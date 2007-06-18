@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Maven JDT Integration Core
+Bundle-SymbolicName: org.devzuz.q.maven.jdt.core;singleton:=true
+Bundle-Version: 0.1.0.v200705281325
+Bundle-Activator: org.devzuz.q.maven.jdt.core.Activator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.jdt.core;visibility:=reexport,
+ org.devzuz.q.maven.core;visibility:=reexport,
+ org.eclipse.jdt.launching;visibility:=reexport
+Eclipse-LazyStart: true
+Bundle-Vendor: Eclipse.org
+Export-Package: org.devzuz.q.maven.jdt.core,
+ org.devzuz.q.maven.jdt.core.builder,
+ org.devzuz.q.maven.jdt.core.classpath.container,
+ org.devzuz.q.maven.jdt.core.exception,
+ org.devzuz.q.maven.jdt.core.listener,
+ org.devzuz.q.maven.jdt.core.nature
+Import-Package: org.apache.commons.collections.list,
+ org.apache.commons.collections.set

@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Maven Embedder Integration
+Bundle-SymbolicName: org.devzuz.q.maven.core;singleton:=true
+Bundle-Version: 0.1.0.v200705281325
+Bundle-Activator: org.devzuz.q.maven.embedder.Activator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui;visibility:=reexport,
+ org.eclipse.core.runtime;visibility:=reexport,
+ org.eclipse.core.resources;visibility:=reexport,
+ org.apache.maven.embedder;visibility:=reexport
+Eclipse-LazyStart: true
+Export-Package: org.devzuz.q.maven.embedder;
+  uses:="org.osgi.framework,
+   org.eclipse.ui.plugin,
+   org.eclipse.core.resources,
+   org.devzuz.q.maven.embedder.internal,
+   org.eclipse.core.runtime",
+ org.devzuz.q.maven.embedder.log
+Bundle-Vendor: Eclipse.org

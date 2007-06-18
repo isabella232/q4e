@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.codehaus.plexus.feature"
+      label="Plexus Feature"
+      version="1.0.0.alpha_16">
+
+   <description url="http://plexus.codehaus.org">
+      Apache Maven
+   </description>
+
+   <copyright url="http://www.example.com/copyright">
+      [Enter Copyright Description here.]
+   </copyright>
+
+   <license url="http://www.example.com/license">
+      [Enter License Description here.]
+   </license>
+
+   <plugin
+         id="org.codehaus.plexus.plexus-classworlds"
+         download-size="0"
+         install-size="0"
+         version="1.2.0.alpha_7"
+         unpack="false"/>
+
+   <plugin
+         id="org.codehaus.plexus.plexus-component-api"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.alpha_16"
+         unpack="false"/>
+
+   <plugin
+         id="org.codehaus.plexus.plexus-container-default"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.alpha_16"
+         unpack="false"/>
+
+   <plugin
+         id="org.codehaus.plexus.plexus-interactivity-api"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.alpha_4"
+         unpack="false"/>
+
+   <plugin
+         id="org.codehaus.plexus.plexus-utils"
+         download-size="0"
+         install-size="0"
+         version="1.4.0"
+         unpack="false"/>
+
+</feature>

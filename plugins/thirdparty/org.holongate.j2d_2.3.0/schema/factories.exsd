@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.holongate.j2d">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.holongate.j2d" id="factories" name="Java2D for SWT Graphics2D Factories"/>
+      </appInfo>
+      <documentation>
+         This extension point allows the definition of the Graphics2DFactory objects
+the framework can use.
+Each Graphics2DFactory found is in turn analyzed and the best runtime platform match
+is registered as the current factory into a registry.
+Each factory is defined through a platform pattern and a class name.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="factory" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="factory">
+      <annotation>
+         <documentation>
+            A factory element describes which class to use and what platform is suitable for this factory.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A (translatable) text that will also used in the preference page for information.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="platform" type="string">
+            <annotation>
+               <documentation>
+                  A string describing the runtime target, in the form of a $os.$ws.$arch pattern.
+Values are compared (exact match) with the boot loader values.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="class" type="string">
+            <annotation>
+               <documentation>
+                  A fully qualified class name, compatible with the org.holongate.j2d.Graphics2DFactory
+type.
+If selected, this factory is registered and will be used whenever a factory is requested.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         Here is how the Windows platform factory is defined:
+&lt;pre&gt;
+&lt;extension
+ name=&quot;Graphics2D Factories&quot;
+ point=&quot;org.holongate.j2d.factories&quot;&gt;
+ &lt;factory
+  class=&quot;org.holongate.j2d.win32.Win32Graphics2DFactory&quot;
+  platform=&quot;win32.win32.x86&quot;
+  name=&quot;%win32.factory&quot;
+ &gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         &lt;ul&gt;
+&lt;li&gt;All the factories should extends the org.holongate.j2d.Graphics2DFactory
+abstract class.&lt;/li&gt;
+&lt;li&gt;All factories must have a public no-argument constructor to be used as an executable extension
+by the platform.&lt;/li&gt;
+&lt;li&gt;All factories must reimplement the createGraphics2DFactory() method.&lt;/li&gt;
+&lt;/ul&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         &lt;br&gt;The standard factories provided by Holongate.org are:&lt;ul&gt;
+&lt;li&gt;org.holongate.j2d.SWTGraphics2DFactory for the default fallback factory,&lt;/li&gt;
+&lt;li&gt;org.holongate.j2d.win32.Win32Graphics2DFactory for the windows/x86 platform,&lt;/li&gt;
+&lt;li&gt;org.holongate.j2d.gtk.GtkGraphics2DFactory for the gtk platforms,&lt;/li&gt;
+&lt;li&gt;org.holongate.j2d.motif.MotifGraphics2DFactory for the motif platforms.&lt;/li&gt;
+&lt;/ul&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         &lt;hr size=&quot;1&quot;&gt;
+&amp;copy; 2002 - 2004, Holongate.org
+      </documentation>
+   </annotation>
+
+</schema>

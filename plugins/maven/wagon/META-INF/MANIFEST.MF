@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Maven Wagon Plug-in
+Bundle-SymbolicName: org.devzuz.q.maven.wagon;singleton:=true
+Bundle-Version: 0.1.0.v200705281325
+Bundle-Activator: org.devzuz.q.internal.maven.wagon.Activator
+Bundle-Vendor: eclipse.org
+Eclipse-LazyStart: true
+Export-Package: org.devzuz.q.maven.wagon,
+ org.devzuz.q.internal.maven.wagon;x-internal:=true
+Require-Bundle: org.eclipse.core.runtime;visibility:=reexport,
+ org.apache.maven.embedder;visibility:=reexport

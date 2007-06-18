@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.pde.ui.targetProvisioners">
+      <provisioner
+            class="org.devzuz.q.maven.pde.targetplatform.MavenProvisionerWizard"
+            icon="src/main/resources/icons/Maven_M16X16-TP.GIF"
+            id="org.devzuz.q.maven.pde.targetplatform.provisioner"
+            name="Maven Repository">
+         <description>
+           This provisioner adds new plug-ins from a Maven repository into your target platform.
+         </description>
+      </provisioner>
+   </extension>
+
+</plugin>

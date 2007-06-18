@@ -1,0 +1,14 @@
+Manifest-Version: 1
+Bundle-Description: Bundle classpath plugin
+Bundle-Name: Bundle classpath plugin
+Import-Package: org.eclipse.core.runtime,
+ org.eclipse.osgi.service.resolver,
+ org.eclipse.osgi.util,
+ org.osgi.framework
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.devzuz.q.bundle.classpath
+Export-Package: org.devzuz.q.bundle.classpath
+Bundle-Version: 0.1.1.v200707121216
+Bundle-Activator: org.devzuz.q.internal.bundle.classpath.Activator
+Eclipse-LazyStart: true
+

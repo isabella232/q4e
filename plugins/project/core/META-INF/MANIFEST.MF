@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Common Project Core
+Bundle-SymbolicName: org.devzuz.q.project.core
+Bundle-Version: 0.1.0.v200705281325
+Bundle-Activator: org.devzuz.q.project.core.Activator
+Bundle-Vendor: Eclipse.org
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui;visibility:=reexport,
+ org.eclipse.core.runtime;visibility:=reexport
+Eclipse-LazyStart: true

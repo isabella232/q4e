@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ***************************************************************************
+	 * Copyright (c) 2007 DevZuz, Inc. (AKA Simula Labs, Inc.)
+ 	 * All rights reserved. This program and the accompanying materials
+ 	 * are made available under the terms of the Eclipse Public License v1.0
+ 	 * which accompanies this distribution, and is available at
+ 	 * http://www.eclipse.org/legal/epl-v10.html
+ 	 ***************************************************************************-->
+
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.devzuz.q</groupId>
+  <artifactId>q</artifactId>
+  <version>1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>Q for Eclipse</name>
+  <description>Q is the Apache Maven integration for Eclipse</description>
+
+  <organization>
+    <name>DevZuz</name>
+    <url>http://www.devzuz.org</url>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>Eclipse Public License - v 1.0</name>
+      <url>http://www.eclipse.org/org/documents/epl-v10.html</url>
+    </license>
+  </licenses>
+
+  <distributionManagement>
+    <repository>
+      <id>code.google.com</id>
+      <name>Google Code Repository</name>
+      <url>dav:https://q4e.googlecode.com/svn/repository/releases</url>
+    </repository>
+    <snapshotRepository>
+      <id>code.google.com</id>
+      <name>Google Code Snapshot Repository</name>
+      <url>dav:https://q4e.googlecode.com/svn/repository/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
+  <repositories>
+     <repository>
+      <id>code.google.com</id>
+      <url>http://q4e.googlecode.com/svn/repository/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+     </repository>
+   </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>code.google.com</id>
+      <name>Apache Snapshot Repository</name>
+      <url>http://q4e.googlecode.com/svn/repository/snapshots</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>apache.org</id>
+      <name>Apache Snapshot Repository</name>
+      <url>http://people.apache.org/repo/m2-snapshot-repository</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+    <pluginRepository>
+      <id>codehaus.org</id>
+      <name>Maven Central Development Plugin Repository</name>
+      <url>http://snapshots.repository.codehaus.org</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
+
+  <build>
+
+    <plugins>
+<!--
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <configuration>
+        </configuration>
+      </plugin>
+-->
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>0.9.0-incubator-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>manifest</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>2.1</version>
+          <!-- Needed for including the manifest, see MJAR-71 -->
+          <configuration>
+            <archive>
+              <manifestFile>${project.build.outputDirectory}/META-INF/MANIFEST.MF</manifestFile>
+            </archive>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-eclipse-plugin</artifactId>
+          <version>2.4-SNAPSHOT</version>
+          <configuration>
+            <projectNameTemplate>${groupId}.${artifactId}</projectNameTemplate>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>pde-maven-plugin</artifactId>
+          <version>1.0-alpha-2-SNAPSHOT</version>
+          <extensions>true</extensions>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.felix</groupId>
+          <artifactId>maven-bundle-plugin</artifactId>
+          <version>0.9.0-incubator-SNAPSHOT</version>
+          <configuration>
+            <supportedProjectTypes>
+              <supportedProjectType>jar</supportedProjectType>
+              <supportedProjectType>bundle</supportedProjectType>
+              <supportedProjectType>eclipse-feature</supportedProjectType>
+            </supportedProjectTypes>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+  </build>
+
+</project>

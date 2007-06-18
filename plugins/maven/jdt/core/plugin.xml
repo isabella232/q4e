@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<extension
+          id="mavenClasspathContainerInitializer"
+          name="%mavenClasspathContainerInitializer.name"
+          point="org.eclipse.jdt.core.classpathContainerInitializer">
+      <classpathContainerInitializer
+            class="org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainerInitializer"
+            id="org.devzuz.q.maven.jdt.core.mavenClasspathContainer">
+      </classpathContainerInitializer>
+   </extension>
+   
+   <extension
+         id="mavenIncrementalBuilder"
+         name="%mavenIncrementalBuilder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            hasNature="true"
+            isConfigurable="false">
+         <run class="org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder"/>
+      </builder>
+   </extension>
+   <extension
+         id="mavenNature"
+         name="%mavenNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="org.devzuz.q.maven.jdt.core.nature.MavenNature"/>
+      </runtime>
+      <requires-nature id="org.eclipse.jdt.core.javanature"/>
+      <builder id="org.devzuz.q.maven.jdt.core.mavenIncrementalBuilder"/>
+   </extension>
+</plugin>
