@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="http://www.devzuz.org/eclipse/update">
+      Maestro Eclipse Integration
+   </description>
+   <feature url="features/org.apache.maven.feature_2.1.0.maestro-1_3.jar" id="org.apache.maven.feature" version="2.1.0.maestro-1_3">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.apache.commons.collections.feature_3.2.0.200705282147.jar" id="org.apache.commons.collections.feature" version="3.2.0.200705282147">
+      <category name="Enabling Features"/>
+   </feature>
+   <category-def name="Community" label="Community"/>
+   <category-def name="Enabling Features" label="Enabling Features"/>
+</site>
