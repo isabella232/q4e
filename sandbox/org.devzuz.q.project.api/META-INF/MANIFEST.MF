@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Project Api Plug-in
+Bundle-SymbolicName: org.devzuz.q.project.api
+Bundle-Version: 1.0.0
+Bundle-Vendor: DevZuz
+Bundle-Localization: plugin

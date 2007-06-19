@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText=""
+    modelDirectory="/org.devzuz.q.project.api/src" modelPluginID="org.devzuz.q.project.api"
+    templateDirectory="" modelName="org.devzuz.q.project" editPluginClass="org.devzuz.q.project.provider.orgdevzuzqprojectEditPlugin"
+    editorPluginClass="org.devzuz.q.project.presentation.orgdevzuzqprojectEditorPlugin"
+    generateSchema="true" testSuiteClass="org.devzuz.q.project.tests.orgdevzuzqprojectAllTests"
+    importerID="org.eclipse.emf.importer.java">
+  <foreignModel>@model</foreignModel>
+  <genPackages prefix="Project" basePackage="org.devzuz.q" disposableProviderFactory="true"
+      ecorePackage="project.ecore#/">
+    <genDataTypes ecoreDataType="project.ecore#//URI"/>
+    <genDataTypes ecoreDataType="project.ecore#//URL"/>
+    <genDataTypes ecoreDataType="project.ecore#//TimeZone"/>
+    <genClasses ecoreClass="project.ecore#//ArtifactClassifier">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//ArtifactClassifier/classifier"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//ArtifactComposition">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//ArtifactComposition/artifactType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference project.ecore#//ArtifactComposition/artifactManifestPartsByType"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//ArtifactManifestPart">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//ArtifactManifestPart/type"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//CommunityInfo">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//CommunityInfo/projectWebSite"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference project.ecore#//CommunityInfo/downloadLocations"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference project.ecore#//CommunityInfo/mailingListServices"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//CommunityInfo/scmService"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//CommunityInfo/issueTrackerService"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//Dependency">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//Dependency/dependencyScheme"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//Dependency/projectKey"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//Dependency/artifactClassifier"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//InfrastructuralService">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//InfrastructuralService/serviceId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference project.ecore#//InfrastructuralService/submitInterfaces"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference project.ecore#//InfrastructuralService/queryInterfaces"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference project.ecore#//InfrastructuralService/browseInterfaces"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference project.ecore#//InfrastructuralService/maintenanceInterfaces"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//InfrastructuralService/serviceName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//InfrastructuralService/serviceDescription"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//InfrastructuralServiceId">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//InfrastructuralServiceId/typeURI"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//InfrastructuralServiceId/typeQualifier"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//InfrastructuralServiceInterface">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//InfrastructuralServiceInterface/interfaceType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//InfrastructuralServiceInterface/serviceId"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//License">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//License/uRL"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//License/licenseName"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//License/applicability"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//MessagingSystemId">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//MessagingSystemId/typeURI"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//MessagingSystemId/systemQualifier"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//OrganizationInfo">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//OrganizationInfo/webSite"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//OrganizationInfo/organizationName"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//Person">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//Person/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//Person/email"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//Person/roles"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//Person/timezone"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference project.ecore#//Person/nicknames"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//Project">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//Project/identification"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//Project/parentProject"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//Project/organizationInfo"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//Project/communityInfo"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//Project/licenses"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//Project/projectClassifications"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//Project/artifactComposition"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//Project/dependencies"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EReference project.ecore#//Project/toolConfigurationByType"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//Project/contributors"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//Project/developers"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//ProjectClassification">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//ProjectClassification/classificationSystemId"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//ProjectKey">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//ProjectKey/groupId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//ProjectKey/artifactId"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//ProjectKey/versionSpec"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//ToolConfiguration">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//ToolConfiguration/toolId"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//ToolId">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//ToolId/typeURI"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//ToolId/typeQualifier"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//Version">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//Version/versionScheme"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//Version/value"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//URIToArtifactManifestPartMapEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//URIToArtifactManifestPartMapEntry/key"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//URIToArtifactManifestPartMapEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//URIToURLMapEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//URIToURLMapEntry/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//URIToURLMapEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//EStringToInfrastructuralServiceMapEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//EStringToInfrastructuralServiceMapEntry/key"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//EStringToInfrastructuralServiceMapEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//URIToInfrastructuralServiceInterfaceMapEntry">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//URIToInfrastructuralServiceInterfaceMapEntry/key"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//URIToInfrastructuralServiceInterfaceMapEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//MessagingSystemIdToEStringMapEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//MessagingSystemIdToEStringMapEntry/key"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute project.ecore#//MessagingSystemIdToEStringMapEntry/value"/>
+    </genClasses>
+    <genClasses ecoreClass="project.ecore#//ToolIdToToolConfigurationMapEntry">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//ToolIdToToolConfigurationMapEntry/key"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference project.ecore#//ToolIdToToolConfigurationMapEntry/value"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>

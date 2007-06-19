@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/maven-model-emf/src"
+    modelPluginID="maven_model_emf" modelName="Maven" importerID="org.eclipse.xsd.ecore.importer">
+  <foreignModel>maven-v4_0_0.xsd</foreignModel>
+  <genPackages prefix="maven" basePackage="org.apache.maven" resource="XML" disposableProviderFactory="true"
+      ecorePackage="pom400.ecore#/">
+    <genClasses ecoreClass="pom400.ecore#//Activation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Activation/activeByDefault"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Activation/jdk"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Activation/os"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Activation/property"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Activation/file"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ActivationFile">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ActivationFile/missing"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ActivationFile/exists"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ActivationOS">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ActivationOS/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ActivationOS/family"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ActivationOS/arch"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ActivationOS/version"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ActivationProperty">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ActivationProperty/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ActivationProperty/value"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Build">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Build/sourceDirectory"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Build/scriptSourceDirectory"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Build/testSourceDirectory"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Build/outputDirectory"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Build/testOutputDirectory"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Build/extensions"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Build/defaultGoal"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Build/resources"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Build/testResources"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Build/directory"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Build/finalName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Build/filters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Build/pluginManagement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Build/plugins"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//BuildBase">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//BuildBase/defaultGoal"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//BuildBase/resources"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//BuildBase/testResources"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//BuildBase/directory"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//BuildBase/finalName"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//BuildBase/filters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//BuildBase/pluginManagement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//BuildBase/plugins"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//CiManagement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//CiManagement/system"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//CiManagement/url"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//CiManagement/notifiers"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ConfigurationType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute pom400.ecore#//ConfigurationType/any"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ConfigurationType1">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute pom400.ecore#//ConfigurationType1/any"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ConfigurationType2">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute pom400.ecore#//ConfigurationType2/any"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ConfigurationType3">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute pom400.ecore#//ConfigurationType3/any"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ConfigurationType4">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute pom400.ecore#//ConfigurationType4/any"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Contributor">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Contributor/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Contributor/email"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Contributor/url"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Contributor/organization"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Contributor/organizationUrl"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Contributor/roles"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Contributor/timezone"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Contributor/properties"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ContributorsType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//ContributorsType/contributor"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//DependenciesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//DependenciesType/dependency"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//DependenciesType1">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//DependenciesType1/dependency"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//DependenciesType2">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//DependenciesType2/dependency"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//DependenciesType3">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//DependenciesType3/dependency"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Dependency">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Dependency/groupId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Dependency/artifactId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Dependency/version"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Dependency/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Dependency/classifier"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Dependency/scope"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Dependency/systemPath"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Dependency/exclusions"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Dependency/optional"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//DependencyManagement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//DependencyManagement/dependencies"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//DeploymentRepository">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//DeploymentRepository/uniqueVersion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//DeploymentRepository/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//DeploymentRepository/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//DeploymentRepository/url"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//DeploymentRepository/layout"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Developer">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Developer/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Developer/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Developer/email"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Developer/url"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Developer/organization"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Developer/organizationUrl"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Developer/roles"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Developer/timezone"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Developer/properties"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//DevelopersType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//DevelopersType/developer"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//DistributionManagement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//DistributionManagement/repository"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//DistributionManagement/snapshotRepository"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//DistributionManagement/site"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//DistributionManagement/downloadUrl"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//DistributionManagement/relocation"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//DistributionManagement/status"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//DocumentRoot">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//DocumentRoot/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference pom400.ecore#//DocumentRoot/xMLNSPrefixMap"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference pom400.ecore#//DocumentRoot/xSISchemaLocation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//DocumentRoot/project"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ExcludesType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ExcludesType/exclude"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Exclusion">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Exclusion/artifactId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Exclusion/groupId"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ExclusionsType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//ExclusionsType/exclusion"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ExecutionsType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//ExecutionsType/execution"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Extension">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Extension/groupId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Extension/artifactId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Extension/version"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ExtensionsType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//ExtensionsType/extension"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//FiltersType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//FiltersType/filter"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//FiltersType1">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//FiltersType1/filter"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//GoalsType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute pom400.ecore#//GoalsType/any"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//GoalsType1">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//GoalsType1/goal"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//IncludesType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//IncludesType/include"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//IssueManagement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//IssueManagement/system"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//IssueManagement/url"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//License">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//License/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//License/url"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//License/distribution"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//License/comments"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//LicensesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//LicensesType/license"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//MailingList">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//MailingList/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//MailingList/subscribe"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//MailingList/unsubscribe"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//MailingList/post"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//MailingList/archive"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//MailingList/otherArchives"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//MailingListsType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//MailingListsType/mailingList"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Model">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/parent"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Model/modelVersion"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Model/groupId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Model/artifactId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Model/packaging"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Model/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Model/version"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Model/description"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Model/url"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/prerequisites"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/issueManagement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/ciManagement"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Model/inceptionYear"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/mailingLists"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/developers"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/contributors"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/licenses"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/scm"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/organization"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/build"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/profiles"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/modules"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/repositories"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/pluginRepositories"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/dependencies"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/reports"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/reporting"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/dependencyManagement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/distributionManagement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Model/properties"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ModulesType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ModulesType/module"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ModulesType1">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ModulesType1/module"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Notifier">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Notifier/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Notifier/sendOnError"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Notifier/sendOnFailure"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Notifier/sendOnSuccess"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Notifier/sendOnWarning"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Notifier/address"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Notifier/configuration"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//NotifiersType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//NotifiersType/notifier"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Organization">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Organization/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Organization/url"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//OtherArchivesType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//OtherArchivesType/otherArchive"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Parent">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Parent/artifactId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Parent/groupId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Parent/version"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Parent/relativePath"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Plugin">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Plugin/groupId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Plugin/artifactId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Plugin/version"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Plugin/extensions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Plugin/executions"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Plugin/dependencies"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Plugin/goals"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Plugin/inherited"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Plugin/configuration"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//PluginExecution">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//PluginExecution/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//PluginExecution/phase"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//PluginExecution/goals"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//PluginExecution/inherited"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//PluginExecution/configuration"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//PluginManagement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//PluginManagement/plugins"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//PluginRepositoriesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//PluginRepositoriesType/pluginRepository"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//PluginRepositoriesType1">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//PluginRepositoriesType1/pluginRepository"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//PluginsType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//PluginsType/plugin"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//PluginsType1">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//PluginsType1/plugin"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//PluginsType2">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//PluginsType2/plugin"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//PluginsType3">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//PluginsType3/plugin"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Prerequisites">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Prerequisites/maven"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Profile">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Profile/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Profile/activation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Profile/build"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Profile/modules"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Profile/repositories"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Profile/pluginRepositories"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Profile/dependencies"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Profile/reports"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Profile/reporting"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Profile/dependencyManagement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Profile/distributionManagement"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Profile/properties"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ProfilesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//ProfilesType/profile"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//PropertiesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute pom400.ecore#//PropertiesType/any"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//PropertiesType1">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute pom400.ecore#//PropertiesType1/any"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//PropertiesType2">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute pom400.ecore#//PropertiesType2/any"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//PropertiesType3">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute pom400.ecore#//PropertiesType3/any"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Relocation">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Relocation/groupId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Relocation/artifactId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Relocation/version"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Relocation/message"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Reporting">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Reporting/excludeDefaults"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Reporting/outputDirectory"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Reporting/plugins"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ReportPlugin">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ReportPlugin/groupId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ReportPlugin/artifactId"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ReportPlugin/version"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ReportPlugin/inherited"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//ReportPlugin/configuration"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//ReportPlugin/reportSets"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ReportSet">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ReportSet/id"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//ReportSet/configuration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ReportSet/inherited"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//ReportSet/reports"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ReportSetsType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//ReportSetsType/reportSet"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ReportsType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//ReportsType/report"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ReportsType1">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute pom400.ecore#//ReportsType1/any"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ReportsType2">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute pom400.ecore#//ReportsType2/any"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//RepositoriesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//RepositoriesType/repository"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//RepositoriesType1">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//RepositoriesType1/repository"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Repository">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Repository/releases"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Repository/snapshots"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Repository/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Repository/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Repository/url"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Repository/layout"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//RepositoryPolicy">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//RepositoryPolicy/enabled"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//RepositoryPolicy/updatePolicy"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//RepositoryPolicy/checksumPolicy"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Resource">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Resource/targetPath"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Resource/filtering"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Resource/directory"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Resource/includes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//Resource/excludes"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ResourcesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//ResourcesType/resource"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//ResourcesType1">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//ResourcesType1/resource"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//RolesType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//RolesType/role"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//RolesType1">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//RolesType1/role"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Scm">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Scm/connection"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Scm/developerConnection"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Scm/tag"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Scm/url"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//Site">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Site/id"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Site/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute pom400.ecore#//Site/url"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//TestResourcesType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//TestResourcesType/testResource"/>
+    </genClasses>
+    <genClasses ecoreClass="pom400.ecore#//TestResourcesType1">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference pom400.ecore#//TestResourcesType1/testResource"/>
+    </genClasses>
+  </genPackages>
+</genmodel:GenModel>
