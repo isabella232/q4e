@@ -117,6 +117,7 @@
             name="%MavenPreferencePage">
       </page>
    </extension>
+   -->
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
@@ -124,7 +125,12 @@
             id="org.devzuz.q.maven.ui.preferences.MavenPreferencePage"
             name="%MavenPreferencePage">
       </page>
+      <page
+            class="org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage"
+            id="org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage"
+            name="%MavenArchetypePreferencePage"
+            category="org.devzuz.q.maven.ui.preferences.MavenPreferencePage">
+      </page>
    </extension>
--->
 
 </plugin>

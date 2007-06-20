@@ -376,8 +376,9 @@ public class DependencyGraphDialog extends AbstractResizableDialog
             Force force = forceCategory.getForce(); 
             int category = forceCategory.getCategory();
             int value = slider.getSelection();
-            System.out.println("-erle- : ForceSimulatorPanelListener.widgetSelected("+ value +")");
-            force.setParameter( category , mapSliderValue( value , MIN , MAX , force.getMinValue( category ) , force.getMaxValue( category ) ) );
+            float newValue = mapSliderValue( value , MIN , MAX , force.getMinValue( category ) , force.getMaxValue( category ) );
+            System.out.println("-erle- : ForceSimulatorPanelListener.widgetSelected( "+ value +" ==> " + newValue + " )");
+            force.setParameter( category , newValue );
         }
     }
     

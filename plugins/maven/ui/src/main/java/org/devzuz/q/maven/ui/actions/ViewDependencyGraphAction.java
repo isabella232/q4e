@@ -49,7 +49,6 @@ public class ViewDependencyGraphAction
             {
                 Activator.getLogger().log( "Unable to display the dependency graph view", e );
             }*/
-            
         }
         //catch ( CoreException e )
         catch ( Exception e )
