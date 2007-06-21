@@ -84,6 +84,12 @@ public class Messages
     public static String MavenAddEditDependencyDialog_scopeLabel;
 
     public static String MavenDependencyLookupDialog_Label;
+    
+    public static String MavenArchetypePreferencePage_description;
+    
+    public static String MavenArchetypePreferencePage_sourceurl;
+    
+    public static String MavenArchetypePreferencePage_type;
 
     static
     {
