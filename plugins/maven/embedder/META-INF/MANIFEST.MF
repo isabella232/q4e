@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Maven Embedder API
 Bundle-SymbolicName: org.apache.maven.embedder
-Bundle-Version: 2.1.0.maestro-1_3
-Bundle-ClassPath: maven-embedder-2.1-maestro-1.3-uber.jar
+Bundle-Version: 2.1.0.549510
+Bundle-ClassPath: maven-embedder-2.1-549510-uber.jar
 Bundle-Vendor: apache.org
 Export-Package: org.apache.maven,
  org.apache.maven.artifact,

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="maven-embedder-2.1-maestro-1.3-uber.jar" sourcepath="maven-embedder-2.1-maestro-1.3-uber-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="maven-embedder-2.1-549510-uber.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>
