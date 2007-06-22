@@ -7,9 +7,11 @@ Bundle-Activator: org.devzuz.q.maven.ui.Activator
 Bundle-Vendor: Eclipse.org
 Require-Bundle: org.devzuz.q.maven.core;visibility:=reexport,
  org.holongate.j2d;visibility:=reexport,
- org.prefuse;visibility:=reexport
+ org.prefuse;visibility:=reexport,
+ org.eclipse.debug.core
 Eclipse-LazyStart: true
 Bundle-Localization: plugin
 Bundle-ClassPath: lucene-core-2.1.0.jar,
  .
-Import-Package: org.apache.commons.collections.buffer
+Import-Package: org.apache.commons.collections.buffer,
+ org.eclipse.debug.ui

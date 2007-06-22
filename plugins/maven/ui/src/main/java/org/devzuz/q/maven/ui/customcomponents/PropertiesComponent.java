@@ -39,6 +39,11 @@ public class PropertiesComponent
 
     private Map<String, String> dataSource;
 
+    public PropertiesComponent( final Composite parent, int styles )
+    {
+        this( parent, styles , null );
+    }
+    
     public PropertiesComponent( final Composite parent, int styles, Map<String, String> dataSource )
     {
         super( parent, styles );
@@ -130,46 +135,49 @@ public class PropertiesComponent
 
     public void buttonSelected( SelectionEvent e )
     {
-        if ( e.getSource() == addPropertyButton )
+        if ( dataSource != null )
         {
-            KeyValueEditorDialog dialog = KeyValueEditorDialog.getKeyValueEditorDialog();
-            if ( dialog.openWithEntry( "", "" ) == Window.OK )
-            {
-                dataSource.put( dialog.getKey(), dialog.getValue() );
-                refreshPropertiesTable();
-            }
-        }
-        else if ( e.getSource() == editPropertyButton )
-        {
-            TableItem[] items = propertiesTable.getSelection();
-            if ( ( items != null ) && ( items.length > 0 ) )
+            if ( e.getSource() == addPropertyButton )
             {
                 KeyValueEditorDialog dialog = KeyValueEditorDialog.getKeyValueEditorDialog();
-                if ( dialog.openWithEntry( items[0].getText( 0 ), items[0].getText( 1 ) ) == Window.OK )
+                if ( dialog.openWithEntry( "", "" ) == Window.OK )
                 {
-                    dataSource.remove( items[0].getText( 0 ) );
                     dataSource.put( dialog.getKey(), dialog.getValue() );
                     refreshPropertiesTable();
                 }
             }
-        }
-        else if ( e.getSource() == removePropertyButton )
-        {
-            TableItem[] items = propertiesTable.getSelection();
-            if ( ( items != null ) && ( items.length > 0 ) )
+            else if ( e.getSource() == editPropertyButton )
             {
-                dataSource.remove( items[0].getText( 0 ) );
-                refreshPropertiesTable();
-                if ( dataSource.size() <= 0 )
+                TableItem[] items = propertiesTable.getSelection();
+                if ( ( items != null ) && ( items.length > 0 ) )
                 {
-                    editPropertyButton.setEnabled( false );
-                    removePropertyButton.setEnabled( false );
+                    KeyValueEditorDialog dialog = KeyValueEditorDialog.getKeyValueEditorDialog();
+                    if ( dialog.openWithEntry( items[0].getText( 0 ), items[0].getText( 1 ) ) == Window.OK )
+                    {
+                        dataSource.remove( items[0].getText( 0 ) );
+                        dataSource.put( dialog.getKey(), dialog.getValue() );
+                        refreshPropertiesTable();
+                    }
                 }
             }
-        }
-        else
-        {
-            throw new RuntimeException( "Unknown event source " + e.getSource() );
+            else if ( e.getSource() == removePropertyButton )
+            {
+                TableItem[] items = propertiesTable.getSelection();
+                if ( ( items != null ) && ( items.length > 0 ) )
+                {
+                    dataSource.remove( items[0].getText( 0 ) );
+                    refreshPropertiesTable();
+                    if ( dataSource.size() <= 0 )
+                    {
+                        editPropertyButton.setEnabled( false );
+                        removePropertyButton.setEnabled( false );
+                    }
+                }
+            }
+            else
+            {
+                throw new RuntimeException( "Unknown event source " + e.getSource() );
+            }
         }
     }
 
@@ -207,5 +215,15 @@ public class PropertiesComponent
                 removePropertyButton.setEnabled( true );
             }
         }
+    }
+
+    public Map<String, String> getDataSource()
+    {
+        return dataSource;
+    }
+
+    public void setDataSource( Map<String, String> dataSource )
+    {
+        this.dataSource = dataSource;
     }
 }

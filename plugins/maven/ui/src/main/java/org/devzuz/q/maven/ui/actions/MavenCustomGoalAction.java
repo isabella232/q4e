@@ -48,6 +48,6 @@ public class MavenCustomGoalAction
                     MavenManager.getMaven().executeGoal( project, goal, properties );
                 }
             }
-        }
+        }        
     }
 }
