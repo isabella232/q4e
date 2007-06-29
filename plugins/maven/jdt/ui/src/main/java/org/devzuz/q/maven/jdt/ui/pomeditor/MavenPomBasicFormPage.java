@@ -72,14 +72,20 @@ public class MavenPomBasicFormPage extends FormPage
         linkControls.setLayoutData( layoutData );
         linkControls.setClient( createLinkControls( linkControls , toolkit ) );
         
+        Section moreProjectInfoControls = toolkit.createSection(form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION );
+        moreProjectInfoControls.setDescription( "Add more project information to this POM." );
+        moreProjectInfoControls.setText( Messages.getString("MavenPomEditor.MavenPomEditor_MoreProjInfo") );
+        moreProjectInfoControls.setLayoutData( layoutData );
+        moreProjectInfoControls.setClient( createMoreProjectInfoControls( moreProjectInfoControls , toolkit ) );
+        
         Section parentProjectControls = toolkit.createSection(form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION );
         parentProjectControls.setDescription( "Add a parent POM whose elements are inherited this POM." );
         parentProjectControls.setText( Messages.getString("MavenPomEditor.MavenPomEditor_ParentPOM") );
         parentProjectControls.setLayoutData( layoutData );
         parentProjectControls.setClient( createParentProjectControls( parentProjectControls , toolkit ) );
         
-        basicCoordinateControls.addExpansionListener( expansionAdapter );
         parentProjectControls.addExpansionListener( expansionAdapter );
+        moreProjectInfoControls.addExpansionListener( expansionAdapter );
     }
     
     public Control createBasicCoordinateControls( Composite form , FormToolkit toolKit )
@@ -137,15 +143,86 @@ public class MavenPomBasicFormPage extends FormPage
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new RowLayout( SWT.VERTICAL ) );
         
-        Hyperlink link = toolKit.createHyperlink( parent, "Add/Modify/Remove Dependencies", SWT.WRAP );
-        link.addHyperlinkListener( new HyperlinkAdapter()
+        Hyperlink dependencieslink = toolKit.createHyperlink( parent, "Add/Modify/Remove Dependencies", SWT.WRAP );
+        dependencieslink.addHyperlinkListener( new HyperlinkAdapter()
         {
             public void linkActivated( HyperlinkEvent e )
             {
                 System.out.println( "Link activated!" );
             }
         } );
-        link.setText( "Add/Modify/Remove Dependencies" );
+        dependencieslink.setText( "Add/Modify/Remove Dependencies" );
+        
+        Hyperlink licensesLink = toolKit.createHyperlink( parent, "Manage Licenses", SWT.WRAP );
+        licensesLink.addHyperlinkListener( new HyperlinkAdapter()
+        {
+            public void linkActivated( HyperlinkEvent e )
+            {
+                System.out.println( "Link activated!" );
+            }
+        } );
+        licensesLink.setText( "Manage Licenses" );
+        
+        Hyperlink developersLink = toolKit.createHyperlink( parent, "Manage Developers Information", SWT.WRAP );
+        developersLink.addHyperlinkListener( new HyperlinkAdapter()
+        {
+            public void linkActivated( HyperlinkEvent e )
+            {
+                System.out.println( "Link activated!" );
+            }
+        } );
+        developersLink.setText( "Manage Developers Information" );
+        
+        Hyperlink contributorsLink = toolKit.createHyperlink( parent, "Manage Contributors Information", SWT.WRAP );
+        contributorsLink.addHyperlinkListener( new HyperlinkAdapter()
+        {
+            public void linkActivated( HyperlinkEvent e )
+            {
+                System.out.println( "Link activated!" );
+            }
+        } );
+        contributorsLink.setText( "Manage Contributors Information" );
+        
+        return parent;
+    }
+    
+    public Control createMoreProjectInfoControls( Composite form , FormToolkit toolKit )
+    {
+        Composite parent = toolKit.createComposite( form );
+        parent.setLayout( new GridLayout( 2 , false ) );
+        
+        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
+        labelData.widthHint = 70;
+        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
+        controlData.horizontalIndent = 10;
+        
+        Label nameLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor.MavenPomEditor_Name") , SWT.NONE ); 
+        nameLabel.setLayoutData( labelData );
+        
+        Text nameText = toolKit.createText( parent, "Name" ); 
+        nameText.setLayoutData( controlData );
+        nameText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        
+        Label descriptionLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor.MavenPomEditor_Description"), SWT.NONE ); 
+        descriptionLabel.setLayoutData( labelData );
+        
+        Text descriptionText = toolKit.createText( parent, "Description" ); 
+        descriptionText.setLayoutData( controlData );
+        descriptionText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        
+        Label urlLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor.MavenPomEditor_URL"), SWT.NONE ); 
+        urlLabel.setLayoutData( labelData );
+        
+        Text urlText = toolKit.createText( parent, "URL" ); 
+        urlText.setLayoutData( controlData );
+        urlText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        
+        Label inceptionYearLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor.MavenPomEditor_InceptionYear"), SWT.NONE ); 
+        inceptionYearLabel.setLayoutData( labelData );
+        
+        Text inceptionYearText = toolKit.createText( parent, "Inception Year" ); 
+        inceptionYearText.setLayoutData( controlData );
+        inceptionYearText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
         
         return parent;
     }
