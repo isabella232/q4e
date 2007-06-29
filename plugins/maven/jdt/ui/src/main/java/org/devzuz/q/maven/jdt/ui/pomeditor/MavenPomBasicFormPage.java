@@ -43,7 +43,7 @@ public class MavenPomBasicFormPage extends FormPage
         {
             public void expansionStateChanged(ExpansionEvent e) 
             {
-                sform.reflow( true );
+                form.reflow( true );
             }
         };
         
@@ -131,7 +131,7 @@ public class MavenPomBasicFormPage extends FormPage
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new RowLayout( SWT.VERTICAL ) );
         
-        Hyperlink link = toolKit.createHyperlink( parent, "Add Dependencies", SWT.WRAP );
+        Hyperlink link = toolKit.createHyperlink( parent, "Add/Modify/Remove Dependencies", SWT.WRAP );
         link.addHyperlinkListener( new HyperlinkAdapter()
         {
             public void linkActivated( HyperlinkEvent e )
@@ -139,7 +139,7 @@ public class MavenPomBasicFormPage extends FormPage
                 System.out.println( "Link activated!" );
             }
         } );
-        link.setText( "Add Dependencies" );
+        link.setText( "Add/Modify/Remove Dependencies" );
         
         return parent;
     }

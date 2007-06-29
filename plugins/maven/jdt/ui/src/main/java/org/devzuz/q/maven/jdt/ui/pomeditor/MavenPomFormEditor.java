@@ -14,7 +14,7 @@ public class MavenPomFormEditor extends FormEditor
             addPage( new MavenPomBasicFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomBasicFormPage;",
                                                        "Maven Basic Information" ) );
             addPage( new MavenPomDependenciesFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage;",
-                                                       "Maven Dependencies" ) );
+                                                       "Dependencies" ) );
             addPage( new MavenPomPropertiesModuleFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage;",
                                                        "Properties/Module" ) );
         }
