@@ -1,3 +1,9 @@
+/***************************************************************************************************
+ * Copyright (c) 2007 DevZuz, Inc. (AKA Simula Labs, Inc.) All rights reserved. This program and the
+ * accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
 import org.devzuz.q.maven.jdt.ui.Messages;
@@ -49,13 +55,6 @@ public class MavenPomDependenciesFormPage extends FormPage
         dependencyTable.setLayoutData( layoutData );
         dependencyTable.setClient( createDependencyTableControls( dependencyTable , toolkit ) );
         
-        /*
-        Section dependencyDetail = toolkit.createSection(form.getBody(), Section.NO_TITLE );
-        dependencyDetail.setDescription( "Set the Dependencies of this POM." );
-        dependencyDetail.setText( "Dependencies" ); 
-        dependencyDetail.setLayoutData( layoutData );
-        dependencyDetail.setClient( createDependencyDetailControls( dependencyDetail , toolkit ) ); */
-        
         Composite container = toolkit.createComposite( form.getBody() );
         container.setLayoutData( layoutData );
         createDependencyDetailControls( container , toolkit );
@@ -72,14 +71,9 @@ public class MavenPomDependenciesFormPage extends FormPage
         propertiesTable.setLinesVisible( true );
         propertiesTable.setHeaderVisible( true );
         
-        /*
-        TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0 );
+        /*TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0 );
         column.setText( Messages.getString("MavenPomEditor.MavenPomEditor_Key") );
-        column.setWidth( 100 );
-
-        column = new TableColumn( propertiesTable, SWT.CENTER, 1 );
-        column.setText( Messages.getString("MavenPomEditor.MavenPomEditor_Value") );
-        column.setWidth( 100 ); */
+        column.setWidth( 100 );*/
 
         Composite container2 = toolKit.createComposite( container );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -193,13 +187,8 @@ public class MavenPomDependenciesFormPage extends FormPage
         dependencyExclusionTable.setLinesVisible( true );
         dependencyExclusionTable.setHeaderVisible( true );
         
-        /*
-        TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0 );
+        /*TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0 );
         column.setText( Messages.getString("MavenPomEditor.MavenPomEditor_Key") );
-        column.setWidth( 100 );
-
-        column = new TableColumn( propertiesTable, SWT.CENTER, 1 );
-        column.setText( Messages.getString("MavenPomEditor.MavenPomEditor_Value") );
         column.setWidth( 100 ); */
 
         Composite container2 = toolKit.createComposite( container );
