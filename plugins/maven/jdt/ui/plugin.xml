@@ -74,6 +74,26 @@
             <perspective id="org.eclipse.jdt.ui.JavaHierarchyPerspective"/>
             <perspective id="org.eclipse.jdt.ui.JavaBrowsingPerspective"/>
             <perspective id="org.eclipse.debug.ui.DebugPerspective"/>
+            <configurationType id="org.devzuz.q.maven.jdt.ui.MavenLaunchConfigurationId"/>\
+            <contextualLaunch>
+               <enablement>
+                  <with variable="selection">
+                     <count value="1"/>
+                     <iterate>
+                              <test property="org.eclipse.jdt.launching.hasProjectNature" args="org.eclipse.jdt.core.javanature"/>
+<!--
+                        <or>
+                           <test property="org.eclipse.jdt.launching.hasMain"/>
+                           <and>
+                              <test property="org.eclipse.jdt.launching.isContainer"/>
+                              <test property="org.eclipse.jdt.launching.hasProjectNature" args="org.eclipse.jdt.core.javanature"/>
+                           </and>
+                        </or>
+-->
+                     </iterate>
+                  </with>
+               </enablement>
+            </contextualLaunch>
       </shortcut>
    </extension>
    <extension
@@ -88,5 +108,11 @@
             name="Maven 2 Pom Editor">
       </editor>
    </extension>
+
+   <extension point="org.eclipse.core.runtime.adapters">
+      <factory adaptableType="org.eclipse.core.resources.IResource" class="">
+         <adapter type="org.eclipse.debug.ui.actions.ILaunchable"/>
+      </factory>
+   </extension> 
 
 </plugin>
