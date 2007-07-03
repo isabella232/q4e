@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Community UI
 Bundle-SymbolicName: org.devzuz.q.community.ui;singleton:=true
-Bundle-Version: 0.1.0.v200705281325
+Bundle-Version: 0.2.0.v200707032020
 Bundle-Activator: org.devzuz.q.community.ui.Activator
 Bundle-Vendor: Eclipse.org
 Bundle-Localization: plugin
