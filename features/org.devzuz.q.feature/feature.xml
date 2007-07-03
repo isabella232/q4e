@@ -35,7 +35,7 @@
       <import plugin="org.eclipse.core.databinding"/>
       <import plugin="org.eclipse.jface.databinding"/>
       <import plugin="org.eclipse.swt"/>
-      <import feature="org.apache.maven.feature" version="2.1.0.maestro-1_3"/>
+      <import feature="org.apache.maven.feature" version="2.1.0.549510"/>
       <import feature="org.apache.commons.collections.feature" version="3.2.0.200705282147"/>
    </requires>
 
