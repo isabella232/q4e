@@ -45,7 +45,7 @@ public class MavenURLConnection
         String protocol = getURL().getProtocol();
         try
         {
-            wagon = (IEclipseWagon) Activator.getDefault().getWagonManager().getKeplerWagon( protocol );
+            wagon = (IEclipseWagon) Activator.getDefault().getWagonManager().getEclipseWagon( protocol );
         }
         catch ( UnsupportedProtocolException e )
         {

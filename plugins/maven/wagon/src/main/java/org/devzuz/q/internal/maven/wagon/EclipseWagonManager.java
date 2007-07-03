@@ -27,7 +27,7 @@ public class EclipseWagonManager
         super();
     }
 
-    public IEclipseWagon getKeplerWagon( String protocol )
+    public IEclipseWagon getEclipseWagon( String protocol )
         throws UnsupportedProtocolException
     {
         if ( protocol.equals( MAVEN_HTTP ) )
