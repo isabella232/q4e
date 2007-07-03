@@ -2,7 +2,7 @@
 <feature
       id="org.apache.maven.feature"
       label="%featureName"
-      version="2.1.0.maestro-1_3"
+      version="2.1.0.549510"
       provider-name="%providerName">
 
    <description>
