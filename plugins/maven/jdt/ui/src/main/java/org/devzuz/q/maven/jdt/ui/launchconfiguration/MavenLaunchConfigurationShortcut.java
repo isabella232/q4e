@@ -6,8 +6,13 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.launchconfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.ui.Activator;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jdt.core.IJavaElement;
@@ -62,23 +67,18 @@ public class MavenLaunchConfigurationShortcut
         IType[] types = null;
         if ( search != null )
         {
-            types = findProjects( search );
+            List<IMavenProject> projects = findProjects( search );
             IType type = null;
-            if ( types.length == 0 )
+            if ( projects.isEmpty() )
             {
                 MessageDialog.openInformation( getShell(), "Maven 2 Launch", "No Maven 2 projects found." );
             }
-            else if ( types.length > 1 )
-            {
-                // type = chooseType(types, mode);
-            }
             else
             {
-                type = types[0];
-            }
-            if ( type != null )
-            {
-                launch( type, mode );
+                for ( IMavenProject mavenProject : projects )
+                {
+                    launch( mavenProject, mode );
+                }
             }
         }
     }
@@ -88,17 +88,36 @@ public class MavenLaunchConfigurationShortcut
         return Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
     }
 
-    private IType[] findProjects( Object[] search )
+    private List<IMavenProject> findProjects( Object[] search )
     {
-        // TODO Auto-generated method stub
-        return new IType[0];
+        List<IMavenProject> mavenProjects = new ArrayList<IMavenProject>();
+        for ( Object o : search )
+        {
+            IMavenProject mavenProject = getMavenProject( o );
+            if ( mavenProject != null )
+            {
+                mavenProjects.add( mavenProject );
+            }
+        }
+        return mavenProjects;
     }
 
-    protected void launch( IType type, String mode )
+    public IMavenProject getMavenProject( Object o )
+    {
+        if ( o instanceof IAdaptable )
+        {
+            IMavenProject mavenProject = (IMavenProject) ( (IAdaptable) o ).getAdapter( IMavenProject.class );
+            return mavenProject;
+        }
+        else
+            return null;
+    }
+
+    protected void launch( IMavenProject mavenProject, String mode )
     {
         try
         {
-            ILaunchConfiguration config = findLaunchConfiguration( type, mode );
+            ILaunchConfiguration config = findLaunchConfiguration( mavenProject, mode );
             if ( config != null )
             {
                 config.launch( mode, null );
@@ -114,11 +133,11 @@ public class MavenLaunchConfigurationShortcut
      * This method first attempts to find an existing config for the project. Failing this, a new
      * config is created and returned.
      * 
-     * @param type
+     * @param mavenProject
      * @param mode
      * @return
      */
-    private ILaunchConfiguration findLaunchConfiguration( IType type, String mode )
+    private ILaunchConfiguration findLaunchConfiguration( IMavenProject mavenProject, String mode )
     {
         // TODO Auto-generated method stub
         return null;
