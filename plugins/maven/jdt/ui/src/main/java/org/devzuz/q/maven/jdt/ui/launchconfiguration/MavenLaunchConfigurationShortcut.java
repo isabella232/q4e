@@ -6,13 +6,16 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.launchconfiguration;
 
+import org.devzuz.q.maven.jdt.ui.Activator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IType;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 
@@ -44,18 +47,26 @@ public class MavenLaunchConfigurationShortcut
         }
     }
 
+    /**
+     * Search for Maven 2 projects in selection and launch them
+     * 
+     * @param search
+     * @param mode
+     */
     protected void searchAndLaunch( Object[] search, String mode )
     {
+        // TODO
+        MessageDialog.openInformation( getShell(), "Maven 2 Launch", "Not implemented." );
+        search = null;
+
         IType[] types = null;
         if ( search != null )
         {
-            // types = AppletLaunchConfigurationUtils.findApplets(
-            // new ProgressMonitorDialog(getShell()), search);
+            types = findProjects( search );
             IType type = null;
             if ( types.length == 0 )
             {
-                // MessageDialog.openInformation(
-                // getShell(), "Applet Launch", "No applets found."};
+                MessageDialog.openInformation( getShell(), "Maven 2 Launch", "No Maven 2 projects found." );
             }
             else if ( types.length > 1 )
             {
@@ -72,6 +83,17 @@ public class MavenLaunchConfigurationShortcut
         }
     }
 
+    private Shell getShell()
+    {
+        return Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
+    }
+
+    private IType[] findProjects( Object[] search )
+    {
+        // TODO Auto-generated method stub
+        return new IType[0];
+    }
+
     protected void launch( IType type, String mode )
     {
         try
@@ -84,7 +106,7 @@ public class MavenLaunchConfigurationShortcut
         }
         catch ( CoreException e )
         {
-            /* Handle exceptions */
+            /* TODO Handle exceptions */
         }
     }
 
