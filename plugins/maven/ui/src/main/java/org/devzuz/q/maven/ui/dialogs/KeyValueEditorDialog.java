@@ -32,8 +32,7 @@ public class KeyValueEditorDialog
     {
         if ( keyValueEditorDialog == null )
         {
-            keyValueEditorDialog = new KeyValueEditorDialog( PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-                .getShell() );
+            keyValueEditorDialog = new KeyValueEditorDialog( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell() );
         }
 
         return keyValueEditorDialog;

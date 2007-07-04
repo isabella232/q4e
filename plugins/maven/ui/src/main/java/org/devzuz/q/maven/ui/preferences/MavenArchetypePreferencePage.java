@@ -1,8 +1,12 @@
 package org.devzuz.q.maven.ui.preferences;
 
 import org.devzuz.q.maven.ui.Messages;
+import org.devzuz.q.maven.ui.dialogs.ArchetypeListSourceDialog;
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -29,6 +33,19 @@ public class MavenArchetypePreferencePage extends PreferencePage
 
 	protected Control createContents(Composite parent)
 	{
+	    SelectionAdapter buttonListener = new SelectionAdapter()
+        {
+            public void widgetDefaultSelected( SelectionEvent e )
+            {
+                buttonSelected( e );
+            }
+
+            public void widgetSelected( SelectionEvent e )
+            {
+                buttonSelected( e );
+            }
+        };
+        
 		noDefaultAndApplyButton();
 		
 		Composite composite = new Composite(parent, SWT.NONE);
@@ -56,11 +73,11 @@ public class MavenArchetypePreferencePage extends PreferencePage
 
         Button addPropertyButton = new Button( container2, SWT.PUSH | SWT.CENTER );
         addPropertyButton.setText( Messages.MavenCustomComponent_AddButtonLabel );
-        //addPropertyButton.addSelectionListener( buttonListener );
+        addPropertyButton.addSelectionListener( buttonListener );
 
         Button editPropertyButton = new Button( container2, SWT.PUSH | SWT.CENTER );
         editPropertyButton.setText( Messages.MavenCustomComponent_EditButtonLabel );
-        //editPropertyButton.addSelectionListener( buttonListener );
+        editPropertyButton.addSelectionListener( buttonListener );
         editPropertyButton.setEnabled( false );
 
         Button removePropertyButton = new Button( container2, SWT.PUSH | SWT.CENTER );
@@ -70,6 +87,17 @@ public class MavenArchetypePreferencePage extends PreferencePage
 		
         return composite;
 	}
+	
+	public void buttonSelected( SelectionEvent e )
+    {
+	    System.out.println("-erle- : test");
+	    ArchetypeListSourceDialog dialog = ArchetypeListSourceDialog.getArchetypeListSourceDialog();
+	    if ( dialog.open() == Window.OK )
+        {
+            // TODO : (1) Get data from dialog and insert into table
+            //        (2) Refresh table
+        }
+    }
 	
 	public void init(IWorkbench workbench) 
 	{
