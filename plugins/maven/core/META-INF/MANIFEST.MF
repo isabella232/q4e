@@ -17,4 +17,4 @@ Export-Package: org.devzuz.q.maven.embedder;
    org.devzuz.q.maven.embedder.internal,
    org.eclipse.core.runtime",
  org.devzuz.q.maven.embedder.log
-Bundle-Vendor: Eclipse.org
+Bundle-Vendor: DevZuz
