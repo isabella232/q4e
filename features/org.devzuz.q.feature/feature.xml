@@ -117,13 +117,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.buckminster.maven.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.holongate.j2d"
          download-size="0"
          install-size="0"
