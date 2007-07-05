@@ -4,7 +4,7 @@ Bundle-Name: Common Project UI
 Bundle-SymbolicName: org.devzuz.q.project.ui
 Bundle-Version: 0.2.0.v200707032020
 Bundle-Activator: org.devzuz.q.project.ui.Activator
-Bundle-Vendor: Eclipse.org
+Bundle-Vendor: DevZuz
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.eclipse.core.runtime;visibility:=reexport
