@@ -7,3 +7,4 @@ Bundle-Activator: org.devzuz.q.internal.maven.pde.targetplatform.Activator
 Require-Bundle: org.eclipse.pde.ui;visibility:=reexport,
  org.devzuz.q.maven.core;visibility:=reexport
 Eclipse-LazyStart: true
+Bundle-Vendor: DevZuz
