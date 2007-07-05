@@ -15,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.maven.model.Dependency;
+import org.devzuz.q.maven.embedder.IMavenProject;
 import org.eclipse.buckminster.core.common.model.ExpandingProperties;
 import org.eclipse.buckminster.core.cspec.WellKnownExports;
 import org.eclipse.buckminster.core.cspec.builder.CSpecBuilder;
@@ -33,7 +34,6 @@ import org.eclipse.buckminster.core.version.IVersionSelector;
 import org.eclipse.buckminster.core.version.VersionFactory;
 import org.eclipse.buckminster.core.version.VersionMatch;
 import org.eclipse.buckminster.core.version.VersionSelectorFactory;
-import org.eclipse.buckminster.maven.embedder.IMavenProject;
 import org.eclipse.buckminster.maven.MavenPlugin;
 import org.eclipse.buckminster.runtime.MonitorUtils;
 import org.eclipse.core.runtime.CoreException;

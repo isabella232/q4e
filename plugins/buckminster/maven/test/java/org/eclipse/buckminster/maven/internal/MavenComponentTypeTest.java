@@ -15,10 +15,10 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Repository;
+import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.eclipse.buckminster.core.version.IVersion;
 import org.eclipse.buckminster.core.version.VersionMatch;
-import org.eclipse.buckminster.maven.embedder.IMavenProject;
-import org.eclipse.buckminster.maven.embedder.MavenManager;
 
 public class MavenComponentTypeTest
     extends TestCase

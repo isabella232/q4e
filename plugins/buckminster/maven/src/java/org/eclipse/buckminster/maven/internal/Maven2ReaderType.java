@@ -15,6 +15,9 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.model.Repository;
+import org.devzuz.q.maven.embedder.IMaven;
+import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.eclipse.buckminster.core.CorePlugin;
 import org.eclipse.buckminster.core.RMContext;
 import org.eclipse.buckminster.core.cspec.model.ComponentRequest;
@@ -24,16 +27,12 @@ import org.eclipse.buckminster.core.query.model.ComponentQuery;
 import org.eclipse.buckminster.core.reader.IComponentReader;
 import org.eclipse.buckminster.core.reader.IVersionFinder;
 import org.eclipse.buckminster.core.resolver.NodeQuery;
-import org.eclipse.buckminster.core.resolver.ResourceMapCache;
 import org.eclipse.buckminster.core.rmap.model.Provider;
 import org.eclipse.buckminster.core.rmap.model.ResourceMap;
 import org.eclipse.buckminster.core.rmap.model.SearchPath;
 import org.eclipse.buckminster.core.version.IVersionSelector;
 import org.eclipse.buckminster.core.version.ProviderMatch;
 import org.eclipse.buckminster.core.version.VersionSelectorType;
-import org.eclipse.buckminster.maven.embedder.IMaven;
-import org.eclipse.buckminster.maven.embedder.IMavenProject;
-import org.eclipse.buckminster.maven.embedder.MavenManager;
 import org.eclipse.buckminster.runtime.MonitorUtils;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -110,7 +109,7 @@ public class Maven2ReaderType extends AbstractMavenReaderType
         {
             /* the project is not in the workspace, return the repositories from the cquery */
             // TODO this need to return the repositories from the pom, we need to figure out where is the pom to read it
-            ResourceMap resourceMap = ResourceMapCache.getResourceMap(cquery.getResourceMapURL());
+            ResourceMap resourceMap = ResourceMap.fromURL(cquery.getResourceMapURL());
             repositories = new ArrayList<Repository>();
             for ( SearchPath searchPath : resourceMap.getSearchPaths() )
             {
