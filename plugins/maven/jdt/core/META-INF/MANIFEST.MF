@@ -9,7 +9,7 @@ Require-Bundle: org.eclipse.jdt.core;visibility:=reexport,
  org.devzuz.q.maven.core;visibility:=reexport,
  org.eclipse.jdt.launching;visibility:=reexport
 Eclipse-LazyStart: true
-Bundle-Vendor: Eclipse.org
+Bundle-Vendor: DevZuz
 Export-Package: org.devzuz.q.maven.jdt.core,
  org.devzuz.q.maven.jdt.core.builder,
  org.devzuz.q.maven.jdt.core.classpath.container,
