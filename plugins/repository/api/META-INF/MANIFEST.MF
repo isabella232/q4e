@@ -8,3 +8,4 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.eclipse.core.runtime;visibility:=reexport
 Eclipse-LazyStart: true
+Bundle-Vendor: DevZuz
