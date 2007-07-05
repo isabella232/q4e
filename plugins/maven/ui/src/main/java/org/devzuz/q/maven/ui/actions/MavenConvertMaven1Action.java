@@ -9,16 +9,16 @@ public class MavenConvertMaven1Action implements IObjectActionDelegate
 {
     public void setActivePart( IAction action, IWorkbenchPart targetPart )
     {
-        
+        // TODO
     }
 
     public void run( IAction action )
     {
-        
+        // TODO
     }
 
     public void selectionChanged( IAction action, ISelection selection )
     {
-        
+        // TODO
     }
 }
