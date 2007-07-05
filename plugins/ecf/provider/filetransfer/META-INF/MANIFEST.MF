@@ -11,3 +11,4 @@ Require-Bundle: org.eclipse.ecf.filetransfer;visibility:=reexport,
  org.eclipse.ecf;visibility:=reexport,
  org.devzuz.q.maven.wagon;visibility:=reexport
 Eclipse-LazyStart: true
+Bundle-Vendor: DevZuz
