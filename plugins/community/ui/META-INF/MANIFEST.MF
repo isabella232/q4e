@@ -4,7 +4,7 @@ Bundle-Name: Community UI
 Bundle-SymbolicName: org.devzuz.q.community.ui;singleton:=true
 Bundle-Version: 0.2.0.v200707032020
 Bundle-Activator: org.devzuz.q.community.ui.Activator
-Bundle-Vendor: Eclipse.org
+Bundle-Vendor: DevZuz
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.resources;visibility:=reexport,
  org.devzuz.q.community.core;visibility:=reexport,
