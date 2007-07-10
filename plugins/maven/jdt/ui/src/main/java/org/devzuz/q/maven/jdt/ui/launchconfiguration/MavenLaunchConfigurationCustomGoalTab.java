@@ -71,7 +71,7 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
 
     public String getName()
     {
-        return "Maven 2 Custom Goal";
+        return "Maven 2 Goal";
     }
 
     public void initializeFrom( ILaunchConfiguration configuration )
