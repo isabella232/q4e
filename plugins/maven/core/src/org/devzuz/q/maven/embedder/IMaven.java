@@ -122,6 +122,7 @@ public interface IMaven {
             throws CoreException;
 
     /**
+     * Same as calling {@link #executeGoal(IMavenProject, String)} with (mavenProject, "install")
      * 
      * @param mavenProject
      * @throws CoreException
@@ -129,6 +130,7 @@ public interface IMaven {
     public void install(IMavenProject mavenProject) throws CoreException;
 
     /**
+     * Same as calling {@link #executeGoal(IMavenProject, String)} with (mavenProject, "deploy")
      * 
      * @param mavenProject
      * @throws CoreException
