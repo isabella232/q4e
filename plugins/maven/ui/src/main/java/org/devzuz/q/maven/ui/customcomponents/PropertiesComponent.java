@@ -115,16 +115,20 @@ public class PropertiesComponent
         removePropertyButton.setEnabled( false );
 
         setTableColumnWidth();
+        // TODO : Should I call refreshPropertiesTable() here ?
     }
 
     public void refreshPropertiesTable()
     {
         propertiesTable.removeAll();
 
-        for ( Map.Entry<String, String> entry : dataSource.entrySet() )
+        if( dataSource != null )
         {
-            TableItem item = new TableItem( propertiesTable, SWT.BEGINNING );
-            item.setText( new String[] { entry.getKey(), entry.getValue() } );
+            for ( Map.Entry<String, String> entry : dataSource.entrySet() )
+            {
+                TableItem item = new TableItem( propertiesTable, SWT.BEGINNING );
+                item.setText( new String[] { entry.getKey(), entry.getValue() } );
+            }
         }
     }
 

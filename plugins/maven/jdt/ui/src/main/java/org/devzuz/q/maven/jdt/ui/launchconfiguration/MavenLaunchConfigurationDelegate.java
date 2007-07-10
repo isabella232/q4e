@@ -14,6 +14,9 @@ import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
 public class MavenLaunchConfigurationDelegate implements ILaunchConfigurationDelegate
 {
+    public static final String CUSTOM_GOAL = "CustomGoal";
+    public static final String CUSTOM_GOAL_PARAMETERS = "CustomGoalParameters";
+    
     public void launch( ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
