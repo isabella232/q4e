@@ -72,7 +72,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         propertiesTable.setHeaderVisible( true );
         
         /*TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0 );
-        column.setText( Messages.getString("MavenPomEditor.MavenPomEditor_Key") );
+        column.setText( Messages.getString("MavenPomEditor_MavenPomEditor_Key") );
         column.setWidth( 100 );*/
 
         Composite container2 = toolKit.createComposite( container );
@@ -81,10 +81,10 @@ public class MavenPomDependenciesFormPage extends FormPage
         layout.fill = true;
         container2.setLayout( layout );
 
-        Button addPropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor.MavenPomEditor_AddButton"), SWT.PUSH | SWT.CENTER );
+        Button addPropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor_MavenPomEditor_AddButton"), SWT.PUSH | SWT.CENTER );
         //addPropertyButton.addSelectionListener( buttonListener );
 
-        Button removePropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor.MavenPomEditor_RemoveButton"), SWT.PUSH | SWT.CENTER );
+        Button removePropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor_MavenPomEditor_RemoveButton"), SWT.PUSH | SWT.CENTER );
         //removePropertyButton.addSelectionListener( buttonListener );
         removePropertyButton.setEnabled( false );
         
@@ -123,42 +123,42 @@ public class MavenPomDependenciesFormPage extends FormPage
         GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
         controlData.horizontalIndent = 10;
         
-        Label groupIdLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor.MavenPomEditor_GroupId") , SWT.NONE ); 
+        Label groupIdLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor_MavenPomEditor_GroupId") , SWT.NONE ); 
         groupIdLabel.setLayoutData( labelData );
         
         Text groupIdText = toolKit.createText( parent, "groupId" /*, SWT.BORDER | SWT.SINGLE*/ ); 
         groupIdText.setLayoutData( controlData );
         groupIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
         
-        Label artifactIdLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor.MavenPomEditor_ArtifactId"), SWT.NONE ); 
+        Label artifactIdLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor_MavenPomEditor_ArtifactId"), SWT.NONE ); 
         artifactIdLabel.setLayoutData( labelData );
         
         Text artifactIdText = toolKit.createText( parent, "artifactId" /*, SWT.BORDER | SWT.SINGLE*/ ); 
         artifactIdText.setLayoutData( controlData );
         artifactIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
         
-        Label versionLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor.MavenPomEditor_Version"), SWT.NONE ); 
+        Label versionLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor_MavenPomEditor_Version"), SWT.NONE ); 
         versionLabel.setLayoutData( labelData );
         
         Text versionText = toolKit.createText( parent, "Version" /*, SWT.BORDER | SWT.SINGLE*/ ); 
         versionText.setLayoutData( controlData );
         versionText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
         
-        Label typeLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor.MavenPomEditor_Type"), SWT.NONE ); 
+        Label typeLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor_MavenPomEditor_Type"), SWT.NONE ); 
         typeLabel.setLayoutData( labelData );
         
         Text typeText = toolKit.createText( parent, "Type" /*, SWT.BORDER | SWT.SINGLE*/ ); 
         typeText.setLayoutData( controlData );
         typeText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
         
-        Label scopeLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor.MavenPomEditor_Scope"), SWT.NONE ); 
+        Label scopeLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor_MavenPomEditor_Scope"), SWT.NONE ); 
         scopeLabel.setLayoutData( labelData );
         
         Text scopeText = toolKit.createText( parent, "Scope" /*, SWT.BORDER | SWT.SINGLE*/ ); 
         scopeText.setLayoutData( controlData );
         scopeText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
         
-        Label systemPathLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor.MavenPomEditor_SystemPath"), SWT.NONE ); 
+        Label systemPathLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor_MavenPomEditor_SystemPath"), SWT.NONE ); 
         systemPathLabel.setLayoutData( labelData );
         systemPathLabel.setEnabled( false );
         
@@ -167,7 +167,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         systemPathText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
         systemPathText.setEnabled( false );
         
-        Label optionalLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor.MavenPomEditor_Optional"), SWT.NONE ); 
+        Label optionalLabel = toolKit.createLabel( parent, Messages.getString("MavenPomEditor_MavenPomEditor_Optional"), SWT.NONE ); 
         optionalLabel.setLayoutData( labelData );
         
         Button optionalRadioButton = toolKit.createButton( parent , "", SWT.CHECK);
@@ -188,7 +188,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         dependencyExclusionTable.setHeaderVisible( true );
         
         /*TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0 );
-        column.setText( Messages.getString("MavenPomEditor.MavenPomEditor_Key") );
+        column.setText( Messages.getString("MavenPomEditor_MavenPomEditor_Key") );
         column.setWidth( 100 ); */
 
         Composite container2 = toolKit.createComposite( container );
@@ -197,10 +197,10 @@ public class MavenPomDependenciesFormPage extends FormPage
         layout.fill = true;
         container2.setLayout( layout );
 
-        Button addPropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor.MavenPomEditor_AddButton"), SWT.PUSH | SWT.CENTER );
+        Button addPropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor_MavenPomEditor_AddButton"), SWT.PUSH | SWT.CENTER );
         //addPropertyButton.addSelectionListener( buttonListener );
 
-        Button removePropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor.MavenPomEditor_RemoveButton"), SWT.PUSH | SWT.CENTER );
+        Button removePropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor_MavenPomEditor_RemoveButton"), SWT.PUSH | SWT.CENTER );
         //removePropertyButton.addSelectionListener( buttonListener );
         removePropertyButton.setEnabled( false );
         
