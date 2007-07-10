@@ -2,7 +2,7 @@
 <feature
       id="org.devzuz.q.feature"
       label="%featureName"
-      version="0.2.0.v200707052056"
+      version="0.2.0.v200707102124"
       provider-name="%providerName">
 
    <description>
