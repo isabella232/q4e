@@ -7,22 +7,31 @@
 package org.devzuz.q.maven.jdt.ui.launchconfiguration;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.ui.Activator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
+import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IType;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.dialogs.ElementListSelectionDialog;
+
+/* NOTE : This class is still being debugged so please don't delete tracer statements. */
 
 /**
  * Add the Maven 2 launch configuration to "Run As" in the right click menu
@@ -60,15 +69,9 @@ public class MavenLaunchConfigurationShortcut
      */
     protected void searchAndLaunch( Object[] search, String mode )
     {
-        // TODO
-        MessageDialog.openInformation( getShell(), "Maven 2 Launch", "Not implemented." );
-        search = null;
-
-        IType[] types = null;
         if ( search != null )
         {
             List<IMavenProject> projects = findProjects( search );
-            IType type = null;
             if ( projects.isEmpty() )
             {
                 MessageDialog.openInformation( getShell(), "Maven 2 Launch", "No Maven 2 projects found." );
@@ -90,12 +93,15 @@ public class MavenLaunchConfigurationShortcut
 
     private List<IMavenProject> findProjects( Object[] search )
     {
+        System.out.println("-erle- : trace 1");
         List<IMavenProject> mavenProjects = new ArrayList<IMavenProject>();
         for ( Object o : search )
         {
+            System.out.println("-erle- : trace 2");
             IMavenProject mavenProject = getMavenProject( o );
             if ( mavenProject != null )
             {
+                System.out.println("-erle- : trace 4");
                 mavenProjects.add( mavenProject );
             }
         }
@@ -104,13 +110,18 @@ public class MavenLaunchConfigurationShortcut
 
     public IMavenProject getMavenProject( Object o )
     {
+        System.out.println("-erle- : trace 3");
         if ( o instanceof IAdaptable )
         {
+            System.out.println("-erle- : trace 3.1");
             IMavenProject mavenProject = (IMavenProject) ( (IAdaptable) o ).getAdapter( IMavenProject.class );
             return mavenProject;
         }
         else
+        {
+            System.out.println("-erle- : trace 3.2");
             return null;
+        }
     }
 
     protected void launch( IMavenProject mavenProject, String mode )
@@ -139,8 +150,119 @@ public class MavenLaunchConfigurationShortcut
      */
     private ILaunchConfiguration findLaunchConfiguration( IMavenProject mavenProject, String mode )
     {
-        // TODO Auto-generated method stub
+        List<ILaunchConfiguration> suitableConfigs = Collections.emptyList(); 
+        
+        ILaunchManager launchMgr = DebugPlugin.getDefault().getLaunchManager();
+        ILaunchConfigurationType mavenLaunchConfigType = launchMgr.getLaunchConfigurationType( MavenLaunchConfigurationDelegate.CONFIGURATION_TYPE_ID );
+        ILaunchConfiguration[] configurations = null;
+        try
+        {
+            configurations = launchMgr.getLaunchConfigurations( mavenLaunchConfigType );
+
+            for ( ILaunchConfiguration config : configurations )
+            {
+                if ( config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PROJECT_NAME, "" ).equals( mavenProject.getProject().getName() ) )
+                {
+                    suitableConfigs.add( config );
+                }
+            }
+        }
+        catch ( Exception e )
+        {
+            // TODO: handle exception
+        }
+
+        // If there is only one config for this project, return it.
+        if ( suitableConfigs.size() == 1 )
+        {
+            return suitableConfigs.get( 0 );
+        }
+        // If there are multiple configs for this project, show a dialog 
+        // with the configs for this project and return the selected config
+        else if( suitableConfigs.size() > 0 ) 
+        {
+            return showLaunchConfigurationSelectionDialog( suitableConfigs.toArray( new ILaunchConfiguration[suitableConfigs.size()] ) );
+        }
+        // If there is no config for this project, yet we have configs for other maven projects
+        // show a dialog with all the maven configs and return the selected config
+        else if( ( suitableConfigs.size() <= 0 ) && ( configurations != null ) && ( configurations.length > 0 ) )
+        {
+            return showLaunchConfigurationSelectionDialog( configurations );
+        }
+        // If no configs for this project and no configs for any maven projects
+        // launch the LCD ? Show a dialog that says No launch configuration has been configured ?
+        else
+        {
+            MessageDialog.openInformation( getShell(), "Maven 2 Launch", "No launch configuration has been configured." );
+        }
+        
         return null;
     }
+    
+    private ILaunchConfiguration showLaunchConfigurationSelectionDialog( ILaunchConfiguration[] configs )
+    {
+        ElementListSelectionDialog dialog = new ElementListSelectionDialog( getShell(), new LaunchConfigurationLabelProvider() );
 
+        dialog.setTitle( "Maven Project Launch Configuration" );
+        dialog.setMessage( "Choose a launch configuration" );
+        dialog.setBlockOnOpen( true );
+
+        if ( ( configs != null ) && ( configs.length > 0 ) )
+        {
+            dialog.setElements( configs );
+            if ( dialog.open() == Window.OK )
+            {
+                return (ILaunchConfiguration) dialog.getFirstResult();
+            }
+        }
+        else
+        {
+            MessageDialog.openInformation( getShell(), "Maven 2 Launch", "No launch configuration has been given." );
+        }
+
+        return null;
+    }
+    
+    private class LaunchConfigurationLabelProvider extends LabelProvider
+    {
+        public String getText( Object element )
+        {
+            if ( element instanceof ILaunchConfiguration )
+            {
+                StringBuffer label = new StringBuffer();
+                ILaunchConfiguration config = (ILaunchConfiguration) element;
+
+                Map<String, String> propertyMap = Collections.emptyMap();
+                try
+                {
+                    label.append( config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL, "" ) );
+                    propertyMap = config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PARAMETERS, Collections.emptyMap() );
+                }
+                catch ( Exception e )
+                {
+                    // TODO: handle exception
+                }
+
+                if ( propertyMap.size() > 0 )
+                    label.append( " ( " );
+
+                StringBuffer propertyLabel = new StringBuffer();
+                for ( Map.Entry<String, String> entry : propertyMap.entrySet() )
+                {
+                    if ( propertyLabel.length() > 0 )
+                        label.append( "," );
+                    label.append( "\"" + entry.getKey() + "\" = \"" + entry.getValue() + "\"" );
+                }
+
+                label.append( propertyLabel );
+
+                if ( propertyMap.size() > 0 )
+                    label.append( " )" );
+
+                return label.toString();
+            }
+            
+            return null;
+        }
+    }
 }

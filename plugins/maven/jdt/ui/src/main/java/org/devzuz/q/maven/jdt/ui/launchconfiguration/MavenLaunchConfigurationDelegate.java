@@ -20,6 +20,7 @@ import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 
 public class MavenLaunchConfigurationDelegate implements ILaunchConfigurationDelegate
 {
+    public static final String CONFIGURATION_TYPE_ID = "org.devzuz.q.maven.jdt.ui.MavenLaunchConfigurationId";
     public static final String CUSTOM_GOAL = "CustomGoal";
     public static final String CUSTOM_GOAL_PARAMETERS = "CustomGoalParameters";
     public static final String CUSTOM_GOAL_PROJECT_NAME = "CustomGoalProjectName";
