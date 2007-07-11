@@ -6,6 +6,12 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.launchconfiguration;
 
+import java.util.Collections;
+import java.util.Map;
+import java.util.Properties;
+
+import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.debug.core.ILaunch;
@@ -16,10 +22,35 @@ public class MavenLaunchConfigurationDelegate implements ILaunchConfigurationDel
 {
     public static final String CUSTOM_GOAL = "CustomGoal";
     public static final String CUSTOM_GOAL_PARAMETERS = "CustomGoalParameters";
+    public static final String CUSTOM_GOAL_PROJECT_NAME = "CustomGoalProjectName";
     
     public void launch( ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
         System.out.println("Test Launch Configuration");
+        
+        String projectName = configuration.getAttribute( CUSTOM_GOAL_PROJECT_NAME, "" );
+        String goal = configuration.getAttribute( CUSTOM_GOAL, "" );
+        Map<String, String> propertyMap = configuration.getAttribute( CUSTOM_GOAL_PARAMETERS, Collections.EMPTY_MAP );
+        Properties properties = new Properties();
+        properties.putAll( propertyMap );
+        
+        if ( ( MavenLaunchConfigurationUtils.isValidMavenProject( projectName ) ) &&
+             ( goal.length() > 0 ) )
+        {
+            IMavenProject mavenProject = MavenLaunchConfigurationUtils.getMavenProjectWithName( projectName );
+            if ( mavenProject != null )
+            {
+                System.out.println( "trace 5" );
+                if ( properties == null || properties.size() <= 0 )
+                {
+                    MavenManager.getMaven().executeGoal( mavenProject, goal );
+                }
+                else
+                {
+                    MavenManager.getMaven().executeGoal( mavenProject, goal, properties );
+                }
+            }
+        }
     }
 }
