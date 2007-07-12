@@ -28,8 +28,6 @@ public class MavenLaunchConfigurationDelegate implements ILaunchConfigurationDel
     public void launch( ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
-        System.out.println("Test Launch Configuration");
-        
         String projectName = configuration.getAttribute( CUSTOM_GOAL_PROJECT_NAME, "" );
         String goal = configuration.getAttribute( CUSTOM_GOAL, "" );
         Map<String, String> propertyMap = configuration.getAttribute( CUSTOM_GOAL_PARAMETERS, Collections.EMPTY_MAP );
@@ -42,7 +40,6 @@ public class MavenLaunchConfigurationDelegate implements ILaunchConfigurationDel
             IMavenProject mavenProject = MavenLaunchConfigurationUtils.getMavenProjectWithName( projectName );
             if ( mavenProject != null )
             {
-                System.out.println( "trace 5" );
                 if ( properties == null || properties.size() <= 0 )
                 {
                     MavenManager.getMaven().executeGoal( mavenProject, goal );

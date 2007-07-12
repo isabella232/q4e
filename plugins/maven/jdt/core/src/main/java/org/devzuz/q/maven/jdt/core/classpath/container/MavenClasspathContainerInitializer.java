@@ -25,9 +25,6 @@ import org.eclipse.jdt.core.IJavaProject;
 public class MavenClasspathContainerInitializer
     extends ClasspathContainerInitializer
 {
-
-    private Set<IJavaProject> projectsInitialized = new HashSet<IJavaProject>();
-
     public MavenClasspathContainerInitializer()
     {
         Activator.getLogger().info( "Creating the " + this.getClass().getName() );
@@ -40,18 +37,9 @@ public class MavenClasspathContainerInitializer
 
         if ( containerPath.equals( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ) ) )
         {
-
-            // TODO for some reason initialize is called twice, quick fix until investigated
-            if ( projectsInitialized.contains( project ) )
-            {
-                return;
-            }
-
             Activator.getLogger().info( "Initializing classpath for " + project.getPath() );
 
-            MavenClasspathContainer newContainer = MavenClasspathContainer.newClasspath( project.getProject() );
-
-            projectsInitialized.add( project );
+            MavenClasspathContainer.newClasspath( project.getProject() );
         }
 
     }
