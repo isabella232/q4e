@@ -26,6 +26,8 @@ public class EclipseMavenArtifact implements IMavenArtifact {
 
     private String scope;
 
+    private String type;
+
     private File file;
 
     private IMavenArtifact parent = null;
@@ -42,6 +44,7 @@ public class EclipseMavenArtifact implements IMavenArtifact {
         setVersion(artifact.getVersion());
         setFile(artifact.getFile());
         setScope(artifact.getScope());
+        setType(artifact.getType());
     }
 
     public String getArtifactId() {
@@ -98,6 +101,15 @@ public class EclipseMavenArtifact implements IMavenArtifact {
 
     public void setScope(String scope) {
         this.scope = scope;
+    }
+
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public Set<IMavenArtifact> getChildren() {

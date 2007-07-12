@@ -45,4 +45,8 @@ public interface IMavenArtifact {
     public abstract String getScope();
 
     public abstract void setScope(String scope);
+
+    public abstract String getType();
+
+    public abstract void setType(String type);
 }
