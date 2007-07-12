@@ -62,6 +62,18 @@ public class Messages
     public static String MavenPomEditor_MavenPomEditor_URL;
 
     public static String MavenPomEditor_MavenPomEditor_InceptionYear;
+    
+    public static String MavenLaunchShortcut_NoLaunchConfigFound;
+    
+    public static String MavenLaunchShortcut_NoLaunchConfigGiven;
+    
+    public static String MavenLaunchShortcut_LaunchDialogTitle;
+    
+    public static String MavenLaunchShortcut_ConfigDialogTitle;
+    
+    public static String MavenLaunchShortcut_NoProjectFound;
+    
+    public static String MavenLaunchShortcut_SelectLaunchConfigLabel;
 
     static
     {
@@ -71,20 +83,5 @@ public class Messages
 
     private Messages()
     {
-    }
-
-    /**
-     * @deprecated use static variables
-     */
-    public static String getString( String key )
-    {
-        try
-        {
-            return RESOURCE_BUNDLE.getString( key );
-        }
-        catch ( MissingResourceException e )
-        {
-            return '!' + key + '!';
-        }
     }
 }

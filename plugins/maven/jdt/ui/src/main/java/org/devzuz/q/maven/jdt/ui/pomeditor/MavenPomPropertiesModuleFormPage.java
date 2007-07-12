@@ -59,13 +59,13 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         
         Section propertiesControls = toolkit.createSection(form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         propertiesControls.setDescription( "Set the properties of this POM." );
-        propertiesControls.setText( Messages.getString("MavenPomEditor_MavenPomEditor_Properties") ); 
+        propertiesControls.setText( Messages.MavenPomEditor_MavenPomEditor_Properties ); 
         propertiesControls.setLayoutData( layoutData );
         propertiesControls.setClient( createPropertiesControls( propertiesControls , toolkit ) );
         
         Section moduleControls = toolkit.createSection(form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION );
         moduleControls.setDescription( "Aggregate the build of a set of projects by adding them as modules." );
-        moduleControls.setText( Messages.getString("MavenPomEditor_MavenPomEditor_Modules") ); 
+        moduleControls.setText( Messages.MavenPomEditor_MavenPomEditor_Modules ); 
         moduleControls.setLayoutData( layoutData );
         moduleControls.setClient( createModulesControls( moduleControls , toolkit ) );
         
@@ -85,11 +85,11 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         
         /*
         TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0 );
-        column.setText( Messages.getString("MavenPomEditor_MavenPomEditor_Key") );
+        column.setText( Messages.MavenPomEditor_MavenPomEditor_Key") );
         column.setWidth( 100 );
 
         column = new TableColumn( propertiesTable, SWT.CENTER, 1 );
-        column.setText( Messages.getString("MavenPomEditor_MavenPomEditor_Value") );
+        column.setText( Messages.MavenPomEditor_MavenPomEditor_Value") );
         column.setWidth( 100 ); */
 
         Composite container2 = toolKit.createComposite( container );
@@ -98,14 +98,14 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         layout.fill = true;
         container2.setLayout( layout );
 
-        Button addPropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor_MavenPomEditor_AddButton"), SWT.PUSH | SWT.CENTER );
+        Button addPropertyButton = toolKit.createButton( container2, Messages.MavenPomEditor_MavenPomEditor_AddButton, SWT.PUSH | SWT.CENTER );
         //addPropertyButton.addSelectionListener( buttonListener );
 
-        Button editPropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor_MavenPomEditor_EditButton"), SWT.PUSH | SWT.CENTER );
+        Button editPropertyButton = toolKit.createButton( container2, Messages.MavenPomEditor_MavenPomEditor_EditButton, SWT.PUSH | SWT.CENTER );
         //editPropertyButton.addSelectionListener( buttonListener );
         editPropertyButton.setEnabled( false );
 
-        Button removePropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor_MavenPomEditor_RemoveButton"), SWT.PUSH | SWT.CENTER );
+        Button removePropertyButton = toolKit.createButton( container2, Messages.MavenPomEditor_MavenPomEditor_RemoveButton, SWT.PUSH | SWT.CENTER );
         //removePropertyButton.addSelectionListener( buttonListener );
         removePropertyButton.setEnabled( false );
         
@@ -126,7 +126,7 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         
         /*
         TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0 );
-        column.setText( Messages.getString("MavenPomEditor_MavenPomEditor_Module") );
+        column.setText( Messages.MavenPomEditor_MavenPomEditor_Module") );
         column.setWidth( 200 ); */
        
         Composite container2 = toolKit.createComposite( container );
@@ -135,14 +135,14 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         layout.fill = true;
         container2.setLayout( layout );
 
-        Button addPropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor_MavenPomEditor_AddButton"), SWT.PUSH | SWT.CENTER );
+        Button addPropertyButton = toolKit.createButton( container2, Messages.MavenPomEditor_MavenPomEditor_AddButton, SWT.PUSH | SWT.CENTER );
         //addPropertyButton.addSelectionListener( buttonListener );
 
-        Button editPropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor_MavenPomEditor_EditButton"), SWT.PUSH | SWT.CENTER );
+        Button editPropertyButton = toolKit.createButton( container2, Messages.MavenPomEditor_MavenPomEditor_EditButton, SWT.PUSH | SWT.CENTER );
         //editPropertyButton.addSelectionListener( buttonListener );
         editPropertyButton.setEnabled( false );
 
-        Button removePropertyButton = toolKit.createButton( container2, Messages.getString("MavenPomEditor_MavenPomEditor_RemoveButton"), SWT.PUSH | SWT.CENTER );
+        Button removePropertyButton = toolKit.createButton( container2, Messages.MavenPomEditor_MavenPomEditor_RemoveButton, SWT.PUSH | SWT.CENTER );
         //removePropertyButton.addSelectionListener( buttonListener );
         removePropertyButton.setEnabled( false );
         

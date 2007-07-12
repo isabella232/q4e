@@ -49,12 +49,10 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
 
     public void createControl( Composite parent )
     {
-        System.out.println( "-erle- : createControl()" );
         ModifyListener modifyingListener = new ModifyListener()
         {
             public void modifyText( ModifyEvent e )
             {
-                System.out.println( "-erle- : modifyText() ..." );
                 updateLaunchConfigurationDialog();
             }
         };
@@ -112,7 +110,6 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
 
     public void initializeFrom( ILaunchConfiguration configuration )
     {
-        System.out.println( "-erle- : initializeFrom()" );
         try
         {
             projectText.setText( configuration.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PROJECT_NAME,
@@ -132,7 +129,6 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
 
     public void performApply( ILaunchConfigurationWorkingCopy configuration )
     {
-        System.out.println( "-erle- : performApply()" );
         configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL, customGoalText.getText().trim() );
         configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PARAMETERS,
                                     propertiesComponent.getDataSource() );
@@ -143,38 +139,20 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
     @Override
     public boolean canSave()
     {
-        System.out.println( "-erle- : canSave()" );
         return ( customGoalText.getText().trim().length() > 0 )
                         && ( MavenLaunchConfigurationUtils.isValidMavenProject( projectText.getText().trim() ) );
     }
 
-    @Override
-    public void dispose()
-    {
-        System.out.println( "-erle- : dispose()" );
-    }
-
-    @Override
-    public void activated( ILaunchConfigurationWorkingCopy workingCopy )
-    {
-        System.out.println( "-erle- : activated()" );
-    }
-
-    @Override
-    public void deactivated( ILaunchConfigurationWorkingCopy workingCopy )
-    {
-        System.out.println( "-erle- : deactivated()" );
-    }
-
     public void setDefaults( ILaunchConfigurationWorkingCopy configuration )
     {
-        System.out.println( "-erle- : setDefaults()" );
+        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL, "test" );
+        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PARAMETERS, Collections.emptyList() );
+        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PROJECT_NAME, "" );
     }
 
     @Override
     public boolean isValid( ILaunchConfiguration launchConfig )
     {
-        System.out.println( "isValid( ILaunchConfiguration launchConfig ) ..." );
         boolean retVal = true;
         try
         {

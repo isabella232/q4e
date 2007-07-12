@@ -13,6 +13,8 @@ import java.util.Map;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.ui.Activator;
+import org.devzuz.q.maven.jdt.ui.Messages;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.debug.core.DebugPlugin;
@@ -21,6 +23,7 @@ import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jdt.core.IJavaElement;
+import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -30,8 +33,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-
-/* NOTE : This class is still being debugged so please don't delete tracer statements. */
 
 /**
  * Add the Maven 2 launch configuration to "Run As" in the right click menu
@@ -74,7 +75,7 @@ public class MavenLaunchConfigurationShortcut
             List<IMavenProject> projects = findProjects( search );
             if ( projects.isEmpty() )
             {
-                MessageDialog.openInformation( getShell(), "Maven 2 Launch", "No Maven 2 projects found." );
+                MessageDialog.openInformation( getShell(), Messages.MavenLaunchShortcut_LaunchDialogTitle, Messages.MavenLaunchShortcut_NoProjectFound );
             }
             else
             {
@@ -93,15 +94,12 @@ public class MavenLaunchConfigurationShortcut
 
     private List<IMavenProject> findProjects( Object[] search )
     {
-        System.out.println("-erle- : trace 1");
         List<IMavenProject> mavenProjects = new ArrayList<IMavenProject>();
         for ( Object o : search )
         {
-            System.out.println("-erle- : trace 2");
             IMavenProject mavenProject = getMavenProject( o );
             if ( mavenProject != null )
             {
-                System.out.println("-erle- : trace 4");
                 mavenProjects.add( mavenProject );
             }
         }
@@ -110,16 +108,14 @@ public class MavenLaunchConfigurationShortcut
 
     public IMavenProject getMavenProject( Object o )
     {
-        System.out.println("-erle- : trace 3");
-        if ( o instanceof IAdaptable )
+        if ( o instanceof IJavaProject )
         {
-            System.out.println("-erle- : trace 3.1");
-            IMavenProject mavenProject = (IMavenProject) ( (IAdaptable) o ).getAdapter( IMavenProject.class );
+            IProject project = ( (IJavaProject) o ).getProject();
+            IMavenProject mavenProject = (IMavenProject) ( (IAdaptable) project ).getAdapter( IMavenProject.class );
             return mavenProject;
         }
         else
         {
-            System.out.println("-erle- : trace 3.2");
             return null;
         }
     }
@@ -150,7 +146,7 @@ public class MavenLaunchConfigurationShortcut
      */
     private ILaunchConfiguration findLaunchConfiguration( IMavenProject mavenProject, String mode )
     {
-        List<ILaunchConfiguration> suitableConfigs = Collections.emptyList(); 
+        List<ILaunchConfiguration> suitableConfigs = new ArrayList<ILaunchConfiguration>(); 
         
         ILaunchManager launchMgr = DebugPlugin.getDefault().getLaunchManager();
         ILaunchConfigurationType mavenLaunchConfigType = launchMgr.getLaunchConfigurationType( MavenLaunchConfigurationDelegate.CONFIGURATION_TYPE_ID );
@@ -161,7 +157,9 @@ public class MavenLaunchConfigurationShortcut
 
             for ( ILaunchConfiguration config : configurations )
             {
-                if ( config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PROJECT_NAME, "" ).equals( mavenProject.getProject().getName() ) )
+                String configProjectName = config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PROJECT_NAME, "" );
+                String mavenProjectName = mavenProject.getProject().getName();
+                if ( configProjectName.equals( mavenProjectName ) )
                 {
                     suitableConfigs.add( config );
                 }
@@ -171,7 +169,7 @@ public class MavenLaunchConfigurationShortcut
         {
             // TODO: handle exception
         }
-
+        
         // If there is only one config for this project, return it.
         if ( suitableConfigs.size() == 1 )
         {
@@ -193,7 +191,7 @@ public class MavenLaunchConfigurationShortcut
         // launch the LCD ? Show a dialog that says No launch configuration has been configured ?
         else
         {
-            MessageDialog.openInformation( getShell(), "Maven 2 Launch", "No launch configuration has been configured." );
+            MessageDialog.openInformation( getShell(), Messages.MavenLaunchShortcut_LaunchDialogTitle, Messages.MavenLaunchShortcut_NoLaunchConfigFound );
         }
         
         return null;
@@ -203,8 +201,8 @@ public class MavenLaunchConfigurationShortcut
     {
         ElementListSelectionDialog dialog = new ElementListSelectionDialog( getShell(), new LaunchConfigurationLabelProvider() );
 
-        dialog.setTitle( "Maven Project Launch Configuration" );
-        dialog.setMessage( "Choose a launch configuration" );
+        dialog.setTitle( Messages.MavenLaunchShortcut_ConfigDialogTitle );
+        dialog.setMessage( Messages.MavenLaunchShortcut_SelectLaunchConfigLabel );
         dialog.setBlockOnOpen( true );
 
         if ( ( configs != null ) && ( configs.length > 0 ) )
@@ -217,7 +215,7 @@ public class MavenLaunchConfigurationShortcut
         }
         else
         {
-            MessageDialog.openInformation( getShell(), "Maven 2 Launch", "No launch configuration has been given." );
+            MessageDialog.openInformation( getShell(), Messages.MavenLaunchShortcut_LaunchDialogTitle, Messages.MavenLaunchShortcut_NoLaunchConfigGiven );
         }
 
         return null;
@@ -265,4 +263,14 @@ public class MavenLaunchConfigurationShortcut
             return null;
         }
     }
+    
+    // NOTE : Do not delete, might prove useful for debugging in the future
+    /*
+    private void debugSelection( IStructuredSelection selection )
+    {
+        for( Object o : selection.toArray() )
+        {
+            System.out.println( "-erle- : class == " + o.getClass().getName() );
+        }
+    }*/
 }
