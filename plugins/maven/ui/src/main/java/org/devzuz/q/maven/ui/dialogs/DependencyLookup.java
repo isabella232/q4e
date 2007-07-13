@@ -201,27 +201,35 @@ public class DependencyLookup
 
     protected void okPressed()
     {
-        TableItem[] items = dependencyTable.getSelection();
+        TableItem item = dependencyTable.getSelection()[0];
 
-        if ( items != null )
-        {
-            groupId = items[0].getText( 0 ).trim();
-            artifactId = items[0].getText( 1 ).trim();
-            version = items[0].getText( 2 ).trim();
-        }
+        groupId = item.getText( 0 ).trim();
+        artifactId = item.getText( 1 ).trim();
+        version = item.getText( 2 ).trim();
 
         super.okPressed();
     }
 
+    @Override
+    protected Control createButtonBar( Composite parent )
+    {
+         Control bar = super.createButtonBar( parent );
+         Button okButton = getButton( IDialogConstants.OK_ID );
+         okButton.setEnabled( false );
+         return bar;
+    }
+
     public void validate()
     {
-        if ( searchText.getText().trim().length() > 0 && okToEnable )
+        lookupButton.setEnabled( searchText.getText().trim().length() > 0 && okToEnable );
+
+        TableItem[] items = dependencyTable.getSelection();
+        Button okButton = getButton( IDialogConstants.OK_ID );
+
+        /* validate can be called before the buttons are created */
+        if ( okButton != null )
         {
-            lookupButton.setEnabled( true );
-        }
-        else
-        {
-            lookupButton.setEnabled( false );
+            okButton.setEnabled( ( items != null ) && ( items.length > 0 ) );
         }
     }
 
