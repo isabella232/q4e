@@ -73,10 +73,20 @@ public class ImportProjectJob
         return status;
     }
 
+    /**
+     * Get the eclipse project name from the maven project
+     * @param mavenProject
+     */
+    protected String getProjectName( final IMavenProject mavenProject )
+    {
+        // TODO this should be configurable
+        return mavenProject.getGroupId() + "." + mavenProject.getArtifactId();
+    }
+
     private void createMavenProject( final IMavenProject mavenProject, IProgressMonitor monitor )
         throws CoreException
     {
-        final String projectName = mavenProject.getArtifactId();
+        final String projectName = getProjectName( mavenProject );
         final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
         IWorkspaceRoot root = workspace.getRoot();
