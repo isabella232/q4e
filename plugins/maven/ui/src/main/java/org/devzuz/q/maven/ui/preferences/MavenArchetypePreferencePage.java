@@ -145,8 +145,8 @@ public class MavenArchetypePreferencePage extends PreferencePage
 	   
     }
 	
-	private boolean isItemPresent(String archeTypeListSource, String type) {
-		
+	private boolean isItemPresent(String archeTypeListSource, String type) 
+	{
 		for(int iCount = 0; iCount < artifactsTable.getItemCount(); iCount++ ) 
 		{
 			TableItem items = artifactsTable.getItem(iCount);
@@ -157,6 +157,11 @@ public class MavenArchetypePreferencePage extends PreferencePage
 		}
 		return false;
 	}
+	
+    public boolean performOk() {
+        return true;
+    }
+	
 	public void init(IWorkbench workbench) 
 	{
 	
@@ -168,9 +173,7 @@ public class MavenArchetypePreferencePage extends PreferencePage
     	
     public void widgetDefaultSelected( SelectionEvent e )
     {
-        System.out.println("item : " + artifactsTable.getItemCount());
         widgetSelected( e );
-       
     }
 
     public void widgetSelected( SelectionEvent e )

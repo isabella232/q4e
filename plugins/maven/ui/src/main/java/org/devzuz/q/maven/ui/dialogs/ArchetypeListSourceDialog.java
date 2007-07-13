@@ -2,6 +2,11 @@ package org.devzuz.q.maven.ui.dialogs;
 
 import org.devzuz.q.maven.ui.Activator;
 import org.devzuz.q.maven.ui.Messages;
+
+import java.net.URL;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.window.IShellProvider;
@@ -129,6 +134,34 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
         return super.open();
     }
 
+	private static boolean isValidURL(String strURL)
+	{
+		URL url = null;
+		boolean retVal = false;
+    	try {
+			url = new URL(strURL); 
+			retVal = true;
+    	} catch (java.net.MalformedURLException ex) {
+    	    //System.out.println("Malformed URL exception: " + ex);
+    	}
+    	if(retVal) { 
+        	try {
+
+            	Pattern pattern = Pattern.compile("^"+url.getProtocol().trim()+"://[\\p{Alnum}]{3,}+.{1}[\\p{Alnum}]{3}[\\p{Alnum}.?+;/=-]*$");
+            	Matcher m = pattern.matcher(strURL);
+            		if(m.matches()) {
+            			retVal= true;
+
+            		}else{
+            			retVal= false;
+            		}
+            	}catch (Exception e){
+            		retVal= false;
+            	}
+    	}
+		return retVal;
+	}
+	
     public void validate()
     {
         getButton( IDialogConstants.OK_ID ).setEnabled( didValidate() );
@@ -136,7 +169,7 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
 
     private boolean didValidate()
     {
-        return ( (archetypeListSourceText.getText().trim().length() > 0) && (typeText.getText().length() > 0) );
+        return ( (archetypeListSourceText.getText().trim().length() > 0 && isValidURL(archetypeListSourceText.getText())) && (typeText.getText().length() > 0) );
     }
 
     @Override
