@@ -7,7 +7,9 @@
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.devzuz.q.maven.embedder.IMavenArtifact;
@@ -135,7 +137,8 @@ public class MavenClasspathContainer
     }
 
     /**
-     * Resolves IMavenArtifacts into the entries in the classpath container
+     * Resolves IMavenArtifacts into the entries in the classpath container, using project or
+     * library dependencies
      * 
      * This function works recursively
      * 
@@ -143,11 +146,39 @@ public class MavenClasspathContainer
      */
     private void resolveArtifact( Set<IMavenArtifact> artifacts )
     {
+        Map<String, IProject> projectsByName = new HashMap<String, IProject>();
+        IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
+        for ( IProject project : projects )
+        {
+            projectsByName.put( project.getName(), project );
+        }
+
         for ( IMavenArtifact artifact : artifacts )
         {
             IClasspathAttribute[] attributes = new IClasspathAttribute[0];
             Path sourcePath = null;
-            if ( artifact.getFile() != null )
+            
+            /*
+             * if dependency is a project in the workspace use a project dependency instead of the
+             * jar dependency
+             */
+            IProject project = projectsByName.get( artifact.getArtifactId() );
+            if ( project == null )
+            {
+                project = projectsByName.get( artifact.getGroupId() + "." + artifact.getArtifactId() );
+            }
+
+            if ( project != null )
+            {
+                boolean export = false;
+                String scope = artifact.getScope();
+                if ( ( scope == null ) || "compile".equals( scope ) || "runtime".equals( scope ) )
+                {
+                    export = true;
+                }
+                classpathEntries.add( JavaCore.newProjectEntry( project.getFullPath(), export ) );
+            }
+            else if ( artifact.getFile() != null )
             {
                 classpathEntries.add( JavaCore
                     .newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ), sourcePath, null,
