@@ -104,12 +104,8 @@ public class MavenCustomGoalDialog
         if ( didValidate() )
         {
             goal = customGoalText.getText().trim();
-            getButton( IDialogConstants.OK_ID ).setEnabled( true );
         }
-        else
-        {
-            getButton( IDialogConstants.OK_ID ).setEnabled( false );
-        }
+        getButton( IDialogConstants.OK_ID ).setEnabled( didValidate() );
     }
 
     private boolean didValidate()

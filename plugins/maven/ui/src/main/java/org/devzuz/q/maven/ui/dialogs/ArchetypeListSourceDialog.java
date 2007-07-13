@@ -131,14 +131,7 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
 
     public void validate()
     {
-        if ( didValidate() )
-        {
-            getButton( IDialogConstants.OK_ID ).setEnabled( true );
-        }
-        else
-        {
-            getButton( IDialogConstants.OK_ID ).setEnabled( false );
-        }
+        getButton( IDialogConstants.OK_ID ).setEnabled( didValidate() );
     }
 
     private boolean didValidate()
