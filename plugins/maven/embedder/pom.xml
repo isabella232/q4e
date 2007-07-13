@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ***************************************************************************
+     * Copyright (c) 2007 DevZuz, Inc. (AKA Simula Labs, Inc.)
+     * All rights reserved. This program and the accompanying materials
+     * are made available under the terms of the Eclipse Public License v1.0
+     * which accompanies this distribution, and is available at
+     * http://www.eclipse.org/legal/epl-v10.html
+     ***************************************************************************-->
+
+<project
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.devzuz.q</groupId>
+    <artifactId>q</artifactId>
+    <version>1-SNAPSHOT</version>
+  </parent>
+  <groupId>org.devzuz.q.maven</groupId>
+  <artifactId>embedder</artifactId>
+  <version>2.1.0-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+  <name>Q for Eclipse Maven Embedder</name>
+  <description>Maven Embedder for the Q project</description>
+  <build>
+    <plugins>
+<!--
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>pde-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>update-site</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+-->
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <extensions>true</extensions>
+<!--
+        <executions>
+          <execution>
+            <phase>process-classes</phase>
+            <goals>
+              <goal>bundleall</goal>
+            </goals>
+          </execution>
+        </executions>
+-->
+        <configuration>
+          <instructions>
+            <Export-Package>*</Export-Package>
+          </instructions>
+<!--
+          <outputDirectory>${basedir}/lib</outputDirectory>
+-->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-embedder</artifactId>
+      <version>2.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
+</project>
