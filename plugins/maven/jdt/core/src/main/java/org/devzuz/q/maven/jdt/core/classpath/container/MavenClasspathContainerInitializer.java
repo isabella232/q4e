@@ -6,9 +6,6 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
