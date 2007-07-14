@@ -7,7 +7,9 @@
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -90,7 +92,7 @@ public class MavenClasspathContainer
             final Set<IMavenArtifact> artifacts = mavenProject.getArtifacts();
 
             classpathEntries.clear();
-            resolveArtifact( artifacts );
+            resolveArtifacts( classpathEntries, artifacts, getWorkspaceProjects() );
         }
     }
 
@@ -136,15 +138,7 @@ public class MavenClasspathContainer
         return container;
     }
 
-    /**
-     * Resolves IMavenArtifacts into the entries in the classpath container, using project or
-     * library dependencies
-     * 
-     * This function works recursively
-     * 
-     * @param artifacts
-     */
-    private void resolveArtifact( Set<IMavenArtifact> artifacts )
+    private Map<String, IProject> getWorkspaceProjects()
     {
         Map<String, IProject> projectsByName = new HashMap<String, IProject>();
         IProject[] projects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
@@ -152,39 +146,71 @@ public class MavenClasspathContainer
         {
             projectsByName.put( project.getName(), project );
         }
+        return projectsByName;
+    }
 
+    /**
+     * Resolves IMavenArtifacts into the entries in the classpath container, using project or
+     * library dependencies
+     * 
+     * This function works recursively
+     * 
+     * @param classpathEntries list of entries in the resulting classpath
+     * @param artifacts maven artifacts
+     * @param workspaceProjects projects in the workspace, indexed by name
+     */
+    private void resolveArtifacts( List<IClasspathEntry> classpathEntries, Set<IMavenArtifact> artifacts,
+                                   Map<String, IProject> workspaceProjects )
+    {
         for ( IMavenArtifact artifact : artifacts )
         {
-            IClasspathAttribute[] attributes = new IClasspathAttribute[0];
-            Path sourcePath = null;
-            
-            /*
-             * if dependency is a project in the workspace use a project dependency instead of the
-             * jar dependency
-             */
-            IProject project = projectsByName.get( artifact.getArtifactId() );
-            if ( project == null )
+            IClasspathEntry entry = resolveArtifact( artifact, workspaceProjects );
+            if ( entry != null )
             {
-                project = projectsByName.get( artifact.getGroupId() + "." + artifact.getArtifactId() );
-            }
-
-            if ( project != null )
-            {
-                boolean export = false;
-                String scope = artifact.getScope();
-                if ( ( scope == null ) || "compile".equals( scope ) || "runtime".equals( scope ) )
-                {
-                    export = true;
-                }
-                classpathEntries.add( JavaCore.newProjectEntry( project.getFullPath(), export ) );
-            }
-            else if ( artifact.getFile() != null )
-            {
-                classpathEntries.add( JavaCore
-                    .newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ), sourcePath, null,
-                                      new IAccessRule[0], attributes, false ) );
+                classpathEntries.add( entry );
             }
         }
+    }
+
+    /**
+     * Resolves an IMavenArtifact into a classpath container entry, using project or library
+     * dependencies
+     * 
+     * @param artifact
+     * @param workspaceProjects
+     * @return the resulting classpath entry or null if should not be added to the classpath
+     */
+    protected IClasspathEntry resolveArtifact( IMavenArtifact artifact, Map<String, IProject> workspaceProjects )
+    {
+        IClasspathAttribute[] attributes = new IClasspathAttribute[0];
+        Path sourcePath = null;
+
+        /*
+         * if dependency is a project in the workspace use a project dependency instead of the jar
+         * dependency
+         */
+        IProject project = workspaceProjects.get( artifact.getArtifactId() );
+        if ( project == null )
+        {
+            project = workspaceProjects.get( artifact.getGroupId() + "." + artifact.getArtifactId() );
+        }
+
+        if ( project != null )
+        {
+            boolean export = false;
+            String scope = artifact.getScope();
+            if ( ( scope == null ) || "compile".equals( scope ) || "runtime".equals( scope ) )
+            {
+                export = true;
+            }
+            return JavaCore.newProjectEntry( project.getFullPath(), export );
+        }
+        else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
+        {
+            return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ), sourcePath, null,
+                                             new IAccessRule[0], attributes, false );
+        }
+        return null;
     }
 
     /**
