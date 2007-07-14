@@ -48,4 +48,8 @@ public interface IMavenArtifact {
     public abstract String getType();
 
     public abstract void setType(String type);
+
+    public abstract boolean isAddedToClasspath();
+
+    public abstract void setAddedToClasspath(boolean addedToClasspath);
 }

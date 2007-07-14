@@ -28,6 +28,8 @@ public class EclipseMavenArtifact implements IMavenArtifact {
 
     private String type;
 
+    private boolean addedToClasspath;
+
     private File file;
 
     private IMavenArtifact parent = null;
@@ -45,6 +47,7 @@ public class EclipseMavenArtifact implements IMavenArtifact {
         setFile(artifact.getFile());
         setScope(artifact.getScope());
         setType(artifact.getType());
+        setAddedToClasspath(artifact.getArtifactHandler().isAddedToClasspath());
     }
 
     public String getArtifactId() {
@@ -103,13 +106,20 @@ public class EclipseMavenArtifact implements IMavenArtifact {
         this.scope = scope;
     }
 
-
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public boolean isAddedToClasspath() {
+        return addedToClasspath;
+    }
+
+    public void setAddedToClasspath(boolean addedToClasspath) {
+        this.addedToClasspath = addedToClasspath;
     }
 
     public Set<IMavenArtifact> getChildren() {

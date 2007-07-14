@@ -32,6 +32,8 @@ public class MavenArtifactStub implements IMavenArtifact {
 
     private String type;
 
+    private boolean addedToClasspath;
+
     private File file;
 
     private IMavenArtifact parent = null;
@@ -102,6 +104,14 @@ public class MavenArtifactStub implements IMavenArtifact {
         this.type = type;
     }
 
+    public boolean isAddedToClasspath() {
+        return addedToClasspath;
+    }
+
+    public void setAddedToClasspath(boolean addedToClasspath) {
+        this.addedToClasspath = addedToClasspath;
+    }
+
     public Set<IMavenArtifact> getChildren() {
         return children;
     }
@@ -149,5 +159,4 @@ public class MavenArtifactStub implements IMavenArtifact {
         sb.append("] ");
         return sb.toString();
     }
-
 }
