@@ -80,7 +80,12 @@ public class ImportProjectJob
     protected String getProjectName( final IMavenProject mavenProject )
     {
         // TODO this should be configurable
-        return mavenProject.getGroupId() + "." + mavenProject.getArtifactId();
+        //return mavenProject.getGroupId() + "." + mavenProject.getArtifactId();
+        // NOTE by Erle : Commented above because the eclipse project name should be THE SAME
+        //                as its location IF it is on the workspace root due to us not being
+        //                able to specify a project location if it is on the workspace root .
+        //                (the location should be set to ("") if it is on the workspace root)
+        return mavenProject.getBaseDirectory().getName();
     }
 
     private void createMavenProject( final IMavenProject mavenProject, IProgressMonitor monitor )
@@ -101,13 +106,14 @@ public class ImportProjectJob
         IProjectDescription description = workspace.newProjectDescription( projectName );
 
         IPath locationPath = new Path( mavenProject.getBaseDirectory().getAbsolutePath() );
-
+        
         /*
          * If is at the root of the workspace we need to use the default location, see
          * org.eclipse.core.internal.resources.LocationValidator:336
          */
         IPath parentPath = locationPath.removeLastSegments( 1 );
-        if ( Platform.getLocation().isPrefixOf( parentPath ) && parentPath.isPrefixOf( Platform.getLocation() ) )
+        if ( Platform.getLocation().isPrefixOf( parentPath ) && 
+             parentPath.isPrefixOf( Platform.getLocation() ) )
         {
             description.setLocation( null );
         }
