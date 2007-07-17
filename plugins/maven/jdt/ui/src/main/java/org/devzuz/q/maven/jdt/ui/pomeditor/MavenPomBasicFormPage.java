@@ -56,7 +56,6 @@ public class MavenPomBasicFormPage extends FormPage
         form = managedForm.getForm();
         FormToolkit toolkit = managedForm.getToolkit();
         
-        
         form.getBody().setLayout( new GridLayout( 2 , false ) );
         
         GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
@@ -223,6 +222,8 @@ public class MavenPomBasicFormPage extends FormPage
         Text inceptionYearText = toolKit.createText( parent, "Inception Year" ); 
         inceptionYearText.setLayoutData( controlData );
         inceptionYearText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        
+        toolKit.paintBordersFor(parent);
         
         return parent;
     }

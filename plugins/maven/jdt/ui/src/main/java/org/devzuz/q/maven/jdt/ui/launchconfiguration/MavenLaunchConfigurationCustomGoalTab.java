@@ -70,7 +70,6 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
         };
 
         Composite container1 = new Composite( parent, SWT.NULL );
-        ;
         container1.setLayout( new GridLayout( 3, false ) );
         container1.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 

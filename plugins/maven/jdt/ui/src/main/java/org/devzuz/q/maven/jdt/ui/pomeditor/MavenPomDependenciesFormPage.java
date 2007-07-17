@@ -173,6 +173,8 @@ public class MavenPomDependenciesFormPage extends FormPage
         Button optionalRadioButton = toolKit.createButton( parent , "", SWT.CHECK);
         optionalRadioButton.setLayoutData( controlData );
         
+        toolKit.paintBordersFor(parent);
+        
         return parent;
     }
     
