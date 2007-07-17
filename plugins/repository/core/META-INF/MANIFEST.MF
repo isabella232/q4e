@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Repository Core
 Bundle-SymbolicName: org.devzuz.q.repository.core
-Bundle-Version: 0.2.0.v200707102124
+Bundle-Version: 0.2.0.v200707170902
 Bundle-Activator: org.devzuz.q.repository.core.Activator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui;visibility:=reexport,

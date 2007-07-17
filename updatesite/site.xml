@@ -15,6 +15,15 @@
    <feature url="features/org.devzuz.q.feature_0.2.0.v200707102124.jar" id="org.devzuz.q.feature" version="0.2.0.v200707102124">
       <category name="Community"/>
    </feature>
+   <feature url="features/org.holongate.j2d.feature_2.3.0.v20070513130200.jar" id="org.holongate.j2d.feature" version="2.3.0.v20070513130200">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.prefuse.feature_1.0.0.v20060715.jar" id="org.prefuse.feature" version="1.0.0.v20060715">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.devzuz.q.feature_0.2.0.v200707170902.jar" id="org.devzuz.q.feature" version="0.2.0.v200707170902">
+      <category name="Community"/>
+   </feature>
    <category-def name="Community" label="Community"/>
    <category-def name="Enabling Features" label="Enabling Features"/>
 </site>
