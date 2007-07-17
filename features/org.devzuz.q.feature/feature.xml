@@ -37,6 +37,8 @@
       <import plugin="org.eclipse.swt"/>
       <import feature="org.apache.maven.feature" version="2.1.0.549510"/>
       <import feature="org.apache.commons.collections.feature" version="3.2.0.200705282147"/>
+      <import feature="org.prefuse.feature" version="1.0.0.v20060715"/>
+      <import feature="org.holongate.j2d.feature" version="2.3.0.v20070513130200"/>
    </requires>
 
    <plugin
