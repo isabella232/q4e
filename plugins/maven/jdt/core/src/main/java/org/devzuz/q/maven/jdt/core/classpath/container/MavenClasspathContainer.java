@@ -7,9 +7,7 @@
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -84,13 +82,12 @@ public class MavenClasspathContainer
     {
         if ( mavenProject != null )
         {
-
             Activator.getLogger().info( "Refreshing classpath for maven project " + mavenProject.getArtifactId() );
 
             this.mavenProject = mavenProject;
             this.project = mavenProject.getProject();
             final Set<IMavenArtifact> artifacts = mavenProject.getArtifacts();
-
+            
             classpathEntries.clear();
             resolveArtifacts( classpathEntries, artifacts, getWorkspaceProjects() );
         }
@@ -103,7 +100,6 @@ public class MavenClasspathContainer
      */
     public static MavenClasspathContainer newClasspath( IProject project )
     {
-
         Activator.getLogger().info( "New classpath for project " + project.getName() );
 
         MavenClasspathContainer container = new MavenClasspathContainer();
@@ -205,11 +201,14 @@ public class MavenClasspathContainer
             }
             return JavaCore.newProjectEntry( project.getFullPath(), export );
         }
-        else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
+                                                 // TODO : -erle- : ? this causes an error 
+                                                 //                   where the junit classpath won't be seen in the projects
+        else if ( ( artifact.getFile() != null ) /*&& artifact.isAddedToClasspath()*/ )
         {
             return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ), sourcePath, null,
                                              new IAccessRule[0], attributes, false );
         }
+        
         return null;
     }
 
@@ -241,7 +240,15 @@ public class MavenClasspathContainer
 
     public String toString()
     {
-        return "Maven classpath container " + ( ( project != null ) ? project : "" );
+        //return "Maven classpath container " + ( ( project != null ) ? project : "" );
+        StringBuffer buffer = new StringBuffer();
+        buffer.append( "Maven classpath container  = " );
+        for( IClasspathEntry entry : classpathEntries )
+        {
+            buffer.append( ":" + entry.getPath().toOSString() );
+        }
+        
+        return buffer.toString();
     }
 
     public IMavenProject getMavenProject()
