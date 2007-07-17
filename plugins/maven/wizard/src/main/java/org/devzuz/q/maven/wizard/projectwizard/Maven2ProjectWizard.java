@@ -80,21 +80,10 @@ public class Maven2ProjectWizard
                 public void run( IProgressMonitor monitor )
                     throws InvocationTargetException, InterruptedException
                 {
-                    /*
-                    final IProject project = ResourcesPlugin.getWorkspace().getRoot().getProject( projectName );
-                    final IPath location = null;
-                    ProjectDescription projectDescription = ResourcesPlugin.getWorkspace().newProjectDescription(project.getName());
-                    projectDescription.setLocation(location);
-                    */
                     try
                     {
-                        //project.create( projectDescription , null );
-                        //project.open( null );
-
                         Maven2ArchetypeManager.executeArchetype( archetype, projectPath, groupID, artifactID, version,
                                                                  packageName );
-
-                        //MavenNatureHelper.addNature( project );
                     }
                     catch ( CoreException e )
                     {
