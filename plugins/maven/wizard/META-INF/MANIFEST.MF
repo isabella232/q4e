@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Wizard Plug-in
 Bundle-SymbolicName: org.devzuz.q.maven.wizard;singleton:=true
-Bundle-Version: 0.2.0.v200707170902
+Bundle-Version: 0.2.0.v200707170915
 Bundle-Activator: org.devzuz.q.maven.wizard.Activator
 Require-Bundle: org.devzuz.q.maven.core;visibility:=reexport
 Eclipse-LazyStart: true
