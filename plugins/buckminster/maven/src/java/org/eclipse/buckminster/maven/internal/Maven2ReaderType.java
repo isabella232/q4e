@@ -130,7 +130,7 @@ public class Maven2ReaderType extends AbstractMavenReaderType
         {
             /* find the pom.xml inside the project */
             IContainer container = (IContainer) resource;
-            IFile file = container.getFile( new Path( "pom.xml" ) );
+            IFile file = container.getFile( new Path( IMavenProject.POM_FILENAME ) );
 
             File pom = new File( file.getLocationURI() );
 

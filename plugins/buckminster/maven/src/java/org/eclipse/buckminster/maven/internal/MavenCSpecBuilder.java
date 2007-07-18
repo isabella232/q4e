@@ -76,7 +76,7 @@ class MavenCSpecBuilder extends AbstractResolutionBuilder implements IStreamCons
 			else if(reader instanceof URLCatalogReader)
 			{
                 /* reading a Maven pom inside an eclipse project */
-                URL url = new URL( ( (URLCatalogReader) reader ).getURL(), "pom.xml" );
+                URL url = new URL( ( (URLCatalogReader) reader ).getURL(), IMavenProject.POM_FILENAME );
                 File pom = new File( url.toURI() );
 
                 if ( pom.exists() )
@@ -94,7 +94,7 @@ class MavenCSpecBuilder extends AbstractResolutionBuilder implements IStreamCons
             {
                 /* Project is inside a zip or in source control so try to get the pom through a temp file  */
                 /* Maven 2 project */
-                File pom = ( (ICatalogReader) reader ).getContents( "pom.xml", new boolean[] { true }, subMon );
+                File pom = ( (ICatalogReader) reader ).getContents( IMavenProject.POM_FILENAME, new boolean[] { true }, subMon );
 
                 if ( pom.exists() )
                 {
@@ -104,7 +104,7 @@ class MavenCSpecBuilder extends AbstractResolutionBuilder implements IStreamCons
                 {
                     try
                     {
-                        pomDoc = ( (ICatalogReader) reader ).readFile( "pom.xml", this, subMon );
+                        pomDoc = ( (ICatalogReader) reader ).readFile( IMavenProject.POM_FILENAME, this, subMon );
                     }
                     catch ( FileNotFoundException e )
                     {
