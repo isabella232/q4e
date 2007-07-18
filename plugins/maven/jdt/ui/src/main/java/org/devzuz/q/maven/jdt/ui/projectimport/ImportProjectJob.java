@@ -52,9 +52,13 @@ public class ImportProjectJob
         monitor.beginTask( "Importing Maven project", 100 );
         monitor.setTaskName( "Importing Maven project" );
 
-        // TODO
         for ( IMavenProject mavenProject : mavenProjects )
         {
+
+            if ( monitor.isCanceled() )
+            {
+                return Status.CANCEL_STATUS;
+            }
 
             try
             {

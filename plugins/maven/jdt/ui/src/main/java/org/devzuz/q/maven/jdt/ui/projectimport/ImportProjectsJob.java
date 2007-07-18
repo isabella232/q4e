@@ -48,6 +48,11 @@ public class ImportProjectsJob
 
         ImportProjectsRunnable importProjectsRunnable = new ImportProjectsRunnable( mavenProjects );
 
+        if ( monitor.isCanceled() )
+        {
+            return Status.CANCEL_STATUS;
+        }
+
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
         try
         {
