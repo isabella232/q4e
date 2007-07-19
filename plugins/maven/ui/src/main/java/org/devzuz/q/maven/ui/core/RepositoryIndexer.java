@@ -151,7 +151,7 @@ public class RepositoryIndexer
         BufferedReader reader = null;
         try
         {
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             reader = new BufferedReader( new InputStreamReader( new FileInputStream( file ) ) );
 
             char[] buffer = new char[1024];

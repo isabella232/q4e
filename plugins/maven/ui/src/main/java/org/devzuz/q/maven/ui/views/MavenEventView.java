@@ -137,7 +137,7 @@ public class MavenEventView
     {	    
 	   if ( tblTemp.length > 0 )
        {
-           StringBuffer strBuff = new StringBuffer();
+	       StringBuilder strBuff = new StringBuilder();
            for ( int x = 0; x < tblTemp.length; x++ )
            {
                strBuff.append( tblTemp[x].getText( 0 ) );
@@ -153,7 +153,7 @@ public class MavenEventView
        }		
     }
     
-    private void copyDatatoClipboard(StringBuffer strbuff)
+    private void copyDatatoClipboard(StringBuilder strbuff)
     {
         StringSelection strSelection  = new StringSelection(strbuff.toString());
         Toolkit.getDefaultToolkit().getSystemClipboard().setContents( strSelection,strSelection );
