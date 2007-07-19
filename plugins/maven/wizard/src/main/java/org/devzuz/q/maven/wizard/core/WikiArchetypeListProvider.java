@@ -38,7 +38,7 @@ public class WikiArchetypeListProvider
     {
         Map<String, Archetype> archs = new LinkedHashMap<String, Archetype>();
 
-        StringBuffer archetypePage = new StringBuffer();
+        StringBuilder archetypePage = new StringBuilder();
         InputStream in = new URL( sanitizeUrl( url ) ).openStream();
         BufferedReader reader = new BufferedReader( new InputStreamReader( in ) );
 
