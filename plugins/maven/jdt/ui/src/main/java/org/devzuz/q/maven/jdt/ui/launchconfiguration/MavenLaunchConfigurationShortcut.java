@@ -227,7 +227,7 @@ public class MavenLaunchConfigurationShortcut
         {
             if ( element instanceof ILaunchConfiguration )
             {
-                StringBuffer label = new StringBuffer();
+                StringBuilder label = new StringBuilder();
                 ILaunchConfiguration config = (ILaunchConfiguration) element;
 
                 Map<String, String> propertyMap = Collections.emptyMap();
@@ -244,7 +244,7 @@ public class MavenLaunchConfigurationShortcut
                 if ( propertyMap.size() > 0 )
                     label.append( " ( " );
 
-                StringBuffer propertyLabel = new StringBuffer();
+                StringBuilder propertyLabel = new StringBuilder();
                 for ( Map.Entry<String, String> entry : propertyMap.entrySet() )
                 {
                     if ( propertyLabel.length() > 0 )
