@@ -16,7 +16,7 @@ import org.devzuz.q.maven.embedder.internal.EclipseMavenEventPropagator;
 public class EclipseMavenEventPropagatorPrintStream extends PrintStream {
     private static final String LS = System.getProperty("line.separator");
 
-    private StringBuffer sb = new StringBuffer();
+    private StringBuilder sb = new StringBuilder();
 
     private EclipseMavenEventPropagator eventPropagator;
 
@@ -46,7 +46,7 @@ public class EclipseMavenEventPropagatorPrintStream extends PrintStream {
             line = line.substring(0, line.length() - LS.length());
         }
         log(line);
-        sb = new StringBuffer();
+        sb = new StringBuilder();
     }
 
     @Override

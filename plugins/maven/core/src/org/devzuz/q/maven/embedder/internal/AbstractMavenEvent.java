@@ -98,7 +98,7 @@ public abstract class AbstractMavenEvent implements IMavenEvent {
             throw new IllegalArgumentException("Old pattern must have content.");
         }
 
-        final StringBuffer result = new StringBuffer();
+        final StringBuilder result = new StringBuilder();
         // startIdx and idxOld delimit various chunks of aInput; these
         // chunks always end where aOldPattern begins
         int startIdx = 0;

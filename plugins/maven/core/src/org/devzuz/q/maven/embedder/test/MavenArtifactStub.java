@@ -147,7 +147,7 @@ public class MavenArtifactStub implements IMavenArtifact {
 
     @Override
     public String toString() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         sb.append("artifactId[");
         sb.append(getArtifactId());
         sb.append("] ");
