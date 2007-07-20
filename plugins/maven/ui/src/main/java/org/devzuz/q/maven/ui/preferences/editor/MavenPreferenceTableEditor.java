@@ -29,7 +29,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IWorkbench;
 
 
-public abstract class MavenPrefenceTableEditor extends FieldEditor
+public abstract class MavenPreferenceTableEditor extends FieldEditor
 {
 	private Table artifactsTable;
     
@@ -43,12 +43,12 @@ public abstract class MavenPrefenceTableEditor extends FieldEditor
     
     private Composite buttonBox;
     
-    protected MavenPrefenceTableEditor() 
+    protected MavenPreferenceTableEditor() 
     {
     }
 
 
-    protected MavenPrefenceTableEditor(String name, String labelText, Composite parent) 
+    protected MavenPreferenceTableEditor(String name, String labelText, Composite parent) 
     {
         init(name, labelText);
         createControl(parent);
@@ -243,8 +243,8 @@ public abstract class MavenPrefenceTableEditor extends FieldEditor
     	editPropertyButton.setEnabled( false );
         removePropertyButton.setEnabled( false );
     }
+    
     protected abstract String[] parsePrefDataString(String prefData);
-	
     
     protected void adjustForNumColumns(int numColumns) 
     {

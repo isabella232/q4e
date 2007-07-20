@@ -10,7 +10,7 @@ package org.devzuz.q.maven.ui.preferences.editor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TableItem;
 
-public class MavenArchetypePreferenceEditor extends MavenPrefenceTableEditor
+public class MavenArchetypePreferenceEditor extends MavenPreferenceTableEditor
 {
 	public MavenArchetypePreferenceEditor()
 	{
@@ -26,8 +26,7 @@ public class MavenArchetypePreferenceEditor extends MavenPrefenceTableEditor
 	protected String[] parsePrefDataString(String prefData) 
 	{
 		final String tokenizer = "MakenTokenPreference";
-		String tabledata [] = prefData.split(tokenizer);
-	    return tabledata;    
+	    return (prefData.split(tokenizer));
 	}
 
 	
