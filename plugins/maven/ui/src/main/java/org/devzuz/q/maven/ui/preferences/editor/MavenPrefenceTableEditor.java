@@ -1,6 +1,10 @@
-/**
- * 
- */
+/***************************************************************************************************
+ * Copyright (c) 2007 DevZuz, Inc. (AKA Simula Labs, Inc.) All rights reserved. This program and the
+ * accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ **************************************************************************************************/
+
 package org.devzuz.q.maven.ui.preferences.editor;
 
 import org.devzuz.q.maven.ui.Messages;
@@ -57,7 +61,8 @@ public abstract class MavenPrefenceTableEditor extends FieldEditor
     	removePropertyButton = createPushButton(box, Messages.MavenCustomComponent_RemoveButtonLabel);
     }
     
-    private Button createPushButton(Composite parent, String key) {
+    private Button createPushButton(Composite parent, String key) 
+    {
         Button button = new Button(parent, SWT.PUSH);
         button.setText(key);
         button.setFont(parent.getFont());
@@ -120,7 +125,8 @@ public abstract class MavenPrefenceTableEditor extends FieldEditor
     
     public Composite getButtonBoxControl(Composite parent) 
     {
-        if (buttonBox == null) {
+        if (buttonBox == null) 
+        {
             buttonBox = new Composite(parent, SWT.NULL);
             GridLayout layout = new GridLayout();
             layout.marginWidth = 0;
@@ -137,7 +143,9 @@ public abstract class MavenPrefenceTableEditor extends FieldEditor
                 }
             });
 
-        } else {
+        } 
+        else 
+        {
             checkParent(buttonBox, parent);
         }
         return buttonBox;
@@ -145,7 +153,8 @@ public abstract class MavenPrefenceTableEditor extends FieldEditor
     
     public Table getTableControl(Composite parent) 
     {
-        if (artifactsTable == null) {
+        if (artifactsTable == null) 
+        {
         	artifactsTable = new Table( parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );        	
         	artifactsTable.setFont(parent.getFont());
         	
@@ -168,7 +177,9 @@ public abstract class MavenPrefenceTableEditor extends FieldEditor
                 	artifactsTable = null;
                 }
             });
-        } else {
+        } 
+        else 
+        {
             checkParent(artifactsTable, parent);
         }
         return artifactsTable;
@@ -176,9 +187,41 @@ public abstract class MavenPrefenceTableEditor extends FieldEditor
 	
     protected void doLoad() 
     {
-    	try{
-            String s = getPreferenceStore().getString(getPreferenceName());           
+    	try
+    	{
+    		artifactsTable.clearAll();   
+            String s = getPreferenceStore().getString(getPreferenceName());
             String[] array = parsePrefDataString(s);
+            if(!s.trim().equals(""))
+            {
+            	for (int i = 0; i < array.length; i++) 
+                {
+                	String tabledata [] = array[i].split(";");
+                	TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
+    				   item.setText( new String[] {
+    						   tabledata[0],
+    						   tabledata[1]});
+                }	
+            }
+            else
+            {
+            	disableEditRemoveButtons();
+            }
+    	}
+    	catch(Exception e)
+    	{
+    		
+    	}
+    	
+    }
+	
+    protected void doLoadDefault() 
+    {
+    	try 
+    	{
+    		artifactsTable.clearAll();          
+            String s = getPreferenceStore().getDefaultString(getPreferenceName());
+            String[] array = parsePrefDataString(s);            
             for (int i = 0; i < array.length; i++) 
             {
             	String tabledata [] = array[i].split(";");
@@ -187,31 +230,19 @@ public abstract class MavenPrefenceTableEditor extends FieldEditor
 						   tabledata[0],
 						   tabledata[1]});
             }
-    	}catch(Exception e){
+    	}
+    	catch(Exception e)
+    	{
     		
     	}
     	
     }
-	
-    protected void doLoadDefault() 
+    	
+    private void disableEditRemoveButtons()
     {
-    	try {
-        	artifactsTable.clearAll();          
-            String s = getPreferenceStore().getDefaultString(getPreferenceName());
-            String[] array = parsePrefDataString(s);            
-            for (int i = 0; i < array.length; i++) {
-            	String tabledata [] = array[i].split(";");
-            	TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
-				   item.setText( new String[] {
-						   tabledata[0],
-						   tabledata[1]});
-            }
-    	}catch(Exception e){
-    		
-    	}
-    	
+    	editPropertyButton.setEnabled( false );
+        removePropertyButton.setEnabled( false );
     }
-    	
     protected abstract String[] parsePrefDataString(String prefData);
 	
     
@@ -230,8 +261,9 @@ public abstract class MavenPrefenceTableEditor extends FieldEditor
     
     protected void doStore() 
     {
-        String strDataPreference = createTableDataList(artifactsTable.getItems());
-        if (strDataPreference != null) {
+        String strDataPreference = createTableDataList(artifactsTable.getItems()).trim();
+        if (strDataPreference != null)
+        {
 			getPreferenceStore().setValue(getPreferenceName(), strDataPreference);
 		}
     }
@@ -271,8 +303,7 @@ public abstract class MavenPrefenceTableEditor extends FieldEditor
 		   artifactsTable.remove(artifactsTable.getSelectionIndex());
 		   if(artifactsTable.getItemCount()<1) 
 		   {
-			   editPropertyButton.setEnabled( false );
-	           removePropertyButton.setEnabled( false );
+			   disableEditRemoveButtons();
 		   }
 	   }
 	   else 
