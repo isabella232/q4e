@@ -196,7 +196,7 @@ public abstract class MavenPreferenceTableEditor extends FieldEditor
             {
             	for (int i = 0; i < array.length; i++) 
                 {
-                	String tabledata [] = array[i].split(";");
+                	String tabledata [] = array[i].split(Messages.MavenArchetypePreferenceEditor_separator);
                 	TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
     				   item.setText( new String[] {
     						   tabledata[0],
@@ -224,7 +224,7 @@ public abstract class MavenPreferenceTableEditor extends FieldEditor
             String[] array = parsePrefDataString(s);            
             for (int i = 0; i < array.length; i++) 
             {
-            	String tabledata [] = array[i].split(";");
+            	String tabledata [] = array[i].split(Messages.MavenArchetypePreferenceEditor_separator);
             	TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
 				   item.setText( new String[] {
 						   tabledata[0],

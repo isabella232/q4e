@@ -147,7 +147,7 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
     	if(retVal) { 
         	try {
 
-            	Pattern pattern = Pattern.compile("^"+url.getProtocol().trim()+"://[\\p{Alnum}]{3,}+.{1}[\\p{Alnum}]{3}[\\p{Alnum}.?+;/=-]*$");
+            	Pattern pattern = Pattern.compile("^"+url.getProtocol().trim()+"://[\\p{Alnum}]{3,}+.{1}[\\p{Alnum}]{3}[\\p{Alnum}.?+/=-]*$");
             	Matcher m = pattern.matcher(strURL);
             		if(m.matches()) {
             			retVal= true;

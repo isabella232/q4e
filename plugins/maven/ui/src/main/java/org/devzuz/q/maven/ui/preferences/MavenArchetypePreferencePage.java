@@ -28,7 +28,7 @@ public class MavenArchetypePreferencePage
 	protected void createFieldEditors() 
 	{
 		noDefaultAndApplyButton();
-		addField( new MavenArchetypePreferenceEditor( Activator.PLUGIN_ID + "MavenArchetypePreferencePage",
+		addField( new MavenArchetypePreferenceEditor( Activator.PLUGIN_ID + Messages.MavenArchetypePreferenceEditor_name,
 				  Messages.MavenArchetypePreferencePage_description, getFieldEditorParent() ) ); 	
 	}
 

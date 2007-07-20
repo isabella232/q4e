@@ -90,6 +90,12 @@ public class Messages
     public static String MavenArchetypePreferencePage_sourceurl;
     
     public static String MavenArchetypePreferencePage_type;
+    
+    public static String MavenArchetypePreferenceEditor_name;
+    
+    public static String MavenArchetypePreferenceEditor_token;
+    
+    public static String MavenArchetypePreferenceEditor_separator;
 
     static
     {
