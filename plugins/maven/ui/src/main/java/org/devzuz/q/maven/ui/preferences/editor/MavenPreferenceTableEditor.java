@@ -221,14 +221,15 @@ public abstract class MavenPreferenceTableEditor extends FieldEditor
     	{
     		artifactsTable.clearAll();          
             String s = getPreferenceStore().getDefaultString(getPreferenceName());
-            String[] array = parsePrefDataString(s);            
-            for (int i = 0; i < array.length; i++) 
+            String[] array = parsePrefDataString(s);  
+            if(!s.trim().equals("")) 
             {
-            	String tabledata [] = array[i].split(Messages.MavenArchetypePreferenceEditor_separator);
-            	TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
-				   item.setText( new String[] {
-						   tabledata[0],
-						   tabledata[1]});
+                for (int i = 0; i < array.length; i++) 
+                {
+                    String tabledata [] = array[i].split(Messages.MavenArchetypePreferenceEditor_separator);
+            	    TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
+				    item.setText( new String[] {tabledata[0], tabledata[1]});
+                }
             }
     	}
     	catch(Exception e)
@@ -326,7 +327,6 @@ public abstract class MavenPreferenceTableEditor extends FieldEditor
 		}
 		return false;
 	}
-
 
 	public void init(IWorkbench workbench) 
 	{

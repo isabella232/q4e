@@ -3,13 +3,13 @@ package org.devzuz.q.maven.ui.dialogs;
 import org.devzuz.q.maven.ui.Activator;
 import org.devzuz.q.maven.ui.Messages;
 
-import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.window.IShellProvider;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -136,30 +136,21 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
 
 	private static boolean isValidURL(String strURL)
 	{
-		URL url = null;
-		boolean retVal = false;
-    	try {
-			url = new URL(strURL); 
-			retVal = true;
-    	} catch (java.net.MalformedURLException ex) {
-    	    //System.out.println("Malformed URL exception: " + ex);
-    	}
-    	if(retVal) { 
-        	try {
+        boolean retVal = false;
+        try {
 
-            	Pattern pattern = Pattern.compile("^"+url.getProtocol().trim()+"://[\\p{Alnum}]{3,}+.{1}[\\p{Alnum}]{3}[\\p{Alnum}.?+/=-]*$");
-            	Matcher m = pattern.matcher(strURL);
-            		if(m.matches()) {
-            			retVal= true;
+            Pattern pattern = Pattern.compile("^((http)|(https)|(ftp)){1}://[\\p{Alnum}]{3,}+.{1}[\\p{Alnum}]{3}((.)([\\p{Alnum}?+/=-]){1,})*$");
+            Matcher m = pattern.matcher(strURL);
+                if(m.matches()) 
+                {
+                    retVal= true;
+                }
+            }catch (Exception e)
+            {
 
-            		}else{
-            			retVal= false;
-            		}
-            	}catch (Exception e){
-            		retVal= false;
-            	}
-    	}
-		return retVal;
+            }
+        
+        return retVal;
 	}
 	
     public void validate()
