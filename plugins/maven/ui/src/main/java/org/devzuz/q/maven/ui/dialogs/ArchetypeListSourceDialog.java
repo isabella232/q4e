@@ -144,18 +144,18 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
 	private static boolean isValidURL(String strURL)
 	{
         boolean retVal = false;
-        try {
-
+        try 
+        {
             Pattern pattern = Pattern.compile("^((http)|(https)|(ftp)){1}://[\\p{Alnum}]{3,}+.{1}[\\p{Alnum}]{3}((.)([\\p{Alnum}?+/=-]){1,})*$");
             Matcher m = pattern.matcher(strURL);
-                if(m.matches()) 
+            if(m.matches())
                 {
                     retVal= true;
                 }
-            }catch (Exception e)
-            {
-
-            }
+         }
+         catch (Exception e)
+         {         
+         }
         
         return retVal;
 	}
