@@ -49,11 +49,11 @@ public class ImportProjectJob
     {
         Status status = null;
         // TODO set a better number
-        monitor.beginTask( "Importing Maven project", 100 );
-        monitor.setTaskName( "Importing Maven project" );
-
         for ( IMavenProject mavenProject : mavenProjects )
         {
+            SubProgressMonitor subProgressMonitor = new SubProgressMonitor( monitor, 1 );
+            subProgressMonitor.beginTask( "Importing Maven project", 100 );
+            subProgressMonitor.setTaskName( "Importing Maven project: " + getProjectName( mavenProject ) );
 
             if ( monitor.isCanceled() )
             {
@@ -62,7 +62,7 @@ public class ImportProjectJob
 
             try
             {
-                createMavenProject( mavenProject, new SubProgressMonitor( monitor, 1 ) );
+                createMavenProject( mavenProject, new SubProgressMonitor( subProgressMonitor, 100 ) );
                 status = new Status( IStatus.OK, Activator.PLUGIN_ID, "Success" ); 
             }
             catch ( CoreException e )
@@ -70,9 +70,10 @@ public class ImportProjectJob
                 Activator.getLogger().log( "Unable to import project from " + mavenProject.getBaseDirectory(), e );
                 status = new Status( IStatus.ERROR , Activator.PLUGIN_ID , e.getCause().getMessage() );
             }
-        }
 
-        monitor.done();
+            subProgressMonitor.done();
+            monitor.worked( 1 );
+        }
 
         return status;
     }
