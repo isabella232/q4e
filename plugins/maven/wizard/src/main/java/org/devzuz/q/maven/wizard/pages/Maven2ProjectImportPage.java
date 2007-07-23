@@ -62,6 +62,11 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
         {
             public void modifyText( ModifyEvent e )
             {
+                if( isDirectoryValid() )
+                {
+                    scheduleProjectScanningJob();
+                }
+                
                 validate();
             }
         };
@@ -180,12 +185,10 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
     
     protected boolean isPageValid()
     {
-        IPath path = Path.fromOSString( getProjectDirectory());
-        File dir = path.toFile();
-        if( path != null && dir.exists() && dir.isDirectory() )
+        if( isDirectoryValid() )
         {
             Object[] checkedElements = pomList.getCheckedElements();
-            if( (checkedElements != null) && (checkedElements.length > 0) )
+            if ( ( checkedElements != null ) && ( checkedElements.length > 0 ) )
             {
                 return true;
             }
@@ -193,10 +196,26 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
             {
                 setError( Messages.wizard_importProject_error_no_chosen_project );
             }
+
         }
         else
         {
             setError( Messages.wizard_importProject_error_location_nonexistent );
+        }
+        
+        return false;
+    }
+    
+    private boolean isDirectoryValid()
+    {
+        IPath path = Path.fromOSString( getProjectDirectory());
+        if( path != null )
+        {
+            File dir = path.toFile();
+            if ( dir.exists() && dir.isDirectory() )
+            {
+                return true;
+            }
         }
         
         return false;
