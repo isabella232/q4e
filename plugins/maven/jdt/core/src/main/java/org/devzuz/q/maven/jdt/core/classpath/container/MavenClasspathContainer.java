@@ -114,7 +114,7 @@ public class MavenClasspathContainer
         }
         catch ( CoreException e )
         {
-            MavenExceptionHandler.handle( e );
+            MavenExceptionHandler.handle( project, e );
         }
 
         try
@@ -241,7 +241,7 @@ public class MavenClasspathContainer
     public String toString()
     {
         //return "Maven classpath container " + ( ( project != null ) ? project : "" );
-        StringBuffer buffer = new StringBuffer();
+        StringBuilder buffer = new StringBuilder();
         buffer.append( "Maven classpath container  = " );
         for( IClasspathEntry entry : classpathEntries )
         {
