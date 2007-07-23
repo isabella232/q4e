@@ -8,7 +8,8 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.eclipse.core.runtime;visibility:=reexport,
  org.eclipse.core.resources;visibility:=reexport,
- org.apache.maven.embedder;visibility:=reexport
+ org.apache.maven.embedder;visibility:=reexport,
+ org.junit
 Eclipse-LazyStart: true
 Export-Package: org.devzuz.q.maven.embedder;
   uses:="org.osgi.framework,
