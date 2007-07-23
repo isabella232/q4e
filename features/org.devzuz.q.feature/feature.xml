@@ -63,20 +63,6 @@
          unpack="false"/>
 
    <plugin
-         id="org.devzuz.q.project.ui"
-         download-size="0"
-         install-size="0"
-         version="0.2.0.v200707170915"
-         unpack="false"/>
-
-   <plugin
-         id="org.devzuz.q.project.core"
-         download-size="0"
-         install-size="0"
-         version="0.2.0.v200707170915"
-         unpack="false"/>
-
-   <plugin
          id="org.devzuz.q.maven.jdt.ui"
          download-size="0"
          install-size="0"
@@ -134,13 +120,6 @@
 
    <plugin
          id="org.devzuz.q.maven.core"
-         download-size="0"
-         install-size="0"
-         version="0.2.0.v200707170915"
-         unpack="false"/>
-
-   <plugin
-         id="org.devzuz.q.project.api"
          download-size="0"
          install-size="0"
          version="0.2.0.v200707170915"
