@@ -228,6 +228,7 @@ public class EclipseMavenProject implements IMavenProject {
         artifact.setId(defaultArtifact.getId());
         artifact.setVersion(defaultArtifact.getVersion());
         artifact.setFile(defaultArtifact.getFile());
+        artifact.setAddedToClasspath(defaultArtifact.getArtifactHandler().isAddedToClasspath());
         // System.out.println("Created Artifact "+artifact);
         return artifact;
     }
