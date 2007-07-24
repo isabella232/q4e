@@ -6,8 +6,12 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.exception;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.project.InvalidProjectModelException;
+import org.apache.maven.project.validation.ModelValidationResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.eclipse.core.resources.IFile;
@@ -85,10 +89,11 @@ public class MavenExceptionHandler
 
     private void handle( IProject project, InvalidProjectModelException e )
     {
-        markPom( project, e.getMessage() );
+        ModelValidationResult validationResult = e.getValidationResult();
+        markPom( project, (List<String>) validationResult.getMessages() );
     }
 
-    private void markPom( final IProject project, final String msg )
+    private void markPom( final IProject project, final List<String> problems )
     {
         final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
 
@@ -97,13 +102,14 @@ public class MavenExceptionHandler
             public void run( IProgressMonitor monitor )
                 throws CoreException
             {
-                // TODO create a custom marker type for this plugin
-                pom.deleteMarkers( IMarker.PROBLEM, false, IResource.DEPTH_ZERO );
-
-                IMarker marker = pom.createMarker( IMarker.PROBLEM );
-                marker.setAttribute( IMarker.MESSAGE, msg );
-                marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
-                marker.setAttribute( IMarker.LINE_NUMBER, 1 );
+                for ( String problem : problems )
+                {
+                    // TODO create a custom marker type for this plugin
+                    IMarker marker = pom.createMarker( IMarker.PROBLEM );
+                    marker.setAttribute( IMarker.MESSAGE, problem );
+                    marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
+                    marker.setAttribute( IMarker.LINE_NUMBER, 1 );
+                }
             }
         };
 
@@ -115,5 +121,10 @@ public class MavenExceptionHandler
         {
             Activator.getLogger().log( ce );
         }
+    }
+
+    private void markPom( final IProject project, final String msg )
+    {
+        markPom( project, Arrays.asList( new String[] { msg } ) );
     }
 }
