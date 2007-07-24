@@ -195,9 +195,7 @@ public class MavenClasspathContainer
             }
             return JavaCore.newProjectEntry( project.getFullPath(), export );
         }
-                                                 // TODO : -erle- : ? this causes an error 
-                                                 //                   where the junit classpath won't be seen in the projects
-        else if ( ( artifact.getFile() != null ) /*&& artifact.isAddedToClasspath()*/ )
+        else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {
             return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ), sourcePath, null,
                                              new IAccessRule[0], attributes, false );
