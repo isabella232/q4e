@@ -17,9 +17,7 @@ import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
-import org.devzuz.q.maven.jdt.core.listener.PomListener;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -46,8 +44,6 @@ public class MavenClasspathContainer
     public static String MAVEN_CLASSPATH_CONTAINER = "org.devzuz.q.maven.jdt.core.mavenClasspathContainer"; //$NON-NLS-1$
 
     private List<IClasspathEntry> classpathEntries = new ArrayList<IClasspathEntry>();
-
-    private PomListener listener;
 
     private IMavenProject mavenProject;
 
@@ -129,8 +125,6 @@ public class MavenClasspathContainer
             Activator.getLogger().log( e );
         }
 
-        container.registerListener();
-
         return container;
     }
 
@@ -210,32 +204,6 @@ public class MavenClasspathContainer
         }
         
         return null;
-    }
-
-    /**
-     * Add a listener for pom changes
-     */
-    public void registerListener()
-    {
-        if ( listener == null )
-        {
-            Activator.getLogger().info( "Registering listener for " + this );
-            listener = new PomListener( this );
-            ResourcesPlugin.getWorkspace().addResourceChangeListener( listener, IResourceChangeEvent.POST_CHANGE );
-        }
-    }
-
-    /**
-     * Remove the listener from the workspace
-     */
-    public void unregisterListener()
-    {
-        if ( listener != null )
-        {
-            Activator.getLogger().info( "Unregistering listener for " + this );
-            ResourcesPlugin.getWorkspace().removeResourceChangeListener( listener );
-            listener = null;
-        }
     }
 
     public String toString()

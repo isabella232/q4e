@@ -17,6 +17,7 @@ import org.apache.commons.collections.set.ListOrderedSet;
 import org.apache.maven.model.Resource;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
@@ -27,13 +28,11 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jdt.launching.JavaRuntime;
-import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
 
 /**
  * An implementation of an Eclipse Project Nature that is used to set-up the Maven Builder for older Nature-based
@@ -87,13 +86,6 @@ public class MavenNature
                 .newContainerEntry( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ) ) );
             javaProject.setRawClasspath( (IClasspathEntry[]) classpathEntries
                 .toArray( new IClasspathEntry[classpathEntries.size()] ), null );
-
-            IClasspathContainer container = JavaCore
-                .getClasspathContainer( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ), javaProject );
-            if ( container instanceof MavenClasspathContainer )
-            {
-                ( (MavenClasspathContainer) container ).registerListener();
-            }
         }
     }
 
@@ -158,13 +150,6 @@ public class MavenNature
                 classpathEntries.remove( entryToRemove );
                 javaProject.setRawClasspath( (IClasspathEntry[]) classpathEntries
                     .toArray( new IClasspathEntry[classpathEntries.size()] ), null );
-            }
-
-            IClasspathContainer container = JavaCore
-                .getClasspathContainer( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ), javaProject );
-            if ( container instanceof MavenClasspathContainer )
-            {
-                ( (MavenClasspathContainer) container ).unregisterListener();
             }
         }
     }

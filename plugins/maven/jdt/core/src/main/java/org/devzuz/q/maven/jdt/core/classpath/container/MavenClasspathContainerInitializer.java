@@ -36,7 +36,7 @@ public class MavenClasspathContainerInitializer
         {
             Activator.getLogger().info( "Initializing classpath for " + project.getPath() );
 
-            MavenClasspathContainer.newClasspath( project.getProject() );
+            new UpdateClasspathJob( project.getProject() ).schedule();
         }
 
     }

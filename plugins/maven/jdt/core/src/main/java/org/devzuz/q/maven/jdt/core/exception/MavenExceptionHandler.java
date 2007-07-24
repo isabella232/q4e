@@ -7,19 +7,27 @@
 package org.devzuz.q.maven.jdt.core.exception;
 
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+import org.apache.maven.project.InvalidProjectModelException;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.core.Activator;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.internal.Workbench;
 
+/**
+ * Handles the Maven exceptions to provide a meaningful message to the user in the best way possible
+ * 
+ * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
+ * @version $Id$
+ */
 public class MavenExceptionHandler
 {
 
@@ -31,6 +39,10 @@ public class MavenExceptionHandler
         if ( cause instanceof ArtifactResolutionException )
         {
             instance.handle( project, (ArtifactResolutionException) cause );
+        }
+        if ( cause instanceof InvalidProjectModelException )
+        {
+            instance.handle( project, (InvalidProjectModelException) cause );
         }
         else
         {
@@ -68,18 +80,40 @@ public class MavenExceptionHandler
 
     public void handle( final IProject project, final ArtifactResolutionException e )
     {
-        Activator.getLogger().log( e );
-        // TODO add a problem marker to the pom, currently fails due to workspace locked exception
-//        try
-//        {
-//            IMarker marker = project.getFile( IMavenProject.POM_FILENAME ).createMarker( IMarker.PROBLEM );
-//            marker.setAttribute( IMarker.MESSAGE, "Missing dependency: " + e.getGroupId() + ":" + e.getArtifactId()
-//                + ":" + e.getVersion() );
-//            marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
-//        }
-//        catch ( CoreException ce )
-//        {
-//            Activator.getLogger().log( ce );
-//        }
+        markPom( project, "Missing dependency: " + e.getGroupId() + ":" + e.getArtifactId() + ":" + e.getVersion() );
+    }
+
+    private void handle( IProject project, InvalidProjectModelException e )
+    {
+        markPom( project, e.getMessage() );
+    }
+
+    private void markPom( final IProject project, final String msg )
+    {
+        final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
+
+        IWorkspaceRunnable r = new IWorkspaceRunnable()
+        {
+            public void run( IProgressMonitor monitor )
+                throws CoreException
+            {
+                // TODO create a custom marker type for this plugin
+                pom.deleteMarkers( IMarker.PROBLEM, false, IResource.DEPTH_ZERO );
+
+                IMarker marker = pom.createMarker( IMarker.PROBLEM );
+                marker.setAttribute( IMarker.MESSAGE, msg );
+                marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
+                marker.setAttribute( IMarker.LINE_NUMBER, 1 );
+            }
+        };
+
+        try
+        {
+            pom.getWorkspace().run( r, null, IWorkspace.AVOID_UPDATE, null );
+        }
+        catch ( CoreException ce )
+        {
+            Activator.getLogger().log( ce );
+        }
     }
 }
