@@ -58,6 +58,10 @@ public class ProjectScanner
 
         for ( String module : modules )
         {
+            if ( monitor.isCanceled() )
+            {
+                throw new InterruptedException();
+            }
 
             File moduleDir = new File( mavenProject.getBaseDirectory(), module );
 
