@@ -15,20 +15,6 @@
             name="Maven Events">
       </view>
    </extension>
-   <extension
-         point="org.eclipse.ui.views">
-      <category
-            id="org.devzuz.q.maven.ui"
-            name="Apache Maven">
-      </category>
-      <view
-            category="org.devzuz.q.maven.ui"
-            class="org.devzuz.q.maven.ui.views.MavenDependencyVisualView"
-            icon="src/main/resources/icons/Maven_M(16)-TP.gif"
-            id="org.devzuz.q.maven.ui.views.MavenDependencyVisualView"
-            name="Maven Dependency Graph">
-      </view>
-   </extension>
    <extension point="org.eclipse.ui.popupMenus">
        <objectContribution
              adaptable="true"
