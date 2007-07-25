@@ -14,5 +14,6 @@ Export-Package: org.devzuz.q.maven.wizard,
  org.devzuz.q.maven.wizard.customcontrol,
  org.devzuz.q.maven.wizard.pages,
  org.devzuz.q.maven.wizard.projectwizard
-Import-Package: org.devzuz.q.maven.jdt.ui.projectimport
+Import-Package: org.devzuz.q.maven.jdt.ui.projectimport,
+ org.devzuz.q.maven.ui.preferences
 Bundle-Vendor: DevZuz

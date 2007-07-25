@@ -9,6 +9,7 @@ package org.devzuz.q.maven.ui.preferences.editor;
 
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.dialogs.ArchetypeListSourceDialog;
+import org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -176,18 +177,17 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
         String archetypeListPref = getPreferenceStore().getString( getPreferenceName() );
         if ( !archetypeListPref.trim().equals( "" ) )
         {
-            String[] arrayStr = archetypeListPref.split( Messages.MavenArchetypePreferenceEditor_token );
+            String[] arrayStr = archetypeListPref.split( MavenArchetypePreferencePage.ARCHETYPE_LIST_LS );
             for ( int i = 0; i < arrayStr.length; i++ )
             {
-                String tabledata[] = arrayStr[i].split( Messages.MavenArchetypePreferenceEditor_separator );
+                String tabledata[] = arrayStr[i].split( MavenArchetypePreferencePage.ARCHETYPE_LIST_FS );
                 TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
                 item.setText( new String[] { tabledata[0], tabledata[1] } );
             }
         }
         else
         {
-            // TODO : We should load the defaults here
-            disableEditRemoveButtons();
+            doLoadDefault();
         }
     }
 
@@ -195,8 +195,8 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
     {
         artifactsTable.clearAll();
         TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
-        // TODO : Load here the default WIKI site
-        //item.setText( new String[] { tabledata[0], tabledata[1] } );
+        item.setText( new String[] { MavenArchetypePreferencePage.DEFAULT_ARCHETYPE_LIST_WIKI , 
+                                     MavenArchetypePreferencePage.DEFAULT_ARCHETYPE_LIST_KIND } );
     }
     
     protected void doStore()
@@ -302,8 +302,10 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
         StringBuffer strBuffer = new StringBuffer( "" );
         for ( int x = 0; x < items.length; x++ )
         {
-            strBuffer.append( ( items[x].getText( 0 ) + Messages.MavenArchetypePreferenceEditor_separator +
-                            items[x].getText( 1 ) + Messages.MavenArchetypePreferenceEditor_token ) );
+            if( x > 0 )
+                strBuffer.append( MavenArchetypePreferencePage.ARCHETYPE_LIST_LS );
+            
+            strBuffer.append( ( items[x].getText( 0 ) + MavenArchetypePreferencePage.ARCHETYPE_LIST_FS + items[x].getText( 1 ) ) );
         }
         return strBuffer.toString();
     }

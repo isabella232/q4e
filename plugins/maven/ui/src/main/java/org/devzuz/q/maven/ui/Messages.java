@@ -91,11 +91,11 @@ public class Messages
     
     public static String MavenArchetypePreferencePage_type;
     
-    public static String MavenArchetypePreferenceEditor_name;
+    public static String MavenArchetypePreferenceEditor_PrefKey;
     
-    public static String MavenArchetypePreferenceEditor_token;
+    public static String MavenArchetypePreferenceEditor_LineSeparator;
     
-    public static String MavenArchetypePreferenceEditor_separator;
+    public static String MavenArchetypePreferenceEditor_FieldSeparator;
 
     static
     {

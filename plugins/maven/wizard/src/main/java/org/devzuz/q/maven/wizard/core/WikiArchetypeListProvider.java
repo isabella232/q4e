@@ -16,16 +16,16 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage;
+
 public class WikiArchetypeListProvider
     implements IArchetypeListProvider
 {
-    static public String ARCHETYPE_LIST_WIKI_PAGE = "http://docs.codehaus.org/pages/viewpagesrc.action?pageId=48400";
-
     private String url;
 
     public WikiArchetypeListProvider()
     {
-        url = ARCHETYPE_LIST_WIKI_PAGE;
+        url = MavenArchetypePreferencePage.DEFAULT_ARCHETYPE_LIST_WIKI;;
     }
 
     public WikiArchetypeListProvider( String url )

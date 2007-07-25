@@ -16,6 +16,12 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class MavenArchetypePreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
 {
+    public static String ARCHETYPE_LIST_KEY = Messages.MavenArchetypePreferenceEditor_PrefKey;
+    public static String ARCHETYPE_LIST_LS = Messages.MavenArchetypePreferenceEditor_LineSeparator;
+    public static String ARCHETYPE_LIST_FS = Messages.MavenArchetypePreferenceEditor_FieldSeparator;
+    public static String DEFAULT_ARCHETYPE_LIST_WIKI = "http://docs.codehaus.org/pages/viewpagesrc.action?pageId=48400";
+    public static String DEFAULT_ARCHETYPE_LIST_KIND = "Wiki";
+    
     public MavenArchetypePreferencePage()
     {
         super( GRID );
@@ -24,9 +30,8 @@ public class MavenArchetypePreferencePage extends FieldEditorPreferencePage impl
 
     protected void createFieldEditors()
     {
-        noDefaultAndApplyButton();
-        addField( new MavenArchetypePreferenceTableEditor( Activator.PLUGIN_ID + Messages.MavenArchetypePreferenceEditor_name,
-                                                           Messages.MavenArchetypePreferencePage_description,
+        //noDefaultAndApplyButton();
+        addField( new MavenArchetypePreferenceTableEditor( ARCHETYPE_LIST_KEY, Messages.MavenArchetypePreferencePage_description,
                                                            getFieldEditorParent() ) );
     }
 
