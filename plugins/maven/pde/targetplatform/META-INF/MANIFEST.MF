@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Targetplatform Plug-in
 Bundle-SymbolicName: org.devzuz.q.maven.pde.targetplatform;singleton:=true
-Bundle-Version: 0.2.0.v200707170915
+Bundle-Version: 0.2.0.v200707261332
 Bundle-Activator: org.devzuz.q.internal.maven.pde.targetplatform.Activator
 Require-Bundle: org.eclipse.pde.ui;visibility:=reexport,
  org.devzuz.q.maven.core;visibility:=reexport
