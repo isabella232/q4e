@@ -93,7 +93,6 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
                 if ( directory != null )
                 {
                     directoryText.setText( directory.trim() );
-                    scheduleProjectScanningJob();
                 }
             }
         } );
@@ -200,6 +199,7 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
         }
         else
         {
+            pomList.getTable().removeAll();
             setError( Messages.wizard_importProject_error_location_nonexistent );
         }
         
