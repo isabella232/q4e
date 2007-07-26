@@ -27,6 +27,12 @@
    <feature url="features/org.devzuz.q.feature_0.2.0.v200707261332.jar" id="org.devzuz.q.feature" version="0.2.0.v200707261332">
       <category name="Community"/>
    </feature>
+   <feature url="features/org.devzuz.q.feature_0.2.0.v200707261447.jar" id="org.devzuz.q.feature" version="0.2.0.v200707261447">
+      <category name="Community"/>
+   </feature>
+   <feature url="features/org.devzuz.q.feature_0.2.0.v200707261452.jar" id="org.devzuz.q.feature" version="0.2.0.v200707261452">
+      <category name="Community"/>
+   </feature>
    <category-def name="Community" label="Community"/>
    <category-def name="Enabling Features" label="Enabling Features"/>
 </site>

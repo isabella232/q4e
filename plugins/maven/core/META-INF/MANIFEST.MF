@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Maven Embedder Integration
 Bundle-SymbolicName: org.devzuz.q.maven.core;singleton:=true
-Bundle-Version: 0.2.0.v200707261332
+Bundle-Version: 0.2.0.v200707261452
 Bundle-Activator: org.devzuz.q.maven.embedder.Activator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui;visibility:=reexport,
