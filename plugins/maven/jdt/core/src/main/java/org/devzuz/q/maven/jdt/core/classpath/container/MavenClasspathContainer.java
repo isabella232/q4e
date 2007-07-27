@@ -185,7 +185,7 @@ public class MavenClasspathContainer
             project = workspaceProjects.get( artifact.getGroupId() + "." + artifact.getArtifactId() );
         }
 
-        if ( project != null )
+        if ( ( project != null ) && ( project.isOpen() ) )
         {
             boolean export = false;
             String scope = artifact.getScope();
