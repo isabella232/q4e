@@ -6,6 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.wizard.core;
 
+import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 

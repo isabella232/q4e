@@ -17,6 +17,7 @@ import org.devzuz.q.maven.embedder.IMavenEventEnd;
 import org.devzuz.q.maven.embedder.IMavenListener;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.ui.projectimport.ImportProjectsJob;
+import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
 import org.devzuz.q.maven.wizard.Activator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;

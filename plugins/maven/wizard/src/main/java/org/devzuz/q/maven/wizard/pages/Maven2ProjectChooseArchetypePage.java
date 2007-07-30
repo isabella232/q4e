@@ -10,9 +10,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
+import org.devzuz.q.maven.ui.core.archetypeprovider.MavenArchetypeProviderManager;
 import org.devzuz.q.maven.wizard.Messages;
-import org.devzuz.q.maven.wizard.core.Archetype;
-import org.devzuz.q.maven.wizard.core.Maven2ArchetypeManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -43,7 +43,7 @@ public class Maven2ProjectChooseArchetypePage
     
     private List archetypeList;
 
-    Map<String, Archetype> archetypeMap;
+    private Map<String, Archetype> archetypeMap;
 
     private Label archetypeDescriptionLabel;
     
@@ -223,7 +223,7 @@ public class Maven2ProjectChooseArchetypePage
 
     private void initialize()
     {
-        archetypeMap = Maven2ArchetypeManager.getArchetypes();
+        archetypeMap = MavenArchetypeProviderManager.getArchetypes();
         for ( String key : archetypeMap.keySet() )
         {
             archetypeList.add( key );

@@ -7,16 +7,16 @@
 
 package org.devzuz.q.maven.ui.dialogs;
 
-import org.devzuz.q.maven.ui.Activator;
-import org.devzuz.q.maven.ui.Messages;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.Messages;
+import org.devzuz.q.maven.ui.core.archetypeprovider.IArchetypeListProvider;
+import org.devzuz.q.maven.ui.core.archetypeprovider.MavenArchetypeProviderManager;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.window.IShellProvider;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -110,8 +110,14 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
         typeText = new Combo( container, SWT.READ_ONLY );
         typeText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false ) );
         //typeText.addModifyListener( modifyingListener );
-        typeText.add( "Wiki" );
-        typeText.add( "XML" );
+        
+        IArchetypeListProvider[] providers = MavenArchetypeProviderManager.getArchetypeListProviders();
+        
+        for( IArchetypeListProvider provider : providers )
+        {
+            typeText.add( provider.getProviderName() );
+        }
+        
         return container;
     }
 

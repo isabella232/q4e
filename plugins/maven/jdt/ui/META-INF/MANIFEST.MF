@@ -9,7 +9,6 @@ Require-Bundle: org.devzuz.q.maven.jdt.core;visibility:=reexport,
  org.eclipse.jdt.ui;visibility:=reexport,
  org.eclipse.ui.ide;visibility:=reexport,
  org.eclipse.debug.core;visibility:=reexport,
- org.devzuz.q.maven.ui;visibility:=reexport,
  org.eclipse.debug.ui;visibility:=reexport,
  org.eclipse.ui.forms;visibility:=reexport
 Eclipse-LazyStart: true
@@ -18,3 +17,5 @@ Export-Package: org.devzuz.q.maven.jdt.ui,
  org.devzuz.q.maven.jdt.ui.actions,
  org.devzuz.q.maven.jdt.ui.classpath.container,
  org.devzuz.q.maven.jdt.ui.projectimport
+Import-Package: org.devzuz.q.maven.ui,
+ org.devzuz.q.maven.ui.customcomponents

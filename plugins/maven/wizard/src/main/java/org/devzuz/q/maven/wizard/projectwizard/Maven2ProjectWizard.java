@@ -8,8 +8,8 @@ package org.devzuz.q.maven.wizard.projectwizard;
 
 import java.lang.reflect.InvocationTargetException;
 
+import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
 import org.devzuz.q.maven.wizard.Activator;
-import org.devzuz.q.maven.wizard.core.Archetype;
 import org.devzuz.q.maven.wizard.core.Maven2ArchetypeManager;
 import org.devzuz.q.maven.wizard.pages.Maven2ProjectArchetypeInfoPage;
 import org.devzuz.q.maven.wizard.pages.Maven2ProjectChooseArchetypePage;

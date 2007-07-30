@@ -15,5 +15,5 @@ Export-Package: org.devzuz.q.maven.wizard,
  org.devzuz.q.maven.wizard.pages,
  org.devzuz.q.maven.wizard.projectwizard
 Import-Package: org.devzuz.q.maven.jdt.ui.projectimport,
- org.devzuz.q.maven.ui.preferences
+ org.devzuz.q.maven.ui.core.archetypeprovider
 Bundle-Vendor: DevZuz
