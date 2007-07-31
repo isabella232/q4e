@@ -165,7 +165,14 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
     
     protected void onPageValidated()
     {
+        int numProjects = pomList.getTable().getItemCount();
+        StringBuilder status = new StringBuilder();
         
+        status.append( "Found " );
+        status.append( numProjects );
+        status.append( numProjects == 1 ? " project" : " projects" );
+        
+        setMessage( status.toString() );
     }
     
     private void scheduleProjectScanningJob()
