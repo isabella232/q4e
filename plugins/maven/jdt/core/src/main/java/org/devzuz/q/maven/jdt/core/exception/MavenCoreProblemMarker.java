@@ -11,8 +11,6 @@ package org.devzuz.q.maven.jdt.core.exception;
 import org.devzuz.q.maven.jdt.core.Activator;
 
 
-
-
 public class MavenCoreProblemMarker
 {
 	private static final String MAVEN_POM_MARKER_ID = Activator.PLUGIN_ID + ".pomproblemmarker";

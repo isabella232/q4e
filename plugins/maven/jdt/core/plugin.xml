@@ -32,13 +32,6 @@
       <builder id="org.devzuz.q.maven.jdt.core.mavenIncrementalBuilder"/>
    </extension>
    <extension
-         point="org.eclipse.ui.ide.markerResolution">
-      <markerResolutionGenerator
-            class="org.devzuz.q.maven.jdt.core.exception.MavenCoreProblemMarker"
-            markerType="org.devzuz.q.maven.jdt.core.pomproblemmarker">
-      </markerResolutionGenerator>
-   </extension>
-   <extension
          id="org.devzuz.q.maven.jdt.core.pomproblemmarker"
          name="pomproblemmarker"
          point="org.eclipse.core.resources.markers">
