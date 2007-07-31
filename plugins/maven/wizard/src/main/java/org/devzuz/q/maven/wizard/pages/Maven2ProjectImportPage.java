@@ -66,8 +66,10 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
                 {
                     scheduleProjectScanningJob();
                 }
-                
-                validate();
+                else
+                {
+                    validate();
+                }
             }
         };
         
@@ -178,6 +180,7 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
             pomList.getTable().removeAll();
             projectScannerJob.setDirectory( Path.fromOSString( getProjectDirectory() ).toFile() );
             projectScannerJob.schedule();
+            setMessage( "Scanning for projects in " + getProjectDirectory() );
             hasUnperformedScanJob = false;
         }
     }
