@@ -105,7 +105,7 @@ public class MavenExceptionHandler
                 for ( String problem : problems )
                 {
                     // TODO create a custom marker type for this plugin
-                    IMarker marker = pom.createMarker( IMarker.PROBLEM );
+                	IMarker marker = pom.createMarker( MavenCoreProblemMarker.getMavenPOMMarker() );             
                     marker.setAttribute( IMarker.MESSAGE, problem );
                     marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
                     marker.setAttribute( IMarker.LINE_NUMBER, 1 );
@@ -115,7 +115,7 @@ public class MavenExceptionHandler
 
         try
         {
-            pom.getWorkspace().run( r, null, IWorkspace.AVOID_UPDATE, null );
+            pom.getWorkspace().run( r, null, IWorkspace.AVOID_UPDATE, null );  
         }
         catch ( CoreException ce )
         {

@@ -8,33 +8,17 @@
 
 package org.devzuz.q.maven.jdt.core.exception;
 
-import org.eclipse.core.resources.IMarker;
+import org.devzuz.q.maven.jdt.core.Activator;
+
+
 
 
 public class MavenCoreProblemMarker
 {
-	//public static final int POM_MISSING_ARTIFACTS = 1;
-	//public static final int POM_MISSING_DEPENDENCY= 2;
-	private static MavenCoreProblemMarker mavenMarker = null;
+	private static final String MAVEN_POM_MARKER_ID = Activator.PLUGIN_ID + ".pomproblemmarker";
 	
-	
-	
-
-	 public static synchronized MavenCoreProblemMarker getMavenCoreProblemMarker()
-	 {
-	        if ( mavenMarker == null )
-	        {
-	            mavenMarker = new MavenCoreProblemMarker();
-	        }
-
-	        return mavenMarker;
-	 }
-	 
-	public void outPomMarkerProblem (String problem)
+	public static String getMavenPOMMarker()
 	{
-		System.out.println("Problem : " + problem);
+		return MAVEN_POM_MARKER_ID;
 	}
-	
-	
-	
 }

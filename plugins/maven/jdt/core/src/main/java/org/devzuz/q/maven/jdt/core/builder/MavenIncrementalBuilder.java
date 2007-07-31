@@ -12,6 +12,7 @@ import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
+import org.devzuz.q.maven.jdt.core.exception.MavenCoreProblemMarker;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -38,7 +39,8 @@ public class MavenIncrementalBuilder
 {
 
     public static final String MAVEN_INCREMENTAL_BUILDER_ID = Activator.PLUGIN_ID + ".mavenIncrementalBuilder"; //$NON-NLS-1$
-
+ 
+    
     @Override
     protected IProject[] build( int kind, Map args, IProgressMonitor monitor )
         throws CoreException
@@ -73,7 +75,7 @@ public class MavenIncrementalBuilder
                     throws CoreException
                 {
                     // TODO create a custom marker type for this plugin
-                    pom.deleteMarkers( IMarker.PROBLEM, false, IResource.DEPTH_ZERO );
+                    pom.deleteMarkers( MavenCoreProblemMarker.getMavenPOMMarker(), false, IResource.DEPTH_ZERO );
                 }
             }.run( monitor );
         }
