@@ -8,7 +8,7 @@
 
 package org.devzuz.q.maven.wizard.importwizard;
 
-import org.devzuz.q.maven.jdt.ui.projectimport.ImportProjectJob;
+import org.devzuz.q.maven.jdt.ui.projectimport.ImportProjectWorkspaceJob;
 import org.devzuz.q.maven.wizard.pages.Maven2ProjectImportPage;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -30,10 +30,15 @@ public class Maven2ImportWizard extends Wizard implements IImportWizard
     @Override
     public boolean performFinish()
     {
-        ImportProjectJob projectImporter = new ImportProjectJob( projectImportPage.getSelectedMavenProjects() ); 
+        /*
+        ImportProjectJob projectImporter = ImportProjectJob.getProjectImporterJob( projectImportPage.getSelectedMavenProjects() );
+        projectImporter.schedule();
+        */
+        ImportProjectWorkspaceJob projectImporter = ImportProjectWorkspaceJob.getProjectImporterRunnable( projectImportPage.getSelectedMavenProjects() );
+        projectImporter.setUser( true );
         projectImporter.schedule();
         
-        return true; 
+        return true;
     }
 
     public void init(IWorkbench workbench, IStructuredSelection selection)
