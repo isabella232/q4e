@@ -48,6 +48,7 @@ public class ProjectScanner
         }
         catch ( CoreException e )
         {
+            // TODO the project doesn't build, but we should add it anyways or show the error to the user
             Activator.getLogger().log( "Unable to read Maven project " + pom, e );
             return Collections.emptyList();
         }
