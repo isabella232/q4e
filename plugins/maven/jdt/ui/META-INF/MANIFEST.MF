@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Maven JDT Integration UI
 Bundle-SymbolicName: org.devzuz.q.maven.jdt.ui;singleton:=true
-Bundle-Version: 0.2.0.v200707261452
+Bundle-Version: 0.2.0.v200708071743
 Bundle-Activator: org.devzuz.q.maven.jdt.ui.Activator
 Bundle-Localization: plugin
 Require-Bundle: org.devzuz.q.maven.jdt.core;visibility:=reexport,

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Maven JDT Integration Core
 Bundle-SymbolicName: org.devzuz.q.maven.jdt.core;singleton:=true
-Bundle-Version: 0.2.0.v200707261452
+Bundle-Version: 0.2.0.v200708071743
 Bundle-Activator: org.devzuz.q.maven.jdt.core.Activator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.jdt.core;visibility:=reexport,
