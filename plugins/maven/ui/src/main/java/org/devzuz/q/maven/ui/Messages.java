@@ -97,6 +97,8 @@ public class Messages
     
     public static String MavenArchetypePreferenceEditor_FieldSeparator;
     
+    public static String MavenLifeCycleView_Project;
+    
     public static String MavenLifeCycleView_PluginID;
     
     public static String MavenLifeCycleView_PhaseName;

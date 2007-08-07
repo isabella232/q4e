@@ -52,7 +52,7 @@ public class MavenLifeCycleView
         mavenLifeCycleTable = mavenLifeCycleTableViewer.getTable();
         
         TableColumn column = new TableColumn( mavenLifeCycleTable, SWT.NONE);
-        column.setText( "Project" );
+        column.setText( Messages.MavenLifeCycleView_Project );
         column.setWidth( 250 );
         TableColumn column1 = new TableColumn( mavenLifeCycleTable, SWT.NONE);
         column1.setText( Messages.MavenLifeCycleView_PluginID );
