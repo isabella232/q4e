@@ -38,7 +38,7 @@ public class MavenLifeCycleView
     
     private IProject[] projects;
     
-    private Action refreshMavenLifeCycleTableViewer;
+    private Action refreshMavenLifeCycleAction;
     
     private Table mavenLifeCycleTable;
     
@@ -75,7 +75,7 @@ public class MavenLifeCycleView
     
     private void createMavenLifeCycleAction()
     {
-    	refreshMavenLifeCycleTableViewer = new Action( Messages.MavenLifeCycleView_TableRefresh )
+    	refreshMavenLifeCycleAction = new Action( Messages.MavenLifeCycleView_TableRefresh )
         {
             public void run()
             {
@@ -83,16 +83,16 @@ public class MavenLifeCycleView
             	setProjectColumnData();
             }
         };
-        refreshMavenLifeCycleTableViewer.setEnabled( true );
-        refreshMavenLifeCycleTableViewer.setToolTipText( Messages.MavenLifeCycleView_TableRefreshToolTip );
-        refreshMavenLifeCycleTableViewer.setImageDescriptor(MavenImages.DESC_REFRESHMLIFECYCLEVIEW);
+        refreshMavenLifeCycleAction.setEnabled( true );
+        refreshMavenLifeCycleAction.setToolTipText( Messages.MavenLifeCycleView_TableRefreshToolTip );
+        refreshMavenLifeCycleAction.setImageDescriptor(MavenImages.DESC_REFRESHMLIFECYCLEVIEW);
     }
     
     private void addMenusAndToolbars()
     {
         IActionBars bars = getViewSite().getActionBars();        
         IToolBarManager toolBarManager = bars.getToolBarManager();
-        toolBarManager.add( refreshMavenLifeCycleTableViewer );
+        toolBarManager.add( refreshMavenLifeCycleAction );
     }
 
      private synchronized IProject[] getWorkBenchProjects()
