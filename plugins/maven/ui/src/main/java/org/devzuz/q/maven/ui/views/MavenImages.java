@@ -51,6 +51,8 @@ public class MavenImages
     public static final ImageDescriptor DESC_SCROLLLOCK = create( PATH_LCL, "lock_co.gif" ); //$NON-NLS-1$
 
     public static final ImageDescriptor DESC_SCROLLLOCK_DISABLED = create( PATH_LCL_DISABLED, "lock_co.gif" ); //$NON-NLS-1$
+    
+    public static final ImageDescriptor DESC_REFRESHMLIFECYCLEVIEW = create( ICONS_PATH, "Maven_M(16)-TP.gif" ); //$NON-NLS-1$
 
     private static ImageDescriptor create( String prefix, String name )
     {

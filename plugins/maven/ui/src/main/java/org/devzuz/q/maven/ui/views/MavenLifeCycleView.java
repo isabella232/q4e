@@ -15,12 +15,16 @@ import org.devzuz.q.maven.ui.Messages;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 
 public class MavenLifeCycleView 
@@ -32,7 +36,11 @@ public class MavenLifeCycleView
     
     private TableViewer mavenLifeCycleTableViewer;
     
-    private  IProject[] projects;
+    private IProject[] projects;
+    
+    private Action refreshMavenLifeCycleTableViewer;
+    
+    private Table mavenLifeCycleTable;
     
     public MavenLifeCycleView()
     {
@@ -42,7 +50,7 @@ public class MavenLifeCycleView
     public void createPartControl( Composite parent )
     {
         mavenLifeCycleTableViewer = new TableViewer( parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.CTRL);
-        final Table mavenLifeCycleTable = mavenLifeCycleTableViewer.getTable();
+        mavenLifeCycleTable = mavenLifeCycleTableViewer.getTable();
         
         TableColumn column = new TableColumn( mavenLifeCycleTable, SWT.NONE);
         column.setText( "Project" );
@@ -57,10 +65,34 @@ public class MavenLifeCycleView
         column3.setText( Messages.MavenLifeCycleView_AssociatedPluginGoal );
         column3.setWidth( 350 );
         mavenLifeCycleTable.setHeaderVisible( true );
-        mavenLifeCycleTable.setLinesVisible( true );
+        mavenLifeCycleTable.setLinesVisible( true );        
+        createMavenLifeCycleAction();
+        addMenusAndToolbars();
         setProjectColumnData();
-
         
+        
+    }
+    
+    private void createMavenLifeCycleAction()
+    {
+    	refreshMavenLifeCycleTableViewer = new Action( Messages.MavenLifeCycleView_TableRefresh )
+        {
+            public void run()
+            {
+            	mavenLifeCycleTable.removeAll();
+            	setProjectColumnData();
+            }
+        };
+        refreshMavenLifeCycleTableViewer.setEnabled( true );
+        refreshMavenLifeCycleTableViewer.setToolTipText( Messages.MavenLifeCycleView_TableRefreshToolTip );
+        refreshMavenLifeCycleTableViewer.setImageDescriptor(MavenImages.DESC_REFRESHMLIFECYCLEVIEW);
+    }
+    
+    private void addMenusAndToolbars()
+    {
+        IActionBars bars = getViewSite().getActionBars();        
+        IToolBarManager toolBarManager = bars.getToolBarManager();
+        toolBarManager.add( refreshMavenLifeCycleTableViewer );
     }
 
      private synchronized IProject[] getWorkBenchProjects()

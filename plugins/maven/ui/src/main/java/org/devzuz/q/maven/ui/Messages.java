@@ -102,6 +102,10 @@ public class Messages
     public static String MavenLifeCycleView_PhaseName;
     
     public static String MavenLifeCycleView_AssociatedPluginGoal;
+    
+    public static String MavenLifeCycleView_TableRefresh;
+    
+    public static String MavenLifeCycleView_TableRefreshToolTip;
 
     static
     {
