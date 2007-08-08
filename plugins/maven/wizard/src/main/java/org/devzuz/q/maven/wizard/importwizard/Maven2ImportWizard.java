@@ -30,11 +30,7 @@ public class Maven2ImportWizard extends Wizard implements IImportWizard
     @Override
     public boolean performFinish()
     {
-        /*
-        ImportProjectJob projectImporter = ImportProjectJob.getProjectImporterJob( projectImportPage.getSelectedMavenProjects() );
-        projectImporter.schedule();
-        */
-        ImportProjectWorkspaceJob projectImporter = ImportProjectWorkspaceJob.getProjectImporterRunnable( projectImportPage.getSelectedMavenProjects() );
+        ImportProjectWorkspaceJob projectImporter = new ImportProjectWorkspaceJob( "Importing Maven Projects" , projectImportPage.getSelectedMavenProjects() );
         projectImporter.setUser( true );
         projectImporter.schedule();
         

@@ -6,6 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.projectimport;
 
+import java.util.Arrays;
 import java.util.Collection;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
@@ -16,33 +17,30 @@ import org.eclipse.core.runtime.IStatus;
 
 public class ImportProjectWorkspaceJob extends WorkspaceJob
 {
-
-    private static ImportProjectWorkspaceJob projectImporter;
-    
-    public static synchronized ImportProjectWorkspaceJob getProjectImporterRunnable( Collection<IMavenProject> mavenProjects )
-    {
-        if( projectImporter == null )
-        {
-            projectImporter = new ImportProjectWorkspaceJob( "Importing maven projects" , mavenProjects );
-        }
-        
-        return projectImporter;
-    }
-    
     private IStatus status;
 
-    private final Collection<IMavenProject> mavenProjects;
+    private Collection<IMavenProject> mavenProjects;
 
     public ImportProjectWorkspaceJob( String name , Collection<IMavenProject> mavenProjects )
     {
         super( name );
         this.mavenProjects = mavenProjects;
     }
+    
+    public void setMavenProject( IMavenProject mavenProject )
+    {
+        setMavenProject( Arrays.asList( new IMavenProject[] { mavenProject } ) );
+    }
+    
+    private void setMavenProject( Collection<IMavenProject> mavenProjects )
+    {
+        this.mavenProjects = mavenProjects;
+    }
 
     public IStatus runInWorkspace(IProgressMonitor monitor) 
         throws CoreException 
     {
-        ImportProjectJob job = ImportProjectJob.getProjectImporterJob( mavenProjects );
+        ImportProjectJob job = new ImportProjectJob( mavenProjects );
         return job.run( monitor );
     }
 

@@ -29,19 +29,7 @@ import org.eclipse.core.runtime.jobs.Job;
 
 public class ImportProjectJob
     extends Job
-{
-    private static ImportProjectJob projectImporter;
-    
-    public static synchronized ImportProjectJob getProjectImporterJob( Collection<IMavenProject> mavenProjects )
-    {
-        if( projectImporter == null )
-        {
-            projectImporter = new ImportProjectJob( mavenProjects );
-        }
-        
-        return projectImporter;
-    }
-    
+{   
     private Collection<IMavenProject> mavenProjects;
 
     public ImportProjectJob( IMavenProject mavenProject )
@@ -52,6 +40,16 @@ public class ImportProjectJob
     public ImportProjectJob( Collection<IMavenProject> mavenProjects )
     {
         super( "Import Maven 2 project" );
+        this.mavenProjects = mavenProjects;
+    }
+    
+    public void setMavenProject( IMavenProject mavenProject )
+    {
+        setMavenProject( Arrays.asList( new IMavenProject[] { mavenProject } ) );
+    }
+    
+    public void setMavenProject( Collection<IMavenProject> mavenProjects )
+    {
         this.mavenProjects = mavenProjects;
     }
 
