@@ -105,10 +105,18 @@ public class MavenExceptionHandler
                 for ( String problem : problems )
                 {
                     // TODO create a custom marker type for this plugin
-                	IMarker marker = pom.createMarker( MavenCoreProblemMarker.getMavenPOMMarker() );             
-                    marker.setAttribute( IMarker.MESSAGE, problem );
-                    marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
-                    marker.setAttribute( IMarker.LINE_NUMBER, 1 );
+                    try 
+                    {
+                        IMarker marker = pom.createMarker( MavenCoreProblemMarker.getMavenPOMMarker() );             
+                        marker.setAttribute( IMarker.MESSAGE, problem );
+                        marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
+                        marker.setAttribute( IMarker.LINE_NUMBER, 1 );
+                    }
+                    catch(CoreException  ce)
+                    {
+                        Activator.getLogger().log( ce );
+                    }
+                	
                 }
             }
         };
