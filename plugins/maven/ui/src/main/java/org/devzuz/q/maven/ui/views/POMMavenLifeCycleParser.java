@@ -72,15 +72,15 @@ public class POMMavenLifeCycleParser
         }
         catch(ParserConfigurationException pce)
         {
-            System.out.println("ParserConfigurationException " + pce.getMessage());
+            //System.out.println("ParserConfigurationException " + pce.getMessage());
         }
         catch(SAXException se)
         {
-            System.out.println("SAXException " + se.getMessage());
+            //System.out.println("SAXException " + se.getMessage());
         }
         catch(IOException ioe)
         {
-            System.out.println("IOException " + ioe.getMessage());  
+           // System.out.println("IOException " + ioe.getMessage());  
         }
     }
     
@@ -226,7 +226,8 @@ public class POMMavenLifeCycleParser
         {
             checkPhaseAndGoal(n);
             NamedNodeMap atts = n.getAttributes();
-            for (int i = 0; i < atts.getLength(); i++) {
+            for (int i = 0; i < atts.getLength(); i++) 
+            {
                 Node att = atts.item(i);
                 recursiveNodeCheck(att);
             }
