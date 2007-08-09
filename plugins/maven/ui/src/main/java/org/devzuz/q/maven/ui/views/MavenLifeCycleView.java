@@ -52,16 +52,16 @@ public class MavenLifeCycleView
         
         TableColumn column = new TableColumn( mavenLifeCycleTable, SWT.NONE);
         column.setText( Messages.MavenLifeCycleView_Project );
-        column.setWidth( 250 );
+        column.setWidth( 300 );
         TableColumn column1 = new TableColumn( mavenLifeCycleTable, SWT.NONE);
         column1.setText( Messages.MavenLifeCycleView_PluginID );
-        column1.setWidth( 200 );
+        column1.setWidth( 300 );
         TableColumn column2 = new TableColumn( mavenLifeCycleTable,  SWT.NONE);
         column2.setText( Messages.MavenLifeCycleView_PhaseName );
         column2.setWidth( 200 );
         TableColumn column3 = new TableColumn( mavenLifeCycleTable,  SWT.NONE);
         column3.setText( Messages.MavenLifeCycleView_AssociatedPluginGoal );
-        column3.setWidth( 350 );
+        column3.setWidth( 200 );
         mavenLifeCycleTable.setHeaderVisible( true );
         mavenLifeCycleTable.setLinesVisible( true );        
         createMavenLifeCycleAction();
