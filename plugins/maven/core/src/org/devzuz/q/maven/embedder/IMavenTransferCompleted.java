@@ -7,6 +7,7 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder;
 
-public interface IMavenTransferCompleted extends IMavenEvent {
+public interface IMavenTransferCompleted extends IMavenEvent
+{
 
 }

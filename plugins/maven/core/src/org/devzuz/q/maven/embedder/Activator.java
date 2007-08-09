@@ -17,7 +17,8 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractUIPlugin
+{
 
     // The plug-in ID
     public static final String PLUGIN_ID = "org.devzuz.q.maven.core";
@@ -32,24 +33,27 @@ public class Activator extends AbstractUIPlugin {
     /**
      * The constructor
      */
-    public Activator() {
+    public Activator()
+    {
         plugin = this;
     }
 
-    public void start(BundleContext context) throws Exception {
-        super.start(context);
-        logger = new EclipseLogger(PLUGIN_ID, this.getLog());
+    public void start( BundleContext context ) throws Exception
+    {
+        super.start( context );
+        logger = new EclipseLogger( PLUGIN_ID, this.getLog() );
 
         // Initialize the maven instance
         mavenInstance = new EclipseMaven();
         mavenInstance.start();
-        ExtensionPointHelper.resolveExtensionPoints(this);
+        ExtensionPointHelper.resolveExtensionPoints( this );
     }
 
-    public void stop(BundleContext context) throws Exception {
+    public void stop( BundleContext context ) throws Exception
+    {
         plugin = null;
         mavenInstance.stop();
-        super.stop(context);
+        super.stop( context );
     }
 
     /**
@@ -57,19 +61,23 @@ public class Activator extends AbstractUIPlugin {
      * 
      * @return the shared instance
      */
-    public static Activator getDefault() {
+    public static Activator getDefault()
+    {
         return plugin;
     }
 
-    public EclipseMaven getMavenInstance() {
+    public EclipseMaven getMavenInstance()
+    {
         return mavenInstance;
     }
 
-    public void setMavenInstance(EclipseMaven mavenInstance) {
+    public void setMavenInstance( EclipseMaven mavenInstance )
+    {
         this.mavenInstance = mavenInstance;
     }
 
-    public static Logger getLogger() {
+    public static Logger getLogger()
+    {
         return getDefault().logger;
     }
 

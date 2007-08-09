@@ -9,19 +9,23 @@ package org.devzuz.q.maven.embedder.internal;
 
 import org.devzuz.q.maven.embedder.IMavenEventStart;
 
-public class MavenEventStart extends AbstractMavenEvent implements IMavenEventStart {
+public class MavenEventStart extends AbstractMavenEvent implements IMavenEventStart
+{
 
-    public MavenEventStart(String event, String target, long time) {
-        super(event, target, time);
+    public MavenEventStart( String event, String target, long time )
+    {
+        super( event, target, time );
     }
 
     @Override
-    public String getDescriptionText() {
-        return mergeMessages(Messages.MavenEventStart_Description, new Object[] { getType(), getTarget(), getTime() });
+    public String getDescriptionText()
+    {
+        return mergeMessages( Messages.MavenEventStart_Description, new Object[] { getType(), getTarget(), getTime() } );
     }
 
     @Override
-    public String getTypeText() {
+    public String getTypeText()
+    {
         return Messages.MavenEventStart_Type;
     }
 

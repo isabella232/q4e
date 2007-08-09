@@ -7,6 +7,7 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder.internal;
 
-public class MavenListener {
+public class MavenListener
+{
 
 }

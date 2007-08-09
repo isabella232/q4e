@@ -10,7 +10,8 @@ package org.devzuz.q.maven.embedder.internal;
 import org.devzuz.q.maven.embedder.IMavenLog;
 import org.devzuz.q.maven.embedder.Severity;
 
-public class MavenLog extends AbstractMavenEvent implements IMavenLog {
+public class MavenLog extends AbstractMavenEvent implements IMavenLog
+{
 
     private Severity severity;
 
@@ -18,23 +19,27 @@ public class MavenLog extends AbstractMavenEvent implements IMavenLog {
 
     private Throwable t;
 
-    public MavenLog(Severity severity, String msg, Throwable t) {
+    public MavenLog( Severity severity, String msg, Throwable t )
+    {
         this.severity = severity;
         this.msg = msg;
         this.t = t;
     }
 
     @Override
-    public String getDescriptionText() {
-        return mergeMessages(Messages.MavenLog_Description, new Object[] { msg, t });
+    public String getDescriptionText()
+    {
+        return mergeMessages( Messages.MavenLog_Description, new Object[] { msg, t } );
     }
 
     @Override
-    public String getTypeText() {
-        return mergeMessages(Messages.MavenLog_Type, new Object[] { severity });
+    public String getTypeText()
+    {
+        return mergeMessages( Messages.MavenLog_Type, new Object[] { severity } );
     }
 
-    public Severity getSeverity() {
+    public Severity getSeverity()
+    {
         return severity;
     }
 }

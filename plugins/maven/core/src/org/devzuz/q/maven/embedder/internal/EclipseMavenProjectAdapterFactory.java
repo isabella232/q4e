@@ -15,24 +15,34 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdapterFactory;
 
-public class EclipseMavenProjectAdapterFactory implements IAdapterFactory {
+public class EclipseMavenProjectAdapterFactory implements IAdapterFactory
+{
 
     private static final Class[] types = { IMavenProject.class, };
 
-    public Object getAdapter(Object adaptableObject, Class adapterType) {
-        if (adapterType == IMavenProject.class) {
-            if (adaptableObject instanceof IProject)
-                try {
-                    return MavenManager.getMaven().getMavenProject((IProject) adaptableObject, true);
-                } catch (CoreException e) {
-                    Activator.getLogger().log(e);
+    public Object getAdapter( Object adaptableObject, Class adapterType )
+    {
+        if ( adapterType == IMavenProject.class )
+        {
+            if ( adaptableObject instanceof IProject )
+                try
+                {
+                    return MavenManager.getMaven().getMavenProject( (IProject) adaptableObject, true );
+                }
+                catch ( CoreException e )
+                {
+                    Activator.getLogger().log( e );
                     return null;
                 }
-            else if (adaptableObject instanceof IFile) {
-                try {
-                    return MavenManager.getMaven().getMavenProject(((IFile) adaptableObject).getProject(), true);
-                } catch (CoreException e) {
-                    Activator.getLogger().log(e);
+            else if ( adaptableObject instanceof IFile )
+            {
+                try
+                {
+                    return MavenManager.getMaven().getMavenProject( ( (IFile) adaptableObject ).getProject(), true );
+                }
+                catch ( CoreException e )
+                {
+                    Activator.getLogger().log( e );
                     return null;
                 }
             }
@@ -40,7 +50,8 @@ public class EclipseMavenProjectAdapterFactory implements IAdapterFactory {
         return null;
     }
 
-    public Class[] getAdapterList() {
+    public Class[] getAdapterList()
+    {
         return types;
     }
 

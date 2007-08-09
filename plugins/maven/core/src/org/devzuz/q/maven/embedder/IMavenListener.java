@@ -7,9 +7,10 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder;
 
-public interface IMavenListener {
+public interface IMavenListener
+{
 
-    public void handleEvent(IMavenEvent event);
+    public void handleEvent( IMavenEvent event );
 
     public void dispose();
 }

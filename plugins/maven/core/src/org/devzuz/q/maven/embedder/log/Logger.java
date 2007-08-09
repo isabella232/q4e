@@ -13,23 +13,24 @@ import org.eclipse.core.runtime.IStatus;
 /**
  * Makes easier to log to the Eclipse logging system
  */
-public interface Logger {
+public interface Logger
+{
 
-    void log(IStatus status);
+    void log( IStatus status );
 
-    void log(CoreException e);
+    void log( CoreException e );
 
-    void log(Throwable t);
+    void log( Throwable t );
 
     /**
      * @deprecated use {@link #error(String)}
      * @param msg
      */
-    void log(String msg);
+    void log( String msg );
 
-    void log(String msg, Throwable t);
+    void log( String msg, Throwable t );
 
-    void error(String msg);
+    void error( String msg );
 
-    void info(String msg);
+    void info( String msg );
 }

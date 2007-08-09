@@ -27,15 +27,17 @@ import org.eclipse.core.runtime.CoreException;
  * @author pdodds
  * 
  */
-public class EclipseMavenProject implements IMavenProject {
+public class EclipseMavenProject implements IMavenProject
+{
 
     /**
      * @deprecated use {@link IMavenProject#POM_FILENAME}
      */
     public static final String POM_XML = POM_FILENAME;
 
-    public static boolean hasDescriptor(IProject project) {
-        return (project.getFile(POM_FILENAME).exists());
+    public static boolean hasDescriptor( IProject project )
+    {
+        return ( project.getFile( POM_FILENAME ).exists() );
     }
 
     private EclipseMavenProjectEnvironment mavenEnvironment;
@@ -52,11 +54,13 @@ public class EclipseMavenProject implements IMavenProject {
 
     private Set<IMavenArtifact> allArtifacts = new HashSet<IMavenArtifact>();
 
-    public EclipseMavenProject(IFile file) {
-        this(new File(file.getLocation().toOSString()));
+    public EclipseMavenProject( IFile file )
+    {
+        this( new File( file.getLocation().toOSString() ) );
     }
 
-    public EclipseMavenProject(File file) {
+    public EclipseMavenProject( File file )
+    {
         this.mavenEnvironment = new EclipseMavenProjectEnvironment();
         this.pomFile = file;
         this.baseDirectory = pomFile.getParentFile();
@@ -65,184 +69,227 @@ public class EclipseMavenProject implements IMavenProject {
     /**
      * Build a Maven project from an Eclipse project
      * 
-     * @param project Eclipse project
+     * @param project
+     *            Eclipse project
      */
-    public EclipseMavenProject(IProject project) {
+    public EclipseMavenProject( IProject project )
+    {
         this.project = project;
-        this.mavenEnvironment = new EclipseMavenProjectEnvironment(project);
+        this.mavenEnvironment = new EclipseMavenProjectEnvironment( project );
         this.baseDirectory = project.getLocation().toFile();
-        this.pomFile = new File(project.getLocation().toOSString() + "/" + POM_FILENAME);
+        this.pomFile = new File( project.getLocation().toOSString() + "/" + POM_FILENAME );
     }
 
     /**
      * Build a Maven project from an Artifact
      * 
-     * @param artifact Maven artifact
+     * @param artifact
+     *            Maven artifact
      */
-    public EclipseMavenProject(IMavenArtifact artifact) {
+    public EclipseMavenProject( IMavenArtifact artifact )
+    {
         this.mavenEnvironment = new EclipseMavenProjectEnvironment();
     }
 
-    public void executeGoals(String goals) {
+    public void executeGoals( String goals )
+    {
     }
 
-    public Object getAdapter(Class adapter) {
+    public Object getAdapter( Class adapter )
+    {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public String getArtifactId() {
-        if (mavenProject != null)
+    public String getArtifactId()
+    {
+        if ( mavenProject != null )
             return mavenProject.getArtifactId();
         else
             return null;
     }
 
-    public MavenArtifactResolver getDependencyResolver() throws CoreException {
-        return new MavenArtifactResolver(mavenProject.getArtifacts());
+    public MavenArtifactResolver getDependencyResolver() throws CoreException
+    {
+        return new MavenArtifactResolver( mavenProject.getArtifacts() );
     }
 
-    public String getGroupId() {
-        if (mavenProject != null)
+    public String getGroupId()
+    {
+        if ( mavenProject != null )
             return mavenProject.getGroupId();
         else
             return null;
     }
 
-    public MavenProject getMavenProject() {
+    public MavenProject getMavenProject()
+    {
         return mavenProject;
     }
 
-    public IProject getProject() {
+    public IProject getProject()
+    {
         return project;
     }
 
-    public EclipseMavenProjectEnvironment getProjectEnvironment() {
+    public EclipseMavenProjectEnvironment getProjectEnvironment()
+    {
         return mavenEnvironment;
     }
 
-    public String getVersion() {
-        if (mavenProject != null)
+    public String getVersion()
+    {
+        if ( mavenProject != null )
             return mavenProject.getVersion();
         else
             return null;
     }
 
-    public File getBaseDirectory() {
+    public File getBaseDirectory()
+    {
         return baseDirectory;
     }
 
-    public int getLoggingLevel() {
+    public int getLoggingLevel()
+    {
         return Logger.LEVEL_INFO;
     }
 
-    public File getPomFile() {
+    public File getPomFile()
+    {
         return pomFile;
     }
 
-    public boolean isOffline() {
+    public boolean isOffline()
+    {
         return false;
     }
 
-    public String getActiveProfiles() {
+    public String getActiveProfiles()
+    {
         return null;
     }
 
-    public void refreshProject(MavenProject mavenRawProject) {
+    public void refreshProject( MavenProject mavenRawProject )
+    {
         mavenProject = mavenRawProject;
     }
 
-    public void refreshDependencies(MavenProject mavenRawProject) {
+    public void refreshDependencies( MavenProject mavenRawProject )
+    {
         // TODO use the dependency graph tool
 
         allArtifacts.clear();
-        for (Object obj : mavenRawProject.getArtifacts()) {
-            if (obj instanceof DefaultArtifact) {
-                IMavenArtifact mavenArtifact = createMavenArtifact((DefaultArtifact) obj);
-                allArtifacts.add(mavenArtifact);
+        for ( Object obj : mavenRawProject.getArtifacts() )
+        {
+            if ( obj instanceof DefaultArtifact )
+            {
+                IMavenArtifact mavenArtifact = createMavenArtifact( (DefaultArtifact) obj );
+                allArtifacts.add( mavenArtifact );
             }
         }
 
-        for (Object obj : mavenRawProject.getArtifacts()) {
-            if (obj instanceof DefaultArtifact) {
-                IMavenArtifact mavenArtifact = createMavenArtifact((DefaultArtifact) obj);
-                addThroughDependencyTrail(mavenRawProject, mavenArtifact, (DefaultArtifact) obj);
+        for ( Object obj : mavenRawProject.getArtifacts() )
+        {
+            if ( obj instanceof DefaultArtifact )
+            {
+                IMavenArtifact mavenArtifact = createMavenArtifact( (DefaultArtifact) obj );
+                addThroughDependencyTrail( mavenRawProject, mavenArtifact, (DefaultArtifact) obj );
             }
         }
     }
 
-    private void addThroughDependencyTrail(MavenProject mavenRawProject, IMavenArtifact mavenArtifact,
-            DefaultArtifact defaultArtifact) {
+    private void addThroughDependencyTrail( MavenProject mavenRawProject, IMavenArtifact mavenArtifact,
+                                            DefaultArtifact defaultArtifact )
+    {
         IMavenArtifact parentArtifact = null;
-        for (Object obj : defaultArtifact.getDependencyTrail()) {
-            if (obj instanceof String) {
-                IMavenArtifact dummyArtifact = createDummyMavenArtifact((String) obj);
-                IMavenArtifact resolvedArtifact = getArtifactInstanceFromSet(allArtifacts, dummyArtifact);
-                if (parentArtifact == null) {
+        for ( Object obj : defaultArtifact.getDependencyTrail() )
+        {
+            if ( obj instanceof String )
+            {
+                IMavenArtifact dummyArtifact = createDummyMavenArtifact( (String) obj );
+                IMavenArtifact resolvedArtifact = getArtifactInstanceFromSet( allArtifacts, dummyArtifact );
+                if ( parentArtifact == null )
+                {
                     // Start at the top
-                    if (artifacts.contains(resolvedArtifact)) {
-                        parentArtifact = getArtifactInstanceFromSet(artifacts, resolvedArtifact);
-                    } else {
-                        artifacts.add(resolvedArtifact);
+                    if ( artifacts.contains( resolvedArtifact ) )
+                    {
+                        parentArtifact = getArtifactInstanceFromSet( artifacts, resolvedArtifact );
+                    }
+                    else
+                    {
+                        artifacts.add( resolvedArtifact );
                         parentArtifact = resolvedArtifact;
                     }
-                } else {
-                    if (parentArtifact.getChildren().contains(resolvedArtifact)) {
-                        parentArtifact = getArtifactInstanceFromSet(parentArtifact.getChildren(), resolvedArtifact);
-                    } else {
-                        parentArtifact.addChild(resolvedArtifact);
+                }
+                else
+                {
+                    if ( parentArtifact.getChildren().contains( resolvedArtifact ) )
+                    {
+                        parentArtifact = getArtifactInstanceFromSet( parentArtifact.getChildren(), resolvedArtifact );
+                    }
+                    else
+                    {
+                        parentArtifact.addChild( resolvedArtifact );
                         parentArtifact = resolvedArtifact;
                     }
                 }
             }
         }
-        if (parentArtifact == null)
-            artifacts.add(mavenArtifact);
+        if ( parentArtifact == null )
+            artifacts.add( mavenArtifact );
         else
-            parentArtifact.addChild(mavenArtifact);
+            parentArtifact.addChild( mavenArtifact );
     }
 
-    private IMavenArtifact createDummyMavenArtifact(String string) {
-        String[] elements = string.split(":");
+    private IMavenArtifact createDummyMavenArtifact( String string )
+    {
+        String[] elements = string.split( ":" );
         IMavenArtifact artifact = new EclipseMavenArtifact();
-        artifact.setArtifactId(elements[1]);
-        artifact.setGroupId(elements[0]);
-        artifact.setId(string);
-        artifact.setVersion(elements[3]);
+        artifact.setArtifactId( elements[1] );
+        artifact.setGroupId( elements[0] );
+        artifact.setId( string );
+        artifact.setVersion( elements[3] );
         return artifact;
     }
 
-    private IMavenArtifact getArtifactInstanceFromSet(Set<IMavenArtifact> artifactsToSearch,
-            IMavenArtifact resolvedArtifact) {
-        for (IMavenArtifact existingArtifact : artifactsToSearch) {
-            if (resolvedArtifact.equals(existingArtifact))
+    private IMavenArtifact getArtifactInstanceFromSet( Set<IMavenArtifact> artifactsToSearch,
+                                                       IMavenArtifact resolvedArtifact )
+    {
+        for ( IMavenArtifact existingArtifact : artifactsToSearch )
+        {
+            if ( resolvedArtifact.equals( existingArtifact ) )
                 return existingArtifact;
         }
         return resolvedArtifact;
     }
 
-    private IMavenArtifact createMavenArtifact(DefaultArtifact defaultArtifact) {
+    private IMavenArtifact createMavenArtifact( DefaultArtifact defaultArtifact )
+    {
         IMavenArtifact artifact = new EclipseMavenArtifact();
-        artifact.setArtifactId(defaultArtifact.getArtifactId());
-        artifact.setGroupId(defaultArtifact.getGroupId());
-        artifact.setId(defaultArtifact.getId());
-        artifact.setVersion(defaultArtifact.getVersion());
-        artifact.setFile(defaultArtifact.getFile());
-        artifact.setAddedToClasspath(defaultArtifact.getArtifactHandler().isAddedToClasspath());
+        artifact.setArtifactId( defaultArtifact.getArtifactId() );
+        artifact.setGroupId( defaultArtifact.getGroupId() );
+        artifact.setId( defaultArtifact.getId() );
+        artifact.setVersion( defaultArtifact.getVersion() );
+        artifact.setFile( defaultArtifact.getFile() );
+        artifact.setAddedToClasspath( defaultArtifact.getArtifactHandler().isAddedToClasspath() );
         // System.out.println("Created Artifact "+artifact);
         return artifact;
     }
 
-    public Set<IMavenArtifact> getArtifacts() {
+    public Set<IMavenArtifact> getArtifacts()
+    {
         return allArtifacts;
     }
 
-    public void setArtifacts(Set<IMavenArtifact> artifacts) {
+    public void setArtifacts( Set<IMavenArtifact> artifacts )
+    {
         this.artifacts = artifacts;
     }
 
     @Override
-    public String toString() {
+    public String toString()
+    {
         return this.getGroupId() + ":" + this.getArtifactId() + ":" + this.getVersion();
     }
 }

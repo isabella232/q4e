@@ -15,6 +15,7 @@ import org.apache.maven.artifact.resolver.DefaultArtifactResolver;
  * @author pdodds
  * 
  */
-public class EclipseMavenArtifactResolver extends DefaultArtifactResolver {
+public class EclipseMavenArtifactResolver extends DefaultArtifactResolver
+{
 
 }

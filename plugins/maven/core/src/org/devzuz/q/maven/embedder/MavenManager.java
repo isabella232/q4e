@@ -7,8 +7,10 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder;
 
-public class MavenManager {
-    public static IMaven getMaven() {
+public class MavenManager
+{
+    public static IMaven getMaven()
+    {
         return Activator.getDefault().getMavenInstance();
     }
 }

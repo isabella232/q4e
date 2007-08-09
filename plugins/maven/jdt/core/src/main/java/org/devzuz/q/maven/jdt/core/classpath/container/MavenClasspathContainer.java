@@ -105,7 +105,7 @@ public class MavenClasspathContainer
         try
         {
             IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, true );
-
+            
             container.refreshClasspath( mavenProject );
         }
         catch ( CoreException e )

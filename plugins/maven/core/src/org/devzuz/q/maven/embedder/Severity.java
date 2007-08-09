@@ -7,20 +7,24 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder;
 
-public enum Severity {
+public enum Severity
+{
 
     debug, info, warn, error, fatal;
 
     private static final Severity[] ALL = new Severity[] { debug, info, warn, error, fatal };
 
-    public static Severity[] getAll() {
+    public static Severity[] getAll()
+    {
         return ALL;
     }
 
-    public static String[] getAllAsString() {
+    public static String[] getAllAsString()
+    {
         Severity[] severities = getAll();
         String[] all = new String[severities.length];
-        for (int i = 0; i < severities.length; i++) {
+        for ( int i = 0; i < severities.length; i++ )
+        {
             all[i] = severities[i].toString();
         }
         return all;

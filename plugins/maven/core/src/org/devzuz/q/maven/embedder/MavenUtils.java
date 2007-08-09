@@ -11,31 +11,33 @@ import org.apache.maven.model.Model;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.embedder.internal.EclipseMaven;
 
-public class MavenUtils 
+public class MavenUtils
 {
     /**
-     * @param pom the POM file
-     * @param newDependencies the new dependencies
+     * @param pom
+     *            the POM file
+     * @param newDependencies
+     *            the new dependencies
      * @throws IOException
      */
-    static public void rewritePomWithNewDependencies( File pom, List<Dependency> newDependencies ) 
-            throws IOException, XmlPullParserException
+    static public void rewritePomWithNewDependencies( File pom, List<Dependency> newDependencies )
+        throws IOException, XmlPullParserException
     {
         IMaven maven = MavenManager.getMaven();
-        if( maven instanceof EclipseMaven )
+        if ( maven instanceof EclipseMaven )
         {
             FileWriter writer = null;
-            try 
+            try
             {
-                MavenEmbedder mavenEmbedder = ((EclipseMaven) maven).getEmbedder();
-                Model project = mavenEmbedder.readModel(pom);
+                MavenEmbedder mavenEmbedder = ( (EclipseMaven) maven ).getEmbedder();
+                Model project = mavenEmbedder.readModel( pom );
 
-                project.setDependencies(newDependencies);
+                project.setDependencies( newDependencies );
 
-                writer = new FileWriter(pom);
-                mavenEmbedder.writeModel(writer, project);
-            } 
-            finally 
+                writer = new FileWriter( pom );
+                mavenEmbedder.writeModel( writer, project );
+            }
+            finally
             {
                 writer.close();
             }
@@ -43,19 +45,20 @@ public class MavenUtils
     }
 
     /**
-     * @param pom the POM file
+     * @param pom
+     *            the POM file
      * @return List<String[]> the dependency list
      * @throws IOException
      */
     static public List<Dependency> getDependenciesFromPom( File pom ) throws IOException, XmlPullParserException
     {
         IMaven maven = MavenManager.getMaven();
-        if( maven instanceof EclipseMaven )
+        if ( maven instanceof EclipseMaven )
         {
-            Model project = ((EclipseMaven) maven).getEmbedder().readModel(pom);
+            Model project = ( (EclipseMaven) maven ).getEmbedder().readModel( pom );
             return project.getDependencies();
         }
-        
+
         return null;
     }
 }

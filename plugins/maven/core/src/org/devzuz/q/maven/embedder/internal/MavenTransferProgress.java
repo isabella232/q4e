@@ -10,20 +10,24 @@ package org.devzuz.q.maven.embedder.internal;
 import org.apache.maven.wagon.events.TransferEvent;
 import org.devzuz.q.maven.embedder.IMavenTransferProgress;
 
-public class MavenTransferProgress extends AbstractMavenEvent implements IMavenTransferProgress {
+public class MavenTransferProgress extends AbstractMavenEvent implements IMavenTransferProgress
+{
 
-    public MavenTransferProgress(TransferEvent arg0, byte[] arg1, int arg2) {
+    public MavenTransferProgress( TransferEvent arg0, byte[] arg1, int arg2 )
+    {
         // TODO Auto-generated constructor stub
     }
 
     @Override
-    public String getDescriptionText() {
+    public String getDescriptionText()
+    {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public String getTypeText() {
+    public String getTypeText()
+    {
         return Messages.MavenTransferProgress_Type;
     }
 }

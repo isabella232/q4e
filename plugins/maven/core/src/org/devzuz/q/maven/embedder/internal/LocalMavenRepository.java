@@ -16,42 +16,51 @@ import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
-public class LocalMavenRepository implements ILocalMavenRepository {
+public class LocalMavenRepository implements ILocalMavenRepository
+{
 
     ArtifactRepository artifactRepository;
 
-    public LocalMavenRepository(ArtifactRepository localRepository) {
+    public LocalMavenRepository( ArtifactRepository localRepository )
+    {
         this.artifactRepository = localRepository;
     }
 
-    public String getBaseDirectoryAbsolutePath() {
+    public String getBaseDirectoryAbsolutePath()
+    {
         return artifactRepository.getBasedir();
     }
 
-    public File getBaseDirectory() {
-        return new File(artifactRepository.getBasedir());
+    public File getBaseDirectory()
+    {
+        return new File( artifactRepository.getBasedir() );
     }
 
-    public IPath getBaseDirectoryPath() {
-        return new Path(artifactRepository.getBasedir());
+    public IPath getBaseDirectoryPath()
+    {
+        return new Path( artifactRepository.getBasedir() );
     }
 
-    public IMavenArtifact findArtifact(String groupId, String artifactId, String version, String classifier) {
+    public IMavenArtifact findArtifact( String groupId, String artifactId, String version, String classifier )
+    {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public List<IMavenArtifact> findArtifacts(String freeText) {
+    public List<IMavenArtifact> findArtifacts( String freeText )
+    {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public List<IMavenArtifact> findArtifacts(String groupId, String artifactId) {
+    public List<IMavenArtifact> findArtifacts( String groupId, String artifactId )
+    {
         // TODO Auto-generated method stub
         return null;
     }
 
-    public List<IMavenArtifact> findArtifacts(String groupId, String artifactId, String version) {
+    public List<IMavenArtifact> findArtifacts( String groupId, String artifactId, String version )
+    {
         // TODO Auto-generated method stub
         return null;
     }

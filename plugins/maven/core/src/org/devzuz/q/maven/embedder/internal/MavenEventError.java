@@ -10,24 +10,29 @@ package org.devzuz.q.maven.embedder.internal;
 import org.devzuz.q.maven.embedder.IMavenEventStart;
 import org.devzuz.q.maven.embedder.Severity;
 
-public class MavenEventError extends AbstractMavenEvent implements IMavenEventStart {
+public class MavenEventError extends AbstractMavenEvent implements IMavenEventStart
+{
 
-    public MavenEventError(String event, String target, long time, Throwable throwable) {
-        super(event, target, time, throwable);
+    public MavenEventError( String event, String target, long time, Throwable throwable )
+    {
+        super( event, target, time, throwable );
     }
 
     @Override
-    public String getDescriptionText() {
-        return mergeMessages(Messages.MavenEventError_Description, new Object[] { getType(), getTarget(), getTime(),
-                getThrowable() });
+    public String getDescriptionText()
+    {
+        return mergeMessages( Messages.MavenEventError_Description, new Object[] { getType(), getTarget(), getTime(),
+            getThrowable() } );
     }
 
     @Override
-    public String getTypeText() {
+    public String getTypeText()
+    {
         return Messages.MavenEventError_Type;
     }
 
-    public Severity getSeverity() {
+    public Severity getSeverity()
+    {
         return Severity.error;
     }
 }

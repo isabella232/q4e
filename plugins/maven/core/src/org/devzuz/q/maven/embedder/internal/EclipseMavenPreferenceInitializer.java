@@ -12,15 +12,17 @@ import org.devzuz.q.maven.embedder.IMaven;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
 
-public class EclipseMavenPreferenceInitializer extends AbstractPreferenceInitializer {
+public class EclipseMavenPreferenceInitializer extends AbstractPreferenceInitializer
+{
 
     @Override
-    public void initializeDefaultPreferences() {
+    public void initializeDefaultPreferences()
+    {
         IPreferenceStore store = Activator.getDefault().getPreferenceStore();
 
-        store.setDefault(IMaven.GLOBAL_PREFERENCE_OFFLINE, false);
-        store.setDefault(IMaven.GLOBAL_PREFERENCE_DOWNLOAD_SOURCES, false);
-        store.setDefault(IMaven.GLOBAL_PREFERENCE_DOWNLOAD_JAVADOC, false);
+        store.setDefault( IMaven.GLOBAL_PREFERENCE_OFFLINE, false );
+        store.setDefault( IMaven.GLOBAL_PREFERENCE_DOWNLOAD_SOURCES, false );
+        store.setDefault( IMaven.GLOBAL_PREFERENCE_DOWNLOAD_JAVADOC, false );
 
     }
 

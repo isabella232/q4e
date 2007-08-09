@@ -21,7 +21,8 @@ import org.eclipse.core.runtime.Platform;
  * @author pdodds
  * 
  */
-public class ExtensionPointHelper {
+public class ExtensionPointHelper
+{
 
     private static final String MAVEN_LISTENERS = "mavenListeners";
 
@@ -36,41 +37,50 @@ public class ExtensionPointHelper {
      * 
      * @param activator
      */
-    public static void resolveExtensionPoints(Activator activator) {
-        parseListeners(activator);
+    public static void resolveExtensionPoints( Activator activator )
+    {
+        parseListeners( activator );
 
     }
 
-    private static void parseListeners(Activator activator) {
-        if (Platform.getExtensionRegistry().getExtensionPoint(Activator.PLUGIN_ID, MAVEN_LISTENERS) != null) {
+    private static void parseListeners( Activator activator )
+    {
+        if ( Platform.getExtensionRegistry().getExtensionPoint( Activator.PLUGIN_ID, MAVEN_LISTENERS ) != null )
+        {
 
-            IExtension[] extensions = Platform.getExtensionRegistry().getExtensionPoint(Activator.PLUGIN_ID,
-                    MAVEN_LISTENERS).getExtensions();
-            List<MavenListener> found = new ArrayList<MavenListener>(20);
+            IExtension[] extensions =
+                Platform.getExtensionRegistry().getExtensionPoint( Activator.PLUGIN_ID, MAVEN_LISTENERS ).getExtensions();
+            List<MavenListener> found = new ArrayList<MavenListener>( 20 );
 
-            for (int i = 0; i < extensions.length; i++) {
+            for ( int i = 0; i < extensions.length; i++ )
+            {
                 IConfigurationElement[] configElements = extensions[i].getConfigurationElements();
-                for (int j = 0; j < configElements.length; j++) {
-                    MavenListener proxy = parseType(configElements[j], found.size());
-                    if (proxy != null)
-                        found.add(proxy);
+                for ( int j = 0; j < configElements.length; j++ )
+                {
+                    MavenListener proxy = parseType( configElements[j], found.size() );
+                    if ( proxy != null )
+                        found.add( proxy );
                 }
             }
-            cachedTypes = found.toArray(new MavenListener[found.size()]);
+            cachedTypes = found.toArray( new MavenListener[found.size()] );
         }
     }
 
-    private static MavenListener parseType(IConfigurationElement configElement, int ordinal) {
-        if (!configElement.getName().equals(TAG_ITEMTYPE))
+    private static MavenListener parseType( IConfigurationElement configElement, int ordinal )
+    {
+        if ( !configElement.getName().equals( TAG_ITEMTYPE ) )
             return null;
-        try {
+        try
+        {
             return new MavenListener();
-        } catch (Exception e) {
-            String name = configElement.getAttribute(ATT_NAME);
-            if (name == null)
+        }
+        catch ( Exception e )
+        {
+            String name = configElement.getAttribute( ATT_NAME );
+            if ( name == null )
                 name = "[missing name attribute]";
             String msg = "Failed to load itemType named " + name + " in " + configElement.getContributor().getName();
-            System.out.println(msg);
+            System.out.println( msg );
             return null;
         }
     }

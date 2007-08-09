@@ -25,24 +25,27 @@ import org.eclipse.core.runtime.jobs.Job;
  * 
  * @author pdodds
  */
-public class EclipseMavenRequest extends Job {
+public class EclipseMavenRequest extends Job
+{
 
     private EclipseMaven maven;
 
     private MavenExecutionRequest request;
 
-    public EclipseMavenRequest(String name, EclipseMaven maven, MavenExecutionRequest request) {
-        super(name);
+    public EclipseMavenRequest( String name, EclipseMaven maven, MavenExecutionRequest request )
+    {
+        super( name );
         this.maven = maven;
         this.request = request;
     }
 
     @Override
-    protected IStatus run(IProgressMonitor monitor) {
+    protected IStatus run( IProgressMonitor monitor )
+    {
 
         // TODO the number should be the number of projects in the reactor * maven phases to execute
-        monitor.beginTask("Maven build", 100);
-        monitor.setTaskName("Maven build");
+        monitor.beginTask( "Maven build", 100 );
+        monitor.setTaskName( "Maven build" );
 
         // TODO add a listener to maven that will call monitor.worked() for each project or phase completed and poll
         // monitor.isCancelled
@@ -52,22 +55,29 @@ public class EclipseMavenRequest extends Job {
 
         PrintStream out = System.out;
         PrintStream err = System.err;
-        try {
-            System.setOut(new MavenThreadPrintStream(getThread(), new EclipseMavenInfoEventPropagator(maven
-                    .getEventPropagator(), out), out));
-            System.setErr(new MavenThreadPrintStream(getThread(), new EclipseMavenErrorEventPropagator(maven
-                    .getEventPropagator(), err), err));
+        try
+        {
+            System.setOut( new MavenThreadPrintStream( getThread(),
+                                                       new EclipseMavenInfoEventPropagator( maven.getEventPropagator(),
+                                                                                            out ), out ) );
+            System.setErr( new MavenThreadPrintStream(
+                                                       getThread(),
+                                                       new EclipseMavenErrorEventPropagator(
+                                                                                             maven.getEventPropagator(),
+                                                                                             err ), err ) );
 
-            this.maven.executeRequest(this.request);
+            this.maven.executeRequest( this.request );
 
-            return new Status(IStatus.OK, Activator.PLUGIN_ID, "Success");
+            return new Status( IStatus.OK, Activator.PLUGIN_ID, "Success" );
             // } catch (Throwable e) {
             // maven.getEventPropagator().error("Unable to execute maven", e);
             // throw e;
             // return new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getLocalizedMessage(), e);
-        } finally {
-            System.setOut(out);
-            System.setErr(err);
+        }
+        finally
+        {
+            System.setOut( out );
+            System.setErr( err );
             // maven.removeEventListener(listener);
             // listener.dispose();
 

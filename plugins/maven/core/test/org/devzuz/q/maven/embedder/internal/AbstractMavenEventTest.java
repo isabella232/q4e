@@ -17,14 +17,16 @@ import org.devzuz.q.maven.embedder.Severity;
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
  */
-public class AbstractMavenEventTest extends TestCase {
+public class AbstractMavenEventTest extends TestCase
+{
 
     private AbstractMavenEvent event;
 
-    public void testMergeMessages() {
+    public void testMergeMessages()
+    {
         String description = "\ttest";
-        event = new MavenLog(Severity.info, description, null);
-        String result = event.mergeMessages(description, new Object[0]);
-        assertEquals("  test", result);
+        event = new MavenLog( Severity.info, description, null );
+        String result = event.mergeMessages( description, new Object[0] );
+        assertEquals( "  test", result );
     }
 }

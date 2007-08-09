@@ -7,6 +7,7 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder;
 
-public interface IMavenTransferError extends IMavenEvent {
+public interface IMavenTransferError extends IMavenEvent
+{
 
 }

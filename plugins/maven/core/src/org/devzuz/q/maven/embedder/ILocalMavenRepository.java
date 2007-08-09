@@ -11,7 +11,8 @@ import java.io.File;
 
 import org.eclipse.core.runtime.IPath;
 
-public interface ILocalMavenRepository extends IMavenRepository {
+public interface ILocalMavenRepository extends IMavenRepository
+{
 
     /**
      * Get base directory absolute path.

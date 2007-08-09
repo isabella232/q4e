@@ -16,14 +16,16 @@ import org.codehaus.plexus.PlexusContainer;
  * @author pdodds
  * 
  */
-public class EclipsePlexusContainerCustomizer implements ContainerCustomizer {
+public class EclipsePlexusContainerCustomizer implements ContainerCustomizer
+{
 
     /*
      * (non-Javadoc)
      * 
      * @see org.apache.maven.embedder.ContainerCustomizer#customize(org.codehaus.plexus.PlexusContainer)
      */
-    public void customize(PlexusContainer arg0) {
+    public void customize( PlexusContainer arg0 )
+    {
 
     }
 

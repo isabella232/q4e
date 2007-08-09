@@ -15,13 +15,14 @@ import org.devzuz.q.maven.embedder.internal.EclipseMavenProjectEnvironment;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
 
-public interface IMavenProject extends IAdaptable {
+public interface IMavenProject extends IAdaptable
+{
 
     public String POM_FILENAME = "pom.xml";
 
-    public abstract void executeGoals(String goals);
+    public abstract void executeGoals( String goals );
 
-    public abstract Object getAdapter(Class adapter);
+    public abstract Object getAdapter( Class adapter );
 
     public abstract String getArtifactId();
 

@@ -15,51 +15,62 @@ import org.eclipse.core.runtime.Status;
 /**
  * Logging utility
  */
-public class EclipseLogger implements Logger {
+public class EclipseLogger implements Logger
+{
 
     private String pluginId;
 
     private ILog log;
 
-    public EclipseLogger(String pluginId, ILog log) {
+    public EclipseLogger( String pluginId, ILog log )
+    {
         this.pluginId = pluginId;
         this.log = log;
     }
 
-    public String getPluginId() {
+    public String getPluginId()
+    {
         return pluginId;
     }
 
-    public ILog getLog() {
+    public ILog getLog()
+    {
         return log;
     }
 
-    public void log(IStatus status) {
-        getLog().log(status);
+    public void log( IStatus status )
+    {
+        getLog().log( status );
     }
 
-    public void log(CoreException e) {
-        log(e.getStatus());
+    public void log( CoreException e )
+    {
+        log( e.getStatus() );
     }
 
-    public void log(Throwable t) {
-        log(t.getMessage(), t);
+    public void log( Throwable t )
+    {
+        log( t.getMessage(), t );
     }
 
-    public void log(String msg) {
-        error(msg);
+    public void log( String msg )
+    {
+        error( msg );
     }
 
-    public void log(String msg, Throwable t) {
-        log(new Status(IStatus.ERROR, getPluginId(), 0, msg, t));
+    public void log( String msg, Throwable t )
+    {
+        log( new Status( IStatus.ERROR, getPluginId(), 0, msg, t ) );
     }
 
-    public void error(String msg) {
-        log(msg, null);
+    public void error( String msg )
+    {
+        log( msg, null );
     }
 
-    public void info(String msg) {
-        log(new Status(IStatus.INFO, getPluginId(), msg));
+    public void info( String msg )
+    {
+        log( new Status( IStatus.INFO, getPluginId(), msg ) );
     }
 
 }

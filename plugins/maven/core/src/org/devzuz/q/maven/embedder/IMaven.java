@@ -28,7 +28,8 @@ import org.eclipse.core.runtime.IPath;
  * @author pdodds
  * 
  */
-public interface IMaven {
+public interface IMaven
+{
 
     public static final String GLOBAL_PREFERENCE_OFFLINE = Activator.PLUGIN_ID + ".offline";
 
@@ -42,7 +43,7 @@ public interface IMaven {
      * @param projectSpec
      * @return
      */
-    public IMavenProject getMavenProject(IFile projectSpec, boolean resolveTransitively) throws CoreException;
+    public IMavenProject getMavenProject( IFile projectSpec, boolean resolveTransitively ) throws CoreException;
 
     /**
      * Returns an instance of IMavenProject for the given project specification
@@ -50,7 +51,7 @@ public interface IMaven {
      * @param projectSpec
      * @return
      */
-    public IMavenProject getMavenProject(File projectSpec, boolean resolveTransitively) throws CoreException;
+    public IMavenProject getMavenProject( File projectSpec, boolean resolveTransitively ) throws CoreException;
 
     /**
      * Returns an instance of IMavenProject for the given project
@@ -58,7 +59,7 @@ public interface IMaven {
      * @param project
      * @return
      */
-    public IMavenProject getMavenProject(IProject project, boolean resolveTransitively) throws CoreException;
+    public IMavenProject getMavenProject( IProject project, boolean resolveTransitively ) throws CoreException;
 
     /**
      * Returns an instance of IMavenProject for the given artifact in the remote repositories
@@ -68,58 +69,67 @@ public interface IMaven {
      * @return
      * @throws CoreException
      */
-    public IMavenProject getMavenProject(Artifact artifact, List<ArtifactRepository> remoteArtifactRepositories)
-            throws CoreException;
+    public IMavenProject getMavenProject( Artifact artifact, List<ArtifactRepository> remoteArtifactRepositories )
+        throws CoreException;
 
     /**
      * Allows you to execute a given goal without an existing project. For example, "archetype:create" can be executed
      * without an existing maven project.
      * 
-     * @param baseDirectory The location of the execution of the goal
-     * @param goal goal name
-     * @param properties properties of this goal
+     * @param baseDirectory
+     *            The location of the execution of the goal
+     * @param goal
+     *            goal name
+     * @param properties
+     *            properties of this goal
      * @throws CoreException
      */
-    public void executeGoal(IPath baseDirectory, String goal, Properties properties) throws CoreException;
+    public void executeGoal( IPath baseDirectory, String goal, Properties properties ) throws CoreException;
 
     /**
      * Allows you to execute a given goal name against a MavenProject
      * 
      * @param mavenProject
-     * @param goal goal name
+     * @param goal
+     *            goal name
      * @throws CoreException
      */
-    public void executeGoal(IMavenProject mavenProject, String goal) throws CoreException;
+    public void executeGoal( IMavenProject mavenProject, String goal ) throws CoreException;
 
     /**
      * Allows you to execute a given goal name against a MavenProject
      * 
      * @param mavenProject
-     * @param goal goal name
-     * @param properties properties of this goal
+     * @param goal
+     *            goal name
+     * @param properties
+     *            properties of this goal
      * @throws CoreException
      */
-    public void executeGoal(IMavenProject mavenProject, String goal, Properties properties) throws CoreException;
+    public void executeGoal( IMavenProject mavenProject, String goal, Properties properties ) throws CoreException;
 
     /**
      * Allows you to execute several goals against a MavenProject
      * 
      * @param mavenProject
-     * @param goals list of goals to execute
+     * @param goals
+     *            list of goals to execute
      * @throws CoreException
      */
-    public void executeGoals(IMavenProject mavenProject, List<String> goals) throws CoreException;
+    public void executeGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException;
 
     /**
      * Allows you to execute several goals against a MavenProject
      * 
      * @param mavenProject
-     * @param goals list of goals to execute
-     * @param properties properties of this goal
+     * @param goals
+     *            list of goals to execute
+     * @param properties
+     *            properties of this goal
      * @throws CoreException
      */
-    public void executeGoals(IMavenProject mavenProject, List<String> goals, Properties properties)
-            throws CoreException;
+    public void executeGoals( IMavenProject mavenProject, List<String> goals, Properties properties )
+        throws CoreException;
 
     /**
      * Same as calling {@link #executeGoal(IMavenProject, String)} with (mavenProject, "install")
@@ -127,7 +137,7 @@ public interface IMaven {
      * @param mavenProject
      * @throws CoreException
      */
-    public void install(IMavenProject mavenProject) throws CoreException;
+    public void install( IMavenProject mavenProject ) throws CoreException;
 
     /**
      * Same as calling {@link #executeGoal(IMavenProject, String)} with (mavenProject, "deploy")
@@ -135,19 +145,19 @@ public interface IMaven {
      * @param mavenProject
      * @throws CoreException
      */
-    public void deploy(IMavenProject mavenProject) throws CoreException;
+    public void deploy( IMavenProject mavenProject ) throws CoreException;
 
     /**
      * 
      * @param listener
      */
-    public void addEventListener(IMavenListener listener);
+    public void addEventListener( IMavenListener listener );
 
     /**
      * 
      * @param listener
      */
-    public void removeEventListener(IMavenListener listener);
+    public void removeEventListener( IMavenListener listener );
 
     /**
      * Get local repository instance.
@@ -165,8 +175,8 @@ public interface IMaven {
      * @return available versions
      * @throws CoreException
      */
-    public List<ArtifactVersion> getArtifactVersions(Artifact artifact, List<ArtifactRepository> remoteRepositories)
-            throws CoreException;
+    public List<ArtifactVersion> getArtifactVersions( Artifact artifact, List<ArtifactRepository> remoteRepositories )
+        throws CoreException;
 
     /**
      * Create an artifact given its info
@@ -178,7 +188,7 @@ public interface IMaven {
      * @param type
      * @return the artifact
      */
-    public Artifact createArtifact(String groupId, String artifactId, String version, String scope, String type);
+    public Artifact createArtifact( String groupId, String artifactId, String version, String scope, String type );
 
     /**
      * Create a maven artifact given its info
@@ -190,7 +200,8 @@ public interface IMaven {
      * @param type
      * @return the artifact
      */
-    public Dependency createMavenDependency(String groupId, String artifactId, String version, String scope, String type);
+    public Dependency createMavenDependency( String groupId, String artifactId, String version, String scope,
+                                             String type );
 
     /**
      * Create artifact repositories objects from model repositories
@@ -198,7 +209,7 @@ public interface IMaven {
      * @param repositories
      * @return artifact repositories
      */
-    public List<ArtifactRepository> createRepositories(List<Repository> repositories);
+    public List<ArtifactRepository> createRepositories( List<Repository> repositories );
 
     /**
      * Resolve an artifact from remote repositories. It will download to the local repository.
@@ -208,6 +219,6 @@ public interface IMaven {
      * @throws ArtifactNotFoundException
      * @throws CoreException
      */
-    public void resolve(Artifact artifact, List<ArtifactRepository> remoteRepositories)
-            throws ArtifactNotFoundException, CoreException;
+    public void resolve( Artifact artifact, List<ArtifactRepository> remoteRepositories )
+        throws ArtifactNotFoundException, CoreException;
 }

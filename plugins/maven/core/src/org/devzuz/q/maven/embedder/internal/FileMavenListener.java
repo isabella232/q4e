@@ -15,38 +15,53 @@ import java.io.IOException;
 import org.devzuz.q.maven.embedder.IMavenEvent;
 import org.devzuz.q.maven.embedder.IMavenListener;
 
-public class FileMavenListener implements IMavenListener {
+public class FileMavenListener implements IMavenListener
+{
 
-    private static final String LS = System.getProperty("line.separator");
+    private static final String LS = System.getProperty( "line.separator" );
 
-    private File log = new File("maven.log");
+    private File log = new File( "maven.log" );
 
     private BufferedWriter os;
 
-    private void openFile() {
-        try {
-            os = new BufferedWriter(new FileWriter(log));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+    private void openFile()
+    {
+        try
+        {
+            os = new BufferedWriter( new FileWriter( log ) );
+        }
+        catch ( IOException e )
+        {
+            throw new RuntimeException( e );
         }
     }
 
-    public void handleEvent(IMavenEvent event) {
-        if (os == null) {
+    public void handleEvent( IMavenEvent event )
+    {
+        if ( os == null )
+        {
             openFile();
         }
-        try {
-            os.write(event.getCreatedDate() + " : " + event.getTypeText() + " : " + event.getDescriptionText() + LS);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        try
+        {
+            os.write( event.getCreatedDate() + " : " + event.getTypeText() + " : " + event.getDescriptionText() + LS );
+        }
+        catch ( IOException e )
+        {
+            throw new RuntimeException( e );
         }
     }
 
-    public void dispose() {
-        if (os != null) {
-            try {
+    public void dispose()
+    {
+        if ( os != null )
+        {
+            try
+            {
                 os.close();
-            } catch (IOException e) {
+            }
+            catch ( IOException e )
+            {
                 // nothing that can be done
             }
         }

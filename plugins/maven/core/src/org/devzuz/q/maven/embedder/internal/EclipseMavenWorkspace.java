@@ -23,7 +23,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * @author pdodds
  * 
  */
-public class EclipseMavenWorkspace {
+public class EclipseMavenWorkspace
+{
 
     /**
      * Resolves local projects and removes them as artifacts from a set of artifacts
@@ -32,15 +33,19 @@ public class EclipseMavenWorkspace {
      * @param workspace
      * @param monitor
      */
-    public static Set resolveProjectArtifacts(Set artifacts, IWorkspace workspace, IProgressMonitor monitor) {
+    public static Set resolveProjectArtifacts( Set artifacts, IWorkspace workspace, IProgressMonitor monitor )
+    {
 
         // Iterate through the projects and remove project artifacts
-        for (IProject project : workspace.getRoot().getProjects()) {
-            monitor.subTask("Checking project " + project.getName());
-            if (EclipseMavenProject.hasDescriptor(project)) {
-                IMavenProject mavenProject = new EclipseMavenProject(project);
-                artifacts = removeArtifact(mavenProject.getArtifactId(), mavenProject.getGroupId(), mavenProject
-                        .getVersion(), artifacts);
+        for ( IProject project : workspace.getRoot().getProjects() )
+        {
+            monitor.subTask( "Checking project " + project.getName() );
+            if ( EclipseMavenProject.hasDescriptor( project ) )
+            {
+                IMavenProject mavenProject = new EclipseMavenProject( project );
+                artifacts =
+                    removeArtifact( mavenProject.getArtifactId(), mavenProject.getGroupId(), mavenProject.getVersion(),
+                                    artifacts );
             }
             monitor.done();
         }
@@ -48,12 +53,15 @@ public class EclipseMavenWorkspace {
 
     }
 
-    private static Set removeArtifact(String artifactId, Object groupId, String version, Set artifacts) {
-        for (Iterator iterator = artifacts.iterator(); iterator.hasNext();) {
+    private static Set removeArtifact( String artifactId, Object groupId, String version, Set artifacts )
+    {
+        for ( Iterator iterator = artifacts.iterator(); iterator.hasNext(); )
+        {
             Artifact artifact = (Artifact) iterator.next();
-            if (artifact.getArtifactId().equals(artifactId) && artifact.getGroupId().equals(groupId)
-                    && artifact.getVersion().equals(version)) {
-                artifacts.remove(artifact);
+            if ( artifact.getArtifactId().equals( artifactId ) && artifact.getGroupId().equals( groupId )
+                            && artifact.getVersion().equals( version ) )
+            {
+                artifacts.remove( artifact );
             }
         }
         return artifacts;

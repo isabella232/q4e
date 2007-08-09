@@ -11,14 +11,17 @@ import java.io.PrintStream;
 
 import org.devzuz.q.maven.embedder.internal.EclipseMavenEventPropagator;
 
-public class EclipseMavenErrorEventPropagator extends EclipseMavenEventPropagatorPrintStream {
+public class EclipseMavenErrorEventPropagator extends EclipseMavenEventPropagatorPrintStream
+{
 
-    public EclipseMavenErrorEventPropagator(EclipseMavenEventPropagator eventPropagator, PrintStream out) {
-        super(eventPropagator, out);
+    public EclipseMavenErrorEventPropagator( EclipseMavenEventPropagator eventPropagator, PrintStream out )
+    {
+        super( eventPropagator, out );
     }
 
     @Override
-    public void log(String s) {
-        getEventPropagator().error(s);
+    public void log( String s )
+    {
+        getEventPropagator().error( s );
     }
 }

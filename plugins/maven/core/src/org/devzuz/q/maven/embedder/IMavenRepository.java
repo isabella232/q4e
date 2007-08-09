@@ -9,14 +9,15 @@ package org.devzuz.q.maven.embedder;
 
 import java.util.List;
 
-public interface IMavenRepository {
+public interface IMavenRepository
+{
 
-    public List<IMavenArtifact> findArtifacts(String freeText);
+    public List<IMavenArtifact> findArtifacts( String freeText );
 
-    public List<IMavenArtifact> findArtifacts(String groupId, String artifactId);
+    public List<IMavenArtifact> findArtifacts( String groupId, String artifactId );
 
-    public List<IMavenArtifact> findArtifacts(String groupId, String artifactId, String version);
+    public List<IMavenArtifact> findArtifacts( String groupId, String artifactId, String version );
 
-    public IMavenArtifact findArtifact(String groupId, String artifactId, String version, String classifier);
+    public IMavenArtifact findArtifact( String groupId, String artifactId, String version, String classifier );
 
 }

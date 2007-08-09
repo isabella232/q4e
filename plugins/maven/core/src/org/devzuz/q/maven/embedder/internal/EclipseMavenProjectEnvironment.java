@@ -15,13 +15,16 @@ import org.eclipse.core.resources.IProject;
  * @author pdodds
  * 
  */
-public class EclipseMavenProjectEnvironment {
+public class EclipseMavenProjectEnvironment
+{
 
-    public EclipseMavenProjectEnvironment(IProject project) {
+    public EclipseMavenProjectEnvironment( IProject project )
+    {
 
     }
 
-    public EclipseMavenProjectEnvironment() {
+    public EclipseMavenProjectEnvironment()
+    {
         // TODO Auto-generated constructor stub
     }
 

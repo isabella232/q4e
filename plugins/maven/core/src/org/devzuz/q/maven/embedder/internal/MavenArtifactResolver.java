@@ -18,11 +18,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * @author pdodds
  * 
  */
-public class MavenArtifactResolver {
+public class MavenArtifactResolver
+{
 
     private Set artifacts;
 
-    public MavenArtifactResolver(Set artifacts) {
+    public MavenArtifactResolver( Set artifacts )
+    {
         this.artifacts = artifacts;
     }
 
@@ -32,9 +34,10 @@ public class MavenArtifactResolver {
      * 
      * @param workspace
      */
-    public void associateWithWorkspace(IWorkspace workspace, IProgressMonitor monitor) {
-        monitor.beginTask("Resolving local projects for workspace", workspace.getRoot().getProjects().length);
-        artifacts = EclipseMavenWorkspace.resolveProjectArtifacts(artifacts, workspace, monitor);
+    public void associateWithWorkspace( IWorkspace workspace, IProgressMonitor monitor )
+    {
+        monitor.beginTask( "Resolving local projects for workspace", workspace.getRoot().getProjects().length );
+        artifacts = EclipseMavenWorkspace.resolveProjectArtifacts( artifacts, workspace, monitor );
         monitor.done();
     }
 

@@ -11,10 +11,12 @@ import java.io.PrintStream;
 
 import org.devzuz.q.maven.embedder.internal.EclipseMavenEventPropagator;
 
-public class EclipseMavenInfoEventPropagator extends EclipseMavenEventPropagatorPrintStream {
+public class EclipseMavenInfoEventPropagator extends EclipseMavenEventPropagatorPrintStream
+{
 
-    public EclipseMavenInfoEventPropagator(EclipseMavenEventPropagator eventPropagator, PrintStream out) {
-        super(eventPropagator, out);
+    public EclipseMavenInfoEventPropagator( EclipseMavenEventPropagator eventPropagator, PrintStream out )
+    {
+        super( eventPropagator, out );
     }
 
 }

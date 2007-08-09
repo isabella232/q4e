@@ -9,7 +9,8 @@ package org.devzuz.q.maven.embedder;
 
 import java.util.Date;
 
-public interface IMavenEvent {
+public interface IMavenEvent
+{
 
     public Date getCreatedDate();
 

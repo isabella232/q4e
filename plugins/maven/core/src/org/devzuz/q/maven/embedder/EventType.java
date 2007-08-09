@@ -9,23 +9,29 @@ package org.devzuz.q.maven.embedder;
 
 import org.apache.maven.monitor.event.MavenEvents;
 
-public enum EventType {
+public enum EventType
+{
 
     phaseExecution, mojoExecution, projectExecution, reactorExecution;
 
-    public static EventType parseEvent(String mavenEventType) {
-        if (MavenEvents.PHASE_EXECUTION.equals(mavenEventType)) {
+    public static EventType parseEvent( String mavenEventType )
+    {
+        if ( MavenEvents.PHASE_EXECUTION.equals( mavenEventType ) )
+        {
             return phaseExecution;
         }
-        if (MavenEvents.MOJO_EXECUTION.equals(mavenEventType)) {
+        if ( MavenEvents.MOJO_EXECUTION.equals( mavenEventType ) )
+        {
             return mojoExecution;
         }
-        if (MavenEvents.PROJECT_EXECUTION.equals(mavenEventType)) {
+        if ( MavenEvents.PROJECT_EXECUTION.equals( mavenEventType ) )
+        {
             return projectExecution;
         }
-        if (MavenEvents.REACTOR_EXECUTION.equals(mavenEventType)) {
+        if ( MavenEvents.REACTOR_EXECUTION.equals( mavenEventType ) )
+        {
             return reactorExecution;
         }
-        throw new IllegalArgumentException(mavenEventType + " is not a valid event type");
+        throw new IllegalArgumentException( mavenEventType + " is not a valid event type" );
     }
 }

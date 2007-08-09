@@ -10,18 +10,21 @@ package org.devzuz.q.maven.embedder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MavenRepositoryFactory {
+public class MavenRepositoryFactory
+{
 
-    public static List<IMavenRepository> getRepositories(IMavenProject project) {
+    public static List<IMavenRepository> getRepositories( IMavenProject project )
+    {
         // XXX To do need to pick up the repo repositories from te project
 
         List<IMavenRepository> repositories = new ArrayList<IMavenRepository>();
-        repositories.add(MavenManager.getMaven().getLocalRepository());
+        repositories.add( MavenManager.getMaven().getLocalRepository() );
         return repositories;
 
     }
 
-    public static IMavenRepository getRepository(String uri) {
+    public static IMavenRepository getRepository( String uri )
+    {
         // XXX To do need to pick up the repo repositories from te project
 
         return MavenManager.getMaven().getLocalRepository();

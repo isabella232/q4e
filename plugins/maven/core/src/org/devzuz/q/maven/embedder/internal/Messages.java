@@ -9,7 +9,8 @@ package org.devzuz.q.maven.embedder.internal;
 
 import org.eclipse.osgi.util.NLS;
 
-public class Messages extends NLS {
+public class Messages extends NLS
+{
     private static final String BUNDLE_NAME = "org.devzuz.q.maven.embedder.internal.messages"; //$NON-NLS-1$
 
     public static String MavenEventDebug_Type;
@@ -42,11 +43,13 @@ public class Messages extends NLS {
 
     public static String MavenTransferStarted_Type;
 
-    static {
+    static
+    {
         // initialize resource bundle
-        NLS.initializeMessages(BUNDLE_NAME, Messages.class);
+        NLS.initializeMessages( BUNDLE_NAME, Messages.class );
     }
 
-    private Messages() {
+    private Messages()
+    {
     }
 }
