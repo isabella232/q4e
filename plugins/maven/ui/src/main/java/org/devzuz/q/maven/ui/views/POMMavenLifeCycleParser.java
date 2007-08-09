@@ -59,10 +59,9 @@ public class POMMavenLifeCycleParser
         dbf.setNamespaceAware(true);
         dbf.setAttribute(JAXP_SCHEMA_SOURCE, new File(getPomFileLoc()));
 
-        dbf.setIgnoringComments(false);
+        dbf.setIgnoringComments(true);
         dbf.setIgnoringElementContentWhitespace(false);
         dbf.setCoalescing(false);
-        dbf.setExpandEntityReferences(true);
 
         try 
         {
