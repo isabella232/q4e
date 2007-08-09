@@ -8,6 +8,7 @@ package org.devzuz.q.maven.jdt.ui.projectimport;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
@@ -27,8 +28,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 
-public class ImportProjectJob
-    extends Job
+public class ImportProjectJob extends Job
 {   
     private Collection<IMavenProject> mavenProjects;
 
@@ -42,13 +42,26 @@ public class ImportProjectJob
         super( "Import Maven 2 project" );
         this.mavenProjects = mavenProjects;
     }
-    
-    public void setMavenProject( IMavenProject mavenProject )
+
+    /**
+     * Utility method to set a single project to be imported. Equivalent to invoking
+     * {@link #setMavenProjects(Collection)} with a collection of a single element.
+     * 
+     * @param mavenProject
+     *            the project to import.
+     */
+    public void setMavenProjects( IMavenProject mavenProject )
     {
-        setMavenProject( Arrays.asList( new IMavenProject[] { mavenProject } ) );
+        setMavenProjects( Collections.singleton( mavenProject ) );
     }
-    
-    public void setMavenProject( Collection<IMavenProject> mavenProjects )
+
+    /**
+     * Sets the projects to be imported.
+     * 
+     * @param mavenProjects
+     *            the collection of projects to be imported.
+     */
+    public void setMavenProjects( Collection<IMavenProject> mavenProjects )
     {
         this.mavenProjects = mavenProjects;
     }
@@ -77,7 +90,7 @@ public class ImportProjectJob
             catch ( CoreException e )
             {
                 Activator.getLogger().log( "Unable to import project from " + mavenProject.getBaseDirectory(), e );
-                status = new Status( IStatus.ERROR , Activator.PLUGIN_ID , e.getCause().getMessage() );
+                status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, e.getCause().getMessage() );
             }
 
             subProgressMonitor.done();
@@ -89,21 +102,21 @@ public class ImportProjectJob
 
     /**
      * Get the eclipse project name from the maven project
+     * 
      * @param mavenProject
      */
     protected String getProjectName( final IMavenProject mavenProject )
     {
         // TODO this should be configurable
-        //return mavenProject.getGroupId() + "." + mavenProject.getArtifactId();
+        // return mavenProject.getGroupId() + "." + mavenProject.getArtifactId();
         // NOTE by Erle : Commented above because the eclipse project name should be THE SAME
-        //                as its location IF it is on the workspace root due to us not being
-        //                able to specify a project location if it is on the workspace root .
-        //                (the location should be set to ("") if it is on the workspace root)
+        // as its location IF it is on the workspace root due to us not being
+        // able to specify a project location if it is on the workspace root .
+        // (the location should be set to ("") if it is on the workspace root)
         return mavenProject.getBaseDirectory().getName();
     }
 
-    private void createMavenProject( final IMavenProject mavenProject, IProgressMonitor monitor )
-        throws CoreException
+    private void createMavenProject( final IMavenProject mavenProject, IProgressMonitor monitor ) throws CoreException
     {
         final String projectName = getProjectName( mavenProject );
         final IWorkspace workspace = ResourcesPlugin.getWorkspace();
@@ -126,8 +139,7 @@ public class ImportProjectJob
          * org.eclipse.core.internal.resources.LocationValidator:336
          */
         IPath parentPath = locationPath.removeLastSegments( 1 );
-        if ( Platform.getLocation().isPrefixOf( parentPath ) && 
-             parentPath.isPrefixOf( Platform.getLocation() ) )
+        if ( Platform.getLocation().isPrefixOf( parentPath ) && parentPath.isPrefixOf( Platform.getLocation() ) )
         {
             description.setLocation( null );
         }
