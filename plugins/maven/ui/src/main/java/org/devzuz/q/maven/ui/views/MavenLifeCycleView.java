@@ -15,6 +15,7 @@ import org.devzuz.q.maven.ui.Messages;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.TableViewer;
@@ -34,8 +35,6 @@ public class MavenLifeCycleView
     public static final String POM_XML = "pom.xml";
     
     private TableViewer mavenLifeCycleTableViewer;
-    
-    private IProject[] projects;
     
     private Action refreshMavenLifeCycleAction;
     
@@ -100,22 +99,42 @@ public class MavenLifeCycleView
      }
      
      private void setProjectColumnData()
-     {
-         projects  = getWorkBenchProjects();
-         if(projects.length>0) 
-         {
+     {       
+         IProject[] projects  = getWorkBenchProjects();         
+         if(projects.length > 0 || projects != null) 
+         {             
              for (int i = 0; i  < projects.length ; i++)
-             { 
-                if(projects[i].isOpen() && isValidMavenProject(projects[i])) 
-                {
-                    TableItem item = new TableItem( mavenLifeCycleTableViewer.getTable(), 
-                                                    SWT.BEGINNING );
-                    item.setText( 0, projects[i].getName() );
-                }
-                
+             {
+                 if(projects[i].isOpen() && isValidMavenProject(projects[i])) 
+                 {
+                     try 
+                     {
+                         POMMavenLifeCycleParser pmlcp = new POMMavenLifeCycleParser(mavenLifeCycleTableViewer,
+                                                                                     projects[i].getName(), 
+                                                                                     getPOMFileLocation(projects[i])); 
+                         pmlcp.parsePOMFile();
+                         if(pmlcp.getICounterPrjPhaseAndGoal() == 0) 
+                         {
+                             TableItem item = new TableItem( mavenLifeCycleTableViewer.getTable(), 
+                                                             SWT.BEGINNING );
+                             
+                             item.setText(  new String[] { projects[i].getName(), "" , "" , "" } );
+                         }
+                     }
+                     catch(Exception e)
+                     {
+                         
+                     }
+                         
+                 }
+                 
              }
          }
-       
+     }
+     
+     private IPath getPOMFileLocation(IProject project)
+     {
+         return project.getFile( POM_XML ).getLocation();   
      }
      
      private boolean isValidMavenProject(IProject project)     
