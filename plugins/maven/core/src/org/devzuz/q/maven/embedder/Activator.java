@@ -11,13 +11,14 @@ import org.devzuz.q.maven.embedder.internal.EclipseMaven;
 import org.devzuz.q.maven.embedder.internal.ExtensionPointHelper;
 import org.devzuz.q.maven.embedder.log.EclipseLogger;
 import org.devzuz.q.maven.embedder.log.Logger;
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.core.internal.runtime.Log;
+import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin
+public class Activator implements BundleActivator
 {
 
     // The plug-in ID
@@ -40,8 +41,7 @@ public class Activator extends AbstractUIPlugin
 
     public void start( BundleContext context ) throws Exception
     {
-        super.start( context );
-        logger = new EclipseLogger( PLUGIN_ID, this.getLog() );
+        logger = new EclipseLogger( PLUGIN_ID, new Log( context.getBundle() ) );
 
         // Initialize the maven instance
         mavenInstance = new EclipseMaven();
@@ -53,7 +53,6 @@ public class Activator extends AbstractUIPlugin
     {
         plugin = null;
         mavenInstance.stop();
-        super.stop( context );
     }
 
     /**
