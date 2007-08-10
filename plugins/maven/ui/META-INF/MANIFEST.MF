@@ -6,7 +6,8 @@ Bundle-Version: 0.2.0.v200708071743
 Bundle-Activator: org.devzuz.q.maven.ui.Activator
 Bundle-Vendor: DevZuz
 Require-Bundle: org.devzuz.q.maven.core;visibility:=reexport,
- org.prefuse;visibility:=reexport
+ org.prefuse;visibility:=reexport,
+ org.eclipse.ui
 Eclipse-LazyStart: true
 Bundle-Localization: plugin
 Bundle-ClassPath: lucene-core-2.1.0.jar,

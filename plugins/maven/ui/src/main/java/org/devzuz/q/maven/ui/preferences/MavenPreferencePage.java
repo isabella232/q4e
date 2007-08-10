@@ -6,7 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.ui.preferences;
 
-import org.devzuz.q.maven.embedder.Activator;
+import org.devzuz.q.maven.ui.Activator;
 import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.ui.Messages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
