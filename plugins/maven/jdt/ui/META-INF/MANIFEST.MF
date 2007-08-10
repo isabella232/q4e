@@ -7,14 +7,8 @@ Bundle-Activator: org.devzuz.q.maven.jdt.ui.Activator
 Bundle-Localization: plugin
 Require-Bundle: org.devzuz.q.maven.jdt.core;visibility:=reexport,
  org.eclipse.jdt.ui;visibility:=reexport,
- org.eclipse.debug.core;visibility:=reexport,
  org.eclipse.debug.ui;visibility:=reexport,
- org.eclipse.swt,
- org.eclipse.core.commands,
- org.eclipse.jface,
- org.eclipse.ui,
- org.eclipse.ui.ide,
- org.eclipse.ui.forms
+ org.eclipse.ui.forms;visibility:=reexport
 Eclipse-LazyStart: true
 Bundle-Vendor: DevZuz
 Export-Package: org.devzuz.q.maven.jdt.ui,
