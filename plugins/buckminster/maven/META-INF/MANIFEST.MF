@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Buckminster Maven Plug-in (Incubation)
 Bundle-SymbolicName: org.devzuz.q.buckminster.maven;singleton:=true
-Bundle-Version: 0.2.0.v200708071743
+Bundle-Version: 0.2.0.v200708132033
 Require-Bundle: org.eclipse.buckminster.core;visibility:=reexport,
  org.eclipse.buckminster.sax;visibility:=reexport,
  org.eclipse.buckminster.runtime;visibility:=reexport,
