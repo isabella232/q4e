@@ -6,14 +6,14 @@
  **************************************************************************************************/
 package org.devzuz.q.repository.api;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 public class Activator
-    extends AbstractUIPlugin
+    extends Plugin
 {
 
     // The plug-in ID
