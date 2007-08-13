@@ -17,14 +17,10 @@ import org.devzuz.q.maven.jdt.core.Activator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.internal.Workbench;
 
 /**
  * Handles the Maven exceptions to provide a meaningful message to the user in the best way possible
@@ -50,36 +46,8 @@ public class MavenExceptionHandler
         }
         else
         {
-            error( "Error reading the POM file", cause );
+            instance.markPom( project, "Error: " + cause.getMessage() );
         }
-    }
-
-    /**
-     * @deprecated use {@link #handle(IProject, CoreException)}
-     * @param e
-     */
-    public static void handle( CoreException e )
-    {
-        handle( null, e );
-    }
-
-    private static void error( String title, Throwable t )
-    {
-        IWorkbenchWindow window = Workbench.getInstance().getActiveWorkbenchWindow();
-        if ( window != null )
-        {
-            MessageDialog.openError( window.getShell(), "Missing artifacts", t.getLocalizedMessage() );
-        }
-    }
-
-    /**
-     * @deprecated use {@link #handle(IProject, ArtifactResolutionException)}
-     * @param e
-     */
-    public void handle( ArtifactResolutionException e )
-    {
-        // TODO present a better dialog specially for MultipleArtifactsNotFoundException
-        error( "Missing artifacts", e );
     }
 
     public void handle( final IProject project, final ArtifactResolutionException e )
