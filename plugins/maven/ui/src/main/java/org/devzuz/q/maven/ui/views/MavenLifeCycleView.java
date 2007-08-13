@@ -11,6 +11,7 @@ package org.devzuz.q.maven.ui.views;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.Messages;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -113,7 +114,7 @@ public class MavenLifeCycleView
                                                                                      projects[i].getName(), 
                                                                                      getPOMFileLocation(projects[i])); 
                          pmlcp.parsePOMFile();
-                         if(pmlcp.getICounterPrjPhaseAndGoal() == 0) 
+                         if(!pmlcp.getPrjPhaseAndGoalFlag()) 
                          {
                              TableItem item = new TableItem( mavenLifeCycleTableViewer.getTable(), 
                                                              SWT.BEGINNING );
@@ -155,6 +156,11 @@ public class MavenLifeCycleView
     {
         // TODO Auto-generated method stub
         
+    }
+    
+    public void dispose()
+    {
+    	super.dispose();
     }
 
 }

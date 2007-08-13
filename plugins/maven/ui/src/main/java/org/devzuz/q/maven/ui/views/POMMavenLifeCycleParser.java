@@ -42,7 +42,7 @@ public class POMMavenLifeCycleParser
     
     private String artifactId;
     
-    private int iCounterPrjPhaseAndGoal=0;
+    private boolean prjPhaseAndGoalFlag=false;
    
     public POMMavenLifeCycleParser(TableViewer tblViewer, String projectName, IPath pomFileIPath)            
     {
@@ -137,31 +137,32 @@ public class POMMavenLifeCycleParser
             goal = n.getFirstChild().getNodeValue();            
             if(goal != null)
             {
-               iCounterPrjPhaseAndGoal ++;
-               this.setGoal( goal );
-               TableItem item = new TableItem( tblViewer.getTable(), 
+            	prjPhaseAndGoalFlag = true;
+            	this.setGoal( goal );
+            	TableItem item = new TableItem( tblViewer.getTable(), 
                                                SWT.BEGINNING );
-               if(getPhaseName() != "")
-               {
-                   item.setText(  new String[] { getProjectName(), 
-                                                 getGroupId()+":"+this.getArtifactId(), 
-                                                 getPhaseName() , 
-                                                 getGoal() } ); 
-               }
-               else
-               { 
-                   this.setPhasename("");
-               }
-               this.setGoal("" );   
+                if(getPhaseName() != "")
+                {
+                	item.setText(  new String[] { getProjectName(),
+                			                      getGroupId()+":"+this.getArtifactId(), 
+                                                  getPhaseName() , 
+                                                  getGoal() } ); 
+                }
+                else
+                {
+                	this.setPhasename("");
+                }
+                this.setGoal("" );   
+             
             }
         }
-  
+        
     }
     
 
-    public int getICounterPrjPhaseAndGoal()
+    public boolean getPrjPhaseAndGoalFlag()
     {
-        return this.iCounterPrjPhaseAndGoal;
+        return this.prjPhaseAndGoalFlag;
     }
     
     private void setGroupId(String groupId)
@@ -238,6 +239,5 @@ public class POMMavenLifeCycleParser
             recursiveNodeCheck(child);
         }
 
-    }
-
+     }
 }
