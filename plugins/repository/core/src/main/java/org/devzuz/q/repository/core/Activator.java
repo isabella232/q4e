@@ -6,14 +6,14 @@
  **************************************************************************************************/
 package org.devzuz.q.repository.core;
 
-import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
 public class Activator
-    extends AbstractUIPlugin
+    extends Plugin
 {
 
     // The plug-in ID
@@ -33,7 +33,7 @@ public class Activator
     /*
      * (non-Javadoc)
      * 
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
+     * @see org.eclipse.ui.plugin.Plugin#start(org.osgi.framework.BundleContext)
      */
     public void start( BundleContext context )
         throws Exception
@@ -44,7 +44,7 @@ public class Activator
     /*
      * (non-Javadoc)
      * 
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
+     * @see org.eclipse.ui.plugin.Plugin#stop(org.osgi.framework.BundleContext)
      */
     public void stop( BundleContext context )
         throws Exception
