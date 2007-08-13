@@ -47,7 +47,7 @@ public class AbstractMavenAction
             }
             catch ( CoreException e )
             {
-                MavenExceptionHandler.handle( e );
+                MavenExceptionHandler.handle( (IProject) obj, e );
             }
         }
         return null;
@@ -67,7 +67,7 @@ public class AbstractMavenAction
                 }
                 catch ( CoreException e )
                 {
-                    MavenExceptionHandler.handle( e );
+                    MavenExceptionHandler.handle( (IProject) obj, e );
                 }
             }
         }
