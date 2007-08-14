@@ -26,6 +26,7 @@ public abstract class Maven2ValidatingWizardPage
     protected void setError( String errorString )
     {
         this.errorString = errorString;
+        setErrorMessage( getError() );
     }
 
     protected boolean validate()

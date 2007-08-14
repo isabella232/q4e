@@ -102,4 +102,10 @@ public class Messages
     public static String wizard_importProject_column_artifactId = "Artifact Id";
     
     public static String wizard_importProject_column_version = "Version";
+
+    public static String wizard_importProject_scanning = "Scanning for projects in";
+
+    public static String wizard_importProject_finished_scanning = "Finished scanning for projects";
+
+    public static String wizard_importProject_no_projects_found = "No projects found";
 }

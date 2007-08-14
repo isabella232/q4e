@@ -17,7 +17,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -46,8 +45,7 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
     private Text directoryText;
     private CheckboxTableViewer pomList;
     private ProjectScannerJob projectScannerJob;
-    private boolean hasUnperformedScanJob = false;
-    
+
     public Maven2ProjectImportPage()
     {
         super( Messages.wizard_importProject_title );
@@ -56,19 +54,31 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
         setPageComplete( false );
     }
 
+    /**
+     * Initializes the dialog, removing messages and projects and canceling previous project
+     * scanning job
+     */
+    private void initialize()
+    {
+        projectScannerJob.cancel();
+        pomList.getTable().removeAll();
+        setError( null );
+    }
+
     public void createControl(Composite parent)
     {
         ModifyListener textListener = new ModifyListener()
         {
             public void modifyText( ModifyEvent e )
             {
-                if( isDirectoryValid() )
+                initialize();
+                if ( isDirectoryValid() )
                 {
                     scheduleProjectScanningJob();
                 }
                 else
                 {
-                    validate();
+                    setError( Messages.wizard_importProject_error_location_nonexistent );
                 }
             }
         };
@@ -177,21 +187,19 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
     
     private void scheduleProjectScanningJob()
     {
-        if( projectScannerJob.getState() == Job.RUNNING )
-        {
-            projectScannerJob.cancel();
-            hasUnperformedScanJob = true;
-        }
-        else if( projectScannerJob.getState() == Job.NONE )
-        {
-            pomList.getTable().removeAll();
-            projectScannerJob.setDirectory( Path.fromOSString( getProjectDirectory() ).toFile() );
-            projectScannerJob.schedule();
-            setMessage( "Scanning for projects in " + getProjectDirectory() );
-            hasUnperformedScanJob = false;
-        }
+        initialize();
+        projectScannerJob.setDirectory( Path.fromOSString( getProjectDirectory() ).toFile() );
+        projectScannerJob.schedule();
+        setMessage( Messages.wizard_importProject_scanning + " " + getProjectDirectory() );
     }
-    
+
+    @Override
+    public void dispose()
+    {
+        projectScannerJob.cancel();
+        super.dispose();
+    }
+
     protected boolean isPageValid()
     {
         if( isDirectoryValid() )
@@ -238,25 +246,23 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
             if ( event.getResult().getSeverity() == IStatus.OK )
             {
                 final Collection<IMavenProject> projects = projectScannerJob.getProjects();
-                if (projects.size() > 0)
+                Display.getDefault().asyncExec( new Runnable()
                 {
-                    Display.getDefault().asyncExec(new Runnable()
+                    public void run()
                     {
-                        public void run()
+                        if ( projects.size() == 0 )
                         {
+                            setMessage( Messages.wizard_importProject_no_projects_found );
+                        }
+                        else
+                        {
+                            setMessage( Messages.wizard_importProject_finished_scanning );
                             pomList.setInput( projects );
                             pomList.setAllChecked( true );
                             validate();
                         }
-                    });
-                }
-            }
-            else if( event.getResult().getSeverity() == IStatus.CANCEL )
-            {
-                if( hasUnperformedScanJob )
-                {
-                    scheduleProjectScanningJob();
-                }
+                    }
+                } );
             }
         }
     }
