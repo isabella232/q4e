@@ -19,6 +19,13 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
+/**
+ * Scans a folder for Maven projects.
+ * Currently it checks for a pom file and the modules listed in it.
+ * 
+ * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
+ * @version $Id$
+ */
 public class ProjectScanner
 {
 
@@ -40,6 +47,11 @@ public class ProjectScanner
         }
 
         File pom = new File( file, IMavenProject.POM_FILENAME );
+
+        if ( !pom.exists() )
+        {
+            return Collections.EMPTY_LIST;
+        }
 
         IMavenProject mavenProject;
         try
