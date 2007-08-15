@@ -58,24 +58,14 @@ public class MavenExceptionHandler
 
     public void handle( final IProject project, final ArtifactResolutionException e )
     {
-        missingDependency( project, e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() );
+        markPom( project, "Error while resolving "
+            + getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() )
+            + " : " + e.getMessage() );
     }
 
-    public void handle( final IProject project, final MultipleArtifactsNotFoundException e )
-    {
-        List<Artifact> missingArtifacts = e.getMissingArtifacts();
-        for ( Artifact artifact : missingArtifacts )
-        {
-            missingDependency( project, artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
-                               artifact.getType(), artifact.getClassifier() );
-        }
-    }
-
-    private void missingDependency( IProject project, String groupId, String artifactId, String version, String type,
-                                    String classifier )
+    private String getArtifactId( String groupId, String artifactId, String version, String type, String classifier )
     {
         StringBuilder sb = new StringBuilder();
-        sb.append( "Missing dependency: " );
         sb.append( groupId );
         sb.append( ":" );
         sb.append( artifactId );
@@ -88,7 +78,16 @@ public class MavenExceptionHandler
             sb.append( ":" );
             sb.append( classifier );
         }
-        markPom( project, sb.toString() );
+        return sb.toString();
+    }
+
+    public void handle( final IProject project, final MultipleArtifactsNotFoundException e )
+    {
+        List<Artifact> missingArtifacts = e.getMissingArtifacts();
+        for ( Artifact artifact : missingArtifacts )
+        {
+            markPom( project, "Missing dependency: " + artifact.toString() );
+        }
     }
 
     private void handle( IProject project, InvalidProjectModelException e )
