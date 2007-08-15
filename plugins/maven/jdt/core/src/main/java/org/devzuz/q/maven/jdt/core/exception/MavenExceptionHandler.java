@@ -9,7 +9,9 @@ package org.devzuz.q.maven.jdt.core.exception;
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.project.validation.ModelValidationResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
@@ -36,11 +38,15 @@ public class MavenExceptionHandler
     public static void handle( IProject project, CoreException e )
     {
         Throwable cause = e.getStatus().getException();
-        if ( cause instanceof ArtifactResolutionException )
+        if ( cause instanceof MultipleArtifactsNotFoundException )
+        {
+            instance.handle( project, (MultipleArtifactsNotFoundException) cause );
+        }
+        else if ( cause instanceof ArtifactResolutionException )
         {
             instance.handle( project, (ArtifactResolutionException) cause );
         }
-        if ( cause instanceof InvalidProjectModelException )
+        else if ( cause instanceof InvalidProjectModelException )
         {
             instance.handle( project, (InvalidProjectModelException) cause );
         }
@@ -52,7 +58,37 @@ public class MavenExceptionHandler
 
     public void handle( final IProject project, final ArtifactResolutionException e )
     {
-        markPom( project, "Missing dependency: " + e.getGroupId() + ":" + e.getArtifactId() + ":" + e.getVersion() );
+        missingDependency( project, e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() );
+    }
+
+    public void handle( final IProject project, final MultipleArtifactsNotFoundException e )
+    {
+        List<Artifact> missingArtifacts = e.getMissingArtifacts();
+        for ( Artifact artifact : missingArtifacts )
+        {
+            missingDependency( project, artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
+                               artifact.getType(), artifact.getClassifier() );
+        }
+    }
+
+    private void missingDependency( IProject project, String groupId, String artifactId, String version, String type,
+                                    String classifier )
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.append( "Missing dependency: " );
+        sb.append( groupId );
+        sb.append( ":" );
+        sb.append( artifactId );
+        sb.append( ":" );
+        sb.append( version );
+        sb.append( ":" );
+        sb.append( type );
+        if ( classifier != null )
+        {
+            sb.append( ":" );
+            sb.append( classifier );
+        }
+        markPom( project, sb.toString() );
     }
 
     private void handle( IProject project, InvalidProjectModelException e )
