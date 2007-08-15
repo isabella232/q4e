@@ -28,9 +28,7 @@ import org.eclipse.core.runtime.SubProgressMonitor;
  */
 public class ProjectScanner
 {
-
-    public Collection<IMavenProject> scanFolder( File file, IProgressMonitor monitor )
-        throws InterruptedException
+    public Collection<IMavenProject> scanFolder( File file, IProgressMonitor monitor ) throws InterruptedException
     {
 
         if ( monitor.isCanceled() )
@@ -50,7 +48,7 @@ public class ProjectScanner
 
         if ( !pom.exists() )
         {
-            return Collections.EMPTY_LIST;
+            return Collections.emptyList();
         }
 
         IMavenProject mavenProject;
@@ -89,4 +87,68 @@ public class ProjectScanner
 
         return mavenProjects;
     }
+    /*
+    private static DirectoryFilter directoryFilter = new DirectoryFilter();
+    public Collection<IMavenProject> scanFolder( File dir, IProgressMonitor monitor ) throws InterruptedException
+    {
+        if ( !dir.exists() || !dir.isDirectory() )
+        {
+            Activator.getLogger().error( "Ignoring " + dir + " : Not a directory or does not exist" );
+            return Collections.emptyList();
+        }
+        
+        return findPom( dir , monitor );
+    }
+    
+    private Collection<IMavenProject> findPom( File dir, IProgressMonitor monitor ) throws InterruptedException
+    {
+        if ( monitor.isCanceled() )
+        {
+            throw new InterruptedException();
+        }
+
+        monitor.worked( 1 );
+        
+        Collection<IMavenProject> mavenProjects = new ArrayList<IMavenProject>();
+        
+        // Check if current directory contains a POM
+        File pom = new File( dir, IMavenProject.POM_FILENAME );
+        if ( pom.exists() )
+        {
+            // It does! Try to create an IMavenProject of it
+            IMavenProject mavenProject;
+            try
+            {
+                mavenProject = MavenManager.getMaven().getMavenProject( pom, false );
+                
+                // If POM is not a parent of a multi-module project, include it
+                if( mavenProject.getMavenProject().getModules().isEmpty() )
+                {
+                    mavenProjects.add( mavenProject );
+                }
+            }
+            catch ( CoreException e )
+            {
+                Activator.getLogger().log( "Unable to read Maven project " + pom, e );
+                // TODO the project doesn't build, but we should add it anyways or show the error to the user
+            }
+        }
+        
+        for( File childDir : dir.listFiles( directoryFilter ) )
+        {
+            mavenProjects.addAll( findPom( childDir , monitor ) );
+        }
+        
+        return mavenProjects;
+    }
+    
+    private static class DirectoryFilter implements FileFilter
+    {
+        public boolean accept( File pathname ) 
+        {
+            if( pathname.isDirectory() )
+                return true;
+            return false;
+        }
+    } */
 }
