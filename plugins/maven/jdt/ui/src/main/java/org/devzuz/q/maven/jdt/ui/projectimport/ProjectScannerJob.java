@@ -20,6 +20,7 @@ public class ProjectScannerJob extends Job
 {
     private File directoryToScan;
     private Collection<IMavenProject> projects;
+    private IProgressMonitor monitor;
     
     public ProjectScannerJob( String name )
     {
@@ -47,6 +48,8 @@ public class ProjectScannerJob extends Job
     {
         ProjectScanner scanner = new ProjectScanner();
         
+        this.monitor = monitor;
+        
         monitor.setTaskName( "Scanning for Maven 2 Projects ...");
         
         try
@@ -59,5 +62,12 @@ public class ProjectScannerJob extends Job
         }
         
         return new Status( IStatus.OK, Activator.PLUGIN_ID, "Ok" );
+    }
+
+    @Override
+    protected void canceling()
+    {
+        monitor.setCanceled( true );
+        super.canceling();
     }
 }
