@@ -8,7 +8,7 @@
          point="org.eclipse.jdt.ui.classpathContainerPage">
       <classpathContainerPage
           id="org.devzuz.q.maven.jdt.ui.classpath.container.MavenClasspathContainerPage"
-          name="%%mavenClasspathContainerPage.name"
+          name="%mavenClasspathContainerPage.name"
             class="org.devzuz.q.maven.jdt.ui.classpath.container.MavenClasspathContainerPage">
       </classpathContainerPage>
    </extension>
