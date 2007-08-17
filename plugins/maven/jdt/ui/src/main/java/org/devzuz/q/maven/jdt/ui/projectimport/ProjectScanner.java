@@ -119,6 +119,11 @@ public class ProjectScanner
             IMavenProject mavenProject;
             try
             {
+                if ( monitor.isCanceled() )
+                {
+                    throw new InterruptedException();
+                }
+                
                 mavenProject = MavenManager.getMaven().getMavenProject( pom, false );
                 
                 // If POM is not a parent of a multi-module project, include it
