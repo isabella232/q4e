@@ -7,12 +7,8 @@
 
 package org.devzuz.q.maven.ui.views;
 
-
-import java.util.Observable;
-import java.util.Observer;
-
-import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.Messages;
+import org.devzuz.q.maven.ui.views.data.MavenLifeCyclePOMParser;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -30,7 +26,6 @@ import org.eclipse.ui.part.ViewPart;
 
 public class MavenLifeCycleView 
     extends ViewPart
-    implements Observer
 {
 
     public static final String POM_XML = "pom.xml";
@@ -67,9 +62,7 @@ public class MavenLifeCycleView
         mavenLifeCycleTable.setLinesVisible( true );        
         createMavenLifeCycleAction();
         addMenusAndToolbars();
-        setProjectColumnData();
-        
-        
+        setProjectColumnData();  
     }
     
     private void createMavenLifeCycleAction()
@@ -110,7 +103,7 @@ public class MavenLifeCycleView
                  {
                      try 
                      {
-                         POMMavenLifeCycleParser pmlcp = new POMMavenLifeCycleParser(mavenLifeCycleTableViewer,
+                    	 MavenLifeCyclePOMParser pmlcp = new MavenLifeCyclePOMParser(mavenLifeCycleTableViewer,
                                                                                      projects[i].getName(), 
                                                                                      getPOMFileLocation(projects[i])); 
                          pmlcp.parsePOMFile();
@@ -151,16 +144,10 @@ public class MavenLifeCycleView
     {
         mavenLifeCycleTableViewer.getControl().setFocus();
     }
-
-    public void update( Observable arg0, Object arg1 )
-    {
-        // TODO Auto-generated method stub
-        
-    }
     
     public void dispose()
     {
     	super.dispose();
     }
-
+    
 }

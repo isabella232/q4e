@@ -4,36 +4,18 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.ui.views;
-
-import java.io.File;
-import java.io.IOException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+package org.devzuz.q.maven.ui.views.data;
 
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.TableItem;
-import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
 
-
-public class POMMavenLifeCycleParser
+public class MavenLifeCyclePOMParser 
+	extends MavenPOMParser
 {
-    static final String JAXP_SCHEMA_SOURCE =
-        "http://java.sun.com/xml/jaxp/properties/schemaSource";
-
-    private String projectName;
-     
-    private TableViewer tblViewer;
-    
-    private String pomFileLoc;
-    
     private String phaseName;
     
     private String goal;
@@ -43,51 +25,40 @@ public class POMMavenLifeCycleParser
     private String artifactId;
     
     private boolean prjPhaseAndGoalFlag=false;
-   
-    public POMMavenLifeCycleParser(TableViewer tblViewer, String projectName, IPath pomFileIPath)            
+    
+    private String projectName;
+    
+    private TableViewer tblViewer;
+
+    public MavenLifeCyclePOMParser(TableViewer tblViewer, String projectName, IPath pomFileIPath)            
     {
         this.projectName = projectName;
         this.tblViewer = tblViewer;
-        this.pomFileLoc = pomFileIPath.toOSString();        
+        super.pomFileLoc = pomFileIPath.toOSString();        
     }
     
-    public void parsePOMFile() 
-    {
-        DocumentBuilderFactory dbf =
-            DocumentBuilderFactory.newInstance();
+	@Override
+	public void recursiveNodeCheck(Node n) 
+	{
+        int type = n.getNodeType();
+        if(type == Node.ELEMENT_NODE)
+        {
+            checkPhaseAndGoal(n);
+            NamedNodeMap atts = n.getAttributes();
+            for (int i = 0; i < atts.getLength(); i++) 
+            {
+                Node att = atts.item(i);
+                recursiveNodeCheck(att);
+            }
+        }
 
-        dbf.setNamespaceAware(true);
-        dbf.setAttribute(JAXP_SCHEMA_SOURCE, new File(getPomFileLoc()));
-
-        dbf.setIgnoringComments(true);
-        dbf.setIgnoringElementContentWhitespace(false);
-        dbf.setCoalescing(false);
-
-        try 
+        for (Node child = n.getFirstChild(); child != null;
+             child = child.getNextSibling()) 
         {
-            DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new File(getPomFileLoc()));
-            recursiveNodeCheck(doc);
-        }
-        catch(ParserConfigurationException pce)
-        {
-            //System.out.println("ParserConfigurationException " + pce.getMessage());
-        }
-        catch(SAXException se)
-        {
-            //System.out.println("SAXException " + se.getMessage());
-        }
-        catch(IOException ioe)
-        {
-           // System.out.println("IOException " + ioe.getMessage());  
-        }
-    }
-    
-    public String getPomFileLoc()
-    {
-        return pomFileLoc;
-    }
-    
+            recursiveNodeCheck(child);
+        }		
+	}
+  	
     private void checkPhaseAndGoal(Node n)
     {
         String val = n.getNodeName();
@@ -158,7 +129,6 @@ public class POMMavenLifeCycleParser
         }
         
     }
-    
 
     public boolean getPrjPhaseAndGoalFlag()
     {
@@ -217,27 +187,5 @@ public class POMMavenLifeCycleParser
     {
         return projectName;
     }
-    
-    private void recursiveNodeCheck(Node n) 
-    {
 
-        int type = n.getNodeType();
-        if(type == Node.ELEMENT_NODE)
-        {
-            checkPhaseAndGoal(n);
-            NamedNodeMap atts = n.getAttributes();
-            for (int i = 0; i < atts.getLength(); i++) 
-            {
-                Node att = atts.item(i);
-                recursiveNodeCheck(att);
-            }
-        }
-
-        for (Node child = n.getFirstChild(); child != null;
-             child = child.getNextSibling()) 
-        {
-            recursiveNodeCheck(child);
-        }
-
-     }
 }
