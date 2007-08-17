@@ -80,12 +80,16 @@ public class MavenNature
         IJavaProject javaProject = JavaCore.create( project );
         if ( javaProject != null )
         {
-            List<IClasspathEntry> classpathEntries = new ArrayList<IClasspathEntry>( Arrays.asList( javaProject
-                .getRawClasspath() ) );
-            classpathEntries.add( JavaCore
-                .newContainerEntry( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ) ) );
-            javaProject.setRawClasspath( (IClasspathEntry[]) classpathEntries
-                .toArray( new IClasspathEntry[classpathEntries.size()] ), null );
+            List<IClasspathEntry> classpathEntries = new ArrayList<IClasspathEntry>( 
+                                                         Arrays.asList( javaProject.getRawClasspath() ) );
+            
+            IPath mavenContainer = new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER );
+            if( !classpathEntries.contains( mavenContainer ) )
+            {
+                classpathEntries.add( JavaCore.newContainerEntry( mavenContainer ) );
+                javaProject.setRawClasspath( (IClasspathEntry[]) classpathEntries.toArray( 
+                                                                     new IClasspathEntry[classpathEntries.size()] ), null );
+            }
         }
     }
 
@@ -263,5 +267,4 @@ public class MavenNature
         result = result.makeRelative();
         return result.toPortableString();
     }
-
 }
