@@ -108,6 +108,10 @@ public class Messages
     public static String MavenLifeCycleView_TableRefresh;
     
     public static String MavenLifeCycleView_TableRefreshToolTip;
+    
+    public static String MavenProjectView_MavenParentProject;
+    
+    public static String MavenProjectView_MavenChildProject;
 
     static
     {
