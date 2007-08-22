@@ -47,6 +47,8 @@ public class Messages
 
     public static String MavenEventView_ScrollLock;
 
+    public static String MavenCustomGoalDialog_CustomGoalProject;
+    
     public static String MavenCustomGoalDialog_CustomGoalLabel;
 
     public static String MavenCustomComponent_GoalPropertiesLabel;

@@ -8,6 +8,7 @@ package org.devzuz.q.maven.jdt.ui.launchconfiguration;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.devzuz.q.maven.ui.Messages;
@@ -32,8 +33,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ElementListSelectionDialog;
-
-/* NOTE : This class is still being debugged so please don't delete tracer statements. */
 
 public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigurationTab
 {
@@ -75,7 +74,7 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
 
         // The maven project
         Label label1 = new Label( container1, SWT.NULL );
-        label1.setText( "Project" );
+        label1.setText( Messages.MavenCustomGoalDialog_CustomGoalProject );
 
         projectText = new Text( container1, SWT.SINGLE | SWT.BORDER );
         projectText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
@@ -111,11 +110,13 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
     {
         try
         {
-            projectText.setText( configuration.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PROJECT_NAME,
-                                                             "" ) );
-            customGoalText.setText( configuration.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL, "" ) );
+            projectText.setText( configuration.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" ) );
+            List<String> customGoalsList = configuration.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS, 
+                                                                       Collections.emptyList() );
+            String customGoal = MavenLaunchConfigurationUtils.goalsListToString( customGoalsList ); 
+            customGoalText.setText( customGoal );
             customGoalParameters =
-                configuration.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PARAMETERS, Collections.emptyMap() );
+                configuration.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PARAMETERS, Collections.emptyMap() );
 
             propertiesComponent.setDataSource( customGoalParameters );
             propertiesComponent.refreshPropertiesTable();
@@ -128,10 +129,11 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
 
     public void performApply( ILaunchConfigurationWorkingCopy configuration )
     {
-        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL, customGoalText.getText().trim() );
-        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PARAMETERS,
+        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS, 
+                                    MavenLaunchConfigurationUtils.goalsStringToList( customGoalText.getText().trim() ) );
+        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PARAMETERS,
                                     propertiesComponent.getDataSource() );
-        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PROJECT_NAME,
+        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME,
                                     projectText.getText().trim() );
     }
 
@@ -144,9 +146,9 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
 
     public void setDefaults( ILaunchConfigurationWorkingCopy configuration )
     {
-        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL, "test" );
-        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PARAMETERS, Collections.emptyList() );
-        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PROJECT_NAME, "" );
+        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS, Collections.emptyList() );
+        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PARAMETERS, Collections.emptyList() );
+        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" );
     }
 
     @Override
@@ -155,14 +157,15 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
         boolean retVal = true;
         try
         {
-            String projectName = launchConfig.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PROJECT_NAME, "" );
+            String projectName = launchConfig.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" );
             if ( !MavenLaunchConfigurationUtils.isValidMavenProject( projectName ) )
             {
                 setErrorMessage( "No Maven project given." );
                 retVal = false;
             }
 
-            if ( !( launchConfig.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL, "" ).length() > 0 ) )
+            if ( !( launchConfig.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS, 
+                                               Collections.emptyList() ).size() > 0 ) )
             {
                 setErrorMessage( "Goal is missing." );
                 retVal = false;

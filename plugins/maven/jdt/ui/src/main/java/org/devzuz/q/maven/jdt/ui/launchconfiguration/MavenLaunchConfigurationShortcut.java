@@ -157,7 +157,7 @@ public class MavenLaunchConfigurationShortcut
 
             for ( ILaunchConfiguration config : configurations )
             {
-                String configProjectName = config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PROJECT_NAME, "" );
+                String configProjectName = config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" );
                 String mavenProjectName = mavenProject.getProject().getName();
                 if ( configProjectName.equals( mavenProjectName ) )
                 {
@@ -233,8 +233,12 @@ public class MavenLaunchConfigurationShortcut
                 Map<String, String> propertyMap = Collections.emptyMap();
                 try
                 {
-                    label.append( config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL, "" ) );
-                    propertyMap = config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOAL_PARAMETERS, Collections.emptyMap() );
+                    List<String> customGoalsList = config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS, 
+                                                                        Collections.emptyList() );
+                    String customGoal = MavenLaunchConfigurationUtils.goalsListToString( customGoalsList );
+                                                                          
+                    label.append( customGoal );
+                    propertyMap = config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PARAMETERS, Collections.emptyMap() );
                 }
                 catch ( Exception e )
                 {

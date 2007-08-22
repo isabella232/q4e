@@ -63,4 +63,29 @@ public class MavenLaunchConfigurationUtils
         return MavenManager.getMaven().getMavenProject( getProjectWithName( projectName ),
                                                         false );
     }
+    
+    public static String goalsListToString( List<String> goals )
+    {
+        StringBuilder str = new StringBuilder();
+        for( String goal : goals )
+        {
+            if( str.length() > 0 )
+                str.append( " " );
+            str.append( goal );
+        }
+        
+        return str.toString();
+    }
+    
+    public static List<String> goalsStringToList( String goals )
+    {
+        List<String> goalsList = new ArrayList<String>();
+        for( String goal : goals.split( " " ) )
+        {
+            if( goal.trim().length() > 0 )
+                goalsList.add( goal.trim() );
+        }
+        
+        return goalsList;
+    }
 }
