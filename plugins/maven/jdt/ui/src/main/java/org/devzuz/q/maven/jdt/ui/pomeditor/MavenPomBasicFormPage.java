@@ -9,6 +9,7 @@ package org.devzuz.q.maven.jdt.ui.pomeditor;
 import javax.swing.event.HyperlinkEvent;
 
 import org.devzuz.q.maven.jdt.ui.Messages;
+import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.POMSearcher;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,20 +28,25 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+import org.eclipse.core.runtime.IPath;
 
 public class MavenPomBasicFormPage extends FormPage
 {
     private ScrolledForm form;
+
+    private IPath pomIPath;
     
-    public MavenPomBasicFormPage( FormEditor editor, String id, String title )
+    public MavenPomBasicFormPage( FormEditor editor, String id, String title, String strPOMLocation )
     {
         super( editor, id, title );
+        POMSearcher st = new POMSearcher(strPOMLocation);
+        setPOMIPath(st.getProjectPOMFilePath());
     }
-
+    
     public MavenPomBasicFormPage( String id, String title )
     {
         super( id, title );
-    }
+    }       
 
     @Override
     protected void createFormContent( IManagedForm managedForm )
@@ -270,4 +276,15 @@ public class MavenPomBasicFormPage extends FormPage
         
         return  parent;
     }
+    
+    private void setPOMIPath(IPath ip)
+    {
+        this.pomIPath = ip;
+    }
+    
+    public IPath getPOMIPath()
+    {
+        return pomIPath;
+    }
+    
 }

@@ -7,22 +7,35 @@
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 
+
 public class MavenPomFormEditor extends FormEditor
 {
+    private String strProjectSelected; 
+    
+    public MavenPomFormEditor()
+    {
+        
+    }
+    
     @Override
     protected void addPages()
     {
         try
         {
+            setSelectedLocationOfPOM();
+            
             addPage( new MavenPomBasicFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomBasicFormPage;",
-                                                       "Project Information" ) );
+                                                       "Project Information" , getSelectedLocationOfPOM()) );
             addPage( new MavenPomDependenciesFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage;",
                                                        "Dependencies" ) );
             addPage( new MavenPomPropertiesModuleFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage;",
                                                        "Properties/Module" ) );
+
+           
         }
         catch ( PartInitException e )
         {
@@ -48,4 +61,16 @@ public class MavenPomFormEditor extends FormEditor
     {
         return false;
     }
+    
+    private void setSelectedLocationOfPOM()
+    {
+        IEditorInput  ie= this.getEditorInput();
+        strProjectSelected = ie.toString().substring( ie.toString().indexOf( "(" )+1,ie.toString().indexOf( ")" ));        
+    }
+    
+    public String getSelectedLocationOfPOM()
+    {
+        return this.strProjectSelected;
+    }
+    
 }
