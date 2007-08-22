@@ -170,14 +170,10 @@ public class MavenLaunchConfigurationShortcut
             // TODO: handle exception
         }
         
-        // If there is only one config for this project, return it.
-        if ( suitableConfigs.size() == 1 )
-        {
-            return suitableConfigs.get( 0 );
-        }
-        // If there are multiple configs for this project, show a dialog 
-        // with the configs for this project and return the selected config
-        else if( suitableConfigs.size() > 0 ) 
+        // If there is only one config for this project or if there are multiple configs 
+        // for this project, show a dialog with the configs for this project and return 
+        // the selected config
+        if( suitableConfigs.size() > 0 ) 
         {
             return showLaunchConfigurationSelectionDialog( suitableConfigs.toArray( new ILaunchConfiguration[suitableConfigs.size()] ) );
         }
@@ -187,7 +183,7 @@ public class MavenLaunchConfigurationShortcut
         {
             return showLaunchConfigurationSelectionDialog( configurations );
         }
-        // If no configs for this project and no configs for any maven projects
+        // If no configs for this project and no co1nfigs for any maven projects
         // launch the LCD ? Show a dialog that says No launch configuration has been configured ?
         else
         {
