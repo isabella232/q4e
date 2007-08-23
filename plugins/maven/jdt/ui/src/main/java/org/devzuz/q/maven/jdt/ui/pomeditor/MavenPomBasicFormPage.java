@@ -6,10 +6,13 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
+import java.io.File;
+
 import javax.swing.event.HyperlinkEvent;
 
 import org.devzuz.q.maven.jdt.ui.Messages;
-import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.POMSearcher;
+import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPOMFormPageData;
+import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPOMSearcher;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -29,17 +32,20 @@ import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.core.runtime.IPath;
+import org.w3c.dom.NodeList;
 
 public class MavenPomBasicFormPage extends FormPage
 {
     private ScrolledForm form;
 
-    private String strPOMLocation;
+    private File fPOMLocation;
     
-    public MavenPomBasicFormPage( FormEditor editor, String id, String title, String strPOMLocation )
+    private String groupID;
+    
+    public MavenPomBasicFormPage( FormEditor editor, String id, String title, File fPOMLocation )
     {
         super( editor, id, title );
-        this.strPOMLocation = strPOMLocation;
+        this.fPOMLocation = fPOMLocation;
     }
     
     public MavenPomBasicFormPage( String id, String title )
@@ -94,6 +100,16 @@ public class MavenPomBasicFormPage extends FormPage
     
     public Control createBasicCoordinateControls( Composite form , FormToolkit toolKit )
     {
+        MavenPOMFormPageData mpmfpd = MavenPOMFormPageData.manageMavenPOMFormPageData(getPOMLocation());
+       
+        mpmfpd.doXPathExpression( "/project/groupId/text()" );
+        String strDataProcNodeList [] = mpmfpd.processNodeList();
+       
+        if(strDataProcNodeList.length > 0)
+        {
+            setGroupID(strDataProcNodeList[0]);
+        }
+        
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new GridLayout( 2 , false ) );
         
@@ -105,35 +121,36 @@ public class MavenPomBasicFormPage extends FormPage
         Label groupIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_GroupId , SWT.NONE ); 
         groupIdLabel.setLayoutData( labelData );
         
-        Text groupIdText = toolKit.createText( parent, "groupId" /*, SWT.BORDER | SWT.SINGLE*/ ); 
+        Text groupIdText = toolKit.createText( parent, "groupId" ); 
         groupIdText.setLayoutData( controlData );
         groupIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        groupIdText.setText( getGroupID() );
         
         Label artifactIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_ArtifactId, SWT.NONE ); 
         artifactIdLabel.setLayoutData( labelData );
         
-        Text artifactIdText = toolKit.createText( parent, "artifactId" /*, SWT.BORDER | SWT.SINGLE*/ ); 
+        Text artifactIdText = toolKit.createText( parent, "artifactId" ); 
         artifactIdText.setLayoutData( controlData );
         artifactIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
         
         Label versionLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Version, SWT.NONE ); 
         versionLabel.setLayoutData( labelData );
         
-        Text versionText = toolKit.createText( parent, "Version" /*, SWT.BORDER | SWT.SINGLE*/ ); 
+        Text versionText = toolKit.createText( parent, "Version" ); 
         versionText.setLayoutData( controlData );
         versionText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
         
         Label packagingLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Packaging, SWT.NONE ); 
         packagingLabel.setLayoutData( labelData );
         
-        Text packagingText = toolKit.createText( parent, "Packaging" /*, SWT.BORDER | SWT.SINGLE*/ ); 
+        Text packagingText = toolKit.createText( parent, "Packaging"  ); 
         packagingText.setLayoutData( controlData );
         packagingText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
         
         Label classifierLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Classifier, SWT.NONE ); 
         classifierLabel.setLayoutData( labelData );
         
-        Text classifierText = toolKit.createText( parent, "Classifier" /*, SWT.BORDER | SWT.SINGLE*/ ); 
+        Text classifierText = toolKit.createText( parent, "Classifier"  ); 
         classifierText.setLayoutData( controlData );
         classifierText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
         
@@ -276,9 +293,19 @@ public class MavenPomBasicFormPage extends FormPage
         return  parent;
     }
     
-    public String getPOMLocation()
+    public File getPOMLocation()
     {
-        return this.strPOMLocation;
+        return this.fPOMLocation;
+    }
+
+    public String getGroupID()
+    {
+        return groupID;
+    }
+
+    private void setGroupID( String groupID )
+    {
+        this.groupID = groupID;
     }
     
 }

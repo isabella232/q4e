@@ -6,7 +6,9 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
-import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.POMSearcher;
+import java.io.File;
+
+import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPOMSearcher;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -31,7 +33,7 @@ public class MavenPomFormEditor extends FormEditor
     {
         try
         {
-            setSelectedLocationOfPOM();
+            setSelectedLocationOfPOMs();
             
             startPOMSearch();
             
@@ -44,10 +46,10 @@ public class MavenPomFormEditor extends FormEditor
 
            
         }
-        catch ( PartInitException e )
+        catch ( PartInitException pie )
         {
             // TODO: handle exception
-            e.printStackTrace();
+            pie.printStackTrace();
         }
     }
 
@@ -69,10 +71,10 @@ public class MavenPomFormEditor extends FormEditor
         return false;
     }
     
-    private void setSelectedLocationOfPOM()
+    private void setSelectedLocationOfPOMs()
     {
-        IEditorInput  ie= this.getEditorInput();
-        strProjectSelected = ie.toString().substring( ie.toString().indexOf( "(" )+1,ie.toString().indexOf( ")" ));        
+        IEditorInput  iei= this.getEditorInput();
+        strProjectSelected = iei.toString().substring( iei.toString().indexOf( "(" )+1,iei.toString().indexOf( ")" ));        
     }
     
     public String getSelectedLocationOfPOM()
@@ -82,8 +84,8 @@ public class MavenPomFormEditor extends FormEditor
     
     public void startPOMSearch()
     {
-        POMSearcher ps = new POMSearcher(getSelectedLocationOfPOM());
-        setPOMIPath(ps.getProjectPOMFilePath());
+        MavenPOMSearcher mps = new MavenPOMSearcher(getSelectedLocationOfPOM());
+        setPOMIPath(mps.getProjectPOMFilePath());
     }
     
     private void setPOMIPath(IPath ip)
@@ -91,9 +93,9 @@ public class MavenPomFormEditor extends FormEditor
         this.pomIPath = ip;
     }
     
-    public String getPOMFilePath()
+    public File getPOMFilePath()
     {
-        return pomIPath.toOSString();
+        return pomIPath.toFile();
     }
     
     

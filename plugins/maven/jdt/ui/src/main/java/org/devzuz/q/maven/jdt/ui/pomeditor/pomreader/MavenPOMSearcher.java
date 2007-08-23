@@ -5,13 +5,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 
-public class POMSearcher
+public class MavenPOMSearcher
 {
     private String strPOMLocation;
     
     public static final String POM_XML = "pom.xml";
     
-    public POMSearcher(String strPOMLocation)     
+    public MavenPOMSearcher(String strPOMLocation)     
     {
         this.strPOMLocation = strPOMLocation.replace( "/pom.xml", "" ).replace( "/", "" ).trim();
     }
@@ -53,7 +53,6 @@ public class POMSearcher
     
     public String getPOMFileLocation()
     {
-        
         return strPOMLocation;
     }
 
