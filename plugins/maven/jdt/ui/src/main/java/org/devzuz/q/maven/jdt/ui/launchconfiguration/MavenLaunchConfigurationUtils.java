@@ -9,14 +9,17 @@
 package org.devzuz.q.maven.jdt.ui.launchconfiguration;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.ui.Messages;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.debug.core.ILaunchConfiguration;
 
 public class MavenLaunchConfigurationUtils
 {
@@ -87,5 +90,22 @@ public class MavenLaunchConfigurationUtils
         }
         
         return goalsList;
+    }
+    
+    public static LaunchConfigValidationResult validateLaunchConfig( ILaunchConfiguration launchConfig ) throws CoreException
+    {
+        String projectName = launchConfig.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" );
+        if ( !MavenLaunchConfigurationUtils.isValidMavenProject( projectName ) )
+        {
+            return LaunchConfigValidationResult.NO_GIVEN_PROJECT;
+        }
+
+        if ( !( launchConfig.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS, 
+                                           Collections.emptyList() ).size() > 0 ) )
+        {
+            return LaunchConfigValidationResult.GOAL_MISSING;
+        }
+        
+        return LaunchConfigValidationResult.VALID;
     }
 }

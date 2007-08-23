@@ -147,25 +147,30 @@ public class MavenLaunchConfigurationShortcut
     private ILaunchConfiguration findLaunchConfiguration( IMavenProject mavenProject, String mode )
     {
         List<ILaunchConfiguration> suitableConfigs = new ArrayList<ILaunchConfiguration>(); 
+        List<ILaunchConfiguration> configurations = new ArrayList<ILaunchConfiguration>();
         
         ILaunchManager launchMgr = DebugPlugin.getDefault().getLaunchManager();
         ILaunchConfigurationType mavenLaunchConfigType = launchMgr.getLaunchConfigurationType( MavenLaunchConfigurationDelegate.CONFIGURATION_TYPE_ID );
-        ILaunchConfiguration[] configurations = null;
+        
         try
         {
-            configurations = launchMgr.getLaunchConfigurations( mavenLaunchConfigType );
-
-            for ( ILaunchConfiguration config : configurations )
+            String mavenProjectName = mavenProject.getProject().getName();
+            for ( ILaunchConfiguration config : launchMgr.getLaunchConfigurations( mavenLaunchConfigType ) )
             {
-                String configProjectName = config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" );
-                String mavenProjectName = mavenProject.getProject().getName();
-                if ( configProjectName.equals( mavenProjectName ) )
+                // Check if this launch configuration validates 
+                if ( MavenLaunchConfigurationUtils.validateLaunchConfig( config ).isValid() )
                 {
-                    suitableConfigs.add( config );
+                    configurations.add(  config );
+                    String configProjectName =
+                        config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" );
+                    if ( configProjectName.equals( mavenProjectName ) )
+                    {
+                        suitableConfigs.add( config );
+                    }
                 }
             }
         }
-        catch ( Exception e )
+        catch ( CoreException e )
         {
             // TODO: handle exception
         }
@@ -175,15 +180,15 @@ public class MavenLaunchConfigurationShortcut
         // the selected config
         if( suitableConfigs.size() > 0 ) 
         {
-            return showLaunchConfigurationSelectionDialog( suitableConfigs.toArray( new ILaunchConfiguration[suitableConfigs.size()] ) );
+            return showLaunchConfigurationSelectionDialog( suitableConfigs );
         }
         // If there is no config for this project, yet we have configs for other maven projects
         // show a dialog with all the maven configs and return the selected config
-        else if( ( suitableConfigs.size() <= 0 ) && ( configurations != null ) && ( configurations.length > 0 ) )
+        else if( ( suitableConfigs.size() <= 0 ) && ( configurations != null ) && ( configurations.size() > 0 ) )
         {
             return showLaunchConfigurationSelectionDialog( configurations );
         }
-        // If no configs for this project and no co1nfigs for any maven projects
+        // If no configs for this project and no configs for any maven projects
         // launch the LCD ? Show a dialog that says No launch configuration has been configured ?
         else
         {
@@ -193,7 +198,7 @@ public class MavenLaunchConfigurationShortcut
         return null;
     }
     
-    private ILaunchConfiguration showLaunchConfigurationSelectionDialog( ILaunchConfiguration[] configs )
+    private ILaunchConfiguration showLaunchConfigurationSelectionDialog( List<ILaunchConfiguration> configs )
     {
         ElementListSelectionDialog dialog = new ElementListSelectionDialog( getShell(), new LaunchConfigurationLabelProvider() );
 
@@ -201,9 +206,9 @@ public class MavenLaunchConfigurationShortcut
         dialog.setMessage( Messages.MavenLaunchShortcut_SelectLaunchConfigLabel );
         dialog.setBlockOnOpen( true );
 
-        if ( ( configs != null ) && ( configs.length > 0 ) )
+        if ( ( configs != null ) && ( configs.size() > 0 ) )
         {
-            dialog.setElements( configs );
+            dialog.setElements( configs.toArray( new ILaunchConfiguration[configs.size()] ) );
             if ( dialog.open() == Window.OK )
             {
                 return (ILaunchConfiguration) dialog.getFirstResult();

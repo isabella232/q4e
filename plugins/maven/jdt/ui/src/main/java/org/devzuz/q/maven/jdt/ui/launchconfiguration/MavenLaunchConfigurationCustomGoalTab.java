@@ -157,24 +157,18 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
         boolean retVal = true;
         try
         {
-            String projectName = launchConfig.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" ); //$NON-NLS-1$
-            if ( !MavenLaunchConfigurationUtils.isValidMavenProject( projectName ) )
+            LaunchConfigValidationResult result = MavenLaunchConfigurationUtils.validateLaunchConfig( launchConfig );
+            
+            retVal = result.isValid();
+            if( retVal == false )
             {
-                setErrorMessage( Messages.MavenLaunchConfigurationCustomGoalTab_NoProjectGiven );
-                retVal = false;
-            }
-
-            if ( !( launchConfig.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS, 
-                                               Collections.emptyList() ).size() > 0 ) )
-            {
-                setErrorMessage( Messages.MavenLaunchConfigurationCustomGoalTab_GoalMissing );
-                retVal = false;
+                setErrorMessage( result.getErrorMessage() );
             }
         }
         catch ( CoreException e )
         {
             // TODO : Do nothing?
-            setErrorMessage( e.getMessage() );
+            setErrorMessage( e.getCause().getMessage() );
             retVal = false;
         }
 
