@@ -6,6 +6,9 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
+import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.POMSearcher;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
@@ -15,6 +18,8 @@ import org.eclipse.ui.forms.editor.FormEditor;
 public class MavenPomFormEditor extends FormEditor
 {
     private String strProjectSelected; 
+    
+    private IPath pomIPath;
     
     public MavenPomFormEditor()
     {
@@ -28,8 +33,10 @@ public class MavenPomFormEditor extends FormEditor
         {
             setSelectedLocationOfPOM();
             
+            startPOMSearch();
+            
             addPage( new MavenPomBasicFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomBasicFormPage;",
-                                                       "Project Information" , getSelectedLocationOfPOM()) );
+                                                       "Project Information" , getPOMFilePath()));
             addPage( new MavenPomDependenciesFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage;",
                                                        "Dependencies" ) );
             addPage( new MavenPomPropertiesModuleFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage;",
@@ -72,5 +79,22 @@ public class MavenPomFormEditor extends FormEditor
     {
         return this.strProjectSelected;
     }
+    
+    public void startPOMSearch()
+    {
+        POMSearcher ps = new POMSearcher(getSelectedLocationOfPOM());
+        setPOMIPath(ps.getProjectPOMFilePath());
+    }
+    
+    private void setPOMIPath(IPath ip)
+    {
+        this.pomIPath = ip;
+    }
+    
+    public String getPOMFilePath()
+    {
+        return pomIPath.toOSString();
+    }
+    
     
 }

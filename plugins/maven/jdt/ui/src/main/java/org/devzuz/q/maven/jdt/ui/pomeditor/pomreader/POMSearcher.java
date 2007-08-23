@@ -29,7 +29,6 @@ public class POMSearcher
                     String strToProcess = strTemp.replace( "\\", "" ).trim();                
                     if(strToProcess.equals( getPOMFileLocation()))
                     {
-                        System.out.println("pom path : " + projects[i].getLocation().toOSString());
                         return getPOMFileLocation(projects[i]);
                     }
                 }

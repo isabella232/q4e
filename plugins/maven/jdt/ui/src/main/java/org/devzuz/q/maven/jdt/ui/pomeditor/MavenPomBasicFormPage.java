@@ -34,13 +34,12 @@ public class MavenPomBasicFormPage extends FormPage
 {
     private ScrolledForm form;
 
-    private IPath pomIPath;
+    private String strPOMLocation;
     
     public MavenPomBasicFormPage( FormEditor editor, String id, String title, String strPOMLocation )
     {
         super( editor, id, title );
-        POMSearcher st = new POMSearcher(strPOMLocation);
-        setPOMIPath(st.getProjectPOMFilePath());
+        this.strPOMLocation = strPOMLocation;
     }
     
     public MavenPomBasicFormPage( String id, String title )
@@ -277,14 +276,9 @@ public class MavenPomBasicFormPage extends FormPage
         return  parent;
     }
     
-    private void setPOMIPath(IPath ip)
+    public String getPOMLocation()
     {
-        this.pomIPath = ip;
-    }
-    
-    public IPath getPOMIPath()
-    {
-        return pomIPath;
+        return this.strPOMLocation;
     }
     
 }
