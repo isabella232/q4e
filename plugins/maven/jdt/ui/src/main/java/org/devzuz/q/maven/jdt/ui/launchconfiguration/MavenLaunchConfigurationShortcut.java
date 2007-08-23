@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
+import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.ILaunchShortcut;
 import org.eclipse.jdt.core.IJavaElement;
@@ -146,8 +147,10 @@ public class MavenLaunchConfigurationShortcut
      */
     private ILaunchConfiguration findLaunchConfiguration( IMavenProject mavenProject, String mode )
     {
-        List<ILaunchConfiguration> suitableConfigs = new ArrayList<ILaunchConfiguration>(); 
+        // List of all maven configurations
         List<ILaunchConfiguration> configurations = new ArrayList<ILaunchConfiguration>();
+        // List of all maven configurations for the given IMavenProject
+        List<ILaunchConfiguration> suitableConfigs = new ArrayList<ILaunchConfiguration>();
         
         ILaunchManager launchMgr = DebugPlugin.getDefault().getLaunchManager();
         ILaunchConfigurationType mavenLaunchConfigType = launchMgr.getLaunchConfigurationType( MavenLaunchConfigurationDelegate.CONFIGURATION_TYPE_ID );
@@ -155,44 +158,57 @@ public class MavenLaunchConfigurationShortcut
         try
         {
             String mavenProjectName = mavenProject.getProject().getName();
+            // Get all maven launch configurations
             for ( ILaunchConfiguration config : launchMgr.getLaunchConfigurations( mavenLaunchConfigType ) )
             {
                 // Check if this launch configuration validates 
                 if ( MavenLaunchConfigurationUtils.validateLaunchConfig( config ).isValid() )
                 {
+                    // It validated so add it to the list of maven configurations
                     configurations.add(  config );
                     String configProjectName =
                         config.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" );
+                    // Check if this launch config is for the given IMavenProject
                     if ( configProjectName.equals( mavenProjectName ) )
                     {
                         suitableConfigs.add( config );
                     }
                 }
             }
+
+            // If there is only one config for this project or if there are multiple configs
+            // for this project, show a dialog with the configs for this project and return
+            // the selected config
+            if ( suitableConfigs.size() > 0 )
+            {
+                return showLaunchConfigurationSelectionDialog( suitableConfigs );
+            }
+            // If there is no config for this project, yet we have configs for other maven projects,
+            // (1) show a dialog with all the maven configs
+            // (2) create a new config cloned from the selected config 
+            // (3) modify the cloned config with the given maven project as the project 
+            // (4) return the new config
+            else if ( ( suitableConfigs.size() <= 0 ) && ( configurations != null ) && ( configurations.size() > 0 ) )
+            {
+                ILaunchConfiguration oldConfig = showLaunchConfigurationSelectionDialog( configurations );
+                ILaunchConfigurationWorkingCopy configCopy =
+                    oldConfig.copy( oldConfig.getName() + "(" + mavenProjectName + ")" );
+
+                configCopy.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, mavenProjectName );
+
+                return configCopy.doSave();
+            }
+            // If no configs for this project and no configs for any maven projects
+            // launch the LCD ? Show a dialog that says No launch configuration has been configured ?
+            else
+            {
+                MessageDialog.openInformation( getShell(), Messages.MavenLaunchShortcut_LaunchDialogTitle,
+                                               Messages.MavenLaunchShortcut_NoLaunchConfigFound );
+            }
         }
         catch ( CoreException e )
         {
             // TODO: handle exception
-        }
-        
-        // If there is only one config for this project or if there are multiple configs 
-        // for this project, show a dialog with the configs for this project and return 
-        // the selected config
-        if( suitableConfigs.size() > 0 ) 
-        {
-            return showLaunchConfigurationSelectionDialog( suitableConfigs );
-        }
-        // If there is no config for this project, yet we have configs for other maven projects
-        // show a dialog with all the maven configs and return the selected config
-        else if( ( suitableConfigs.size() <= 0 ) && ( configurations != null ) && ( configurations.size() > 0 ) )
-        {
-            return showLaunchConfigurationSelectionDialog( configurations );
-        }
-        // If no configs for this project and no configs for any maven projects
-        // launch the LCD ? Show a dialog that says No launch configuration has been configured ?
-        else
-        {
-            MessageDialog.openInformation( getShell(), Messages.MavenLaunchShortcut_LaunchDialogTitle, Messages.MavenLaunchShortcut_NoLaunchConfigFound );
         }
         
         return null;
