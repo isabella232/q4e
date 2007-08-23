@@ -80,7 +80,7 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
         projectText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
         projectText.addModifyListener( modifyingListener );
 
-        Button projectButton = createPushButton( container1, "Browse", null );
+        Button projectButton = createPushButton( container1, Messages.MavenLaunchConfigurationCustomGoalTab_Browse, null );
         projectButton.addSelectionListener( selectionListener );
 
         // Custom goal
@@ -103,14 +103,14 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
 
     public String getName()
     {
-        return "Maven 2 Goal";
+        return Messages.MavenLaunchConfigurationCustomGoalTab_GoalName;
     }
 
     public void initializeFrom( ILaunchConfiguration configuration )
     {
         try
         {
-            projectText.setText( configuration.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" ) );
+            projectText.setText( configuration.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" ) ); //$NON-NLS-1$
             List<String> customGoalsList = configuration.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS, 
                                                                        Collections.emptyList() );
             String customGoal = MavenLaunchConfigurationUtils.goalsListToString( customGoalsList ); 
@@ -148,7 +148,7 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
     {
         configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS, Collections.emptyList() );
         configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PARAMETERS, Collections.emptyList() );
-        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" );
+        configuration.setAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" ); //$NON-NLS-1$
     }
 
     @Override
@@ -157,17 +157,17 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
         boolean retVal = true;
         try
         {
-            String projectName = launchConfig.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" );
+            String projectName = launchConfig.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS_PROJECT_NAME, "" ); //$NON-NLS-1$
             if ( !MavenLaunchConfigurationUtils.isValidMavenProject( projectName ) )
             {
-                setErrorMessage( "No Maven project given." );
+                setErrorMessage( Messages.MavenLaunchConfigurationCustomGoalTab_NoProjectGiven );
                 retVal = false;
             }
 
             if ( !( launchConfig.getAttribute( MavenLaunchConfigurationDelegate.CUSTOM_GOALS, 
                                                Collections.emptyList() ).size() > 0 ) )
             {
-                setErrorMessage( "Goal is missing." );
+                setErrorMessage( Messages.MavenLaunchConfigurationCustomGoalTab_GoalMissing );
                 retVal = false;
             }
         }
@@ -207,8 +207,8 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
             }
         } );
 
-        dialog.setTitle( "Maven Project Selection" );
-        dialog.setMessage( "Choose Maven Project" );
+        dialog.setTitle( Messages.MavenLaunchConfigurationCustomGoalTab_ProjectSelection );
+        dialog.setMessage( Messages.MavenLaunchConfigurationCustomGoalTab_ChooseProject );
         dialog.setBlockOnOpen( true );
 
         IProject[] projects = MavenLaunchConfigurationUtils.getMavenProjects();

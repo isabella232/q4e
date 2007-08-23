@@ -27,6 +27,18 @@ public class Messages
 
     public static String MavenEventView_FilterDialog_eventTypes;
 
+    public static String MavenLaunchConfigurationCustomGoalTab_Browse;
+
+    public static String MavenLaunchConfigurationCustomGoalTab_ChooseProject;
+
+    public static String MavenLaunchConfigurationCustomGoalTab_GoalMissing;
+
+    public static String MavenLaunchConfigurationCustomGoalTab_GoalName;
+
+    public static String MavenLaunchConfigurationCustomGoalTab_NoProjectGiven;
+
+    public static String MavenLaunchConfigurationCustomGoalTab_ProjectSelection;
+
     public static String MavenPreference_Offline;
 
     public static String MavenPreference_DownloadJavaDocs;
