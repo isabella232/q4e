@@ -78,12 +78,12 @@ public class Maven2ProjectLocationPage
     {
         if ( !locationComponent.isLocationInWorkspace() )
         {
-            return locationComponent.getLocationPath().append( getProjectName() );
+            return locationComponent.getLocationPath();
         }
         else
         {
             IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-            return root.getLocation().append( root.getProject( getProjectName() ).getFullPath() );
+            return root.getLocation();
         }
     }
 

@@ -6,11 +6,8 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.wizard.core;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
 
-import org.apache.commons.io.FileUtils;
 import org.devzuz.q.maven.embedder.EventType;
 import org.devzuz.q.maven.embedder.IMavenEvent;
 import org.devzuz.q.maven.embedder.IMavenEventEnd;
@@ -18,14 +15,12 @@ import org.devzuz.q.maven.embedder.IMavenListener;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.ui.projectimport.ScanImportProjectJob;
 import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
-import org.devzuz.q.maven.wizard.Activator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
 public class Maven2EmbedderArchetypeExecutor
     implements IArchetypeExecutor
 {
-    private static final String USER_DIR = System.getProperty( "user.dir" );;
 
     public void executeArchetype( Archetype archetype, IPath baseDir, String groupId, String artifactId,
                                   String version, String packageName )
@@ -40,6 +35,7 @@ public class Maven2EmbedderArchetypeExecutor
         archetypeProperties.setProperty( "archetypeArtifactId", archetype.getArtifactId() );
         archetypeProperties.setProperty( "archetypeGroupId", archetype.getGroupId() );
         archetypeProperties.setProperty( "basedir", baseDir.makeAbsolute().toOSString() );
+        // TODO user.dir is not needed with archetype plugin 1.0-alpha-6
         archetypeProperties.setProperty( "user.dir", baseDir.makeAbsolute().toOSString() );
         
         if( !archetype.getVersion().equals("") )
@@ -48,14 +44,14 @@ public class Maven2EmbedderArchetypeExecutor
         if( !archetype.getRemoteRepositories().equals("") )
             archetypeProperties.setProperty( "remoteRepositories", archetype.getRemoteRepositories() );
 
-        IMavenListener listener = new ArchetypeGenerationListener( artifactId, baseDir );
+        IMavenListener listener = new ArchetypeGenerationListener( baseDir.append( artifactId ) );
 
         MavenManager.getMaven().addEventListener( listener );
         MavenManager.getMaven().executeGoal( baseDir, ARCHETYPE_PLUGIN_ID + ":create", archetypeProperties );
     }
 
     /**
-     * Move generated archetype to destination folder when maven build ends
+     * Import generated archetype in the workspace when generation ends
      * 
      * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
      * @version $Id$
@@ -64,14 +60,11 @@ public class Maven2EmbedderArchetypeExecutor
         implements IMavenListener
     {
 
-        private final String artifactId;
+        private final IPath generatedDir;
 
-        private final IPath baseDir;
-
-        public ArchetypeGenerationListener( String artifactId, IPath baseDir )
+        public ArchetypeGenerationListener( IPath generatedDir )
         {
-            this.artifactId = artifactId;
-            this.baseDir = baseDir;
+            this.generatedDir = generatedDir;
         }
 
         public void dispose()
@@ -82,35 +75,8 @@ public class Maven2EmbedderArchetypeExecutor
         {
             if ( ( event instanceof IMavenEventEnd ) && ( event.getType().equals( EventType.reactorExecution ) ) )
             {
-                /* if using 1.0-alpha-4 of the archetype plugin the project is generated in ${user.dir} */
-                File generatedProject = new File( USER_DIR, artifactId );
-                File destination = baseDir.toFile();
-
-                if ( generatedProject.exists() )
-                {
-                    destination.getParentFile().mkdirs();
-                    try
-                    {
-                        FileUtils.copyDirectory( generatedProject, destination );
-                        FileUtils.deleteDirectory( generatedProject );
-                    }
-                    catch ( IOException e )
-                    {
-                        Activator.getLogger().log(
-                                                   "Unable to move project from " + generatedProject + " to "
-                                                       + destination, e );
-                    }
-                }
-
-                if ( !destination.exists() )
-                {
-                    Activator.getLogger().error( "Generated project was not found: " + destination );
-                }
-                else
-                {
-                    ScanImportProjectJob job = new ScanImportProjectJob( destination );
-                    job.schedule();
-                }
+                ScanImportProjectJob job = new ScanImportProjectJob( generatedDir.toFile() );
+                job.schedule();
 
                 MavenManager.getMaven().removeEventListener( this );
             }

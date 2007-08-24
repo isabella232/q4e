@@ -12,10 +12,7 @@ import org.eclipse.core.runtime.IPath;
 
 public interface IArchetypeExecutor
 {
-    /**
-     * TODO upgrade when released to solve ARCHETYPE-38 
-     */
-    public static final String ARCHETYPE_PLUGIN_ID = "org.apache.maven.plugins:maven-archetype-plugin:1.0-alpha-4";
+    public static final String ARCHETYPE_PLUGIN_ID = "org.apache.maven.plugins:maven-archetype-plugin:1.0-alpha-5";
 
     public void executeArchetype( Archetype archetype, IPath baseDir, String groupId, String artifactId,
                                   String version, String packageName )
