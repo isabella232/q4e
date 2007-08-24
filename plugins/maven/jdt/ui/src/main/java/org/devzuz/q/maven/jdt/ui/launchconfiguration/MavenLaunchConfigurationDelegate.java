@@ -22,10 +22,13 @@ import org.eclipse.debug.core.model.ILaunchConfigurationDelegate;
 public class MavenLaunchConfigurationDelegate implements ILaunchConfigurationDelegate
 {
     public static final String CONFIGURATION_TYPE_ID = "org.devzuz.q.maven.jdt.ui.MavenLaunchConfigurationId";
+
     public static final String CUSTOM_GOALS = "CustomGoals";
+
     public static final String CUSTOM_GOALS_PARAMETERS = "CustomGoalParameters";
+
     public static final String CUSTOM_GOALS_PROJECT_NAME = "CustomGoalProjectName";
-    
+
     public void launch( ILaunchConfiguration configuration, String mode, ILaunch launch, IProgressMonitor monitor )
         throws CoreException
     {
@@ -34,18 +37,13 @@ public class MavenLaunchConfigurationDelegate implements ILaunchConfigurationDel
         Map<String, String> propertyMap = configuration.getAttribute( CUSTOM_GOALS_PARAMETERS, Collections.emptyMap() );
         Properties properties = new Properties();
         properties.putAll( propertyMap );
-        
-        if ( ( MavenLaunchConfigurationUtils.isValidMavenProject( projectName ) ) &&
-             ( goals.size() > 0 ) )
+
+        if ( ( MavenLaunchConfigurationUtils.isValidMavenProject( projectName ) ) && ( goals.size() > 0 ) )
         {
             IMavenProject mavenProject = MavenLaunchConfigurationUtils.getMavenProjectWithName( projectName );
             if ( mavenProject != null )
             {
                 if ( properties == null || properties.size() <= 0 )
-                {
-                    MavenManager.getMaven().executeGoals( mavenProject, goals );
-                }
-                else
                 {
                     MavenManager.getMaven().executeGoals( mavenProject, goals, properties );
                 }

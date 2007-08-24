@@ -46,6 +46,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * Default implementation of IMaven for Eclipse
@@ -110,7 +112,7 @@ public class EclipseMaven implements IMaven
         request.setLoggingLevel( MavenExecutionRequest.LOGGING_LEVEL_DEBUG );
 
         // executeRequest(request);
-        scheduleRequest( request );
+        scheduleRequest( baseDirectory, request );
     }
 
     public void executeGoal( IMavenProject mavenProject, String goal ) throws CoreException
@@ -120,7 +122,7 @@ public class EclipseMaven implements IMaven
 
     public void executeGoal( IMavenProject mavenProject, String goal, Properties properties ) throws CoreException
     {
-        executeGoals( mavenProject, Arrays.asList( new String[] { goal } ), properties );
+        executeGoals( mavenProject, Collections.singletonList( goal ), properties );
     }
 
     public void executeGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException
@@ -133,12 +135,42 @@ public class EclipseMaven implements IMaven
     {
         MavenExecutionRequest request = generateRequest( mavenProject, properties );
         request.setGoals( goals );
-        scheduleRequest( request );
+        scheduleRequest( mavenProject, request );
     }
 
-    public void scheduleRequest( MavenExecutionRequest request )
+    /**
+     * Schedules a new maven execution for the given project.
+     * 
+     * This method makes sure that two executions are not run simultaneously on the same project.
+     * 
+     * @param request
+     *            the description of the execution to be performed.
+     * @param mavenProject
+     *            the maven project on which this execution is being run.
+     */
+    public void scheduleRequest( IMavenProject mavenProject, MavenExecutionRequest request )
     {
         EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
+        eclipseMavenRequest.setRule( mavenProject.getProject() );
+        eclipseMavenRequest.setPriority( Job.BUILD );
+        eclipseMavenRequest.schedule();
+    }
+
+    /**
+     * Schedules a new maven execution without an existing project.
+     * 
+     * This method makes sure that two executions are not run simultaneously on the same folder or on a subfolder.
+     * 
+     * @param path
+     *            path where maven is being invoked.
+     * @param request
+     *            the description of the execution to be performed.
+     */
+    public void scheduleRequest( IPath path, MavenExecutionRequest request )
+    {
+        EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
+        eclipseMavenRequest.setRule( new MavenSchedulingRule() );
+        eclipseMavenRequest.setPriority( Job.BUILD );
         eclipseMavenRequest.schedule();
     }
 
@@ -434,5 +466,62 @@ public class EclipseMaven implements IMaven
     public MavenEmbedder getEmbedder()
     {
         return mavenEmbedder;
+    }
+
+    /**
+     * Scheduling rule which controls access to a path and its descendants.
+     * 
+     * @author Abel Mui–o <amuino@gmail.com>
+     */
+    static class MavenSchedulingRule implements ISchedulingRule
+    {
+
+        private IProject project = null;
+
+        /**
+         * Creates an scheduling rule for the given maven project.
+         * 
+         * @param mavenProject
+         *            the maven project to control access to.
+         */
+        public MavenSchedulingRule( IMavenProject mavenProject )
+        {
+            this.project = mavenProject.getProject();
+        }
+
+        /**
+         * Creates an scheduling rule for maven executions outside of the workspace.
+         * 
+         */
+        public MavenSchedulingRule()
+        {
+            super();
+        }
+
+        public boolean contains( ISchedulingRule rule )
+        {
+            if ( rule == this )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+
+        }
+
+        public boolean isConflicting( ISchedulingRule rule )
+        {
+            if ( rule instanceof MavenSchedulingRule )
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
     }
 }

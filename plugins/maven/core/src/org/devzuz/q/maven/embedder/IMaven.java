@@ -87,7 +87,10 @@ public interface IMaven
     public void executeGoal( IPath baseDirectory, String goal, Properties properties ) throws CoreException;
 
     /**
-     * Allows you to execute a given goal name against a MavenProject
+     * Allows you to execute a given goal name against a MavenProject.
+     * 
+     * This is equivalent to {@link #executeGoal(IMavenProject, String, Properties)}, using <code>null</code> as the
+     * properties argument.
      * 
      * @param mavenProject
      * @param goal
@@ -97,7 +100,10 @@ public interface IMaven
     public void executeGoal( IMavenProject mavenProject, String goal ) throws CoreException;
 
     /**
-     * Allows you to execute a given goal name against a MavenProject
+     * Allows you to execute a given goal name against a MavenProject.
+     * 
+     * This is equivalent to {@link #executeGoals(IMavenProject, List, Properties)} using a list with a single element
+     * as the second argument.
      * 
      * @param mavenProject
      * @param goal
@@ -109,7 +115,10 @@ public interface IMaven
     public void executeGoal( IMavenProject mavenProject, String goal, Properties properties ) throws CoreException;
 
     /**
-     * Allows you to execute several goals against a MavenProject
+     * Allows you to execute several goals against a MavenProject.
+     * 
+     * This is equivalent to {@link #executeGoals(IMavenProject, List, Properties)}, using <code>null</code> as the
+     * properties argument.
      * 
      * @param mavenProject
      * @param goals
@@ -119,13 +128,13 @@ public interface IMaven
     public void executeGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException;
 
     /**
-     * Allows you to execute several goals against a MavenProject
+     * Allows you to execute several goals against a MavenProject.
      * 
      * @param mavenProject
      * @param goals
      *            list of goals to execute
      * @param properties
-     *            properties of this goal
+     *            properties of this goal. Might be <code>null</code> when no properties are used.
      * @throws CoreException
      */
     public void executeGoals( IMavenProject mavenProject, List<String> goals, Properties properties )
