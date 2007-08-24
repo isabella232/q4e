@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
 import org.devzuz.q.maven.ui.core.archetypeprovider.MavenArchetypeProviderManager;
 import org.devzuz.q.maven.wizard.Messages;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -27,42 +28,44 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.FilteredList;
 
-public class Maven2ProjectChooseArchetypePage
-    extends Maven2ValidatingWizardPage
+public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 {
     private static final String DEFAULT_ARCHETYPE = "maven-archetype-quickstart";
-    private static final String URL_REG_EX = "((http|https|ftp)://)?" +                             // for the optional http:// or https:// 
-                                             "(localhost|" +                                        // for localhost
-                                             "[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}|" + // or IP
-                                             "([\\w]+\\.)*[\\w]+\\.[\\w]+)" +                       // or hostname 
-                                             "(:[0-9]{1,5})?" +                                     // for the option port to use
-                                             "(/[\\w.?%&=]*)*";                                     // for the optional path
-    
-    private List archetypeList;
+
+    private static final String URL_REG_EX = "((http|https|ftp)://)?" + // for the optional http:// or https://
+                    "(localhost|" + // for localhost
+                    "[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}|" + // or IP
+                    "([\\w]+\\.)*[\\w]+\\.[\\w]+)" + // or hostname
+                    "(:[0-9]{1,5})?" + // for the option port to use
+                    "(/[\\w.?%&=]*)*"; // for the optional path
+
+    private FilteredList archetypeList;
 
     private Map<String, Archetype> archetypeMap;
 
     private Label archetypeDescriptionLabel;
-    
+
     private Button publishedArchetypesButton;
-    
+
     private Group publishedArchetypesGroup;
-    
+
     private Button customArchetypesButton;
 
     private Group customArchetypeGroup;
-    
+
     private Text groupIDText;
 
     private Text artifactIDText;
 
     private Text versionText;
-    
+
     private Text remoteRepositoryText;
-    
+
+    private Text filterText;
+
     public Maven2ProjectChooseArchetypePage()
     {
         super( Messages.wizard_project_chooseArchetype_name );
@@ -75,25 +78,27 @@ public class Maven2ProjectChooseArchetypePage
     {
         SelectionAdapter buttonListener = new SelectionAdapter()
         {
+            @Override
             public void widgetDefaultSelected( SelectionEvent e )
             {
                 widgetSelected( e );
             }
 
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 boolean publishedArchetypesEnabled = publishedArchetypesButton.getSelection();
-                
+
                 publishedArchetypesGroup.setEnabled( publishedArchetypesEnabled );
-                setEnableChildren( publishedArchetypesGroup , publishedArchetypesEnabled );
-                
+                setEnableChildren( publishedArchetypesGroup, publishedArchetypesEnabled );
+
                 customArchetypeGroup.setEnabled( !publishedArchetypesEnabled );
-                setEnableChildren( customArchetypeGroup , !publishedArchetypesEnabled );
-                
+                setEnableChildren( customArchetypeGroup, !publishedArchetypesEnabled );
+
                 validate();
             }
         };
-        
+
         ModifyListener modifyingListener = new ModifyListener()
         {
             public void modifyText( ModifyEvent e )
@@ -101,18 +106,15 @@ public class Maven2ProjectChooseArchetypePage
                 validate();
             }
         };
-        
+
         Composite container = new Composite( parent, SWT.NULL );
         container.setLayout( new GridLayout( 1, false ) );
 
-        GridData gridData = new GridData();
-        gridData.horizontalSpan = 1;
-        
         publishedArchetypesButton = new Button( container, SWT.RADIO );
         publishedArchetypesButton.setText( Messages.wizard_project_chooseArchetype_group_label );
-        publishedArchetypesButton.setLayoutData( new GridData( GridData.BEGINNING , GridData.CENTER , false , false , 3 , 1 ) );
+        publishedArchetypesButton.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false, 3, 1 ) );
         publishedArchetypesButton.addSelectionListener( buttonListener );
-        
+
         publishedArchetypesGroup = new Group( container, SWT.NULL );
         publishedArchetypesGroup.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 
@@ -121,7 +123,24 @@ public class Maven2ProjectChooseArchetypePage
         publishedArchetypesGroup.setLayout( fillLayout );
         publishedArchetypesGroup.setText( "" );
 
-        archetypeList = new List( publishedArchetypesGroup, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL );
+        Composite archetypeFilterGroup = new Composite( publishedArchetypesGroup, SWT.NULL );
+        archetypeFilterGroup.setLayout( new GridLayout( 1, true ) );
+        filterText = new Text( archetypeFilterGroup, SWT.SEARCH );
+        archetypeList = new FilteredList( archetypeFilterGroup, SWT.SINGLE, new LabelProvider(), true, false, true );
+        filterText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false ) );
+        GridData archetypeListGridData = new GridData( GridData.FILL, GridData.CENTER, true, true );
+        archetypeListGridData.minimumHeight = 150;
+        archetypeList.setLayoutData( archetypeListGridData );
+        filterText.addModifyListener( new ModifyListener()
+        {
+
+            public void modifyText( ModifyEvent e )
+            {
+                archetypeList.setFilter( filterText.getText() );
+
+            }
+
+        } );
         archetypeList.addSelectionListener( new SelectionListener()
         {
             public void widgetDefaultSelected( SelectionEvent e )
@@ -139,13 +158,13 @@ public class Maven2ProjectChooseArchetypePage
 
         customArchetypesButton = new Button( container, SWT.RADIO );
         customArchetypesButton.setText( Messages.wizard_project_chooseArchetype_custom_label );
-        customArchetypesButton.setLayoutData( new GridData( GridData.BEGINNING , GridData.CENTER , false , false , 3 , 1 ) );
-        //customArchetypesButton.addSelectionListener( buttonListener );
-        
+        customArchetypesButton.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false, 3, 1 ) );
+        // customArchetypesButton.addSelectionListener( buttonListener );
+
         customArchetypeGroup = new Group( container, SWT.NULL );
         customArchetypeGroup.setLayout( new GridLayout( 2, false ) );
-        customArchetypeGroup.setLayoutData( new GridData( GridData.FILL, SWT.BOTTOM , true, false ) );
-        
+        customArchetypeGroup.setLayoutData( new GridData( GridData.FILL, SWT.BOTTOM, true, false ) );
+
         Label groupIDLabel = new Label( customArchetypeGroup, SWT.NULL );
         groupIDLabel.setText( Messages.wizard_project_archetypeInfo_arch_groupid_label );
         groupIDText = new Text( customArchetypeGroup, SWT.BORDER | SWT.SINGLE );
@@ -157,19 +176,19 @@ public class Maven2ProjectChooseArchetypePage
         artifactIDText = new Text( customArchetypeGroup, SWT.BORDER | SWT.SINGLE );
         artifactIDText.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, false ) );
         artifactIDText.addModifyListener( modifyingListener );
-        
+
         Label versionLabel = new Label( customArchetypeGroup, SWT.NULL );
         versionLabel.setText( Messages.wizard_project_archetypeInfo_arch_version_label );
         versionText = new Text( customArchetypeGroup, SWT.BORDER | SWT.SINGLE );
         versionText.setText( "" );
         versionText.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, false ) );
-        
+
         Label remoteRepositoryLabel = new Label( customArchetypeGroup, SWT.NULL );
         remoteRepositoryLabel.setText( Messages.wizard_project_archetypeInfo_remoteRepo_label );
         remoteRepositoryText = new Text( customArchetypeGroup, SWT.BORDER | SWT.SINGLE );
         remoteRepositoryText.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, false ) );
         remoteRepositoryText.addModifyListener( modifyingListener );
-        
+
         initialize();
 
         setControl( container );
@@ -178,13 +197,13 @@ public class Maven2ProjectChooseArchetypePage
     @Override
     protected boolean isPageValid()
     {
-        if( !publishedArchetypesButton.getSelection() )
+        if ( !publishedArchetypesButton.getSelection() )
         {
-            if( artifactIDText.getText().trim().length() > 0 )
+            if ( artifactIDText.getText().trim().length() > 0 )
             {
-                if( groupIDText.getText().trim().length() > 0 )
+                if ( groupIDText.getText().trim().length() > 0 )
                 {
-                    if( validateUrl( remoteRepositoryText.getText().trim() ) )
+                    if ( validateUrl( remoteRepositoryText.getText().trim() ) )
                     {
                         return true;
                     }
@@ -203,37 +222,33 @@ public class Maven2ProjectChooseArchetypePage
                 setError( Messages.wizard_project_archetypeInfo_error_artifactId );
             }
         }
-        
+
         return false;
     }
-    
+
     public Archetype getArchetype()
     {
-        if( publishedArchetypesButton.getSelection() )
+        if ( publishedArchetypesButton.getSelection() )
         {
             return archetypeMap.get( archetypeList.getSelection()[0] );
         }
         else
         {
-            return new Archetype( artifactIDText.getText().trim(),
-                                  groupIDText.getText().trim(), versionText.getText().trim(),
-                                  remoteRepositoryText.getText().trim(),"" );
+            return new Archetype( artifactIDText.getText().trim(), groupIDText.getText().trim(),
+                                  versionText.getText().trim(), remoteRepositoryText.getText().trim(), "" );
         }
     }
 
     private void initialize()
     {
         archetypeMap = MavenArchetypeProviderManager.getArchetypes();
-        for ( String key : archetypeMap.keySet() )
-        {
-            archetypeList.add( key );
-        }
+        archetypeList.setElements( archetypeMap.keySet().toArray( new String[0] ) );
 
-        archetypeList.select( archetypeList.indexOf( DEFAULT_ARCHETYPE ) );
-        
-        publishedArchetypesButton.setSelection(  true );
-        setEnableChildren( publishedArchetypesGroup , true );
-        setEnableChildren( customArchetypeGroup , false );
+        archetypeList.setSelection( new String[] { DEFAULT_ARCHETYPE } );
+
+        publishedArchetypesButton.setSelection( true );
+        setEnableChildren( publishedArchetypesGroup, true );
+        setEnableChildren( customArchetypeGroup, false );
     }
 
     private void widgetEvent( SelectionEvent e )
@@ -241,19 +256,19 @@ public class Maven2ProjectChooseArchetypePage
         archetypeDescriptionLabel.setText( archetypeMap.get( archetypeList.getSelection()[0] ).getDescription() );
         setPageComplete( true );
     }
-    
-    static private void setEnableChildren( Composite parent , boolean flag )
+
+    static private void setEnableChildren( Composite parent, boolean flag )
     {
-        for( Control control : parent.getChildren() )
+        for ( Control control : parent.getChildren() )
         {
             control.setEnabled( flag );
         }
     }
-    
+
     static private boolean validateUrl( String urlStr )
     {
         // TODO : Im currently using a home-brewed URL RegEx pattern which myt have bugs,
-        //        Any suggestions on how to properly validate a URL will be appreciated.
+        // Any suggestions on how to properly validate a URL will be appreciated.
         Pattern urlPattern = Pattern.compile( URL_REG_EX );
         Matcher match = urlPattern.matcher( urlStr );
         return match.matches();
