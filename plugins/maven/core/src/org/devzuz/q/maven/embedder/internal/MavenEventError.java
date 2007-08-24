@@ -7,10 +7,10 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder.internal;
 
-import org.devzuz.q.maven.embedder.IMavenEventStart;
+import org.devzuz.q.maven.embedder.IMavenEventError;
 import org.devzuz.q.maven.embedder.Severity;
 
-public class MavenEventError extends AbstractMavenEvent implements IMavenEventStart
+public class MavenEventError extends AbstractMavenEvent implements IMavenEventError
 {
 
     public MavenEventError( String event, String target, long time, Throwable throwable )
@@ -34,5 +34,10 @@ public class MavenEventError extends AbstractMavenEvent implements IMavenEventSt
     public Severity getSeverity()
     {
         return Severity.error;
+    }
+
+    public Throwable getThrowable()
+    {
+        return super.getThrowable();
     }
 }
