@@ -142,9 +142,9 @@ public class EclipseMaven implements IMaven
         eclipseMavenRequest.schedule();
     }
 
-    public void executeRequest( MavenExecutionRequest request )
+    public MavenExecutionResult executeRequest( MavenExecutionRequest request )
     {
-        mavenEmbedder.execute( request );
+        return mavenEmbedder.execute( request );
     }
 
     private MavenExecutionRequest generateRequest( IMavenProject mavenProject, Properties properties )
@@ -215,7 +215,7 @@ public class EclipseMaven implements IMaven
             {
                 MavenExecutionResult status =
                     mavenEmbedder.readProjectWithDependencies( generateRequest( mavenProject, null ) );
-                if ( status.getExceptions().size() > 0 )
+                if ( ( status.getExceptions() != null ) && ( status.getExceptions().size() > 0 ) )
                 {
                     if ( status.getExceptions().get( 0 ) instanceof MultipleArtifactsNotFoundException )
                     {

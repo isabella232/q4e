@@ -10,6 +10,7 @@ package org.devzuz.q.maven.embedder.internal;
 import java.io.PrintStream;
 
 import org.apache.maven.execution.MavenExecutionRequest;
+import org.apache.maven.execution.MavenExecutionResult;
 import org.devzuz.q.maven.embedder.Activator;
 import org.devzuz.q.maven.embedder.internal.stream.EclipseMavenErrorEventPropagator;
 import org.devzuz.q.maven.embedder.internal.stream.EclipseMavenInfoEventPropagator;
@@ -45,7 +46,7 @@ public class EclipseMavenRequest extends Job
 
         // TODO the number should be the number of projects in the reactor * maven phases to execute
         monitor.beginTask( "Maven build", 100 );
-        monitor.setTaskName( "Maven build" );
+        monitor.setTaskName( "Maven " + request.getGoals() );
 
         // TODO add a listener to maven that will call monitor.worked() for each project or phase completed and poll
         // monitor.isCancelled
@@ -66,13 +67,15 @@ public class EclipseMavenRequest extends Job
                                                                                              maven.getEventPropagator(),
                                                                                              err ), err ) );
 
-            this.maven.executeRequest( this.request );
+            MavenExecutionResult status = this.maven.executeRequest( this.request );
+            if ( ( status.getExceptions() != null ) && ( status.getExceptions().size() > 0 ) )
+            {
+                // TODO somehow store all exceptions and not just the first one
+                return new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Errors during Maven execution",
+                                   (Exception) status.getExceptions().get( 0 ) );
+            }
 
             return new Status( IStatus.OK, Activator.PLUGIN_ID, "Success" );
-            // } catch (Throwable e) {
-            // maven.getEventPropagator().error("Unable to execute maven", e);
-            // throw e;
-            // return new Status(IStatus.ERROR, Activator.PLUGIN_ID, e.getLocalizedMessage(), e);
         }
         finally
         {
