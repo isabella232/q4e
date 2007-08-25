@@ -6,15 +6,21 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.ui.views;
 
+import java.util.Observable;
+
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 import org.devzuz.q.maven.embedder.IMavenEvent;
 import org.devzuz.q.maven.embedder.IMavenListener;
 
-import java.util.Observable;
-
-public class MavenEventStore
-    extends Observable
-    implements IMavenListener
+/**
+ * The maven event store keeps a reference to a limited number of maven events.
+ * 
+ * The store is used as the data model for the Maven Event View.
+ * 
+ * @author carlossg
+ * @author Abel Mui–o <amuino@gmail.com>
+ */
+public class MavenEventStore extends Observable implements IMavenListener
 {
 
     /* TODO allow user customization */
@@ -34,15 +40,24 @@ public class MavenEventStore
         this.notifyListeners();
     }
 
-    public Object[] getEvents()
+    /**
+     * Obtains every maven event in the store.
+     * 
+     * @return a copy of the stored maven events.
+     */
+    @SuppressWarnings( "unchecked" )
+    public IMavenEvent[] getEvents()
     {
-        return events.toArray( new IMavenEvent[events.size()] );
+        return (IMavenEvent[]) events.toArray( new IMavenEvent[events.size()] );
     }
 
+    /**
+     * Notifies every observer that a new event has arrived.
+     */
     public void notifyListeners()
     {
         this.setChanged();
         this.notifyObservers();
-        this.clearChanged();
+        // changed state will be automatically reset by notifyObservers
     }
 }

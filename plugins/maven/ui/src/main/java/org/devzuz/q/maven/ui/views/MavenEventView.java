@@ -11,6 +11,7 @@ import java.awt.datatransfer.StringSelection;
 import java.util.Observable;
 import java.util.Observer;
 
+import org.devzuz.q.maven.embedder.IMavenEvent;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.Severity;
 import org.devzuz.q.maven.ui.Messages;
@@ -35,15 +36,13 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.part.ViewPart;
 
-public class MavenEventView
-    extends ViewPart
-    implements Observer
+public class MavenEventView extends ViewPart implements Observer
 {
 
     public static final String VIEW_ID = MavenEventView.class.getName();
 
     public static final String SELECTED_INDEX_KEY = "selection";
-    
+
     public static final int KEYBOARD_CTRL_C = 99;
 
     private Action filterAction;
@@ -62,7 +61,6 @@ public class MavenEventView
 
     private MavenEventStore store;
 
-       
     /**
      * The constructor.
      */
@@ -70,8 +68,8 @@ public class MavenEventView
     {
     }
 
-    public void init( IViewSite site, IMemento memento )
-        throws PartInitException
+    @Override
+    public void init( IViewSite site, IMemento memento ) throws PartInitException
     {
         super.init( site, memento );
         this.site = site;
@@ -83,85 +81,87 @@ public class MavenEventView
 
         severityFilter = new MavenViewSeverityFilter();
         severityFilter.setSeverity( getSeverity() );
-       
+
     }
 
     /**
      * This is a callback that will allow us to create the viewer and initialize it.
      */
+    @Override
     public void createPartControl( Composite parent )
     {
         store = new MavenEventStore();
         store.addObserver( this );
         MavenManager.getMaven().addEventListener( store );
-        eventTableViewer = new TableViewer( parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.CTRL);
-       
+        eventTableViewer = new TableViewer( parent, SWT.FULL_SELECTION | SWT.MULTI | SWT.CTRL );
+
         // Get the SWT Table that's inside the TableViewer
         final Table eventTable = eventTableViewer.getTable();
-        TableColumn column = new TableColumn( eventTable, SWT.NONE);
+        TableColumn column = new TableColumn( eventTable, SWT.NONE );
         column.setText( Messages.MavenEventView_Column_CreatedDate );
         column.setWidth( 100 );
-        TableColumn column2 = new TableColumn( eventTable,  SWT.NONE);
+        TableColumn column2 = new TableColumn( eventTable, SWT.NONE );
         column2.setText( Messages.MavenEventView_Column_EventType );
         column2.setWidth( 100 );
-        TableColumn column3 = new TableColumn( eventTable,  SWT.NONE);
+        TableColumn column3 = new TableColumn( eventTable, SWT.NONE );
         column3.setText( Messages.MavenEventView_Column_Description );
         column3.setWidth( 500 );
         // Show the column headers
         eventTable.setHeaderVisible( true );
         eventTableViewer.addFilter( severityFilter );
-        
+
         makeActions();
         addMenusAndToolbars();
 
         eventTableViewer.setContentProvider( new MavenEventContentProvider() );
         eventTableViewer.setLabelProvider( new MavenEventLabelProvider() );
         eventTableViewer.setInput( store );
- 
+
         KeyListener selectedDataItems = new KeyAdapter()
         {
-	        public void keyPressed(KeyEvent e)
+            @Override
+            public void keyPressed( KeyEvent e )
             {
-		       if( e.keyCode == KEYBOARD_CTRL_C )
-               {
-			      setBufferData(eventTable.getSelection());
-		       }
-	        }
+                if ( e.keyCode == KEYBOARD_CTRL_C )
+                {
+                    setBufferData( eventTable.getSelection() );
+                }
+            }
         };
 
-        eventTable.addKeyListener(selectedDataItems);
+        eventTable.addKeyListener( selectedDataItems );
     }
-    
-    
-    private void setBufferData(TableItem [] tblTemp)
-    {	    
-	   if ( tblTemp.length > 0 )
-       {
-	       StringBuilder strBuff = new StringBuilder();
-           for ( int x = 0; x < tblTemp.length; x++ )
-           {
-               strBuff.append( tblTemp[x].getText( 0 ) );
-               strBuff.append( "\t" );
-               strBuff.append( tblTemp[x].getText( 1 ) );
-               strBuff.append( "\t" );
-               strBuff.append( tblTemp[x].getText( 2 ) );
-               strBuff.append( "\n" );
-           }
 
-           copyDatatoClipboard( strBuff );
-           strBuff.delete( 0, strBuff.length() );
-       }		
-    }
-    
-    private void copyDatatoClipboard(StringBuilder strbuff)
+    private void setBufferData( TableItem[] tblTemp )
     {
-        StringSelection strSelection  = new StringSelection(strbuff.toString());
-        Toolkit.getDefaultToolkit().getSystemClipboard().setContents( strSelection,strSelection );
+        if ( tblTemp.length > 0 )
+        {
+            StringBuilder strBuff = new StringBuilder();
+            for ( int x = 0; x < tblTemp.length; x++ )
+            {
+                strBuff.append( tblTemp[x].getText( 0 ) );
+                strBuff.append( "\t" );
+                strBuff.append( tblTemp[x].getText( 1 ) );
+                strBuff.append( "\t" );
+                strBuff.append( tblTemp[x].getText( 2 ) );
+                strBuff.append( "\n" );
+            }
+
+            copyDatatoClipboard( strBuff );
+            strBuff.delete( 0, strBuff.length() );
+        }
     }
-   
+
+    private void copyDatatoClipboard( StringBuilder strbuff )
+    {
+        StringSelection strSelection = new StringSelection( strbuff.toString() );
+        Toolkit.getDefaultToolkit().getSystemClipboard().setContents( strSelection, strSelection );
+    }
+
     /**
      * Passing the focus request to the viewer's control.
      */
+    @Override
     public void setFocus()
     {
 
@@ -187,15 +187,15 @@ public class MavenEventView
 
         toolBarManager.add( clearEventViewAction );
         toolBarManager.add( controlScrollingAction );
-        
+
         mgr.add( filterAction );
     }
 
-    
     private void makeActions()
     {
         filterAction = new Action( Messages.MavenEventView_Filter )
         {
+            @Override
             public void run()
             {
                 handleFilter();
@@ -207,6 +207,7 @@ public class MavenEventView
 
         clearEventViewAction = new Action( Messages.MavenEventView_ClearView )
         {
+            @Override
             public void run()
             {
                 handleClearEventView();
@@ -219,6 +220,7 @@ public class MavenEventView
 
         controlScrollingAction = new Action( Messages.MavenEventView_ScrollLock, Action.AS_CHECK_BOX )
         {
+            @Override
             public void run()
             {
             }
@@ -227,26 +229,44 @@ public class MavenEventView
         controlScrollingAction.setToolTipText( Messages.MavenEventView_ScrollLock );
         controlScrollingAction.setImageDescriptor( MavenImages.DESC_SCROLLLOCK );
         controlScrollingAction.setDisabledImageDescriptor( MavenImages.DESC_SCROLLLOCK_DISABLED );
-        
+
     }
 
     // This is the handler for the "events added" or "store cleared" event of MavenEventStore
     public void update( Observable o, Object arg )
     {
+        // Just in case, this should not happen.
+        if ( !( o instanceof MavenEventStore ) )
+        {
+            return;
+        }
+        // For performance, avoid refreshing when the event will not be displayed
+        MavenEventStore store = (MavenEventStore) o;
+        IMavenEvent lastEvent = store.getEvents()[store.getEvents().length - 1];
+        if ( !severityFilter.select( lastEvent ) )
+        {
+            // The event will not be displayed, skip update.
+            return;
+        }
         eventTableViewer.getControl().getDisplay().asyncExec( new Runnable()
         {
             public void run()
             {
+                // Check if the control is still available
+                if ( eventTableViewer.getControl().isDisposed() )
+                {
+                    return;
+                }
                 eventTableViewer.refresh();
                 // If scrolling is enabled, scroll it
                 if ( !controlScrollingAction.isChecked() )
                 {
                     Table table = eventTableViewer.getTable();
-                    if ( ( table != null ) 
-                        && ( table.getItemCount() * table.getItemHeight() > table.getClientArea().height ) )
+                    if ( ( table != null )
+                                    && ( table.getItemCount() * table.getItemHeight() > table.getClientArea().height ) )
                     {
                         // The idea here is to select the last element to induce a scroll to the bottom
-                        table.showItem( table.getItem(table.getItemCount() - 1) );
+                        table.showItem( table.getItem( table.getItemCount() - 1 ) );
                     }
                 }
             }
