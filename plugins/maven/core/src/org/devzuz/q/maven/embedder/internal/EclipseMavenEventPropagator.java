@@ -90,17 +90,26 @@ public class EclipseMavenEventPropagator implements TransferListener, EventMonit
 
     public void addMavenListener( IMavenListener listener )
     {
-        listeners.add( listener );
+        synchronized ( listeners )
+        {
+            listeners.add( listener );
+        }
     }
 
     public void removeMavenListener( IMavenListener listener )
     {
-        listeners.remove( listener );
+        synchronized ( listeners )
+        {
+            listeners.remove( listener );
+        }
     }
 
     public void removeAllMavenListeners()
     {
-        listeners.clear();
+        synchronized ( listeners )
+        {
+            listeners.clear();
+        }
     }
 
     public void log( Severity severity, String s )
