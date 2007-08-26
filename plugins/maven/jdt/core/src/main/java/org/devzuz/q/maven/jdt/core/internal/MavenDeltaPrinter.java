@@ -6,7 +6,6 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.internal;
 
-import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
