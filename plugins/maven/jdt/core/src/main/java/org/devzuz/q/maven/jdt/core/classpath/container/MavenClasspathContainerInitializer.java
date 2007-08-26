@@ -7,6 +7,10 @@
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import org.devzuz.q.maven.jdt.core.Activator;
+import org.devzuz.q.maven.jdt.core.internal.MavenProjectJDTResourceListener;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -24,14 +28,20 @@ public class MavenClasspathContainerInitializer
 {
     public MavenClasspathContainerInitializer()
     {
-        Activator.getLogger().info( "Creating the " + this.getClass().getName() );
+
+        IResourceChangeListener listener = new MavenProjectJDTResourceListener();
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
+                                                                 IResourceChangeEvent.PRE_CLOSE
+                                                                 | IResourceChangeEvent.PRE_DELETE
+                                                                 | IResourceChangeEvent.PRE_BUILD
+                                                                 | IResourceChangeEvent.POST_BUILD
+                                                                 | IResourceChangeEvent.POST_CHANGE);
     }
 
     @Override
     public void initialize( IPath containerPath, IJavaProject project )
         throws CoreException
     {
-
         if ( containerPath.equals( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ) ) )
         {
             Activator.getLogger().info( "Initializing classpath for " + project.getPath() );
