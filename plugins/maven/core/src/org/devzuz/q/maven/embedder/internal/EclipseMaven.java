@@ -253,7 +253,7 @@ public class EclipseMaven implements IMaven
                     {
                         // TODO do something different to show user missing dependencies
                     }
-                    throw new CoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Unable to read project",
+                    throw new QCoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Unable to read project",
                                                          (Exception) status.getExceptions().get( 0 ) ) );
                 }
                 // TODO should we call refreshProject?
@@ -270,7 +270,7 @@ public class EclipseMaven implements IMaven
         }
         catch ( ProjectBuildingException e )
         {
-            throw new CoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Unable to read project", e ) );
+            throw new QCoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Unable to read project", e ) );
         }
     }
 
@@ -293,12 +293,12 @@ public class EclipseMaven implements IMaven
         }
         catch ( ComponentLookupException e )
         {
-            throw new CoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+            throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
                                                  "Unable to lookup project builder", e ) );
         }
         catch ( ProjectBuildingException e )
         {
-            throw new CoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+            throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
                                                  "Unable to build project from artifact " + artifact, e ) );
         }
     }
@@ -328,7 +328,7 @@ public class EclipseMaven implements IMaven
         }
         catch ( MavenEmbedderException e )
         {
-            throw new CoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+            throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
                                                  "Unable to start Maven Embedder", e ) );
         }
     }
@@ -344,7 +344,7 @@ public class EclipseMaven implements IMaven
             }
             catch ( MavenEmbedderException e )
             {
-                throw new CoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, STOP_ERROR_CODE,
+                throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, STOP_ERROR_CODE,
                                                      "Unable to stop Maven Embedder", e ) );
             }
         }
@@ -394,7 +394,7 @@ public class EclipseMaven implements IMaven
             }
             catch ( ComponentLookupException e )
             {
-                throw new CoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+                throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
                                                      "Unable to lookup the artifact metadata source", e ) );
             }
         }
@@ -458,7 +458,7 @@ public class EclipseMaven implements IMaven
         }
         catch ( ArtifactResolutionException e )
         {
-            throw new CoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+            throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
                                                  "Unable to resolve artifact " + artifact, e ) );
         }
     }
@@ -471,7 +471,7 @@ public class EclipseMaven implements IMaven
     /**
      * Scheduling rule which controls access to a path and its descendants.
      * 
-     * @author Abel Mui–o <amuino@gmail.com>
+     * @author Abel Muiï¿½o <amuino@gmail.com>
      */
     static class MavenSchedulingRule implements ISchedulingRule
     {
