@@ -28,14 +28,13 @@ public class MavenClasspathContainerInitializer
 {
     public MavenClasspathContainerInitializer()
     {
-
-        IResourceChangeListener listener = new MavenProjectJDTResourceListener();
-        ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
-                                                                 IResourceChangeEvent.PRE_CLOSE
-                                                                 | IResourceChangeEvent.PRE_DELETE
-                                                                 | IResourceChangeEvent.PRE_BUILD
-                                                                 | IResourceChangeEvent.POST_BUILD
-                                                                 | IResourceChangeEvent.POST_CHANGE);
+//        IResourceChangeListener listener = new MavenProjectJDTResourceListener();
+//        ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
+//                                                                 IResourceChangeEvent.PRE_CLOSE
+//                                                                 | IResourceChangeEvent.PRE_DELETE
+//                                                                 | IResourceChangeEvent.PRE_BUILD
+//                                                                 | IResourceChangeEvent.POST_BUILD
+//                                                                 | IResourceChangeEvent.POST_CHANGE);
     }
 
     @Override
