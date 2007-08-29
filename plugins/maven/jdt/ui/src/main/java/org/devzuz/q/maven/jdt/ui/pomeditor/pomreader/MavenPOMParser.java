@@ -49,15 +49,16 @@ public class MavenPOMParser
             Document docPOMFile = db.parse(getPOMFile()); 
             XPathFactory xPathFactory = XPathFactory.newInstance();
             XPath xPath = xPathFactory.newXPath();
-         
+            xPath.setNamespaceContext(new MavenNameSpaceContext());
             XPathExpression expr = xPath.compile(strExpression);
             Object result = expr.evaluate(docPOMFile, XPathConstants.NODESET);
             xPathNodeList = (NodeList) result;
-            
-            for (int i = 0; i < xPathNodeList.getLength(); i++) 
+/*            
+ *          for (int i = 0; i < xPathNodeList.getLength(); i++) 
             {
                 System.out.println("item :" + i + xPathNodeList.item(i).getNodeValue()); 
             }
+            */
         }
         catch(ParserConfigurationException pce)
         {

@@ -42,6 +42,14 @@ public class MavenPomBasicFormPage extends FormPage
     
     private String groupID;
     
+    private String artifactID;
+    
+    private String version;
+    
+    private String packaging;
+    
+    private String classifier;
+
     public MavenPomBasicFormPage( FormEditor editor, String id, String title, File fPOMLocation )
     {
         super( editor, id, title );
@@ -100,15 +108,8 @@ public class MavenPomBasicFormPage extends FormPage
     
     public Control createBasicCoordinateControls( Composite form , FormToolkit toolKit )
     {
-        MavenPOMFormPageData mpmfpd = MavenPOMFormPageData.manageMavenPOMFormPageData(getPOMLocation());
-       
-        mpmfpd.doXPathExpression( "/project/groupId/text()" );
-        String strDataProcNodeList [] = mpmfpd.processNodeList();
-       
-        if(strDataProcNodeList.length > 0)
-        {
-            setGroupID(strDataProcNodeList[0]);
-        }
+        MavenPOMFormPageData mpmfpd = new MavenPOMFormPageData(getPOMLocation());
+        String strDataProcNodeList [] = {};
         
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new GridLayout( 2 , false ) );
@@ -121,38 +122,93 @@ public class MavenPomBasicFormPage extends FormPage
         Label groupIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_GroupId , SWT.NONE ); 
         groupIdLabel.setLayoutData( labelData );
         
+        mpmfpd.doXPathExpression( "/pre:project/pre:groupId/text()" );
+         strDataProcNodeList = mpmfpd.processNodeList();
+        if(strDataProcNodeList.length > 0)
+        {
+            setGroupID(strDataProcNodeList[0]);
+        }
+        
         Text groupIdText = toolKit.createText( parent, "groupId" ); 
         groupIdText.setLayoutData( controlData );
         groupIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-        groupIdText.setText( getGroupID() );
-        
+        if(!getGroupID().trim().equals( "" ))
+        {
+            groupIdText.setText( getGroupID() );    
+        }
+   
         Label artifactIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_ArtifactId, SWT.NONE ); 
         artifactIdLabel.setLayoutData( labelData );
+        
+        mpmfpd.doXPathExpression( "/pre:project/pre:artifactId/text()" );
+        strDataProcNodeList = mpmfpd.processNodeList();
+        if(strDataProcNodeList.length > 0)
+        {
+            setArtifactID(strDataProcNodeList[0]);
+        }
         
         Text artifactIdText = toolKit.createText( parent, "artifactId" ); 
         artifactIdText.setLayoutData( controlData );
         artifactIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-        
+        if(! getArtifactID().trim().equals( "" ))
+        {
+            artifactIdText.setText( getArtifactID());      
+        }
+
         Label versionLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Version, SWT.NONE ); 
         versionLabel.setLayoutData( labelData );
+        
+        mpmfpd.doXPathExpression( "/pre:project/pre:modelVersion/text()" );
+        strDataProcNodeList = mpmfpd.processNodeList();
+        if(strDataProcNodeList.length > 0)
+        {
+            setVersion(strDataProcNodeList[0]);
+        }
         
         Text versionText = toolKit.createText( parent, "Version" ); 
         versionText.setLayoutData( controlData );
         versionText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-        
+        if(!getVersion().trim().equals( "" ))
+        {
+            versionText.setText( getVersion());           
+        }
+
         Label packagingLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Packaging, SWT.NONE ); 
         packagingLabel.setLayoutData( labelData );
         
+        mpmfpd.doXPathExpression( "/pre:project/pre:packaging/text()" );
+        strDataProcNodeList = mpmfpd.processNodeList();
+        if(strDataProcNodeList.length > 0)
+        {
+            setPackaging(strDataProcNodeList[0]);
+        }
+       
         Text packagingText = toolKit.createText( parent, "Packaging"  ); 
         packagingText.setLayoutData( controlData );
         packagingText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        if(!getPackaging().trim().equals( "" ))
+        {
+            packagingText.setText( getPackaging() );
+        }
         
         Label classifierLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Classifier, SWT.NONE ); 
         classifierLabel.setLayoutData( labelData );
         
+        mpmfpd.doXPathExpression( "/pre:project/pre:classifier/text()" );
+        strDataProcNodeList = mpmfpd.processNodeList();
+        if(strDataProcNodeList.length > 0)
+        {
+            setClassifier(strDataProcNodeList[0]);
+        }
+        
         Text classifierText = toolKit.createText( parent, "Classifier"  ); 
         classifierText.setLayoutData( controlData );
         classifierText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        if(!getClassifier().trim().equals( "" ))
+        {
+            classifierText.setText( getClassifier() ); 
+        }
+
         
         toolKit.paintBordersFor(parent);
         
@@ -307,5 +363,46 @@ public class MavenPomBasicFormPage extends FormPage
     {
         this.groupID = groupID;
     }
+
+    public String getArtifactID()
+    {
+        return artifactID;
+    }
+
+    private void setArtifactID( String artifactID )
+    {
+        this.artifactID = artifactID;
+    }
+    
+    public String getVersion()
+    {
+        return version;
+    }
+
+    private void setVersion( String version )
+    {
+        this.version = version;
+    }
+    
+    public String getPackaging()
+    {
+        return packaging;
+    }
+
+    private void setPackaging( String packaging )
+    {
+        this.packaging = packaging;
+    }
+    
+    public String getClassifier()
+    {
+        return classifier;
+    }
+
+    public void setClassifier( String classifier )
+    {
+        this.classifier = classifier;
+    }
+
     
 }

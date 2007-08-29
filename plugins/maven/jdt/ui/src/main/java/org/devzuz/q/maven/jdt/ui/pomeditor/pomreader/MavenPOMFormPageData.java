@@ -14,21 +14,9 @@ public class MavenPOMFormPageData
 {
     private MavenPOMParser mavenPOMParser;
     
-    private static MavenPOMFormPageData mavenPOMFormPageData = null;
-    
     public MavenPOMFormPageData(File strPOMLocation)
     {
         this.mavenPOMParser = new MavenPOMParser(strPOMLocation);
-    }
-    
-    public static synchronized MavenPOMFormPageData manageMavenPOMFormPageData(File fPOMLocation)
-    {
-        if(mavenPOMFormPageData == null)
-        {
-            mavenPOMFormPageData = new MavenPOMFormPageData(fPOMLocation);
-        }
-        
-        return mavenPOMFormPageData;
     }
     
     public void doXPathExpression(String strSearchExpr)
@@ -47,7 +35,6 @@ public class MavenPOMFormPageData
         for(int i =0; i < getNodeList().getLength() ; i ++)
         {
             strNodeItems[i] = getNodeList().item(i).getNodeValue();
-            System.out.println(strNodeItems[i]);
         }
         return strNodeItems;
     }
