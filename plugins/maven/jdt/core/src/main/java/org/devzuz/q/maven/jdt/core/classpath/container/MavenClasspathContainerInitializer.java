@@ -8,9 +8,6 @@ package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.devzuz.q.maven.jdt.core.internal.MavenProjectJDTResourceListener;
-import org.eclipse.core.resources.IResourceChangeEvent;
-import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -28,13 +25,7 @@ public class MavenClasspathContainerInitializer
 {
     public MavenClasspathContainerInitializer()
     {
-//        IResourceChangeListener listener = new MavenProjectJDTResourceListener();
-//        ResourcesPlugin.getWorkspace().addResourceChangeListener(listener,
-//                                                                 IResourceChangeEvent.PRE_CLOSE
-//                                                                 | IResourceChangeEvent.PRE_DELETE
-//                                                                 | IResourceChangeEvent.PRE_BUILD
-//                                                                 | IResourceChangeEvent.POST_BUILD
-//                                                                 | IResourceChangeEvent.POST_CHANGE);
+
     }
 
     @Override
@@ -48,7 +39,7 @@ public class MavenClasspathContainerInitializer
             // TODO : -erle- : This will cause the java heap error, need more investigation on this.
             //new UpdateClasspathJob( project.getProject() ).schedule();
         }
-
+        MavenProjectJDTResourceListener.deleteMavenProjectJDTResourceListener();
     }
 
 }
