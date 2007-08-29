@@ -37,6 +37,10 @@ public interface IMaven
 
     public static final String GLOBAL_PREFERENCE_DOWNLOAD_JAVADOC = Activator.PLUGIN_ID + ".downloadJavadoc";
 
+    public static final String SETTINGS_FILENAME = "settings.xml";
+
+    public static final String USER_CONFIGURATION_DIRECTORY_NAME = ".m2";
+
     /**
      * Returns an instance of IMavenProject for the given project specification
      * 

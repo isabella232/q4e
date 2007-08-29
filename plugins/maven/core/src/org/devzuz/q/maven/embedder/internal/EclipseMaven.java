@@ -23,6 +23,7 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.embedder.Configuration;
+import org.apache.maven.embedder.ConfigurationValidationResult;
 import org.apache.maven.embedder.DefaultConfiguration;
 import org.apache.maven.embedder.MavenEmbedder;
 import org.apache.maven.embedder.MavenEmbedderException;
@@ -57,6 +58,7 @@ import org.eclipse.core.runtime.jobs.Job;
  */
 public class EclipseMaven implements IMaven
 {
+    private static final String USER_HOME = System.getProperty( "user.home" );
 
     private static final String GOAL_DEPLOY = "deploy";
 
@@ -322,6 +324,25 @@ public class EclipseMaven implements IMaven
             Configuration config = new DefaultConfiguration();
             config.setConfigurationCustomizer( new EclipsePlexusContainerCustomizer() );
             config.setMavenEmbedderLogger( getEventPropagator() );
+
+            /* add the settings.xml */
+            if ( USER_HOME != null )
+            {
+                File m2Dir = new File( new File( USER_HOME ), USER_CONFIGURATION_DIRECTORY_NAME );
+                File userSettings = new File( m2Dir, SETTINGS_FILENAME );
+                if ( userSettings.exists() )
+                {
+                    config.setUserSettingsFile( userSettings );
+                }
+            }
+
+            ConfigurationValidationResult validationResult = MavenEmbedder.validateConfiguration(config);
+
+            if (validationResult.isUserSettingsFilePresent() && validationResult.isUserSettingsFileParses())
+            {
+                throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, "The settings file is invalid" ) );
+            }
+
             mavenEmbedder = new MavenEmbedder( config );
 
             state = STARTED;
