@@ -62,7 +62,7 @@ public class MavenProjectJDTResourceListener
        return ResourcesPlugin.getWorkspace().getRoot().getProjects();           
     }
     
-    public static void deleteMavenProjectJDTResourceListener()
+    public static void manageMavenProjectJDTResourceListener()
     {
         if((getMavenProjectsLength()== 0) || (getMavenProjectsLength() == getCountClosedProjects()))
         {         
@@ -92,7 +92,7 @@ public class MavenProjectJDTResourceListener
                
            case IResourceChangeEvent.POST_CHANGE:
                //System.out.println("Resources have changed." );
-               deleteMavenProjectJDTResourceListener();
+        	   manageMavenProjectJDTResourceListener();
                break;
          }
       } 
