@@ -39,7 +39,7 @@ public class MavenClasspathContainerInitializer
             // TODO : -erle- : This will cause the java heap error, need more investigation on this.
             //new UpdateClasspathJob( project.getProject() ).schedule();
         }
-        MavenProjectJDTResourceListener.manageMavenProjectJDTResourceListener();
+        //MavenProjectJDTResourceListener.manageMavenProjectJDTResourceListener();
     }
 
 }
