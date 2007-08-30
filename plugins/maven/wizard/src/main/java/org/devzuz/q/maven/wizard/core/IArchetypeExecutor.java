@@ -12,7 +12,7 @@ import org.eclipse.core.runtime.IPath;
 
 public interface IArchetypeExecutor
 {
-    public static final String ARCHETYPE_PLUGIN_ID = "org.apache.maven.plugins:maven-archetype-plugin:1.0-alpha-6";
+    public static final String ARCHETYPE_PLUGIN_ID = "org.apache.maven.plugins:maven-archetype-plugin:1.0-alpha-7";
 
     public void executeArchetype( Archetype archetype, IPath baseDir, String groupId, String artifactId,
                                   String version, String packageName )
