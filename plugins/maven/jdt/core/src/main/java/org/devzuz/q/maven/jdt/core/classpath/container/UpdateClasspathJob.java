@@ -31,7 +31,7 @@ public class UpdateClasspathJob
      */
     public UpdateClasspathJob( IProject project )
     {
-        super( "Updating classpath container" );
+        super( "Updating classpath container: " + project.getName() );
         this.project = project;
     }
 
