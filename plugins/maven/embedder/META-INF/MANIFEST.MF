@@ -2,8 +2,8 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Maven Embedder API
 Bundle-SymbolicName: org.apache.maven.embedder
-Bundle-Version: 2.1.0.571108
-Bundle-ClassPath: maven-embedder-2.1-571108-shaded.jar
+Bundle-Version: 2.1.0.571188
+Bundle-ClassPath: maven-embedder-2.1-571188-shaded.jar
 Bundle-Vendor: apache.org
 Export-Package: org.apache.maven,
  org.apache.maven.artifact,
