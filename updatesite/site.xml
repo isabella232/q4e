@@ -6,37 +6,13 @@
    <feature url="features/org.apache.commons.collections.feature_3.2.0.200705282147.jar" id="org.apache.commons.collections.feature" version="3.2.0.200705282147">
       <category name="Enabling Features"/>
    </feature>
-   <feature url="features/org.apache.maven.feature_2.1.0.549510.jar" id="org.apache.maven.feature" version="2.1.0.549510">
-      <category name="Enabling Features"/>
-   </feature>
-   <feature url="features/org.devzuz.q.feature_0.2.0.v200707052056.jar" id="org.devzuz.q.feature" version="0.2.0.v200707052056">
-      <category name="Community"/>
-   </feature>
-   <feature url="features/org.devzuz.q.feature_0.2.0.v200707102124.jar" id="org.devzuz.q.feature" version="0.2.0.v200707102124">
-      <category name="Community"/>
-   </feature>
    <feature url="features/org.prefuse.feature_1.0.0.v20060715.jar" id="org.prefuse.feature" version="1.0.0.v20060715">
       <category name="Enabling Features"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature_0.2.0.v200707170902.jar" id="org.devzuz.q.feature" version="0.2.0.v200707170902">
-      <category name="Community"/>
+   <feature url="features/org.apache.maven.feature_2.1.0.571188.jar" id="org.apache.maven.feature" version="2.1.0.571188">
+      <category name="Enabling Features"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature_0.2.0.v200707170915.jar" id="org.devzuz.q.feature" version="0.2.0.v200707170915">
-      <category name="Community"/>
-   </feature>
-   <feature url="features/org.devzuz.q.feature_0.2.0.v200707261332.jar" id="org.devzuz.q.feature" version="0.2.0.v200707261332">
-      <category name="Community"/>
-   </feature>
-   <feature url="features/org.devzuz.q.feature_0.2.0.v200707261447.jar" id="org.devzuz.q.feature" version="0.2.0.v200707261447">
-      <category name="Community"/>
-   </feature>
-   <feature url="features/org.devzuz.q.feature_0.2.0.v200707261452.jar" id="org.devzuz.q.feature" version="0.2.0.v200707261452">
-      <category name="Community"/>
-   </feature>
-   <feature url="features/org.devzuz.q.feature_0.2.0.v200708071743.jar" id="org.devzuz.q.feature" version="0.2.0.v200708071743">
-      <category name="Community"/>
-   </feature>
-   <feature url="features/org.devzuz.q.feature_0.2.0.v200708132033.jar" id="org.devzuz.q.feature" version="0.2.0.v200708132033">
+   <feature url="features/org.devzuz.q.feature_0.2.0.v200708302115.jar" id="org.devzuz.q.feature" version="0.2.0.v200708302115">
       <category name="Community"/>
    </feature>
    <category-def name="Community" label="Community"/>
