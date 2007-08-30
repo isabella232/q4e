@@ -15,9 +15,9 @@
 package org.eclipse.buckminster.maven.internal;
 
 import org.eclipse.buckminster.core.cspec.model.ComponentRequest;
-import org.eclipse.buckminster.core.helpers.BuckminsterException;
 import org.eclipse.buckminster.core.reader.URLCatalogReaderType;
 import org.eclipse.buckminster.core.rmap.model.Provider;
+import org.eclipse.buckminster.runtime.BuckminsterException;
 
 public class AbstractMavenReaderType
     extends URLCatalogReaderType

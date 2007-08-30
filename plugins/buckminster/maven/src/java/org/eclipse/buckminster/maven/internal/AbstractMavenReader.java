@@ -17,7 +17,6 @@
 package org.eclipse.buckminster.maven.internal;
 
 import org.eclipse.buckminster.core.reader.URLFileReader;
-import org.eclipse.buckminster.core.version.IVersionSelector;
 import org.eclipse.buckminster.core.version.ProviderMatch;
 import org.eclipse.core.runtime.CoreException;
 
