@@ -7,7 +7,6 @@
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import org.devzuz.q.maven.jdt.core.Activator;
-import org.devzuz.q.maven.jdt.core.internal.MavenProjectJDTResourceListener;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -25,7 +24,6 @@ public class MavenClasspathContainerInitializer
 {
     public MavenClasspathContainerInitializer()
     {
-
     }
 
     @Override
@@ -38,7 +36,6 @@ public class MavenClasspathContainerInitializer
             
             new UpdateClasspathJob( project.getProject() ).schedule();
         }
-        //MavenProjectJDTResourceListener.manageMavenProjectJDTResourceListener();
     }
 
 }
