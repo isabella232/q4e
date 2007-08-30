@@ -2,7 +2,7 @@
 <feature
       id="org.devzuz.q.feature"
       label="%featureName"
-      version="0.2.0.v200708302115"
+      version="0.2.0.v200708302159"
       provider-name="%providerName">
 
    <description>
@@ -35,9 +35,9 @@
       <import plugin="org.eclipse.core.databinding"/>
       <import plugin="org.eclipse.jface.databinding"/>
       <import plugin="org.eclipse.swt"/>
-      <import feature="org.apache.maven.feature" version="2.1.0.549510"/>
       <import feature="org.apache.commons.collections.feature" version="3.2.0.200705282147"/>
       <import feature="org.prefuse.feature" version="1.0.0.v20060715"/>
+      <import feature="org.apache.maven.feature" version="2.1.0.571188"/>
    </requires>
 
    <plugin
