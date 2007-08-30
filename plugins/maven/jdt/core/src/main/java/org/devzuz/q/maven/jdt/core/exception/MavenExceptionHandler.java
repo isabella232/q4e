@@ -107,7 +107,6 @@ public class MavenExceptionHandler
             {
                 for ( String problem : problems )
                 {
-                    // TODO create a custom marker type for this plugin
                     try 
                     {
                         IMarker marker = pom.createMarker( MavenCoreProblemMarker.getMavenPOMMarker() );             

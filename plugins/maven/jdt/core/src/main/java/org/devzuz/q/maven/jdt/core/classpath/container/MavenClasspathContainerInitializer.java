@@ -36,8 +36,7 @@ public class MavenClasspathContainerInitializer
         {
             Activator.getLogger().info( "Initializing classpath for " + project.getPath() );
             
-            // TODO : -erle- : This will cause the java heap error, need more investigation on this.
-            //new UpdateClasspathJob( project.getProject() ).schedule();
+            new UpdateClasspathJob( project.getProject() ).schedule();
         }
         //MavenProjectJDTResourceListener.manageMavenProjectJDTResourceListener();
     }

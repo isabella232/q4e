@@ -8,10 +8,10 @@ package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * Updates the Maven classpath container
@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.jobs.Job;
  * @version $Id$
  */
 public class UpdateClasspathJob
-    extends Job
+    extends WorkspaceJob
 {
     private IProject project;
 
@@ -36,7 +36,7 @@ public class UpdateClasspathJob
     }
 
     @Override
-    public IStatus run( IProgressMonitor monitor )
+    public IStatus runInWorkspace( IProgressMonitor monitor )
     {
         MavenClasspathContainer.newClasspath( project );
 

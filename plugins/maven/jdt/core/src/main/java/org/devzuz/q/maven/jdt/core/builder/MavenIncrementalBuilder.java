@@ -73,7 +73,6 @@ public class MavenIncrementalBuilder
                 public void run( IProgressMonitor monitor )
                     throws CoreException
                 {
-                    // TODO create a custom marker type for this plugin
                     pom.deleteMarkers( MavenCoreProblemMarker.getMavenPOMMarker(), false, IResource.DEPTH_ZERO );
                 }
             }.run( monitor );
@@ -83,8 +82,7 @@ public class MavenIncrementalBuilder
             Activator.getLogger().log( ce );
         }
 
-        /* don't schedule the job or will trigger a infinite loop */
-        new UpdateClasspathJob( project ).run( monitor );
+        new UpdateClasspathJob( project ).schedule();
     }
 
     private MavenClasspathContainer getClasspathContainer()
