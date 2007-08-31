@@ -10,6 +10,7 @@
 package org.devzuz.q.internal.maven.wagon;
 
 import org.apache.maven.artifact.manager.WagonManager;
+import org.codehaus.plexus.DefaultPlexusContainer;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
@@ -31,7 +32,7 @@ public class Activator
     // The shared instance
     private static Activator plugin;
 
-    private EclipsePlexusContainer plexusContainer;
+    private DefaultPlexusContainer plexusContainer;
 
     WagonManager wagonManager;
 
@@ -61,7 +62,7 @@ public class Activator
         plugin = this;
         try
         {
-            plexusContainer = new EclipsePlexusContainer();
+            plexusContainer = new DefaultPlexusContainer();
         }
         catch ( Exception e )
         {
