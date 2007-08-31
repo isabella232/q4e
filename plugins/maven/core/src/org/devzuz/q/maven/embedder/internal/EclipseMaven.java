@@ -339,8 +339,7 @@ public class EclipseMaven implements IMaven
             ConfigurationValidationResult validationResult = MavenEmbedder.validateConfiguration(config);
 
             // TODO present the error in a user friendly way
-            // Fail when you have a settings.xml file and it does not parse
-            if ( validationResult.isUserSettingsFilePresent() && !validationResult.isUserSettingsFileParses() )
+            if ( !validationResult.isUserSettingsFilePresent() || !validationResult.isUserSettingsFileParses() )
             {
                 throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, "The settings file is invalid" ) );
             }
