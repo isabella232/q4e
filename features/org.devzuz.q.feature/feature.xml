@@ -2,7 +2,7 @@
 <feature
       id="org.devzuz.q.feature"
       label="%featureName"
-      version="0.2.0.v200708302159"
+      version="0.2.1.qualifier"
       provider-name="%providerName">
 
    <description>
@@ -44,91 +44,91 @@
          id="org.devzuz.q.repository.ui"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.repository.core"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.repository.api"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.jdt.ui"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.jdt.core"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.ui"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.wagon"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.ecf.provider.filetransfer"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.pde.targetplatform"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.wizard"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.bundle.classpath"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.core"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.buckminster.maven"
          download-size="0"
          install-size="0"
-         version="0.2.0.v200708302115"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
