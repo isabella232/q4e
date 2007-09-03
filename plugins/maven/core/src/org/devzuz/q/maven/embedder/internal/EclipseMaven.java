@@ -41,6 +41,7 @@ import org.devzuz.q.maven.embedder.ILocalMavenRepository;
 import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.embedder.IMavenListener;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -114,7 +115,7 @@ public class EclipseMaven implements IMaven
         request.setLoggingLevel( MavenExecutionRequest.LOGGING_LEVEL_DEBUG );
 
         // executeRequest(request);
-        scheduleRequest( baseDirectory, request );
+        scheduleRequest( baseDirectory, request , null );
     }
 
     public void executeGoal( IMavenProject mavenProject, String goal ) throws CoreException
@@ -124,7 +125,13 @@ public class EclipseMaven implements IMaven
 
     public void executeGoal( IMavenProject mavenProject, String goal, Properties properties ) throws CoreException
     {
-        executeGoals( mavenProject, Collections.singletonList( goal ), properties );
+        executeGoal( mavenProject, goal, properties , null );
+    }
+    
+    public void executeGoal( IMavenProject mavenProject, String goal, Properties properties , MavenExecutionJobAdapter jobAdapter ) 
+        throws CoreException
+    {
+        executeGoals( mavenProject, Collections.singletonList( goal ), properties , jobAdapter );
     }
 
     public void executeGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException
@@ -135,9 +142,15 @@ public class EclipseMaven implements IMaven
     public void executeGoals( IMavenProject mavenProject, List<String> goals, Properties properties )
         throws CoreException
     {
+        executeGoals( mavenProject, goals, properties , null );
+    }
+    
+    public void executeGoals( IMavenProject mavenProject, List<String> goals, Properties properties , MavenExecutionJobAdapter jobAdapter )
+        throws CoreException
+    {
         MavenExecutionRequest request = generateRequest( mavenProject, properties );
         request.setGoals( goals );
-        scheduleRequest( mavenProject, request );
+        scheduleRequest( mavenProject, request , jobAdapter );
     }
 
     /**
@@ -150,9 +163,16 @@ public class EclipseMaven implements IMaven
      * @param mavenProject
      *            the maven project on which this execution is being run.
      */
-    public void scheduleRequest( IMavenProject mavenProject, MavenExecutionRequest request )
+    public void scheduleRequest( IMavenProject mavenProject, MavenExecutionRequest request , MavenExecutionJobAdapter jobAdapter )
     {
         EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
+        
+        if ( jobAdapter != null )
+        {
+            jobAdapter.setMavenExecutionJob( eclipseMavenRequest );
+            eclipseMavenRequest.addJobChangeListener( jobAdapter );
+        }
+        
         eclipseMavenRequest.setRule( mavenProject.getProject() );
         eclipseMavenRequest.setPriority( Job.BUILD );
         eclipseMavenRequest.schedule();
@@ -168,9 +188,16 @@ public class EclipseMaven implements IMaven
      * @param request
      *            the description of the execution to be performed.
      */
-    public void scheduleRequest( IPath path, MavenExecutionRequest request )
+    public void scheduleRequest( IPath path, MavenExecutionRequest request , MavenExecutionJobAdapter jobAdapter )
     {
         EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
+        
+        if ( jobAdapter != null )
+        {
+            jobAdapter.setMavenExecutionJob( eclipseMavenRequest );
+            eclipseMavenRequest.addJobChangeListener( jobAdapter );
+        }
+        
         eclipseMavenRequest.setRule( new MavenSchedulingRule() );
         eclipseMavenRequest.setPriority( Job.BUILD );
         eclipseMavenRequest.schedule();

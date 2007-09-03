@@ -93,8 +93,8 @@ public interface IMaven
     /**
      * Allows you to execute a given goal name against a MavenProject.
      * 
-     * This is equivalent to {@link #executeGoal(IMavenProject, String, Properties)}, using <code>null</code> as the
-     * properties argument.
+     * This is equivalent to {@link #executeGoal(IMavenProject, String, Properties )}, 
+     * using <code>null</code> as the properties argument.
      * 
      * @param mavenProject
      * @param goal
@@ -106,8 +106,8 @@ public interface IMaven
     /**
      * Allows you to execute a given goal name against a MavenProject.
      * 
-     * This is equivalent to {@link #executeGoals(IMavenProject, List, Properties)} using a list with a single element
-     * as the second argument.
+     * This is equivalent to {@link #executeGoal(IMavenProject mavenProject, String goal, Properties properties , MavenExecutionJobAdapter jobAdapter)} 
+     * using <code>null</code> as the jobAdapter argument.
      * 
      * @param mavenProject
      * @param goal
@@ -117,6 +117,24 @@ public interface IMaven
      * @throws CoreException
      */
     public void executeGoal( IMavenProject mavenProject, String goal, Properties properties ) throws CoreException;
+    
+    /**
+     * Allows you to execute a given goal name against a MavenProject.
+     * 
+     * This is equivalent to {@link #executeGoals(IMavenProject, List, Properties, MavenExecutionJobAdapter)} using a list with a single element
+     * as the second argument.
+     * 
+     * @param mavenProject
+     * @param goal
+     *            goal name
+     * @param properties
+     *            properties of this goal
+     * @param jobAdapter
+     *            listener to the thread that executes the maven goal           
+     * @throws CoreException
+     */
+    public void executeGoal( IMavenProject mavenProject, String goal, Properties properties , MavenExecutionJobAdapter jobAdapter ) 
+        throws CoreException;
 
     /**
      * Allows you to execute several goals against a MavenProject.
@@ -134,14 +152,32 @@ public interface IMaven
     /**
      * Allows you to execute several goals against a MavenProject.
      * 
+     * This is equivalent to {@link #executeGoals(IMavenProject, List, Properties, MavenExecutionJobAdapter)}, 
+     * using <code>null</code> as the jobAdapter argument.
+     *
      * @param mavenProject
-     * @param goals
+     * @param goals 
      *            list of goals to execute
      * @param properties
      *            properties of this goal. Might be <code>null</code> when no properties are used.
      * @throws CoreException
      */
     public void executeGoals( IMavenProject mavenProject, List<String> goals, Properties properties )
+        throws CoreException;
+    
+    /**
+     * Allows you to execute several goals against a MavenProject.
+     * 
+     * @param mavenProject
+     * @param goals 
+     *            list of goals to execute
+     * @param properties
+     *            properties of this goal. Might be <code>null</code> when no properties are used.
+     * @param jobAdapter
+     *            listener to the thread that executes the maven goal 
+     * @throws CoreException
+     */
+    public void executeGoals( IMavenProject mavenProject, List<String> goals, Properties properties , MavenExecutionJobAdapter jobAdapter )
         throws CoreException;
 
     /**

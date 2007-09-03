@@ -12,6 +12,7 @@ import java.io.PrintStream;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.devzuz.q.maven.embedder.Activator;
+import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.internal.stream.EclipseMavenErrorEventPropagator;
 import org.devzuz.q.maven.embedder.internal.stream.EclipseMavenInfoEventPropagator;
 import org.devzuz.q.maven.embedder.internal.stream.MavenThreadPrintStream;
@@ -32,6 +33,8 @@ public class EclipseMavenRequest extends Job
     private EclipseMaven maven;
 
     private MavenExecutionRequest request;
+    
+    private IMavenExecutionResult executionResult; 
 
     public EclipseMavenRequest( String name, EclipseMaven maven, MavenExecutionRequest request )
     {
@@ -43,7 +46,6 @@ public class EclipseMavenRequest extends Job
     @Override
     protected IStatus run( IProgressMonitor monitor )
     {
-
         // TODO the number should be the number of projects in the reactor * maven phases to execute
         monitor.beginTask( "Maven build", 100 );
         monitor.setTaskName( "Maven " + request.getGoals() );
@@ -68,13 +70,14 @@ public class EclipseMavenRequest extends Job
                                                                                              err ), err ) );
 
             MavenExecutionResult status = this.maven.executeRequest( this.request );
+            executionResult = new EclipseMavenExecutionResult( status );
             if ( ( status.getExceptions() != null ) && ( status.getExceptions().size() > 0 ) )
             {
                 // TODO somehow store all exceptions and not just the first one
                 return new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Errors during Maven execution",
                                    (Exception) status.getExceptions().get( 0 ) );
             }
-
+            
             return new Status( IStatus.OK, Activator.PLUGIN_ID, "Success" );
         }
         finally
@@ -87,5 +90,9 @@ public class EclipseMavenRequest extends Job
             monitor.done();
         }
     }
-
+    
+    public IMavenExecutionResult getExecutionResult()
+    {
+        return executionResult;
+    }
 }
