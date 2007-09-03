@@ -253,8 +253,16 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 
     private void widgetEvent( SelectionEvent e )
     {
-        archetypeDescriptionLabel.setText( archetypeMap.get( archetypeList.getSelection()[0] ).getDescription() );
-        setPageComplete( true );
+        if ( archetypeList.getSelection().length == 1 )
+        {
+            archetypeDescriptionLabel.setText( archetypeMap.get( archetypeList.getSelection()[0] ).getDescription() );
+            setPageComplete( true );
+        }
+        else
+        {
+            archetypeDescriptionLabel.setText( "No archetype selected" ); // TODO: Externalize message.
+            setPageComplete( false );
+        }
     }
 
     static private void setEnableChildren( Composite parent, boolean flag )
