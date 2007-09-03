@@ -1,0 +1,180 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="org.devzuz.q.maven.wizard">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="org.devzuz.q.maven.wizard" id="org.devzuz.q.maven.wizard.archetypeExtender" name="Archetype Extenders"/>
+      </appInfo>
+      <documentation>
+         This extension point allows to provide additional processing after creating a new project based on Maven Archerypes.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <choice minOccurs="1" maxOccurs="unbounded">
+            <element ref="config-factory"/>
+            <element ref="archetype"/>
+         </choice>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="page">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.devzuz.q.maven.wizard.ui.IMavenWizardPage"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="config" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="archetype">
+      <complexType>
+         <choice minOccurs="1" maxOccurs="unbounded">
+            <element ref="page"/>
+            <element ref="postprocessor"/>
+         </choice>
+         <attribute name="artifact" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Artifact ID of the archetype that will be affected by this extension (i.e. maven-archetype-quickstart or appfuse-basic-jsf).
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="group" type="string">
+            <annotation>
+               <documentation>
+                  Group ID of the archetype that will be affected by this extension (i.e. org.apache.maven.archetypes or org.appfuse).
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="config-factory">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.devzuz.q.maven.wizard.config.core.IWizardConfigFactory"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="postprocessor">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":org.devzuz.q.maven.wizard.postprocessor.core.IMavenProjectPostprocessor"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="config" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+</schema>

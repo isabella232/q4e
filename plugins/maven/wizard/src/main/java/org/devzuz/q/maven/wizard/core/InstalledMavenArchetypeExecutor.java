@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
 import org.eclipse.core.runtime.CoreException;
@@ -19,11 +20,11 @@ import org.eclipse.core.runtime.IPath;
 /**
  * @deprecated use {@link Maven2EmbedderArchetypeExecutor}
  */
-public class InstalledMavenArchetypeExecutor
-    implements IArchetypeExecutor
+@Deprecated
+public class InstalledMavenArchetypeExecutor implements IArchetypeExecutor
 {
     public void executeArchetype( Archetype archetype, IPath baseDir, String groupId, String artifactId,
-                                  String version, String packageName )
+                                  String version, String packageName, IMavenWizardContext wizardContext )
         throws CoreException
     {
         List<String> margs = new ArrayList<String>();
@@ -45,10 +46,15 @@ public class InstalledMavenArchetypeExecutor
         if ( archetype.getRemoteRepositories().length() > 0 )
             margs.add( "-DremoteRepositories=" + archetype.getRemoteRepositories() );
 
+        for ( Map.Entry entry : wizardContext.getArchetypeCreationProperties().entrySet() )
+        {
+            margs.add( "-D" + entry.getKey() + "=" + entry.getValue() );
+        }
+
         if ( isRunningWindows() )
             margs.set( 0, "mvn.bat" );
 
-        exec( (String[]) margs.toArray( new String[] {} ) );
+        exec( margs.toArray( new String[] {} ) );
     }
 
     static int exec( String[] args )
@@ -59,13 +65,13 @@ public class InstalledMavenArchetypeExecutor
             proc = Runtime.getRuntime().exec( args );
             InputStream pin = proc.getInputStream();
             BufferedInputStream bin = new BufferedInputStream( pin );
-            //BufferedOutputStream bout = new BufferedOutputStream( System.out );
+            // BufferedOutputStream bout = new BufferedOutputStream( System.out );
             int c;
             byte[] buffer = new byte[256];
             while ( ( c = bin.read( buffer ) ) != -1 )
             {
-                //bout.write( buffer, 0, c );
-                //bout.flush();
+                // bout.write( buffer, 0, c );
+                // bout.flush();
                 System.out.write( buffer, 0, c );
                 System.out.flush();
             }

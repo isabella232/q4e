@@ -7,26 +7,34 @@
 package org.devzuz.q.maven.wizard.projectwizard;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
+import java.util.List;
 
 import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
 import org.devzuz.q.maven.wizard.Activator;
 import org.devzuz.q.maven.wizard.core.Maven2ArchetypeManager;
+import org.devzuz.q.maven.wizard.core.internal.MavenWizardContext;
 import org.devzuz.q.maven.wizard.pages.Maven2ProjectArchetypeInfoPage;
 import org.devzuz.q.maven.wizard.pages.Maven2ProjectChooseArchetypePage;
 import org.devzuz.q.maven.wizard.pages.Maven2ProjectLocationPage;
+import org.devzuz.q.maven.wizard.pages.core.internal.WizardPageExtensionUtil;
+import org.devzuz.q.maven.wizard.pages.ui.IMavenWizardPage;
+import org.devzuz.q.maven.wizard.postprocessor.core.IMavenProjectPostprocessor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-public class Maven2ProjectWizard
-    extends Wizard
-    implements INewWizard
+public class Maven2ProjectWizard extends Wizard implements INewWizard
 {
+    /** Number of pages created by the wizard for the default case (no extra pages) . */
+    private static final int DEFAULT_PAGE_COUNT = 3;
+
     private Maven2ProjectLocationPage locationPage;
 
     private Maven2ProjectChooseArchetypePage archetypePage;
@@ -48,6 +56,9 @@ public class Maven2ProjectWizard
     private String version = "";
 
     private String description = "";
+
+    /** Holds the current wizard context, shared with every extension page */
+    private MavenWizardContext wizardContext = new MavenWizardContext();
 
     @Override
     public void addPages()
@@ -77,13 +88,16 @@ public class Maven2ProjectWizard
         {
             getContainer().run( true, true, new IRunnableWithProgress()
             {
-                public void run( IProgressMonitor monitor )
-                    throws InvocationTargetException, InterruptedException
+                public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                 {
                     try
                     {
+                        monitor.setTaskName( "Invoking maven to create the archetype" );
+                        List<IMavenProjectPostprocessor> postProcessors =
+                            WizardPageExtensionUtil.getPostProcessors( archetype, wizardContext );
+                        wizardContext.setPostProcessors( postProcessors );
                         Maven2ArchetypeManager.executeArchetype( archetype, projectPath, groupID, artifactID, version,
-                                                                 packageName );
+                                                                 packageName, wizardContext );
                     }
                     catch ( CoreException e )
                     {
@@ -99,7 +113,7 @@ public class Maven2ProjectWizard
         }
         catch ( InterruptedException e )
         {
-            // User canceled, so stop but don't close wizard. 
+            // User canceled, so stop but don't close wizard.
             return false;
         }
 
@@ -113,14 +127,9 @@ public class Maven2ProjectWizard
 
     /* Commented due to Eclipse having unstable API. This should be changed when 3.3 is finalized. */
     /*
-    public void pageTransition(PageTransitionEvent event)
-    {
-        if( event.getType() == PageTransitionEvent.EVENT_NEXT && 
-            event.getSelectedPage() == locationPage)
-        {
-            setArchetypeInfoUIElements();
-        }
-    }*/
+     * public void pageTransition(PageTransitionEvent event) { if( event.getType() == PageTransitionEvent.EVENT_NEXT &&
+     * event.getSelectedPage() == locationPage) { setArchetypeInfoUIElements(); } }
+     */
 
     public void setProjectInfo()
     {
@@ -132,4 +141,59 @@ public class Maven2ProjectWizard
         archetypeInfoPage.setPackageName( projectName );
     }
 
+    @Override
+    public IWizardPage getNextPage( IWizardPage page )
+    {
+        if ( archetypeInfoPage == page )
+        {
+            addExtraPages();
+        }
+        return super.getNextPage( page );
+    }
+
+    @Override
+    public IWizardPage getPreviousPage( IWizardPage page )
+    {
+        /*
+         * The eclipse wizard API does not allow removing pages from a wizard, so we must disallow going back to the
+         * archetype selection page, which might require a different set of pages.
+         */
+        if ( page instanceof IMavenWizardPage )
+        {
+            /* check if it is the first of the added pages. */
+            List<IWizardPage> pages = Arrays.asList( getPages() );
+            int index = pages.indexOf( page );
+            if ( DEFAULT_PAGE_COUNT == index )
+            {
+                return null;
+            }
+        }
+        return super.getPreviousPage( page );
+    }
+
+    /**
+     * Appends the extra pages provided by extensions to this wizard list of pages.
+     */
+    private void addExtraPages()
+    {
+        if ( getPageCount() > DEFAULT_PAGE_COUNT )
+        {
+            /* Extra pages already added. */
+            return;
+        }
+        try
+        {
+            Archetype selectedArchetype = archetypePage.getArchetype();
+            List<IMavenWizardPage> extraPages =
+                WizardPageExtensionUtil.getExtraPages( selectedArchetype, wizardContext );
+            for ( IMavenWizardPage extraPage : extraPages )
+            {
+                addPage( extraPage );
+            }
+        }
+        catch ( CoreException e )
+        {
+            Activator.getLogger().log( e );
+        }
+    }
 }

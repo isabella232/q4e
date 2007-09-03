@@ -21,11 +21,12 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 
-public class ScanImportProjectJob
-    extends Job
+public class ScanImportProjectJob extends Job
 {
 
     private File directory;
+
+    private Collection<IMavenProject> mavenProjects;
 
     public ScanImportProjectJob( File directory )
     {
@@ -37,7 +38,6 @@ public class ScanImportProjectJob
     protected IStatus run( IProgressMonitor monitor )
     {
         ProjectScanner scanner = new ProjectScanner();
-        final Collection<IMavenProject> mavenProjects;
         try
         {
             mavenProjects = scanner.scanFolder( directory, monitor );
@@ -71,8 +71,7 @@ public class ScanImportProjectJob
     /**
      * Do the workspace operations inside a batch to avoid refreshes during the process
      */
-    private class ImportProjectsRunnable
-        implements IWorkspaceRunnable
+    private class ImportProjectsRunnable implements IWorkspaceRunnable
     {
 
         private IStatus status;
@@ -84,8 +83,7 @@ public class ScanImportProjectJob
             this.mavenProjects = mavenProjects;
         }
 
-        public void run( IProgressMonitor monitor )
-            throws CoreException
+        public void run( IProgressMonitor monitor ) throws CoreException
         {
             ImportProjectJob job = new ImportProjectJob( mavenProjects );
             status = job.run( monitor );
@@ -96,5 +94,16 @@ public class ScanImportProjectJob
             return status;
         }
 
+    }
+
+    /**
+     * Retrieves the collection of maven projects that have been found after the job completes. The outcome of calling
+     * this method before the job finishes is not defined.
+     * 
+     * @return the collection of maven projects.
+     */
+    public Collection<IMavenProject> getMavenProjects()
+    {
+        return mavenProjects;
     }
 }

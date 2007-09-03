@@ -18,7 +18,7 @@ public class Maven2ArchetypeManager
     {
         if ( archetypeExecutor == null )
         {
-            //archetypeExecutor = new InstalledMavenArchetypeExecutor();
+            // archetypeExecutor = new InstalledMavenArchetypeExecutor();
             archetypeExecutor = new Maven2EmbedderArchetypeExecutor();
         }
 
@@ -26,11 +26,11 @@ public class Maven2ArchetypeManager
     }
 
     static public void executeArchetype( Archetype archetype, IPath baseDir, String groupId, String artifactId,
-                                         String version, String packageName )
+                                         String version, String packageName, IMavenWizardContext wizardContext )
         throws CoreException
     {
         IArchetypeExecutor executor = getArchetypeExecutor();
 
-        executor.executeArchetype( archetype, baseDir, groupId, artifactId, version, packageName );
+        executor.executeArchetype( archetype, baseDir, groupId, artifactId, version, packageName, wizardContext );
     }
 }
