@@ -46,20 +46,19 @@ public class Activator
         super.start( context );
         logger = new EclipseLogger( PLUGIN_ID, this.getLog() );
 
-//        iResourceListener = new MavenProjectJDTResourceListener();
-//        ResourcesPlugin.getWorkspace().addResourceChangeListener(iResourceListener,
-//                                                                 IResourceChangeEvent.PRE_CLOSE
-//                                                                 | IResourceChangeEvent.PRE_DELETE
-//                                                                 | IResourceChangeEvent.POST_CHANGE
-//                                                                 );
+        iResourceListener = new MavenProjectJDTResourceListener();
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(iResourceListener,
+                                                                 IResourceChangeEvent.PRE_CLOSE
+                                                                 | IResourceChangeEvent.PRE_DELETE
+                                                                 );
     }
 
     public void stop( BundleContext context )
         throws Exception
     {
         plugin = null;
-//        ResourcesPlugin.getWorkspace().removeResourceChangeListener(iResourceListener);
-//        iResourceListener = null;
+        ResourcesPlugin.getWorkspace().removeResourceChangeListener(iResourceListener);
+        iResourceListener = null;
         super.stop( context );
     }
 
