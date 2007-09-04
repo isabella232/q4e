@@ -69,32 +69,33 @@ public class MavenProjectJDTResourceListener
     {    	
     	String [] strDataProcNodeList = {""};
     	String strProjectInfoData = "";
-    
-    	MavenPOMParser mpp = new MavenPOMParser(iproject.getFile("pom.xml").getLocation().toFile());
     	
-    	mpp.parsePOMFile("/pre:project/pre:artifactId/text()");
-    	strDataProcNodeList = mpp.processNodeList();
-    	if(strDataProcNodeList.length > 1)
+    	if(iproject.getFile("pom.xml").exists())
     	{
-    	    strProjectInfoData = strProjectInfoData + strDataProcNodeList[0] + "-";
+    	    MavenPOMParser mpp = new MavenPOMParser(iproject.getFile("pom.xml").getLocation().toFile());
+    	        
+	        mpp.parsePOMFile("/pre:project/pre:artifactId/text()");
+	        strDataProcNodeList = mpp.processNodeList();
+	        if(strDataProcNodeList.length > 1)
+	        {
+	            strProjectInfoData = strProjectInfoData + strDataProcNodeList[0] + "-";
+	        }
+
+	        mpp.parsePOMFile("/pre:project/pre:version/text()");
+	        strDataProcNodeList = mpp.processNodeList();
+	        if(strDataProcNodeList.length > 1)
+	        {
+	            strProjectInfoData = strProjectInfoData + strDataProcNodeList[0] + ".";
+	        }
+
+	        mpp.parsePOMFile("/pre:project/pre:packaging/text()");
+	        strDataProcNodeList = mpp.processNodeList();
+	        if(strDataProcNodeList.length > 1)
+	        {
+	            strProjectInfoData = strProjectInfoData + strDataProcNodeList[0];     
+	        }   	    
     	}
-
-    	mpp.parsePOMFile("/pre:project/pre:version/text()");
-    	strDataProcNodeList = mpp.processNodeList();
-        if(strDataProcNodeList.length > 1)
-        {
-            strProjectInfoData = strProjectInfoData + strDataProcNodeList[0] + ".";
-        }
-
-    	mpp.parsePOMFile("/pre:project/pre:packaging/text()");
-    	strDataProcNodeList = mpp.processNodeList();
-        if(strDataProcNodeList.length > 1)
-        {
-            strProjectInfoData = strProjectInfoData + strDataProcNodeList[0];     
-        }
-    	
     	return strProjectInfoData;
-    	
     }
     
 }
