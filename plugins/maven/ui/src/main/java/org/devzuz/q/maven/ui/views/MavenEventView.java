@@ -10,6 +10,8 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.util.Observable;
 import java.util.Observer;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.devzuz.q.maven.embedder.IMavenEvent;
 import org.devzuz.q.maven.embedder.MavenManager;
@@ -242,7 +244,8 @@ public class MavenEventView extends ViewPart implements Observer
         }
         // For performance, avoid refreshing when the event will not be displayed
         MavenEventStore store = (MavenEventStore) o;
-        IMavenEvent lastEvent = store.getEvents()[store.getEvents().length - 1];
+        IMavenEvent[] events = store.getEvents();
+        IMavenEvent lastEvent = events[events.length - 1];
         if ( !severityFilter.select( lastEvent ) )
         {
             // The event will not be displayed, skip update.
