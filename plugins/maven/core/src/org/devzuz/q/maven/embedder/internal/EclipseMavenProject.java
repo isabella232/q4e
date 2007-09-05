@@ -79,6 +79,21 @@ public class EclipseMavenProject implements IMavenProject
         this.baseDirectory = project.getLocation().toFile();
         this.pomFile = new File( project.getLocation().toOSString() + "/" + POM_FILENAME );
     }
+    
+    /**
+     * Build a Maven project from a MavenProject
+     * 
+     * @param artifact
+     *            Maven artifact
+     */
+    public EclipseMavenProject( MavenProject project )
+    {
+        this.mavenEnvironment = new EclipseMavenProjectEnvironment();
+        this.pomFile = project.getFile();
+        this.baseDirectory = project.getBasedir();
+        this.refreshProject( project );
+        this.refreshDependencies( project );
+    }
 
     /**
      * Build a Maven project from an Artifact

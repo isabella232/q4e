@@ -9,9 +9,6 @@ package org.devzuz.q.maven.embedder;
 
 import java.util.List;
 
-import org.apache.maven.execution.ReactorManager;
-import org.apache.maven.project.MavenProject;
-
 /**
  * @author emantos
  *
@@ -19,9 +16,7 @@ import org.apache.maven.project.MavenProject;
 
 public interface IMavenExecutionResult
 {
-    public MavenProject getMavenProject();
+    public IMavenProject getMavenProject();
 
-    public ReactorManager getReactorManager();
-    
     public List<Exception> getExceptions();
 }

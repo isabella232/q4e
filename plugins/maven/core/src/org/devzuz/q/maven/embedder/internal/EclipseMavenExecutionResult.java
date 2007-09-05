@@ -10,9 +10,8 @@ package org.devzuz.q.maven.embedder.internal;
 import java.util.List;
 
 import org.apache.maven.execution.MavenExecutionResult;
-import org.apache.maven.execution.ReactorManager;
-import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
+import org.devzuz.q.maven.embedder.IMavenProject;
 
 /**
  * @author emantos
@@ -22,14 +21,12 @@ import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 public class EclipseMavenExecutionResult implements IMavenExecutionResult
 {
     private List<Exception> exceptions;
-    private MavenProject mavenProject;
-    private ReactorManager reactorManager;
+    private IMavenProject mavenProject;
     
     public EclipseMavenExecutionResult( MavenExecutionResult result )
     {
         setExceptions( result.getExceptions() );
-        setReactorManager( result.getReactorManager() );
-        setMavenProject( result.getMavenProject() );
+        setMavenProject( new EclipseMavenProject( result.getMavenProject() ) );
     }
     
     public List<Exception> getExceptions()
@@ -37,28 +34,18 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
         return exceptions;
     }
 
-    public MavenProject getMavenProject()
+    public IMavenProject getMavenProject()
     {
         return mavenProject;
     }
 
-    public ReactorManager getReactorManager()
-    {
-        return reactorManager;
-    }
-    
     public void setExceptions( List<Exception> exceptions )
     {
         this.exceptions = exceptions;
     }
 
-    public void setMavenProject( MavenProject project )
+    public void setMavenProject( IMavenProject project )
     {
         this.mavenProject = project;
-    }
-    
-    public void setReactorManager( ReactorManager reactorManager )
-    {
-        this.reactorManager = reactorManager;
     }
 }
