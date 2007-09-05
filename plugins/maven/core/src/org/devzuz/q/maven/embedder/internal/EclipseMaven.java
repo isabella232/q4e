@@ -42,6 +42,7 @@ import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.embedder.IMavenListener;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
+import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -274,16 +275,13 @@ public class EclipseMaven implements IMaven
         {
             if ( resolveTransitively )
             {
-                MavenExecutionResult status =
+                MavenExecutionResult status = 
                     mavenEmbedder.readProjectWithDependencies( generateRequest( mavenProject, null ) );
-                if ( ( status.getExceptions() != null ) && ( status.getExceptions().size() > 0 ) )
+                if( status.hasExceptions() )
                 {
-                    if ( status.getExceptions().get( 0 ) instanceof MultipleArtifactsNotFoundException )
-                    {
-                        // TODO do something different to show user missing dependencies
-                    }
-                    throw new QCoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Unable to read project",
-                                                         (Exception) status.getExceptions().get( 0 ) ) );
+                    throw new QCoreException( new MavenExecutionStatus ( IStatus.ERROR, Activator.PLUGIN_ID, 
+                                                                         "Unable to read project",
+                                                                         new EclipseMavenExecutionResult( status ) ) );
                 }
                 // TODO should we call refreshProject?
                 // -erle- : I think we should, otherwise, I can't get the mavenProject object, it is null.

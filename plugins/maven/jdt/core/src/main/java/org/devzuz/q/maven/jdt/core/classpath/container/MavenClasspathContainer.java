@@ -8,13 +8,18 @@ package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
+import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
 import org.eclipse.core.resources.IProject;
@@ -74,7 +79,7 @@ public class MavenClasspathContainer
      * 
      * @param mavenProject
      */
-    private void refreshClasspath( IMavenProject mavenProject )
+    private void refreshClasspath( IMavenProject mavenProject , Set<IMavenArtifact> artifacts )
     {
         if ( mavenProject != null )
         {
@@ -82,7 +87,6 @@ public class MavenClasspathContainer
 
             this.mavenProject = mavenProject;
             this.project = mavenProject.getProject();
-            final Set<IMavenArtifact> artifacts = mavenProject.getArtifacts();
             
             classpathEntries.clear();
             resolveArtifacts( classpathEntries, artifacts, getWorkspaceProjects() );
@@ -106,11 +110,43 @@ public class MavenClasspathContainer
         {
             IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, true );
             
-            container.refreshClasspath( mavenProject );
+            container.refreshClasspath( mavenProject , mavenProject.getArtifacts() );
         }
         catch ( CoreException e )
         {
-            MavenExceptionHandler.handle( project, e );
+            /* 
+             * If it is an exception from maven, try to see if it is due to missing dependencies.
+             * If it is, try to check if those missing dependencies are projects in the workspace,
+             * If it is, add it as a project dependency. 
+             */
+            if( e.getStatus() instanceof MavenExecutionStatus )
+            {
+                MavenExecutionStatus status = (MavenExecutionStatus) e.getStatus();
+                IMavenExecutionResult result = status.getMavenExecutionResult();
+                List< Exception > exceptions = result.getExceptions();
+                if( ( exceptions != null ) && ( exceptions.size() > 0 ) )
+                {
+                    for( Exception exception : exceptions )
+                    {
+                        if( exception instanceof MultipleArtifactsNotFoundException )
+                        {
+                            Set<IMavenArtifact> artifactToBeResolved = new LinkedHashSet<IMavenArtifact>();
+                            artifactToBeResolved.addAll( MavenUtils.getMissingArtifacts( ( MultipleArtifactsNotFoundException ) exception ) );
+                            artifactToBeResolved.addAll( MavenUtils.getResolvedArtifacts( ( MultipleArtifactsNotFoundException ) exception ) );
+                            
+                            container.refreshClasspath( result.getMavenProject() , artifactToBeResolved );
+                        }
+                        else
+                        {
+                            MavenExceptionHandler.handle( project, e );
+                        }
+                    }
+                }
+            }
+            else
+            {
+                MavenExceptionHandler.handle( project, e );
+            }
         }
 
         try
@@ -199,6 +235,11 @@ public class MavenClasspathContainer
         {
             return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ), sourcePath, null,
                                              new IAccessRule[0], attributes, false );
+        }
+        else
+        {
+            // TODO : Raise error that a dependency was not added
+            
         }
         
         return null;

@@ -16,6 +16,7 @@ import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.Logger;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -199,7 +200,7 @@ public class EclipseMavenProject implements IMavenProject
         {
             if ( obj instanceof DefaultArtifact )
             {
-                IMavenArtifact mavenArtifact = createMavenArtifact( (DefaultArtifact) obj );
+                IMavenArtifact mavenArtifact = MavenUtils.createMavenArtifact( (DefaultArtifact) obj );
                 allArtifacts.add( mavenArtifact );
             }
         }
@@ -208,7 +209,7 @@ public class EclipseMavenProject implements IMavenProject
         {
             if ( obj instanceof DefaultArtifact )
             {
-                IMavenArtifact mavenArtifact = createMavenArtifact( (DefaultArtifact) obj );
+                IMavenArtifact mavenArtifact = MavenUtils.createMavenArtifact( (DefaultArtifact) obj );
                 addThroughDependencyTrail( mavenRawProject, mavenArtifact, (DefaultArtifact) obj );
             }
         }
@@ -277,19 +278,6 @@ public class EclipseMavenProject implements IMavenProject
                 return existingArtifact;
         }
         return resolvedArtifact;
-    }
-
-    private IMavenArtifact createMavenArtifact( DefaultArtifact defaultArtifact )
-    {
-        IMavenArtifact artifact = new EclipseMavenArtifact();
-        artifact.setArtifactId( defaultArtifact.getArtifactId() );
-        artifact.setGroupId( defaultArtifact.getGroupId() );
-        artifact.setId( defaultArtifact.getId() );
-        artifact.setVersion( defaultArtifact.getVersion() );
-        artifact.setFile( defaultArtifact.getFile() );
-        artifact.setAddedToClasspath( defaultArtifact.getArtifactHandler().isAddedToClasspath() );
-        // System.out.println("Created Artifact "+artifact);
-        return artifact;
     }
 
     public Set<IMavenArtifact> getArtifacts()
