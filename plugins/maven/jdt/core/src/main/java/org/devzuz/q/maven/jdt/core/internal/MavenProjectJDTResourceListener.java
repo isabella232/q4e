@@ -27,21 +27,25 @@ public class MavenProjectJDTResourceListener
     	boolean eventFlag = false;
         IResource ires = event.getResource();    
         
-        switch (event.getType())
+        if(ires.getProject().getFile( "pom.xml" ).exists())
         {
-           case IResourceChangeEvent.PRE_CLOSE:               
-        	   eventFlag = true;
-        	   break;  
-               
-           case IResourceChangeEvent.PRE_DELETE:                 
-        	   eventFlag = true;
-        	   break;                    
-         }
-        
-        if(eventFlag)
-        {
-        	classPathChangeUpdater(ires);
+            switch (event.getType())
+            {
+               case IResourceChangeEvent.PRE_CLOSE:               
+                   eventFlag = true;
+                   break;  
+                   
+               case IResourceChangeEvent.PRE_DELETE:                 
+                   eventFlag = true;
+                   break;                    
+             }
+            
+            if(eventFlag)
+            {
+                classPathChangeUpdater(ires);
+            }
         }
+        
     }
     
     private void classPathChangeUpdater(IResource ires)
