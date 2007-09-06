@@ -37,6 +37,7 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
     public MavenPomPropertiesModuleFormPage( FormEditor editor, String id, String title )
     {
         super( editor, id, title );
+        
     }
     
     @Override
@@ -51,6 +52,7 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         };
         
         FormToolkit toolkit = managedForm.getToolkit();
+        
         form = managedForm.getForm();
         
         form.getBody().setLayout( new GridLayout( 2 , false ) );

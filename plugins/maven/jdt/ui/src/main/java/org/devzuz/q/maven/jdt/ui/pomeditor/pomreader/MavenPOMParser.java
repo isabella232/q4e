@@ -27,7 +27,7 @@ public class MavenPOMParser
 
     private File pomFile;
     
-    private static NodeList xPathNodeList;
+    private NodeList xPathNodeList;
     
     public MavenPOMParser(File pomFileLocation)
     {
@@ -46,19 +46,14 @@ public class MavenPOMParser
             DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
             dbf.setNamespaceAware(true);
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document docPOMFile = db.parse(getPOMFile()); 
+            Document docPOMFile = db.parse(getPOMFile());
             XPathFactory xPathFactory = XPathFactory.newInstance();
             XPath xPath = xPathFactory.newXPath();
             xPath.setNamespaceContext(new MavenNameSpaceContext());
             XPathExpression expr = xPath.compile(strExpression);
             Object result = expr.evaluate(docPOMFile, XPathConstants.NODESET);
             xPathNodeList = (NodeList) result;
-/*            
- *          for (int i = 0; i < xPathNodeList.getLength(); i++) 
-            {
-                System.out.println("item :" + i + xPathNodeList.item(i).getNodeValue()); 
-            }
-            */
+            
         }
         catch(ParserConfigurationException pce)
         {

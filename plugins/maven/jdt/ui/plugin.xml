@@ -101,6 +101,7 @@
       <editor
             class="org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomFormEditor"
             contributorClass="org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomEditorActionBarContributor"
+            default="true"
             extensions="xml"
             filenames="pom.xml"
             icon="src/main/resources/icons/Maven_M(16)-TP.gif"

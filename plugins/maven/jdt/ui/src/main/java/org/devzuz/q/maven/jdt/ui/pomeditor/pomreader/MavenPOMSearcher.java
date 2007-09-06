@@ -13,7 +13,11 @@ public class MavenPOMSearcher
     
     public MavenPOMSearcher(String strPOMLocation)     
     {
-        this.strPOMLocation = strPOMLocation.replace( "/pom.xml", "" ).replace( "/", "" ).trim();
+        String [] strTemp = strPOMLocation.split( "/" );
+        if(strTemp.length > 0) 
+        {
+            this.strPOMLocation = strTemp[1];
+        }
     }
 
     public IPath getProjectPOMFilePath()
@@ -21,15 +25,14 @@ public class MavenPOMSearcher
         IProject[] projects  = getWorkBenchProjects();  
         if(projects.length > 0 || projects != null) 
         {
-            for (int i = 0; i  < projects.length ; i++)
+            for (IProject project :  projects)
             {
-                if(projects[i].isOpen() && isValidMavenProject(projects[i])) 
+                if(project.isOpen() && isValidMavenProject(project)) 
                 {
-                    String strTemp = projects[i].getFullPath().toOSString();
-                    String strToProcess = strTemp.replace( "\\", "" ).trim();                
-                    if(strToProcess.equals( getPOMFileLocation()))
+                    String strTemp = project.getName();
+                    if(strTemp.equals( getPOMFileLocation()))
                     {
-                        return getPOMFileLocation(projects[i]);
+                        return getPOMFileLocation(project);
                     }
                 }
             }

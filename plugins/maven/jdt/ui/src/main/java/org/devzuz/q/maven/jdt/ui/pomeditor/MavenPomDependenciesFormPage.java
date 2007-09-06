@@ -6,7 +6,10 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
+import java.io.File;
+
 import org.devzuz.q.maven.jdt.ui.Messages;
+import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPOMFormPageData;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -17,6 +20,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -29,14 +34,19 @@ public class MavenPomDependenciesFormPage extends FormPage
 {
     private ScrolledForm form;
     
+    private File fPOMLocation;
+    
+    private Table propertiesTable;
+    
     public MavenPomDependenciesFormPage( String id, String title )
     {
         super( id, title );
     }
 
-    public MavenPomDependenciesFormPage( FormEditor editor, String id, String title )
+    public MavenPomDependenciesFormPage( FormEditor editor, String id, String title, File fPOMLocation)
     {
         super( editor, id, title );
+        this.fPOMLocation = fPOMLocation;
     }
 
     @Override
@@ -66,14 +76,14 @@ public class MavenPomDependenciesFormPage extends FormPage
         
         container.setLayout( new GridLayout( 2, false ) );
         
-        Table propertiesTable = toolKit.createTable( container , SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
+        propertiesTable = toolKit.createTable( container , SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
         propertiesTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
         propertiesTable.setLinesVisible( true );
         propertiesTable.setHeaderVisible( true );
         
-        /*TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0 );
-        column.setText( Messages.getString("MavenPomEditor_MavenPomEditor_Key") );
-        column.setWidth( 100 );*/
+        TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0);
+        column.setWidth( 220 );
+        column.setText( "Dependencies" );
 
         Composite container2 = toolKit.createComposite( container );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -90,7 +100,31 @@ public class MavenPomDependenciesFormPage extends FormPage
         
         toolKit.paintBordersFor( parent );
         
+        generateDependencyTableData();
+       
         return container;
+    }
+    
+    private void generateDependencyTableData()
+    {
+        MavenPOMFormPageData mpmfpd = new MavenPOMFormPageData(getPOMLocation());
+        String strDataProcNodeList_artifact [] = {""};
+        String strDataProcNodeList_version [] = {""};
+        
+        mpmfpd.doXPathExpression( "/pre:project/pre:dependencies/pre:dependency/pre:version/text()" );
+        strDataProcNodeList_version = mpmfpd.processNodeList();
+        
+        mpmfpd.doXPathExpression( "/pre:project/pre:dependencies/pre:dependency/pre:artifactId/text()" );
+        strDataProcNodeList_artifact = mpmfpd.processNodeList();
+        
+        
+               
+        for(int x = 0; x < strDataProcNodeList_artifact.length ; x++)
+        {
+            TableItem item = new TableItem( propertiesTable, SWT.BEGINNING);
+            item.setText(new String [] {strDataProcNodeList_artifact[x]+"-"+ strDataProcNodeList_version[x]+".jar"});
+            System.out.println(strDataProcNodeList_artifact[x]+"-"+ strDataProcNodeList_version[x]+".jar");
+        }    
     }
     
     private Control createDependencyDetailControls( Composite container , FormToolkit toolKit )
@@ -209,5 +243,10 @@ public class MavenPomDependenciesFormPage extends FormPage
         toolKit.paintBordersFor( container );
         
         return container;
+    }
+    
+    public File getPOMLocation()
+    {
+        return this.fPOMLocation;
     }
 }

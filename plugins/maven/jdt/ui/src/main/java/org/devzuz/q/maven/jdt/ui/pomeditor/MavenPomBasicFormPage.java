@@ -12,7 +12,6 @@ import javax.swing.event.HyperlinkEvent;
 
 import org.devzuz.q.maven.jdt.ui.Messages;
 import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPOMFormPageData;
-import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPOMSearcher;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -31,8 +30,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.core.runtime.IPath;
-import org.w3c.dom.NodeList;
 
 public class MavenPomBasicFormPage extends FormPage
 {
@@ -104,12 +101,15 @@ public class MavenPomBasicFormPage extends FormPage
         
         parentProjectControls.addExpansionListener( expansionAdapter );
         moreProjectInfoControls.addExpansionListener( expansionAdapter );
+        
+     
     }
     
     public Control createBasicCoordinateControls( Composite form , FormToolkit toolKit )
     {
+       
         MavenPOMFormPageData mpmfpd = new MavenPOMFormPageData(getPOMLocation());
-        String strDataProcNodeList [] = {};
+        String strDataProcNodeList [] = null;
         
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new GridLayout( 2 , false ) );
@@ -119,96 +119,87 @@ public class MavenPomBasicFormPage extends FormPage
         GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
         controlData.horizontalIndent = 10;
         
-        Label groupIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_GroupId , SWT.NONE ); 
-        groupIdLabel.setLayoutData( labelData );
+        try 
+        {            
+            Label groupIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_GroupId , SWT.NONE ); 
+            groupIdLabel.setLayoutData( labelData );
         
-        mpmfpd.doXPathExpression( "/pre:project/pre:groupId/text()" );
-         strDataProcNodeList = mpmfpd.processNodeList();
-        if(strDataProcNodeList.length > 0)
-        {
-            setGroupID(strDataProcNodeList[0]);
-        }
-        
-        Text groupIdText = toolKit.createText( parent, "groupId" ); 
-        groupIdText.setLayoutData( controlData );
-        groupIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-        if(!getGroupID().trim().equals( "" ))
-        {
+            mpmfpd.doXPathExpression( "/pre:project/pre:groupId/text()" );
+            strDataProcNodeList = mpmfpd.processNodeList();
+            if(strDataProcNodeList != null)
+            {
+                setGroupID(strDataProcNodeList[0]);
+            }
+            
+            Text groupIdText = toolKit.createText( parent, "" ); 
+            groupIdText.setLayoutData( controlData );
+            groupIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
             groupIdText.setText( getGroupID() );    
-        }
-   
-        Label artifactIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_ArtifactId, SWT.NONE ); 
-        artifactIdLabel.setLayoutData( labelData );
-        
-        mpmfpd.doXPathExpression( "/pre:project/pre:artifactId/text()" );
-        strDataProcNodeList = mpmfpd.processNodeList();
-        if(strDataProcNodeList.length > 0)
-        {
-            setArtifactID(strDataProcNodeList[0]);
-        }
-        
-        Text artifactIdText = toolKit.createText( parent, "artifactId" ); 
-        artifactIdText.setLayoutData( controlData );
-        artifactIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-        if(! getArtifactID().trim().equals( "" ))
-        {
-            artifactIdText.setText( getArtifactID());      
-        }
-
-        Label versionLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Version, SWT.NONE ); 
-        versionLabel.setLayoutData( labelData );
-        
-        mpmfpd.doXPathExpression( "/pre:project/pre:modelVersion/text()" );
-        strDataProcNodeList = mpmfpd.processNodeList();
-        if(strDataProcNodeList.length > 0)
-        {
-            setVersion(strDataProcNodeList[0]);
-        }
-        
-        Text versionText = toolKit.createText( parent, "Version" ); 
-        versionText.setLayoutData( controlData );
-        versionText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-        if(!getVersion().trim().equals( "" ))
-        {
-            versionText.setText( getVersion());           
-        }
-
-        Label packagingLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Packaging, SWT.NONE ); 
-        packagingLabel.setLayoutData( labelData );
-        
-        mpmfpd.doXPathExpression( "/pre:project/pre:packaging/text()" );
-        strDataProcNodeList = mpmfpd.processNodeList();
-        if(strDataProcNodeList.length > 0)
-        {
-            setPackaging(strDataProcNodeList[0]);
-        }
        
-        Text packagingText = toolKit.createText( parent, "Packaging"  ); 
-        packagingText.setLayoutData( controlData );
-        packagingText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-        if(!getPackaging().trim().equals( "" ))
-        {
+            Label artifactIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_ArtifactId, SWT.NONE ); 
+            artifactIdLabel.setLayoutData( labelData );
+            
+            mpmfpd.doXPathExpression( "/pre:project/pre:artifactId/text()" );
+            strDataProcNodeList = mpmfpd.processNodeList();
+            if(strDataProcNodeList != null)
+            {
+                setArtifactID(strDataProcNodeList[0]);
+            }
+            
+            Text artifactIdText = toolKit.createText( parent, "" ); 
+            artifactIdText.setLayoutData( controlData );
+            artifactIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+            artifactIdText.setText( getArtifactID());      
+    
+            Label versionLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Version, SWT.NONE ); 
+            versionLabel.setLayoutData( labelData );
+            
+            mpmfpd.doXPathExpression( "/pre:project/pre:modelVersion/text()" );
+            strDataProcNodeList = mpmfpd.processNodeList();
+            if(strDataProcNodeList != null)
+            {
+                setVersion(strDataProcNodeList[0]);
+            }
+            
+            Text versionText = toolKit.createText( parent, "" ); 
+            versionText.setLayoutData( controlData );
+            versionText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+            versionText.setText( getVersion());           
+
+            Label packagingLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Packaging, SWT.NONE ); 
+            packagingLabel.setLayoutData( labelData );
+            
+            mpmfpd.doXPathExpression( "/pre:project/pre:packaging/text()" );
+            strDataProcNodeList = mpmfpd.processNodeList();
+            if(strDataProcNodeList != null)
+            {
+                setPackaging(strDataProcNodeList[0]);
+            }
+           
+            Text packagingText = toolKit.createText( parent, ""  ); 
+            packagingText.setLayoutData( controlData );
+            packagingText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
             packagingText.setText( getPackaging() );
-        }
-        
-        Label classifierLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Classifier, SWT.NONE ); 
-        classifierLabel.setLayoutData( labelData );
-        
-        mpmfpd.doXPathExpression( "/pre:project/pre:classifier/text()" );
-        strDataProcNodeList = mpmfpd.processNodeList();
-        if(strDataProcNodeList.length > 0)
-        {
-            setClassifier(strDataProcNodeList[0]);
-        }
-        
-        Text classifierText = toolKit.createText( parent, "Classifier"  ); 
-        classifierText.setLayoutData( controlData );
-        classifierText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-        if(!getClassifier().trim().equals( "" ))
-        {
+            
+            Label classifierLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Classifier, SWT.NONE ); 
+            classifierLabel.setLayoutData( labelData );
+            
+            mpmfpd.doXPathExpression( "/pre:project/pre:classifier/text()" );
+            strDataProcNodeList = mpmfpd.processNodeList();
+            if(strDataProcNodeList != null)
+            {
+                setClassifier(strDataProcNodeList[0]);
+            }
+            
+            Text classifierText = toolKit.createText( parent, ""  ); 
+            classifierText.setLayoutData( controlData );
+            classifierText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
             classifierText.setText( getClassifier() ); 
         }
-
+        
+        catch(Exception e)
+        {
+        }
         
         toolKit.paintBordersFor(parent);
         

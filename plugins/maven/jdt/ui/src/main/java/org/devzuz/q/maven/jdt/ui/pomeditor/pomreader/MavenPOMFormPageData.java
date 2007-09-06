@@ -31,11 +31,16 @@ public class MavenPOMFormPageData
     
     public String[] processNodeList()
     {
-        String [] strNodeItems={""};
-        for(int i =0; i < getNodeList().getLength() ; i ++)
+        String  strNodeItems[] = null;
+        if(getNodeList().getLength() > 0 )
         {
-            strNodeItems[i] = getNodeList().item(i).getNodeValue();
+            strNodeItems = new String[getNodeList().getLength()];
+            for(int i = 0; i < getNodeList().getLength() ; i ++)
+            {
+                strNodeItems[i] = getNodeList().item(i).getNodeValue();
+            }           
         }
+
         return strNodeItems;
     }
     

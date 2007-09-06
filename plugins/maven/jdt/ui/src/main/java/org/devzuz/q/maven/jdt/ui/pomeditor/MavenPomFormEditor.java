@@ -6,15 +6,18 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
-import java.io.File;
 
 import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPOMSearcher;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
+
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.forms.editor.IFormPage;
+
+import java.io.File;
 
 
 public class MavenPomFormEditor extends FormEditor
@@ -22,6 +25,8 @@ public class MavenPomFormEditor extends FormEditor
     private String strProjectSelected; 
     
     private IPath pomIPath;
+    
+    private TextEditor textEditor;
     
     public MavenPomFormEditor()
     {
@@ -33,6 +38,7 @@ public class MavenPomFormEditor extends FormEditor
     {
         try
         {
+    
             setSelectedLocationOfPOMs();
             
             startPOMSearch();
@@ -40,11 +46,9 @@ public class MavenPomFormEditor extends FormEditor
             addPage( new MavenPomBasicFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomBasicFormPage;",
                                                        "Project Information" , getPOMFilePath()));
             addPage( new MavenPomDependenciesFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage;",
-                                                       "Dependencies" ) );
+                                                       "Dependencies", getPOMFilePath()) );
             addPage( new MavenPomPropertiesModuleFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage;",
-                                                       "Properties/Module" ) );
-
-           
+                                                       "Properties/Module" ) );    
         }
         catch ( PartInitException pie )
         {
@@ -56,13 +60,13 @@ public class MavenPomFormEditor extends FormEditor
     @Override
     public void doSave( IProgressMonitor monitor )
     {
-        
+        monitor.done();
     }
 
     @Override
     public void doSaveAs()
     {
-        
+      
     }
 
     @Override
@@ -73,13 +77,13 @@ public class MavenPomFormEditor extends FormEditor
     
     private void setSelectedLocationOfPOMs()
     {
-        IEditorInput  iei= this.getEditorInput();
-        strProjectSelected = iei.toString().substring( iei.toString().indexOf( "(" )+1,iei.toString().indexOf( ")" ));        
+        IEditorInput  iei = this.getEditorInput();      
+        strProjectSelected = iei.toString().substring( iei.toString().indexOf( "(" )+1,iei.toString().indexOf( ")" )).trim();
     }
     
     public String getSelectedLocationOfPOM()
     {
-        return this.strProjectSelected;
+        return strProjectSelected;
     }
     
     public void startPOMSearch()
