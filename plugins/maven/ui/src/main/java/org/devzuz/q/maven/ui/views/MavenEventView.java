@@ -10,12 +10,11 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.StringSelection;
 import java.util.Observable;
 import java.util.Observer;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 import org.devzuz.q.maven.embedder.IMavenEvent;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.Severity;
+import org.devzuz.q.maven.ui.Activator;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.dialogs.FilterDialog;
 import org.eclipse.jface.action.Action;
@@ -33,6 +32,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.XMLMemento;
@@ -53,6 +53,8 @@ public class MavenEventView extends ViewPart implements Observer
 
     private Action controlScrollingAction;
 
+    private Action copyToClipboardAction;
+    
     private IMemento memento;
 
     private IViewSite site;
@@ -187,6 +189,7 @@ public class MavenEventView extends ViewPart implements Observer
         IToolBarManager toolBarManager = bars.getToolBarManager();
         IMenuManager mgr = bars.getMenuManager();
 
+        toolBarManager.add( copyToClipboardAction );
         toolBarManager.add( clearEventViewAction );
         toolBarManager.add( controlScrollingAction );
 
@@ -220,6 +223,21 @@ public class MavenEventView extends ViewPart implements Observer
         clearEventViewAction.setImageDescriptor( MavenImages.DESC_CLEAREVENTVIEW );
         clearEventViewAction.setDisabledImageDescriptor( MavenImages.DESC_CLEAREVENTVIEW_DISABLED );
 
+        copyToClipboardAction= new Action( Messages.MavenEventView_CopyToClipboard )
+        {
+            @Override
+            public void run()
+            {
+                setBufferData( eventTableViewer.getTable().getSelection() );
+            }
+        };
+        copyToClipboardAction.setEnabled( true ); 
+        copyToClipboardAction.setToolTipText( Messages.MavenEventView_CopyToClipboard ); 
+        copyToClipboardAction.setImageDescriptor( Activator.getDefault().getWorkbench().getSharedImages().
+                                                  getImageDescriptor( ISharedImages.IMG_TOOL_COPY ) );
+        copyToClipboardAction.setDisabledImageDescriptor( Activator.getDefault().getWorkbench().getSharedImages().
+                                                          getImageDescriptor( ISharedImages.IMG_TOOL_COPY_DISABLED  ) );
+         
         controlScrollingAction = new Action( Messages.MavenEventView_ScrollLock, Action.AS_CHECK_BOX )
         {
             @Override

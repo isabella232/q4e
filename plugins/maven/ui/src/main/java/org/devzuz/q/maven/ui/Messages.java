@@ -56,6 +56,8 @@ public class Messages
     public static String MavenEventView_Filter;
 
     public static String MavenEventView_ClearView;
+    
+    public static String MavenEventView_CopyToClipboard;
 
     public static String MavenEventView_ScrollLock;
 
@@ -126,7 +128,7 @@ public class Messages
     public static String MavenProjectView_MavenParentProject;
     
     public static String MavenProjectView_MavenChildProject;
-
+    
     static
     {
         // initialize resource bundle
