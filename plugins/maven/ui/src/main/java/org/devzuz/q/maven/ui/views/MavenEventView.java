@@ -242,15 +242,25 @@ public class MavenEventView extends ViewPart implements Observer
         {
             return;
         }
-        // For performance, avoid refreshing when the event will not be displayed
+        
         MavenEventStore store = (MavenEventStore) o;
         IMavenEvent[] events = store.getEvents();
+        
+        if ( events.length <= 0 )
+        {
+            // Refresh the table when a "store cleared" is received.
+            eventTableViewer.refresh();
+            return;
+        }
+        
+        // For performance, avoid refreshing when the event will not be displayed
         IMavenEvent lastEvent = events[events.length - 1];
         if ( !severityFilter.select( lastEvent ) )
         {
             // The event will not be displayed, skip update.
             return;
         }
+        
         eventTableViewer.getControl().getDisplay().asyncExec( new Runnable()
         {
             public void run()
