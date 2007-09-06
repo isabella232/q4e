@@ -6,10 +6,11 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
-import java.io.File;
 
 import org.devzuz.q.maven.jdt.ui.Messages;
 import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPOMFormPageData;
+import java.io.File;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -117,13 +118,10 @@ public class MavenPomDependenciesFormPage extends FormPage
         mpmfpd.doXPathExpression( "/pre:project/pre:dependencies/pre:dependency/pre:artifactId/text()" );
         strDataProcNodeList_artifact = mpmfpd.processNodeList();
         
-        
-               
         for(int x = 0; x < strDataProcNodeList_artifact.length ; x++)
         {
             TableItem item = new TableItem( propertiesTable, SWT.BEGINNING);
             item.setText(new String [] {strDataProcNodeList_artifact[x]+"-"+ strDataProcNodeList_version[x]+".jar"});
-            System.out.println(strDataProcNodeList_artifact[x]+"-"+ strDataProcNodeList_version[x]+".jar");
         }    
     }
     

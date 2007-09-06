@@ -6,12 +6,10 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
-import java.io.File;
-
-import javax.swing.event.HyperlinkEvent;
 
 import org.devzuz.q.maven.jdt.ui.Messages;
 import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPOMFormPageData;
+import java.io.File;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -30,6 +28,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Hyperlink;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+import javax.swing.event.HyperlinkEvent;
 
 public class MavenPomBasicFormPage extends FormPage
 {
