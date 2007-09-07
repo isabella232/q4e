@@ -9,7 +9,7 @@ package org.devzuz.q.maven.jdt.ui.projectimport;
 import java.io.File;
 import java.util.Collection;
 
-import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.Activator;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRunnable;
@@ -26,7 +26,7 @@ public class ScanImportProjectJob extends Job
 
     private File directory;
 
-    private Collection<IMavenProject> mavenProjects;
+    private Collection<PomFileDescriptor> pomDescriptors;
 
     public ScanImportProjectJob( File directory )
     {
@@ -40,14 +40,14 @@ public class ScanImportProjectJob extends Job
         ProjectScanner scanner = new ProjectScanner();
         try
         {
-            mavenProjects = scanner.scanFolder( directory, monitor );
+            pomDescriptors = scanner.scanFolder( directory, monitor );
         }
         catch ( InterruptedException e )
         {
             return new Status( IStatus.CANCEL, Activator.PLUGIN_ID, "Cancelled" );
         }
 
-        ImportProjectsRunnable importProjectsRunnable = new ImportProjectsRunnable( mavenProjects );
+        ImportProjectsRunnable importProjectsRunnable = new ImportProjectsRunnable( pomDescriptors );
 
         if ( monitor.isCanceled() )
         {
@@ -57,7 +57,7 @@ public class ScanImportProjectJob extends Job
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
         try
         {
-            workspace.run( importProjectsRunnable, new SubProgressMonitor( monitor, mavenProjects.size() ) );
+            workspace.run( importProjectsRunnable, new SubProgressMonitor( monitor, pomDescriptors.size() ) );
         }
         catch ( CoreException e )
         {
@@ -76,16 +76,16 @@ public class ScanImportProjectJob extends Job
 
         private IStatus status;
 
-        private final Collection<IMavenProject> mavenProjects;
+        private final Collection<PomFileDescriptor> pomDescriptors;
 
-        ImportProjectsRunnable( Collection<IMavenProject> mavenProjects )
+        ImportProjectsRunnable( Collection<PomFileDescriptor> pomDescriptors )
         {
-            this.mavenProjects = mavenProjects;
+            this.pomDescriptors = pomDescriptors;
         }
 
         public void run( IProgressMonitor monitor ) throws CoreException
         {
-            ImportProjectJob job = new ImportProjectJob( mavenProjects );
+            ImportProjectJob job = new ImportProjectJob( pomDescriptors );
             status = job.run( monitor );
         }
 
@@ -102,8 +102,8 @@ public class ScanImportProjectJob extends Job
      * 
      * @return the collection of maven projects.
      */
-    public Collection<IMavenProject> getMavenProjects()
+    public Collection<PomFileDescriptor> getPomDescriptors()
     {
-        return mavenProjects;
+        return pomDescriptors;
     }
 }

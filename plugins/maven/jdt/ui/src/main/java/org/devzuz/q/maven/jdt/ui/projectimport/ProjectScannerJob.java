@@ -9,7 +9,7 @@ package org.devzuz.q.maven.jdt.ui.projectimport;
 import java.io.File;
 import java.util.Collection;
 
-import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.Activator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -19,48 +19,50 @@ import org.eclipse.core.runtime.jobs.Job;
 public class ProjectScannerJob extends Job
 {
     private File directoryToScan;
-    private Collection<IMavenProject> projects;
+
+    private Collection<PomFileDescriptor> pomDescriptors;
+
     private IProgressMonitor monitor;
-    
+
     public ProjectScannerJob( String name )
     {
-        super(name);
+        super( name );
     }
-    
+
     public ProjectScannerJob( String name, File file )
     {
-        super(name);
+        super( name );
         directoryToScan = file;
     }
-    
+
     public void setDirectory( File file )
     {
         directoryToScan = file;
     }
 
-    public Collection<IMavenProject> getProjects()
+    public Collection<PomFileDescriptor> getPomDescriptors()
     {
-        return projects;
+        return pomDescriptors;
     }
-    
+
     @Override
-    protected IStatus run(IProgressMonitor monitor)
+    protected IStatus run( IProgressMonitor monitor )
     {
         ProjectScanner scanner = new ProjectScanner();
-        
+
         this.monitor = monitor;
-        
-        monitor.setTaskName( "Scanning for Maven 2 Projects ...");
-        
+
+        monitor.setTaskName( "Scanning for Maven 2 Projects ..." );
+
         try
         {
-            projects = scanner.scanFolder( directoryToScan, monitor );
+            pomDescriptors = scanner.scanFolder( directoryToScan, monitor );
         }
         catch ( InterruptedException e )
         {
             return new Status( IStatus.CANCEL, Activator.PLUGIN_ID, "Cancelled" );
         }
-        
+
         return new Status( IStatus.OK, Activator.PLUGIN_ID, "Ok" );
     }
 

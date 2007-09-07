@@ -10,7 +10,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.ui.Activator;
 import org.eclipse.core.resources.IProject;
@@ -29,41 +29,41 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 
 public class ImportProjectJob extends Job
-{   
-    private Collection<IMavenProject> mavenProjects;
+{
+    private Collection<PomFileDescriptor> pomDescriptors;
 
-    public ImportProjectJob( IMavenProject mavenProject )
+    public ImportProjectJob( PomFileDescriptor pomDescriptor )
     {
-        this( Arrays.asList( new IMavenProject[] { mavenProject } ) );
+        this( Arrays.asList( new PomFileDescriptor[] { pomDescriptor } ) );
     }
 
-    public ImportProjectJob( Collection<IMavenProject> mavenProjects )
+    public ImportProjectJob( Collection<PomFileDescriptor> pomDescriptors )
     {
         super( "Import Maven 2 project" );
-        this.mavenProjects = mavenProjects;
+        this.pomDescriptors = pomDescriptors;
     }
 
     /**
      * Utility method to set a single project to be imported. Equivalent to invoking
      * {@link #setMavenProjects(Collection)} with a collection of a single element.
      * 
-     * @param mavenProject
+     * @param pomDescriptor
      *            the project to import.
      */
-    public void setMavenProjects( IMavenProject mavenProject )
+    public void setMavenProjects( PomFileDescriptor pomDescriptor )
     {
-        setMavenProjects( Collections.singleton( mavenProject ) );
+        setMavenProjects( Collections.singleton( pomDescriptor ) );
     }
 
     /**
      * Sets the projects to be imported.
      * 
-     * @param mavenProjects
+     * @param pomDescriptor
      *            the collection of projects to be imported.
      */
-    public void setMavenProjects( Collection<IMavenProject> mavenProjects )
+    public void setMavenProjects( Collection<PomFileDescriptor> pomDescriptor )
     {
-        this.mavenProjects = mavenProjects;
+        this.pomDescriptors = pomDescriptor;
     }
 
     @Override
@@ -71,11 +71,11 @@ public class ImportProjectJob extends Job
     {
         Status status = null;
         // TODO set a better number
-        for ( IMavenProject mavenProject : mavenProjects )
+        for ( PomFileDescriptor pomDescriptor : pomDescriptors )
         {
             SubProgressMonitor subProgressMonitor = new SubProgressMonitor( monitor, 1 );
             subProgressMonitor.beginTask( "Importing Maven project", 100 );
-            subProgressMonitor.setTaskName( "Importing Maven project: " + getProjectName( mavenProject ) );
+            subProgressMonitor.setTaskName( "Importing Maven project: " + getProjectName( pomDescriptor ) );
 
             if ( monitor.isCanceled() )
             {
@@ -84,13 +84,13 @@ public class ImportProjectJob extends Job
 
             try
             {
-                createMavenProject( mavenProject, new SubProgressMonitor( subProgressMonitor, 100 ) );
-                status = new Status( IStatus.OK, Activator.PLUGIN_ID, "Success" ); 
+                createMavenProject( pomDescriptor, new SubProgressMonitor( subProgressMonitor, 100 ) );
+                status = new Status( IStatus.OK, Activator.PLUGIN_ID, "Success" );
             }
             catch ( CoreException e )
             {
-                Activator.getLogger().log( "Unable to import project from " + mavenProject.getBaseDirectory(), e );
-                status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, e.getCause().getMessage() );
+                Activator.getLogger().log( "Unable to import project from " + pomDescriptor.getBaseDirectory(), e );
+                status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, e.getCause().getMessage(), e );
             }
 
             subProgressMonitor.done();
@@ -103,9 +103,9 @@ public class ImportProjectJob extends Job
     /**
      * Get the eclipse project name from the maven project
      * 
-     * @param mavenProject
+     * @param pomDescriptor
      */
-    protected String getProjectName( final IMavenProject mavenProject )
+    protected String getProjectName( final PomFileDescriptor pomDescriptor )
     {
         // TODO this should be configurable
         // return mavenProject.getGroupId() + "." + mavenProject.getArtifactId();
@@ -113,12 +113,13 @@ public class ImportProjectJob extends Job
         // as its location IF it is on the workspace root due to us not being
         // able to specify a project location if it is on the workspace root .
         // (the location should be set to ("") if it is on the workspace root)
-        return mavenProject.getBaseDirectory().getName();
+        return pomDescriptor.getBaseDirectory().getName();
     }
 
-    private void createMavenProject( final IMavenProject mavenProject, IProgressMonitor monitor ) throws CoreException
+    private void createMavenProject( final PomFileDescriptor pomDescriptor, IProgressMonitor monitor )
+        throws CoreException
     {
-        final String projectName = getProjectName( mavenProject );
+        final String projectName = getProjectName( pomDescriptor );
         final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
         IWorkspaceRoot root = workspace.getRoot();
@@ -132,8 +133,8 @@ public class ImportProjectJob extends Job
 
         IProjectDescription description = workspace.newProjectDescription( projectName );
 
-        IPath locationPath = new Path( mavenProject.getBaseDirectory().getAbsolutePath() );
-        
+        IPath locationPath = new Path( pomDescriptor.getBaseDirectory().getAbsolutePath() );
+
         /*
          * If is at the root of the workspace we need to use the default location, see
          * org.eclipse.core.internal.resources.LocationValidator:336

@@ -9,7 +9,7 @@ package org.devzuz.q.maven.jdt.ui.projectimport;
 import java.util.Collection;
 import java.util.Collections;
 
-import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -19,41 +19,41 @@ public class ImportProjectWorkspaceJob extends WorkspaceJob
 {
     private IStatus status;
 
-    private Collection<IMavenProject> mavenProjects;
+    private Collection<PomFileDescriptor> pomDescriptors;
 
-    public ImportProjectWorkspaceJob( String name, Collection<IMavenProject> mavenProjects )
+    public ImportProjectWorkspaceJob( String name, Collection<PomFileDescriptor> pomDescriptor )
     {
         super( name );
-        this.mavenProjects = mavenProjects;
+        this.pomDescriptors = pomDescriptor;
     }
-    
+
     /**
      * Utility method to set a single project to be imported. Equivalent to invoking
      * {@link #setMavenProjects(Collection)} with a collection of a single element.
      * 
-     * @param mavenProject
+     * @param pomDescriptor
      *            the project to import.
      */
-    public void setMavenProjects( IMavenProject mavenProject )
+    public void setMavenProjects( PomFileDescriptor pomDescriptor )
     {
-        setMavenProjects( Collections.singleton( mavenProject ) );
+        setMavenProjects( Collections.singleton( pomDescriptor ) );
     }
-    
+
     /**
      * Sets the projects to be imported.
      * 
-     * @param mavenProjects
+     * @param pomDescriptors
      *            the collection of projects to be imported.
      */
-    private void setMavenProjects( Collection<IMavenProject> mavenProjects )
+    private void setMavenProjects( Collection<PomFileDescriptor> pomDescriptors )
     {
-        this.mavenProjects = mavenProjects;
+        this.pomDescriptors = pomDescriptors;
     }
 
     @Override
     public IStatus runInWorkspace( IProgressMonitor monitor ) throws CoreException
     {
-        ImportProjectJob job = new ImportProjectJob( mavenProjects );
+        ImportProjectJob job = new ImportProjectJob( pomDescriptors );
         return job.run( monitor );
     }
 

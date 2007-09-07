@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.projectimport.ProjectScannerJob;
 import org.devzuz.q.maven.wizard.Messages;
 import org.eclipse.core.runtime.IPath;
@@ -41,9 +41,11 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 
 public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
-{   
+{
     private Text directoryText;
+
     private CheckboxTableViewer pomList;
+
     private ProjectScannerJob projectScannerJob;
 
     public Maven2ProjectImportPage()
@@ -55,8 +57,7 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
     }
 
     /**
-     * Initializes the dialog, removing messages and projects and canceling previous project
-     * scanning job
+     * Initializes the dialog, removing messages and projects and canceling previous project scanning job
      */
     private void initialize()
     {
@@ -65,7 +66,7 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
         setError( null );
     }
 
-    public void createControl(Composite parent)
+    public void createControl( Composite parent )
     {
         ModifyListener textListener = new ModifyListener()
         {
@@ -82,23 +83,24 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
                 }
             }
         };
-        
+
         Composite container = new Composite( parent, SWT.NULL );
         container.setLayout( new GridLayout( 3, false ) );
-        
+
         Label label = new Label( container, SWT.NULL );
-        label.setLayoutData( new GridData( GridData.BEGINNING , GridData.CENTER , false , false ) );
+        label.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
         label.setText( Messages.wizard_importProject_location );
-        
+
         directoryText = new Text( container, SWT.BORDER | SWT.SINGLE );
         directoryText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
         directoryText.addModifyListener( textListener );
-        
+
         Button locationButton = new Button( container, SWT.PUSH );
         locationButton.setLayoutData( new GridData( GridData.CENTER, GridData.CENTER, false, false ) );
         locationButton.setText( Messages.wizard_importProject_browse );
         locationButton.addSelectionListener( new SelectionAdapter()
         {
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 String directory = new DirectoryDialog( getShell(), SWT.OPEN ).open();
@@ -108,22 +110,22 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
                 }
             }
         } );
-        
+
         MavenProjectTableViewerProvider provider = new MavenProjectTableViewerProvider();
-        
+
         pomList = CheckboxTableViewer.newCheckList( container, SWT.SINGLE | SWT.BORDER | SWT.V_SCROLL );
         Table pomListTable = pomList.getTable();
-        pomListTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true , 2 , 1 ) );
+        pomListTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true, 2, 1 ) );
         pomList.setContentProvider( provider );
         pomList.setLabelProvider( provider );
-        pomList.addCheckStateListener( new ICheckStateListener() 
+        pomList.addCheckStateListener( new ICheckStateListener()
         {
-            public void checkStateChanged(CheckStateChangedEvent event) 
+            public void checkStateChanged( CheckStateChangedEvent event )
             {
                 validate();
             }
-        });
-        
+        } );
+
         Composite container2 = new Composite( container, SWT.NULL );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
         RowLayout layout = new RowLayout( SWT.VERTICAL );
@@ -134,6 +136,7 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
         selectButton.setText( Messages.wizard_importProject_select );
         selectButton.addSelectionListener( new SelectionAdapter()
         {
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 pomList.setAllChecked( true );
@@ -145,46 +148,49 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
         deselectButton.setText( Messages.wizard_importProject_deselect );
         deselectButton.addSelectionListener( new SelectionAdapter()
         {
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 pomList.setAllChecked( false );
                 validate();
             }
         } );
-        
+
         Button refreshButton = new Button( container2, SWT.PUSH | SWT.CENTER );
         refreshButton.setText( Messages.wizard_importProject_refresh );
         refreshButton.addSelectionListener( new SelectionAdapter()
         {
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 scheduleProjectScanningJob();
             }
         } );
-        
-        projectScannerJob = new ProjectScannerJob("Project Scanner");
+
+        projectScannerJob = new ProjectScannerJob( "Project Scanner" );
         projectScannerJob.addJobChangeListener( new ProjectScannerJobAdapter() );
-        
+
         setControl( container );
     }
-    
+
     public String getProjectDirectory()
     {
         return directoryText.getText().trim();
     }
-    
+
+    @Override
     protected void onPageValidated()
     {
         int numProjects = pomList.getTable().getItemCount();
         StringBuilder status = new StringBuilder();
-        
+
         status.append( "Found " );
         status.append( numProjects );
         status.append( numProjects == 1 ? " project" : " projects" );
-        
+
         setMessage( status.toString() );
     }
-    
+
     private void scheduleProjectScanningJob()
     {
         initialize();
@@ -200,9 +206,10 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
         super.dispose();
     }
 
+    @Override
     protected boolean isPageValid()
     {
-        if( isDirectoryValid() )
+        if ( isDirectoryValid() )
         {
             Object[] checkedElements = pomList.getCheckedElements();
             if ( ( checkedElements != null ) && ( checkedElements.length > 0 ) )
@@ -220,14 +227,14 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
             pomList.getTable().removeAll();
             setError( Messages.wizard_importProject_error_location_nonexistent );
         }
-        
+
         return false;
     }
-    
+
     private boolean isDirectoryValid()
     {
-        IPath path = Path.fromOSString( getProjectDirectory());
-        if( path != null )
+        IPath path = Path.fromOSString( getProjectDirectory() );
+        if ( path != null )
         {
             File dir = path.toFile();
             if ( dir.exists() && dir.isDirectory() )
@@ -235,29 +242,30 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     private class ProjectScannerJobAdapter extends JobChangeAdapter
     {
-        public void done(IJobChangeEvent event) 
+        @Override
+        public void done( IJobChangeEvent event )
         {
             if ( event.getResult().getSeverity() == IStatus.OK )
             {
-                final Collection<IMavenProject> projects = projectScannerJob.getProjects();
+                final Collection<PomFileDescriptor> pomDescriptors = projectScannerJob.getPomDescriptors();
                 Display.getDefault().asyncExec( new Runnable()
                 {
                     public void run()
                     {
-                        if ( projects.size() == 0 )
+                        if ( pomDescriptors.size() == 0 )
                         {
                             setMessage( Messages.wizard_importProject_no_projects_found );
                         }
                         else
                         {
                             setMessage( Messages.wizard_importProject_finished_scanning );
-                            pomList.setInput( projects );
+                            pomList.setInput( pomDescriptors );
                             pomList.setAllChecked( true );
                             validate();
                         }
@@ -266,54 +274,53 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
             }
         }
     }
-    
-    public Collection<IMavenProject> getSelectedMavenProjects()
+
+    public Collection<PomFileDescriptor> getSelectedMavenProjects()
     {
-        Collection<IMavenProject> projects = new ArrayList<IMavenProject>();
-        
+        Collection<PomFileDescriptor> pomDescriptors = new ArrayList<PomFileDescriptor>();
+
         Object[] objects = pomList.getCheckedElements();
-        for( Object object : objects )
+        for ( Object object : objects )
         {
-            if( object instanceof IMavenProject )
+            if ( object instanceof PomFileDescriptor )
             {
-                IMavenProject project = (IMavenProject) object;
-                projects.add( project );
+                PomFileDescriptor pomDescriptor = (PomFileDescriptor) object;
+                pomDescriptors.add( pomDescriptor );
             }
         }
-        
-        return projects;
+
+        return pomDescriptors;
     }
-        
-    private class MavenProjectTableViewerProvider extends LabelProvider 
-        implements IStructuredContentProvider
+
+    private class MavenProjectTableViewerProvider extends LabelProvider implements IStructuredContentProvider
     {
 
         @Override
-        public String getText(Object element)
+        public String getText( Object element )
         {
-            if( element instanceof IMavenProject )
+            if ( element instanceof PomFileDescriptor )
             {
-                IMavenProject project = (IMavenProject) element;
-                return  project.getPomFile().getAbsolutePath().substring(getProjectDirectory().length()) +  
-                        " - "  + project.getMavenProject().getModel().getId();
+                PomFileDescriptor pomDescriptor = (PomFileDescriptor) element;
+                return pomDescriptor.getFile().getAbsolutePath().substring( getProjectDirectory().length() ) + " - "
+                                + pomDescriptor.getModel().getId();
             }
-            
+
             return null;
         }
 
-        public Object[] getElements(Object inputElement)
+        public Object[] getElements( Object inputElement )
         {
-            if( inputElement instanceof Collection )
+            if ( inputElement instanceof Collection )
             {
-                Collection<IMavenProject> projects = (Collection<IMavenProject>) inputElement;
-                return projects.toArray( new IMavenProject[projects.size()] );
+                Collection<PomFileDescriptor> pomDescriptors = (Collection<PomFileDescriptor>) inputElement;
+                return pomDescriptors.toArray( new PomFileDescriptor[pomDescriptors.size()] );
             }
-            
+
             return null;
         }
 
-        public void inputChanged(Viewer viewer, Object oldInput, Object newInput)
-        {   
+        public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
+        {
         }
     }
 }
