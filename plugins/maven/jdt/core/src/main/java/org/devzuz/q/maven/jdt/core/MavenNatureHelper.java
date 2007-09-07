@@ -20,8 +20,7 @@ public class MavenNatureHelper
 
     private static String NATURE_ID = Activator.PLUGIN_ID + ".mavenNature";
 
-    public static void addNature( IProject project )
-        throws CoreException
+    public static void addNature( IProject project ) throws CoreException
     {
         Set<String> newNatures = new HashSet<String>();
         newNatures.add( JavaCore.NATURE_ID );
@@ -30,23 +29,37 @@ public class MavenNatureHelper
         IProjectDescription description = project.getDescription();
         HashSet<String> existingNatureIds = new HashSet<String>( Arrays.asList( description.getNatureIds() ) );
         existingNatureIds.addAll( newNatures );
-        description.setNatureIds( (String[]) existingNatureIds.toArray( new String[existingNatureIds.size()] ) );
+        description.setNatureIds( existingNatureIds.toArray( new String[existingNatureIds.size()] ) );
         if ( description != null )
         {
             project.setDescription( description, null );
         }
     }
 
-    public static void removeNature( IProject project )
-        throws CoreException
+    public static void removeNature( IProject project ) throws CoreException
     {
         IProjectDescription description = project.getDescription();
         HashSet<String> existingNatureIds = new HashSet<String>( Arrays.asList( description.getNatureIds() ) );
         existingNatureIds.remove( NATURE_ID );
-        description.setNatureIds( (String[]) existingNatureIds.toArray( new String[existingNatureIds.size()] ) );
+        description.setNatureIds( existingNatureIds.toArray( new String[existingNatureIds.size()] ) );
         if ( description != null )
         {
             project.setDescription( description, null );
         }
+    }
+
+    /**
+     * Helper method for checking if a given project has the <b>q4e</b> nature enabled.
+     * 
+     * @param project
+     *            the project to check.
+     * @return <code>true</code> if the maven has q4e enabled.
+     * @throws CoreException
+     *             if the natures of the project can't be read.
+     */
+    public static boolean hasMavenNature( IProject project ) throws CoreException
+    {
+        IProjectDescription description = project.getDescription();
+        return description.hasNature( NATURE_ID );
     }
 }
