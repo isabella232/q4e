@@ -19,4 +19,5 @@ Export-Package: org.devzuz.q.maven.jdt.ui,
  org.devzuz.q.maven.jdt.ui.classpath.container,
  org.devzuz.q.maven.jdt.ui.projectimport
 Import-Package: org.devzuz.q.maven.ui,
- org.devzuz.q.maven.ui.customcomponents
+ org.devzuz.q.maven.ui.customcomponents,
+ org.devzuz.q.maven.ui.views
