@@ -171,7 +171,6 @@ public class EclipseMaven implements IMaven
         if ( jobAdapter != null )
         {
             jobAdapter.setMavenExecutionJob( eclipseMavenRequest );
-            eclipseMavenRequest.addJobChangeListener( jobAdapter );
         }
         
         eclipseMavenRequest.setRule( mavenProject.getProject() );
@@ -196,7 +195,6 @@ public class EclipseMaven implements IMaven
         if ( jobAdapter != null )
         {
             jobAdapter.setMavenExecutionJob( eclipseMavenRequest );
-            eclipseMavenRequest.addJobChangeListener( jobAdapter );
         }
         
         eclipseMavenRequest.setRule( new MavenSchedulingRule() );

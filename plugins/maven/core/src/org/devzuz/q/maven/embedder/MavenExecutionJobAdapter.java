@@ -23,6 +23,7 @@ public class MavenExecutionJobAdapter extends JobChangeAdapter
     public void setMavenExecutionJob( EclipseMavenRequest mavenExecutionJob )
     {
         this.mavenExecutionJob = mavenExecutionJob;
+        mavenExecutionJob.addJobChangeListener( this );
     }
     
     /**
@@ -33,6 +34,7 @@ public class MavenExecutionJobAdapter extends JobChangeAdapter
     public final void done( IJobChangeEvent event ) 
     {
         done( event , mavenExecutionJob.getExecutionResult() );
+        mavenExecutionJob.removeJobChangeListener( this );
     }
     
     public void done( IJobChangeEvent event , IMavenExecutionResult result )
