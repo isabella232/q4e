@@ -21,6 +21,8 @@ import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
 import org.devzuz.q.maven.wizard.postprocessor.core.IMavenProjectPostprocessor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 
 public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
 {
@@ -89,17 +91,17 @@ public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
             if ( ( event instanceof IMavenEventEnd ) && ( event.getType().equals( EventType.reactorExecution ) ) )
             {
                 ScanImportProjectJob job = new ScanImportProjectJob( generatedDir.toFile() );
+                job.addJobChangeListener( new JobChangeAdapter()
+                {
+                    @Override
+                    public void done( IJobChangeEvent event )
+                    {
+                        Collection<IMavenProject> mavenProjects =
+                            ( (ScanImportProjectJob) event.getJob() ).getMavenProjects();
+                        applyPostProcessors( mavenProjects );
+                    }
+                } );
                 job.schedule();
-                try
-                {
-                    job.join();
-                    Collection<IMavenProject> mavenProjects = job.getMavenProjects();
-                    applyPostProcessors( mavenProjects );
-                }
-                catch ( InterruptedException e )
-                {
-                    // TODO: Handle InterruptedException
-                }
 
                 MavenManager.getMaven().removeEventListener( this );
             }
