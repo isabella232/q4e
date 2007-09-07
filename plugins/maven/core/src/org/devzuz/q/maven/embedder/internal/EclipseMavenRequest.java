@@ -7,15 +7,10 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder.internal;
 
-import java.io.PrintStream;
-
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.devzuz.q.maven.embedder.Activator;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
-import org.devzuz.q.maven.embedder.internal.stream.EclipseMavenErrorEventPropagator;
-import org.devzuz.q.maven.embedder.internal.stream.EclipseMavenInfoEventPropagator;
-import org.devzuz.q.maven.embedder.internal.stream.MavenThreadPrintStream;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -33,8 +28,8 @@ public class EclipseMavenRequest extends Job
     private EclipseMaven maven;
 
     private MavenExecutionRequest request;
-    
-    private IMavenExecutionResult executionResult; 
+
+    private IMavenExecutionResult executionResult;
 
     public EclipseMavenRequest( String name, EclipseMaven maven, MavenExecutionRequest request )
     {
@@ -56,19 +51,8 @@ public class EclipseMavenRequest extends Job
         // FileMavenListener listener = new FileMavenListener();
         // maven.addEventListener(listener);
 
-        PrintStream out = System.out;
-        PrintStream err = System.err;
         try
         {
-            System.setOut( new MavenThreadPrintStream( getThread(),
-                                                       new EclipseMavenInfoEventPropagator( maven.getEventPropagator(),
-                                                                                            out ), out ) );
-            System.setErr( new MavenThreadPrintStream(
-                                                       getThread(),
-                                                       new EclipseMavenErrorEventPropagator(
-                                                                                             maven.getEventPropagator(),
-                                                                                             err ), err ) );
-
             MavenExecutionResult status = this.maven.executeRequest( this.request );
             executionResult = new EclipseMavenExecutionResult( status );
             if ( ( status.getExceptions() != null ) && ( status.getExceptions().size() > 0 ) )
@@ -77,20 +61,18 @@ public class EclipseMavenRequest extends Job
                 return new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Errors during Maven execution",
                                    (Exception) status.getExceptions().get( 0 ) );
             }
-            
+
             return new Status( IStatus.OK, Activator.PLUGIN_ID, "Success" );
         }
         finally
         {
-            System.setOut( out );
-            System.setErr( err );
             // maven.removeEventListener(listener);
             // listener.dispose();
 
             monitor.done();
         }
     }
-    
+
     public IMavenExecutionResult getExecutionResult()
     {
         return executionResult;
