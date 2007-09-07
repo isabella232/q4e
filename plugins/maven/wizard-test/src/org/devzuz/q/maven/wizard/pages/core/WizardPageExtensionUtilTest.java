@@ -99,7 +99,7 @@ public class WizardPageExtensionUtilTest extends TestCase
         assertEquals( "Wrong config class", HashMap.class, postProcessor.getConfig().getClass() );
         postProcessor = postProcessors.get( 1 );
         assertEquals( "Wrong postprocessor class", MavenProjectPostprocessor1.class, postProcessor.getClass() );
-        assertEquals( "Wrong config class", ArrayList.class, postProcessor.getConfig().getClass() );
+        assertNull( "A configuration object leaked to the post processor", postProcessor.getConfig() );
     }
 
     public void testAppFuseGetPostProcessors() throws Exception
