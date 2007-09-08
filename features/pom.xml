@@ -47,6 +47,7 @@
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>pde-maven-plugin</artifactId>
+        <extensions>true</extensions>
       </plugin>
    </plugins>
   </build>
