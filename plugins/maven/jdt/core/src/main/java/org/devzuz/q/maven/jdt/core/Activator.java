@@ -9,17 +9,18 @@ package org.devzuz.q.maven.jdt.core;
 import org.devzuz.q.maven.embedder.log.EclipseLogger;
 import org.devzuz.q.maven.embedder.log.Logger;
 import org.devzuz.q.maven.jdt.core.internal.MavenProjectJDTResourceListener;
+import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator
-    extends Plugin
+public class Activator extends Plugin
 {
 
     // The plug-in ID
@@ -27,7 +28,7 @@ public class Activator
 
     // The shared instance
     private static Activator plugin;
-    
+
     private IResourceChangeListener iResourceListener;
 
     private Logger logger;
@@ -40,24 +41,24 @@ public class Activator
         plugin = this;
     }
 
-    public void start( BundleContext context )
-        throws Exception
+    @Override
+    public void start( BundleContext context ) throws Exception
     {
         super.start( context );
         logger = new EclipseLogger( PLUGIN_ID, this.getLog() );
 
         iResourceListener = new MavenProjectJDTResourceListener();
-        ResourcesPlugin.getWorkspace().addResourceChangeListener(iResourceListener,
-                                                                 IResourceChangeEvent.PRE_CLOSE
-                                                                 | IResourceChangeEvent.PRE_DELETE
-                                                                 );
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(
+                                                                  iResourceListener,
+                                                                  IResourceChangeEvent.PRE_CLOSE
+                                                                                  | IResourceChangeEvent.PRE_DELETE );
     }
 
-    public void stop( BundleContext context )
-        throws Exception
+    @Override
+    public void stop( BundleContext context ) throws Exception
     {
         plugin = null;
-        ResourcesPlugin.getWorkspace().removeResourceChangeListener(iResourceListener);
+        ResourcesPlugin.getWorkspace().removeResourceChangeListener( iResourceListener );
         iResourceListener = null;
         super.stop( context );
     }
@@ -75,5 +76,24 @@ public class Activator
     public static Logger getLogger()
     {
         return getDefault().logger;
+    }
+
+    /**
+     * Sends trace messages to stdout if the specified trace option is enabled.
+     * 
+     * This is intended only for developing and debugging.
+     * 
+     * @param traceOption
+     *            the trace option enabling the message trace.
+     * @param message
+     *            the message to display.
+     */
+    public static void trace( TraceOption traceOption, String message )
+    {
+        String value = Platform.getDebugOption( PLUGIN_ID + "/" + traceOption.getValue() );
+        if ( null != value && value.equals( "true" ) )
+        {
+            System.out.println( "[" + traceOption + "] " + message );
+        }
     }
 }

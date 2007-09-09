@@ -1,0 +1,3 @@
+org.devzuz.q.maven.jdt.core/debug=false
+org.devzuz.q.maven.jdt.core/jdtResourceListener=false
+org.devzuz.q.maven.jdt.core/classpathUpdate=false
