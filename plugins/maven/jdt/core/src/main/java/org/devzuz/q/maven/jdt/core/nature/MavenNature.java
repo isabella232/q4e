@@ -19,6 +19,7 @@ import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
+import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -172,42 +173,46 @@ public class MavenNature
             return;
         }
 
-        IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, false );
-        File basedir = mavenProject.getBaseDirectory();
-        IJavaProject javaProject = JavaCore.create( project );
-
-        String outputDirectory = mavenProject.getMavenProject().getBuild().getOutputDirectory();
-        String testOutputDirectory = mavenProject.getMavenProject().getBuild().getTestOutputDirectory();
-        IPath outputFolder = project.getFolder( getRelativePath( basedir, outputDirectory ) ).getFullPath();
-        IPath testTargetFolder = project.getFolder( getRelativePath( basedir, testOutputDirectory ) ).getFullPath();
-
-        /* use a Set that will keep the order of elements added */
-        Set<IClasspathEntry> classpath = new ListOrderedSet();
-
-        /* add previous classpath entries */
-        // TODO sevral problems with this
-        // eg a folder with includes is not equal to the same folder without includes
-        // and later a exception is thrown
-        // classpath.addAll(Arrays.asList(javaProject.getRawClasspath()));
-        /* add source and resource folders */
-        classpath.addAll( getSourceFolders( project, basedir, mavenProject.getMavenProject().getCompileSourceRoots(),
-                                            null ) );
-        classpath.addAll( getSourceFolders( project, basedir, mavenProject.getMavenProject()
-            .getTestCompileSourceRoots(), testTargetFolder ) );
-        classpath.addAll( getResourceFolders( project, basedir, mavenProject.getMavenProject().getBuild()
-            .getResources(), null ) );
-        classpath.addAll( getResourceFolders( project, basedir, mavenProject.getMavenProject().getBuild()
-            .getTestResources(), testTargetFolder ) );
-
-        // TODO read compiler plugin configuration and customize as needed
-        /* ensure the JRE is the last one by removing it first */
-        classpath.remove( JavaRuntime.getDefaultJREContainerEntry() );
-        classpath.add( JavaRuntime.getDefaultJREContainerEntry() );
-
-        IClasspathEntry[] classpathEntries = (IClasspathEntry[]) classpath.toArray( new IClasspathEntry[classpath
-            .size()] );
-
-        javaProject.setRawClasspath( classpathEntries, outputFolder, null );
+        try
+        {
+            IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, false );
+            File basedir = mavenProject.getBaseDirectory();
+            IJavaProject javaProject = JavaCore.create( project );
+            String outputDirectory = mavenProject.getMavenProject().getBuild().getOutputDirectory();
+            String testOutputDirectory = mavenProject.getMavenProject().getBuild().getTestOutputDirectory();
+            IPath outputFolder = project.getFolder( getRelativePath( basedir, outputDirectory ) ).getFullPath();
+            IPath testTargetFolder = project.getFolder( getRelativePath( basedir, testOutputDirectory ) ).getFullPath();
+            /* use a Set that will keep the order of elements added */
+            Set<IClasspathEntry> classpath = new ListOrderedSet();
+            /* add previous classpath entries */
+            // TODO sevral problems with this
+            // eg a folder with includes is not equal to the same folder without includes
+            // and later a exception is thrown
+            // classpath.addAll(Arrays.asList(javaProject.getRawClasspath()));
+            /* add source and resource folders */
+            classpath.addAll( getSourceFolders( project, basedir,
+                                                mavenProject.getMavenProject().getCompileSourceRoots(), null ) );
+            classpath.addAll( getSourceFolders( project, basedir,
+                                                mavenProject.getMavenProject().getTestCompileSourceRoots(),
+                                                testTargetFolder ) );
+            classpath.addAll( getResourceFolders( project, basedir,
+                                                  mavenProject.getMavenProject().getBuild().getResources(), null ) );
+            classpath.addAll( getResourceFolders( project, basedir,
+                                                  mavenProject.getMavenProject().getBuild().getTestResources(),
+                                                  testTargetFolder ) );
+            // TODO read compiler plugin configuration and customize as needed
+            /* ensure the JRE is the last one by removing it first */
+            classpath.remove( JavaRuntime.getDefaultJREContainerEntry() );
+            classpath.add( JavaRuntime.getDefaultJREContainerEntry() );
+            IClasspathEntry[] classpathEntries =
+                (IClasspathEntry[]) classpath.toArray( new IClasspathEntry[classpath.size()] );
+            javaProject.setRawClasspath( classpathEntries, outputFolder, null );
+        }
+        catch ( CoreException e )
+        {
+            // TODO: handle exception
+            MavenExceptionHandler.handle( project, e );
+        }
 
     }
 

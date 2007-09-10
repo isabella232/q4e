@@ -10,6 +10,7 @@ package org.devzuz.q.maven.embedder.internal;
 import java.util.List;
 
 import org.apache.maven.execution.MavenExecutionResult;
+import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
 
@@ -26,7 +27,17 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
     public EclipseMavenExecutionResult( MavenExecutionResult result )
     {
         setExceptions( result.getExceptions() );
-        setMavenProject( new EclipseMavenProject( result.getMavenProject() ) );
+        
+        MavenProject mavenProject = result.getMavenProject();
+        
+        if( mavenProject != null )
+        {
+            setMavenProject( new EclipseMavenProject( result.getMavenProject() ) );
+        }
+        else
+        {
+            setMavenProject( null );
+        }
     }
     
     public List<Exception> getExceptions()

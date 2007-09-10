@@ -133,8 +133,15 @@ public class MavenClasspathContainer
                             Set<IMavenArtifact> artifactToBeResolved = new LinkedHashSet<IMavenArtifact>();
                             artifactToBeResolved.addAll( MavenUtils.getMissingArtifacts( ( MultipleArtifactsNotFoundException ) exception ) );
                             artifactToBeResolved.addAll( MavenUtils.getResolvedArtifacts( ( MultipleArtifactsNotFoundException ) exception ) );
-                            
-                            container.refreshClasspath( result.getMavenProject() , artifactToBeResolved );
+                            IMavenProject mavenProject = result.getMavenProject();
+                            if( mavenProject != null )
+                            {
+                                container.refreshClasspath( mavenProject , artifactToBeResolved );
+                            }
+                            else
+                            {
+                                MavenExceptionHandler.handle( project, e );
+                            }
                         }
                         else
                         {
