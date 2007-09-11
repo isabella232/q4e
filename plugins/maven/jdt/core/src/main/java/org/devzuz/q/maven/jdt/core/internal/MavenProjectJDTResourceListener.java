@@ -6,6 +6,14 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.internal;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
@@ -25,6 +33,8 @@ import org.eclipse.jdt.core.JavaModelException;
 
 public class MavenProjectJDTResourceListener implements IResourceChangeListener
 {
+	private static String POM_XML = "pom.xml";
+	
     public MavenProjectJDTResourceListener()
     {
     }
@@ -38,7 +48,7 @@ public class MavenProjectJDTResourceListener implements IResourceChangeListener
             Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Procesing change event for " + ires );
         }
 
-        if ( ires.getProject().isOpen() && ires.getProject().getFile( "pom.xml" ).exists() )
+        if ( ires.getProject().isOpen() && ires.getProject().getFile( POM_XML).exists() )
         {
             classPathChangeUpdater( ires );
         }
@@ -120,39 +130,28 @@ public class MavenProjectJDTResourceListener implements IResourceChangeListener
 
     private String getProjectPackage( IProject iproject )
     {
-        String[] strDataProcNodeList = { "" };
         StringBuilder strProjectInfoData = new StringBuilder("");
 
-        if ( iproject.getFile( "pom.xml" ).exists() )
+        if ( iproject.getFile( POM_XML ).exists() )
         {
-            MavenPOMParser mpp = new MavenPOMParser( iproject.getFile( "pom.xml" ).getLocation().toFile() );
-
-            mpp.parsePOMFile( "/pre:project/pre:artifactId/text()" );
-            strDataProcNodeList = mpp.processNodeList();
-            if ( strDataProcNodeList != null )
-            {
-                strProjectInfoData.append(strDataProcNodeList[0] + "-");
-            }
-
-            mpp.parsePOMFile( "/pre:project/pre:version/text()" );
-            strDataProcNodeList = mpp.processNodeList();
-            if ( strDataProcNodeList != null )
-            {
-            	strProjectInfoData.append(strDataProcNodeList[0] + ".");
-            }
-
-            mpp.parsePOMFile( "/pre:project/pre:packaging/text()" );
-            strDataProcNodeList = mpp.processNodeList();
-            if ( strDataProcNodeList != null )
-            {
-            	strProjectInfoData.append(strDataProcNodeList[0]);
-            }
-            else
-            {
-            	strProjectInfoData.append("jar");
-            }
+        	File pom = new File(  iproject.getFile( POM_XML ).getLocation().toOSString());
+        	try {
+				Model pomModel = new MavenXpp3Reader().read( new FileReader( pom) );
+				strProjectInfoData.append(pomModel.getArtifactId()+"-");
+				strProjectInfoData.append(pomModel.getVersion()+".");
+				strProjectInfoData.append(pomModel.getPackaging());
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (XmlPullParserException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}                	
         }
-        
+ 
         return strProjectInfoData.toString();
         	
     }
