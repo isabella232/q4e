@@ -132,26 +132,30 @@ public class MavenProjectJDTResourceListener implements IResourceChangeListener
     {
         StringBuilder strProjectInfoData = new StringBuilder("");
 
-        if ( iproject.getFile( POM_XML ).exists() )
-        {
-        	File pom = new File(  iproject.getFile( POM_XML ).getLocation().toOSString());
-        	try {
-				Model pomModel = new MavenXpp3Reader().read( new FileReader( pom) );
-				strProjectInfoData.append(pomModel.getArtifactId()+"-");
-				strProjectInfoData.append(pomModel.getVersion()+".");
-				strProjectInfoData.append(pomModel.getPackaging());
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (XmlPullParserException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}                	
-        }
- 
+    	File pom = new File(  iproject.getFile( POM_XML ).getLocation().toOSString());
+    	
+    	try {
+			Model pomModel = new MavenXpp3Reader().read( new FileReader( pom) );
+			strProjectInfoData.append(pomModel.getArtifactId()+"-");
+			strProjectInfoData.append(pomModel.getVersion()+".");
+			strProjectInfoData.append(pomModel.getPackaging());
+		} 
+    	catch (FileNotFoundException e) 
+    	{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+    	catch (IOException e) 
+    	{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	catch (XmlPullParserException e) 
+    	{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}                	
+
         return strProjectInfoData.toString();
         	
     }
