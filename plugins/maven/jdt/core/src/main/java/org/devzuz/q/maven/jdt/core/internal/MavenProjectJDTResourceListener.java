@@ -114,13 +114,14 @@ public class MavenProjectJDTResourceListener implements IResourceChangeListener
         IClasspathContainer classpathContainer =
             JavaCore.getClasspathContainer( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ), javaProject );
         /* Get current entries. */
+        
         return classpathContainer.getClasspathEntries();
     }
 
     private String getProjectPackage( IProject iproject )
     {
         String[] strDataProcNodeList = { "" };
-        String strProjectInfoData = "";
+        StringBuilder strProjectInfoData = new StringBuilder("");
 
         if ( iproject.getFile( "pom.xml" ).exists() )
         {
@@ -128,26 +129,32 @@ public class MavenProjectJDTResourceListener implements IResourceChangeListener
 
             mpp.parsePOMFile( "/pre:project/pre:artifactId/text()" );
             strDataProcNodeList = mpp.processNodeList();
-            if ( strDataProcNodeList.length > 1 )
+            if ( strDataProcNodeList != null )
             {
-                strProjectInfoData = strProjectInfoData + strDataProcNodeList[0] + "-";
+                strProjectInfoData.append(strDataProcNodeList[0] + "-");
             }
 
             mpp.parsePOMFile( "/pre:project/pre:version/text()" );
             strDataProcNodeList = mpp.processNodeList();
-            if ( strDataProcNodeList.length > 1 )
+            if ( strDataProcNodeList != null )
             {
-                strProjectInfoData = strProjectInfoData + strDataProcNodeList[0] + ".";
+            	strProjectInfoData.append(strDataProcNodeList[0] + ".");
             }
 
             mpp.parsePOMFile( "/pre:project/pre:packaging/text()" );
             strDataProcNodeList = mpp.processNodeList();
-            if ( strDataProcNodeList.length > 1 )
+            if ( strDataProcNodeList != null )
             {
-                strProjectInfoData = strProjectInfoData + strDataProcNodeList[0];
+            	strProjectInfoData.append(strDataProcNodeList[0]);
+            }
+            else
+            {
+            	strProjectInfoData.append("jar");
             }
         }
-        return strProjectInfoData;
+        System.out.println(strProjectInfoData.toString());
+        return strProjectInfoData.toString();
+        	
     }
 
 }

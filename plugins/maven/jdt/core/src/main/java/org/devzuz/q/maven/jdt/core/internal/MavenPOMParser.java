@@ -78,12 +78,17 @@ public class MavenPOMParser
     
     public String[] processNodeList()
     {
-        String [] strNodeItems={""};        
-        for(int i =0; i < xPathNodeList.getLength() ; i ++)
-        {
-            strNodeItems[i] = xPathNodeList.item(i).getNodeValue();
-        }
-        return strNodeItems;
+    	 String  strNodeItems[] = null;
+         if(xPathNodeList.getLength() > 0 )
+         {
+             strNodeItems = new String[xPathNodeList.getLength()];
+             for(int i = 0; i < xPathNodeList.getLength() ; i ++)
+             {
+                 strNodeItems[i] = xPathNodeList.item(i).getNodeValue();
+             }           
+         }
+
+         return strNodeItems;
     }
     
 }
