@@ -7,6 +7,9 @@
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
 
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPOMSearcher;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -14,6 +17,9 @@ import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 
 public class MavenPomFormEditor extends FormEditor
@@ -22,9 +28,11 @@ public class MavenPomFormEditor extends FormEditor
     
     private IPath pomIPath;
     
+    private Model pomModel;
+    
     public MavenPomFormEditor()
     {
-        
+
     }
     
     @Override
@@ -33,16 +41,16 @@ public class MavenPomFormEditor extends FormEditor
         try
         {
     
-            setSelectedLocationOfPOMs();
-            
-            startPOMSearch();
-            
-            addPage( new MavenPomBasicFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomBasicFormPage;",
-                                                       "Project Information" , getPOMFilePath()));
-            addPage( new MavenPomDependenciesFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage;",
-                                                       "Dependencies", getPOMFilePath()) );
-            addPage( new MavenPomPropertiesModuleFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage;",
-                                                       "Properties/Module" ) );    
+        	if(initializeAddPagesOK())
+        	{
+                addPage( new MavenPomBasicFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomBasicFormPage;",
+                        "Project Information" , this.pomModel ));
+                addPage( new MavenPomDependenciesFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage;",
+                        "Dependencies", this.pomModel ) );
+                addPage( new MavenPomPropertiesModuleFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage;",
+                        "Properties/Module" ) ); 
+        	}
+   
         }
         catch ( PartInitException pie )
         {
@@ -50,7 +58,37 @@ public class MavenPomFormEditor extends FormEditor
             pie.printStackTrace();
         }
     }
-
+    
+    private boolean initializeAddPagesOK()
+    {
+        setSelectedLocationOfPOMs();
+        
+        startPOMSearch();
+        
+        if(getPOMFilePath() != null)
+        {
+        	File pom = new File( getPOMFilePath());
+        	try {
+				this.pomModel = new MavenXpp3Reader().read( new FileReader( pom) );
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (XmlPullParserException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}            
+        }
+        else 
+        {
+        	return false;
+        }
+        
+        return true;
+    	
+    }
     @Override
     public void doSave( IProgressMonitor monitor )
     {
@@ -91,10 +129,12 @@ public class MavenPomFormEditor extends FormEditor
         this.pomIPath = ip;
     }
     
-    public File getPOMFilePath()
+    public String getPOMFilePath()
     {
-        return pomIPath.toFile();
+        return pomIPath.toOSString();
     }
+    
+    
     
     
 }

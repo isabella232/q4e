@@ -7,9 +7,10 @@
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
 
+import org.apache.maven.model.Dependency;
+import org.apache.maven.model.Model;
 import org.devzuz.q.maven.jdt.ui.Messages;
-import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPOMFormPageData;
-import java.io.File;
+import java.util.List;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -35,19 +36,19 @@ public class MavenPomDependenciesFormPage extends FormPage
 {
     private ScrolledForm form;
     
-    private File fPOMLocation;
-    
     private Table propertiesTable;
+    
+    private Model modelPOM;
     
     public MavenPomDependenciesFormPage( String id, String title )
     {
         super( id, title );
     }
 
-    public MavenPomDependenciesFormPage( FormEditor editor, String id, String title, File fPOMLocation)
+    public MavenPomDependenciesFormPage( FormEditor editor, String id, String title, Model modelPOM)
     {
         super( editor, id, title );
-        this.fPOMLocation = fPOMLocation;
+        this.modelPOM = modelPOM;
     }
 
     @Override
@@ -108,21 +109,27 @@ public class MavenPomDependenciesFormPage extends FormPage
     
     private void generateDependencyTableData()
     {
-        MavenPOMFormPageData mpmfpd = new MavenPOMFormPageData(getPOMLocation());
-        String strDataProcNodeList_artifact [] = {""};
-        String strDataProcNodeList_version [] = {""};
-        
-        mpmfpd.doXPathExpression( "/pre:project/pre:dependencies/pre:dependency/pre:version/text()" );
-        strDataProcNodeList_version = mpmfpd.processNodeList();
-        
-        mpmfpd.doXPathExpression( "/pre:project/pre:dependencies/pre:dependency/pre:artifactId/text()" );
-        strDataProcNodeList_artifact = mpmfpd.processNodeList();
-        
-        for(int x = 0; x < strDataProcNodeList_artifact.length ; x++)
-        {
+    	List dependenciesList = modelPOM.getDependencies();
+        for(int x =0 ; x < dependenciesList.size(); x++)
+        {     
+        	
+            Dependency dependecies = (Dependency)dependenciesList.get(x);
             TableItem item = new TableItem( propertiesTable, SWT.BEGINNING);
-            item.setText(new String [] {strDataProcNodeList_artifact[x]+"-"+ strDataProcNodeList_version[x]+".jar"});
-        }    
+            item.setText(new String [] { getDependency(dependecies)});
+
+        }   
+    }
+    
+    private String getDependency(Dependency dependency)
+    {
+    	StringBuilder strDependency = new StringBuilder();
+    	strDependency.append(dependency.getArtifactId());
+    	strDependency.append("-");
+    	strDependency.append(dependency.getVersion());
+    	strDependency.append(".");
+    	strDependency.append(dependency.getType());
+    	
+    	return strDependency.toString();    	
     }
     
     private Control createDependencyDetailControls( Composite container , FormToolkit toolKit )
@@ -241,10 +248,5 @@ public class MavenPomDependenciesFormPage extends FormPage
         toolKit.paintBordersFor( container );
         
         return container;
-    }
-    
-    public File getPOMLocation()
-    {
-        return this.fPOMLocation;
     }
 }

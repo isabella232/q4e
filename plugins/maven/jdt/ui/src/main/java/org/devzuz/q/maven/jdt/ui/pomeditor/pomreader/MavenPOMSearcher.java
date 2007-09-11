@@ -9,7 +9,7 @@ public class MavenPOMSearcher
 {
     private String strPOMLocation;
     
-    public static final String POM_XML = "pom.xml";
+    private static final String POM_XML = "pom.xml";
     
     public MavenPOMSearcher(String strPOMLocation)     
     {
