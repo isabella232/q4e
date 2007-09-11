@@ -152,7 +152,7 @@ public class MavenProjectJDTResourceListener implements IResourceChangeListener
             	strProjectInfoData.append("jar");
             }
         }
-        System.out.println(strProjectInfoData.toString());
+        
         return strProjectInfoData.toString();
         	
     }
