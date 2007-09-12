@@ -50,8 +50,6 @@ public class MavenClasspathContainer
 
     private List<IClasspathEntry> classpathEntries = new ArrayList<IClasspathEntry>();
 
-    private IMavenProject mavenProject;
-
     private IProject project;
 
     public IClasspathEntry[] getClasspathEntries()
@@ -85,7 +83,6 @@ public class MavenClasspathContainer
         {
             Activator.getLogger().info( "Refreshing classpath for maven project " + mavenProject.getArtifactId() );
 
-            this.mavenProject = mavenProject;
             this.project = mavenProject.getProject();
             
             classpathEntries.clear();
@@ -109,7 +106,6 @@ public class MavenClasspathContainer
         try
         {
             IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, true );
-            
             container.refreshClasspath( mavenProject , mavenProject.getArtifacts() );
         }
         catch ( CoreException e )
@@ -263,11 +259,6 @@ public class MavenClasspathContainer
         }
         
         return buffer.toString();
-    }
-
-    public IMavenProject getMavenProject()
-    {
-        return mavenProject;
     }
 
     public IProject getProject()
