@@ -8,7 +8,7 @@
 package org.devzuz.q.maven.ui.views;
 
 import org.devzuz.q.maven.ui.Messages;
-import org.devzuz.q.maven.ui.views.data.MavenLifeCyclePOMParser;
+import org.devzuz.q.maven.ui.views.data.MavenLifeCyclePomParser;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -103,7 +103,7 @@ public class MavenLifeCycleView
                  {
                      try 
                      {
-                    	 MavenLifeCyclePOMParser pmlcp = new MavenLifeCyclePOMParser(mavenLifeCycleTableViewer,
+                    	 MavenLifeCyclePomParser pmlcp = new MavenLifeCyclePomParser(mavenLifeCycleTableViewer,
                                                                                      projects[i].getName(), 
                                                                                      getPOMFileLocation(projects[i])); 
                          pmlcp.parsePOMFile();

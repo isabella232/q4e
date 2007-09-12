@@ -13,8 +13,8 @@ import org.eclipse.swt.widgets.TableItem;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 
-public class MavenLifeCyclePOMParser 
-	extends MavenPOMParser
+public class MavenLifeCyclePomParser 
+	extends MavenPomParser
 {
     private String phaseName;
     
@@ -30,7 +30,7 @@ public class MavenLifeCyclePOMParser
     
     private TableViewer tblViewer;
 
-    public MavenLifeCyclePOMParser(TableViewer tblViewer, String projectName, IPath pomFileIPath)            
+    public MavenLifeCyclePomParser(TableViewer tblViewer, String projectName, IPath pomFileIPath)            
     {
         this.projectName = projectName;
         this.tblViewer = tblViewer;

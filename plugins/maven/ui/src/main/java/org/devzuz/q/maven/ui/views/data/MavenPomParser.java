@@ -17,7 +17,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-public abstract class MavenPOMParser 
+public abstract class MavenPomParser 
 {
 
     public String pomFileLoc;
