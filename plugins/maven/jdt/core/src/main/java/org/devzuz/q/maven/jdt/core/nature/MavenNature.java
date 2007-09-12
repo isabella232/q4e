@@ -311,7 +311,7 @@ public class MavenNature
         return classpathEntries;
     }
 
-    private String getRelativePath( File basedir, String fullPath )
+    String getRelativePath( File basedir, String fullPath )
     {
         IPath path = new Path( fullPath );
         IPath basedirPath = new Path( basedir.getAbsolutePath() );
