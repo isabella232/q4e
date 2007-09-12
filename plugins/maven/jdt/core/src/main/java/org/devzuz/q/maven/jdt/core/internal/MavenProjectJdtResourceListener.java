@@ -59,7 +59,6 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                 Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Skiping because it has no pom.xml: " + ires );
             }
         }
-
     }
 
     private void classPathChangeUpdater( IResource ires )
@@ -134,26 +133,27 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
 
     	File pom = new File(  iproject.getFile( POM_XML ).getLocation().toOSString());
     	
-    	try {
+    	try 
+    	{
 			Model pomModel = new MavenXpp3Reader().read( new FileReader( pom) );
 			strProjectInfoData.append(pomModel.getArtifactId()+"-");
 			strProjectInfoData.append(pomModel.getVersion()+".");
 			strProjectInfoData.append(pomModel.getPackaging());
 		} 
-    	catch (FileNotFoundException e) 
+    	catch (FileNotFoundException fnfe) 
     	{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+    		fnfe.printStackTrace();
 		} 
-    	catch (IOException e) 
+    	catch (IOException ioe) 
     	{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+    		ioe.printStackTrace();
 		}
-    	catch (XmlPullParserException e) 
+    	catch (XmlPullParserException xppe) 
     	{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+    		xppe.printStackTrace();
 		}                	
 
         return strProjectInfoData.toString();
