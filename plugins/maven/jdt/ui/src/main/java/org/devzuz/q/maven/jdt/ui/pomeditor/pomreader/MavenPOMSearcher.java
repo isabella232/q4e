@@ -35,8 +35,7 @@ public class MavenPOMSearcher
                         return getPOMFileLocation(project);
                     }
                 }
-            }
-            
+            }            
         }
         return null;
     }

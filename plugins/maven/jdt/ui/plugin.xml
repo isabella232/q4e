@@ -96,6 +96,7 @@
             </contextualLaunch>
       </shortcut>
    </extension>
+   <!--
    <extension
          point="org.eclipse.ui.editors">
       <editor
@@ -109,6 +110,7 @@
             name="Maven 2 Pom Editor">
       </editor>
    </extension>
+   -->
 
    <extension point="org.eclipse.core.runtime.adapters">
       <factory adaptableType="org.eclipse.core.resources.IResource" class="">
