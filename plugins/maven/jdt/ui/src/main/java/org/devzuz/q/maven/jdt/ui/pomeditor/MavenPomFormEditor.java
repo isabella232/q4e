@@ -6,11 +6,10 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
-
+import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPomSearcher;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPOMSearcher;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.ui.IEditorInput;
@@ -120,7 +119,7 @@ public class MavenPomFormEditor extends FormEditor
     
     public void startPOMSearch()
     {
-        MavenPOMSearcher mps = new MavenPOMSearcher(getSelectedLocationOfPOM());
+        MavenPomSearcher mps = new MavenPomSearcher(getSelectedLocationOfPOM());
         setPOMIPath(mps.getProjectPOMFilePath());
     }
     
@@ -133,8 +132,5 @@ public class MavenPomFormEditor extends FormEditor
     {
         return pomIPath.toOSString();
     }
-    
-    
-    
     
 }
