@@ -177,6 +177,7 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
         String archetypeListPref = getPreferenceStore().getString( getPreferenceName() );
         if ( !archetypeListPref.trim().equals( "" ) )
         {
+        	
             String[] arrayStr = archetypeListPref.split( MavenArchetypePreferencePage.ARCHETYPE_LIST_LS );
             for ( int i = 0; i < arrayStr.length; i++ )
             {
@@ -193,7 +194,7 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
 
     protected void doLoadDefault()
     {
-        artifactsTable.clearAll();
+        artifactsTable.removeAll();        
         TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
         item.setText( new String[] { MavenArchetypePreferencePage.DEFAULT_ARCHETYPE_LIST_WIKI , 
                                      MavenArchetypePreferencePage.DEFAULT_ARCHETYPE_LIST_KIND } );
@@ -299,7 +300,7 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
 
     protected String createTableDataList( TableItem[] items )
     {
-        StringBuffer strBuffer = new StringBuffer( "" );
+        StringBuilder strBuffer = new StringBuilder();
         for ( int x = 0; x < items.length; x++ )
         {
             if( x > 0 )
