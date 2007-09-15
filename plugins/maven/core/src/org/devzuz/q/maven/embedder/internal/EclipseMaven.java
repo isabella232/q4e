@@ -570,4 +570,13 @@ public class EclipseMaven implements IMaven
         }
 
     }
+
+    public void refresh() throws CoreException
+    {
+        synchronized ( this )
+        {
+            stop();
+            start();
+        }
+    }
 }

@@ -270,4 +270,19 @@ public interface IMaven
      */
     public void resolve( Artifact artifact, List<ArtifactRepository> remoteRepositories )
         throws ArtifactNotFoundException, CoreException;
+
+    /**
+     * <p>
+     * Refresh the Maven Embedder instance, deleting cache, rereading settings,...
+     * </p>
+     * <p>
+     * This is potentially a costly operation, but required due to bugs in the Maven Embedder,
+     * <ul>
+     * <li>http://jira.codehaus.org/browse/MNG-3008</li>
+     * </ul>
+     * </p>
+     * 
+     * @throws CoreException
+     */
+    public void refresh() throws CoreException;
 }
