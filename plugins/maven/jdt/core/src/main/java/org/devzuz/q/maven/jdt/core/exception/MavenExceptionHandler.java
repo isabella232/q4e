@@ -52,7 +52,8 @@ public class MavenExceptionHandler
         }
         else
         {
-            instance.markPom( project, "Error: " + cause.getMessage() );
+            String s = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getName();
+            instance.markPom( project, "Error: " + s );
         }
     }
 
