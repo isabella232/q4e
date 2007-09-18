@@ -50,7 +50,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
 
         if ( ires.getProject().isOpen() && ires.getProject().getFile( POM_XML).exists() )
         {
-            classPathChangeUpdater( ires );
+            classPathChangeUpdater( ires.getProject() );
         }
         else
         {
@@ -61,48 +61,51 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         }
     }
 
-    private void classPathChangeUpdater( IResource ires )
+    private void classPathChangeUpdater( IProject iresProject )
     {
         IProject[] iprojects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
         for ( IProject iproject : iprojects )
         {
-            boolean isMavenNatureEnabled = false;
-            try
-            {
-                isMavenNatureEnabled = MavenNatureHelper.hasMavenNature( iproject );
-            }
-            catch ( CoreException e )
-            {
-                Activator.getLogger().log( "Could not read nature for project: " + iproject, e );
-            }
-            if ( isMavenNatureEnabled )
-            {
+        	if(!(iresProject.equals(iproject.getProject())))
+        	{
+        		boolean isMavenNatureEnabled = false;
                 try
                 {
-                    /* Get current entries. */
-                    IClasspathEntry[] classPathEntries = getCurrentClasspathEntries( iproject );
-
-                    for ( IClasspathEntry classPathEntry : classPathEntries )
+                    isMavenNatureEnabled = MavenNatureHelper.hasMavenNature( iproject );
+                }
+                catch ( CoreException e )
+                {
+                    Activator.getLogger().log( "Could not read nature for project: " + iproject, e );
+                }
+                if ( isMavenNatureEnabled )
+                {
+                    try
                     {
-                        String projectName = classPathEntry.getPath().lastSegment();
+                        /* Get current entries. */
+                        IClasspathEntry[] classPathEntries = getCurrentClasspathEntries( iproject );
 
-                        if ( projectName.equals( getProjectPackage( ires.getProject() ).trim() ) )
+                        for ( IClasspathEntry classPathEntry : classPathEntries )
                         {
-                            if ( Activator.getDefault().isDebugging() )
+                            String projectName = classPathEntry.getPath().lastSegment();
+
+                            if ( projectName.equals( getProjectPackage( iresProject ).trim() ) )
                             {
-                                Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for " + iproject );
+                                if ( Activator.getDefault().isDebugging() )
+                                {
+                                    Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for " + iproject );
+                                }
+                                new UpdateClasspathJob( iproject ).schedule();
                             }
-                            new UpdateClasspathJob( iproject ).schedule();
                         }
                     }
-                }
-                catch ( JavaModelException e )
-                {
-                    // Could not get project's classpath, ignore and try next.
-                    Activator.getLogger().log( "Could not read classpath for project: " + iproject, e );
+                    catch ( JavaModelException e )
+                    {
+                        // Could not get project's classpath, ignore and try next.
+                        Activator.getLogger().log( "Could not read classpath for project: " + iproject, e );
 
+                    }
                 }
-            }
+        	}
         }
     }
 
@@ -135,10 +138,13 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
     	
     	try 
     	{
-			Model pomModel = new MavenXpp3Reader().read( new FileReader( pom) );
+    		FileReader filetoread = new FileReader( pom );
+			Model pomModel = new MavenXpp3Reader().read( filetoread );
 			strProjectInfoData.append(pomModel.getArtifactId()+"-");
 			strProjectInfoData.append(pomModel.getVersion()+".");
 			strProjectInfoData.append(pomModel.getPackaging());
+			pomModel = null;		
+			filetoread.close();
 		} 
     	catch (FileNotFoundException fnfe) 
     	{
@@ -154,8 +160,8 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
     	{
 			// TODO Auto-generated catch block
     		xppe.printStackTrace();
-		}                	
-
+		}                
+    	pom = null;
         return strProjectInfoData.toString();
         	
     }
