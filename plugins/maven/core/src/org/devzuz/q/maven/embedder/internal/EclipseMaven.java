@@ -203,7 +203,7 @@ public class EclipseMaven implements IMaven
 
     public MavenExecutionResult executeRequest( MavenExecutionRequest request )
     {
-        return mavenEmbedder.execute( request );
+        return getMavenEmbedder().execute( request );
     }
 
     private MavenExecutionRequest generateRequest( IMavenProject mavenProject, Properties properties )
@@ -273,7 +273,7 @@ public class EclipseMaven implements IMaven
             if ( resolveTransitively )
             {
                 MavenExecutionResult status = 
-                    mavenEmbedder.readProjectWithDependencies( generateRequest( mavenProject, null ) );
+                    getMavenEmbedder().readProjectWithDependencies( generateRequest( mavenProject, null ) );
                 if( status.hasExceptions() )
                 {
                     throw new QCoreException( new MavenExecutionStatus ( IStatus.ERROR, Activator.PLUGIN_ID, 
@@ -287,7 +287,7 @@ public class EclipseMaven implements IMaven
             }
             else
             {
-                MavenProject mavenRawProject = mavenEmbedder.readProject( mavenProject.getPomFile() );
+                MavenProject mavenRawProject = getMavenEmbedder().readProject( mavenProject.getPomFile() );
                 mavenProject.refreshProject( mavenRawProject );
             }
             return mavenProject;
@@ -306,11 +306,11 @@ public class EclipseMaven implements IMaven
             if ( mavenProjectBuilder == null )
             {
                 mavenProjectBuilder =
-                    (MavenProjectBuilder) mavenEmbedder.getPlexusContainer().lookup( MavenProjectBuilder.ROLE );
+                    (MavenProjectBuilder) getMavenEmbedder().getPlexusContainer().lookup( MavenProjectBuilder.ROLE );
             }
             MavenProject mavenRawProject =
                 mavenProjectBuilder.buildFromRepository( artifact, remoteArtifactRepositories,
-                                                         mavenEmbedder.getLocalRepository(), true );
+                                                         getMavenEmbedder().getLocalRepository(), true );
             EclipseMavenProject mavenProject = new EclipseMavenProject( new EclipseMavenArtifact( artifact ) );
             mavenProject.refreshProject( mavenRawProject );
             return mavenProject;
@@ -380,11 +380,11 @@ public class EclipseMaven implements IMaven
 
     public void stop() throws CoreException
     {
-        if ( mavenEmbedder != null )
+        if ( getMavenEmbedder() != null )
         {
             try
             {
-                mavenEmbedder.stop();
+                getMavenEmbedder().stop();
                 state = STOPPED;
             }
             catch ( MavenEmbedderException e )
@@ -413,7 +413,7 @@ public class EclipseMaven implements IMaven
 
     public ILocalMavenRepository getLocalRepository()
     {
-        return new LocalMavenRepository( mavenEmbedder.getLocalRepository() );
+        return new LocalMavenRepository( getMavenEmbedder().getLocalRepository() );
     }
 
     public void setEventPropagator( EclipseMavenEventPropagator eventPropagator )
@@ -435,7 +435,7 @@ public class EclipseMaven implements IMaven
             try
             {
                 artifactMetadataSource =
-                    (ArtifactMetadataSource) mavenEmbedder.getPlexusContainer().lookup( ArtifactMetadataSource.ROLE );
+                    (ArtifactMetadataSource) getMavenEmbedder().getPlexusContainer().lookup( ArtifactMetadataSource.ROLE );
             }
             catch ( ComponentLookupException e )
             {
@@ -453,7 +453,7 @@ public class EclipseMaven implements IMaven
         try
         {
             // getLogger().info( "Retrieving versions of " + artifact.getGroupId() + ":" + artifact.getArtifactId() );
-            return artifactMetadataSource.retrieveAvailableVersions( artifact, mavenEmbedder.getLocalRepository(),
+            return artifactMetadataSource.retrieveAvailableVersions( artifact, getMavenEmbedder().getLocalRepository(),
                                                                      remoteRepositories );
         }
         catch ( ArtifactMetadataRetrievalException e )
@@ -467,7 +467,7 @@ public class EclipseMaven implements IMaven
 
     public Artifact createArtifact( String groupId, String artifactId, String version, String scope, String type )
     {
-        return mavenEmbedder.createArtifact( groupId, artifactId, version, scope, type );
+        return getMavenEmbedder().createArtifact( groupId, artifactId, version, scope, type );
     }
 
     public Dependency createMavenDependency( String groupId, String artifactId, String version, String scope,
@@ -489,7 +489,7 @@ public class EclipseMaven implements IMaven
         List<ArtifactRepository> artifactRepositories = new ArrayList<ArtifactRepository>( repositories.size() );
         for ( Repository repository : repositories )
         {
-            artifactRepositories.add( mavenEmbedder.createRepository( repository.getUrl(), repository.getId() ) );
+            artifactRepositories.add( getMavenEmbedder().createRepository( repository.getUrl(), repository.getId() ) );
         }
         return artifactRepositories;
     }
@@ -499,7 +499,7 @@ public class EclipseMaven implements IMaven
     {
         try
         {
-            mavenEmbedder.resolve( artifact, remoteRepositories, mavenEmbedder.getLocalRepository() );
+            getMavenEmbedder().resolve( artifact, remoteRepositories, getMavenEmbedder().getLocalRepository() );
         }
         catch ( ArtifactResolutionException e )
         {
@@ -510,7 +510,7 @@ public class EclipseMaven implements IMaven
 
     public MavenEmbedder getEmbedder()
     {
-        return mavenEmbedder;
+        return getMavenEmbedder();
     }
 
     /**
@@ -577,5 +577,14 @@ public class EclipseMaven implements IMaven
             stop();
             start();
         }
+    }
+
+    private MavenEmbedder getMavenEmbedder()
+    {
+        if ( mavenEmbedder == null )
+        {
+            throw new IllegalStateException( "The plugin has not been properly started, try restarting eclipse" );
+        }
+        return mavenEmbedder;
     }
 }
