@@ -35,6 +35,17 @@
                label="%mavenDisableManageDependenciesAction"
                menubarPath="org.devzuz.q.maven.ui.project.submenu/contents"/>     
       	</objectContribution>
+       <objectContribution
+             adaptable="true"
+             id="org.devzuz.q.maven.jdt.ui.project.menu"
+             objectClass="org.eclipse.core.resources.IProject">
+          <action
+                class="org.devzuz.q.maven.jdt.ui.actions.MavenReloadAction"
+                id="org.devzuz.q.maven.jdt.ui.actions.MavenReloadProjects"
+                label="%mavenReloadMavenProjects"
+                menubarPath="org.devzuz.q.maven.ui.project.submenu/contents">
+          </action>
+       </objectContribution>
    </extension>
 
    <extension
