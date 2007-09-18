@@ -7,6 +7,7 @@
 package org.devzuz.q.maven.jdt.core.exception;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -34,6 +35,14 @@ public class MavenExceptionHandler
 {
 
     private static MavenExceptionHandler instance = new MavenExceptionHandler();
+
+    public static void handle( IProject project, Collection<CoreException> exceptions )
+    {
+        for ( CoreException e : exceptions )
+        {
+            handle( project, e );
+        }
+    }
 
     public static void handle( IProject project, CoreException e )
     {
