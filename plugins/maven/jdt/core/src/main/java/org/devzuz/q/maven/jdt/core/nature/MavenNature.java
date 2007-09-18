@@ -40,6 +40,7 @@ import org.eclipse.core.resources.IProjectNature;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -182,87 +183,76 @@ public class MavenNature
         }
         
         IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, false );
-        
-        // Execute maven goal process-test-resources in another thread
+
+        // Execute maven goal process-test-resources
         // After the execution of that goal, two things happen
         // (1) The source folders are added to the classpath
         // (2) The maven classpath container is added to the classpath
         // (3) The JRE container is added to the classpath
-        MavenManager.getMaven().executeGoals( mavenProject, 
-                                              Collections.singletonList( "process-test-resources" ),
-                                              null, 
-                                              new MavenNatureExecutionJobAdapter( project ) );
+        // we don't want to schedule this, we can't exit method until the maven execution finishes
+        // or the classpath will be update incorrectly
+        IMavenExecutionResult result = MavenManager.getMaven().executeGoal( mavenProject, "process-test-resources", new NullProgressMonitor() );
+        addClasspath( result );
     }
-    
-    private class MavenNatureExecutionJobAdapter extends MavenExecutionJobAdapter
-    { 
-        private IProject project;
-        
-        public MavenNatureExecutionJobAdapter( IProject project )
+
+    private void addClasspath( IMavenExecutionResult result )
+    {
+        IJavaProject javaProject = JavaCore.create( project );
+        IMavenProject mavenProject = result.getMavenProject();
+        List< CoreException > mavenExceptions = result.getExceptions();
+        if( ( javaProject != null ) )
         {
-            this.project = project;
-        }
-        
-        public void done( IJobChangeEvent event , IMavenExecutionResult result )
-        {
-            IJavaProject javaProject = JavaCore.create( project );
-            IMavenProject mavenProject = result.getMavenProject();
-            List< CoreException > mavenExceptions = result.getExceptions();
-            if( ( javaProject != null ) )
+            if ( mavenExceptions == null || mavenExceptions.size() <= 0 )
             {
-                if ( mavenExceptions == null || mavenExceptions.size() <= 0 )
+                try
                 {
-                    try
-                    {
-                        // Refresh ourself
-                        project.refreshLocal( IResource.DEPTH_INFINITE, null );
+                    // Refresh ourself
+                    project.refreshLocal( IResource.DEPTH_INFINITE, null );
 
-                        // use a Set that will keep the order of elements added
-                        Set<IClasspathEntry> classpathEntriesSet = new ListOrderedSet();
+                    // use a Set that will keep the order of elements added
+                    Set<IClasspathEntry> classpathEntriesSet = new ListOrderedSet();
 
-                        classpathEntriesSet.addAll( getSourceFoldersClasspath( project, javaProject, mavenProject ) );
+                    classpathEntriesSet.addAll( getSourceFoldersClasspath( project, javaProject, mavenProject ) );
 
-                        classpathEntriesSet.add( getMavenClasspathContainer( javaProject ) );
+                    classpathEntriesSet.add( getMavenClasspathContainer( javaProject ) );
 
-                        classpathEntriesSet.add( getJREClasspathContainer( javaProject, result.getMavenProject() ) );
+                    classpathEntriesSet.add( getJREClasspathContainer( javaProject, result.getMavenProject() ) );
 
-                        IClasspathEntry[] classpathEntries =
-                            (IClasspathEntry[]) classpathEntriesSet.toArray( new IClasspathEntry[classpathEntriesSet.size()] );
+                    IClasspathEntry[] classpathEntries =
+                        (IClasspathEntry[]) classpathEntriesSet.toArray( new IClasspathEntry[classpathEntriesSet.size()] );
 
-                        String outputDirectory = mavenProject.getMavenProject().getBuild().getOutputDirectory();
-                        IFolder outputFolder =
-                            project.getFolder( getRelativePath( mavenProject.getBaseDirectory(), outputDirectory ) );
+                    String outputDirectory = mavenProject.getMavenProject().getBuild().getOutputDirectory();
+                    IFolder outputFolder =
+                        project.getFolder( getRelativePath( mavenProject.getBaseDirectory(), outputDirectory ) );
 
-                        javaProject.setRawClasspath( classpathEntries, outputFolder.getFullPath(), null );
-                    }
-                    catch ( JavaModelException e )
-                    {
-                        // TODO Handle this
-                        MavenExceptionHandler.handle( project, e );
-                    }
-                    catch ( CoreException e )
-                    {
-                        // TODO Handle this
-                        MavenExceptionHandler.handle( project, e );
-                    }
+                    javaProject.setRawClasspath( classpathEntries, outputFolder.getFullPath(), null );
                 }
-                else
+                catch ( JavaModelException e )
                 {
-                    for ( CoreException exception : mavenExceptions )
-                    {
-                        // TODO Handle this
-                        MavenExceptionHandler.handle( project, exception );
-                    }
-                    
+                    // TODO Handle this
+                    MavenExceptionHandler.handle( project, e );
+                }
+                catch ( CoreException e )
+                {
+                    // TODO Handle this
+                    MavenExceptionHandler.handle( project, e );
                 }
             }
             else
             {
-                
+                for ( CoreException exception : mavenExceptions )
+                {
+                    // TODO Handle this
+                    MavenExceptionHandler.handle( project, exception );
+                }
             }
-        } 
-    }
-    
+        }
+        else
+        {
+            // this shouldn't happen
+        }
+    } 
+
     private Set<IClasspathEntry> getSourceFoldersClasspath( IProject project , IJavaProject javaProject , IMavenProject mavenProject )
         throws CoreException
     {
