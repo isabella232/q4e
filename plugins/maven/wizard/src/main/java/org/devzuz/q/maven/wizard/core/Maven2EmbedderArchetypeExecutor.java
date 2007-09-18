@@ -55,7 +55,7 @@ public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
         IMavenListener listener = new ArchetypeGenerationListener( baseDir.append( artifactId ), wizardContext );
 
         MavenManager.getMaven().addEventListener( listener );
-        MavenManager.getMaven().executeGoal( baseDir, ARCHETYPE_PLUGIN_ID + ":create", archetypeProperties );
+        MavenManager.getMaven().scheduleGoal( baseDir, ARCHETYPE_PLUGIN_ID + ":create", archetypeProperties );
     }
 
     /**

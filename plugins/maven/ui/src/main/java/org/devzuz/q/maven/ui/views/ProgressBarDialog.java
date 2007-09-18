@@ -67,11 +67,11 @@ public class ProgressBarDialog implements IRunnableWithProgress
                 {
                     if ( properties == null || properties.size() == 0 )
                     {
-                        MavenManager.getMaven().executeGoal( project, goal );
+                        MavenManager.getMaven().scheduleGoal( project, goal );
                     }
                     else
                     {
-                        MavenManager.getMaven().executeGoal( project, goal, properties );
+                        MavenManager.getMaven().scheduleGoal( project, goal, properties );
                     }
                 }
             }

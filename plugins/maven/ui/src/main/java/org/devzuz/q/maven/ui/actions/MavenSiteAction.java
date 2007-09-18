@@ -40,7 +40,7 @@ public class MavenSiteAction
             IMavenListener listener = new SiteBuildListener( project, browserSupport );
 
             MavenManager.getMaven().addEventListener( listener );
-            MavenManager.getMaven().executeGoal( project, "site" );
+            MavenManager.getMaven().scheduleGoal( project, "site" );
         }
     }
 

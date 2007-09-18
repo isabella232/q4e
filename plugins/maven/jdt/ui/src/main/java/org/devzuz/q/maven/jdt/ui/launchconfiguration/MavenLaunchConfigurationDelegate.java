@@ -52,7 +52,7 @@ public class MavenLaunchConfigurationDelegate implements ILaunchConfigurationDel
                 if ( properties == null || properties.size() <= 0 )
                 {
                     runMavenEventView();
-                    MavenManager.getMaven().executeGoals( mavenProject, goals, properties );
+                    MavenManager.getMaven().scheduleGoals( mavenProject, goals, properties );
                 }
             }
         }

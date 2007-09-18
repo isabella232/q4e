@@ -87,7 +87,7 @@ public class EclipseMaven implements IMaven
 
     public void deploy( IMavenProject mavenProject ) throws CoreException
     {
-        executeGoal( mavenProject, GOAL_DEPLOY );
+        scheduleGoal( mavenProject, GOAL_DEPLOY );
     }
 
     public void addMavenListener( IMavenListener listener )
@@ -95,7 +95,7 @@ public class EclipseMaven implements IMaven
         getEventPropagator().addMavenListener( listener );
     }
 
-    public void executeGoal( IPath baseDirectory, String goal, Properties properties ) throws CoreException
+    public void scheduleGoal( IPath baseDirectory, String goal, Properties properties ) throws CoreException
     {
         Properties executionProperties = new Properties();
         if ( properties != null )
@@ -118,34 +118,34 @@ public class EclipseMaven implements IMaven
         scheduleRequest( baseDirectory, request , null );
     }
 
-    public void executeGoal( IMavenProject mavenProject, String goal ) throws CoreException
+    public void scheduleGoal( IMavenProject mavenProject, String goal ) throws CoreException
     {
-        executeGoal( mavenProject, goal, null );
+        scheduleGoal( mavenProject, goal, null );
     }
 
-    public void executeGoal( IMavenProject mavenProject, String goal, Properties properties ) throws CoreException
+    public void scheduleGoal( IMavenProject mavenProject, String goal, Properties properties ) throws CoreException
     {
-        executeGoal( mavenProject, goal, properties , null );
+        scheduleGoal( mavenProject, goal, properties , null );
     }
     
-    public void executeGoal( IMavenProject mavenProject, String goal, Properties properties , MavenExecutionJobAdapter jobAdapter ) 
+    public void scheduleGoal( IMavenProject mavenProject, String goal, Properties properties , MavenExecutionJobAdapter jobAdapter ) 
         throws CoreException
     {
-        executeGoals( mavenProject, Collections.singletonList( goal ), properties , jobAdapter );
+        scheduleGoals( mavenProject, Collections.singletonList( goal ), properties , jobAdapter );
     }
 
-    public void executeGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException
     {
-        executeGoals( mavenProject, goals, null );
+        scheduleGoals( mavenProject, goals, null );
     }
 
-    public void executeGoals( IMavenProject mavenProject, List<String> goals, Properties properties )
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, Properties properties )
         throws CoreException
     {
-        executeGoals( mavenProject, goals, properties , null );
+        scheduleGoals( mavenProject, goals, properties , null );
     }
     
-    public void executeGoals( IMavenProject mavenProject, List<String> goals, Properties properties , MavenExecutionJobAdapter jobAdapter )
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, Properties properties , MavenExecutionJobAdapter jobAdapter )
         throws CoreException
     {
         MavenExecutionRequest request = generateRequest( mavenProject, properties );
@@ -334,7 +334,7 @@ public class EclipseMaven implements IMaven
 
     public void install( IMavenProject mavenProject ) throws CoreException
     {
-        executeGoal( mavenProject, GOAL_INSTALL );
+        scheduleGoal( mavenProject, GOAL_INSTALL );
     }
 
     public void start() throws CoreException

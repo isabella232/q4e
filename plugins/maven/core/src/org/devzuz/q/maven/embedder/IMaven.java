@@ -88,12 +88,12 @@ public interface IMaven
      *            properties of this goal
      * @throws CoreException
      */
-    public void executeGoal( IPath baseDirectory, String goal, Properties properties ) throws CoreException;
+    public void scheduleGoal( IPath baseDirectory, String goal, Properties properties ) throws CoreException;
 
     /**
      * Allows you to execute a given goal name against a MavenProject.
      * 
-     * This is equivalent to {@link #executeGoal(IMavenProject, String, Properties )}, 
+     * This is equivalent to {@link #scheduleGoal(IMavenProject, String, Properties )}, 
      * using <code>null</code> as the properties argument.
      * 
      * @param mavenProject
@@ -101,12 +101,12 @@ public interface IMaven
      *            goal name
      * @throws CoreException
      */
-    public void executeGoal( IMavenProject mavenProject, String goal ) throws CoreException;
+    public void scheduleGoal( IMavenProject mavenProject, String goal ) throws CoreException;
 
     /**
      * Allows you to execute a given goal name against a MavenProject.
      * 
-     * This is equivalent to {@link #executeGoal(IMavenProject mavenProject, String goal, Properties properties , MavenExecutionJobAdapter jobAdapter)} 
+     * This is equivalent to {@link #scheduleGoal(IMavenProject mavenProject, String goal, Properties properties , MavenExecutionJobAdapter jobAdapter)} 
      * using <code>null</code> as the jobAdapter argument.
      * 
      * @param mavenProject
@@ -116,12 +116,12 @@ public interface IMaven
      *            properties of this goal
      * @throws CoreException
      */
-    public void executeGoal( IMavenProject mavenProject, String goal, Properties properties ) throws CoreException;
+    public void scheduleGoal( IMavenProject mavenProject, String goal, Properties properties ) throws CoreException;
     
     /**
      * Allows you to execute a given goal name against a MavenProject.
      * 
-     * This is equivalent to {@link #executeGoals(IMavenProject, List, Properties, MavenExecutionJobAdapter)} using a list with a single element
+     * This is equivalent to {@link #scheduleGoals(IMavenProject, List, Properties, MavenExecutionJobAdapter)} using a list with a single element
      * as the second argument.
      * 
      * @param mavenProject
@@ -133,13 +133,13 @@ public interface IMaven
      *            listener to the thread that executes the maven goal           
      * @throws CoreException
      */
-    public void executeGoal( IMavenProject mavenProject, String goal, Properties properties , MavenExecutionJobAdapter jobAdapter ) 
+    public void scheduleGoal( IMavenProject mavenProject, String goal, Properties properties , MavenExecutionJobAdapter jobAdapter ) 
         throws CoreException;
 
     /**
      * Allows you to execute several goals against a MavenProject.
      * 
-     * This is equivalent to {@link #executeGoals(IMavenProject, List, Properties)}, using <code>null</code> as the
+     * This is equivalent to {@link #scheduleGoals(IMavenProject, List, Properties)}, using <code>null</code> as the
      * properties argument.
      * 
      * @param mavenProject
@@ -147,12 +147,12 @@ public interface IMaven
      *            list of goals to execute
      * @throws CoreException
      */
-    public void executeGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException;
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException;
 
     /**
      * Allows you to execute several goals against a MavenProject.
      * 
-     * This is equivalent to {@link #executeGoals(IMavenProject, List, Properties, MavenExecutionJobAdapter)}, 
+     * This is equivalent to {@link #scheduleGoals(IMavenProject, List, Properties, MavenExecutionJobAdapter)}, 
      * using <code>null</code> as the jobAdapter argument.
      *
      * @param mavenProject
@@ -162,7 +162,7 @@ public interface IMaven
      *            properties of this goal. Might be <code>null</code> when no properties are used.
      * @throws CoreException
      */
-    public void executeGoals( IMavenProject mavenProject, List<String> goals, Properties properties )
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, Properties properties )
         throws CoreException;
     
     /**
@@ -177,11 +177,11 @@ public interface IMaven
      *            listener to the thread that executes the maven goal 
      * @throws CoreException
      */
-    public void executeGoals( IMavenProject mavenProject, List<String> goals, Properties properties , MavenExecutionJobAdapter jobAdapter )
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, Properties properties , MavenExecutionJobAdapter jobAdapter )
         throws CoreException;
 
     /**
-     * Same as calling {@link #executeGoal(IMavenProject, String)} with (mavenProject, "install")
+     * Same as calling {@link #scheduleGoal(IMavenProject, String)} with (mavenProject, "install")
      * 
      * @param mavenProject
      * @throws CoreException
@@ -189,7 +189,7 @@ public interface IMaven
     public void install( IMavenProject mavenProject ) throws CoreException;
 
     /**
-     * Same as calling {@link #executeGoal(IMavenProject, String)} with (mavenProject, "deploy")
+     * Same as calling {@link #scheduleGoal(IMavenProject, String)} with (mavenProject, "deploy")
      * 
      * @param mavenProject
      * @throws CoreException

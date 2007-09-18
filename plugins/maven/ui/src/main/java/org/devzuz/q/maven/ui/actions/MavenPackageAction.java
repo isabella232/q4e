@@ -21,7 +21,7 @@ public class MavenPackageAction
         IMavenProject project = getMavenProject();
         if ( project != null )
         {
-            MavenManager.getMaven().executeGoal( project, "package" );
+            MavenManager.getMaven().scheduleGoal( project, "package" );
         }
     }
 
