@@ -7,12 +7,17 @@
  */
 package org.devzuz.q.maven.embedder.internal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.project.MavenProject;
+import org.devzuz.q.maven.embedder.Activator;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 /**
  * @author emantos
@@ -21,13 +26,36 @@ import org.devzuz.q.maven.embedder.IMavenProject;
 
 public class EclipseMavenExecutionResult implements IMavenExecutionResult
 {
-    private List<Exception> exceptions;
+    private List<CoreException> exceptions;
     private IMavenProject mavenProject;
     
     public EclipseMavenExecutionResult( MavenExecutionResult result )
     {
-        setExceptions( result.getExceptions() );
+        if( exceptions == null )
+        {
+            exceptions = new ArrayList<CoreException>();
+        }
+        else
+        {
+            exceptions.clear();
+        }
         
+        List<Exception> mavenExceptions = (List<Exception>) result.getExceptions();
+        if ( mavenExceptions != null )
+        {
+            for ( Exception exception : mavenExceptions )
+            {
+                if ( exception instanceof CoreException )
+                {
+                    exceptions.add( (CoreException) exception );
+                }
+                else
+                {
+                    exceptions.add( new CoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID,
+                                                                   "Errors during Maven execution", exception ) ) );
+                }
+            }
+        }
         MavenProject mavenProject = result.getMavenProject();
         
         if( mavenProject != null )
@@ -40,7 +68,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
         }
     }
     
-    public List<Exception> getExceptions()
+    public List<CoreException> getExceptions()
     {
         return exceptions;
     }
@@ -49,8 +77,8 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
     {
         return mavenProject;
     }
-
-    public void setExceptions( List<Exception> exceptions )
+    
+    public void setExceptions( List<CoreException> exceptions )
     {
         this.exceptions = exceptions;
     }

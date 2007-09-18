@@ -115,20 +115,22 @@ public class MavenClasspathContainer
              * If it is, try to check if those missing dependencies are projects in the workspace,
              * If it is, add it as a project dependency. 
              */
+            // TODO : Refactor this
             if( e.getStatus() instanceof MavenExecutionStatus )
             {
                 MavenExecutionStatus status = (MavenExecutionStatus) e.getStatus();
                 IMavenExecutionResult result = status.getMavenExecutionResult();
-                List< Exception > exceptions = result.getExceptions();
+                List< CoreException > exceptions = result.getExceptions();
                 if( ( exceptions != null ) && ( exceptions.size() > 0 ) )
                 {
-                    for( Exception exception : exceptions )
+                    for( CoreException exception : exceptions )
                     {
-                        if( exception instanceof MultipleArtifactsNotFoundException )
+                        Throwable exceptionCause = exception.getCause();
+                        if( exceptionCause instanceof MultipleArtifactsNotFoundException )
                         {
                             Set<IMavenArtifact> artifactToBeResolved = new LinkedHashSet<IMavenArtifact>();
-                            artifactToBeResolved.addAll( MavenUtils.getMissingArtifacts( ( MultipleArtifactsNotFoundException ) exception ) );
-                            artifactToBeResolved.addAll( MavenUtils.getResolvedArtifacts( ( MultipleArtifactsNotFoundException ) exception ) );
+                            artifactToBeResolved.addAll( MavenUtils.getMissingArtifacts( ( MultipleArtifactsNotFoundException ) exceptionCause ) );
+                            artifactToBeResolved.addAll( MavenUtils.getResolvedArtifacts( ( MultipleArtifactsNotFoundException ) exceptionCause ) );
                             IMavenProject mavenProject = result.getMavenProject();
                             if( mavenProject != null )
                             {
