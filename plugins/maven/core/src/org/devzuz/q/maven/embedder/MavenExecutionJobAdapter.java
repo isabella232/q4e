@@ -13,32 +13,28 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 
 /**
  * @author emantos
- *
  */
-
 public class MavenExecutionJobAdapter extends JobChangeAdapter
 {
     private EclipseMavenRequest mavenExecutionJob;
-    
+
     public void setMavenExecutionJob( EclipseMavenRequest mavenExecutionJob )
     {
         this.mavenExecutionJob = mavenExecutionJob;
         mavenExecutionJob.addJobChangeListener( this );
     }
-    
+
     /**
-     * Override 
-     * public void done( IJobChangeEvent event , MavenExecutionResult result )
-     * instead.
+     * Override {@link #done(IJobChangeEvent, IMavenExecutionResult)} instead.
      */
-    public final void done( IJobChangeEvent event ) 
+    public final void done( IJobChangeEvent event )
     {
-        done( event , mavenExecutionJob.getExecutionResult() );
+        done( event, mavenExecutionJob.getExecutionResult() );
         mavenExecutionJob.removeJobChangeListener( this );
     }
-    
-    public void done( IJobChangeEvent event , IMavenExecutionResult result )
+
+    public void done( IJobChangeEvent event, IMavenExecutionResult result )
     {
-        
+
     }
 }
