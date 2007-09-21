@@ -128,6 +128,7 @@ public class EclipseMaven implements IMaven
                                                IProgressMonitor monitor ) throws CoreException
     {
         MavenExecutionRequest request = generateRequest( mavenProject, properties );
+        request.setGoals( goals );
         EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
         eclipseMavenRequest.run( monitor );
         return eclipseMavenRequest.getExecutionResult();
