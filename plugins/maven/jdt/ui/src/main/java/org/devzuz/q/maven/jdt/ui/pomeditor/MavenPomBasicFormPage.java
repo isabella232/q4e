@@ -6,9 +6,8 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.pomeditor;
 
-
-import org.apache.maven.model.Model;
 import org.devzuz.q.maven.jdt.ui.Messages;
+import org.apache.maven.model.Model;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -136,40 +135,35 @@ public class MavenPomBasicFormPage extends FormPage
         groupIdLabel.setLayoutData( labelData );
         
         Text groupIdText = toolKit.createText( parent, "" ); 
-        groupIdText.setLayoutData( controlData );
-        groupIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( groupIdText, controlData );
         groupIdText.setText( getGroupID() );    
    
         Label artifactIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_ArtifactId, SWT.NONE ); 
         artifactIdLabel.setLayoutData( labelData );
         
         Text artifactIdText = toolKit.createText( parent, "" ); 
-        artifactIdText.setLayoutData( controlData );
-        artifactIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( artifactIdText, controlData );
         artifactIdText.setText( getArtifactID());      
 
         Label versionLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Version, SWT.NONE ); 
         versionLabel.setLayoutData( labelData );
 
         Text versionText = toolKit.createText( parent, "" ); 
-        versionText.setLayoutData( controlData );
-        versionText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( versionText, controlData );
         versionText.setText( getVersion());           
 
         Label packagingLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Packaging, SWT.NONE ); 
         packagingLabel.setLayoutData( labelData );
        
         Text packagingText = toolKit.createText( parent, ""  ); 
-        packagingText.setLayoutData( controlData );
-        packagingText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( packagingText, controlData );
         packagingText.setText( getPackaging() );
         
         Label classifierLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Classifier, SWT.NONE ); 
         classifierLabel.setLayoutData( labelData );       
         
         Text classifierText = toolKit.createText( parent, ""  ); 
-        classifierText.setLayoutData( controlData );
-        classifierText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( classifierText, controlData );
         classifierText.setText( getClassifier() ); 
         
         toolKit.paintBordersFor(parent);
@@ -190,6 +184,7 @@ public class MavenPomBasicFormPage extends FormPage
                 System.out.println( "Link activated!" );
             }
         } );
+        
         dependencieslink.setText( "Add/Modify/Remove Dependencies" );
         
         Hyperlink licensesLink = toolKit.createHyperlink( parent, "Manage Licenses", SWT.WRAP );
@@ -200,6 +195,7 @@ public class MavenPomBasicFormPage extends FormPage
                 System.out.println( "Link activated!" );
             }
         } );
+        
         licensesLink.setText( "Manage Licenses" );
         
         Hyperlink developersLink = toolKit.createHyperlink( parent, "Manage Developers Information", SWT.WRAP );
@@ -210,6 +206,7 @@ public class MavenPomBasicFormPage extends FormPage
                 System.out.println( "Link activated!" );
             }
         } );
+        
         developersLink.setText( "Manage Developers Information" );
         
         Hyperlink contributorsLink = toolKit.createHyperlink( parent, "Manage Contributors Information", SWT.WRAP );
@@ -220,6 +217,7 @@ public class MavenPomBasicFormPage extends FormPage
                 System.out.println( "Link activated!" );
             }
         } );
+        
         contributorsLink.setText( "Manage Contributors Information" );
         
         return parent;
@@ -239,24 +237,21 @@ public class MavenPomBasicFormPage extends FormPage
         nameLabel.setLayoutData( labelData );
         
         Text nameText = toolKit.createText( parent, "Name" ); 
-        nameText.setLayoutData( controlData );
-        nameText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( nameText, controlData );
         nameText.setText(getName());
         
         Label descriptionLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Description, SWT.NONE ); 
         descriptionLabel.setLayoutData( labelData );
         
         Text descriptionText = toolKit.createText( parent, "Description" ); 
-        descriptionText.setLayoutData( controlData );
-        descriptionText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( descriptionText, controlData );
         descriptionText.setText(getDescription());
         
         Label urlLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE ); 
         urlLabel.setLayoutData( labelData );
         
         Text urlText = toolKit.createText( parent, "URL" ); 
-        urlText.setLayoutData( controlData );
-        urlText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( urlText, controlData );
         urlText.setText(getUrl());
         
         Label inceptionYearLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_InceptionYear, SWT.NONE ); 
@@ -264,8 +259,7 @@ public class MavenPomBasicFormPage extends FormPage
         
         
         Text inceptionYearText = toolKit.createText( parent, "Inception Year" ); 
-        inceptionYearText.setLayoutData( controlData );
-        inceptionYearText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( inceptionYearText, controlData );
         inceptionYearText.setText(getInceptionYear());
         
         toolKit.paintBordersFor(parent);
@@ -288,24 +282,21 @@ public class MavenPomBasicFormPage extends FormPage
         groupIdLabel.setLayoutData( labelData );
         
         Text groupIdText = toolKit.createText( parent, "groupId" ); 
-        groupIdText.setLayoutData( controlData );
-        groupIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( groupIdText, controlData );      
         groupIdText.setText(getParenPOMgroupID());
         
         Label artifactIdLabel = toolKit.createLabel( parent, "Artifact Id", SWT.NONE ); 
         artifactIdLabel.setLayoutData( labelData );
         
         Text artifactIdText = toolKit.createText( parent, "artifactId" ); 
-        artifactIdText.setLayoutData( controlData );
-        artifactIdText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( artifactIdText, controlData );
         artifactIdText.setText(getParentPOMArtifactID());
         
         Label versionLabel = toolKit.createLabel( parent, "Version", SWT.NONE ); 
         versionLabel.setLayoutData( labelData );
         
         Text versionText = toolKit.createText( parent, "Version" ); 
-        versionText.setLayoutData( controlData );
-        versionText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( versionText, controlData );
         versionText.setText(getParentPOMVersion());
         
         
@@ -313,13 +304,21 @@ public class MavenPomBasicFormPage extends FormPage
         relativePathLabel.setLayoutData( labelData );
         
         Text relativePathText = toolKit.createText( parent, "Relative Path" ); 
-        relativePathText.setLayoutData( controlData );
-        relativePathText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        this.createTextDisplay( relativePathText, controlData );
         relativePathText.setText(getParentPOMRelPath());
         
         toolKit.paintBordersFor(parent);
         
         return  parent;
+    }
+    
+    private void createTextDisplay(Text text, GridData controlData)
+    {
+        if(text != null)
+        {
+            text.setLayoutData( controlData );
+            text.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        }
     }
     
     private void setPOMEditorProjectInfomation()
