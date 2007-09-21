@@ -338,43 +338,25 @@ public class MavenPomBasicFormPage extends FormPage
         this.setInceptionYear(checkStringIfNull(modelPOM.getInceptionYear()));    
         
         //sets data to be used in createParentProjectControls
-        try 
+        if( modelPOM.getParent() != null)
         {
-            this.setParenPOMgroupID(modelPOM.getParent().getGroupId());
+            this.setParenPOMgroupID(checkStringIfNull(modelPOM.getParent().getGroupId()));
+            this.setParentPOMArtifactID(checkStringIfNull(modelPOM.getParent().getArtifactId()));
+            this.setParentPOMVersion(checkStringIfNull(modelPOM.getParent().getVersion()));
+            this.setParentPOMRelPath(checkStringIfNull(modelPOM.getParent().getRelativePath()));
         }
-        catch(Exception e)
+        else
         {
-        	this.setParenPOMgroupID("");
-        }
-        try 
-        {
-        	this.setParentPOMArtifactID(modelPOM.getParent().getArtifactId());
-        }
-        catch(Exception e)
-        {
-        	this.setParentPOMArtifactID("");
-        }
-        try 
-        {
-        	this.setParentPOMVersion(modelPOM.getParent().getVersion());
-        }
-        catch(Exception e)
-        {
-        	this.setParentPOMVersion("");
-        }
-        try 
-        {
-        	this.setParentPOMRelPath(modelPOM.getParent().getRelativePath());
-        }
-        catch(Exception e)
-        {
-        	this.setParentPOMRelPath("");
+            this.setParenPOMgroupID("");
+            this.setParentPOMArtifactID("");
+            this.setParentPOMVersion("");
+            this.setParentPOMRelPath("");
         }
     }
     
     private String checkStringIfNull(String strTemp)
     {
-    	if(strTemp != null)
+    	if(null != strTemp )
     	{
     		return strTemp;
     	}
@@ -513,5 +495,9 @@ public class MavenPomBasicFormPage extends FormPage
 		this.parentPOMRelPath = parentPOMRelPath;
 	}
 
+    public Model getModelPOM()
+    {
+        return modelPOM;
+    }
     
 }

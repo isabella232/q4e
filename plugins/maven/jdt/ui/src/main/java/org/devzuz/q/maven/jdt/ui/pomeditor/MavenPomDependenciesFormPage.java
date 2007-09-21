@@ -249,4 +249,9 @@ public class MavenPomDependenciesFormPage extends FormPage
         
         return container;
     }
+    
+    public Model getModelPOM()
+    {
+        return modelPOM;
+    }
 }
