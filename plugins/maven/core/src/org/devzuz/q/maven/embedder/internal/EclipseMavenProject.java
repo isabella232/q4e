@@ -138,7 +138,7 @@ public class EclipseMavenProject implements IMavenProject
             return null;
     }
 
-    public MavenProject getMavenProject()
+    public MavenProject getRawMavenProject()
     {
         return mavenProject;
     }

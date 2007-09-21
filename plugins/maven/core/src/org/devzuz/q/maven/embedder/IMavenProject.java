@@ -51,6 +51,6 @@ public interface IMavenProject extends IAdaptable
      * 
      * @return the maven project
      */
-    public abstract MavenProject getMavenProject();
+    public abstract MavenProject getRawMavenProject();
 
 }

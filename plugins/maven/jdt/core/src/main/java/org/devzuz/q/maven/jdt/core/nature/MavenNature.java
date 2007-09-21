@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,6 @@ import org.apache.maven.model.Resource;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
-import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
@@ -42,7 +40,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -221,7 +218,7 @@ public class MavenNature
                     IClasspathEntry[] classpathEntries =
                         (IClasspathEntry[]) classpathEntriesSet.toArray( new IClasspathEntry[classpathEntriesSet.size()] );
 
-                    String outputDirectory = mavenProject.getMavenProject().getBuild().getOutputDirectory();
+                    String outputDirectory = mavenProject.getRawMavenProject().getBuild().getOutputDirectory();
                     IFolder outputFolder =
                         project.getFolder( getRelativePath( mavenProject.getBaseDirectory(), outputDirectory ) );
 
@@ -261,7 +258,7 @@ public class MavenNature
         // Add generated source folders to the classpath
         File basedir = mavenProject.getBaseDirectory();
         
-        String testOutputDirectory = mavenProject.getMavenProject().getBuild().getTestOutputDirectory();
+        String testOutputDirectory = mavenProject.getRawMavenProject().getBuild().getTestOutputDirectory();
         IPath testTargetFolder = project.getFolder( getRelativePath( basedir, testOutputDirectory ) ).getFullPath();
 
         
@@ -276,14 +273,14 @@ public class MavenNature
         // }
 
         classpathSrcEntries.addAll( getSourceFolders( project, basedir,
-                                                      mavenProject.getMavenProject().getCompileSourceRoots(), null ) );
+                                                      mavenProject.getRawMavenProject().getCompileSourceRoots(), null ) );
         classpathSrcEntries.addAll( getSourceFolders( project, basedir,
-                                                      mavenProject.getMavenProject().getTestCompileSourceRoots(),
+                                                      mavenProject.getRawMavenProject().getTestCompileSourceRoots(),
                                                       testTargetFolder ) );
         classpathSrcEntries.addAll( getResourceFolders( project, basedir,
-                                                        mavenProject.getMavenProject().getBuild().getResources(), null ) );
+                                                        mavenProject.getRawMavenProject().getBuild().getResources(), null ) );
         classpathSrcEntries.addAll( getResourceFolders( project, basedir,
-                                                        mavenProject.getMavenProject().getBuild().getTestResources(),
+                                                        mavenProject.getRawMavenProject().getBuild().getTestResources(),
                                                         testTargetFolder ) );
         
         return classpathSrcEntries;
@@ -407,7 +404,7 @@ public class MavenNature
     
     private String getArtifactSettings( IMavenProject mavenProject , String artifactId , String settingsName )
     {
-        for( Plugin plugin : (List<Plugin>) mavenProject.getMavenProject().getBuild().getPlugins() )
+        for( Plugin plugin : (List<Plugin>) mavenProject.getRawMavenProject().getBuild().getPlugins() )
         {
             if( artifactId.equals( plugin.getArtifactId() ) )
             {
