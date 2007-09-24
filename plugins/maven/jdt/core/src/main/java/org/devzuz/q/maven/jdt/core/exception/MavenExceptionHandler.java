@@ -47,7 +47,22 @@ public class MavenExceptionHandler
     public static void handle( IProject project, CoreException e )
     {
         Throwable cause = e.getStatus().getException();
-        if ( cause instanceof MultipleArtifactsNotFoundException )
+        if( cause == null )
+        {
+            if( e.getCause() != null )
+            {
+                Activator.getLogger().error( "Unknown Error - Class " + e.getCause().getClass().getName() + 
+                                             " - " + e.getCause().getMessage() );
+                instance.markPom( project, "Error: " + e.getCause().getMessage() );
+            }
+            else
+            {
+                Activator.getLogger().error( "Unknown Error - Class " + e.getClass().getName() + 
+                                             " - " + e.getMessage() );
+                instance.markPom( project, "Error: " + e.getMessage() );
+            }
+        }
+        else if ( cause instanceof MultipleArtifactsNotFoundException )
         {
             instance.handle( project, (MultipleArtifactsNotFoundException) cause );
         }
