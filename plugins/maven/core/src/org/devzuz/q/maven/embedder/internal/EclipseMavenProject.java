@@ -9,9 +9,12 @@ package org.devzuz.q.maven.embedder.internal;
 
 import java.io.File;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.artifact.DefaultArtifact;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.logging.Logger;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
@@ -30,7 +33,6 @@ import org.eclipse.core.runtime.CoreException;
  */
 public class EclipseMavenProject implements IMavenProject
 {
-
     /**
      * @deprecated use {@link IMavenProject#POM_FILENAME}
      */
@@ -43,8 +45,6 @@ public class EclipseMavenProject implements IMavenProject
 
     private EclipseMavenProjectEnvironment mavenEnvironment;
 
-    private MavenProject mavenProject;
-
     private IProject project;
 
     private File pomFile;
@@ -54,6 +54,28 @@ public class EclipseMavenProject implements IMavenProject
     private Set<IMavenArtifact> artifacts = new HashSet<IMavenArtifact>();
 
     private Set<IMavenArtifact> allArtifacts = new HashSet<IMavenArtifact>();
+    
+    private MavenArtifactResolver artifactResolver;
+    
+    private String artifactId;
+    
+    private String groupId;
+    
+    private String version;
+    
+    private String buildOutputDirectory;
+    
+    private String buildTestOutputDirectory;
+    
+    private List<String> compileSourceRoots;
+    
+    private List<String> testCompileSourceRoots;
+    
+    private List<Resource> resources;
+    
+    private List<Resource> testResources;
+    
+    private List<Plugin> buildPlugins;
 
     public EclipseMavenProject( IFile file )
     {
@@ -90,8 +112,6 @@ public class EclipseMavenProject implements IMavenProject
     public EclipseMavenProject( MavenProject project )
     {
         this.mavenEnvironment = new EclipseMavenProjectEnvironment();
-        this.pomFile = project.getFile();
-        this.baseDirectory = project.getBasedir();
         this.refreshProject( project );
         this.refreshDependencies( project );
     }
@@ -119,28 +139,17 @@ public class EclipseMavenProject implements IMavenProject
 
     public String getArtifactId()
     {
-        if ( mavenProject != null )
-            return mavenProject.getArtifactId();
-        else
-            return null;
+        return artifactId;
     }
 
     public MavenArtifactResolver getDependencyResolver() throws CoreException
     {
-        return new MavenArtifactResolver( mavenProject.getArtifacts() );
+        return artifactResolver;
     }
 
     public String getGroupId()
     {
-        if ( mavenProject != null )
-            return mavenProject.getGroupId();
-        else
-            return null;
-    }
-
-    public MavenProject getRawMavenProject()
-    {
-        return mavenProject;
+        return groupId;
     }
 
     public IProject getProject()
@@ -155,10 +164,7 @@ public class EclipseMavenProject implements IMavenProject
 
     public String getVersion()
     {
-        if ( mavenProject != null )
-            return mavenProject.getVersion();
-        else
-            return null;
+        return version;
     }
 
     public File getBaseDirectory()
@@ -188,7 +194,19 @@ public class EclipseMavenProject implements IMavenProject
 
     public void refreshProject( MavenProject mavenRawProject )
     {
-        mavenProject = mavenRawProject;
+        artifactResolver = new MavenArtifactResolver( mavenRawProject.getArtifacts() );
+        artifactId = mavenRawProject.getArtifactId();
+        groupId = mavenRawProject.getGroupId();
+        version = mavenRawProject.getVersion();
+        pomFile = mavenRawProject.getFile();
+        baseDirectory = mavenRawProject.getBasedir();
+        buildOutputDirectory = mavenRawProject.getBuild().getOutputDirectory();
+        buildTestOutputDirectory = mavenRawProject.getBuild().getTestOutputDirectory();
+        compileSourceRoots = mavenRawProject.getCompileSourceRoots();
+        testCompileSourceRoots = mavenRawProject.getTestCompileSourceRoots();
+        resources = mavenRawProject.getBuild().getResources();
+        testResources = mavenRawProject.getBuild().getTestResources();
+        buildPlugins = mavenRawProject.getBuild().getPlugins();
     }
 
     public void refreshDependencies( MavenProject mavenRawProject )
@@ -288,6 +306,41 @@ public class EclipseMavenProject implements IMavenProject
     public void setArtifacts( Set<IMavenArtifact> artifacts )
     {
         this.artifacts = artifacts;
+    }
+    
+    public String getBuildOutputDirectory()
+    {
+        return buildOutputDirectory;
+    }
+
+    public List<Plugin> getBuildPlugins()
+    {
+        return buildPlugins;
+    }
+
+    public String getBuildTestOutputDirectory()
+    {
+        return buildTestOutputDirectory;
+    }
+
+    public List<String> getCompileSourceRoots()
+    {
+        return compileSourceRoots;
+    }
+
+    public List<Resource> getResources()
+    {
+        return resources;
+    }
+
+    public List<String> getTestCompileSourceRoots()
+    {
+        return testCompileSourceRoots;
+    }
+
+    public List<Resource> getTestResources()
+    {
+        return testResources;
     }
 
     @Override

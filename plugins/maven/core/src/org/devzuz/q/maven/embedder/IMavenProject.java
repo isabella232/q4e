@@ -8,9 +8,11 @@
 package org.devzuz.q.maven.embedder;
 
 import java.io.File;
+import java.util.List;
 import java.util.Set;
 
-import org.apache.maven.project.MavenProject;
+import org.apache.maven.model.Plugin;
+import org.apache.maven.model.Resource;
 import org.devzuz.q.maven.embedder.internal.EclipseMavenProjectEnvironment;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
@@ -45,12 +47,26 @@ public interface IMavenProject extends IAdaptable
     public abstract String getActiveProfiles();
 
     public abstract Set<IMavenArtifact> getArtifacts();
+    
+    public abstract String getBuildOutputDirectory();
+    
+    public abstract String getBuildTestOutputDirectory();
+    
+    public abstract List<String> getCompileSourceRoots();
+    
+    public abstract List<String> getTestCompileSourceRoots();
+    
+    public abstract List<Resource> getResources();
+    
+    public abstract List<Resource> getTestResources();
+    
+    public abstract List<Plugin> getBuildPlugins();
 
     /**
      * Expose the underlying Maven project
      * 
      * @return the maven project
+     *
+     * public abstract MavenProject getRawMavenProject();
      */
-    public abstract MavenProject getRawMavenProject();
-
 }
