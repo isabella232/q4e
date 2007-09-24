@@ -25,8 +25,6 @@ public class Messages
 
     public static String MavenEventView_FilterDialog_fatal;
 
-    public static String MavenEventView_FilterDialog_eventTypes;
-
     public static String MavenLaunchConfigurationCustomGoalTab_Browse;
 
     public static String MavenLaunchConfigurationCustomGoalTab_ChooseProject;
