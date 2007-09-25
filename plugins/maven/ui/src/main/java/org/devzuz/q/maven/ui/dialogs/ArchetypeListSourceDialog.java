@@ -7,8 +7,8 @@
 
 package org.devzuz.q.maven.ui.dialogs;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import org.devzuz.q.maven.ui.Activator;
 import org.devzuz.q.maven.ui.Messages;
@@ -38,12 +38,13 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
     {
         if ( archetypeListSourceDialog == null )
         {
-            archetypeListSourceDialog = new ArchetypeListSourceDialog( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell() );
+            archetypeListSourceDialog =
+                new ArchetypeListSourceDialog( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell() );
         }
 
         return archetypeListSourceDialog;
     }
-    
+
     public ArchetypeListSourceDialog( IShellProvider parentShell )
     {
         super( parentShell );
@@ -81,7 +82,8 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
     {
         this.type = type;
     }
-    
+
+    @Override
     protected Control internalCreateDialogArea( Composite container )
     {
         ModifyListener modifyingListener = new ModifyListener()
@@ -109,28 +111,30 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
 
         typeText = new Combo( container, SWT.READ_ONLY );
         typeText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false ) );
-        //typeText.addModifyListener( modifyingListener );
-        
+        // typeText.addModifyListener( modifyingListener );
+
         IArchetypeListProvider[] providers = MavenArchetypeProviderManager.getArchetypeListProviders();
-        
-        for( IArchetypeListProvider provider : providers )
+
+        for ( IArchetypeListProvider provider : providers )
         {
             typeText.add( provider.getProviderName() );
         }
-        
+
         return container;
     }
 
+    @Override
     public void onWindowActivate()
     {
         archetypeListSourceText.setText( archetypeListSource );
-        if( !type.trim().equals( "" ) )
+        if ( !type.trim().equals( "" ) )
             typeText.setText( type );
         else
             typeText.select( 0 );
         validate();
     }
 
+    @Override
     protected void okPressed()
     {
         archetypeListSource = archetypeListSourceText.getText().trim();
@@ -147,25 +151,20 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
         return super.open();
     }
 
-	private static boolean isValidURL(String strURL)
-	{
-        boolean retVal = false;
-        try 
+    private static boolean isValidURL( String strURL )
+    {
+        try
         {
-            Pattern pattern = Pattern.compile("^((http)|(https)|(ftp)){1}://[\\p{Alnum}]{3,}+.{1}[\\p{Alnum}-]{2,}((.)([\\p{Alnum}?+/=-]){1,})*$");
-            Matcher m = pattern.matcher(strURL);
-            if(m.matches())
-                {
-                    retVal= true;
-                }
-         }
-         catch (Exception e)
-         {         
-         }
-        
-        return retVal;
-	}
-	
+            URL url = new URL( strURL );
+            String protocol = url.getProtocol();
+            return "http".equals( protocol ) || "https".equals( protocol ) || "ftp".equals( protocol );
+        }
+        catch ( MalformedURLException e )
+        {
+            return false;
+        }
+    }
+
     public void validate()
     {
         getButton( IDialogConstants.OK_ID ).setEnabled( didValidate() );
@@ -173,7 +172,7 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
 
     private boolean didValidate()
     {
-        return ( (archetypeListSourceText.getText().trim().length() > 0 && isValidURL(archetypeListSourceText.getText())) && (typeText.getText().length() > 0) );
+        return ( ( archetypeListSourceText.getText().trim().length() > 0 && isValidURL( archetypeListSourceText.getText() ) ) && ( typeText.getText().length() > 0 ) );
     }
 
     @Override
