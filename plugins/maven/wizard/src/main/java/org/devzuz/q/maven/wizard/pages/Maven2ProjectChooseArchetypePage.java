@@ -6,9 +6,9 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.wizard.pages;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
 import org.devzuz.q.maven.ui.core.archetypeprovider.MavenArchetypeProviderManager;
@@ -31,16 +31,15 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredList;
 
+/**
+ * Implementation of a page for the New Maven Project wizard which allows the user to select an archetype from the list
+ * or to manually specify one.
+ * 
+ * @author Abel Mui–o <amuino@gmail.com>
+ */
 public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 {
     private static final String DEFAULT_ARCHETYPE = "maven-archetype-quickstart";
-
-    private static final String URL_REG_EX = "((http|https|ftp)://)?" + // for the optional http:// or https://
-                    "(localhost|" + // for localhost
-                    "[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}\\.[\\d]{1,3}|" + // or IP
-                    "([\\w]+\\.)*[\\w]+\\.[\\w]+)" + // or hostname
-                    "(:[0-9]{1,5})?" + // for the option port to use
-                    "(/[\\w.?%&=]*)*"; // for the optional path
 
     private FilteredList archetypeList;
 
@@ -66,6 +65,9 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 
     private Text filterText;
 
+    /**
+     * Creates the wizard's page.
+     */
     public Maven2ProjectChooseArchetypePage()
     {
         super( Messages.wizard_project_chooseArchetype_name );
@@ -226,6 +228,11 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
         return false;
     }
 
+    /**
+     * Returns the user-selected archetype.
+     * 
+     * @return the selected archetype.
+     */
     public Archetype getArchetype()
     {
         if ( publishedArchetypesButton.getSelection() )
@@ -275,10 +282,15 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 
     static private boolean validateUrl( String urlStr )
     {
-        // TODO : Im currently using a home-brewed URL RegEx pattern which myt have bugs,
-        // Any suggestions on how to properly validate a URL will be appreciated.
-        Pattern urlPattern = Pattern.compile( URL_REG_EX );
-        Matcher match = urlPattern.matcher( urlStr );
-        return match.matches();
+        try
+        {
+            URL url = new URL( urlStr );
+            String protocol = url.getProtocol();
+            return "http".equals( protocol ) || "https".equals( protocol ) || "ftp".equals( protocol );
+        }
+        catch ( MalformedURLException e )
+        {
+            return false;
+        }
     }
 }
