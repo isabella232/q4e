@@ -532,7 +532,7 @@ public class MavenNature
                         {
                             // TODO : Handle!
                             Activator.getLogger().error( "In MavenNature.getJREVersion() : " + 
-                                                         e.getClass().getName() + " - " + e.getMessage() ) 
+                                                         e.getClass().getName() + " - " + e.getMessage() ); 
                         }
                     }
                 }
