@@ -195,7 +195,8 @@ public class DependencyLookup
         }
         catch ( Exception e1 )
         {
-            e1.printStackTrace();
+            // TODO : Handle gracefully
+            Activator.getLogger().error( e.getClass().getName() + " - " + e.toString() );
         }
     }
 
@@ -268,7 +269,8 @@ public class DependencyLookup
             }
             catch ( Exception e )
             {
-                e.printStackTrace();
+                // TODO : Handle gracefully
+                Activator.getLogger().error( e.getClass().getName() + " - " + e.toString() );
             }
         }
     }

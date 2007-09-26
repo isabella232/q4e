@@ -209,6 +209,8 @@ public class MavenLaunchConfigurationShortcut
         catch ( CoreException e )
         {
             // TODO: handle exception
+            Activator.getLogger().error( "In MavenLaunchConfigurationShortcut.findLaunchConfiguration() - " + 
+                                         e.getClass().getName() + " - " + e.getMessage() );
         }
         
         return null;
@@ -259,7 +261,8 @@ public class MavenLaunchConfigurationShortcut
                 }
                 catch ( Exception e )
                 {
-                    // TODO: handle exception
+                    Activator.getLogger().error( "In MavenLaunchConfigurationShortcut.LaunchConfigurationLabelProvider.getText(..) - " + 
+                                                  e.getClass().getName() + " - " + e.getMessage() );
                 }
 
                 if ( propertyMap.size() > 0 )

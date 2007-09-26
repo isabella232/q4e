@@ -26,6 +26,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.WildcardQuery;
+import org.devzuz.q.maven.ui.Activator;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class RepositoryIndexer
@@ -116,7 +117,7 @@ public class RepositoryIndexer
                 catch ( IOException e )
                 {
                     // TODO : what to do here?
-                    e.printStackTrace();
+                    Activator.getLogger().error("In RepositoryIndexer.index() - " + e.toString() );
                 }
             }
 
@@ -161,14 +162,14 @@ public class RepositoryIndexer
                 sb.append( buffer, 0, len );
             }
 
-            Pattern pattern = Pattern.compile( "<groupId>([0-9A-Za-z.-]+)</groupId>[ \\t\\n\\x0B\\f\\r]+"
-                + "<artifactId>([0-9A-Za-z.-]+)</artifactId>[ \\t\\n\\x0B\\f\\r]+"
-                + "<version>([0-9A-Za-z.-]+)</version>" );
+            Pattern pattern = Pattern.compile( "<groupId>([0-9A-Za-z.-]+)</groupId>[ \\t\\n\\x0B\\f\\r]+" + 
+                                               "<artifactId>([0-9A-Za-z.-]+)</artifactId>[ \\t\\n\\x0B\\f\\r]+" + 
+                                               "<version>([0-9A-Za-z.-]+)</version>" );
             Matcher matcher = pattern.matcher( sb.toString() );
             while ( matcher.find() )
             {
                 monitor.beginTask( "Found artifact " + matcher.group( 1 ) + "." + matcher.group( 2 ) + "."
-                    + matcher.group( 3 ), IProgressMonitor.UNKNOWN );
+                                   + matcher.group( 3 ), IProgressMonitor.UNKNOWN );
                 Document doc = new Document();
 
                 doc.add( new Field( JAR_NAME, getJarOfPom( file ), Field.Store.YES, Field.Index.TOKENIZED ) );
@@ -185,7 +186,7 @@ public class RepositoryIndexer
         catch ( IOException e )
         {
             // TODO : ?
-            e.printStackTrace();
+            Activator.getLogger().error("In RepositoryIndexer.processPom() - " + e.toString() );
         }
         finally
         {
@@ -196,7 +197,7 @@ public class RepositoryIndexer
             catch ( IOException e )
             {
                 // TODO : ?
-                e.printStackTrace();
+                Activator.getLogger().error("In RepositoryIndexer.processPom() - " + e.toString() );
             }
         }
     }

@@ -531,6 +531,8 @@ public class MavenNature
                         catch( IOException e )
                         {
                             // TODO : Handle!
+                            Activator.getLogger().error( "In MavenNature.getJREVersion() : " + 
+                                                         e.getClass().getName() + " - " + e.getMessage() ) 
                         }
                     }
                 }

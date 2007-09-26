@@ -7,6 +7,7 @@
 
 package org.devzuz.q.maven.ui.views;
 
+import org.devzuz.q.maven.ui.Activator;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.views.data.MavenLifeCyclePomParser;
 import org.eclipse.core.resources.IFile;
@@ -117,9 +118,9 @@ public class MavenLifeCycleView
                      }
                      catch(Exception e)
                      {
-                         
+                         Activator.getLogger().error( "In MavenLifeCycleView.setProjectColumnData() : " + 
+                                                      e.getClass().getName() + " - " + e.getMessage() );
                      }
-                         
                  }
                  
              }
