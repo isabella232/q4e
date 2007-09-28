@@ -49,7 +49,11 @@ public interface IMavenArtifact
     public abstract String getType();
 
     public abstract void setType( String type );
-
+        
+    public abstract String getClassifier();
+    
+    public abstract  void setClassifier( String classifier );
+    
     public abstract boolean isAddedToClasspath();
 
     public abstract void setAddedToClasspath( boolean addedToClasspath );

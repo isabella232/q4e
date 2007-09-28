@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Resource;
 import org.devzuz.q.maven.embedder.internal.EclipseMavenProjectEnvironment;
@@ -62,6 +63,7 @@ public interface IMavenProject extends IAdaptable
     
     public abstract List<Plugin> getBuildPlugins();
 
+    public abstract List<ArtifactRepository> getRemoteArtifactRepositories();
     /**
      * Expose the underlying Maven project
      * 

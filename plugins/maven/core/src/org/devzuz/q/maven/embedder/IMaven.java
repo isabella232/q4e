@@ -336,12 +336,12 @@ public interface IMaven
      * 
      * @param artifact
      * @param remoteRepositories
-     * @throws ArtifactNotFoundException
      * @throws CoreException
      */
-    public void resolve( Artifact artifact, List<ArtifactRepository> remoteRepositories )
-        throws ArtifactNotFoundException, CoreException;
-
+    public void resolveArtifact( IMavenArtifact artifact , String type , String suffix , 
+                                 List<ArtifactRepository> remoteRepositories )
+        throws CoreException;
+    
     /**
      * <p>
      * Refresh the Maven Embedder instance, deleting cache, rereading settings,...

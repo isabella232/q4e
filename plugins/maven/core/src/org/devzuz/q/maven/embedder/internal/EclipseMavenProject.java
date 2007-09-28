@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.artifact.DefaultArtifact;
+import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
@@ -76,6 +77,8 @@ public class EclipseMavenProject implements IMavenProject
     private List<Resource> testResources;
     
     private List<Plugin> buildPlugins;
+    
+    private List<ArtifactRepository> remoteArtifactRepositories; 
 
     public EclipseMavenProject( IFile file )
     {
@@ -207,6 +210,7 @@ public class EclipseMavenProject implements IMavenProject
         resources = mavenRawProject.getBuild().getResources();
         testResources = mavenRawProject.getBuild().getTestResources();
         buildPlugins = mavenRawProject.getBuild().getPlugins();
+        remoteArtifactRepositories = mavenRawProject.getRemoteArtifactRepositories();
     }
 
     public void refreshDependencies( MavenProject mavenRawProject )
@@ -341,6 +345,11 @@ public class EclipseMavenProject implements IMavenProject
     public List<Resource> getTestResources()
     {
         return testResources;
+    }
+    
+    public List<ArtifactRepository> getRemoteArtifactRepositories()
+    {
+        return remoteArtifactRepositories;
     }
 
     @Override

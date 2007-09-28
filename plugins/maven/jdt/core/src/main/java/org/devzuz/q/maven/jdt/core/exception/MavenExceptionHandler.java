@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.apache.maven.project.InvalidProjectModelException;
@@ -70,6 +71,10 @@ public class MavenExceptionHandler
         {
             instance.handle( project, (ArtifactResolutionException) cause );
         }
+        else if ( cause instanceof ArtifactNotFoundException )
+        {
+            instance.handle( project, (ArtifactNotFoundException) cause );
+        }
         else if ( cause instanceof InvalidProjectModelException )
         {
             instance.handle( project, (InvalidProjectModelException) cause );
@@ -84,6 +89,13 @@ public class MavenExceptionHandler
     public void handle( final IProject project, final ArtifactResolutionException e )
     {
         markPom( project, "Error while resolving "
+            + getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() )
+            + " : " + e.getMessage() );
+    }
+    
+    public void handle( final IProject project, final ArtifactNotFoundException e )
+    {
+        markPom( project, "Artifact cannot be found - "
             + getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() )
             + " : " + e.getMessage() );
     }

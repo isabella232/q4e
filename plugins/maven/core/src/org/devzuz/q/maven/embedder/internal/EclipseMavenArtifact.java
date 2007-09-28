@@ -28,6 +28,8 @@ public class EclipseMavenArtifact implements IMavenArtifact
     private String scope;
 
     private String type;
+    
+    private String classifier;
 
     private boolean addedToClasspath;
 
@@ -50,6 +52,7 @@ public class EclipseMavenArtifact implements IMavenArtifact
         setFile( artifact.getFile() );
         setScope( artifact.getScope() );
         setType( artifact.getType() );
+        setClassifier( artifact.getArtifactHandler().getClassifier() );
         setAddedToClasspath( artifact.getArtifactHandler().isAddedToClasspath() );
     }
 
@@ -131,6 +134,16 @@ public class EclipseMavenArtifact implements IMavenArtifact
     public void setType( String type )
     {
         this.type = type;
+    }
+    
+    public String getClassifier()
+    {
+        return classifier;
+    }
+    
+    public void setClassifier( String classifier )
+    {
+        this.classifier = classifier;
     }
 
     public boolean isAddedToClasspath()

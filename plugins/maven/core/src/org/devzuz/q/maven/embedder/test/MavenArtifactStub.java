@@ -32,6 +32,8 @@ public class MavenArtifactStub implements IMavenArtifact
     private String scope;
 
     private String type;
+    
+    private String classifier;
 
     private boolean addedToClasspath;
 
@@ -119,6 +121,16 @@ public class MavenArtifactStub implements IMavenArtifact
     public void setType( String type )
     {
         this.type = type;
+    }
+    
+    public String getClassifier()
+    {
+        return classifier;
+    }
+    
+    public void setClassifier( String classifier )
+    {
+        this.classifier = classifier;
     }
 
     public boolean isAddedToClasspath()

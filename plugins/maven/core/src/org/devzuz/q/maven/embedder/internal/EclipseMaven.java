@@ -38,6 +38,7 @@ import org.codehaus.plexus.component.repository.exception.ComponentLookupExcepti
 import org.devzuz.q.maven.embedder.Activator;
 import org.devzuz.q.maven.embedder.ILocalMavenRepository;
 import org.devzuz.q.maven.embedder.IMaven;
+import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenListener;
 import org.devzuz.q.maven.embedder.IMavenProject;
@@ -537,17 +538,35 @@ public class EclipseMaven implements IMaven
         return artifactRepositories;
     }
 
-    public void resolve( Artifact artifact, List<ArtifactRepository> remoteRepositories )
-        throws ArtifactNotFoundException, CoreException
+    public void resolveArtifact( IMavenArtifact artifact , String type , String suffix , 
+                                 List<ArtifactRepository> remoteRepositories )
+        throws CoreException
     {
         try
         {
-            getMavenEmbedder().resolve( artifact, remoteRepositories, getMavenEmbedder().getLocalRepository() );
+            Artifact rawArtifact = getMavenEmbedder().createArtifactWithClassifier( artifact.getGroupId(), 
+                                                                                    artifact.getArtifactId(), 
+                                                                                    artifact.getVersion(), 
+                                                                                    type, suffix);
+            if( rawArtifact != null )
+            {            
+                getMavenEmbedder().resolve( rawArtifact, remoteRepositories, getMavenEmbedder().getLocalRepository() );
+            }
+            else
+            {
+                throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+                                                      "Unknown Artifact - " + artifact , null ) );
+            }
+        }
+        catch ( ArtifactNotFoundException e )
+        {
+            throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+                                                  "Artifact not found - " + artifact, e ) );
         }
         catch ( ArtifactResolutionException e )
         {
             throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
-                                                 "Unable to resolve artifact " + artifact, e ) );
+                                                 "Unable to resolve artifact - " + artifact, e ) );
         }
     }
 
