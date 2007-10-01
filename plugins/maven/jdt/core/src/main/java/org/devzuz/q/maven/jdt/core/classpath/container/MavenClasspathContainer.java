@@ -6,6 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -86,7 +87,7 @@ public class MavenClasspathContainer
             this.project = mavenProject.getProject();
             
             classpathEntries.clear();
-            resolveArtifacts( classpathEntries, artifacts, getWorkspaceProjects() );
+            resolveArtifacts( mavenProject , classpathEntries, artifacts, getWorkspaceProjects() );
         }
     }
 
@@ -190,12 +191,12 @@ public class MavenClasspathContainer
      * @param artifacts maven artifacts
      * @param workspaceProjects projects in the workspace, indexed by name
      */
-    private void resolveArtifacts( List<IClasspathEntry> classpathEntries, Set<IMavenArtifact> artifacts,
-                                   Map<String, IProject> workspaceProjects )
+    private void resolveArtifacts( IMavenProject mavenProject , List<IClasspathEntry> classpathEntries, 
+                                   Set<IMavenArtifact> artifacts, Map<String, IProject> workspaceProjects )
     {
         for ( IMavenArtifact artifact : artifacts )
         {
-            IClasspathEntry entry = resolveArtifact( artifact, workspaceProjects );
+            IClasspathEntry entry = resolveArtifact( mavenProject , artifact, workspaceProjects );
             if ( entry != null )
             {
                 classpathEntries.add( entry );
@@ -211,11 +212,11 @@ public class MavenClasspathContainer
      * @param workspaceProjects
      * @return the resulting classpath entry or null if should not be added to the classpath
      */
-    protected IClasspathEntry resolveArtifact( IMavenArtifact artifact, Map<String, IProject> workspaceProjects )
+    protected IClasspathEntry resolveArtifact( IMavenProject mavenProject , IMavenArtifact artifact, 
+                                               Map<String, IProject> workspaceProjects )
     {
         IClasspathAttribute[] attributes = new IClasspathAttribute[0];
-        Path sourcePath = null;
-
+        
         /*
          * if dependency is a project in the workspace use a project dependency instead of the jar
          * dependency
@@ -238,13 +239,17 @@ public class MavenClasspathContainer
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {
-            return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ), sourcePath, null,
-                                             new IAccessRule[0], attributes, false );
+            // TODO : The last parameter should be taken from the download-sources? preference
+            Path sourcePath = getArtifactPath( mavenProject , artifact , "java-source" , "sources" , false );
+            return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ),  
+                                             sourcePath, null, new IAccessRule[0], attributes, false );
         }
         else
         {
             // TODO : Raise error that a dependency was not added
-            
+            Activator.getLogger().info( "The dependency " + artifact.getGroupId() + ":" + 
+                                                            artifact.getArtifactId() + ":" + 
+                                                            artifact.getVersion() + " was not added." ); 
         }
         
         return null;
@@ -266,5 +271,53 @@ public class MavenClasspathContainer
     public IProject getProject()
     {
         return project;
+    }
+    
+    private Path getArtifactPath( IMavenProject mavenProject , IMavenArtifact artifact , String type , String suffix , boolean materialize  )
+    {
+        File artifactFile;
+        String artifactLocation = artifact.getFile().getAbsolutePath();
+        if ( artifactLocation != null )
+        {
+            String classifier = artifact.getClassifier();
+            if ( ( type.equals( "java-source" ) ) && 
+                 ( classifier != null ) && 
+                 ( classifier.equals( "test" ) ) )
+            {
+                artifactFile =
+                    new File( artifactLocation.substring( 0, artifactLocation.length() - "-tests.jar".length() )
+                                    + "-test-sources.jar" );
+            }
+            else
+            {
+                artifactFile =
+                    new File( artifactLocation.substring( 0, artifactLocation.length() - ".jar".length() ) + "-"
+                                    + suffix + ".jar" );
+            }
+            
+            if ( artifactFile.exists() )
+            {
+                return new Path( artifactFile.getAbsolutePath() );
+            }
+            else
+            {
+                if ( materialize )
+                {
+                    try
+                    {
+                        // Materialize this artifact
+                        MavenManager.getMaven().resolveArtifact( artifact, type, suffix,
+                                                                 mavenProject.getRemoteArtifactRepositories() );
+                        return new Path( artifact.getFile().getAbsolutePath() );
+                    }
+                    catch ( CoreException e )
+                    {
+                        MavenExceptionHandler.handle( project, e );
+                    }
+                }
+            }
+        }
+        
+        return null;
     }
 }

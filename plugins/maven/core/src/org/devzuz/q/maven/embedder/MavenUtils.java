@@ -120,6 +120,10 @@ public class MavenUtils
         artifact.setVersion( defaultArtifact.getVersion() );
         artifact.setFile( defaultArtifact.getFile() );
         artifact.setAddedToClasspath( defaultArtifact.getArtifactHandler().isAddedToClasspath() );
+        artifact.setClassifier( defaultArtifact.getClassifier() );
+        artifact.setFile( defaultArtifact.getFile() );
+        artifact.setScope( defaultArtifact.getScope() );
+        artifact.setType( defaultArtifact.getType() );
         // System.out.println("Created Artifact "+artifact);
         return artifact;
     }
