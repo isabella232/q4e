@@ -66,7 +66,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         IProject[] iprojects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
         for ( IProject iproject : iprojects )
         {
-        	if(!(iresProject.equals(iproject.getProject())))
+        	if(iproject.isOpen() && !(iresProject.equals(iproject.getProject())))
         	{
         		boolean isMavenNatureEnabled = false;
                 try
