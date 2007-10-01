@@ -14,6 +14,7 @@ import java.util.Set;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Resource;
+import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.internal.EclipseMavenProjectEnvironment;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
@@ -69,6 +70,6 @@ public interface IMavenProject extends IAdaptable
      * 
      * @return the maven project
      *
-     * public abstract MavenProject getRawMavenProject();
      */
+    public abstract MavenProject getRawMavenProject();
 }

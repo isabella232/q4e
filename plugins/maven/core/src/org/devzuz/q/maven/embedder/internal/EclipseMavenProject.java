@@ -78,7 +78,10 @@ public class EclipseMavenProject implements IMavenProject
     
     private List<Plugin> buildPlugins;
     
-    private List<ArtifactRepository> remoteArtifactRepositories; 
+    private List<ArtifactRepository> remoteArtifactRepositories;
+    
+    /* workaround for a while */
+    private MavenProject mavenProject;
 
     public EclipseMavenProject( IFile file )
     {
@@ -197,6 +200,7 @@ public class EclipseMavenProject implements IMavenProject
 
     public void refreshProject( MavenProject mavenRawProject )
     {
+        mavenProject = mavenRawProject;
         artifactResolver = new MavenArtifactResolver( mavenRawProject.getArtifacts() );
         artifactId = mavenRawProject.getArtifactId();
         groupId = mavenRawProject.getGroupId();
@@ -350,6 +354,11 @@ public class EclipseMavenProject implements IMavenProject
     public List<ArtifactRepository> getRemoteArtifactRepositories()
     {
         return remoteArtifactRepositories;
+    }
+    
+    public MavenProject getRawMavenProject()
+    {
+        return mavenProject;
     }
 
     @Override
