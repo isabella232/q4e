@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Aardvark Plug-in
+Bundle-SymbolicName: org.aardvark
+Bundle-Version: 1.0.0
+Export-Package: org.apache.maven.aardvark.ant,
+ org.apache.maven.aardvark.ant.plugin,
+ org.apache.maven.aardvark.converter,
+ org.apache.maven.aardvark.converter.ant,
+ org.apache.maven.aardvark.converter.maven1,
+ org.apache.maven.aardvark.ui,
+ org.apache.maven.aardvark.ui.collections,
+ org.apache.maven.aardvark.ui.wizard,
+ org.apache.maven.aardvark.ui.wizard.ant,
+ org.apache.maven.aardvark.ui.wizard.maven1

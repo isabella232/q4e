@@ -1,0 +1,30 @@
+<component-set>
+  <components>
+    <component>
+      <role>org.apache.maven.aardvark.ui.wizard.WizardFactory</role>
+      <role-hint>ant</role-hint>
+      <implementation>org.apache.maven.aardvark.ui.wizard.ant.AntWizardFactory</implementation>
+      <description>Constructs the wizard steps for the Ant conversion wizard.</description>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.aardvark.converter.ProjectConverter</role>
+          <role-hint>ant</role-hint>
+          <field-name>projectConverter</field-name>
+        </requirement>
+      </requirements>
+    </component>
+    <component>
+      <role>org.apache.maven.aardvark.ui.wizard.WizardFactory</role>
+      <role-hint>maven1</role-hint>
+      <implementation>org.apache.maven.aardvark.ui.wizard.maven1.MavenOneWizardFactory</implementation>
+      <description>Constructs the wizard steps for the Maven 1.</description>
+      <requirements>
+        <requirement>
+          <role>org.apache.maven.aardvark.converter.ProjectConverter</role>
+          <role-hint>maven1</role-hint>
+          <field-name>projectConverter</field-name>
+        </requirement>
+      </requirements>
+    </component>
+  </components>
+</component-set>
