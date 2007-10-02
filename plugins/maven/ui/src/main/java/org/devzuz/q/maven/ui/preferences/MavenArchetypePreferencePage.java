@@ -26,7 +26,7 @@ public class MavenArchetypePreferencePage extends FieldEditorPreferencePage impl
     public MavenArchetypePreferencePage()
     {
         super( GRID );
-        setPreferenceStore( Activator.getDefault().getPreferenceStore() );
+        setPreferenceStore( MavenPreferenceManager.getMavenPreferenceManager().getPreferenceStore() );
     }
 
     protected void createFieldEditors()

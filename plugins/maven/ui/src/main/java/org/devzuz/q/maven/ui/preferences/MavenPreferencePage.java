@@ -22,7 +22,7 @@ public class MavenPreferencePage
     public MavenPreferencePage()
     {
         super( GRID );
-        setPreferenceStore( Activator.getDefault().getPreferenceStore() );
+        setPreferenceStore( MavenPreferenceManager.getMavenPreferenceManager().getPreferenceStore() );
     }
 
     public void createFieldEditors()

@@ -15,4 +15,5 @@ Export-Package: org.devzuz.q.maven.jdt.core,
  org.devzuz.q.maven.jdt.core.classpath.container,
  org.devzuz.q.maven.jdt.core.exception,
  org.devzuz.q.maven.jdt.core.nature
-Import-Package: org.apache.commons.collections.set
+Import-Package: org.apache.commons.collections.set,
+ org.devzuz.q.maven.ui.preferences

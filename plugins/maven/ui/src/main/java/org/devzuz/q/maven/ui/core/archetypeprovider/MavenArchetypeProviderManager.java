@@ -8,7 +8,7 @@ import java.util.Map;
 
 import org.devzuz.q.maven.ui.Activator;
 import org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage;
-import org.eclipse.jface.preference.IPreferenceStore;
+import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 
 
 public class MavenArchetypeProviderManager
@@ -41,15 +41,14 @@ public class MavenArchetypeProviderManager
     {
         Map<String , Archetype> archetypeMap = new HashMap<String, Archetype>(); 
         
-        IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
-        String archetypeSourceList = preferenceStore.getString( MavenArchetypePreferencePage.ARCHETYPE_LIST_KEY );
+        String archetypeSourceList = MavenPreferenceManager.getMavenPreferenceManager().getArchetypeSourceList();
         if ( archetypeSourceList.trim().length() <= 0 )
         {
             String value = MavenArchetypePreferencePage.DEFAULT_ARCHETYPE_LIST_WIKI + 
                            MavenArchetypePreferencePage.ARCHETYPE_LIST_FS + 
                            MavenArchetypePreferencePage.DEFAULT_ARCHETYPE_LIST_KIND;
             
-            preferenceStore.setValue( MavenArchetypePreferencePage.ARCHETYPE_LIST_KEY , value );
+            MavenPreferenceManager.getMavenPreferenceManager().setArchetypeSourceList( value );
             archetypeSourceList = value;
         }
         

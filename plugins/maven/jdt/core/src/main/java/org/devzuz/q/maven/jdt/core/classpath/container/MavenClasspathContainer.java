@@ -23,6 +23,7 @@ import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
+import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
@@ -194,9 +195,10 @@ public class MavenClasspathContainer
     private void resolveArtifacts( IMavenProject mavenProject , List<IClasspathEntry> classpathEntries, 
                                    Set<IMavenArtifact> artifacts, Map<String, IProject> workspaceProjects )
     {
+        boolean downloadSources = MavenPreferenceManager.getMavenPreferenceManager().downloadSources(); 
         for ( IMavenArtifact artifact : artifacts )
         {
-            IClasspathEntry entry = resolveArtifact( mavenProject , artifact, workspaceProjects );
+            IClasspathEntry entry = resolveArtifact( mavenProject , artifact, workspaceProjects , downloadSources );
             if ( entry != null )
             {
                 classpathEntries.add( entry );
@@ -213,7 +215,7 @@ public class MavenClasspathContainer
      * @return the resulting classpath entry or null if should not be added to the classpath
      */
     protected IClasspathEntry resolveArtifact( IMavenProject mavenProject , IMavenArtifact artifact, 
-                                               Map<String, IProject> workspaceProjects )
+                                               Map<String, IProject> workspaceProjects , boolean downloadSources )
     {
         IClasspathAttribute[] attributes = new IClasspathAttribute[0];
         
@@ -239,8 +241,7 @@ public class MavenClasspathContainer
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {
-            // TODO : The last parameter should be taken from the download-sources? preference
-            Path sourcePath = getArtifactPath( mavenProject , artifact , "java-source" , "sources" , false );
+            Path sourcePath = getArtifactPath( mavenProject , artifact , "java-source" , "sources" , downloadSources );
             return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ),  
                                              sourcePath, null, new IAccessRule[0], attributes, false );
         }
@@ -312,7 +313,10 @@ public class MavenClasspathContainer
                     }
                     catch ( CoreException e )
                     {
-                        MavenExceptionHandler.handle( project, e );
+                        Activator.getLogger().info( "Cannot download the sources for " + artifact.getGroupId() + ":" +
+                                                                                         artifact.getArtifactId() +
+                                                                                         artifact.getVersion() );
+                        return null;
                     }
                 }
             }
