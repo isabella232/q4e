@@ -8,6 +8,8 @@ package org.devzuz.q.maven.ui.views;
 
 import java.util.Observable;
 
+import org.apache.commons.collections.Buffer;
+import org.apache.commons.collections.BufferUtils;
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 import org.devzuz.q.maven.embedder.IMavenEvent;
 import org.devzuz.q.maven.embedder.IMavenListener;
@@ -26,8 +28,9 @@ public class MavenEventStore extends Observable implements IMavenListener
     /* TODO allow user customization */
     private static final int BUFFER_SIZE = 50000;
 
-    private CircularFifoBuffer events = new CircularFifoBuffer( BUFFER_SIZE );
+    private Buffer events = BufferUtils.synchronizedBuffer( new CircularFifoBuffer( BUFFER_SIZE ) );
 
+    @SuppressWarnings( "unchecked" )
     public void handleEvent( IMavenEvent event )
     {
         events.add( event );

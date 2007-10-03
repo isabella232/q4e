@@ -12,7 +12,8 @@ Eclipse-LazyStart: true
 Bundle-Localization: plugin
 Bundle-ClassPath: lucene-core-2.1.0.jar,
  .
-Import-Package: org.apache.commons.collections.buffer
+Import-Package: org.apache.commons.collections,
+ org.apache.commons.collections.buffer
 Export-Package: org.devzuz.q.maven.ui,
  org.devzuz.q.maven.ui.actions,
  org.devzuz.q.maven.ui.actions.helper,
