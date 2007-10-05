@@ -10,12 +10,12 @@ package org.devzuz.q.maven.embedder.internal;
 import org.apache.maven.wagon.events.TransferEvent;
 import org.devzuz.q.maven.embedder.IMavenTransferCompleted;
 
-public class MavenTransferCompleted extends AbstractMavenEvent implements IMavenTransferCompleted
+public class MavenTransferCompleted extends AbstractMavenTransferEvent implements IMavenTransferCompleted
 {
 
-    public MavenTransferCompleted( TransferEvent arg0 )
+    public MavenTransferCompleted( TransferEvent event )
     {
-        // TODO Auto-generated constructor stub
+        super( event );
     }
 
     @Override

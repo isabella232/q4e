@@ -8,27 +8,18 @@
 package org.devzuz.q.maven.embedder.internal;
 
 import org.apache.maven.wagon.events.TransferEvent;
-import org.devzuz.q.maven.embedder.IMavenTransferError;
 
-public class MavenTransferError extends AbstractMavenTransferEvent implements IMavenTransferError
+public abstract class AbstractMavenTransferEvent extends AbstractMavenEvent
 {
+    private TransferEvent event;
 
-    public MavenTransferError( TransferEvent event )
+    public AbstractMavenTransferEvent( TransferEvent event )
     {
-        super( event );
+        this.event = event;
     }
 
-    @Override
-    public String getDescriptionText()
+    public TransferEvent getEvent()
     {
-        // TODO Auto-generated method stub
-        return null;
+        return event;
     }
-
-    @Override
-    public String getTypeText()
-    {
-        return Messages.MavenTransferError_Type;
-    }
-
 }
