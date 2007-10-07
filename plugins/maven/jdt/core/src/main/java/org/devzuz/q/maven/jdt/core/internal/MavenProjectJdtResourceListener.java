@@ -33,8 +33,8 @@ import org.eclipse.jdt.core.JavaModelException;
 
 public class MavenProjectJdtResourceListener implements IResourceChangeListener
 {
-	private static String POM_XML = "pom.xml";
-	
+    private static String POM_XML = "pom.xml";
+
     public MavenProjectJdtResourceListener()
     {
     }
@@ -45,10 +45,10 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
 
         if ( Activator.getDefault().isDebugging() )
         {
-            Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Procesing change event for " + ires );
+            Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Procesing change event for ", ires );
         }
 
-        if ( ires.getProject().isOpen() && ires.getProject().getFile( POM_XML).exists() )
+        if ( ires.getProject().isOpen() && ires.getProject().getFile( POM_XML ).exists() )
         {
             classPathChangeUpdater( ires.getProject() );
         }
@@ -66,9 +66,9 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         IProject[] iprojects = ResourcesPlugin.getWorkspace().getRoot().getProjects();
         for ( IProject iproject : iprojects )
         {
-        	if(iproject.isOpen() && !(iresProject.equals(iproject.getProject())))
-        	{
-        		boolean isMavenNatureEnabled = false;
+            if ( iproject.isOpen() && !( iresProject.equals( iproject.getProject() ) ) )
+            {
+                boolean isMavenNatureEnabled = false;
                 try
                 {
                     isMavenNatureEnabled = MavenNatureHelper.hasMavenNature( iproject );
@@ -92,7 +92,8 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                             {
                                 if ( Activator.getDefault().isDebugging() )
                                 {
-                                    Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for " + iproject );
+                                    Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for ",
+                                                     iproject );
                                 }
                                 new UpdateClasspathJob( iproject ).schedule();
                             }
@@ -105,7 +106,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
 
                     }
                 }
-        	}
+            }
         }
     }
 
@@ -126,44 +127,44 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         IClasspathContainer classpathContainer =
             JavaCore.getClasspathContainer( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ), javaProject );
         /* Get current entries. */
-        
+
         return classpathContainer.getClasspathEntries();
     }
 
     private String getProjectPackage( IProject iproject )
     {
-        StringBuilder strProjectInfoData = new StringBuilder("");
+        StringBuilder strProjectInfoData = new StringBuilder( "" );
 
-    	File pom = new File(  iproject.getFile( POM_XML ).getLocation().toOSString());
-    	
-    	try 
-    	{
-    		FileReader filetoread = new FileReader( pom );
-			Model pomModel = new MavenXpp3Reader().read( filetoread );
-			strProjectInfoData.append(pomModel.getArtifactId()+"-");
-			strProjectInfoData.append(pomModel.getVersion()+".");
-			strProjectInfoData.append(pomModel.getPackaging());
-			pomModel = null;		
-			filetoread.close();
-		} 
-    	catch (FileNotFoundException fnfe) 
-    	{
-			// TODO Auto-generated catch block
-    		fnfe.printStackTrace();
-		} 
-    	catch (IOException ioe) 
-    	{
-			// TODO Auto-generated catch block
-    		ioe.printStackTrace();
-		}
-    	catch (XmlPullParserException xppe) 
-    	{
-			// TODO Auto-generated catch block
-    		xppe.printStackTrace();
-		}                
-    	pom = null;
+        File pom = new File( iproject.getFile( POM_XML ).getLocation().toOSString() );
+
+        try
+        {
+            FileReader filetoread = new FileReader( pom );
+            Model pomModel = new MavenXpp3Reader().read( filetoread );
+            strProjectInfoData.append( pomModel.getArtifactId() + "-" );
+            strProjectInfoData.append( pomModel.getVersion() + "." );
+            strProjectInfoData.append( pomModel.getPackaging() );
+            pomModel = null;
+            filetoread.close();
+        }
+        catch ( FileNotFoundException fnfe )
+        {
+            // TODO Auto-generated catch block
+            fnfe.printStackTrace();
+        }
+        catch ( IOException ioe )
+        {
+            // TODO Auto-generated catch block
+            ioe.printStackTrace();
+        }
+        catch ( XmlPullParserException xppe )
+        {
+            // TODO Auto-generated catch block
+            xppe.printStackTrace();
+        }
+        pom = null;
         return strProjectInfoData.toString();
-        	
+
     }
 
 }

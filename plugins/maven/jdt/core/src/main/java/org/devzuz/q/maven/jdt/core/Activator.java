@@ -81,19 +81,26 @@ public class Activator extends Plugin
     /**
      * Sends trace messages to stdout if the specified trace option is enabled.
      * 
-     * This is intended only for developing and debugging.
+     * This is intended only for developing and debugging. The use of variable number of parameters avoids the cost of
+     * building the message when the debug option is not enabled.
      * 
      * @param traceOption
      *            the trace option enabling the message trace.
-     * @param message
-     *            the message to display.
+     * @param messageParts
+     *            a variable number of objects with each part of the message to display.
      */
-    public static void trace( TraceOption traceOption, String message )
+    public static void trace( TraceOption traceOption, Object... messageParts )
     {
-        String value = Platform.getDebugOption( PLUGIN_ID + "/" + traceOption.getValue() );
+        String value = Platform.getDebugOption( traceOption.getValue() );
         if ( null != value && value.equals( "true" ) )
         {
-            System.out.println( "[" + traceOption + "] " + message );
+            StringBuilder b = new StringBuilder( 255 );
+            b.append( "[" ).append( traceOption ).append( "] " );
+            for ( int i = 0; i < messageParts.length; i++ )
+            {
+                b.append( messageParts[i] );
+            }
+            System.out.println( b.toString() );
         }
     }
 }

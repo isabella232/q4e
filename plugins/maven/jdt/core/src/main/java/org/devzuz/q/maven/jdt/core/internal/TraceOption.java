@@ -6,6 +6,8 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.internal;
 
+import org.devzuz.q.maven.jdt.core.Activator;
+
 /**
  * This enumeration contains the constants used to enable traces for the plug-in.
  * 
@@ -13,7 +15,8 @@ package org.devzuz.q.maven.jdt.core.internal;
  */
 public enum TraceOption
 {
-    JDT_RESOURCE_LISTENER( "jdtResourceListener" ), CLASSPATH_UPDATE( "classpathUpdate" );
+    JDT_RESOURCE_LISTENER( Activator.PLUGIN_ID + "/jdtResourceListener" ), CLASSPATH_UPDATE( Activator.PLUGIN_ID
+                    + "/classpathUpdate" );
 
     private final String value;
 
