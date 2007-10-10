@@ -5,9 +5,11 @@ Bundle-SymbolicName: org.devzuz.q.maven.jdt.core;singleton:=true
 Bundle-Version: 0.2.3.qualifier
 Bundle-Activator: org.devzuz.q.maven.jdt.core.Activator
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.jdt.core;bundle-version="3.3.0";visibility:=reexport,
- org.devzuz.q.maven.core;bundle-version="0.2.3";visibility:=reexport,
- org.eclipse.jdt.launching;bundle-version="3.3.0";visibility:=reexport
+Require-Bundle: org.eclipse.jdt.core;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
+ org.devzuz.q.maven.core;bundle-version="[0.2.3,0.3.0)";visibility:=reexport,
+ org.eclipse.jdt.launching;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
+ org.apache.commons.collections;bundle-version="[3.2.0,4.0.0)",
+ org.devzuz.q.maven.ui;bundle-version="[0.2.3,0.3.0)";visibility:=reexport
 Eclipse-LazyStart: true
 Bundle-Vendor: DevZuz
 Export-Package: org.devzuz.q.maven.jdt.core,
@@ -15,5 +17,3 @@ Export-Package: org.devzuz.q.maven.jdt.core,
  org.devzuz.q.maven.jdt.core.classpath.container,
  org.devzuz.q.maven.jdt.core.exception,
  org.devzuz.q.maven.jdt.core.nature
-Import-Package: org.apache.commons.collections.set,
- org.devzuz.q.maven.ui.preferences
