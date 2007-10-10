@@ -135,4 +135,5 @@ Export-Package: org.apache.maven,
  org.codehaus.plexus.personality.plexus.lifecycle.phase,
  org.codehaus.plexus.util.xml,
  org.codehaus.plexus.util.xml.pull
-Import-Package: org.xml.sax
+Import-Package: org.w3c.dom,
+ org.xml.sax
