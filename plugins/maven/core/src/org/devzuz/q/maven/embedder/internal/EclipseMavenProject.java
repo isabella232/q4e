@@ -37,14 +37,13 @@ public class EclipseMavenProject implements IMavenProject
     /**
      * @deprecated use {@link IMavenProject#POM_FILENAME}
      */
+    @Deprecated
     public static final String POM_XML = POM_FILENAME;
 
     public static boolean hasDescriptor( IProject project )
     {
         return ( project.getFile( POM_FILENAME ).exists() );
     }
-
-    private EclipseMavenProjectEnvironment mavenEnvironment;
 
     private IProject project;
 
@@ -55,31 +54,31 @@ public class EclipseMavenProject implements IMavenProject
     private Set<IMavenArtifact> artifacts = new HashSet<IMavenArtifact>();
 
     private Set<IMavenArtifact> allArtifacts = new HashSet<IMavenArtifact>();
-    
+
     private MavenArtifactResolver artifactResolver;
-    
+
     private String artifactId;
-    
+
     private String groupId;
-    
+
     private String version;
-    
+
     private String buildOutputDirectory;
-    
+
     private String buildTestOutputDirectory;
-    
+
     private List<String> compileSourceRoots;
-    
+
     private List<String> testCompileSourceRoots;
-    
+
     private List<Resource> resources;
-    
+
     private List<Resource> testResources;
-    
+
     private List<Plugin> buildPlugins;
-    
+
     private List<ArtifactRepository> remoteArtifactRepositories;
-    
+
     /* workaround for a while */
     private MavenProject mavenProject;
 
@@ -90,7 +89,6 @@ public class EclipseMavenProject implements IMavenProject
 
     public EclipseMavenProject( File file )
     {
-        this.mavenEnvironment = new EclipseMavenProjectEnvironment();
         this.pomFile = file;
         this.baseDirectory = pomFile.getParentFile();
     }
@@ -104,11 +102,10 @@ public class EclipseMavenProject implements IMavenProject
     public EclipseMavenProject( IProject project )
     {
         this.project = project;
-        this.mavenEnvironment = new EclipseMavenProjectEnvironment( project );
         this.baseDirectory = project.getLocation().toFile();
         this.pomFile = new File( project.getLocation().toOSString() + "/" + POM_FILENAME );
     }
-    
+
     /**
      * Build a Maven project from a MavenProject
      * 
@@ -117,7 +114,6 @@ public class EclipseMavenProject implements IMavenProject
      */
     public EclipseMavenProject( MavenProject project )
     {
-        this.mavenEnvironment = new EclipseMavenProjectEnvironment();
         this.refreshProject( project );
         this.refreshDependencies( project );
     }
@@ -130,11 +126,12 @@ public class EclipseMavenProject implements IMavenProject
      */
     public EclipseMavenProject( IMavenArtifact artifact )
     {
-        this.mavenEnvironment = new EclipseMavenProjectEnvironment();
+        // TODO: Needs to do something
     }
 
     public void executeGoals( String goals )
     {
+        // TODO: Needs to do something
     }
 
     public Object getAdapter( Class adapter )
@@ -161,11 +158,6 @@ public class EclipseMavenProject implements IMavenProject
     public IProject getProject()
     {
         return project;
-    }
-
-    public EclipseMavenProjectEnvironment getProjectEnvironment()
-    {
-        return mavenEnvironment;
     }
 
     public String getVersion()
@@ -315,7 +307,7 @@ public class EclipseMavenProject implements IMavenProject
     {
         this.artifacts = artifacts;
     }
-    
+
     public String getBuildOutputDirectory()
     {
         return buildOutputDirectory;
@@ -350,12 +342,12 @@ public class EclipseMavenProject implements IMavenProject
     {
         return testResources;
     }
-    
+
     public List<ArtifactRepository> getRemoteArtifactRepositories()
     {
         return remoteArtifactRepositories;
     }
-    
+
     public MavenProject getRawMavenProject()
     {
         return mavenProject;

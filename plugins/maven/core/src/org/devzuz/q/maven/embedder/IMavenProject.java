@@ -15,7 +15,6 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
-import org.devzuz.q.maven.embedder.internal.EclipseMavenProjectEnvironment;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
 
@@ -34,8 +33,6 @@ public interface IMavenProject extends IAdaptable
 
     public abstract IProject getProject();
 
-    public abstract EclipseMavenProjectEnvironment getProjectEnvironment();
-
     public abstract String getVersion();
 
     public abstract File getBaseDirectory();
@@ -49,27 +46,28 @@ public interface IMavenProject extends IAdaptable
     public abstract String getActiveProfiles();
 
     public abstract Set<IMavenArtifact> getArtifacts();
-    
+
     public abstract String getBuildOutputDirectory();
-    
+
     public abstract String getBuildTestOutputDirectory();
-    
+
     public abstract List<String> getCompileSourceRoots();
-    
+
     public abstract List<String> getTestCompileSourceRoots();
-    
+
     public abstract List<Resource> getResources();
-    
+
     public abstract List<Resource> getTestResources();
-    
+
     public abstract List<Plugin> getBuildPlugins();
 
     public abstract List<ArtifactRepository> getRemoteArtifactRepositories();
+
     /**
      * Expose the underlying Maven project
      * 
      * @return the maven project
-     *
+     * 
      */
     public abstract MavenProject getRawMavenProject();
 }
