@@ -50,6 +50,8 @@ public class MavenClasspathContainer
 
     public static String MAVEN_CLASSPATH_CONTAINER = "org.devzuz.q.maven.jdt.core.mavenClasspathContainer"; //$NON-NLS-1$
 
+    public static String SOURCES_CLASSIFIER = "sources";
+
     private List<IClasspathEntry> classpathEntries = new ArrayList<IClasspathEntry>();
 
     private IProject project;
@@ -241,7 +243,8 @@ public class MavenClasspathContainer
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {
-            Path sourcePath = getArtifactPath( mavenProject , artifact , "java-source" , "sources" , downloadSources );
+            Path sourcePath = getArtifactPath( mavenProject, artifact, "java-source", SOURCES_CLASSIFIER,
+                                               downloadSources );
             return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ),  
                                              sourcePath, null, new IAccessRule[0], attributes, false );
         }
@@ -276,6 +279,11 @@ public class MavenClasspathContainer
     
     private Path getArtifactPath( IMavenProject mavenProject , IMavenArtifact artifact , String type , String suffix , boolean materialize  )
     {
+        //TODO in the future we want to do something like:
+        // IMavenArtifact sourcesArtifact = (IMavenArtifact) artifact.clone();
+        // sourcesArtifact.setClassifier( SOURCES_CLASSIFIER );
+        // IPath sourcePath = MavenManager.getMaven().getLocalRepository().getPath( sourcesArtifact );
+
         File artifactFile;
         String artifactLocation = artifact.getFile().getAbsolutePath();
         if ( artifactLocation != null )
@@ -290,7 +298,7 @@ public class MavenClasspathContainer
                                     + "-test-sources.jar" );
             }
             else
-            {
+        {            
                 artifactFile =
                     new File( artifactLocation.substring( 0, artifactLocation.length() - ".jar".length() ) + "-"
                                     + suffix + ".jar" );
@@ -313,9 +321,7 @@ public class MavenClasspathContainer
                     }
                     catch ( CoreException e )
                     {
-                        Activator.getLogger().info( "Cannot download the sources for " + artifact.getGroupId() + ":" +
-                                                                                         artifact.getArtifactId() +
-                                                                                         artifact.getVersion() );
+                        /* Cannot download the sources for artifact, ignoring */
                         return null;
                     }
                 }
