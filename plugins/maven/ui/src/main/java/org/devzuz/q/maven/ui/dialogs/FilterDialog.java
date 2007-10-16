@@ -33,6 +33,7 @@ public class FilterDialog extends TrayDialog
         this.memento = memento;
     }
 
+    @Override
     protected Control createDialogArea( Composite parent )
     {
         Composite container = (Composite) super.createDialogArea( parent );
@@ -60,16 +61,18 @@ public class FilterDialog extends TrayDialog
         severityCombo = new Combo( textContainer, SWT.DROP_DOWN | SWT.READ_ONLY );
         severityCombo.setItems( Severity.getAllAsString() );
         severityCombo.select( memento.getInteger( MavenEventView.SELECTED_INDEX_KEY ) );
-        severityCombo.setLayoutData( gd );
+        severityCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
         // getSelectedTypes();
     }
 
+    @Override
     protected void createButtonsForButtonBar( Composite parent )
     {
         createButton( parent, IDialogConstants.OK_ID, IDialogConstants.OK_LABEL, true );
         createButton( parent, IDialogConstants.CANCEL_ID, IDialogConstants.CANCEL_LABEL, false );
     }
 
+    @Override
     protected void okPressed()
     {
         memento.putInteger( MavenEventView.SELECTED_INDEX_KEY, severityCombo.getSelectionIndex() );
