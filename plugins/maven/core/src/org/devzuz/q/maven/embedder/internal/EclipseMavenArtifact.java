@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DefaultArtifact;
+import org.apache.maven.artifact.versioning.VersionRange;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 
 public class EclipseMavenArtifact implements IMavenArtifact
@@ -28,7 +30,7 @@ public class EclipseMavenArtifact implements IMavenArtifact
     private String scope;
 
     private String type;
-    
+
     private String classifier;
 
     private boolean addedToClasspath;
@@ -45,6 +47,11 @@ public class EclipseMavenArtifact implements IMavenArtifact
 
     public EclipseMavenArtifact( Artifact artifact )
     {
+        fromMaven( artifact );
+    }
+
+    public void fromMaven( Artifact artifact )
+    {
         setArtifactId( artifact.getArtifactId() );
         setGroupId( artifact.getGroupId() );
         setId( artifact.getId() );
@@ -54,6 +61,14 @@ public class EclipseMavenArtifact implements IMavenArtifact
         setType( artifact.getType() );
         setClassifier( artifact.getArtifactHandler().getClassifier() );
         setAddedToClasspath( artifact.getArtifactHandler().isAddedToClasspath() );
+    }
+
+    public Artifact toMaven()
+    {
+        Artifact artifact =
+            new DefaultArtifact( getGroupId(), getArtifactId(), VersionRange.createFromVersion( getVersion() ),
+                                 getScope(), getType(), getClassifier(), null, false );
+        return artifact;
     }
 
     public String getArtifactId()
@@ -135,12 +150,12 @@ public class EclipseMavenArtifact implements IMavenArtifact
     {
         this.type = type;
     }
-    
+
     public String getClassifier()
     {
         return classifier;
     }
-    
+
     public void setClassifier( String classifier )
     {
         this.classifier = classifier;
@@ -209,5 +224,21 @@ public class EclipseMavenArtifact implements IMavenArtifact
         sb.append( getVersion() );
         sb.append( "] " );
         return sb.toString();
+    }
+
+    @Override
+    public Object clone()
+    {
+        EclipseMavenArtifact artifact = new EclipseMavenArtifact();
+        artifact.setArtifactId( getArtifactId() );
+        artifact.setGroupId( getGroupId() );
+        artifact.setId( getId() );
+        setVersion( getVersion() );
+        artifact.setFile( getFile() );
+        artifact.setScope( getScope() );
+        artifact.setType( getType() );
+        artifact.setClassifier( getClassifier() );
+        artifact.setAddedToClasspath( isAddedToClasspath() );
+        return artifact;
     }
 }

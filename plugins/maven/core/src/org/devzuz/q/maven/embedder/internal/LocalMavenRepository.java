@@ -19,7 +19,7 @@ import org.eclipse.core.runtime.Path;
 public class LocalMavenRepository implements ILocalMavenRepository
 {
 
-    ArtifactRepository artifactRepository;
+    private ArtifactRepository artifactRepository;
 
     public LocalMavenRepository( ArtifactRepository localRepository )
     {
@@ -39,6 +39,12 @@ public class LocalMavenRepository implements ILocalMavenRepository
     public IPath getBaseDirectoryPath()
     {
         return new Path( artifactRepository.getBasedir() );
+    }
+
+    public IPath getPath( IMavenArtifact artifact )
+    {
+        String pathOf = artifactRepository.pathOf( artifact.toMaven() );
+        return new Path( pathOf );
     }
 
     public IMavenArtifact findArtifact( String groupId, String artifactId, String version, String classifier )

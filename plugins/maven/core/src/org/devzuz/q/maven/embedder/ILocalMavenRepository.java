@@ -30,4 +30,6 @@ public interface ILocalMavenRepository extends IMavenRepository
 
     public IPath getBaseDirectoryPath();
 
+    public IPath getPath( IMavenArtifact artifact );
+
 }

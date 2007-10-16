@@ -9,6 +9,8 @@ package org.devzuz.q.maven.embedder;
 import java.io.File;
 import java.util.Set;
 
+import org.apache.maven.artifact.Artifact;
+
 public interface IMavenArtifact
 {
 
@@ -57,4 +59,10 @@ public interface IMavenArtifact
     public abstract boolean isAddedToClasspath();
 
     public abstract void setAddedToClasspath( boolean addedToClasspath );
+
+    public void fromMaven( Artifact artifact );
+
+    public Artifact toMaven();
+
+    public Object clone();
 }
