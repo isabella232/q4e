@@ -10,9 +10,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
+import org.eclipse.core.runtime.CoreException;
+
 public interface IArchetypeListProvider
 {
     public String getProviderName();
+    
+    public int getTimeout();
+    
+    public void setTimeout( int timeout );
     
     public URL getProviderSource();
     
@@ -23,5 +29,5 @@ public interface IArchetypeListProvider
      * @throws IOException if an error happened while retrieving the archetype list
      */
     public Map<String, Archetype> getArchetypes()
-        throws IOException;
+        throws CoreException;
 }

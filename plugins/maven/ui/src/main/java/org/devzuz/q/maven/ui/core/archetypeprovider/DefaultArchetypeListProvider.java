@@ -19,6 +19,16 @@ public class DefaultArchetypeListProvider
         return DEFAULT;
     }
     
+    public int getTimeout()
+    {
+        return 0;
+    }
+    
+    public void setTimeout( int timeout )
+    {
+        
+    }
+    
     public URL getProviderSource()
     {
         return null;

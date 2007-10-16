@@ -7,7 +7,6 @@
 
 package org.devzuz.q.maven.ui.preferences;
 
-import org.devzuz.q.maven.ui.Activator;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.core.archetypeprovider.WikiArchetypeListProvider;
 import org.devzuz.q.maven.ui.preferences.editor.MavenArchetypePreferenceTableEditor;

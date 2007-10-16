@@ -9,6 +9,7 @@ import java.util.Map;
 import org.devzuz.q.maven.ui.Activator;
 import org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage;
 import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
+import org.eclipse.core.runtime.CoreException;
 
 
 public class MavenArchetypeProviderManager
@@ -40,8 +41,8 @@ public class MavenArchetypeProviderManager
     public static Map<String, Archetype> getArchetypes()
     {
         Map<String , Archetype> archetypeMap = new HashMap<String, Archetype>(); 
-        
         String archetypeSourceList = MavenPreferenceManager.getMavenPreferenceManager().getArchetypeSourceList();
+        
         if ( archetypeSourceList.trim().length() <= 0 )
         {
             String value = MavenArchetypePreferencePage.DEFAULT_ARCHETYPE_LIST_WIKI + 
@@ -52,17 +53,24 @@ public class MavenArchetypeProviderManager
             archetypeSourceList = value;
         }
         
+        // Get the timeout from preference, use default if timeout is 0
+        int timeout = MavenPreferenceManager.getMavenPreferenceManager().getArchetypeConnectionTimeout();
+        if( timeout <= 0 )
+        {
+            timeout = MavenPreferenceManager.ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT;
+        }
+        
         for ( Map.Entry<String, String> source : getArchetypeSourcePreferences( archetypeSourceList,
                                                                                 MavenArchetypePreferencePage.ARCHETYPE_LIST_LS,
                                                                                 MavenArchetypePreferencePage.ARCHETYPE_LIST_FS ).entrySet() )
         {
-            archetypeMap.putAll( getArchetypes( source.getKey(), source.getValue() ) );
+            archetypeMap.putAll( getArchetypes( source.getKey(), source.getValue() , timeout ) );
         }
         
         return archetypeMap;
     }
 
-    public static Map<String, Archetype> getArchetypes( String source , String kind )
+    public static Map<String, Archetype> getArchetypes( String source , String kind , int timeout )
     {
         Map<String, Archetype> archetypeMap = null;
         IArchetypeListProvider listProvider = null;
@@ -71,6 +79,7 @@ public class MavenArchetypeProviderManager
         {
             if( provider.getProviderName().equals( kind ) )
             {
+                Activator.getLogger().info( "Using the " + kind + " archetype provider on " + source );
                 listProvider = provider;
             }
         }
@@ -80,6 +89,7 @@ public class MavenArchetypeProviderManager
             if( listProvider != null )
             {
                 listProvider.setProviderSource( getURL( source ) );
+                listProvider.setTimeout( timeout );
                 archetypeMap = listProvider.getArchetypes();
             }
             else
@@ -91,6 +101,13 @@ public class MavenArchetypeProviderManager
         catch ( IOException e )
         {
             // Exceptions, default to hardcoded
+            Activator.getLogger().error( "IOException in MavenArchetypeProviderManager.getArchetypes() - " + e.getMessage() );
+            return getDefaultArchetypes();
+        }
+        catch( CoreException e )
+        {
+            // Exceptions, default to hardcoded
+            Activator.getLogger().error( "CoreException in MavenArchetypeProviderManager.getArchetypes() - " + e.getStatus().getException().getMessage() );
             return getDefaultArchetypes();
         }
 
@@ -105,7 +122,7 @@ public class MavenArchetypeProviderManager
         {
             archetypeMap = defaultListProvider.getArchetypes();
         }
-        catch ( IOException e1 )
+        catch ( CoreException e1 )
         {
             Activator.getLogger().log( "Unable to find any archetypes", e1 );
         }

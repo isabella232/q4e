@@ -40,8 +40,10 @@ public class Messages
     public static String MavenPreference_Offline;
 
     public static String MavenPreference_DownloadJavaDocs;
-
+    
     public static String MavenPreference_DownloadSources;
+    
+    public static String MavenPreference_ArchetypeConnectionTimeout;
 
     public static String MavenEventView_Column_Description;
 

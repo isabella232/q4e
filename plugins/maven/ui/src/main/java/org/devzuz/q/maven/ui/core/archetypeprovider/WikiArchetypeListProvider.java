@@ -11,10 +11,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 public class WikiArchetypeListProvider
     implements IArchetypeListProvider
@@ -23,14 +30,10 @@ public class WikiArchetypeListProvider
     
     private URL url;
     
-    public WikiArchetypeListProvider()
+    private int timeout = MavenPreferenceManager.ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT;
+    
+    public WikiArchetypeListProvider( )
     {
-        
-    }
-
-    public WikiArchetypeListProvider( URL url )
-    {
-        this.url = url;
     }
     
     public String getProviderName()
@@ -49,29 +52,52 @@ public class WikiArchetypeListProvider
     }
     
     public Map<String, Archetype> getArchetypes()
-        throws IOException
+        throws CoreException
     {
-        Map<String, Archetype> archs = new LinkedHashMap<String, Archetype>();
-
         StringBuilder archetypePage = new StringBuilder();
-        InputStream in = url.openStream();
-        BufferedReader reader = new BufferedReader( new InputStreamReader( in ) );
-
         char[] buffer = new char[1024];
         int length = 0;
 
+        BufferedReader reader = null;
         try
         {
+            URLConnection conn = url.openConnection();
+            conn.setConnectTimeout( timeout );
+            conn.setReadTimeout( timeout );
+            conn.connect();
+            
+            InputStream in = conn.getInputStream();
+            
+            reader = new BufferedReader( new InputStreamReader( in ) );
+
             while ( ( length = reader.read( buffer ) ) > -1 )
             {
                 archetypePage.append( buffer, 0, length );
             }
         }
+        catch( Exception e )
+        {
+            Activator.getLogger().error("Error while accessing page - " + e.getMessage() );
+            throw new CoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Error while accessing page", e ) );
+        }
         finally
         {
-            reader.close();
+            if( reader != null )
+            {
+                try
+                {
+                    reader.close();
+                }
+                catch ( IOException e )
+                {
+                    // Just let it go, we can't do anything with this.
+                    Activator.getLogger().error("reader.close() in WikiArchetypeListProvider.getArchetypes() throwed an IOException" );
+                }
+            }
         }
-
+        
+        Map<String, Archetype> archs = new LinkedHashMap<String, Archetype>();
+        
         Pattern pattern = Pattern.compile( "<br>\\|([\\p{Alnum}-_. ]+)\\|([\\p{Alnum}-_. ]+)\\|([\\p{Alnum}-_. ]+)\\|([\\p{Alnum}-_.:/ \\[\\],]+)\\|([^|]+)\\|" );
         Matcher m = pattern.matcher( archetypePage.toString() );
         while ( m.find() )
@@ -91,5 +117,15 @@ public class WikiArchetypeListProvider
     public static String sanitizeUrl( String url )
     {
         return url.replaceAll( "\\r|\\n|\\s{2,}|\\[|\\]|\\&nbsp;", "" );
+    }
+
+    public int getTimeout()
+    {
+        return timeout;
+    }
+
+    public void setTimeout( int timeout )
+    {
+        this.timeout = timeout;
     }
 }

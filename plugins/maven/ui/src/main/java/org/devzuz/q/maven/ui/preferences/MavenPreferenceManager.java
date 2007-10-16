@@ -6,6 +6,9 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 public class MavenPreferenceManager
 {
+    public static final String ARCHETYPE_PAGE_CONN_TIMEOUT = Activator.PLUGIN_ID + ".archetypeConnTimeout";
+    public static final int    ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT = 30000;
+    
     private static MavenPreferenceManager mavenPreferenceManager;
     public static synchronized MavenPreferenceManager getMavenPreferenceManager()
     {
@@ -42,6 +45,16 @@ public class MavenPreferenceManager
     public void setDownloadSources( boolean downloadSources )
     {
         preferenceStore.setValue( IMaven.GLOBAL_PREFERENCE_DOWNLOAD_SOURCES , downloadSources );
+    }
+    
+    public int getArchetypeConnectionTimeout()
+    {
+        return preferenceStore.getInt( ARCHETYPE_PAGE_CONN_TIMEOUT );
+    }
+    
+    public void setArchetypeConnectionTimeout( int timeout )
+    {
+        preferenceStore.setValue( ARCHETYPE_PAGE_CONN_TIMEOUT , timeout );
     }
     
     public IPreferenceStore getPreferenceStore()

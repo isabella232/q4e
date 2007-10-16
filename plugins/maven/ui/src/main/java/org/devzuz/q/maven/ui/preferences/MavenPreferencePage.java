@@ -6,11 +6,11 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.ui.preferences;
 
-import org.devzuz.q.maven.ui.Activator;
 import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.ui.Messages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -18,7 +18,6 @@ public class MavenPreferencePage
     extends FieldEditorPreferencePage
     implements IWorkbenchPreferencePage
 {
-
     public MavenPreferencePage()
     {
         super( GRID );
@@ -27,6 +26,9 @@ public class MavenPreferencePage
 
     public void createFieldEditors()
     {
+        addField( new IntegerFieldEditor( MavenPreferenceManager.ARCHETYPE_PAGE_CONN_TIMEOUT,
+                                          Messages.MavenPreference_ArchetypeConnectionTimeout, getFieldEditorParent() ) );
+        
         addField( new BooleanFieldEditor( IMaven.GLOBAL_PREFERENCE_OFFLINE, Messages.MavenPreference_Offline,
                                           getFieldEditorParent() ) );
 
@@ -39,6 +41,16 @@ public class MavenPreferencePage
 
     public void init( IWorkbench workbench )
     {
-    }
 
+    }
+    
+    protected void initialize()
+    {
+        if( MavenPreferenceManager.getMavenPreferenceManager().getArchetypeConnectionTimeout() == 0 )
+        {
+            MavenPreferenceManager.getMavenPreferenceManager().setArchetypeConnectionTimeout( MavenPreferenceManager.ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT );
+        }
+        
+        super.initialize();
+    }
 }
