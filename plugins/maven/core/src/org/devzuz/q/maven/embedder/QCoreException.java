@@ -4,7 +4,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.embedder.internal;
+package org.devzuz.q.maven.embedder;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -14,12 +14,19 @@ import org.eclipse.core.runtime.IStatus;
  * 
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
- * @deprecated use {@link org.devzuz.q.maven.embedder.QCoreException}
  */
-public class QCoreException extends org.devzuz.q.maven.embedder.QCoreException
+public class QCoreException extends CoreException
 {
+
     public QCoreException( IStatus status )
     {
         super( status );
     }
+
+    @Override
+    public Throwable getCause()
+    {
+        return getStatus().getException();
+    }
+
 }

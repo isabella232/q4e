@@ -44,6 +44,7 @@ import org.devzuz.q.maven.embedder.IMavenListener;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
+import org.devzuz.q.maven.embedder.QCoreException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;

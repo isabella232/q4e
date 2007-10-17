@@ -15,6 +15,7 @@ import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.Activator;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.QCoreException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -51,7 +52,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
                 }
                 else
                 {
-                    exceptions.add( new CoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID,
+                    exceptions.add( new QCoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID,
                                                                    "Errors during Maven execution", exception ) ) );
                 }
             }
