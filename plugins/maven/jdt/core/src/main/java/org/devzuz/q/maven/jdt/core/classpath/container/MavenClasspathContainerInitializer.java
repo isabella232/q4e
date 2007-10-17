@@ -7,14 +7,18 @@
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import org.devzuz.q.maven.jdt.core.Activator;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jdt.core.ClasspathContainerInitializer;
+import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IJavaProject;
+import org.eclipse.jdt.core.JavaCore;
 
 /**
- * Provides initialization for the MavenClasspathContainer - including creating it if it doesn't exist on the project
+ * Provides initialization for the MavenClasspathContainer - including creating it if it doesn't
+ * exist on the project
  * 
  * @author pdodds
  * 
@@ -27,14 +31,38 @@ public class MavenClasspathContainerInitializer
     }
 
     @Override
-    public void initialize( IPath containerPath, IJavaProject project )
+    public void initialize( IPath containerPath, IJavaProject javaProject )
         throws CoreException
     {
-        if ( containerPath.equals( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ) ) )
+        if ( containerPath.equals( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH ) )
         {
-            Activator.getLogger().info( "Initializing classpath for " + project.getPath() );
-            
-            new UpdateClasspathJob( project.getProject() ).schedule();
+            Activator.getLogger().info( "Initializing classpath for " + javaProject.getPath() );
+
+            IProject project = javaProject.getProject();
+
+            IClasspathContainer container = JavaCore.getClasspathContainer( containerPath, javaProject );
+
+            MavenClasspathContainer mavenContainer;
+            if ( container == null )
+            {
+                mavenContainer = new MavenClasspathContainer( project );
+            }
+            else
+            {
+                mavenContainer = new MavenClasspathContainer( project, container.getClasspathEntries() );
+            }
+
+            /* we must call setClasspathContainer before scheduling a job or we will be called again */
+            JavaCore.setClasspathContainer( containerPath, new IJavaProject[] { javaProject },
+                                            new IClasspathContainer[] { mavenContainer }, new NullProgressMonitor() );
+
+            if ( container == null )
+            {
+                UpdateClasspathJob job = new UpdateClasspathJob( project );
+                // job.setRule( project.getProject().getParent() );
+                // job.setPriority( Job.BUILD );
+                job.schedule();
+            }
         }
     }
 
