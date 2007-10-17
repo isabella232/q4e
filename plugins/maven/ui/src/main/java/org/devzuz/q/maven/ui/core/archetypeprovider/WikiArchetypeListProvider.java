@@ -17,6 +17,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.devzuz.q.maven.embedder.QCoreException;
 import org.devzuz.q.maven.ui.Activator;
 import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.core.runtime.CoreException;
@@ -78,7 +79,7 @@ public class WikiArchetypeListProvider
         catch( Exception e )
         {
             Activator.getLogger().error("Error while accessing page - " + e.getMessage() );
-            throw new CoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Error while accessing page", e ) );
+            throw new QCoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Error while accessing page", e ) );
         }
         finally
         {
