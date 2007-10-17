@@ -199,11 +199,7 @@ public class MavenNature
             if ( ( mavenExceptions != null ) && ( mavenExceptions.size() > 0 ) )
             {
                 Activator.getLogger().error("Maven exceptions while generating source code for adding to classpath");
-                for ( CoreException exception : mavenExceptions )
-                {
-                    // TODO Handle this
-                    MavenExceptionHandler.handle( project, exception );
-                }
+                MavenExceptionHandler.handle( project, mavenExceptions );
             }
             else
             {
