@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.maven.artifact.Artifact;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 
 /**
@@ -196,5 +197,33 @@ public class MavenArtifactStub implements IMavenArtifact
         sb.append( getVersion() );
         sb.append( "] " );
         return sb.toString();
+    }
+
+    public void fromMaven( Artifact artifact )
+    {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public Artifact toMaven()
+    {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Object clone()
+    {
+        MavenArtifactStub artifact = new MavenArtifactStub();
+        artifact.setArtifactId( getArtifactId() );
+        artifact.setGroupId( getGroupId() );
+        artifact.setId( getId() );
+        setVersion( getVersion() );
+        artifact.setFile( getFile() );
+        artifact.setScope( getScope() );
+        artifact.setType( getType() );
+        artifact.setClassifier( getClassifier() );
+        artifact.setAddedToClasspath( isAddedToClasspath() );
+        return artifact;
     }
 }
