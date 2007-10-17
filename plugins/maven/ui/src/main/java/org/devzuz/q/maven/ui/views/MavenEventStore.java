@@ -34,13 +34,14 @@ public class MavenEventStore extends Observable implements IMavenListener
     public void handleEvent( IMavenEvent event )
     {
         events.add( event );
-        this.notifyListeners();
+        this.notifyListeners( event );
     }
 
     public void dispose()
     {
         events.clear();
-        this.notifyListeners();
+        // Why notify on dispose?
+        // this.notifyListeners();
     }
 
     /**
@@ -56,11 +57,14 @@ public class MavenEventStore extends Observable implements IMavenListener
 
     /**
      * Notifies every observer that a new event has arrived.
+     * 
+     * @param event
+     *            the event being handled.
      */
-    public void notifyListeners()
+    public void notifyListeners( IMavenEvent event )
     {
         this.setChanged();
-        this.notifyObservers();
+        this.notifyObservers( event );
         // changed state will be automatically reset by notifyObservers
     }
 }

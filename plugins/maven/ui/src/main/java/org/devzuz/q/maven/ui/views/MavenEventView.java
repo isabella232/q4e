@@ -12,6 +12,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.devzuz.q.maven.embedder.IMavenEvent;
+import org.devzuz.q.maven.embedder.IMavenEventEnd;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.Severity;
 import org.devzuz.q.maven.ui.Activator;
@@ -47,6 +48,9 @@ public class MavenEventView extends ViewPart implements Observer
 
     public static final int KEYBOARD_CTRL_C = 99;
 
+    /** Delay updates to the event view for up to this number of milliseconds. */
+    private static final long MAX_MS_BETWEEN_UPDATES = 250;
+
     private Action filterAction;
 
     private Action clearEventViewAction;
@@ -54,7 +58,7 @@ public class MavenEventView extends ViewPart implements Observer
     private Action controlScrollingAction;
 
     private Action copyToClipboardAction;
-    
+
     private IMemento memento;
 
     private IViewSite site;
@@ -64,6 +68,8 @@ public class MavenEventView extends ViewPart implements Observer
     private MavenViewSeverityFilter severityFilter;
 
     private MavenEventStore store;
+
+    private long lastUpdateTime = 0;
 
     /**
      * The constructor.
@@ -223,7 +229,7 @@ public class MavenEventView extends ViewPart implements Observer
         clearEventViewAction.setImageDescriptor( MavenImages.DESC_CLEAREVENTVIEW );
         clearEventViewAction.setDisabledImageDescriptor( MavenImages.DESC_CLEAREVENTVIEW_DISABLED );
 
-        copyToClipboardAction= new Action( Messages.MavenEventView_CopyToClipboard )
+        copyToClipboardAction = new Action( Messages.MavenEventView_CopyToClipboard )
         {
             @Override
             public void run()
@@ -231,13 +237,13 @@ public class MavenEventView extends ViewPart implements Observer
                 setBufferData( eventTableViewer.getTable().getSelection() );
             }
         };
-        copyToClipboardAction.setEnabled( true ); 
-        copyToClipboardAction.setToolTipText( Messages.MavenEventView_CopyToClipboard ); 
-        copyToClipboardAction.setImageDescriptor( Activator.getDefault().getWorkbench().getSharedImages().
-                                                  getImageDescriptor( ISharedImages.IMG_TOOL_COPY ) );
-        copyToClipboardAction.setDisabledImageDescriptor( Activator.getDefault().getWorkbench().getSharedImages().
-                                                          getImageDescriptor( ISharedImages.IMG_TOOL_COPY_DISABLED  ) );
-         
+        copyToClipboardAction.setEnabled( true );
+        copyToClipboardAction.setToolTipText( Messages.MavenEventView_CopyToClipboard );
+        copyToClipboardAction.setImageDescriptor( Activator.getDefault().getWorkbench().getSharedImages().getImageDescriptor(
+                                                                                                                              ISharedImages.IMG_TOOL_COPY ) );
+        copyToClipboardAction.setDisabledImageDescriptor( Activator.getDefault().getWorkbench().getSharedImages().getImageDescriptor(
+                                                                                                                                      ISharedImages.IMG_TOOL_COPY_DISABLED ) );
+
         controlScrollingAction = new Action( Messages.MavenEventView_ScrollLock, Action.AS_CHECK_BOX )
         {
             @Override
@@ -260,48 +266,55 @@ public class MavenEventView extends ViewPart implements Observer
         {
             return;
         }
-        
+
         MavenEventStore store = (MavenEventStore) o;
         IMavenEvent[] events = store.getEvents();
-        
+
         if ( events.length <= 0 )
         {
             // Refresh the table when a "store cleared" is received.
             eventTableViewer.refresh();
             return;
         }
-        
+
         // For performance, avoid refreshing when the event will not be displayed
-        IMavenEvent lastEvent = events[events.length - 1];
-        if ( !severityFilter.select( lastEvent ) )
+        IMavenEvent lastEvent = (IMavenEvent) arg;
+        if ( !( lastEvent instanceof IMavenEventEnd ) && !severityFilter.select( lastEvent ) )
         {
             // The event will not be displayed, skip update.
             return;
         }
-        
-        eventTableViewer.getControl().getDisplay().asyncExec( new Runnable()
+
+        /* Maven generates too many events to handle them one by one. We update the view in batches. */
+        long now = System.currentTimeMillis();
+
+        if ( now - lastUpdateTime > MAX_MS_BETWEEN_UPDATES || lastEvent instanceof IMavenEventEnd )
         {
-            public void run()
+            lastUpdateTime = now;
+            eventTableViewer.getControl().getDisplay().syncExec( new Runnable()
             {
-                // Check if the control is still available
-                if ( eventTableViewer.getControl().isDisposed() )
+                public void run()
                 {
-                    return;
-                }
-                eventTableViewer.refresh();
-                // If scrolling is enabled, scroll it
-                if ( !controlScrollingAction.isChecked() )
-                {
-                    Table table = eventTableViewer.getTable();
-                    if ( ( table != null )
-                                    && ( table.getItemCount() * table.getItemHeight() > table.getClientArea().height ) )
+                    // Check if the control is still available
+                    if ( eventTableViewer.getControl().isDisposed() )
                     {
-                        // The idea here is to select the last element to induce a scroll to the bottom
-                        table.showItem( table.getItem( table.getItemCount() - 1 ) );
+                        return;
+                    }
+                    eventTableViewer.refresh();
+                    // If scrolling is enabled, scroll it
+                    if ( !controlScrollingAction.isChecked() )
+                    {
+                        Table table = eventTableViewer.getTable();
+                        if ( ( table != null )
+                                        && ( table.getItemCount() * table.getItemHeight() > table.getClientArea().height ) )
+                        {
+                            // The idea here is to select the last element to induce a scroll to the bottom
+                            table.showItem( table.getItem( table.getItemCount() - 1 ) );
+                        }
                     }
                 }
-            }
-        } );
+            } );
+        }
     }
 
     private void handleFilter()
