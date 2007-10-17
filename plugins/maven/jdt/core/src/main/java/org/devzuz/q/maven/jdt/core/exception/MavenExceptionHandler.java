@@ -6,6 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.exception;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -21,6 +22,7 @@ import org.devzuz.q.maven.jdt.core.Activator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
@@ -121,10 +123,12 @@ public class MavenExceptionHandler
     public void handle( final IProject project, final MultipleArtifactsNotFoundException e )
     {
         List<Artifact> missingArtifacts = e.getMissingArtifacts();
+        List<String> problems = new ArrayList<String>( missingArtifacts.size() );
         for ( Artifact artifact : missingArtifacts )
         {
-            markPom( project, "Missing dependency: " + artifact.toString() );
+            problems.add( "Missing dependency: " + artifact.toString() );
         }
+        markPom( project, problems );
     }
 
     private void handle( IProject project, InvalidProjectModelException e )
@@ -142,6 +146,8 @@ public class MavenExceptionHandler
             public void run( IProgressMonitor monitor )
                 throws CoreException
             {
+                pom.deleteMarkers( MavenCoreProblemMarker.getMavenPOMMarker(), true, IResource.DEPTH_INFINITE ); 
+
                 for ( String problem : problems )
                 {
                     try 
@@ -170,6 +176,11 @@ public class MavenExceptionHandler
         }
     }
 
+    /**
+     * Add only one marker, note that all previous markers will be deleted 
+     * @param project
+     * @param msg
+     */
     private void markPom( final IProject project, final String msg )
     {
         markPom( project, Arrays.asList( new String[] { msg } ) );
