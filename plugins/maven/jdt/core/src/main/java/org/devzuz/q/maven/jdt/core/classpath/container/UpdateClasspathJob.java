@@ -38,7 +38,7 @@ public class UpdateClasspathJob
     @Override
     public IStatus runInWorkspace( IProgressMonitor monitor )
     {
-        MavenClasspathContainer.newClasspath( project );
+        MavenClasspathContainer.newClasspath( project, monitor );
 
         return new Status( IStatus.OK, Activator.PLUGIN_ID, "Updated classpath container" );
     }

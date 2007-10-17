@@ -28,6 +28,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IAccessRule;
@@ -52,13 +53,13 @@ public class MavenClasspathContainer
 
     public static String SOURCES_CLASSIFIER = "sources";
 
-    private List<IClasspathEntry> classpathEntries = new ArrayList<IClasspathEntry>();
+    private IClasspathEntry[] classpathEntries;
 
     private IProject project;
 
     public IClasspathEntry[] getClasspathEntries()
     {
-        return classpathEntries.toArray( new IClasspathEntry[classpathEntries.size()] );
+        return classpathEntries;
     }
 
     public String getDescription()
@@ -89,8 +90,9 @@ public class MavenClasspathContainer
 
             this.project = mavenProject.getProject();
             
-            classpathEntries.clear();
-            resolveArtifacts( mavenProject , classpathEntries, artifacts, getWorkspaceProjects() );
+            List<IClasspathEntry> newClasspathEntries = new ArrayList<IClasspathEntry>( artifacts.size() );
+            resolveArtifacts( mavenProject, newClasspathEntries, artifacts, getWorkspaceProjects() );
+            classpathEntries = newClasspathEntries.toArray( new IClasspathEntry[newClasspathEntries.size()] );;
         }
     }
 
@@ -98,8 +100,19 @@ public class MavenClasspathContainer
      * Refreshes the classpath entries after loading the {@link IMavenProject} from the {@link IProject}
      * 
      * @param project
+     * @deprecated use {@link #newClasspath(IProject, IProgressMonitor)}
      */
     public static MavenClasspathContainer newClasspath( IProject project )
+    {
+        return newClasspath( project, new NullProgressMonitor() );
+    }
+
+    /**
+     * Refreshes the classpath entries after loading the {@link IMavenProject} from the {@link IProject}
+     * 
+     * @param project
+     */
+    public static MavenClasspathContainer newClasspath( IProject project, IProgressMonitor monitor )
     {
         Activator.getLogger().info( "New classpath for project " + project.getName() );
 
@@ -163,7 +176,7 @@ public class MavenClasspathContainer
             IJavaProject javaProject = JavaCore.create( project );
             JavaCore.setClasspathContainer( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ),
                                             new IJavaProject[] { javaProject },
-                                            new IClasspathContainer[] { container }, new NullProgressMonitor() );
+                                            new IClasspathContainer[] { container }, monitor );
         }
         catch ( JavaModelException e )
         {
