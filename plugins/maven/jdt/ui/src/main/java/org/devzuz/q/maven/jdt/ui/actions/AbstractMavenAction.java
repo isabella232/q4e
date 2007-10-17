@@ -37,7 +37,7 @@ public class AbstractMavenAction
 
     public IMavenProject getMavenProject()
     {
-        Object obj = selection.iterator().next();
+        Object obj = getSelection().iterator().next();
 
         if ( obj instanceof IProject )
         {
@@ -57,7 +57,7 @@ public class AbstractMavenAction
     {
         Collection<IMavenProject> projects = new ArrayList<IMavenProject>();
         
-        for( Object obj : selection.toList())
+        for( Object obj : getSelection().toList())
         {
             if ( obj instanceof IProject )
             {
@@ -79,7 +79,7 @@ public class AbstractMavenAction
     {
         if ( selection instanceof IStructuredSelection )
         {
-            this.selection = (IStructuredSelection) selection;
+            this.setSelection( (IStructuredSelection) selection );
         }
     }
 
@@ -98,5 +98,15 @@ public class AbstractMavenAction
     protected void runInternal( IAction action )
         throws CoreException
     {
+    }
+
+    public void setSelection( IStructuredSelection selection )
+    {
+        this.selection = selection;
+    }
+
+    public IStructuredSelection getSelection()
+    {
+        return selection;
     }
 }

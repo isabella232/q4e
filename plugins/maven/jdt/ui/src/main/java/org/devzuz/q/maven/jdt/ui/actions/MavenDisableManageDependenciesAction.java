@@ -6,10 +6,8 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.actions;
 
-import java.util.Collection;
-
-import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IActionDelegate;
@@ -22,12 +20,11 @@ public class MavenDisableManageDependenciesAction
     protected void runInternal( IAction action )
         throws CoreException
     {
-        Collection<IMavenProject> projects = getMavenProjects();
-        if ( ( projects != null ) && ( projects.size() > 0 ) )
+        for ( Object obj : getSelection().toList() )
         {
-            for( IMavenProject project : projects )
+            if ( obj instanceof IProject )
             {
-                MavenNatureHelper.removeNature( project.getProject() );
+                MavenNatureHelper.removeNature( (IProject) obj );
             }
         }
     }
