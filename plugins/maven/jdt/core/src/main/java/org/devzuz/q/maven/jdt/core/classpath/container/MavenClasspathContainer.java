@@ -45,8 +45,7 @@ import org.eclipse.jdt.core.JavaModelException;
  * @author pdodds
  * 
  */
-public class MavenClasspathContainer
-    implements IClasspathContainer
+public class MavenClasspathContainer implements IClasspathContainer
 {
 
     public static String MAVEN_CLASSPATH_CONTAINER = "org.devzuz.q.maven.jdt.core.mavenClasspathContainer"; //$NON-NLS-1$
@@ -100,14 +99,14 @@ public class MavenClasspathContainer
      * 
      * @param mavenProject
      */
-    private void refreshClasspath( IMavenProject mavenProject , Set<IMavenArtifact> artifacts )
+    private void refreshClasspath( IMavenProject mavenProject, Set<IMavenArtifact> artifacts )
     {
         if ( mavenProject != null )
         {
             Activator.getLogger().info( "Refreshing classpath for maven project " + mavenProject.getArtifactId() );
 
             this.project = mavenProject.getProject();
-            
+
             List<IClasspathEntry> newClasspathEntries = new ArrayList<IClasspathEntry>( artifacts.size() );
             resolveArtifacts( mavenProject, newClasspathEntries, artifacts, getWorkspaceProjects() );
             classpathEntries = newClasspathEntries.toArray( new IClasspathEntry[newClasspathEntries.size()] );;
@@ -139,35 +138,34 @@ public class MavenClasspathContainer
         try
         {
             IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, true );
-            container.refreshClasspath( mavenProject , mavenProject.getArtifacts() );
+            container.refreshClasspath( mavenProject, mavenProject.getArtifacts() );
         }
         catch ( CoreException e )
         {
-            /* 
-             * If it is an exception from maven, try to see if it is due to missing dependencies.
-             * If it is, try to check if those missing dependencies are projects in the workspace,
-             * If it is, add it as a project dependency. 
+            /*
+             * If it is an exception from maven, try to see if it is due to missing dependencies. If it is, try to check
+             * if those missing dependencies are projects in the workspace, If it is, add it as a project dependency.
              */
             // TODO : Refactor this
-            if( e.getStatus() instanceof MavenExecutionStatus )
+            if ( e.getStatus() instanceof MavenExecutionStatus )
             {
                 MavenExecutionStatus status = (MavenExecutionStatus) e.getStatus();
                 IMavenExecutionResult result = status.getMavenExecutionResult();
-                List< CoreException > exceptions = result.getExceptions();
-                if( ( exceptions != null ) && ( exceptions.size() > 0 ) )
+                List<CoreException> exceptions = result.getExceptions();
+                if ( ( exceptions != null ) && ( exceptions.size() > 0 ) )
                 {
-                    for( CoreException exception : exceptions )
+                    for ( CoreException exception : exceptions )
                     {
-                        Throwable exceptionCause = exception.getCause();
-                        if( exceptionCause instanceof MultipleArtifactsNotFoundException )
+                        Throwable exceptionCause = exception.getStatus().getException();
+                        if ( exceptionCause instanceof MultipleArtifactsNotFoundException )
                         {
                             Set<IMavenArtifact> artifactToBeResolved = new LinkedHashSet<IMavenArtifact>();
-                            artifactToBeResolved.addAll( MavenUtils.getMissingArtifacts( ( MultipleArtifactsNotFoundException ) exceptionCause ) );
-                            artifactToBeResolved.addAll( MavenUtils.getResolvedArtifacts( ( MultipleArtifactsNotFoundException ) exceptionCause ) );
+                            artifactToBeResolved.addAll( MavenUtils.getMissingArtifacts( (MultipleArtifactsNotFoundException) exceptionCause ) );
+                            artifactToBeResolved.addAll( MavenUtils.getResolvedArtifacts( (MultipleArtifactsNotFoundException) exceptionCause ) );
                             IMavenProject mavenProject = result.getMavenProject();
-                            if( mavenProject != null )
+                            if ( mavenProject != null )
                             {
-                                container.refreshClasspath( mavenProject , artifactToBeResolved );
+                                container.refreshClasspath( mavenProject, artifactToBeResolved );
                             }
                             else
                             {
@@ -214,22 +212,24 @@ public class MavenClasspathContainer
     }
 
     /**
-     * Resolves IMavenArtifacts into the entries in the classpath container, using project or
-     * library dependencies
+     * Resolves IMavenArtifacts into the entries in the classpath container, using project or library dependencies
      * 
      * This function works recursively
      * 
-     * @param classpathEntries list of entries in the resulting classpath
-     * @param artifacts maven artifacts
-     * @param workspaceProjects projects in the workspace, indexed by name
+     * @param classpathEntries
+     *            list of entries in the resulting classpath
+     * @param artifacts
+     *            maven artifacts
+     * @param workspaceProjects
+     *            projects in the workspace, indexed by name
      */
-    private void resolveArtifacts( IMavenProject mavenProject , List<IClasspathEntry> classpathEntries, 
+    private void resolveArtifacts( IMavenProject mavenProject, List<IClasspathEntry> classpathEntries,
                                    Set<IMavenArtifact> artifacts, Map<String, IProject> workspaceProjects )
     {
-        boolean downloadSources = MavenPreferenceManager.getMavenPreferenceManager().downloadSources(); 
+        boolean downloadSources = MavenPreferenceManager.getMavenPreferenceManager().downloadSources();
         for ( IMavenArtifact artifact : artifacts )
         {
-            IClasspathEntry entry = resolveArtifact( mavenProject , artifact, workspaceProjects , downloadSources );
+            IClasspathEntry entry = resolveArtifact( mavenProject, artifact, workspaceProjects, downloadSources );
             if ( entry != null )
             {
                 classpathEntries.add( entry );
@@ -238,21 +238,19 @@ public class MavenClasspathContainer
     }
 
     /**
-     * Resolves an IMavenArtifact into a classpath container entry, using project or library
-     * dependencies
+     * Resolves an IMavenArtifact into a classpath container entry, using project or library dependencies
      * 
      * @param artifact
      * @param workspaceProjects
      * @return the resulting classpath entry or null if should not be added to the classpath
      */
-    protected IClasspathEntry resolveArtifact( IMavenProject mavenProject , IMavenArtifact artifact, 
-                                               Map<String, IProject> workspaceProjects , boolean downloadSources )
+    protected IClasspathEntry resolveArtifact( IMavenProject mavenProject, IMavenArtifact artifact,
+                                               Map<String, IProject> workspaceProjects, boolean downloadSources )
     {
         IClasspathAttribute[] attributes = new IClasspathAttribute[0];
-        
+
         /*
-         * if dependency is a project in the workspace use a project dependency instead of the jar
-         * dependency
+         * if dependency is a project in the workspace use a project dependency instead of the jar dependency
          */
         IProject project = workspaceProjects.get( artifact.getArtifactId() );
         if ( project == null )
@@ -272,32 +270,33 @@ public class MavenClasspathContainer
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {
-            Path sourcePath = getArtifactPath( mavenProject, artifact, "java-source", SOURCES_CLASSIFIER,
-                                               downloadSources );
-            return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ),  
-                                             sourcePath, null, new IAccessRule[0], attributes, false );
+            Path sourcePath =
+                getArtifactPath( mavenProject, artifact, "java-source", SOURCES_CLASSIFIER, downloadSources );
+            return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ), sourcePath, null,
+                                             new IAccessRule[0], attributes, false );
         }
         else
         {
             // TODO : Raise error that a dependency was not added
-            Activator.getLogger().info( "The dependency " + artifact.getGroupId() + ":" + 
-                                                            artifact.getArtifactId() + ":" + 
-                                                            artifact.getVersion() + " was not added." ); 
+            Activator.getLogger().info(
+                                        "The dependency " + artifact.getGroupId() + ":" + artifact.getArtifactId()
+                                                        + ":" + artifact.getVersion() + " was not added." );
         }
-        
+
         return null;
     }
 
+    @Override
     public String toString()
     {
-        //return "Maven classpath container " + ( ( project != null ) ? project : "" );
+        // return "Maven classpath container " + ( ( project != null ) ? project : "" );
         StringBuilder buffer = new StringBuilder();
         buffer.append( "Maven classpath container  = " );
-        for( IClasspathEntry entry : classpathEntries )
+        for ( IClasspathEntry entry : classpathEntries )
         {
             buffer.append( ":" + entry.getPath().toOSString() );
         }
-        
+
         return buffer.toString();
     }
 
@@ -305,10 +304,11 @@ public class MavenClasspathContainer
     {
         return project;
     }
-    
-    private Path getArtifactPath( IMavenProject mavenProject , IMavenArtifact artifact , String type , String suffix , boolean materialize  )
+
+    private Path getArtifactPath( IMavenProject mavenProject, IMavenArtifact artifact, String type, String suffix,
+                                  boolean materialize )
     {
-        //TODO in the future we want to do something like:
+        // TODO in the future we want to do something like:
         // IMavenArtifact sourcesArtifact = (IMavenArtifact) artifact.clone();
         // sourcesArtifact.setClassifier( SOURCES_CLASSIFIER );
         // IPath sourcePath = MavenManager.getMaven().getLocalRepository().getPath( sourcesArtifact );
@@ -318,21 +318,19 @@ public class MavenClasspathContainer
         if ( artifactLocation != null )
         {
             String classifier = artifact.getClassifier();
-            if ( ( type.equals( "java-source" ) ) && 
-                 ( classifier != null ) && 
-                 ( classifier.equals( "test" ) ) )
+            if ( ( type.equals( "java-source" ) ) && ( classifier != null ) && ( classifier.equals( "test" ) ) )
             {
                 artifactFile =
                     new File( artifactLocation.substring( 0, artifactLocation.length() - "-tests.jar".length() )
                                     + "-test-sources.jar" );
             }
             else
-        {            
+            {
                 artifactFile =
                     new File( artifactLocation.substring( 0, artifactLocation.length() - ".jar".length() ) + "-"
                                     + suffix + ".jar" );
             }
-            
+
             if ( artifactFile.exists() )
             {
                 return new Path( artifactFile.getAbsolutePath() );
@@ -356,7 +354,7 @@ public class MavenClasspathContainer
                 }
             }
         }
-        
+
         return null;
     }
 }

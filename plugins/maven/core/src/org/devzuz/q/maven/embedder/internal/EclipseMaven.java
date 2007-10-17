@@ -170,13 +170,13 @@ public class EclipseMaven implements IMaven
 
     public void scheduleGoal( IMavenProject mavenProject, String goal, Properties properties ) throws CoreException
     {
-        scheduleGoal( mavenProject, goal, properties , null );
+        scheduleGoal( mavenProject, goal, properties, null );
     }
-    
-    public void scheduleGoal( IMavenProject mavenProject, String goal, Properties properties , MavenExecutionJobAdapter jobAdapter ) 
-        throws CoreException
+
+    public void scheduleGoal( IMavenProject mavenProject, String goal, Properties properties,
+                              MavenExecutionJobAdapter jobAdapter ) throws CoreException
     {
-        scheduleGoals( mavenProject, Collections.singletonList( goal ), properties , jobAdapter );
+        scheduleGoals( mavenProject, Collections.singletonList( goal ), properties, jobAdapter );
     }
 
     public void scheduleGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException
@@ -187,15 +187,15 @@ public class EclipseMaven implements IMaven
     public void scheduleGoals( IMavenProject mavenProject, List<String> goals, Properties properties )
         throws CoreException
     {
-        scheduleGoals( mavenProject, goals, properties , null );
+        scheduleGoals( mavenProject, goals, properties, null );
     }
-    
-    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, Properties properties , MavenExecutionJobAdapter jobAdapter )
-        throws CoreException
+
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, Properties properties,
+                               MavenExecutionJobAdapter jobAdapter ) throws CoreException
     {
         MavenExecutionRequest request = generateRequest( mavenProject, properties );
         request.setGoals( goals );
-        scheduleRequest( mavenProject, request , jobAdapter );
+        scheduleRequest( mavenProject, request, jobAdapter );
     }
 
     /**
@@ -208,15 +208,16 @@ public class EclipseMaven implements IMaven
      * @param mavenProject
      *            the maven project on which this execution is being run.
      */
-    public void scheduleRequest( IMavenProject mavenProject, MavenExecutionRequest request , MavenExecutionJobAdapter jobAdapter )
+    public void scheduleRequest( IMavenProject mavenProject, MavenExecutionRequest request,
+                                 MavenExecutionJobAdapter jobAdapter )
     {
         EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
-        
+
         if ( jobAdapter != null )
         {
             jobAdapter.setMavenExecutionJob( eclipseMavenRequest );
         }
-        
+
         eclipseMavenRequest.setRule( mavenProject.getProject() );
         eclipseMavenRequest.setPriority( Job.BUILD );
         eclipseMavenRequest.schedule();
@@ -232,15 +233,15 @@ public class EclipseMaven implements IMaven
      * @param request
      *            the description of the execution to be performed.
      */
-    public void scheduleRequest( IPath path, MavenExecutionRequest request , MavenExecutionJobAdapter jobAdapter )
+    public void scheduleRequest( IPath path, MavenExecutionRequest request, MavenExecutionJobAdapter jobAdapter )
     {
         EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
-        
+
         if ( jobAdapter != null )
         {
             jobAdapter.setMavenExecutionJob( eclipseMavenRequest );
         }
-        
+
         eclipseMavenRequest.setRule( new MavenSchedulingRule() );
         eclipseMavenRequest.setPriority( Job.BUILD );
         eclipseMavenRequest.schedule();
@@ -317,13 +318,13 @@ public class EclipseMaven implements IMaven
         {
             if ( resolveTransitively )
             {
-                MavenExecutionResult status = 
+                MavenExecutionResult status =
                     getMavenEmbedder().readProjectWithDependencies( generateRequest( mavenProject, null ) );
-                if( status.hasExceptions() )
+                if ( status.hasExceptions() )
                 {
-                    throw new QCoreException( new MavenExecutionStatus ( IStatus.ERROR, Activator.PLUGIN_ID, 
+                    throw new QCoreException( new MavenExecutionStatus( IStatus.ERROR, Activator.PLUGIN_ID,
                                                                          "Unable to read project",
-                                                                         new EclipseMavenExecutionResult( status ) ) );
+                                                                        new EclipseMavenExecutionResult( status ) ) );
                 }
                 // TODO should we call refreshProject?
                 // -erle- : I think we should, otherwise, I can't get the mavenProject object, it is null.
@@ -339,7 +340,7 @@ public class EclipseMaven implements IMaven
         }
         catch ( ProjectBuildingException e )
         {
-            throw new QCoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Unable to read project", e ) );
+            throw new QCoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e ) );
         }
     }
 
@@ -363,12 +364,12 @@ public class EclipseMaven implements IMaven
         catch ( ComponentLookupException e )
         {
             throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
-                                                 "Unable to lookup project builder", e ) );
+                                                  "Unable to lookup project builder", e ) );
         }
         catch ( ProjectBuildingException e )
         {
             throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
-                                                 "Unable to build project from artifact " + artifact, e ) );
+                                                  "Unable to build project from artifact " + artifact, e ) );
         }
     }
 
@@ -403,13 +404,14 @@ public class EclipseMaven implements IMaven
                 }
             }
 
-            ConfigurationValidationResult validationResult = MavenEmbedder.validateConfiguration(config);
+            ConfigurationValidationResult validationResult = MavenEmbedder.validateConfiguration( config );
 
             // TODO present the error in a user friendly way
             // Fail when you have a settings.xml file and it does not parse
             if ( validationResult.isUserSettingsFilePresent() && !validationResult.isUserSettingsFileParses() )
             {
-                throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, "The settings file is invalid" ) );
+                throw new QCoreException(
+                                          new Status( Status.ERROR, Activator.PLUGIN_ID, "The settings file is invalid" ) );
             }
 
             mavenEmbedder = new MavenEmbedder( config );
@@ -419,7 +421,7 @@ public class EclipseMaven implements IMaven
         catch ( MavenEmbedderException e )
         {
             throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
-                                                 "Unable to start Maven Embedder", e ) );
+                                                  "Unable to start Maven Embedder", e ) );
         }
     }
 
@@ -435,7 +437,7 @@ public class EclipseMaven implements IMaven
             catch ( MavenEmbedderException e )
             {
                 throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, STOP_ERROR_CODE,
-                                                     "Unable to stop Maven Embedder", e ) );
+                                                      "Unable to stop Maven Embedder", e ) );
             }
         }
     }
@@ -480,12 +482,13 @@ public class EclipseMaven implements IMaven
             try
             {
                 artifactMetadataSource =
-                    (ArtifactMetadataSource) getMavenEmbedder().getPlexusContainer().lookup( ArtifactMetadataSource.ROLE );
+                    (ArtifactMetadataSource) getMavenEmbedder().getPlexusContainer().lookup(
+                                                                                             ArtifactMetadataSource.ROLE );
             }
             catch ( ComponentLookupException e )
             {
                 throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
-                                                     "Unable to lookup the artifact metadata source", e ) );
+                                                      "Unable to lookup the artifact metadata source", e ) );
             }
         }
 
@@ -539,24 +542,22 @@ public class EclipseMaven implements IMaven
         return artifactRepositories;
     }
 
-    public void resolveArtifact( IMavenArtifact artifact , String type , String suffix , 
-                                 List<ArtifactRepository> remoteRepositories )
-        throws CoreException
+    public void resolveArtifact( IMavenArtifact artifact, String type, String suffix,
+                                 List<ArtifactRepository> remoteRepositories ) throws CoreException
     {
         try
         {
-            Artifact rawArtifact = getMavenEmbedder().createArtifactWithClassifier( artifact.getGroupId(), 
-                                                                                    artifact.getArtifactId(), 
-                                                                                    artifact.getVersion(), 
-                                                                                    type, suffix);
-            if( rawArtifact != null )
-            {            
+            Artifact rawArtifact =
+                getMavenEmbedder().createArtifactWithClassifier( artifact.getGroupId(), artifact.getArtifactId(),
+                                                                 artifact.getVersion(), type, suffix );
+            if ( rawArtifact != null )
+            {
                 getMavenEmbedder().resolve( rawArtifact, remoteRepositories, getMavenEmbedder().getLocalRepository() );
             }
             else
             {
                 throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
-                                                      "Unknown Artifact - " + artifact , null ) );
+                                                      "Unknown Artifact - " + artifact, null ) );
             }
         }
         catch ( ArtifactNotFoundException e )
@@ -567,7 +568,7 @@ public class EclipseMaven implements IMaven
         catch ( ArtifactResolutionException e )
         {
             throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
-                                                 "Unable to resolve artifact - " + artifact, e ) );
+                                                  "Unable to resolve artifact - " + artifact, e ) );
         }
     }
 
