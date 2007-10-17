@@ -20,12 +20,9 @@ public class MavenDisableManageDependenciesAction
     protected void runInternal( IAction action )
         throws CoreException
     {
-        for ( Object obj : getSelection().toList() )
+        for ( IProject project : getProjects() )
         {
-            if ( obj instanceof IProject )
-            {
-                MavenNatureHelper.removeNature( (IProject) obj );
-            }
+            MavenNatureHelper.removeNature( project );
         }
     }
 }

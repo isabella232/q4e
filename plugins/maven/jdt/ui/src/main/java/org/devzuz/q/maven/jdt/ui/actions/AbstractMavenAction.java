@@ -75,11 +75,26 @@ public class AbstractMavenAction
         return projects;
     }
     
+    public Collection<IProject> getProjects()
+    {
+        Collection<IProject> projects = new ArrayList<IProject>();
+
+        for ( Object obj : getSelection().toList() )
+        {
+            if ( obj instanceof IProject )
+            {
+                projects.add( (IProject) obj );
+            }
+        }
+
+        return projects;
+    }
+    
     public void selectionChanged( IAction action, ISelection selection )
     {
         if ( selection instanceof IStructuredSelection )
         {
-            this.setSelection( (IStructuredSelection) selection );
+            this.selection = (IStructuredSelection) selection;
         }
     }
 
@@ -100,12 +115,7 @@ public class AbstractMavenAction
     {
     }
 
-    public void setSelection( IStructuredSelection selection )
-    {
-        this.selection = selection;
-    }
-
-    public IStructuredSelection getSelection()
+    private IStructuredSelection getSelection()
     {
         return selection;
     }
