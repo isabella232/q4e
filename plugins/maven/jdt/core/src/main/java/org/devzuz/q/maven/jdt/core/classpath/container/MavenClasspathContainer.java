@@ -51,11 +51,29 @@ public class MavenClasspathContainer
 
     public static String MAVEN_CLASSPATH_CONTAINER = "org.devzuz.q.maven.jdt.core.mavenClasspathContainer"; //$NON-NLS-1$
 
+    public static IPath MAVEN_CLASSPATH_CONTAINER_PATH = new Path( MAVEN_CLASSPATH_CONTAINER );
+
     public static String SOURCES_CLASSIFIER = "sources";
 
     private IClasspathEntry[] classpathEntries;
 
     private IProject project;
+
+    public MavenClasspathContainer()
+    {
+        this( null );
+    }
+
+    public MavenClasspathContainer( IProject project )
+    {
+        this( project, new IClasspathEntry[0] );
+    }
+
+    public MavenClasspathContainer( IProject project, IClasspathEntry[] classpathEntries )
+    {
+        this.project = project;
+        this.classpathEntries = classpathEntries;
+    }
 
     public IClasspathEntry[] getClasspathEntries()
     {
@@ -74,7 +92,7 @@ public class MavenClasspathContainer
 
     public IPath getPath()
     {
-        return new Path( MAVEN_CLASSPATH_CONTAINER );
+        return MAVEN_CLASSPATH_CONTAINER_PATH;
     }
 
     /**
@@ -116,9 +134,7 @@ public class MavenClasspathContainer
     {
         Activator.getLogger().info( "New classpath for project " + project.getName() );
 
-        MavenClasspathContainer container = new MavenClasspathContainer();
-
-        container.project = project;
+        MavenClasspathContainer container = new MavenClasspathContainer( project );
 
         try
         {
@@ -174,7 +190,7 @@ public class MavenClasspathContainer
         try
         {
             IJavaProject javaProject = JavaCore.create( project );
-            JavaCore.setClasspathContainer( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ),
+            JavaCore.setClasspathContainer( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH,
                                             new IJavaProject[] { javaProject },
                                             new IClasspathContainer[] { container }, monitor );
         }

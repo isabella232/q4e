@@ -16,15 +16,14 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
-import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
+import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -124,8 +123,8 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         /* Assume it is a java project. */
         IJavaProject javaProject = JavaCore.create( iproject );
         /* Find maven classpath container */
-        IClasspathContainer classpathContainer =
-            JavaCore.getClasspathContainer( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ), javaProject );
+        IClasspathContainer classpathContainer = JavaCore
+            .getClasspathContainer( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH, javaProject );
         /* Get current entries. */
 
         return classpathContainer.getClasspathEntries();

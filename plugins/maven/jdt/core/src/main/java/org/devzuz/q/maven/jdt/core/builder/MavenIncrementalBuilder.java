@@ -93,7 +93,7 @@ public class MavenIncrementalBuilder
             try
             {
                 IClasspathContainer container = JavaCore
-                    .getClasspathContainer( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ), javaProject );
+                    .getClasspathContainer( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH, javaProject );
                 return (MavenClasspathContainer) container;
             }
             catch ( JavaModelException e )

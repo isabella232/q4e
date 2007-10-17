@@ -42,7 +42,7 @@ public class MavenNatureTest
     {
         List<IClasspathEntry> classpathEntries = new ArrayList<IClasspathEntry>();
         
-        IClasspathEntry mavenContainer = JavaCore.newContainerEntry( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ) );
+        IClasspathEntry mavenContainer = JavaCore.newContainerEntry( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH );
         
         classpathEntries.add( JavaCore.newContainerEntry( new Path( "test1" ) ) );
         classpathEntries.add( JavaCore.newContainerEntry( new Path( "test2" ) ) );

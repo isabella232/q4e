@@ -152,7 +152,7 @@ public class MavenNature
             IClasspathEntry entryToRemove = null;
             for ( IClasspathEntry entry : classpathEntries )
             {
-                if ( entry.getPath().equals( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ) ) )
+                if ( entry.getPath().equals( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH ) )
                 {
                     entryToRemove = entry;
 
@@ -365,7 +365,7 @@ public class MavenNature
     
     private IClasspathEntry getMavenClasspathContainer( IJavaProject javaProject )
     {
-        return JavaCore.newContainerEntry( new Path( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER ) );
+        return JavaCore.newContainerEntry( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH );
     }
     
     private IClasspathEntry getJREClasspathContainer( IJavaProject javaProject , IMavenProject mavenProject )
