@@ -8,6 +8,7 @@ package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -223,6 +224,7 @@ public class MavenClasspathContainer implements IClasspathContainer
      * @param workspaceProjects
      *            projects in the workspace, indexed by name
      */
+    @SuppressWarnings("unchecked")
     private void resolveArtifacts( IMavenProject mavenProject, List<IClasspathEntry> classpathEntries,
                                    Set<IMavenArtifact> artifacts, Map<String, IProject> workspaceProjects )
     {
@@ -232,6 +234,18 @@ public class MavenClasspathContainer implements IClasspathContainer
             IClasspathEntry entry = resolveArtifact( mavenProject, artifact, workspaceProjects, downloadSources );
             if ( entry != null )
             {
+                if ( classpathEntries.contains( entry ) )
+                {
+                    /*
+                     * two dependencies with same artifactId but different groupId match a workspace
+                     * project so don't link both to the same workspace project
+                     */
+                    IPath path = entry.getPath();
+                    entry = resolveArtifact( mavenProject, artifact, Collections.EMPTY_MAP, downloadSources );
+                    MavenExceptionHandler.warning( project,
+                                                   "Two dependencies with same artifactId but different groupId match the workspace project "
+                                                       + path );
+                }
                 classpathEntries.add( entry );
             }
         }
