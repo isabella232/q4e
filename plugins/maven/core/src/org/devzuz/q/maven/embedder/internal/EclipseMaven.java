@@ -258,7 +258,7 @@ public class EclipseMaven implements IMaven
 
         request.setOffline( mavenProject.isOffline() );
         request.setUseReactor( false );
-        request.setRecursive( true );
+        request.setRecursive( false );
 
         if ( mavenProject.getLoggingLevel() == LOGGING_DEBUG )
         {
