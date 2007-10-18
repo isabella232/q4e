@@ -6,9 +6,11 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -39,6 +41,16 @@ public class UpdateClasspathJob
     public IStatus runInWorkspace( IProgressMonitor monitor )
     {
         MavenClasspathContainer.newClasspath( project, monitor );
+        
+        //TODO this is needed for now to avoid out of memory errors
+        try
+        {
+            MavenManager.getMaven().refresh();
+        }
+        catch ( CoreException e )
+        {
+            // ignore
+        }
 
         return new Status( IStatus.OK, Activator.PLUGIN_ID, "Updated classpath container" );
     }
