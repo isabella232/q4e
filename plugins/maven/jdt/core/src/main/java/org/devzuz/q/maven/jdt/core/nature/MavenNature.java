@@ -194,7 +194,7 @@ public class MavenNature
                                                                                 "process-test-resources", 
                                                                                 new NullProgressMonitor() );
             
-            List< CoreException > mavenExceptions = result.getExceptions();
+            List<Exception> mavenExceptions = result.getExceptions();
             // Mark any errors, particularly, on the launching of the process-test-resources goal
             if ( ( mavenExceptions != null ) && ( mavenExceptions.size() > 0 ) )
             {

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
@@ -151,17 +152,16 @@ public class MavenClasspathContainer implements IClasspathContainer
             {
                 MavenExecutionStatus status = (MavenExecutionStatus) e.getStatus();
                 IMavenExecutionResult result = status.getMavenExecutionResult();
-                List<CoreException> exceptions = result.getExceptions();
+                List<Exception> exceptions = result.getExceptions();
                 if ( ( exceptions != null ) && ( exceptions.size() > 0 ) )
                 {
-                    for ( CoreException exception : exceptions )
+                    for ( Exception exception : exceptions )
                     {
-                        Throwable exceptionCause = exception.getStatus().getException();
-                        if ( exceptionCause instanceof MultipleArtifactsNotFoundException )
+                        if ( exception instanceof MultipleArtifactsNotFoundException )
                         {
                             Set<IMavenArtifact> artifactToBeResolved = new LinkedHashSet<IMavenArtifact>();
-                            artifactToBeResolved.addAll( MavenUtils.getMissingArtifacts( (MultipleArtifactsNotFoundException) exceptionCause ) );
-                            artifactToBeResolved.addAll( MavenUtils.getResolvedArtifacts( (MultipleArtifactsNotFoundException) exceptionCause ) );
+                            artifactToBeResolved.addAll( MavenUtils.getMissingArtifacts( (MultipleArtifactsNotFoundException) exception ) );
+                            artifactToBeResolved.addAll( MavenUtils.getResolvedArtifacts( (MultipleArtifactsNotFoundException) exception ) );
                             IMavenProject mavenProject = result.getMavenProject();
                             if ( mavenProject != null )
                             {
@@ -258,14 +258,15 @@ public class MavenClasspathContainer implements IClasspathContainer
             project = workspaceProjects.get( artifact.getGroupId() + "." + artifact.getArtifactId() );
         }
 
+        boolean export = false;
+        String scope = artifact.getScope();
+        if ( ( scope == null ) || Artifact.SCOPE_COMPILE.equals( scope ) || Artifact.SCOPE_RUNTIME.equals( scope ) )
+        {
+            export = true;
+        }
+
         if ( ( project != null ) && ( project.isOpen() ) )
         {
-            boolean export = false;
-            String scope = artifact.getScope();
-            if ( ( scope == null ) || "compile".equals( scope ) || "runtime".equals( scope ) )
-            {
-                export = true;
-            }
             return JavaCore.newProjectEntry( project.getFullPath(), export );
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
@@ -273,7 +274,7 @@ public class MavenClasspathContainer implements IClasspathContainer
             Path sourcePath =
                 getArtifactPath( mavenProject, artifact, "java-source", SOURCES_CLASSIFIER, downloadSources );
             return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ), sourcePath, null,
-                                             new IAccessRule[0], attributes, false );
+                                             new IAccessRule[0], attributes, export );
         }
         else
         {

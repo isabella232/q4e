@@ -17,6 +17,7 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.project.validation.ModelValidationResult;
+import org.apache.maven.reactor.MavenExecutionException;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.eclipse.core.resources.IFile;
@@ -39,30 +40,34 @@ public class MavenExceptionHandler
 
     private static MavenExceptionHandler instance = new MavenExceptionHandler();
 
-    public static void handle( IProject project, Collection<CoreException> exceptions )
+    public static void handle( IProject project, Collection<Exception> exceptions )
     {
-        for ( CoreException e : exceptions )
+        for ( Exception e : exceptions )
         {
             handle( project, e );
         }
     }
 
-    public static void handle( IProject project, CoreException e )
+    public static void handle( IProject project, Exception e )
     {
-        Throwable cause = e.getStatus().getException();
-        if( cause == null )
+        Throwable cause = e;
+
+        if ( cause instanceof CoreException )
         {
-            if( e.getCause() != null )
+            cause = ( (CoreException) cause ).getStatus().getException();
+        }
+
+        if ( cause == null )
+        {
+            if ( e.getCause() != null )
             {
-                Activator.getLogger().error( "Unknown Error - Class " + e.getCause().getClass().getName() + 
-                                             " - " + e.getCause().getMessage() );
-                instance.markPom( project, "Error: " + e.getCause().getMessage() );
+                Activator.getLogger().log( e.getCause() );
+                instance.markPom( project, "Unknown error: " + e.getCause().getMessage() );
             }
             else
             {
-                Activator.getLogger().error( "Unknown Error - Class " + e.getClass().getName() + 
-                                             " - " + e.getMessage() );
-                instance.markPom( project, "Error: " + e.getMessage() );
+                Activator.getLogger().log( e );
+                instance.markPom( project, "Unknown error: " + e.getMessage() );
             }
         }
         else if ( cause instanceof MultipleArtifactsNotFoundException )
@@ -80,6 +85,10 @@ public class MavenExceptionHandler
         else if ( cause instanceof InvalidProjectModelException )
         {
             instance.handle( project, (InvalidProjectModelException) cause );
+        }
+        else if ( cause instanceof MavenExecutionException )
+        {
+            instance.handle( project, (MavenExecutionException) cause );
         }
         else
         {
@@ -137,6 +146,11 @@ public class MavenExceptionHandler
         markPom( project, (List<String>) validationResult.getMessages() );
     }
 
+    private void handle( IProject project, MavenExecutionException e )
+    {
+        markPom( project, e.getMessage() );
+    }
+
     private void markPom( final IProject project, final List<String> problems )
     {
         final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
@@ -150,18 +164,17 @@ public class MavenExceptionHandler
 
                 for ( String problem : problems )
                 {
-                    try 
+                    try
                     {
-                        IMarker marker = pom.createMarker( MavenCoreProblemMarker.getMavenPOMMarker() );             
+                        IMarker marker = pom.createMarker( MavenCoreProblemMarker.getMavenPOMMarker() );
                         marker.setAttribute( IMarker.MESSAGE, problem );
                         marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
                         marker.setAttribute( IMarker.LINE_NUMBER, 1 );
                     }
-                    catch(CoreException  ce)
+                    catch ( CoreException ce )
                     {
                         Activator.getLogger().log( ce );
                     }
-                	
                 }
             }
         };
