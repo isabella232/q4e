@@ -24,8 +24,50 @@
   <packaging>bundle</packaging>
   <name>Q for Eclipse Maven Embedder</name>
   <description>Maven Embedder for the Q project</description>
+
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <organization>
+    <name>The Apache Software Foundation</name>
+    <url>http://www.apache.org/</url>
+  </organization>
+  <url>http://www.apache.org/</url>
+
   <build>
     <plugins>
+     <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-dependencies</id>
+            <phase>package</phase>
+            <goals>
+              <goal>copy-dependencies</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/lib</outputDirectory>
+            </configuration>
+          </execution>
+          <execution>
+            <id>copy-src-dependencies</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack-dependencies</goal>
+            </goals>
+            <configuration>
+              <classifier>sources</classifier>
+              <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
+              <outputDirectory>${basedir}/sources</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
 <!--
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -56,11 +98,23 @@
 -->
         <configuration>
           <instructions>
-            <Export-Package>*</Export-Package>
+            <manifestLocation>${basedir}/META-INF</manifestLocation>
+            <_exportcontents>
+                org.apache.maven.*;-noimport:=true,
+                org.codehaus.plexus.*;-noimport:=true
+            </_exportcontents>
+            <Import-Package>
+                !javax.crypto.*,
+                !junit.*,
+                !org.jaxen.*,
+                !org.apache.commons.lang.*,
+                *
+            </Import-Package>
+            <Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
+            <Embed-Transitive>true</Embed-Transitive>
+            <Embed-StripGroup>true</Embed-StripGroup>
+            <Embed-Directory>lib</Embed-Directory>
           </instructions>
-<!--
-          <outputDirectory>${basedir}/lib</outputDirectory>
--->
         </configuration>
       </plugin>
     </plugins>
@@ -70,6 +124,20 @@
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-embedder</artifactId>
       <version>2.1-SNAPSHOT</version>
+      <exclusions>
+        <exclusion>
+          <groupId>junit</groupId>
+          <artifactId>junit</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xml-apis</groupId>
+          <artifactId>xml-apis</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.jcraft</groupId>
+          <artifactId>jsch</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 </project>
