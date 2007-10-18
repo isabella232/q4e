@@ -193,7 +193,6 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
 
     private void scheduleProjectScanningJob()
     {
-        initialize();
         projectScannerJob.setDirectory( Path.fromOSString( getProjectDirectory() ).toFile() );
         projectScannerJob.schedule();
         setMessage( Messages.wizard_importProject_scanning + " " + getProjectDirectory() );
