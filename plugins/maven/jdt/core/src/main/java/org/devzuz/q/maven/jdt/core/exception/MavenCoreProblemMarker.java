@@ -10,13 +10,16 @@ package org.devzuz.q.maven.jdt.core.exception;
 
 import org.devzuz.q.maven.jdt.core.Activator;
 
-
+/**
+ * @deprecated use {@link Activator#MARKER_ID}
+ */
 public class MavenCoreProblemMarker
 {
-	private static final String MAVEN_POM_MARKER_ID = Activator.PLUGIN_ID + ".pomproblemmarker";
-	
-	public static String getMavenPOMMarker()
-	{
-		return MAVEN_POM_MARKER_ID;
-	}
+    /**
+     * @deprecated use {@link Activator#MARKER_ID}
+     */
+    public static String getMavenPOMMarker()
+    {
+        return Activator.MARKER_ID;
+    }
 }

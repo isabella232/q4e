@@ -23,9 +23,14 @@ import org.osgi.framework.BundleContext;
 public class Activator extends Plugin
 {
 
-    // The plug-in ID
+    /** The plug-in ID */
     public static final String PLUGIN_ID = "org.devzuz.q.maven.jdt.core"; //$NON-NLS-1$
 
+    /**
+     * Marker id 
+     */
+    public static final String MARKER_ID = PLUGIN_ID + ".pomproblemmarker";
+    
     // The shared instance
     private static Activator plugin;
 
