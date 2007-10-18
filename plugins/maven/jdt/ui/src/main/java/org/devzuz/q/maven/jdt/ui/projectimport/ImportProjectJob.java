@@ -18,6 +18,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -26,9 +27,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
-import org.eclipse.core.runtime.jobs.Job;
 
-public class ImportProjectJob extends Job
+public class ImportProjectJob extends WorkspaceJob
 {
     private Collection<PomFileDescriptor> pomDescriptors;
 
@@ -67,7 +67,7 @@ public class ImportProjectJob extends Job
     }
 
     @Override
-    protected IStatus run( IProgressMonitor monitor )
+    public IStatus runInWorkspace( IProgressMonitor monitor )
     {
         Status status = null;
         // TODO set a better number

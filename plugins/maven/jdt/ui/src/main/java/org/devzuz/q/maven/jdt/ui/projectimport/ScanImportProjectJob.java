@@ -11,14 +11,10 @@ import java.util.Collection;
 
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.Activator;
-import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 
 public class ScanImportProjectJob extends Job
@@ -47,53 +43,19 @@ public class ScanImportProjectJob extends Job
             return new Status( IStatus.CANCEL, Activator.PLUGIN_ID, "Cancelled" );
         }
 
-        ImportProjectsRunnable importProjectsRunnable = new ImportProjectsRunnable( pomDescriptors );
+        // ImportProjectsRunnable importProjectsRunnable = new ImportProjectsRunnable( pomDescriptors );
+        ImportProjectJob importProjectsJob = new ImportProjectJob( pomDescriptors );
+        importProjectsJob.setPriority( Job.BUILD );
+        importProjectsJob.setRule( ResourcesPlugin.getWorkspace().getRoot() );
 
         if ( monitor.isCanceled() )
         {
             return Status.CANCEL_STATUS;
         }
 
-        IWorkspace workspace = ResourcesPlugin.getWorkspace();
-        try
-        {
-            workspace.run( importProjectsRunnable, new SubProgressMonitor( monitor, pomDescriptors.size() ) );
-        }
-        catch ( CoreException e )
-        {
-            Activator.getLogger().log( e );
-            return e.getStatus();
-        }
+        importProjectsJob.schedule();
 
-        return importProjectsRunnable.getStatus();
-    }
-
-    /**
-     * Do the workspace operations inside a batch to avoid refreshes during the process
-     */
-    private class ImportProjectsRunnable implements IWorkspaceRunnable
-    {
-
-        private IStatus status;
-
-        private final Collection<PomFileDescriptor> pomDescriptors;
-
-        ImportProjectsRunnable( Collection<PomFileDescriptor> pomDescriptors )
-        {
-            this.pomDescriptors = pomDescriptors;
-        }
-
-        public void run( IProgressMonitor monitor ) throws CoreException
-        {
-            ImportProjectJob job = new ImportProjectJob( pomDescriptors );
-            status = job.run( monitor );
-        }
-
-        public IStatus getStatus()
-        {
-            return status;
-        }
-
+        return Status.OK_STATUS;
     }
 
     /**
