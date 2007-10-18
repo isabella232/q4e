@@ -49,21 +49,61 @@ public class MavenExceptionHandler
         }
     }
 
+    /**
+     * Marks a single error in the pom.xml for the given project.
+     * 
+     * Note that this method removes any other marker in the pom.xml.
+     * 
+     * @param project
+     *            the project where pom.xml is contained.
+     * @param msg
+     *            the error message to display in the marker.
+     */
     public static void error( final IProject project, final String msg )
     {
         error( project, Collections.singletonList( msg ) );
     }
 
+    /**
+     * Marks a single warning in the pom.xml for the given project.
+     * 
+     * Note that this method removes any other marker in the pom.xml.
+     * 
+     * @param project
+     *            the project where pom.xml is contained.
+     * @param msg
+     *            the warning message to display in the marker.
+     */
     public static void warning( final IProject project, final String msg )
     {
         warning( project, Collections.singletonList( msg ) );
     }
 
-    public static void error( final IProject project, final List<String> msg )
+    /**
+     * Marks several errors in the pom.xml for the given project.
+     * 
+     * Note that this method removes any other markers in the pom.xml.
+     * 
+     * @param project
+     *            the project where pom.xml is contained.
+     * @param msgs
+     *            the error messages to display in the marker.
+     */
+    public static void error( final IProject project, final List<String> msgs )
     {
-        instance.markPom( project, msg, IMarker.SEVERITY_ERROR );
+        instance.markPom( project, msgs, IMarker.SEVERITY_ERROR );
     }
 
+    /**
+     * Marks several warnings in the pom.xml for the given project.
+     * 
+     * Note that this method removes any other markers in the pom.xml.
+     * 
+     * @param project
+     *            the project where pom.xml is contained.
+     * @param msgs
+     *            the warning messages to display in the marker.
+     */
     public static void warning( final IProject project, final List<String> msg )
     {
         instance.markPom( project, msg, IMarker.SEVERITY_WARNING );
@@ -82,12 +122,12 @@ public class MavenExceptionHandler
         {
             if ( e.getCause() != null )
             {
-                Activator.getLogger().log( e.getCause() );
+                Activator.getLogger().log( "Unknown error: ", e.getCause() );
                 error( project, "Unknown error: " + e.getCause().getMessage() );
             }
             else
             {
-                Activator.getLogger().log( e );
+                Activator.getLogger().log( "Unknown error: ", e );
                 error( project, "Unknown error: " + e.getMessage() );
             }
         }
@@ -115,21 +155,22 @@ public class MavenExceptionHandler
         {
             String s = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getName();
             error( project, "Error: " + s );
+            Activator.getLogger().log( "Unexpected error: " + s, cause );
         }
     }
 
     private void handle( final IProject project, final ArtifactResolutionException e )
     {
         error( project, "Error while resolving "
-            + getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() )
-            + " : " + e.getMessage() );
+                        + getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(),
+                                         e.getClassifier() ) + " : " + e.getMessage() );
     }
-    
+
     private void handle( final IProject project, final ArtifactNotFoundException e )
     {
         error( project, "Artifact cannot be found - "
-            + getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() )
-            + " : " + e.getMessage() );
+                        + getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(),
+                                         e.getClassifier() ) + " : " + e.getMessage() );
     }
 
     private String getArtifactId( String groupId, String artifactId, String version, String type, String classifier )
@@ -161,11 +202,11 @@ public class MavenExceptionHandler
         error( project, problems );
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private void handle( IProject project, InvalidProjectModelException e )
     {
         ModelValidationResult validationResult = e.getValidationResult();
-        error( project, (List<String>) validationResult.getMessages() );
+        error( project, validationResult.getMessages() );
     }
 
     private void handle( IProject project, MavenExecutionException e )
@@ -179,10 +220,9 @@ public class MavenExceptionHandler
 
         IWorkspaceRunnable r = new IWorkspaceRunnable()
         {
-            public void run( IProgressMonitor monitor )
-                throws CoreException
+            public void run( IProgressMonitor monitor ) throws CoreException
             {
-                pom.deleteMarkers( Activator.MARKER_ID, true, IResource.DEPTH_INFINITE ); 
+                pom.deleteMarkers( Activator.MARKER_ID, true, IResource.DEPTH_INFINITE );
 
                 for ( String problem : problems )
                 {
@@ -191,7 +231,7 @@ public class MavenExceptionHandler
                         IMarker marker = pom.createMarker( Activator.MARKER_ID );
                         marker.setAttribute( IMarker.MESSAGE, problem );
                         marker.setAttribute( IMarker.SEVERITY, severity );
-                        //TODO improve line numbers usage
+                        // TODO improve line numbers usage
                         marker.setAttribute( IMarker.LINE_NUMBER, 1 );
                     }
                     catch ( CoreException ce )
@@ -204,7 +244,7 @@ public class MavenExceptionHandler
 
         try
         {
-            pom.getWorkspace().run( r, null, IWorkspace.AVOID_UPDATE, null );  
+            pom.getWorkspace().run( r, null, IWorkspace.AVOID_UPDATE, null );
         }
         catch ( CoreException ce )
         {
@@ -213,7 +253,8 @@ public class MavenExceptionHandler
     }
 
     /**
-     * Add only one marker, note that all previous markers will be deleted 
+     * Add only one marker, note that all previous markers will be deleted
+     * 
      * @param project
      * @param msg
      * @param severity
