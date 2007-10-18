@@ -31,7 +31,6 @@ public class MavenPomFormEditor extends FormEditor
     
     public MavenPomFormEditor()
     {
-
     }
     
     @Override
@@ -53,7 +52,6 @@ public class MavenPomFormEditor extends FormEditor
         }
         catch ( PartInitException pie )
         {
-            // TODO: handle exception
             pie.printStackTrace();
         }
     }
@@ -67,16 +65,20 @@ public class MavenPomFormEditor extends FormEditor
         if(getPOMFilePath() != null)
         {
         	File pom = new File( getPOMFilePath());
-        	try {
+        	try 
+        	{
 				this.pomModel = new MavenXpp3Reader().read( new FileReader( pom) );
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
+			} 
+        	catch (FileNotFoundException e)
+        	{
 				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			}
+        	catch (IOException e) 
+        	{
 				e.printStackTrace();
-			} catch (XmlPullParserException e) {
-				// TODO Auto-generated catch block
+			} 
+        	catch (XmlPullParserException e) 
+        	{
 				e.printStackTrace();
 			}            
         }
@@ -120,12 +122,7 @@ public class MavenPomFormEditor extends FormEditor
     public void startPOMSearch()
     {
         MavenPomSearcher mps = new MavenPomSearcher(getSelectedLocationOfPOM());
-        setPOMIPath(mps.getProjectPOMFilePath());
-    }
-    
-    private void setPOMIPath(IPath ip)
-    {
-        this.pomIPath = ip;
+        this.pomIPath = mps.getProjectPOMFilePath();
     }
     
     public String getPOMFilePath()

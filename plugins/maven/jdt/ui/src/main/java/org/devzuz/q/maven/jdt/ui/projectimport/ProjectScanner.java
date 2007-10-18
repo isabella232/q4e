@@ -79,11 +79,6 @@ public class ProjectScanner
 
         for ( String module : modules )
         {
-            if ( monitor.isCanceled() )
-            {
-                throw new InterruptedException();
-            }
-
             File moduleDir = new File( pomDescriptor.getBaseDirectory(), module );
 
             Collection<PomFileDescriptor> scanned = scanFolder( moduleDir, new SubProgressMonitor( monitor, 10 ) );
