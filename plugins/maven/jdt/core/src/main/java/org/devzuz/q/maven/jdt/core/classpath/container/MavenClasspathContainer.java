@@ -25,6 +25,7 @@ import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.jdt.core.Activator;
 import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
+import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -105,13 +106,14 @@ public class MavenClasspathContainer implements IClasspathContainer
     {
         if ( mavenProject != null )
         {
-            Activator.getLogger().info( "Refreshing classpath for maven project " + mavenProject.getArtifactId() );
+            Activator.trace( TraceOption.CLASSPATH_UPDATE, "Refreshing classpath for maven project ",
+                             mavenProject.getArtifactId() );
 
             this.project = mavenProject.getProject();
 
             List<IClasspathEntry> newClasspathEntries = new ArrayList<IClasspathEntry>( artifacts.size() );
             resolveArtifacts( mavenProject, newClasspathEntries, artifacts, getWorkspaceProjects() );
-            classpathEntries = newClasspathEntries.toArray( new IClasspathEntry[newClasspathEntries.size()] );;
+            classpathEntries = newClasspathEntries.toArray( new IClasspathEntry[newClasspathEntries.size()] );
         }
     }
 
@@ -121,6 +123,7 @@ public class MavenClasspathContainer implements IClasspathContainer
      * @param project
      * @deprecated use {@link #newClasspath(IProject, IProgressMonitor)}
      */
+    @Deprecated
     public static MavenClasspathContainer newClasspath( IProject project )
     {
         return newClasspath( project, new NullProgressMonitor() );
@@ -133,7 +136,7 @@ public class MavenClasspathContainer implements IClasspathContainer
      */
     public static MavenClasspathContainer newClasspath( IProject project, IProgressMonitor monitor )
     {
-        Activator.getLogger().info( "New classpath for project " + project.getName() );
+        Activator.trace( TraceOption.CLASSPATH_UPDATE, "New classpath for project ", project.getName() );
 
         MavenClasspathContainer container = new MavenClasspathContainer( project );
 
@@ -224,7 +227,7 @@ public class MavenClasspathContainer implements IClasspathContainer
      * @param workspaceProjects
      *            projects in the workspace, indexed by name
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private void resolveArtifacts( IMavenProject mavenProject, List<IClasspathEntry> classpathEntries,
                                    Set<IMavenArtifact> artifacts, Map<String, IProject> workspaceProjects )
     {
@@ -237,14 +240,14 @@ public class MavenClasspathContainer implements IClasspathContainer
                 if ( classpathEntries.contains( entry ) )
                 {
                     /*
-                     * two dependencies with same artifactId but different groupId match a workspace
-                     * project so don't link both to the same workspace project
+                     * two dependencies with same artifactId but different groupId match a workspace project so don't
+                     * link both to the same workspace project
                      */
                     IPath path = entry.getPath();
                     entry = resolveArtifact( mavenProject, artifact, Collections.EMPTY_MAP, downloadSources );
                     MavenExceptionHandler.warning( project,
                                                    "Two dependencies with same artifactId but different groupId match the workspace project "
-                                                       + path );
+                                                                   + path );
                 }
                 classpathEntries.add( entry );
             }
