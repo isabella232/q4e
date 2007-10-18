@@ -9,8 +9,6 @@ package org.devzuz.q.maven.embedder;
 
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-
 /**
  * @author emantos
  *
@@ -20,5 +18,5 @@ public interface IMavenExecutionResult
 {
     public IMavenProject getMavenProject();
 
-    public List<CoreException> getExceptions();
+    public List<Exception> getExceptions();
 }

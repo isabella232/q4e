@@ -11,6 +11,7 @@ import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.devzuz.q.maven.embedder.Activator;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
+import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -57,12 +58,11 @@ public class EclipseMavenRequest extends Job
             executionResult = new EclipseMavenExecutionResult( status );
             if ( ( status.getExceptions() != null ) && ( status.getExceptions().size() > 0 ) )
             {
-                // TODO somehow store all exceptions and not just the first one
-                return new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Errors during Maven execution",
-                                   (Exception) status.getExceptions().get( 0 ) );
+                return new MavenExecutionStatus( IStatus.ERROR, Activator.PLUGIN_ID, "Errors during Maven execution",
+                                                 executionResult );
             }
 
-            return new Status( IStatus.OK, Activator.PLUGIN_ID, "Success" );
+            return new MavenExecutionStatus( IStatus.OK, Activator.PLUGIN_ID, "Success", executionResult );
         }
         finally
         {
