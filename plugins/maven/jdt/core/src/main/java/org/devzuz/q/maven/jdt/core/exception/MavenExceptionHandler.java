@@ -9,6 +9,7 @@ package org.devzuz.q.maven.jdt.core.exception;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
@@ -48,6 +49,26 @@ public class MavenExceptionHandler
         }
     }
 
+    public static void error( final IProject project, final String msg )
+    {
+        error( project, Collections.singletonList( msg ) );
+    }
+
+    public static void warning( final IProject project, final String msg )
+    {
+        warning( project, Collections.singletonList( msg ) );
+    }
+
+    public static void error( final IProject project, final List<String> msg )
+    {
+        instance.markPom( project, msg, IMarker.SEVERITY_ERROR );
+    }
+
+    public static void warning( final IProject project, final List<String> msg )
+    {
+        instance.markPom( project, msg, IMarker.SEVERITY_WARNING );
+    }
+
     public static void handle( IProject project, Exception e )
     {
         Throwable cause = e;
@@ -62,12 +83,12 @@ public class MavenExceptionHandler
             if ( e.getCause() != null )
             {
                 Activator.getLogger().log( e.getCause() );
-                instance.markPom( project, "Unknown error: " + e.getCause().getMessage() );
+                error( project, "Unknown error: " + e.getCause().getMessage() );
             }
             else
             {
                 Activator.getLogger().log( e );
-                instance.markPom( project, "Unknown error: " + e.getMessage() );
+                error( project, "Unknown error: " + e.getMessage() );
             }
         }
         else if ( cause instanceof MultipleArtifactsNotFoundException )
@@ -93,20 +114,20 @@ public class MavenExceptionHandler
         else
         {
             String s = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getName();
-            instance.markPom( project, "Error: " + s );
+            error( project, "Error: " + s );
         }
     }
 
-    public void handle( final IProject project, final ArtifactResolutionException e )
+    private void handle( final IProject project, final ArtifactResolutionException e )
     {
-        markPom( project, "Error while resolving "
+        error( project, "Error while resolving "
             + getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() )
             + " : " + e.getMessage() );
     }
     
-    public void handle( final IProject project, final ArtifactNotFoundException e )
+    private void handle( final IProject project, final ArtifactNotFoundException e )
     {
-        markPom( project, "Artifact cannot be found - "
+        error( project, "Artifact cannot be found - "
             + getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() )
             + " : " + e.getMessage() );
     }
@@ -129,7 +150,7 @@ public class MavenExceptionHandler
         return sb.toString();
     }
 
-    public void handle( final IProject project, final MultipleArtifactsNotFoundException e )
+    private void handle( final IProject project, final MultipleArtifactsNotFoundException e )
     {
         List<Artifact> missingArtifacts = e.getMissingArtifacts();
         List<String> problems = new ArrayList<String>( missingArtifacts.size() );
@@ -137,21 +158,22 @@ public class MavenExceptionHandler
         {
             problems.add( "Missing dependency: " + artifact.toString() );
         }
-        markPom( project, problems );
+        error( project, problems );
     }
 
+    @SuppressWarnings("unchecked")
     private void handle( IProject project, InvalidProjectModelException e )
     {
         ModelValidationResult validationResult = e.getValidationResult();
-        markPom( project, (List<String>) validationResult.getMessages() );
+        error( project, (List<String>) validationResult.getMessages() );
     }
 
     private void handle( IProject project, MavenExecutionException e )
     {
-        markPom( project, e.getMessage() );
+        error( project, e.getMessage() );
     }
 
-    private void markPom( final IProject project, final List<String> problems )
+    private void markPom( final IProject project, final List<String> problems, final int severity )
     {
         final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
 
@@ -160,15 +182,16 @@ public class MavenExceptionHandler
             public void run( IProgressMonitor monitor )
                 throws CoreException
             {
-                pom.deleteMarkers( MavenCoreProblemMarker.getMavenPOMMarker(), true, IResource.DEPTH_INFINITE ); 
+                pom.deleteMarkers( Activator.MARKER_ID, true, IResource.DEPTH_INFINITE ); 
 
                 for ( String problem : problems )
                 {
                     try
                     {
-                        IMarker marker = pom.createMarker( MavenCoreProblemMarker.getMavenPOMMarker() );
+                        IMarker marker = pom.createMarker( Activator.MARKER_ID );
                         marker.setAttribute( IMarker.MESSAGE, problem );
-                        marker.setAttribute( IMarker.SEVERITY, IMarker.SEVERITY_ERROR );
+                        marker.setAttribute( IMarker.SEVERITY, severity );
+                        //TODO improve line numbers usage
                         marker.setAttribute( IMarker.LINE_NUMBER, 1 );
                     }
                     catch ( CoreException ce )
@@ -193,9 +216,10 @@ public class MavenExceptionHandler
      * Add only one marker, note that all previous markers will be deleted 
      * @param project
      * @param msg
+     * @param severity
      */
-    private void markPom( final IProject project, final String msg )
+    private void markPom( final IProject project, final String msg, final int severity )
     {
-        markPom( project, Arrays.asList( new String[] { msg } ) );
+        markPom( project, Arrays.asList( new String[] { msg } ), severity );
     }
 }
