@@ -7,6 +7,7 @@
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import org.devzuz.q.maven.jdt.core.Activator;
+import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -18,26 +19,23 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 
 /**
- * Provides initialization for the MavenClasspathContainer - including creating it if it doesn't
- * exist on the project
+ * Provides initialization for the MavenClasspathContainer - including creating it if it doesn't exist on the project
  * 
  * @author pdodds
  * 
  */
-public class MavenClasspathContainerInitializer
-    extends ClasspathContainerInitializer
+public class MavenClasspathContainerInitializer extends ClasspathContainerInitializer
 {
     public MavenClasspathContainerInitializer()
     {
     }
 
     @Override
-    public void initialize( IPath containerPath, IJavaProject javaProject )
-        throws CoreException
+    public void initialize( IPath containerPath, IJavaProject javaProject ) throws CoreException
     {
         if ( containerPath.equals( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH ) )
         {
-            Activator.getLogger().info( "Initializing classpath for " + javaProject.getPath() );
+            Activator.trace( TraceOption.CLASSPATH_UPDATE, "Initializing classpath for ", javaProject );
 
             IProject project = javaProject.getProject();
 
