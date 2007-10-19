@@ -60,7 +60,7 @@
   <pluginRepositories>
     <pluginRepository>
       <id>code.google.com</id>
-      <name>Apache Snapshot Repository</name>
+      <name>Q Snapshot Repository</name>
       <url>http://q4e.googlecode.com/svn/repository/snapshots</url>
       <releases>
         <enabled>false</enabled>
