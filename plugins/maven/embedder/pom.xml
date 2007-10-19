@@ -38,6 +38,12 @@
   </organization>
   <url>http://www.apache.org/</url>
 
+  <properties>
+    <libdir>${basedir}/lib</libdir>
+    <srcdir>${basedir}/sources</srcdir>
+    <manifestdir>${basedir}/META-INF</manifestdir>
+  </properties>
+
   <build>
 <!-- doesn't work with bundle plugin see https://issues.apache.org/jira/browse/FELIX-400
     <resources>
@@ -54,6 +60,26 @@
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+          <configuration>
+          <filesets>
+            <fileset>
+              <directory>${libdir}</directory>
+            </fileset>
+            <fileset>
+              <directory>${srcdir}</directory>
+            </fileset>
+            <fileset>
+              <directory>${manifestdir}</directory>
+              <includes>
+                <include>MANIFEST.MF</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
         <executions>
           <execution>
@@ -63,7 +89,7 @@
               <goal>copy-dependencies</goal>
             </goals>
             <configuration>
-              <outputDirectory>${basedir}/lib</outputDirectory>
+              <outputDirectory>${libdir}</outputDirectory>
             </configuration>
           </execution>
           <execution>
@@ -75,7 +101,7 @@
             <configuration>
               <classifier>sources</classifier>
               <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
-              <outputDirectory>${basedir}/sources</outputDirectory>
+              <outputDirectory>${srcdir}</outputDirectory>
             </configuration>
           </execution>
         </executions>
@@ -109,12 +135,14 @@
         </executions>
 -->
         <configuration>
-          <manifestLocation>${basedir}/META-INF</manifestLocation>
+          <manifestLocation>${manifestdir}</manifestLocation>
           <instructions>
             <_exportcontents>
                 !org.apache.maven.doxia..svn,
                 org.apache.maven.*;-noimport:=true,
-                org.codehaus.plexus.*;-noimport:=true
+                org.codehaus.plexus.util.xml.*;-noimport:=true,
+                !org.codehaus.plexus.util.*,
+                org.codehaus.plexus.*;-noimport:=true,
             </_exportcontents>
             <Import-Package>
                 !javax.crypto.*,
@@ -131,6 +159,44 @@
           </instructions>
         </configuration>
       </plugin>
+<!--
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>shade-maven-plugin</artifactId>
+        <version>1.0-alpha-12</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <finalName>plexus-utils-shaded-${project.version}</finalName>
+              <shadedArtifactAttached>true</shadedArtifactAttached>
+              <createDependencyReducedPom>false</createDependencyReducedPom>
+              <keepDependenciesWithProvidedScope>true</keepDependenciesWithProvidedScope>
+              <transformers>
+                <transformer implementation="org.codehaus.mojo.shade.resource.ComponentsXmlResourceTransformer"/>
+              </transformers>
+              <artifactSet>
+                <includes>
+                  <include>org.codehaus.plexus:plexus-utils</include>
+                </includes>
+              </artifactSet>
+              <relocations>
+                <relocation>
+                  <pattern>org.codehaus.plexus.util</pattern>
+                  <excludes>
+                    <exclude>org.codehaus.plexus.util.xml.Xpp3Dom</exclude>
+                    <exclude>org.codehaus.plexus.util.xml.pull.*</exclude>
+                  </excludes>
+                </relocation>
+              </relocations>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+-->
     </plugins>
   </build>
   <dependencies>
