@@ -295,10 +295,9 @@ public class MavenClasspathContainer implements IClasspathContainer
         }
         else
         {
-            // TODO : Raise error that a dependency was not added
-            Activator.getLogger().info(
-                                        "The dependency " + artifact.getGroupId() + ":" + artifact.getArtifactId()
-                                                        + ":" + artifact.getVersion() + " was not added." );
+            Activator.trace( TraceOption.CLASSPATH_UPDATE, "The dependency ", artifact.getGroupId(), ":",
+                             artifact.getArtifactId(), ":", artifact.getVersion(), " with type ", artifact.getType(),
+                             " on project ", mavenProject, " does not require being added to the classpath." );
         }
 
         return null;
