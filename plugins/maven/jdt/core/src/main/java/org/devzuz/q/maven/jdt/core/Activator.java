@@ -110,6 +110,10 @@ public class Activator extends Plugin
      */
     public static void trace( TraceOption traceOption, Object... messageParts )
     {
+        if ( !Platform.inDebugMode() )
+        {
+            return;
+        }
         String globalTraceValue = Platform.getDebugOption( PLUGIN_GLOBAL_TRACE_OPTION );
         String value = Platform.getDebugOption( traceOption.getValue() );
         if ( null != globalTraceValue && globalTraceValue.equals( "true" ) && null != value && value.equals( "true" ) )
