@@ -6,6 +6,10 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.devzuz.q.maven.jdt.core.internal.MavenProjectJdtResourceListener;
 import org.devzuz.q.maven.embedder.log.EclipseLogger;
 import org.devzuz.q.maven.embedder.log.Logger;
@@ -27,10 +31,20 @@ public class Activator extends Plugin
     public static final String PLUGIN_ID = "org.devzuz.q.maven.jdt.core"; //$NON-NLS-1$
 
     /**
-     * Marker id 
+     * Prefix string for all trace options
+     */
+    public static final String PLUGIN_GLOBAL_TRACE_OPTION = PLUGIN_ID + "/debug";
+
+    /**
+     * Formatter for times displayed in traces.
+     */
+    private static DateFormat TIME_FORMAT;
+
+    /**
+     * Marker id
      */
     public static final String MARKER_ID = PLUGIN_ID + ".pomproblemmarker";
-    
+
     // The shared instance
     private static Activator plugin;
 
@@ -96,16 +110,27 @@ public class Activator extends Plugin
      */
     public static void trace( TraceOption traceOption, Object... messageParts )
     {
+        String globalTraceValue = Platform.getDebugOption( PLUGIN_GLOBAL_TRACE_OPTION );
         String value = Platform.getDebugOption( traceOption.getValue() );
-        if ( null != value && value.equals( "true" ) )
+        if ( null != globalTraceValue && globalTraceValue.equals( "true" ) && null != value && value.equals( "true" ) )
         {
-            StringBuilder b = new StringBuilder( 255 );
-            b.append( "[" ).append( traceOption ).append( "] " );
+            String timingValue = Platform.getDebugOption( PLUGIN_GLOBAL_TRACE_OPTION + "/timing" );
+            if ( null != timingValue && timingValue.equals( "true" ) )
+            {
+                if ( null == TIME_FORMAT )
+                {
+                    TIME_FORMAT = new SimpleDateFormat( "HH:mm:ss.SSS  " );
+                }
+                System.out.print( TIME_FORMAT.format( new Date() ) );
+            }
+            System.out.print( "[" );
+            System.out.print( traceOption );
+            System.out.print( "] " );
             for ( int i = 0; i < messageParts.length; i++ )
             {
-                b.append( messageParts[i] );
+                System.out.print( messageParts[i] );
             }
-            System.out.println( b.toString() );
+            System.out.println();
         }
     }
 }

@@ -15,14 +15,13 @@ import org.devzuz.q.maven.jdt.core.Activator;
  */
 public enum TraceOption
 {
-    JDT_RESOURCE_LISTENER( Activator.PLUGIN_ID + "/jdtResourceListener" ), CLASSPATH_UPDATE( Activator.PLUGIN_ID
-                    + "/classpathUpdate" );
+    JDT_RESOURCE_LISTENER( "/jdtResourceListener" ), CLASSPATH_UPDATE( "/classpathUpdate" );
 
     private final String value;
 
     TraceOption( String value )
     {
-        this.value = value;
+        this.value = Activator.PLUGIN_GLOBAL_TRACE_OPTION + value;
     }
 
     /**
