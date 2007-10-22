@@ -86,8 +86,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                         for ( IClasspathEntry classPathEntry : classPathEntries )
                         {
                             String projectName = classPathEntry.getPath().lastSegment();
-
-                            if ( projectName.equals( getProjectPackage( iresProject ).trim() ) )
+                            if ( projectName.equals( iresProject.getName() ) )
                             {
                                 if ( Activator.getDefault().isDebugging() )
                                 {
@@ -95,6 +94,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                                                      iproject );
                                 }
                                 new UpdateClasspathJob( iproject ).schedule();
+                                break;
                             }
                         }
                     }
@@ -102,7 +102,6 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                     {
                         // Could not get project's classpath, ignore and try next.
                         Activator.getLogger().log( "Could not read classpath for project: " + iproject, e );
-
                     }
                 }
             }
@@ -129,7 +128,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
 
         return classpathContainer.getClasspathEntries();
     }
-
+    /*
     private String getProjectPackage( IProject iproject )
     {
         StringBuilder strProjectInfoData = new StringBuilder( "" );
@@ -165,5 +164,5 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         return strProjectInfoData.toString();
 
     }
-
+    */
 }

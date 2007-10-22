@@ -67,10 +67,9 @@ public class Activator extends Plugin
         logger = new EclipseLogger( PLUGIN_ID, this.getLog() );
 
         iResourceListener = new MavenProjectJdtResourceListener();
-        ResourcesPlugin.getWorkspace().addResourceChangeListener(
-                                                                  iResourceListener,
-                                                                  IResourceChangeEvent.PRE_CLOSE
-                                                                                  | IResourceChangeEvent.PRE_DELETE );
+        ResourcesPlugin.getWorkspace().addResourceChangeListener( iResourceListener,
+                                                                  IResourceChangeEvent.PRE_CLOSE | 
+                                                                  IResourceChangeEvent.PRE_DELETE );
     }
 
     @Override
