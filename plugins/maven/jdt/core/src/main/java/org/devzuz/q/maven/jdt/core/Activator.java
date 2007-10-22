@@ -38,7 +38,7 @@ public class Activator extends Plugin
     /**
      * Formatter for times displayed in traces.
      */
-    private static DateFormat TIME_FORMAT;
+    private static DateFormat TIME_FORMAT = new SimpleDateFormat( "HH:mm:ss.SSS  " );
 
     /**
      * Marker id
@@ -120,10 +120,6 @@ public class Activator extends Plugin
             String timingValue = Platform.getDebugOption( PLUGIN_GLOBAL_TRACE_OPTION + "/timing" );
             if ( null != timingValue && timingValue.equals( "true" ) )
             {
-                if ( null == TIME_FORMAT )
-                {
-                    TIME_FORMAT = new SimpleDateFormat( "HH:mm:ss.SSS  " );
-                }
                 System.out.print( TIME_FORMAT.format( new Date() ) );
             }
             System.out.print( "[" );
