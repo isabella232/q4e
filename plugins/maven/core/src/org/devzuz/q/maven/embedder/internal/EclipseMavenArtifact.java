@@ -199,6 +199,9 @@ public class EclipseMavenArtifact implements IMavenArtifact
                 return false;
             if ( !secondArtifact.getVersion().equals( getVersion() ) )
                 return false;
+            if ( !secondArtifact.getType().equals( getType() ) )
+                return false;
+            
             return true;
         }
         return false;
@@ -222,6 +225,12 @@ public class EclipseMavenArtifact implements IMavenArtifact
         sb.append( "] " );
         sb.append( "version[" );
         sb.append( getVersion() );
+        sb.append( "] " );
+        sb.append( "type[" );
+        sb.append( getType() );
+        sb.append( "] " );
+        sb.append( "scope[" );
+        sb.append( getScope() );
         sb.append( "] " );
         return sb.toString();
     }

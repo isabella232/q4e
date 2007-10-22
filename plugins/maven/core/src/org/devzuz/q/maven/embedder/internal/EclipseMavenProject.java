@@ -284,6 +284,7 @@ public class EclipseMavenProject implements IMavenProject
         artifact.setGroupId( elements[0] );
         artifact.setId( string );
         artifact.setVersion( elements[3] );
+        artifact.setType( elements[2] );
         return artifact;
     }
 
