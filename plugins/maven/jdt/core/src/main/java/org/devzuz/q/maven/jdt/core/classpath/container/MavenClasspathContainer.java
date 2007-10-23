@@ -237,17 +237,18 @@ public class MavenClasspathContainer implements IClasspathContainer
             IClasspathEntry entry = resolveArtifact( mavenProject, artifact, workspaceProjects, downloadSources );
             if ( entry != null )
             {
-                //  classpathEntries.contains( entry ) doesn't work as expected. 
-                if( classpathContainsFolder( classpathEntries , entry ) )
+                // classpathEntries.contains( entry ) doesn't work as expected.
+                if ( classpathContainsFolder( classpathEntries, entry ) )
                 {
-                    /*
-                     * two dependencies with same artifactId but different groupId match a workspace project so don't
-                     * link both to the same workspace project
-                     */
+                    // two dependencies with same artifactId match a workspace project so don't link both to the same
+                    // workspace project.
+                    // If these are two artifacts with different type, thats ok.
+                    // FIXME If they have different groupId, we have a problem.
                     IPath path = entry.getPath();
                     entry = resolveArtifact( mavenProject, artifact, Collections.EMPTY_MAP, downloadSources );
-                    MavenExceptionHandler.warning( project, "Two dependencies with same artifactId but different groupId match the workspace project "
-                                                            + path );
+                    MavenExceptionHandler.warning( project,
+                                                   "Two dependencies with same artifactId match the workspace project "
+                                                                   + path );
                 }
                 classpathEntries.add( entry );
             }
@@ -286,18 +287,20 @@ public class MavenClasspathContainer implements IClasspathContainer
         {
             if ( Activator.getDefault().isDebugging() )
             {
-                Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added as project dependency - " + project.getFullPath() );
+                Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added as project dependency - "
+                                + project.getFullPath() );
             }
-            
+
             return JavaCore.newProjectEntry( project.getFullPath(), export );
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {
             if ( Activator.getDefault().isDebugging() )
             {
-                Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added as jar dependency - " + artifact.getFile().getAbsolutePath() );
+                Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added as jar dependency - "
+                                + artifact.getFile().getAbsolutePath() );
             }
-            
+
             Path sourcePath =
                 getArtifactPath( mavenProject, artifact, "java-source", SOURCES_CLASSIFIER, downloadSources );
             return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ), sourcePath, null,
@@ -384,17 +387,17 @@ public class MavenClasspathContainer implements IClasspathContainer
 
         return null;
     }
-    
-    private boolean classpathContainsFolder( List<IClasspathEntry> classpathSrcEntries , IClasspathEntry folder )
+
+    private boolean classpathContainsFolder( List<IClasspathEntry> classpathSrcEntries, IClasspathEntry folder )
     {
-        for( IClasspathEntry entry : classpathSrcEntries )
+        for ( IClasspathEntry entry : classpathSrcEntries )
         {
-            if( entry.getPath().equals( folder.getPath() ) ) 
+            if ( entry.getPath().equals( folder.getPath() ) )
             {
                 return true;
             }
         }
-        
+
         return false;
     }
 }
