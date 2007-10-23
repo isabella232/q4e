@@ -334,7 +334,9 @@ public class MavenEventView extends ViewPart implements Observer
     {
         // This will generate a table refresh event with an empty store
         // thereby clearing the view.
+    	
         store.dispose();
+        eventTableViewer.refresh();
     }
 
     public Severity getSeverity()
