@@ -31,6 +31,7 @@ import org.devzuz.q.maven.jdt.core.Activator;
 import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
+import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -188,7 +189,8 @@ public class MavenNature
             // use a Set that will keep the order of elements added
             Set<IClasspathEntry> classpathEntriesSet = new ListOrderedSet();
             
-            Activator.getLogger().info( "Executing process-test-resources on " + project.getName() );
+            Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Executing process-test-resources on ", project
+                .getName() );
             // (x) Execute process-test-resources on the maven project
             IMavenExecutionResult result = MavenManager.getMaven().executeGoal( mavenProject, 
                                                                                 "process-test-resources", 
@@ -198,7 +200,6 @@ public class MavenNature
             // Mark any errors, particularly, on the launching of the process-test-resources goal
             if ( ( mavenExceptions != null ) && ( mavenExceptions.size() > 0 ) )
             {
-                Activator.getLogger().error("Maven exceptions while generating source code for adding to classpath");
                 MavenExceptionHandler.handle( project, mavenExceptions );
             }
             else
@@ -279,7 +280,8 @@ public class MavenNature
         
         for( IClasspathEntry entry : classpathEntries )
         {
-            Activator.getLogger().info( "Adding " + entry.getPath().toOSString() + " to classpath of " + project.getName() );
+            Activator.trace( TraceOption.CLASSPATH_UPDATE, "Adding ", entry.getPath().toOSString(),
+                             " to classpath of ", project.getName() );
         }
         
         return classpathEntries;
