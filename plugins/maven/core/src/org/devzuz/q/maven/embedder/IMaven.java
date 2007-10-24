@@ -324,7 +324,7 @@ public interface IMaven
 
     /**
      * Create artifact repositories objects from model repositories
-     * 
+     * @deprecated this will be removed, doesn't seem to be used
      * @param repositories
      * @return artifact repositories
      */
