@@ -22,19 +22,19 @@
    </url>
 
    <requires>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
-      <import plugin="org.eclipse.jdt.ui"/>
-      <import plugin="org.eclipse.jdt.core"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.jface.text"/>
-      <import plugin="org.eclipse.ui.editors"/>
-      <import plugin="org.eclipse.ui.ide"/>
-      <import plugin="org.eclipse.ui.workbench.texteditor"/>
-      <import plugin="org.eclipse.ui.forms"/>
-      <import plugin="org.eclipse.core.databinding"/>
-      <import plugin="org.eclipse.jface.databinding"/>
-      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.ui" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.core.runtime" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.jdt.ui" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.jdt.core" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.core.resources" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.jface.text" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.editors" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.ide" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.workbench.texteditor" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.forms" version="3.3.0" match="compatible"/>
+      <import plugin="org.eclipse.core.databinding" version="1.0.0" match="compatible"/>
+      <import plugin="org.eclipse.jface.databinding" version="1.1.0" match="compatible"/>
+      <import plugin="org.eclipse.swt" version="3.3.0" match="compatible"/>
       <import feature="org.apache.commons.collections.feature" version="3.2.0.200705282147"/>
       <import feature="org.prefuse.feature" version="1.0.0.v20060715"/>
       <import feature="org.apache.maven.feature" version="2.1.0.571188"/>
