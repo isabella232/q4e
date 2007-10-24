@@ -208,4 +208,9 @@ public class EclipseMavenEventPropagator implements TransferListener, EventMonit
         // ignored
     }
 
+    public void close()
+    {
+        // nothing to do
+    }
+
 }
