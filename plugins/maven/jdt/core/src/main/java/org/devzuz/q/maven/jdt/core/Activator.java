@@ -68,6 +68,7 @@ public class Activator extends Plugin
 
         iResourceListener = new MavenProjectJdtResourceListener();
         ResourcesPlugin.getWorkspace().addResourceChangeListener( iResourceListener,
+                                                                  IResourceChangeEvent.POST_CHANGE |
                                                                   IResourceChangeEvent.PRE_CLOSE | 
                                                                   IResourceChangeEvent.PRE_DELETE );
     }
