@@ -322,9 +322,11 @@ public class EclipseMaven implements IMaven
                     getMavenEmbedder().readProjectWithDependencies( generateRequest( mavenProject, null ) );
                 if ( status.hasExceptions() )
                 {
+                    EclipseMavenExecutionResult eclipseMavenExecutionResult =
+                        new EclipseMavenExecutionResult( status, mavenProject.getProject() );
                     throw new QCoreException( new MavenExecutionStatus( IStatus.ERROR, Activator.PLUGIN_ID,
-                                                                         "Unable to read project",
-                                                                        new EclipseMavenExecutionResult( status ) ) );
+                                                                        "Unable to read project",
+                                                                        eclipseMavenExecutionResult ) );
                 }
                 // TODO should we call refreshProject?
                 // -erle- : I think we should, otherwise, I can't get the mavenProject object, it is null.

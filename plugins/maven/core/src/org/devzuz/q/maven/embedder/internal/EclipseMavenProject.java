@@ -107,15 +107,18 @@ public class EclipseMavenProject implements IMavenProject
     }
 
     /**
-     * Build a Maven project from a MavenProject
+     * Build an Eclipse Maven project from a Embedder MavenProject
      * 
-     * @param artifact
-     *            Maven artifact
+     * @param mavenProject
+     *            Maven project from the embedder.
+     * @param project
+     *            workspace project.
      */
-    public EclipseMavenProject( MavenProject project )
+    public EclipseMavenProject( MavenProject mavenProject, IProject project )
     {
-        this.refreshProject( project );
-        this.refreshDependencies( project );
+        this.refreshProject( mavenProject );
+        this.refreshDependencies( mavenProject );
+        this.project = project;
     }
 
     /**

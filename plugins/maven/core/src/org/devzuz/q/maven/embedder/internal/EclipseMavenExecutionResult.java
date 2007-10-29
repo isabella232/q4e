@@ -14,9 +14,13 @@ import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.eclipse.core.resources.IProject;
 
 /**
+ * Eclipse representation of the {@link MavenExecutionResult} from maven.
+ * 
  * @author emantos
+ * @author amuino
  */
 public class EclipseMavenExecutionResult implements IMavenExecutionResult
 {
@@ -24,8 +28,33 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
 
     private IMavenProject mavenProject;
 
-    @SuppressWarnings( "unchecked" )
+    /**
+     * Creates an instance of this class populating it from the given {@link MavenExecutionResult}.
+     * 
+     * The created instance represents the result of executing maven outside the eclipse workspace.
+     * 
+     * @param result
+     *            the maven execution result.
+     */
     public EclipseMavenExecutionResult( MavenExecutionResult result )
+    {
+        this( result, null );
+    }
+
+    /**
+     * Creates an instance of this class populating it from the given {@link MavenExecutionResult}.
+     * 
+     * The created instance represents the result of executing maven inside the workspace <code>project</code> passed
+     * as argument.
+     * 
+     * @param result
+     *            the maven execution result.
+     * @param project
+     *            the project in the workspace where maven was executed. Might be <code>null</code> when creating the
+     *            result for an execution outside the workspace.
+     */
+    @SuppressWarnings( "unchecked" )
+    public EclipseMavenExecutionResult( MavenExecutionResult result, IProject project )
     {
         exceptions = result.getExceptions();
         if ( exceptions == null )
@@ -37,7 +66,12 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
 
         if ( mavenProject != null )
         {
-            this.mavenProject = new EclipseMavenProject( mavenProject );
+            this.mavenProject = new EclipseMavenProject( mavenProject, project );
+        }
+        else
+        {
+            // TODO: Trace or log this. Why is result.getMavenProject() null?
+            this.mavenProject = new EclipseMavenProject( project );
         }
     }
 
@@ -48,7 +82,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
 
     public boolean hasErrors()
     {
-        return exceptions == Collections.EMPTY_LIST;
+        return exceptions != Collections.EMPTY_LIST;
     }
 
     public IMavenProject getMavenProject()
