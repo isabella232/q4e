@@ -151,36 +151,15 @@ public class MavenClasspathContainer implements IClasspathContainer
              * If it is an exception from maven, try to see if it is due to missing dependencies. If it is, try to check
              * if those missing dependencies are projects in the workspace, If it is, add it as a project dependency.
              */
-            // TODO : Refactor this
             if ( e.getStatus() instanceof MavenExecutionStatus )
             {
                 MavenExecutionStatus status = (MavenExecutionStatus) e.getStatus();
                 IMavenExecutionResult result = status.getMavenExecutionResult();
-                List<Exception> exceptions = result.getExceptions();
-                if ( ( exceptions != null ) && ( exceptions.size() > 0 ) )
+                if ( result.hasErrors() )
                 {
-                    for ( Exception exception : exceptions )
-                    {
-                        if ( exception instanceof MultipleArtifactsNotFoundException )
-                        {
-                            Set<IMavenArtifact> artifactToBeResolved = new LinkedHashSet<IMavenArtifact>();
-                            artifactToBeResolved.addAll( MavenUtils.getMissingArtifacts( (MultipleArtifactsNotFoundException) exception ) );
-                            artifactToBeResolved.addAll( MavenUtils.getResolvedArtifacts( (MultipleArtifactsNotFoundException) exception ) );
-                            IMavenProject mavenProject = result.getMavenProject();
-                            if ( mavenProject != null )
-                            {
-                                container.refreshClasspath( mavenProject, artifactToBeResolved );
-                            }
-                            else
-                            {
-                                MavenExceptionHandler.handle( project, exception );
-                            }
-                        }
-                        else
-                        {
-                            MavenExceptionHandler.handle( project, exception );
-                        }
-                    }
+                    List<Exception> exceptions = result.getExceptions();
+                    IMavenProject mavenProject = result.getMavenProject();
+                    processExecutionExceptions( mavenProject, container, exceptions );
                 }
             }
             else
@@ -202,6 +181,65 @@ public class MavenClasspathContainer implements IClasspathContainer
         }
 
         return container;
+    }
+
+    /**
+     * Iterates over the exceptions in the maven execution and handles them.
+     * 
+     * The only special case is when the exception is {@link MultipleArtifactsNotFoundException}, where we try to
+     * resolve them from the workspace.
+     * 
+     * @param mavenProject
+     *            the project with errors.
+     * @param container
+     *            the container we might update with workspace dependencies.
+     * @param exceptions
+     *            the exceptions raised during the maven execution.
+     */
+    private static void processExecutionExceptions( IMavenProject mavenProject, MavenClasspathContainer container,
+                                                    List<Exception> exceptions )
+    {
+        for ( Exception exception : exceptions )
+        {
+            if ( exception instanceof MultipleArtifactsNotFoundException )
+            {
+                MultipleArtifactsNotFoundException artifactsNotFoundException =
+                    (MultipleArtifactsNotFoundException) exception;
+                resolveMissingArtifacts( mavenProject, container, artifactsNotFoundException );
+            }
+            else
+            {
+                MavenExceptionHandler.handle( mavenProject.getProject(), exception );
+            }
+        }
+    }
+
+    /**
+     * Try to resolve the missing artifacts from the workspace.
+     * 
+     * TODO: We need better integration so we can resolve them before the exception is raised.
+     * 
+     * @param mavenProject
+     *            the project with missing dependencies.
+     * @param container
+     *            the classpath container to update.
+     * @param artifactsNotFoundException
+     *            the exception containing the missing artifacts.
+     */
+    private static void resolveMissingArtifacts( IMavenProject mavenProject, MavenClasspathContainer container,
+                                                 MultipleArtifactsNotFoundException artifactsNotFoundException )
+    {
+        Set<IMavenArtifact> artifactToBeResolved = new LinkedHashSet<IMavenArtifact>();
+        artifactToBeResolved.addAll( MavenUtils.getMissingArtifacts( artifactsNotFoundException ) );
+        artifactToBeResolved.addAll( MavenUtils.getResolvedArtifacts( artifactsNotFoundException ) );
+        if ( mavenProject != null )
+        {
+            container.refreshClasspath( mavenProject, artifactToBeResolved );
+        }
+        else
+        {
+            MavenExceptionHandler.handle( mavenProject.getProject(), artifactsNotFoundException );
+        }
     }
 
     private Map<String, IProject> getWorkspaceProjects()
