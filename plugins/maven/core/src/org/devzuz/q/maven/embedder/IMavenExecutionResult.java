@@ -11,12 +11,31 @@ import java.util.List;
 
 /**
  * @author emantos
- *
+ * 
  */
 
 public interface IMavenExecutionResult
 {
+    /**
+     * Gives access to the maven project where the execution as performed.
+     * 
+     * @return the maven project.
+     */
     public IMavenProject getMavenProject();
 
+    /**
+     * Returns the <b>not-null</b> list of exceptions generated during the maven execution.
+     * 
+     * @return the list of exceptions.
+     */
     public List<Exception> getExceptions();
+
+    /**
+     * Utility method for checking if any exception was raised during the execution.
+     * 
+     * It is equivalent to <code>!getExceptions().isEmpty()</code>
+     * 
+     * @return <code>true</code> if {@link #getExceptions()} will return a non-empty list.
+     */
+    public boolean hasErrors();
 }

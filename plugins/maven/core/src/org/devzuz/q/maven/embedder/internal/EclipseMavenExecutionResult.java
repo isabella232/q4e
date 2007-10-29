@@ -27,10 +27,10 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
     @SuppressWarnings( "unchecked" )
     public EclipseMavenExecutionResult( MavenExecutionResult result )
     {
-        exceptions = (List<Exception>) result.getExceptions();
+        exceptions = result.getExceptions();
         if ( exceptions == null )
         {
-            exceptions = Collections.emptyList();
+            exceptions = Collections.EMPTY_LIST;
         }
 
         MavenProject mavenProject = result.getMavenProject();
@@ -44,6 +44,11 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
     public List<Exception> getExceptions()
     {
         return exceptions;
+    }
+
+    public boolean hasErrors()
+    {
+        return exceptions == Collections.EMPTY_LIST;
     }
 
     public IMavenProject getMavenProject()
