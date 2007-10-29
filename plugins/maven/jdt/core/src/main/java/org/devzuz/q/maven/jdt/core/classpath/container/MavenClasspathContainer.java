@@ -173,12 +173,12 @@ public class MavenClasspathContainer implements IClasspathContainer
                             }
                             else
                             {
-                                MavenExceptionHandler.handle( project, e );
+                                MavenExceptionHandler.handle( project, exception );
                             }
                         }
                         else
                         {
-                            MavenExceptionHandler.handle( project, e );
+                            MavenExceptionHandler.handle( project, exception );
                         }
                     }
                 }
