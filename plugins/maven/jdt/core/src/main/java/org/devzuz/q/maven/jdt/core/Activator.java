@@ -67,10 +67,11 @@ public class Activator extends Plugin
         logger = new EclipseLogger( PLUGIN_ID, this.getLog() );
 
         iResourceListener = new MavenProjectJdtResourceListener();
-        ResourcesPlugin.getWorkspace().addResourceChangeListener( iResourceListener,
-                                                                  IResourceChangeEvent.POST_CHANGE |
-                                                                  IResourceChangeEvent.PRE_CLOSE | 
-                                                                  IResourceChangeEvent.PRE_DELETE );
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(
+                                                                  iResourceListener,
+                                                                  IResourceChangeEvent.POST_CHANGE
+                                                                                  | IResourceChangeEvent.PRE_CLOSE
+                                                                                  | IResourceChangeEvent.PRE_DELETE );
     }
 
     @Override
@@ -115,8 +116,12 @@ public class Activator extends Plugin
             return;
         }
         String globalTraceValue = Platform.getDebugOption( PLUGIN_GLOBAL_TRACE_OPTION );
+        if ( null == globalTraceValue || !globalTraceValue.equals( "true" ) )
+        {
+            return;
+        }
         String value = Platform.getDebugOption( traceOption.getValue() );
-        if ( null != globalTraceValue && globalTraceValue.equals( "true" ) && null != value && value.equals( "true" ) )
+        if ( null != value && value.equals( "true" ) )
         {
             String timingValue = Platform.getDebugOption( PLUGIN_GLOBAL_TRACE_OPTION + "/timing" );
             if ( null != timingValue && timingValue.equals( "true" ) )
