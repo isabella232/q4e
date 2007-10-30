@@ -96,7 +96,7 @@
         <executions>
           <execution>
             <id>copy-dependencies</id>
-            <phase>generate-sources</phase>
+            <phase>package</phase>
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
@@ -108,7 +108,7 @@
             <id>copy-src-dependencies</id>
             <phase>package</phase>
             <goals>
-              <goal>generate-sources</goal>
+              <goal>copy-dependencies</goal>
             </goals>
             <configuration>
               <classifier>sources</classifier>
@@ -175,14 +175,6 @@
             <Include-Resource>LICENSE.txt,NOTICE.txt</Include-Resource>
           </instructions>
         </configuration>
-        <executions>
-          <execution>
-            <phase>genrate-sources</phase>
-            <goals>
-              <goal>manifest</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 <!--
       <plugin>
