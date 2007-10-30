@@ -2,7 +2,7 @@
 <feature
       id="org.apache.maven.feature"
       label="%featureName"
-      version="2.1.0.571188-shaded"
+      version="2.1.0.587165"
       provider-name="%providerName">
 
    <description>
@@ -21,11 +21,29 @@
       <update label="%updateSiteName" url="http://q4e.googlecode.com/svn/trunk/updatesite"/>
    </url>
 
+   <requires>
+      <import plugin="com.jcraft.jsch"/>
+   </requires>
+
    <plugin
          id="org.apache.maven.embedder"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="2.1.0.587793"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.cli"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.v200709131616"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.lang"
+         download-size="0"
+         install-size="0"
+         version="2.1.0.v200709131643"
          unpack="false"/>
 
 </feature>
