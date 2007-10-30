@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: ECF Provider for Maven Filetransfer
 Bundle-SymbolicName: org.devzuz.q.ecf.provider.filetransfer;singleton:=true
-Bundle-Version: 0.2.4.qualifier
+Bundle-Version: 0.3.0.qualifier
 Bundle-Activator: org.devzuz.q.internal.ecf.provider.filetransfer.Activator
 Require-Bundle: org.eclipse.ecf.filetransfer;visibility:=reexport,
  org.eclipse.ecf.identity;visibility:=reexport,
