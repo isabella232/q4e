@@ -27,7 +27,7 @@
    <feature url="features/org.devzuz.q.feature_0.2.4.200710310008.jar" id="org.devzuz.q.feature" version="0.2.4.200710310008">
       <category name="Community"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature_0.2.4.200710301430.jar" id="org.devzuz.q.feature" version="0.2.4.200710310009">
+   <feature url="features/org.devzuz.q.feature_0.2.4.200710310009.jar" id="org.devzuz.q.feature" version="0.2.4.200710310009">
       <category name="Community"/>
    </feature>
    <category-def name="Community" label="Community"/>
