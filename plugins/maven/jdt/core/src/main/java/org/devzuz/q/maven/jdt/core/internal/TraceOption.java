@@ -25,7 +25,9 @@ public enum TraceOption
     }
 
     /**
-     * Obtains the string value of the trace option. Does not include the plug-in ID part.
+     * Obtains the string value of the trace option, including the plug-in ID and global debug prefix.
+     * 
+     * For example: <code>org.devzuz.q.maven.jdt.core/debug/classpathUpdate</code>
      * 
      * @return the string value of the trace option.
      */
