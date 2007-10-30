@@ -20,7 +20,7 @@
   </parent>
   <groupId>org.apache.maven</groupId>
   <artifactId>embedder</artifactId>
-  <version>2.1.0-586566</version>
+  <version>2.1.0-587793</version>
   <packaging>bundle</packaging>
   <name>Q for Eclipse Maven Embedder</name>
   <description>Maven Embedder for the Q project</description>
@@ -44,6 +44,12 @@
     <manifestdir>${basedir}/META-INF</manifestdir>
   </properties>
 
+  <!-- it requires 2.0.8 for the sources to be copied
+  <prerequisites>
+    <maven>2.0.8</maven>
+  </prerequisites>
+  -->
+
   <build>
 <!-- doesn't work with bundle plugin see https://issues.apache.org/jira/browse/FELIX-400
     <resources>
@@ -65,9 +71,15 @@
           <filesets>
             <fileset>
               <directory>${libdir}</directory>
+              <includes>
+                <include>*.jar</include>
+              </includes>
             </fileset>
             <fileset>
               <directory>${srcdir}</directory>
+              <includes>
+                <include>*.jar</include>
+              </includes>
             </fileset>
             <fileset>
               <directory>${manifestdir}</directory>
@@ -84,7 +96,7 @@
         <executions>
           <execution>
             <id>copy-dependencies</id>
-            <phase>package</phase>
+            <phase>generate-sources</phase>
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
@@ -96,7 +108,7 @@
             <id>copy-src-dependencies</id>
             <phase>package</phase>
             <goals>
-              <goal>unpack-dependencies</goal>
+              <goal>generate-sources</goal>
             </goals>
             <configuration>
               <classifier>sources</classifier>
@@ -137,8 +149,10 @@
         <configuration>
           <manifestLocation>${manifestdir}</manifestLocation>
           <instructions>
+            <!-- org.apache.maven.embedder.* should not be needed but it gets imported if not -->
             <_exportcontents>
                 !org.apache.maven.doxia..svn,
+                org.apache.maven.embedder.*;-noimport:=true,
                 org.apache.maven.*;-noimport:=true,
                 org.codehaus.plexus.util.xml.*;-noimport:=true,
                 !org.codehaus.plexus.util.*,
@@ -161,6 +175,14 @@
             <Include-Resource>LICENSE.txt,NOTICE.txt</Include-Resource>
           </instructions>
         </configuration>
+        <executions>
+          <execution>
+            <phase>genrate-sources</phase>
+            <goals>
+              <goal>manifest</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
 <!--
       <plugin>

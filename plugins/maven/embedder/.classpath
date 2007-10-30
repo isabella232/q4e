@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="maven-embedder-2.1-571188-shaded.jar" sourcepath="maven-2.1-571188-sources.jar"/>
+    <classpathentry exported="true" kind="lib" path="lib/doxia-sink-api-1.0-alpha-9.jar" sourcepath="sources/doxia-sink-api-1.0-alpha-9-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/jtidy-4aug2000r7-dev.jar" sourcepath="sources/jtidy-4aug2000r7-dev-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/maven-artifact-3.0-SNAPSHOT.jar" sourcepath="sources/maven-artifact-3.0-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/maven-build-context-2.1-SNAPSHOT.jar" sourcepath="sources/maven-build-context-2.1-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/maven-core-2.1-SNAPSHOT.jar" sourcepath="sources/maven-core-2.1-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/maven-embedder-2.1-SNAPSHOT.jar" sourcepath="sources/maven-embedder-2.1-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/maven-lifecycle-2.1-SNAPSHOT.jar" sourcepath="sources/maven-lifecycle-2.1-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/maven-model-2.1-SNAPSHOT.jar" sourcepath="sources/maven-model-2.1-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/maven-plugin-api-2.1-SNAPSHOT.jar" sourcepath="sources/maven-plugin-api-2.1-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/maven-profile-2.1-SNAPSHOT.jar" sourcepath="sources/maven-profile-2.1-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/maven-project-2.1-SNAPSHOT.jar" sourcepath="sources/maven-project-2.1-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/maven-reporting-api-2.1-SNAPSHOT.jar" sourcepath="sources/maven-reporting-api-2.1-SNAPSHOT-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/plexus-classworlds-1.2-alpha-10.jar" sourcepath="sources/plexus-classworlds-1.2-alpha-10-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/plexus-component-api-1.0-alpha-16.jar" sourcepath="sources/plexus-component-api-1.0-alpha-16-sources.jar"/>
+    <classpathentry exported="true" kind="lib" path="lib/plexus-container-default-1.0-alpha-34.jar" sourcepath="sources/plexus-container-default-1.0-alpha-34-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/plexus-interactivity-api-1.0-alpha-6.jar" sourcepath="sources/plexus-interactivity-api-1.0-alpha-6-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/plexus-utils-1.4.5.jar" sourcepath="sources/plexus-utils-1.4.5-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wagon-file-1.0-beta-2.jar" sourcepath="sources/wagon-file-1.0-beta-2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wagon-http-lightweight-1.0-beta-2.jar" sourcepath="sources/wagon-http-lightweight-1.0-beta-2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wagon-http-shared-1.0-beta-2.jar" sourcepath="sources/wagon-http-shared-1.0-beta-2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wagon-provider-api-1.0-beta-2.jar" sourcepath="sources/wagon-provider-api-1.0-beta-2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wagon-ssh-1.0-beta-2.jar" sourcepath="sources/wagon-ssh-1.0-beta-2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wagon-ssh-common-1.0-beta-2.jar" sourcepath="sources/wagon-ssh-common-1.0-beta-2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/wagon-ssh-external-1.0-beta-2.jar" sourcepath="sources/wagon-ssh-external-1.0-beta-2-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="target/classes"/>
