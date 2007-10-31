@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.devzuz.q.maven.jdt.ui;singleton:=true
 Bundle-Version: 0.3.0.qualifier
 Bundle-Activator: org.devzuz.q.maven.jdt.ui.Activator
 Bundle-Localization: plugin
-Require-Bundle: org.devzuz.q.maven.jdt.core;bundle-version="[0.2.3,0.3.0)";visibility:=reexport,
+Require-Bundle: org.devzuz.q.maven.jdt.core;bundle-version="[0.3.0,0.4.0)";visibility:=reexport,
  org.eclipse.jdt.ui;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.eclipse.debug.ui;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.eclipse.ui.forms;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
