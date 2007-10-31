@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Created-By: 1.5.0_10 (Sun Microsystems Inc.)
 Import-Package: com.jcraft.jsch,org.apache.commons.cli;version="[1.0.0
- ,2.0.0)",org.w3c.dom,org.xml.sax
+ ,2.0.0)",org.w3c.dom,org.w3c.tidy
 Embed-Transitive: true
 Embed-StripGroup: true
 Include-Resource: LICENSE.txt,NOTICE.txt,lib/maven-profile-2.1-SNAPSHO
@@ -561,8 +561,7 @@ Private-Package: lib,licenses,org.codehaus.classworlds,org.codehaus.do
  xia.sink,org.codehaus.plexus.util,org.codehaus.plexus.util.cli,org.co
  dehaus.plexus.util.cli.shell,org.codehaus.plexus.util.dag,org.codehau
  s.plexus.util.interpolation,org.codehaus.plexus.util.introspection,or
- g.codehaus.plexus.util.reflection,org.w3c.dom,org.w3c.tidy,org.xml.sa
- x
+ g.codehaus.plexus.util.reflection
 Embed-Directory: lib
 Bundle-Vendor: The Apache Software Foundation
 Bundle-ManifestVersion: 2
