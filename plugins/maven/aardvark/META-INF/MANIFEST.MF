@@ -1,8 +1,8 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Aardvark Plug-in
-Bundle-SymbolicName: org.devzuz.q.aardvark
-Bundle-Version: 1.0.0
+Bundle-Name: Maven Aardvark
+Bundle-SymbolicName: org.devzuz.q.maven.aardvark
+Bundle-Version: 0.3.0.qualifier
 Bundle-ClassPath: aardvark-core-1.0-SNAPSHOT.jar,
  aardvark-ant-1.0-SNAPSHOT.jar,
  maven-shared-jar-1.0.jar,
@@ -12,4 +12,5 @@ Export-Package: org.apache.maven.aardvark.ant,
  org.apache.maven.aardvark.converter,
  org.apache.maven.aardvark.converter.ant,
  org.apache.maven.aardvark.converter.maven1
-Require-Bundle: org.apache.maven.embedder
+Require-Bundle: org.apache.maven.embedder;bundle-version="2.1.0.587793";visibility:=reexport
+Bundle-Vendor: DevZuz
