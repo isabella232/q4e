@@ -90,12 +90,9 @@ public class ImportProjectJob extends WorkspaceJob
             }
             catch ( CoreException e )
             {
-                Activator.getLogger().log( "Unable to import project from " + pomDescriptor.getBaseDirectory(), e );
-                // Issue 117: CoreException might have a null cause.
-                Throwable cause = e.getCause();
-                status =
-                    new Status( IStatus.ERROR, Activator.PLUGIN_ID,
-                                cause != null ? cause.getMessage() : e.getMessage(), e );
+                String s = "Unable to import project from " + pomDescriptor.getBaseDirectory();
+                Activator.getLogger().log( s, e );
+                status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, s, e );
             }
 
             subProgressMonitor.done();
