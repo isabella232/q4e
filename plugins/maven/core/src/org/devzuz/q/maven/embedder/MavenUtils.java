@@ -15,7 +15,6 @@ import org.apache.maven.model.Model;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.embedder.internal.EclipseMaven;
 import org.devzuz.q.maven.embedder.internal.EclipseMavenArtifact;
-import org.devzuz.q.maven.embedder.internal.EclipseMavenProject;
 
 public class MavenUtils
 {
