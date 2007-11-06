@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collections;
 
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage;
@@ -67,7 +68,10 @@ public class MavenArchetypeProviderManager
             archetypeMap.putAll( getArchetypes( source.getKey(), source.getValue() , timeout ) );
         }
         
-        return archetypeMap;
+        if( archetypeMap.size() > 0 )
+            return archetypeMap;
+        
+        return getDefaultArchetypes();
     }
 
     public static Map<String, Archetype> getArchetypes( String source , String kind , int timeout )
@@ -95,20 +99,20 @@ public class MavenArchetypeProviderManager
             else
             {
                 // No handler for the requested provider kind, default to hardcoded
-                return getDefaultArchetypes();
+                return Collections.emptyMap();
             }
         }
         catch ( IOException e )
         {
             // Exceptions, default to hardcoded
             MavenUiActivator.getLogger().error( "IOException in MavenArchetypeProviderManager.getArchetypes() - " + e.getMessage() );
-            return getDefaultArchetypes();
+            return Collections.emptyMap();
         }
         catch( CoreException e )
         {
             // Exceptions, default to hardcoded
             MavenUiActivator.getLogger().error( "CoreException in MavenArchetypeProviderManager.getArchetypes() - " + e.getStatus().getException().getMessage() );
-            return getDefaultArchetypes();
+            return Collections.emptyMap();
         }
 
         return archetypeMap;

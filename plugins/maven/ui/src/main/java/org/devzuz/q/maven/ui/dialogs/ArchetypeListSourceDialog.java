@@ -157,7 +157,7 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
         {
             URL url = new URL( strURL );
             String protocol = url.getProtocol();
-            return "http".equals( protocol ) || "https".equals( protocol ) || "ftp".equals( protocol );
+            return "http".equals( protocol ) || "https".equals( protocol ) || "ftp".equals( protocol ) || "file".equals( protocol );
         }
         catch ( MalformedURLException e )
         {
