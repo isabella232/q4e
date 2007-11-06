@@ -19,7 +19,7 @@ import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.projectimport.ScanImportProjectJob;
 import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
-import org.devzuz.q.maven.wizard.Activator;
+import org.devzuz.q.maven.wizard.MavenWizardActivator;
 import org.devzuz.q.maven.wizard.postprocessor.core.IMavenProjectPostprocessor;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -137,7 +137,7 @@ public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
                 catch ( CoreException e )
                 {
                     // TODO: Throw an exception and inform the user
-                    Activator.log( "Could not resolve the Maven Project.", e );
+                    MavenWizardActivator.log( "Could not resolve the Maven Project.", e );
                 }
             }
         }

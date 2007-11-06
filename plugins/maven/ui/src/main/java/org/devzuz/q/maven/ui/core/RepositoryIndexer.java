@@ -26,7 +26,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.WildcardQuery;
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 public class RepositoryIndexer
@@ -117,7 +117,7 @@ public class RepositoryIndexer
                 catch ( IOException e )
                 {
                     // TODO : what to do here?
-                    Activator.getLogger().error("In RepositoryIndexer.index() - " + e.toString() );
+                    MavenUiActivator.getLogger().error("In RepositoryIndexer.index() - " + e.toString() );
                 }
             }
 
@@ -186,7 +186,7 @@ public class RepositoryIndexer
         catch ( IOException e )
         {
             // TODO : ?
-            Activator.getLogger().error("In RepositoryIndexer.processPom() - " + e.toString() );
+            MavenUiActivator.getLogger().error("In RepositoryIndexer.processPom() - " + e.toString() );
         }
         finally
         {
@@ -197,7 +197,7 @@ public class RepositoryIndexer
             catch ( IOException e )
             {
                 // TODO : ?
-                Activator.getLogger().error("In RepositoryIndexer.processPom() - " + e.toString() );
+                MavenUiActivator.getLogger().error("In RepositoryIndexer.processPom() - " + e.toString() );
             }
         }
     }

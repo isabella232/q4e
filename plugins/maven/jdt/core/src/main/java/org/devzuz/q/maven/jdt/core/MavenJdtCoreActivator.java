@@ -24,7 +24,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends Plugin
+public class MavenJdtCoreActivator extends Plugin
 {
 
     /** The plug-in ID */
@@ -46,7 +46,7 @@ public class Activator extends Plugin
     public static final String MARKER_ID = PLUGIN_ID + ".pomproblemmarker";
 
     // The shared instance
-    private static Activator plugin;
+    private static MavenJdtCoreActivator plugin;
 
     private IResourceChangeListener iResourceListener;
 
@@ -55,7 +55,7 @@ public class Activator extends Plugin
     /**
      * The constructor
      */
-    public Activator()
+    public MavenJdtCoreActivator()
     {
         plugin = this;
     }
@@ -88,7 +88,7 @@ public class Activator extends Plugin
      * 
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static MavenJdtCoreActivator getDefault()
     {
         return plugin;
     }

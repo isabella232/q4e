@@ -13,7 +13,7 @@ import java.util.Properties;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.jdt.ui.Activator;
+import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.devzuz.q.maven.ui.views.MavenEventView;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -127,12 +127,12 @@ public class MavenLaunchConfigurationDelegate implements ILaunchConfigurationDel
             }
             else
             {
-                Activator.getLogger().info( "Unable to open Maven Event View, IWorkbenchPage is null" );
+                MavenJdtUiActivator.getLogger().info( "Unable to open Maven Event View, IWorkbenchPage is null" );
             }
         }
         else
         {
-            Activator.getLogger().info( "Unable to open Maven Event View, IWorkbenchWindow is null" );
+            MavenJdtUiActivator.getLogger().info( "Unable to open Maven Event View, IWorkbenchWindow is null" );
         }
     }
 
@@ -144,7 +144,7 @@ public class MavenLaunchConfigurationDelegate implements ILaunchConfigurationDel
         }
         catch ( PartInitException e )
         {
-            Activator.getLogger().log( "Unable to open Maven Event View", e );
+            MavenJdtUiActivator.getLogger().log( "Unable to open Maven Event View", e );
             return;
         }
     }

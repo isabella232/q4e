@@ -10,7 +10,7 @@ package org.devzuz.q.maven.ui.dialogs;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.core.archetypeprovider.IArchetypeListProvider;
 import org.devzuz.q.maven.ui.core.archetypeprovider.MavenArchetypeProviderManager;
@@ -178,6 +178,6 @@ public class ArchetypeListSourceDialog extends AbstractResizableDialog
     @Override
     protected Preferences getDialogPreferences()
     {
-        return Activator.getDefault().getPluginPreferences();
+        return MavenUiActivator.getDefault().getPluginPreferences();
     }
 }

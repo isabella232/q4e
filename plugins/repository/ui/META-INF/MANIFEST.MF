@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Repository UI
 Bundle-SymbolicName: org.devzuz.q.repository.ui
 Bundle-Version: 0.3.0.qualifier
-Bundle-Activator: org.devzuz.q.repository.ui.Activator
+Bundle-Activator: org.devzuz.q.repository.ui.QRepositoryUiActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui;visibility:=reexport,
  org.eclipse.core.runtime;visibility:=reexport

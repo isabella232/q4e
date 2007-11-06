@@ -9,7 +9,7 @@ package org.devzuz.q.maven.jdt.core.builder;
 import java.util.Map;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
-import org.devzuz.q.maven.jdt.core.Activator;
+import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
 import org.devzuz.q.maven.jdt.core.exception.MavenCoreProblemMarker;
@@ -37,7 +37,7 @@ public class MavenIncrementalBuilder
     extends IncrementalProjectBuilder
 {
 
-    public static final String MAVEN_INCREMENTAL_BUILDER_ID = Activator.PLUGIN_ID + ".mavenIncrementalBuilder"; //$NON-NLS-1$
+    public static final String MAVEN_INCREMENTAL_BUILDER_ID = MavenJdtCoreActivator.PLUGIN_ID + ".mavenIncrementalBuilder"; //$NON-NLS-1$
  
     
     @Override
@@ -79,7 +79,7 @@ public class MavenIncrementalBuilder
         }
         catch ( CoreException ce )
         {
-            Activator.getLogger().log( ce );
+            MavenJdtCoreActivator.getLogger().log( ce );
         }
 
         new UpdateClasspathJob( project ).schedule();
@@ -98,7 +98,7 @@ public class MavenIncrementalBuilder
             }
             catch ( JavaModelException e )
             {
-                Activator.getLogger().log( e );
+                MavenJdtCoreActivator.getLogger().log( e );
             }
         }
         return null;

@@ -12,7 +12,7 @@ import java.util.Collection;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
-import org.devzuz.q.maven.jdt.ui.Activator;
+import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
@@ -106,7 +106,7 @@ public class AbstractMavenAction
         }
         catch ( CoreException e )
         {
-            Activator.getLogger().log( e );
+            MavenJdtUiActivator.getLogger().log( e );
         }
     }
 

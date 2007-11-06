@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
-import org.devzuz.q.maven.wizard.Activator;
+import org.devzuz.q.maven.wizard.MavenWizardActivator;
 import org.devzuz.q.maven.wizard.core.Maven2ArchetypeManager;
 import org.devzuz.q.maven.wizard.core.internal.MavenWizardContext;
 import org.devzuz.q.maven.wizard.pages.Maven2ProjectArchetypeInfoPage;
@@ -101,14 +101,14 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
                     }
                     catch ( CoreException e )
                     {
-                        Activator.getLogger().log( "Error executing the archetype", e );
+                        MavenWizardActivator.getLogger().log( "Error executing the archetype", e );
                     }
                 }
             } );
         }
         catch ( InvocationTargetException e )
         {
-            Activator.getLogger().log( "Error finalizing the wizard", e );
+            MavenWizardActivator.getLogger().log( "Error finalizing the wizard", e );
             return false;
         }
         catch ( InterruptedException e )
@@ -193,7 +193,7 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
         }
         catch ( CoreException e )
         {
-            Activator.getLogger().log( e );
+            MavenWizardActivator.getLogger().log( e );
         }
     }
 }

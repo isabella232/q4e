@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.Collection;
 
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
-import org.devzuz.q.maven.jdt.ui.Activator;
+import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -40,7 +40,7 @@ public class ScanImportProjectJob extends Job
         }
         catch ( InterruptedException e )
         {
-            return new Status( IStatus.CANCEL, Activator.PLUGIN_ID, "Cancelled" );
+            return new Status( IStatus.CANCEL, MavenJdtUiActivator.PLUGIN_ID, "Cancelled" );
         }
 
         // ImportProjectsRunnable importProjectsRunnable = new ImportProjectsRunnable( pomDescriptors );

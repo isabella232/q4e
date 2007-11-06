@@ -3,7 +3,7 @@ package org.devzuz.q.maven.embedder.internal;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import org.devzuz.q.maven.embedder.Activator;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.QCoreException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -22,7 +22,7 @@ public class QCoreExceptionTest extends TestCase
         super.setUp();
         Exception e = new RuntimeException( MSG );
         coreException =
-            new RuntimeException( new QCoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID,
+            new RuntimeException( new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID,
                                                                  "Unable to read project", e ) ) );
     }
 

@@ -1,12 +1,12 @@
 package org.devzuz.q.maven.ui.preferences;
 
 import org.devzuz.q.maven.embedder.IMaven;
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.jface.preference.IPreferenceStore;
 
 public class MavenPreferenceManager
 {
-    public static final String ARCHETYPE_PAGE_CONN_TIMEOUT = Activator.PLUGIN_ID + ".archetypeConnTimeout";
+    public static final String ARCHETYPE_PAGE_CONN_TIMEOUT = MavenUiActivator.PLUGIN_ID + ".archetypeConnTimeout";
     public static final int    ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT = 30000;
     
     private static MavenPreferenceManager mavenPreferenceManager;
@@ -24,7 +24,7 @@ public class MavenPreferenceManager
     
     private MavenPreferenceManager()
     {
-        preferenceStore = Activator.getDefault().getPreferenceStore();
+        preferenceStore = MavenUiActivator.getDefault().getPreferenceStore();
     }
     
     public String getArchetypeSourceList()

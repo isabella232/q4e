@@ -14,7 +14,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator
+public class QBundleClasspathActivator
     extends Plugin
 {
 
@@ -22,12 +22,12 @@ public class Activator
     public static final String PLUGIN_ID = "org.devzuz.q.bundle.classpath";
 
     // The shared instance
-    private static Activator plugin;
+    private static QBundleClasspathActivator plugin;
 
     /**
      * The constructor
      */
-    public Activator()
+    public QBundleClasspathActivator()
     {
     }
 
@@ -60,7 +60,7 @@ public class Activator
      * 
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static QBundleClasspathActivator getDefault()
     {
         return plugin;
     }

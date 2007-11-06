@@ -12,7 +12,7 @@ import java.util.Collections;
 
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
-import org.devzuz.q.maven.jdt.ui.Activator;
+import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
@@ -86,13 +86,13 @@ public class ImportProjectJob extends WorkspaceJob
             try
             {
                 createMavenProject( pomDescriptor, new SubProgressMonitor( subProgressMonitor, 100 ) );
-                status = new Status( IStatus.OK, Activator.PLUGIN_ID, "Success" );
+                status = new Status( IStatus.OK, MavenJdtUiActivator.PLUGIN_ID, "Success" );
             }
             catch ( CoreException e )
             {
                 String s = "Unable to import project from " + pomDescriptor.getBaseDirectory();
-                Activator.getLogger().log( s, e );
-                status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, s, e );
+                MavenJdtUiActivator.getLogger().log( s, e );
+                status = new Status( IStatus.ERROR, MavenJdtUiActivator.PLUGIN_ID, s, e );
             }
 
             subProgressMonitor.done();
@@ -129,7 +129,7 @@ public class ImportProjectJob extends WorkspaceJob
         IProject project = root.getProject( projectName );
         if ( project.exists() )
         {
-            Activator.getLogger().error( "Project " + project + " already exists in the workspace" );
+            MavenJdtUiActivator.getLogger().error( "Project " + project + " already exists in the workspace" );
             return;
         }
 

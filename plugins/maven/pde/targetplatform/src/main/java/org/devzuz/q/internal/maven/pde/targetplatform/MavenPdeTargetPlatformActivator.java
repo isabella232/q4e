@@ -15,7 +15,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator
+public class MavenPdeTargetPlatformActivator
     extends AbstractUIPlugin
 {
 
@@ -23,12 +23,12 @@ public class Activator
     public static final String PLUGIN_ID = "org.devzuz.q.maven.pde.targetplatform"; //$NON-NLS-1$
 
     // The shared instance
-    private static Activator plugin;
+    private static MavenPdeTargetPlatformActivator plugin;
 
     /**
      * The constructor
      */
-    public Activator()
+    public MavenPdeTargetPlatformActivator()
     {
     }
 
@@ -59,7 +59,7 @@ public class Activator
      *
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static MavenPdeTargetPlatformActivator getDefault()
     {
         return plugin;
     }

@@ -7,7 +7,7 @@
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.jdt.core.Activator;
+import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -52,7 +52,7 @@ public class UpdateClasspathJob
             // ignore
         }
 
-        return new Status( IStatus.OK, Activator.PLUGIN_ID, "Updated classpath container" );
+        return new Status( IStatus.OK, MavenJdtCoreActivator.PLUGIN_ID, "Updated classpath container" );
     }
 
 }

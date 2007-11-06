@@ -6,7 +6,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage;
 import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.core.runtime.CoreException;
@@ -79,7 +79,7 @@ public class MavenArchetypeProviderManager
         {
             if( provider.getProviderName().equals( kind ) )
             {
-                Activator.getLogger().info( "Using the " + kind + " archetype provider on " + source );
+                MavenUiActivator.getLogger().info( "Using the " + kind + " archetype provider on " + source );
                 listProvider = provider;
             }
         }
@@ -101,13 +101,13 @@ public class MavenArchetypeProviderManager
         catch ( IOException e )
         {
             // Exceptions, default to hardcoded
-            Activator.getLogger().error( "IOException in MavenArchetypeProviderManager.getArchetypes() - " + e.getMessage() );
+            MavenUiActivator.getLogger().error( "IOException in MavenArchetypeProviderManager.getArchetypes() - " + e.getMessage() );
             return getDefaultArchetypes();
         }
         catch( CoreException e )
         {
             // Exceptions, default to hardcoded
-            Activator.getLogger().error( "CoreException in MavenArchetypeProviderManager.getArchetypes() - " + e.getStatus().getException().getMessage() );
+            MavenUiActivator.getLogger().error( "CoreException in MavenArchetypeProviderManager.getArchetypes() - " + e.getStatus().getException().getMessage() );
             return getDefaultArchetypes();
         }
 
@@ -124,7 +124,7 @@ public class MavenArchetypeProviderManager
         }
         catch ( CoreException e1 )
         {
-            Activator.getLogger().log( "Unable to find any archetypes", e1 );
+            MavenUiActivator.getLogger().log( "Unable to find any archetypes", e1 );
         }
         
         return archetypeMap;

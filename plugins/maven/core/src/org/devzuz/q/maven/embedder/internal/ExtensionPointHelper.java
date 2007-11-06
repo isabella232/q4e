@@ -10,7 +10,7 @@ package org.devzuz.q.maven.embedder.internal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.devzuz.q.maven.embedder.Activator;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.Platform;
@@ -37,19 +37,19 @@ public class ExtensionPointHelper
      * 
      * @param activator
      */
-    public static void resolveExtensionPoints( Activator activator )
+    public static void resolveExtensionPoints( MavenCoreActivator activator )
     {
         parseListeners( activator );
 
     }
 
-    private static void parseListeners( Activator activator )
+    private static void parseListeners( MavenCoreActivator activator )
     {
-        if ( Platform.getExtensionRegistry().getExtensionPoint( Activator.PLUGIN_ID, MAVEN_LISTENERS ) != null )
+        if ( Platform.getExtensionRegistry().getExtensionPoint( MavenCoreActivator.PLUGIN_ID, MAVEN_LISTENERS ) != null )
         {
 
             IExtension[] extensions =
-                Platform.getExtensionRegistry().getExtensionPoint( Activator.PLUGIN_ID, MAVEN_LISTENERS ).getExtensions();
+                Platform.getExtensionRegistry().getExtensionPoint( MavenCoreActivator.PLUGIN_ID, MAVEN_LISTENERS ).getExtensions();
             List<MavenListener> found = new ArrayList<MavenListener>( 20 );
 
             for ( int i = 0; i < extensions.length; i++ )

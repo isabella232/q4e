@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -68,7 +68,7 @@ public class RepositoryIndexerManager
             }
             catch ( IOException e )
             {
-                status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, -1, "Indexing error", e );
+                status = new Status( IStatus.ERROR, MavenUiActivator.PLUGIN_ID, -1, "Indexing error", e );
                 return status;
             }
         }
@@ -134,7 +134,7 @@ public class RepositoryIndexerManager
             }
             catch ( IOException e )
             {
-                status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, -1, "Indexing error", e );
+                status = new Status( IStatus.ERROR, MavenUiActivator.PLUGIN_ID, -1, "Indexing error", e );
                 return status;
             }
         }

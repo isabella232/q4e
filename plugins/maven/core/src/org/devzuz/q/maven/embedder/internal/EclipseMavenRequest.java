@@ -9,7 +9,7 @@ package org.devzuz.q.maven.embedder.internal;
 
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
-import org.devzuz.q.maven.embedder.Activator;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -57,11 +57,11 @@ public class EclipseMavenRequest extends Job
             executionResult = new EclipseMavenExecutionResult( status );
             if ( ( status.getExceptions() != null ) && ( status.getExceptions().size() > 0 ) )
             {
-                return new MavenExecutionStatus( IStatus.ERROR, Activator.PLUGIN_ID, "Errors during Maven execution",
+                return new MavenExecutionStatus( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID, "Errors during Maven execution",
                                                  executionResult );
             }
 
-            return new MavenExecutionStatus( IStatus.OK, Activator.PLUGIN_ID, "Success", executionResult );
+            return new MavenExecutionStatus( IStatus.OK, MavenCoreActivator.PLUGIN_ID, "Success", executionResult );
         }
         finally
         {

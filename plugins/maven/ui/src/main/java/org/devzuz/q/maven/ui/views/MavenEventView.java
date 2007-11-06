@@ -15,7 +15,7 @@ import org.devzuz.q.maven.embedder.IMavenEvent;
 import org.devzuz.q.maven.embedder.IMavenEventEnd;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.Severity;
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.dialogs.FilterDialog;
 import org.eclipse.jface.action.Action;
@@ -239,9 +239,9 @@ public class MavenEventView extends ViewPart implements Observer
         };
         copyToClipboardAction.setEnabled( true );
         copyToClipboardAction.setToolTipText( Messages.MavenEventView_CopyToClipboard );
-        copyToClipboardAction.setImageDescriptor( Activator.getDefault().getWorkbench().getSharedImages().getImageDescriptor(
+        copyToClipboardAction.setImageDescriptor( MavenUiActivator.getDefault().getWorkbench().getSharedImages().getImageDescriptor(
                                                                                                                               ISharedImages.IMG_TOOL_COPY ) );
-        copyToClipboardAction.setDisabledImageDescriptor( Activator.getDefault().getWorkbench().getSharedImages().getImageDescriptor(
+        copyToClipboardAction.setDisabledImageDescriptor( MavenUiActivator.getDefault().getWorkbench().getSharedImages().getImageDescriptor(
                                                                                                                                       ISharedImages.IMG_TOOL_COPY_DISABLED ) );
 
         controlScrollingAction = new Action( Messages.MavenEventView_ScrollLock, Action.AS_CHECK_BOX )

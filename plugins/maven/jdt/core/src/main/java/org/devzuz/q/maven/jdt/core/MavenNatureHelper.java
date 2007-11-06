@@ -18,7 +18,7 @@ import org.eclipse.jdt.core.JavaCore;
 public class MavenNatureHelper
 {
 
-    private static String NATURE_ID = Activator.PLUGIN_ID + ".mavenNature";
+    private static String NATURE_ID = MavenJdtCoreActivator.PLUGIN_ID + ".mavenNature";
 
     public static void addNature( IProject project ) throws CoreException
     {

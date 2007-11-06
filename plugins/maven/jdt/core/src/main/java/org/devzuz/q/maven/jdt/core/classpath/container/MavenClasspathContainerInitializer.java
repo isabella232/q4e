@@ -6,7 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
-import org.devzuz.q.maven.jdt.core.Activator;
+import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -35,7 +35,7 @@ public class MavenClasspathContainerInitializer extends ClasspathContainerInitia
     {
         if ( containerPath.equals( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH ) )
         {
-            Activator.trace( TraceOption.CLASSPATH_UPDATE, "Initializing classpath for ", javaProject );
+            MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Initializing classpath for ", javaProject );
 
             IProject project = javaProject.getProject();
 

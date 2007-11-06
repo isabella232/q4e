@@ -28,7 +28,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.QCoreException;
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.actions.helper.GraphHelper;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -92,15 +92,15 @@ public class DependencyGraphDataSource implements IDependencyVisualSource
         }
         catch ( ParserConfigurationException e )
         {
-            throw new QCoreException(new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Unable to read data source", e ));
+            throw new QCoreException(new Status( IStatus.ERROR, MavenUiActivator.PLUGIN_ID, "Unable to read data source", e ));
         }
         catch ( TransformerFactoryConfigurationError e )
         {
-            throw new QCoreException(new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Unable to read data source", e ));
+            throw new QCoreException(new Status( IStatus.ERROR, MavenUiActivator.PLUGIN_ID, "Unable to read data source", e ));
         }
         catch ( TransformerException e )
         {
-            throw new QCoreException(new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Unable to read data source", e ));
+            throw new QCoreException(new Status( IStatus.ERROR, MavenUiActivator.PLUGIN_ID, "Unable to read data source", e ));
         }
         
         return instream;

@@ -8,18 +8,18 @@
 
 package org.devzuz.q.maven.jdt.core.exception;
 
-import org.devzuz.q.maven.jdt.core.Activator;
+import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 
 /**
- * @deprecated use {@link Activator#MARKER_ID}
+ * @deprecated use {@link MavenJdtCoreActivator#MARKER_ID}
  */
 public class MavenCoreProblemMarker
 {
     /**
-     * @deprecated use {@link Activator#MARKER_ID}
+     * @deprecated use {@link MavenJdtCoreActivator#MARKER_ID}
      */
     public static String getMavenPOMMarker()
     {
-        return Activator.MARKER_ID;
+        return MavenJdtCoreActivator.MARKER_ID;
     }
 }

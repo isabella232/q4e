@@ -20,7 +20,7 @@ import org.apache.maven.wagon.UnsupportedProtocolException;
 import org.apache.maven.wagon.authentication.AuthenticationInfo;
 import org.apache.maven.wagon.proxy.ProxyInfo;
 import org.apache.maven.wagon.repository.Repository;
-import org.devzuz.q.internal.maven.wagon.Activator;
+import org.devzuz.q.internal.maven.wagon.MavenWagonActivator;
 import org.eclipse.core.runtime.Assert;
 
 public class MavenURLConnection
@@ -45,7 +45,7 @@ public class MavenURLConnection
         String protocol = getURL().getProtocol();
         try
         {
-            wagon = (IEclipseWagon) Activator.getDefault().getWagonManager().getEclipseWagon( protocol );
+            wagon = (IEclipseWagon) MavenWagonActivator.getDefault().getWagonManager().getEclipseWagon( protocol );
         }
         catch ( UnsupportedProtocolException e )
         {

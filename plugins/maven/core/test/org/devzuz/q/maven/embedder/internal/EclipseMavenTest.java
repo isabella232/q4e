@@ -4,7 +4,7 @@ import java.io.File;
 
 import junit.framework.TestCase;
 
-import org.devzuz.q.maven.embedder.Activator;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.test.EclipseMavenForTesting;
 
 public class EclipseMavenTest extends TestCase
@@ -19,7 +19,7 @@ public class EclipseMavenTest extends TestCase
         super.setUp();
         mavenInstance = new EclipseMavenForTesting();
         mavenInstance.start();
-        Activator activator = new Activator();
+        MavenCoreActivator activator = new MavenCoreActivator();
         activator.setMavenInstance( mavenInstance );
     }
 

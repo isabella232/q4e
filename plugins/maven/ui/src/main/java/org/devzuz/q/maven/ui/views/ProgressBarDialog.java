@@ -11,7 +11,7 @@ import java.util.Properties;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -79,7 +79,7 @@ public class ProgressBarDialog implements IRunnableWithProgress
             catch ( CoreException e )
             {
                 // TODO Auto-generated catch block
-                Activator.getLogger().error("In ProgressBarDialog.run() - " + e.toString() );
+                MavenUiActivator.getLogger().error("In ProgressBarDialog.run() - " + e.toString() );
             }
         }
 

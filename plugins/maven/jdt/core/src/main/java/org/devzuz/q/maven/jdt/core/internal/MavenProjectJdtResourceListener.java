@@ -15,7 +15,7 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.jdt.core.Activator;
+import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
@@ -68,9 +68,9 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         {
             IResource ires = event.getResource();
 
-            if ( Activator.getDefault().isDebugging() )
+            if ( MavenJdtCoreActivator.getDefault().isDebugging() )
             {
-                Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Processing change event for ", ires );
+                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Processing change event for ", ires );
             }
 
             if ( ires.getProject().isOpen() && ires.getProject().getFile( POM_XML ).exists() )
@@ -80,9 +80,9 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
             }
             else
             {
-                if ( Activator.getDefault().isDebugging() )
+                if ( MavenJdtCoreActivator.getDefault().isDebugging() )
                 {
-                    Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Skipping because it has no pom.xml: " + ires );
+                    MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Skipping because it has no pom.xml: " + ires );
                 }
             }
         }
@@ -101,7 +101,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                 }
                 catch ( CoreException e )
                 {
-                    Activator.getLogger().log( "Could not read nature for project: " + iproject, e );
+                    MavenJdtCoreActivator.getLogger().log( "Could not read nature for project: " + iproject, e );
                 }
                 if ( isMavenNatureEnabled )
                 {
@@ -113,9 +113,9 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                         {
                             if ( classpathEqualsProject( classPathEntry , iresProject ) )
                             {
-                                if ( Activator.getDefault().isDebugging() )
+                                if ( MavenJdtCoreActivator.getDefault().isDebugging() )
                                 {
-                                    Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for ",
+                                    MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for ",
                                                      iproject );
                                 }
                                 new UpdateClasspathJob( iproject ).schedule();
@@ -126,7 +126,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                     catch ( JavaModelException e )
                     {
                         // Could not get project's classpath, ignore and try next.
-                        Activator.getLogger().log( "Could not read classpath for project: " + iproject, e );
+                        MavenJdtCoreActivator.getLogger().log( "Could not read classpath for project: " + iproject, e );
                     }
                 }
             }

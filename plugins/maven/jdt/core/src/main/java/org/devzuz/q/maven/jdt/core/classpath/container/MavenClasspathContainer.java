@@ -23,7 +23,7 @@ import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.MavenUtils;
-import org.devzuz.q.maven.jdt.core.Activator;
+import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
@@ -106,7 +106,7 @@ public class MavenClasspathContainer implements IClasspathContainer
     {
         if ( mavenProject != null )
         {
-            Activator.trace( TraceOption.CLASSPATH_UPDATE, "Refreshing classpath for maven project ",
+            MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Refreshing classpath for maven project ",
                              mavenProject.getArtifactId() );
 
             this.project = mavenProject.getProject();
@@ -136,7 +136,7 @@ public class MavenClasspathContainer implements IClasspathContainer
      */
     public static MavenClasspathContainer newClasspath( IProject project, IProgressMonitor monitor )
     {
-        Activator.trace( TraceOption.CLASSPATH_UPDATE, "New classpath for project ", project.getName() );
+        MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "New classpath for project ", project.getName() );
 
         MavenClasspathContainer container = new MavenClasspathContainer( project );
 
@@ -177,7 +177,7 @@ public class MavenClasspathContainer implements IClasspathContainer
         }
         catch ( JavaModelException e )
         {
-            Activator.getLogger().log( e );
+            MavenJdtCoreActivator.getLogger().log( e );
         }
 
         return container;
@@ -323,9 +323,9 @@ public class MavenClasspathContainer implements IClasspathContainer
 
         if ( ( project != null ) && ( project.isOpen() ) )
         {
-            if ( Activator.getDefault().isDebugging() )
+            if ( MavenJdtCoreActivator.getDefault().isDebugging() )
             {
-                Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added as project dependency - "
+                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added as project dependency - "
                                 + project.getFullPath() );
             }
 
@@ -333,9 +333,9 @@ public class MavenClasspathContainer implements IClasspathContainer
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {
-            if ( Activator.getDefault().isDebugging() )
+            if ( MavenJdtCoreActivator.getDefault().isDebugging() )
             {
-                Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added as jar dependency - "
+                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added as jar dependency - "
                                 + artifact.getFile().getAbsolutePath() );
             }
 
@@ -346,7 +346,7 @@ public class MavenClasspathContainer implements IClasspathContainer
         }
         else
         {
-            Activator.trace( TraceOption.CLASSPATH_UPDATE, "The dependency ", artifact.getGroupId(), ":",
+            MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "The dependency ", artifact.getGroupId(), ":",
                              artifact.getArtifactId(), ":", artifact.getVersion(), " with type ", artifact.getType(),
                              " on project ", mavenProject, " does not require being added to the classpath." );
         }

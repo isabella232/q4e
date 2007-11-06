@@ -12,7 +12,7 @@ import org.eclipse.osgi.util.NLS;
 
 public class Messages
 {
-    private static final String BUNDLE_NAME = Activator.PLUGIN_ID + ".messages"; //$NON-NLS-1$
+    private static final String BUNDLE_NAME = MavenJdtUiActivator.PLUGIN_ID + ".messages"; //$NON-NLS-1$
 
     public static String MavenPomEditor_MavenPomEditor_BasicInformation;
 

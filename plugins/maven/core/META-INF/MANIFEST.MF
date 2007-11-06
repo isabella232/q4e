@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Maven Embedder Integration
 Bundle-SymbolicName: org.devzuz.q.maven.core;singleton:=true
 Bundle-Version: 0.3.0.qualifier
-Bundle-Activator: org.devzuz.q.maven.embedder.Activator
+Bundle-Activator: org.devzuz.q.maven.embedder.MavenCoreActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.eclipse.core.resources;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,

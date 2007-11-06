@@ -9,7 +9,7 @@ package org.devzuz.q.maven.ui.dialogs;
 import java.util.Iterator;
 import java.util.Set;
 
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.core.RepositoryIndexerManager;
 import org.eclipse.core.runtime.Preferences;
@@ -196,7 +196,7 @@ public class DependencyLookup
         catch ( Exception e1 )
         {
             // TODO : Handle gracefully
-            Activator.getLogger().error( e.getClass().getName() + " - " + e.toString() );
+            MavenUiActivator.getLogger().error( e.getClass().getName() + " - " + e.toString() );
         }
     }
 
@@ -249,7 +249,7 @@ public class DependencyLookup
     @Override
     protected Preferences getDialogPreferences()
     {
-        return Activator.getDefault().getPluginPreferences();
+        return MavenUiActivator.getDefault().getPluginPreferences();
     }
 
     private class SearchJobAdapter
@@ -270,7 +270,7 @@ public class DependencyLookup
             catch ( Exception e )
             {
                 // TODO : Handle gracefully
-                Activator.getLogger().error( e.getClass().getName() + " - " + e.toString() );
+                MavenUiActivator.getLogger().error( e.getClass().getName() + " - " + e.toString() );
             }
         }
     }

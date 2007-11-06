@@ -6,7 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.ui.dialogs;
 
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -144,6 +144,6 @@ public class KeyValueEditorDialog
     @Override
     protected Preferences getDialogPreferences()
     {
-        return Activator.getDefault().getPluginPreferences();
+        return MavenUiActivator.getDefault().getPluginPreferences();
     }
 }

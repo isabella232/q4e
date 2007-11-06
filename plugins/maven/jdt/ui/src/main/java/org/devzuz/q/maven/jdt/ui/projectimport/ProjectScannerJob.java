@@ -10,7 +10,7 @@ import java.io.File;
 import java.util.Collection;
 
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
-import org.devzuz.q.maven.jdt.ui.Activator;
+import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -60,10 +60,10 @@ public class ProjectScannerJob extends Job
         }
         catch ( InterruptedException e )
         {
-            return new Status( IStatus.CANCEL, Activator.PLUGIN_ID, "Cancelled" );
+            return new Status( IStatus.CANCEL, MavenJdtUiActivator.PLUGIN_ID, "Cancelled" );
         }
 
-        return new Status( IStatus.OK, Activator.PLUGIN_ID, "Ok" );
+        return new Status( IStatus.OK, MavenJdtUiActivator.PLUGIN_ID, "Ok" );
     }
 
     @Override

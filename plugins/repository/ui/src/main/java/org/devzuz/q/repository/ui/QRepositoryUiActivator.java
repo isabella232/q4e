@@ -12,7 +12,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator
+public class QRepositoryUiActivator
     extends AbstractUIPlugin
 {
 
@@ -20,12 +20,12 @@ public class Activator
     public static final String PLUGIN_ID = "org.devzuz.q.repository.ui";
 
     // The shared instance
-    private static Activator plugin;
+    private static QRepositoryUiActivator plugin;
 
     /**
      * The constructor
      */
-    public Activator()
+    public QRepositoryUiActivator()
     {
         plugin = this;
     }
@@ -58,7 +58,7 @@ public class Activator
      * 
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static QRepositoryUiActivator getDefault()
     {
         return plugin;
     }

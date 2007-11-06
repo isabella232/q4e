@@ -16,7 +16,7 @@ package org.devzuz.q.maven.ui.views;
 
 import java.net.URL;
 
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
@@ -56,7 +56,7 @@ public class MavenImages
 
     private static ImageDescriptor create( String prefix, String name )
     {
-        return Activator.imageDescriptorFromPlugin( Activator.PLUGIN_ID, prefix + name );
+        return MavenUiActivator.imageDescriptorFromPlugin( MavenUiActivator.PLUGIN_ID, prefix + name );
     }
 
     public static Image get( String key )

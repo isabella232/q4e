@@ -15,7 +15,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator
+public class EcfProviderFileTransferActivator
     extends Plugin
 {
 
@@ -23,12 +23,12 @@ public class Activator
     public static final String PLUGIN_ID = "org.devzuz.q.ecf.provider.maven.wagon";
 
     // The shared instance
-    private static Activator plugin;
+    private static EcfProviderFileTransferActivator plugin;
 
     /**
      * The constructor
      */
-    public Activator()
+    public EcfProviderFileTransferActivator()
     {
     }
 
@@ -61,7 +61,7 @@ public class Activator
      * 
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static EcfProviderFileTransferActivator getDefault()
     {
         return plugin;
     }

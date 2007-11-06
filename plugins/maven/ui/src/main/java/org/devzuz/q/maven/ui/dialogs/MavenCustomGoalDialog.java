@@ -9,7 +9,7 @@ package org.devzuz.q.maven.ui.dialogs;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.customcomponents.PropertiesComponent;
 import org.eclipse.core.runtime.Preferences;
@@ -130,6 +130,6 @@ public class MavenCustomGoalDialog
 
     protected Preferences getDialogPreferences()
     {
-        return Activator.getDefault().getPluginPreferences();
+        return MavenUiActivator.getDefault().getPluginPreferences();
     }
 }

@@ -6,12 +6,12 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.internal;
 
-import org.devzuz.q.maven.jdt.core.Activator;
+import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 
 /**
  * This enumeration contains the constants used to enable traces for the plug-in.
  * 
- * @author Abel Mui–o <amuino@gmail.com>
+ * @author Abel Muiï¿½o <amuino@gmail.com>
  */
 public enum TraceOption
 {
@@ -21,7 +21,7 @@ public enum TraceOption
 
     TraceOption( String value )
     {
-        this.value = Activator.PLUGIN_GLOBAL_TRACE_OPTION + value;
+        this.value = MavenJdtCoreActivator.PLUGIN_GLOBAL_TRACE_OPTION + value;
     }
 
     /**

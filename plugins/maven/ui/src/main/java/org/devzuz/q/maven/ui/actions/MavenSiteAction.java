@@ -16,7 +16,7 @@ import org.devzuz.q.maven.embedder.IMavenEventEnd;
 import org.devzuz.q.maven.embedder.IMavenListener;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -66,7 +66,7 @@ public class MavenSiteAction
         }
         catch ( MalformedURLException e )
         {
-            Activator.getLogger().log( "Unable to get URL from " + siteIndex, e );
+            MavenUiActivator.getLogger().log( "Unable to get URL from " + siteIndex, e );
             return;
         }
 
@@ -78,7 +78,7 @@ public class MavenSiteAction
         }
         catch ( PartInitException e )
         {
-            Activator.getLogger().log( "Unable to open browser for URL " + webUrl, e );
+            MavenUiActivator.getLogger().log( "Unable to open browser for URL " + webUrl, e );
             return;
         }
     }

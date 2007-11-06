@@ -18,14 +18,14 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator implements BundleActivator
+public class MavenCoreActivator implements BundleActivator
 {
 
     // The plug-in ID
     public static final String PLUGIN_ID = "org.devzuz.q.maven.core";
 
     // The shared instance
-    private static Activator plugin;
+    private static MavenCoreActivator plugin;
 
     private EclipseMaven mavenInstance;
 
@@ -34,7 +34,7 @@ public class Activator implements BundleActivator
     /**
      * The constructor
      */
-    public Activator()
+    public MavenCoreActivator()
     {
         plugin = this;
     }
@@ -60,7 +60,7 @@ public class Activator implements BundleActivator
      * 
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static MavenCoreActivator getDefault()
     {
         return plugin;
     }

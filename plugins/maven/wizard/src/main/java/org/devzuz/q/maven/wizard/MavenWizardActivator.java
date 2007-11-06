@@ -17,7 +17,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator
+public class MavenWizardActivator
     extends AbstractUIPlugin
 {
 
@@ -25,14 +25,14 @@ public class Activator
     public static final String PLUGIN_ID = "org.devzuz.q.maven.wizard.wizards";
 
     // The shared instance
-    private static Activator plugin;
+    private static MavenWizardActivator plugin;
 
     private Logger logger;
 
     /**
      * The constructor
      */
-    public Activator()
+    public MavenWizardActivator()
     {
     }
 
@@ -56,7 +56,7 @@ public class Activator
      *
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static MavenWizardActivator getDefault()
     {
         return plugin;
     }
@@ -75,7 +75,7 @@ public class Activator
 
     public static void log( String msg, Throwable t )
     {
-        getDefault().getLog().log( new Status( IStatus.ERROR, Activator.PLUGIN_ID, msg, t ) );
+        getDefault().getLog().log( new Status( IStatus.ERROR, MavenWizardActivator.PLUGIN_ID, msg, t ) );
     }
 
     public static Logger getLogger()

@@ -34,7 +34,7 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.devzuz.q.maven.embedder.Activator;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.ILocalMavenRepository;
 import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
@@ -323,7 +323,7 @@ public class EclipseMaven implements IMaven
                 {
                     EclipseMavenExecutionResult eclipseMavenExecutionResult =
                         new EclipseMavenExecutionResult( status, mavenProject.getProject() );
-                    throw new QCoreException( new MavenExecutionStatus( IStatus.ERROR, Activator.PLUGIN_ID,
+                    throw new QCoreException( new MavenExecutionStatus( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID,
                                                                         "Unable to read project",
                                                                         eclipseMavenExecutionResult ) );
                 }
@@ -341,7 +341,7 @@ public class EclipseMaven implements IMaven
                 }
                 catch ( ExtensionScanningException e )
                 {
-                    throw new QCoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID,
+                    throw new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID,
                                                           "Unable to read pom file.", e ) );
                 }
                 mavenProject.refreshProject( mavenRawProject );
@@ -350,7 +350,7 @@ public class EclipseMaven implements IMaven
         }
         catch ( ProjectBuildingException e )
         {
-            throw new QCoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID, e.getMessage(), e ) );
+            throw new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID, e.getMessage(), e ) );
         }
     }
 
@@ -373,12 +373,12 @@ public class EclipseMaven implements IMaven
         }
         catch ( ComponentLookupException e )
         {
-            throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
                                                   "Unable to lookup project builder", e ) );
         }
         catch ( ProjectBuildingException e )
         {
-            throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
                                                   "Unable to build project from artifact " + artifact, e ) );
         }
     }
@@ -421,7 +421,7 @@ public class EclipseMaven implements IMaven
             if ( validationResult.isUserSettingsFilePresent() && !validationResult.isUserSettingsFileParses() )
             {
                 throw new QCoreException(
-                                          new Status( Status.ERROR, Activator.PLUGIN_ID, "The settings file is invalid" ) );
+                                          new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, "The settings file is invalid" ) );
             }
 
             mavenEmbedder = new MavenEmbedder( config );
@@ -430,7 +430,7 @@ public class EclipseMaven implements IMaven
         }
         catch ( MavenEmbedderException e )
         {
-            throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
                                                   "Unable to start Maven Embedder", e ) );
         }
     }
@@ -446,7 +446,7 @@ public class EclipseMaven implements IMaven
             }
             catch ( MavenEmbedderException e )
             {
-                throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, STOP_ERROR_CODE,
+                throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, STOP_ERROR_CODE,
                                                       "Unable to stop Maven Embedder", e ) );
             }
         }
@@ -497,7 +497,7 @@ public class EclipseMaven implements IMaven
             }
             catch ( ComponentLookupException e )
             {
-                throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+                throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
                                                       "Unable to lookup the artifact metadata source", e ) );
             }
         }
@@ -556,18 +556,18 @@ public class EclipseMaven implements IMaven
             }
             else
             {
-                throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+                throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
                                                       "Unknown Artifact - " + artifact, null ) );
             }
         }
         catch ( ArtifactNotFoundException e )
         {
-            throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
                                                   "Artifact not found - " + artifact, e ) );
         }
         catch ( ArtifactResolutionException e )
         {
-            throw new QCoreException( new Status( Status.ERROR, Activator.PLUGIN_ID, START_ERROR_CODE,
+            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
                                                   "Unable to resolve artifact - " + artifact, e ) );
         }
     }

@@ -7,7 +7,7 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder.internal;
 
-import org.devzuz.q.maven.embedder.Activator;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.eclipse.core.resources.IFile;
@@ -31,7 +31,7 @@ public class EclipseMavenProjectAdapterFactory implements IAdapterFactory
                 }
                 catch ( CoreException e )
                 {
-                    Activator.getLogger().log( e );
+                    MavenCoreActivator.getLogger().log( e );
                     return null;
                 }
             else if ( adaptableObject instanceof IFile )
@@ -42,7 +42,7 @@ public class EclipseMavenProjectAdapterFactory implements IAdapterFactory
                 }
                 catch ( CoreException e )
                 {
-                    Activator.getLogger().log( e );
+                    MavenCoreActivator.getLogger().log( e );
                     return null;
                 }
             }

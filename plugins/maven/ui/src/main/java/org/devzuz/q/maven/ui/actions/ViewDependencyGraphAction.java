@@ -6,7 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.ui.actions;
 
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.core.DependencyGraphDataSource;
 import org.devzuz.q.maven.ui.dialogs.DependencyGraphDialog;
 import org.eclipse.core.runtime.CoreException;
@@ -53,7 +53,7 @@ public class ViewDependencyGraphAction
         //catch ( CoreException e )
         catch ( Exception e )
         {
-            Activator.getLogger().log( e.getCause() );
+            MavenUiActivator.getLogger().log( e.getCause() );
         }
     }
 }

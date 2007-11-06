@@ -10,7 +10,7 @@ import java.io.IOException;
 
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.embedder.MavenUtils;
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.dialogs.ManageDependenciesDialog;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -48,11 +48,11 @@ public class ManageDependenciesAction
                 }
                 catch ( XmlPullParserException e )
                 {
-                    Activator.getLogger().log( e );
+                    MavenUiActivator.getLogger().log( e );
                 }
                 catch ( IOException e )
                 {
-                    Activator.getLogger().log( e );
+                    MavenUiActivator.getLogger().log( e );
                 }
             }
         }

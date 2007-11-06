@@ -7,7 +7,7 @@
 package org.devzuz.q.maven.jdt.ui.actions;
 
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.jdt.core.Activator;
+import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IActionDelegate;
@@ -21,7 +21,7 @@ public class MavenReloadAction
     {
         if(getMavenProjects() != null  &&  getMavenProjects().size() > 0)
         {       
-            Activator.getLogger().info( "Refresh the Maven Embedder instance, deleting cache, rereading settings .... ");
+            MavenJdtCoreActivator.getLogger().info( "Refresh the Maven Embedder instance, deleting cache, rereading settings .... ");
             MavenManager.getMaven().refresh();
         }        
     }

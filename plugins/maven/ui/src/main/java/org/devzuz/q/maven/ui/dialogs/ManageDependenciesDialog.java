@@ -11,7 +11,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.maven.model.Dependency;
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.customcomponents.DependencyViewer;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.swt.SWT;
@@ -74,7 +74,7 @@ public class ManageDependenciesDialog
     @Override
     protected Preferences getDialogPreferences()
     {
-        return Activator.getDefault().getPluginPreferences();
+        return MavenUiActivator.getDefault().getPluginPreferences();
     }
 
     public List<Dependency> getDependencies()

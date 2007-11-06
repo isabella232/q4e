@@ -15,7 +15,7 @@ import java.io.InputStream;
 
 import javax.swing.JPanel;
 
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.swt.SWT;
@@ -100,7 +100,7 @@ public class DependencyGraphDialog extends AbstractResizableDialog
     @Override
     protected Preferences getDialogPreferences()
     {
-        return Activator.getDefault().getPluginPreferences();
+        return MavenUiActivator.getDefault().getPluginPreferences();
     }
 
     @Override

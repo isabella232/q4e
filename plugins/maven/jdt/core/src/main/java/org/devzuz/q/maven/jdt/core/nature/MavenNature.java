@@ -27,7 +27,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.jdt.core.Activator;
+import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
@@ -189,7 +189,7 @@ public class MavenNature
             // use a Set that will keep the order of elements added
             Set<IClasspathEntry> classpathEntriesSet = new ListOrderedSet();
             
-            Activator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Executing process-test-resources on ", project
+            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Executing process-test-resources on ", project
                 .getName() );
             // (x) Execute process-test-resources on the maven project
             IMavenExecutionResult result = MavenManager.getMaven().executeGoal( mavenProject, 
@@ -230,12 +230,12 @@ public class MavenNature
         }
         catch ( JavaModelException e )
         {
-            Activator.getLogger().error("Exception '" + e.getClass().getName() +  "' in adding classpath. - " + e.getMessage() );
+            MavenJdtCoreActivator.getLogger().error("Exception '" + e.getClass().getName() +  "' in adding classpath. - " + e.getMessage() );
             MavenExceptionHandler.handle( project, e );
         }
         catch ( CoreException e )
         {
-            Activator.getLogger().error("Exception '" + e.getClass().getName() +  "' in adding classpath. - " + e.getMessage() );
+            MavenJdtCoreActivator.getLogger().error("Exception '" + e.getClass().getName() +  "' in adding classpath. - " + e.getMessage() );
             MavenExceptionHandler.handle( project, e );
         }
     }
@@ -280,7 +280,7 @@ public class MavenNature
         
         for( IClasspathEntry entry : classpathEntries )
         {
-            Activator.trace( TraceOption.CLASSPATH_UPDATE, "Adding ", entry.getPath().toOSString(),
+            MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Adding ", entry.getPath().toOSString(),
                              " to classpath of ", project.getName() );
         }
         
@@ -529,7 +529,7 @@ public class MavenNature
                         catch( IOException e )
                         {
                             // TODO : Handle!
-                            Activator.getLogger().log( e ); 
+                            MavenJdtCoreActivator.getLogger().log( e ); 
                         }
                     }
                 }

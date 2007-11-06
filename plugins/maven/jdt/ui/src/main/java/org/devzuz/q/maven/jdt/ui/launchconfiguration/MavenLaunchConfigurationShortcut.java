@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
-import org.devzuz.q.maven.jdt.ui.Activator;
+import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.devzuz.q.maven.jdt.ui.Messages;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -90,7 +90,7 @@ public class MavenLaunchConfigurationShortcut
 
     private Shell getShell()
     {
-        return Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
+        return MavenJdtUiActivator.getDefault().getWorkbench().getActiveWorkbenchWindow().getShell();
     }
 
     private List<IMavenProject> findProjects( Object[] search )
@@ -209,7 +209,7 @@ public class MavenLaunchConfigurationShortcut
         catch ( CoreException e )
         {
             // TODO: handle exception
-            Activator.getLogger().error( "In MavenLaunchConfigurationShortcut.findLaunchConfiguration() - " + 
+            MavenJdtUiActivator.getLogger().error( "In MavenLaunchConfigurationShortcut.findLaunchConfiguration() - " + 
                                          e.getClass().getName() + " - " + e.getMessage() );
         }
         
@@ -261,7 +261,7 @@ public class MavenLaunchConfigurationShortcut
                 }
                 catch ( Exception e )
                 {
-                    Activator.getLogger().error( "In MavenLaunchConfigurationShortcut.LaunchConfigurationLabelProvider.getText(..) - " + 
+                    MavenJdtUiActivator.getLogger().error( "In MavenLaunchConfigurationShortcut.LaunchConfigurationLabelProvider.getText(..) - " + 
                                                   e.getClass().getName() + " - " + e.getMessage() );
                 }
 

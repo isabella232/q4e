@@ -20,7 +20,7 @@ import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.project.validation.ModelValidationResult;
 import org.apache.maven.reactor.MavenExecutionException;
 import org.devzuz.q.maven.embedder.IMavenProject;
-import org.devzuz.q.maven.jdt.core.Activator;
+import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -122,12 +122,12 @@ public class MavenExceptionHandler
         {
             if ( e.getCause() != null )
             {
-                Activator.getLogger().log( "Unknown error: ", e.getCause() );
+                MavenJdtCoreActivator.getLogger().log( "Unknown error: ", e.getCause() );
                 error( project, "Unknown error: " + e.getCause().getMessage() );
             }
             else
             {
-                Activator.getLogger().log( "Unknown error: ", e );
+                MavenJdtCoreActivator.getLogger().log( "Unknown error: ", e );
                 error( project, "Unknown error: " + e.getMessage() );
             }
         }
@@ -155,7 +155,7 @@ public class MavenExceptionHandler
         {
             String s = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getName();
             error( project, "Error: " + s );
-            Activator.getLogger().log( "Unexpected error: " + s, cause );
+            MavenJdtCoreActivator.getLogger().log( "Unexpected error: " + s, cause );
         }
     }
 
@@ -222,13 +222,13 @@ public class MavenExceptionHandler
         {
             public void run( IProgressMonitor monitor ) throws CoreException
             {
-                pom.deleteMarkers( Activator.MARKER_ID, true, IResource.DEPTH_INFINITE );
+                pom.deleteMarkers( MavenJdtCoreActivator.MARKER_ID, true, IResource.DEPTH_INFINITE );
 
                 for ( String problem : problems )
                 {
                     try
                     {
-                        IMarker marker = pom.createMarker( Activator.MARKER_ID );
+                        IMarker marker = pom.createMarker( MavenJdtCoreActivator.MARKER_ID );
                         marker.setAttribute( IMarker.MESSAGE, problem );
                         marker.setAttribute( IMarker.SEVERITY, severity );
                         // TODO improve line numbers usage
@@ -236,7 +236,7 @@ public class MavenExceptionHandler
                     }
                     catch ( CoreException ce )
                     {
-                        Activator.getLogger().log( ce );
+                        MavenJdtCoreActivator.getLogger().log( ce );
                     }
                 }
             }
@@ -248,7 +248,7 @@ public class MavenExceptionHandler
         }
         catch ( CoreException ce )
         {
-            Activator.getLogger().log( ce );
+            MavenJdtCoreActivator.getLogger().log( ce );
         }
     }
 

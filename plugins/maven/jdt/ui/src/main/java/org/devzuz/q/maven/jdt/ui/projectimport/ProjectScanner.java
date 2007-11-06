@@ -19,7 +19,7 @@ import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
-import org.devzuz.q.maven.jdt.ui.Activator;
+import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
@@ -43,7 +43,7 @@ public class ProjectScanner
 
         if ( !file.exists() || !file.isDirectory() )
         {
-            Activator.getLogger().error( "Ignoring " + file + " : Not a directory or does not exist" );
+            MavenJdtUiActivator.getLogger().error( "Ignoring " + file + " : Not a directory or does not exist" );
             return Collections.emptyList();
         }
 
@@ -63,13 +63,13 @@ public class ProjectScanner
         catch ( IOException e )
         {
             // TODO the project doesn't build, but we should add it anyways or show the error to the user
-            Activator.getLogger().log( "Unable to read Maven project: " + pom, e );
+            MavenJdtUiActivator.getLogger().log( "Unable to read Maven project: " + pom, e );
             return Collections.emptyList();
         }
         catch ( XmlPullParserException e )
         {
             // TODO the project's pom can't be parsed, but we should add it anyways or show the error to the user
-            Activator.getLogger().log( "Maven project contains wrong markup: " + pom, e );
+            MavenJdtUiActivator.getLogger().log( "Maven project contains wrong markup: " + pom, e );
             return Collections.emptyList();
         }
 

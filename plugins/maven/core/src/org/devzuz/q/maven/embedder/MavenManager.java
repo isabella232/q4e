@@ -11,6 +11,6 @@ public class MavenManager
 {
     public static IMaven getMaven()
     {
-        return Activator.getDefault().getMavenInstance();
+        return MavenCoreActivator.getDefault().getMavenInstance();
     }
 }

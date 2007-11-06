@@ -7,7 +7,7 @@
 package org.devzuz.q.maven.ui.actions;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.views.MavenEventView;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -70,7 +70,7 @@ public abstract class AbstractMavenAction
         }
         catch ( PartInitException e )
         {
-            Activator.getLogger().log( "Unable to open Maven Event View", e );
+            MavenUiActivator.getLogger().log( "Unable to open Maven Event View", e );
             return;
         }
 
@@ -80,7 +80,7 @@ public abstract class AbstractMavenAction
         }
         catch ( CoreException e )
         {
-            Activator.getLogger().log( e );
+            MavenUiActivator.getLogger().log( e );
         }
     }
 

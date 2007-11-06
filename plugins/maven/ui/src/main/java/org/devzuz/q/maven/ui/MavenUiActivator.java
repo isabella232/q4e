@@ -4,48 +4,43 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.repository.api;
+package org.devzuz.q.maven.ui;
 
-import org.eclipse.core.runtime.Plugin;
+import org.devzuz.q.maven.embedder.log.EclipseLogger;
+import org.devzuz.q.maven.embedder.log.Logger;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator
-    extends Plugin
+public class MavenUiActivator
+    extends AbstractUIPlugin
 {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "org.devzuz.q.repository.api";
+    public static final String PLUGIN_ID = "org.devzuz.q.maven.ui";
 
     // The shared instance
-    private static Activator plugin;
+    private static MavenUiActivator plugin;
+
+    private Logger logger;
 
     /**
      * The constructor
      */
-    public Activator()
+    public MavenUiActivator()
     {
-        plugin = this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.ui.plugin.Plugin#start(org.osgi.framework.BundleContext)
-     */
     public void start( BundleContext context )
         throws Exception
     {
         super.start( context );
+        logger = new EclipseLogger( PLUGIN_ID, this.getLog() );
+        plugin = this;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.ui.plugin.Plugin#stop(org.osgi.framework.BundleContext)
-     */
     public void stop( BundleContext context )
         throws Exception
     {
@@ -58,9 +53,13 @@ public class Activator
      * 
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static MavenUiActivator getDefault()
     {
         return plugin;
     }
 
+    public static Logger getLogger()
+    {
+        return getDefault().logger;
+    }
 }

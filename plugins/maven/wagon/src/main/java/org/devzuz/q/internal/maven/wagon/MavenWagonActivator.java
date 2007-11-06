@@ -20,7 +20,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator
+public class MavenWagonActivator
     extends Plugin
 {
 
@@ -30,7 +30,7 @@ public class Activator
     private static final String PLEXUS_CONTAINER_CONFIG = "/components.xml";
 
     // The shared instance
-    private static Activator plugin;
+    private static MavenWagonActivator plugin;
 
     private DefaultPlexusContainer plexusContainer;
 
@@ -39,7 +39,7 @@ public class Activator
     /**
      * The constructor
      */
-    public Activator()
+    public MavenWagonActivator()
     {
     }
 
@@ -87,7 +87,7 @@ public class Activator
      * 
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static MavenWagonActivator getDefault()
     {
         return plugin;
     }

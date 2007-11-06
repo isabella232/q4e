@@ -18,7 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.devzuz.q.maven.embedder.QCoreException;
-import org.devzuz.q.maven.ui.Activator;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -78,8 +78,8 @@ public class WikiArchetypeListProvider
         }
         catch( Exception e )
         {
-            Activator.getLogger().error("Error while accessing page - " + e.getMessage() );
-            throw new QCoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Error while accessing page", e ) );
+            MavenUiActivator.getLogger().error("Error while accessing page - " + e.getMessage() );
+            throw new QCoreException( new Status( IStatus.ERROR, MavenUiActivator.PLUGIN_ID, "Error while accessing page", e ) );
         }
         finally
         {
@@ -92,7 +92,7 @@ public class WikiArchetypeListProvider
                 catch ( IOException e )
                 {
                     // Just let it go, we can't do anything with this.
-                    Activator.getLogger().error("reader.close() in WikiArchetypeListProvider.getArchetypes() throwed an IOException" );
+                    MavenUiActivator.getLogger().error("reader.close() in WikiArchetypeListProvider.getArchetypes() throwed an IOException" );
                 }
             }
         }

@@ -9,7 +9,7 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.devzuz.q.bundle.classpath
 Export-Package: org.devzuz.q.bundle.classpath
 Bundle-Version: 0.3.0.qualifier
-Bundle-Activator: org.devzuz.q.internal.bundle.classpath.Activator
+Bundle-Activator: org.devzuz.q.internal.bundle.classpath.QBundleClasspathActivator
 Eclipse-LazyStart: true
 Bundle-Vendor: DevZuz
 
