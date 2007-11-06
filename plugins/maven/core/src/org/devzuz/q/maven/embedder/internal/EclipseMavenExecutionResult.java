@@ -62,7 +62,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
             exceptions = Collections.EMPTY_LIST;
         }
 
-        MavenProject mavenProject = result.getMavenProject();
+        MavenProject mavenProject = result.getProject();
 
         if ( mavenProject != null )
         {

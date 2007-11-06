@@ -323,14 +323,6 @@ public interface IMaven
                                              String type );
 
     /**
-     * Create artifact repositories objects from model repositories
-     * @deprecated this will be removed, doesn't seem to be used
-     * @param repositories
-     * @return artifact repositories
-     */
-    public List<ArtifactRepository> createRepositories( List<Repository> repositories );
-
-    /**
      * Resolve an artifact from remote repositories. It will download to the local repository.
      * 
      * @param artifact

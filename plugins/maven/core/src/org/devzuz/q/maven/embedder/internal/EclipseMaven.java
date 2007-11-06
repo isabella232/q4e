@@ -29,6 +29,7 @@ import org.apache.maven.embedder.MavenEmbedderException;
 import org.apache.maven.execution.DefaultMavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
+import org.apache.maven.extension.ExtensionScanningException;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Repository;
 import org.apache.maven.project.MavenProject;
@@ -330,12 +331,21 @@ public class EclipseMaven implements IMaven
                 }
                 // TODO should we call refreshProject?
                 // -erle- : I think we should, otherwise, I can't get the mavenProject object, it is null.
-                mavenProject.refreshDependencies( status.getMavenProject() );
-                mavenProject.refreshProject( status.getMavenProject() );
+                mavenProject.refreshDependencies( status.getProject() );
+                mavenProject.refreshProject( status.getProject() );
             }
             else
             {
-                MavenProject mavenRawProject = getMavenEmbedder().readProject( mavenProject.getPomFile() );
+                MavenProject mavenRawProject = null;
+                try
+                {
+                    mavenRawProject = getMavenEmbedder().readProject( mavenProject.getPomFile() );
+                }
+                catch ( ExtensionScanningException e )
+                {
+                    throw new QCoreException( new Status( IStatus.ERROR, Activator.PLUGIN_ID,
+                                                          "Unable to read pom file.", e ) );
+                }
                 mavenProject.refreshProject( mavenRawProject );
             }
             return mavenProject;
@@ -532,16 +542,6 @@ public class EclipseMaven implements IMaven
         dependency.setScope( scope );
 
         return dependency;
-    }
-
-    public List<ArtifactRepository> createRepositories( List<Repository> repositories )
-    {
-        List<ArtifactRepository> artifactRepositories = new ArrayList<ArtifactRepository>( repositories.size() );
-        for ( Repository repository : repositories )
-        {
-            artifactRepositories.add( getMavenEmbedder().createRepository( repository.getUrl(), repository.getId() ) );
-        }
-        return artifactRepositories;
     }
 
     public void resolveArtifact( IMavenArtifact artifact, String type, String suffix,
