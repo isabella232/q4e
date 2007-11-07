@@ -17,6 +17,7 @@
     <groupId>org.devzuz.q</groupId>
     <artifactId>q</artifactId>
     <version>1-SNAPSHOT</version>
+    <relativePath>../../../pom.xml</relativePath>
   </parent>
   <groupId>org.apache.maven</groupId>
   <artifactId>embedder</artifactId>
