@@ -91,7 +91,7 @@ public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
 
         public void handleEvent( IMavenEvent event )
         {
-            if ( ( event instanceof IMavenEventEnd ) && ( event.getType().equals( EventType.reactorExecution ) ) )
+            if ( ( event instanceof IMavenEventEnd ) && ( event.getType().equals( EventType.projectExecution ) ) )
             {
                 ScanImportProjectJob job = new ScanImportProjectJob( generatedDir.toFile() );
                 job.addJobChangeListener( new JobChangeAdapter()
