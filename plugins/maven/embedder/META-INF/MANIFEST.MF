@@ -89,11 +89,6 @@ Export-Package: org.apache.maven;
    org.codehaus.plexus.context,
    org.apache.maven.context,
    org.apache.maven.extension",
- org.apache.maven.aardvark.ant,
- org.apache.maven.aardvark.ant.plugin,
- org.apache.maven.aardvark.converter,
- org.apache.maven.aardvark.converter.ant,
- org.apache.maven.aardvark.converter.maven1,
  org.apache.maven.artifact;
   uses:="org.apache.maven.artifact.repository,
    org.apache.maven.artifact.metadata,
@@ -975,13 +970,7 @@ Bundle-ClassPath: .,
  lib/maven-core-2.1-SNAPSHOT.jar,
  lib/maven-artifact-3.0-SNAPSHOT.jar,
  lib/wagon-provider-api-1.0-beta-2.jar,
- lib/maven-embedder-2.1-SNAPSHOT.jar,
- lib/aardvark-ant-1.0-SNAPSHOT.jar,
- lib/aardvark-core-1.0-SNAPSHOT.jar,
- lib/aardvark/lib/dom4j-1.4.jar,
- lib/aardvark/lib/maven-model-converter-2.2.jar,
- lib/aardvark/lib/maven-model-v3-2.0.jar,
- lib/aardvark/lib/maven-shared-jar-1.0.jar
+ lib/maven-embedder-2.1-SNAPSHOT.jar
 Bundle-DocURL: http://www.apache.org/
 Private-Package: lib,licenses,org.codehaus.classworlds,org.codehaus.do
  xia.sink,org.codehaus.plexus.util,org.codehaus.plexus.util.cli,org.co

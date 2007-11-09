@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="lib/aardvark/lib/dom4j-1.4.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/aardvark/lib/maven-model-converter-2.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/aardvark/lib/maven-model-v3-2.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/aardvark/lib/maven-shared-jar-1.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/aardvark-ant-1.0-SNAPSHOT.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/aardvark-core-1.0-SNAPSHOT.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/doxia-sink-api-1.0-alpha-9.jar" sourcepath="sources/doxia-sink-api-1.0-alpha-9-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/maven-artifact-3.0-SNAPSHOT.jar" sourcepath="sources/maven-artifact-3.0-SNAPSHOT-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/maven-build-context-2.1-SNAPSHOT.jar" sourcepath="sources/maven-build-context-2.1-SNAPSHOT-sources.jar"/>
