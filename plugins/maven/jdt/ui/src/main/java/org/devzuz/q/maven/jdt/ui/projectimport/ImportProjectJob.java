@@ -29,6 +29,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
+/**
+ * Imports a number of maven projects in the workspace.
+ * 
+ * @author Abel Mui–o <amuino@gmail.com>
+ */
 public class ImportProjectJob extends WorkspaceJob
 {
     private Collection<PomFileDescriptor> pomDescriptors;
@@ -40,7 +45,7 @@ public class ImportProjectJob extends WorkspaceJob
 
     public ImportProjectJob( Collection<PomFileDescriptor> pomDescriptors )
     {
-        super( "Import Maven 2 project" );
+        super( "Importing Maven 2 projects" );
         this.pomDescriptors = pomDescriptors;
     }
 

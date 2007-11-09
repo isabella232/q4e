@@ -15,6 +15,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 
+/**
+ * @deprecated use {@link ImportProjectJob}.
+ */
+@Deprecated
 public class ImportProjectWorkspaceJob extends WorkspaceJob
 {
     private IStatus status;
