@@ -9,21 +9,25 @@
 package org.devzuz.q.maven.ui.actions;
 
 
+import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.ui.actions.helper.MavenConvertProjectHelper;
+
 import org.apache.maven.aardvark.converter.ConversionFailedException;
 import org.apache.maven.aardvark.converter.ProjectConverter;
 import org.apache.maven.aardvark.converter.maven1.MavenOneProjectConverter;
-import org.codehaus.plexus.DefaultPlexusContainer;
+
 import org.codehaus.plexus.PlexusContainer;
-import org.codehaus.plexus.PlexusContainerException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+
 import java.io.File;
+import java.io.IOException;
 
 
 public class MavenConvertMaven1Action 
@@ -39,45 +43,39 @@ public class MavenConvertMaven1Action
     {
     }
 
-
     public void run( IAction action )
     {  	
-    	
+
         File maven1ProjectFile = getEclipseProject().getFile( PROJECT_XML ).getLocation().toFile();
-        
-        PlexusContainer container;
-        try
-        {
-            container = new DefaultPlexusContainer();
+        PlexusContainer pc = MavenUtils.getPlexusContainer();
+        if(pc != null )
+        {        
+           
             MavenOneProjectConverter converter;
-            try 
+            try
             {
-                converter = (MavenOneProjectConverter) container.lookup( ProjectConverter.ROLE, "maven1" );
-                try
-                {
-                    converter.execute(maven1ProjectFile.getParentFile(), maven1ProjectFile.getParentFile());
-                    //converter.execute(new File("src_test"), new File("src_test"));
-                }
-                catch ( ConversionFailedException e )
-                {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            } 
-            catch (ComponentLookupException e) 
+                converter = (MavenOneProjectConverter) pc.lookup( ProjectConverter.ROLE, "maven1" );
+
+                converter.convertFromPath(maven1ProjectFile.getParentFile(), 
+                                          maven1ProjectFile.getParentFile());
+            }
+            catch ( ComponentLookupException e )
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }  
+            catch ( IOException e )
             {
                 // TODO Auto-generated catch block
                 e.printStackTrace();
             }
+            catch ( ConversionFailedException e )
+            {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }           
 
-            container.dispose();
-          
         }
-        catch ( PlexusContainerException e1 )
-        {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        }       
 
     }
 
@@ -89,7 +87,7 @@ public class MavenConvertMaven1Action
         }
     }
     
-    public IProject getEclipseProject()
+    private IProject getEclipseProject()
     {
         return MavenConvertProjectHelper.getEclipseProject( this.selection );
     }
