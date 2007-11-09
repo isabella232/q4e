@@ -71,7 +71,14 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
         else
         {
             // TODO: Trace or log this. Why is result.getMavenProject() null?
-            this.mavenProject = new EclipseMavenProject( project );
+            if ( project != null )
+            {
+                this.mavenProject = new EclipseMavenProject( project );
+            }
+            else
+            {
+                // FIXME: Can't initialize! Fingers crossed and hope this does not blow up later
+            }
         }
     }
 
