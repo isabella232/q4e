@@ -1,5 +1,9 @@
 package org.devzuz.q.maven.embedder;
 
+
+import org.devzuz.q.maven.embedder.internal.EclipseMaven;
+import org.devzuz.q.maven.embedder.internal.EclipseMavenArtifact;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -12,9 +16,10 @@ import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.apache.maven.embedder.MavenEmbedder;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
+
+import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.devzuz.q.maven.embedder.internal.EclipseMaven;
-import org.devzuz.q.maven.embedder.internal.EclipseMavenArtifact;
+
 
 public class MavenUtils
 {
@@ -126,4 +131,22 @@ public class MavenUtils
         // System.out.println("Created Artifact "+artifact);
         return artifact;
     }
+    
+    public static PlexusContainer getPlexusContainer()
+    {
+        IMaven maven = MavenManager.getMaven();
+        
+        if ( maven instanceof EclipseMaven )
+        {
+            
+            MavenEmbedder mavenEmbedder = ( (EclipseMaven) maven ).getEmbedder();
+               
+            return mavenEmbedder.getPlexusContainer();
+
+        }
+        
+        return null;
+        
+    }
+   
 }
