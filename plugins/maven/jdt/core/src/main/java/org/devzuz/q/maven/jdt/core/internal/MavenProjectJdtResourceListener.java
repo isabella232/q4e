@@ -20,7 +20,6 @@ import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
@@ -36,59 +35,72 @@ import org.eclipse.jdt.core.JavaModelException;
 public class MavenProjectJdtResourceListener implements IResourceChangeListener
 {
     private static String POM_XML = "pom.xml";
-    
+
     public MavenProjectJdtResourceListener()
     {
     }
 
     public void resourceChanged( IResourceChangeEvent event )
     {
-        if( event.getType() == IResourceChangeEvent.POST_CHANGE )
+        if ( event.getType() == IResourceChangeEvent.POST_CHANGE )
         {
             for ( IResourceDelta delta : event.getDelta().getAffectedChildren() )
             {
                 // for open and close events
-                if ( delta.getFlags() == IResourceDelta.OPEN )
+                if ( delta.getFlags() == IResourceDelta.OPEN && delta.getResource() instanceof IProject )
                 {
-                    if ( delta.getResource() instanceof IProject )
+                    IProject project = (IProject) delta.getResource();
+                    if ( MavenJdtCoreActivator.getDefault().isDebugging() )
                     {
-                        IProject project = (IProject) delta.getResource();
-                        // check if its an "open" event
-                        if( project.isOpen() )
+                        MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Received open event for ",
+                                                     project );
+                    }
+                    // check if its an "open" event and the project is managed by maven.
+                    if ( project.isOpen() && isMavenManagedProject( project ) )
+                    {
+                        updateProjectsClasspathWithProject( ResourcesPlugin.getWorkspace().getRoot().getProjects(),
+                                                            project );
+                    }
+                    else
+                    {
+                        if ( MavenJdtCoreActivator.getDefault().isDebugging() )
                         {
-                            updateProjectsClasspathWithProject( ResourcesPlugin.getWorkspace().getRoot().getProjects(),
-                                                                project );
+                            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
+                                                         "Skipping because it has no pom.xml: " + project );
                         }
                     }
                 }
             }
         }
-        else if ( ( event.getType() == IResourceChangeEvent.PRE_CLOSE ) ||
-                  ( event.getType() == IResourceChangeEvent.PRE_DELETE ) )
+        else if ( ( event.getType() == IResourceChangeEvent.PRE_CLOSE )
+                        || ( event.getType() == IResourceChangeEvent.PRE_DELETE ) )
         {
-            IResource ires = event.getResource();
+            /* IResourceChangeEvent documents that an IProject is always returned */
+            IProject project = (IProject) event.getResource();
 
             if ( MavenJdtCoreActivator.getDefault().isDebugging() )
             {
-                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Processing change event for ", ires );
+                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Received close/delete event for ",
+                                             project );
             }
 
-            if ( ires.getProject().isOpen() && ires.getProject().getFile( POM_XML ).exists() )
+            if ( project.isOpen() && isMavenManagedProject( project.getProject() ) )
             {
                 updateProjectsClasspathWithProject( ResourcesPlugin.getWorkspace().getRoot().getProjects(),
-                                                    ires.getProject() );
+                                                    project.getProject() );
             }
             else
             {
                 if ( MavenJdtCoreActivator.getDefault().isDebugging() )
                 {
-                    MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Skipping because it has no pom.xml: " + ires );
+                    MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
+                                                 "Skipping because it has no pom.xml: " + project );
                 }
             }
         }
     }
-    
-    public static void updateProjectsClasspathWithProject( IProject[] iprojects , IProject iresProject )
+
+    public static void updateProjectsClasspathWithProject( IProject[] iprojects, IProject iresProject )
     {
         for ( IProject iproject : iprojects )
         {
@@ -111,12 +123,12 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                         IClasspathEntry[] classPathEntries = getCurrentClasspathEntries( iproject );
                         for ( IClasspathEntry classPathEntry : classPathEntries )
                         {
-                            if ( classpathEqualsProject( classPathEntry , iresProject ) )
+                            if ( classpathEqualsProject( classPathEntry, iresProject ) )
                             {
                                 if ( MavenJdtCoreActivator.getDefault().isDebugging() )
                                 {
-                                    MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for ",
-                                                     iproject );
+                                    MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
+                                                                 "Scheduling update for ", iproject );
                                 }
                                 new UpdateClasspathJob( iproject ).schedule();
                                 break;
@@ -147,47 +159,47 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         /* Assume it is a java project. */
         IJavaProject javaProject = JavaCore.create( iproject );
         /* Find maven classpath container */
-        IClasspathContainer classpathContainer = JavaCore
-            .getClasspathContainer( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH, javaProject );
+        IClasspathContainer classpathContainer =
+            JavaCore.getClasspathContainer( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH, javaProject );
         /* Get current entries. */
 
         return classpathContainer.getClasspathEntries();
     }
-    
-    private static boolean classpathEqualsProject( IClasspathEntry classpath , IProject project )
+
+    private static boolean classpathEqualsProject( IClasspathEntry classpath, IProject project )
     {
-        if( classpath.getEntryKind() == IClasspathEntry.CPE_PROJECT )
+        if ( classpath.getEntryKind() == IClasspathEntry.CPE_PROJECT )
         {
             return classpath.getPath().lastSegment().equals( project.getName() );
         }
-        else if( classpath.getEntryKind() == IClasspathEntry.CPE_LIBRARY )
+        else if ( classpath.getEntryKind() == IClasspathEntry.CPE_LIBRARY )
         {
-             return getMavenProjectTriplet( classpath ).equals( getMavenProjectTriplet( project ) );
+            return getMavenProjectTriplet( classpath ).equals( getMavenProjectTriplet( project ) );
         }
-        
+
         return false;
     }
-    
+
     private static String getMavenProjectTriplet( IClasspathEntry classpathEntry )
     {
         int repoSegmentCount = MavenManager.getMaven().getLocalRepository().getBaseDirectoryPath().segmentCount();
-        IPath classpath = classpathEntry.getPath(); 
+        IPath classpath = classpathEntry.getPath();
         int segmentCount = classpath.segmentCount();
         String version = classpath.segment( segmentCount - 2 );
         String artifactId = classpath.segment( segmentCount - 3 );
-        
+
         StringBuilder groupId = new StringBuilder( "" );
-        for( int i = repoSegmentCount; i < segmentCount - 3 ; i++ )
+        for ( int i = repoSegmentCount; i < segmentCount - 3; i++ )
         {
             // Attach the dot
-            if( i != repoSegmentCount )
+            if ( i != repoSegmentCount )
                 groupId.append( "." );
             groupId.append( classpath.segment( i ) );
         }
-        
+
         return groupId.toString() + "-" + artifactId + "-" + version;
     }
-    
+
     private static String getMavenProjectTriplet( IProject iproject )
     {
         StringBuilder strProjectInfoData = new StringBuilder( "" );
@@ -220,5 +232,19 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         }
         pom = null;
         return strProjectInfoData.toString();
+    }
+
+    /**
+     * Checks if the project is a maven project managed by q4e. This is used to check if maven classpaths need to be
+     * recalculated when the project is opened/closed/deleted.
+     * 
+     * @param project
+     *            the project.
+     * @return <code>true</code> if the project is managed by q4e.
+     */
+    private boolean isMavenManagedProject( IProject project )
+    {
+        // TODO: Check if the project has the q4e maven nature??: MavenNatureHelper.hasMavenNature( project );
+        return project.getFile( POM_XML ).exists();
     }
 }
