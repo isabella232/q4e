@@ -66,6 +66,8 @@ public class EclipseMavenProject implements IMavenProject
     private String buildOutputDirectory;
 
     private String buildTestOutputDirectory;
+    
+    private String packaging;
 
     private List<String> compileSourceRoots;
 
@@ -173,19 +175,14 @@ public class EclipseMavenProject implements IMavenProject
         return baseDirectory;
     }
 
-    public int getLoggingLevel()
-    {
-        return Logger.LEVEL_INFO;
-    }
-
     public File getPomFile()
     {
         return pomFile;
     }
-
-    public boolean isOffline()
+    
+    public String getPackaging()
     {
-        return false;
+        return packaging;
     }
 
     public String getActiveProfiles()
@@ -210,6 +207,7 @@ public class EclipseMavenProject implements IMavenProject
         testResources = mavenRawProject.getBuild().getTestResources();
         buildPlugins = mavenRawProject.getBuild().getPlugins();
         remoteArtifactRepositories = mavenRawProject.getRemoteArtifactRepositories();
+        packaging = mavenRawProject.getPackaging();
     }
 
     public void refreshDependencies( MavenProject mavenRawProject )

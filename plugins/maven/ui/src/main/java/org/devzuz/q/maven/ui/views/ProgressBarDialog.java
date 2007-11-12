@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Properties;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.runtime.CoreException;
@@ -72,7 +73,8 @@ public class ProgressBarDialog implements IRunnableWithProgress
                     }
                     else
                     {
-                        MavenManager.getMaven().scheduleGoal( project, goal, properties );
+                        MavenManager.getMaven().scheduleGoal( project, goal, 
+                                                              MavenExecutionParameter.newDefaultMavenExecutionParameter( properties ) );
                     }
                 }
             }

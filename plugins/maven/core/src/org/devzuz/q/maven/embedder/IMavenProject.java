@@ -32,6 +32,8 @@ public interface IMavenProject extends IAdaptable
     public abstract String getGroupId();
 
     public abstract IProject getProject();
+    
+    public abstract String getPackaging();
 
     public abstract String getVersion();
 
@@ -39,11 +41,7 @@ public interface IMavenProject extends IAdaptable
 
     public abstract File getPomFile();
 
-    public abstract boolean isOffline();
-
-    public abstract int getLoggingLevel();
-
-    public abstract String getActiveProfiles();
+    public abstract String getActiveProfiles(); // TODO : is this supposed to be here ?
 
     public abstract Set<IMavenArtifact> getArtifacts();
 

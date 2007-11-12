@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.devzuz.q.maven.ui.views.MavenEventView;
@@ -52,7 +53,8 @@ public class MavenLaunchConfigurationDelegate implements ILaunchConfigurationDel
                 if ( properties == null || properties.size() <= 0 )
                 {
                     runMavenEventView();
-                    MavenManager.getMaven().scheduleGoals( mavenProject, goals, properties );
+                    MavenManager.getMaven().scheduleGoals( mavenProject, goals, 
+                                                           MavenExecutionParameter.newDefaultMavenExecutionParameter( properties ) );
                 }
             }
         }

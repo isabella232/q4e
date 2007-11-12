@@ -87,7 +87,7 @@ public interface IMaven
      *            properties of this goal
      * @throws CoreException
      */
-    public IMavenExecutionResult executeGoal( IPath baseDirectory, String goal, Properties properties,
+    public IMavenExecutionResult executeGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter,
                                               IProgressMonitor monitor ) throws CoreException;
 
     /**
@@ -114,7 +114,7 @@ public interface IMaven
      *            properties of this goal
      * @throws CoreException
      */
-    public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal, Properties properties,
+    public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter,
                                               IProgressMonitor monitor ) throws CoreException;
 
     /**
@@ -141,7 +141,7 @@ public interface IMaven
      *            properties of this goal. Might be <code>null</code> when no properties are used.
      * @throws CoreException
      */
-    public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals, Properties properties,
+    public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals, MavenExecutionParameter parameter,
                                                IProgressMonitor monitor ) throws CoreException;
 
     /**
@@ -156,7 +156,7 @@ public interface IMaven
      *            properties of this goal
      * @throws CoreException
      */
-    public void scheduleGoal( IPath baseDirectory, String goal, Properties properties ) throws CoreException;
+    public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter ) throws CoreException;
 
     /**
      * Allows you to schedule the execution of a given goal name against a MavenProject.
@@ -185,7 +185,7 @@ public interface IMaven
      *            properties of this goal
      * @throws CoreException
      */
-    public void scheduleGoal( IMavenProject mavenProject, String goal, Properties properties ) throws CoreException;
+    public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter ) throws CoreException;
 
     /**
      * Allows you to schedule the execution of a given goal name against a MavenProject.
@@ -202,7 +202,7 @@ public interface IMaven
      *            listener to the thread that executes the maven goal
      * @throws CoreException
      */
-    public void scheduleGoal( IMavenProject mavenProject, String goal, Properties properties,
+    public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter,
                               MavenExecutionJobAdapter jobAdapter ) throws CoreException;
 
     /**
@@ -231,7 +231,7 @@ public interface IMaven
      *            properties of this goal. Might be <code>null</code> when no properties are used.
      * @throws CoreException
      */
-    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, Properties properties )
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, MavenExecutionParameter parameter )
         throws CoreException;
 
     /**
@@ -246,7 +246,7 @@ public interface IMaven
      *            listener to the thread that executes the maven goal
      * @throws CoreException
      */
-    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, Properties properties,
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, MavenExecutionParameter parameters,
                                MavenExecutionJobAdapter jobAdapter ) throws CoreException;
 
     /**

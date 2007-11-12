@@ -19,6 +19,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -31,27 +32,33 @@ public class MavenCustomGoalDialog
 {
     private static MavenCustomGoalDialog customGoalDialog = null;
 
-    public static synchronized MavenCustomGoalDialog getCustomGoalDialog()
+    public static synchronized MavenCustomGoalDialog getCustomGoalDialog( boolean isParentPom )
     {
         if ( customGoalDialog == null )
         {
             customGoalDialog = new MavenCustomGoalDialog( PlatformUI.getWorkbench().getActiveWorkbenchWindow()
                 .getShell() );
         }
-
+        customGoalDialog.setParentPom( isParentPom );
         return customGoalDialog;
     }
 
     private PropertiesComponent propertiesComponent;
 
     private Text customGoalText;
+    
+    private Button setRecursiveRadioButton;
 
+    private boolean isParentPom;
+    
     private Map<String, String> customGoalProperties;
 
     private String goal;
+    
+    private boolean executionIsRecursive = false;
 
     public MavenCustomGoalDialog( Shell shell )
-    {
+    {   
         super( shell );
         customGoalProperties = new TreeMap<String, String>();
     }
@@ -85,6 +92,22 @@ public class MavenCustomGoalDialog
         propertiesComponent = new PropertiesComponent( container, SWT.NONE, customGoalProperties );
         propertiesComponent.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 
+        // radio button for recursive
+        Composite container2 = new Composite( container, SWT.NULL );;
+        container2.setLayout( new GridLayout( 2, false ) );
+        container2.setLayoutData( new GridData( GridData.FILL, GridData.BEGINNING, true, false ) );
+        container2.setEnabled( isParentPom );
+        
+        setRecursiveRadioButton = new Button( container2 , SWT.CHECK );
+        setRecursiveRadioButton.setLayoutData(  new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
+        setRecursiveRadioButton.setSelection( false );
+        setRecursiveRadioButton.setEnabled( isParentPom );
+        
+        Label label2 = new Label( container2, SWT.NULL );
+        label2.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
+        label2.setText( "Recursive" );
+        label2.setEnabled( isParentPom );
+        
         return container;
     }
 
@@ -97,6 +120,7 @@ public class MavenCustomGoalDialog
     public void onWindowDeactivate()
     {
         goal = customGoalText.getText().trim();
+        executionIsRecursive = setRecursiveRadioButton.getSelection();
     }
 
     public void validate()
@@ -104,6 +128,7 @@ public class MavenCustomGoalDialog
         if ( didValidate() )
         {
             goal = customGoalText.getText().trim();
+            executionIsRecursive = setRecursiveRadioButton.getSelection();
         }
         getButton( IDialogConstants.OK_ID ).setEnabled( didValidate() );
     }
@@ -127,9 +152,24 @@ public class MavenCustomGoalDialog
     {
         return customGoalProperties;
     }
+    
+    public boolean isExecutionRecursive()
+    {
+        return executionIsRecursive;
+    }
 
     protected Preferences getDialogPreferences()
     {
         return MavenUiActivator.getDefault().getPluginPreferences();
+    }
+
+    public boolean isParentPom()
+    {
+        return isParentPom;
+    }
+
+    public void setParentPom( boolean isParentPom )
+    {
+        this.isParentPom = isParentPom;
     }
 }

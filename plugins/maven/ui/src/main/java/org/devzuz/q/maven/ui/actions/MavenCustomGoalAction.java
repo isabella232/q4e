@@ -10,6 +10,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.dialogs.MavenCustomGoalDialog;
 import org.eclipse.core.runtime.CoreException;
@@ -19,17 +20,15 @@ import org.eclipse.jface.window.Window;
 public class MavenCustomGoalAction
     extends AbstractMavenAction
 {
-
+    public static String PACKAGING_POM = "pom";
+    
     protected void runInternal( IAction action )
         throws CoreException
     {
-
         IMavenProject project = getMavenProject();
-
         if ( project != null )
         {
-
-            MavenCustomGoalDialog customGoalDialog = MavenCustomGoalDialog.getCustomGoalDialog();
+            MavenCustomGoalDialog customGoalDialog = MavenCustomGoalDialog.getCustomGoalDialog( project.getPackaging().equals( PACKAGING_POM ) );
 
             if ( customGoalDialog.open() == Window.OK )
             {
@@ -45,7 +44,9 @@ public class MavenCustomGoalAction
                 }
                 else
                 {
-                    MavenManager.getMaven().scheduleGoal( project, goal, properties );
+                    MavenExecutionParameter parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter( properties );
+                    parameter.setRecursive( customGoalDialog.isExecutionRecursive() );
+                    MavenManager.getMaven().scheduleGoal( project, goal, parameter );
                 }
             }
         }        

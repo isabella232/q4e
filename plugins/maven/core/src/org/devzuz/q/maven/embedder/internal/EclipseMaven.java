@@ -42,6 +42,7 @@ import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenListener;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
+import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.devzuz.q.maven.embedder.QCoreException;
 import org.eclipse.core.resources.IFile;
@@ -98,10 +99,10 @@ public class EclipseMaven implements IMaven
         getEventPropagator().addMavenListener( listener );
     }
 
-    public IMavenExecutionResult executeGoal( IPath baseDirectory, String goal, Properties properties,
+    public IMavenExecutionResult executeGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter,
                                               IProgressMonitor monitor ) throws CoreException
     {
-        MavenExecutionRequest request = generateRequest( baseDirectory, goal, properties );
+        MavenExecutionRequest request = generateRequest( baseDirectory, goal, parameter );
         EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
         eclipseMavenRequest.run( monitor );
         return eclipseMavenRequest.getExecutionResult();
@@ -113,10 +114,10 @@ public class EclipseMaven implements IMaven
         return executeGoal( mavenProject, goal, null, monitor );
     }
 
-    public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal, Properties properties,
+    public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter,
                                               IProgressMonitor monitor ) throws CoreException
     {
-        return executeGoals( mavenProject, Collections.singletonList( goal ), properties, monitor );
+        return executeGoals( mavenProject, Collections.singletonList( goal ), parameter, monitor );
     }
 
     public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals, IProgressMonitor monitor )
@@ -125,21 +126,21 @@ public class EclipseMaven implements IMaven
         return executeGoals( mavenProject, goals, null, monitor );
     }
 
-    public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals, Properties properties,
+    public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals, MavenExecutionParameter parameter,
                                                IProgressMonitor monitor ) throws CoreException
     {
-        MavenExecutionRequest request = generateRequest( mavenProject, properties );
+        MavenExecutionRequest request = generateRequest( mavenProject, parameter );
         request.setGoals( goals );
         EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
         eclipseMavenRequest.run( monitor );
         return eclipseMavenRequest.getExecutionResult();
     }
 
-    private MavenExecutionRequest generateRequest( IPath baseDirectory, String goal, Properties properties )
+    private MavenExecutionRequest generateRequest( IPath baseDirectory, String goal, MavenExecutionParameter parameter )
     {
         Properties executionProperties = new Properties();
-        if ( properties != null )
-            executionProperties.putAll( properties );
+        if ( ( parameter != null ) && ( parameter.getExecutionProperties() != null ) )
+            executionProperties.putAll( parameter.getExecutionProperties() );
         // executionProperties.putAll( System.getProperties() );
 
         // Use all defaults except the indicated parameters
@@ -157,9 +158,9 @@ public class EclipseMaven implements IMaven
         return request;
     }
 
-    public void scheduleGoal( IPath baseDirectory, String goal, Properties properties ) throws CoreException
+    public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter ) throws CoreException
     {
-        scheduleRequest( baseDirectory, generateRequest( baseDirectory, goal, properties ), null );
+        scheduleRequest( baseDirectory, generateRequest( baseDirectory, goal, parameter ), null );
     }
 
     public void scheduleGoal( IMavenProject mavenProject, String goal ) throws CoreException
@@ -167,15 +168,15 @@ public class EclipseMaven implements IMaven
         scheduleGoal( mavenProject, goal, null );
     }
 
-    public void scheduleGoal( IMavenProject mavenProject, String goal, Properties properties ) throws CoreException
+    public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter ) throws CoreException
     {
-        scheduleGoal( mavenProject, goal, properties, null );
+        scheduleGoal( mavenProject, goal, parameter, null );
     }
 
-    public void scheduleGoal( IMavenProject mavenProject, String goal, Properties properties,
+    public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter,
                               MavenExecutionJobAdapter jobAdapter ) throws CoreException
     {
-        scheduleGoals( mavenProject, Collections.singletonList( goal ), properties, jobAdapter );
+        scheduleGoals( mavenProject, Collections.singletonList( goal ), parameter, jobAdapter );
     }
 
     public void scheduleGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException
@@ -183,16 +184,16 @@ public class EclipseMaven implements IMaven
         scheduleGoals( mavenProject, goals, null );
     }
 
-    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, Properties properties )
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, MavenExecutionParameter parameter )
         throws CoreException
     {
-        scheduleGoals( mavenProject, goals, properties, null );
+        scheduleGoals( mavenProject, goals, parameter, null );
     }
 
-    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, Properties properties,
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals, MavenExecutionParameter parameter,
                                MavenExecutionJobAdapter jobAdapter ) throws CoreException
     {
-        MavenExecutionRequest request = generateRequest( mavenProject, properties );
+        MavenExecutionRequest request = generateRequest( mavenProject, parameter );
         request.setGoals( goals );
         scheduleRequest( mavenProject, request, jobAdapter );
     }
@@ -251,15 +252,20 @@ public class EclipseMaven implements IMaven
         return getMavenEmbedder().execute( request );
     }
 
-    private MavenExecutionRequest generateRequest( IMavenProject mavenProject, Properties properties )
+    private MavenExecutionRequest generateRequest( IMavenProject mavenProject, MavenExecutionParameter parameter )
     {
+        if( parameter == null )
+        {
+            parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter();
+        }
+        
         DefaultMavenExecutionRequest request = new DefaultMavenExecutionRequest();
 
-        request.setOffline( mavenProject.isOffline() );
-        request.setUseReactor( false );
-        request.setRecursive( false );
+        request.setOffline( parameter.isOffline() ); // false
+        request.setUseReactor( parameter.isUseReactor() ); // false
+        request.setRecursive( parameter.isRecursive() ); // false
 
-        if ( mavenProject.getLoggingLevel() == LOGGING_DEBUG )
+        if ( parameter.getLoggingLevel() == LOGGING_DEBUG )
         {
             request.setShowErrors( true );
             request.setLoggingLevel( MavenExecutionRequest.LOGGING_LEVEL_DEBUG );
@@ -275,6 +281,7 @@ public class EclipseMaven implements IMaven
 
         Properties executionProperties = new Properties();
         executionProperties.putAll( System.getProperties() );
+        Properties properties = parameter.getExecutionProperties();
         if ( properties != null )
             executionProperties.putAll( properties );
 
