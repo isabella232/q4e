@@ -13,10 +13,13 @@ import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
+import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
+// TODO: Remove before 0.4.0. Could not find any use for this class before 0.3.0.
+@Deprecated
 public class ProgressBarDialog implements IRunnableWithProgress
 {
     private int TOTAL_TIME;
@@ -45,8 +48,7 @@ public class ProgressBarDialog implements IRunnableWithProgress
         // TOTAL_TIME = project.getArtifactId().length();
     }
 
-    public void run( IProgressMonitor monitor )
-        throws InvocationTargetException, InterruptedException
+    public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
     {
         // getTotalTime();
         monitor.beginTask( "Running operation", TOTAL_TIME );
@@ -57,31 +59,26 @@ public class ProgressBarDialog implements IRunnableWithProgress
             monitor.worked( INCREMENT );
             try
             {
+                MavenExecutionParameter parameters =
+                    MavenExecutionParameter.newDefaultMavenExecutionParameter( properties );
+                parameters.setRecursive( MavenPreferenceManager.getMavenPreferenceManager().isRecursive() );
                 if ( goal.equals( "deploy" ) )
                 {
-                    MavenManager.getMaven().deploy( project );
+                    MavenManager.getMaven().deploy( project, parameters );
                 }
                 else if ( goal.equals( "install" ) )
                 {
-                    MavenManager.getMaven().install( project );
+                    MavenManager.getMaven().install( project, parameters );
                 }
                 else
                 {
-                    if ( properties == null || properties.size() == 0 )
-                    {
-                        MavenManager.getMaven().scheduleGoal( project, goal );
-                    }
-                    else
-                    {
-                        MavenManager.getMaven().scheduleGoal( project, goal, 
-                                                              MavenExecutionParameter.newDefaultMavenExecutionParameter( properties ) );
-                    }
+                    MavenManager.getMaven().scheduleGoal( project, goal, parameters );
                 }
             }
             catch ( CoreException e )
             {
                 // TODO Auto-generated catch block
-                MavenUiActivator.getLogger().error("In ProgressBarDialog.run() - " + e.toString() );
+                MavenUiActivator.getLogger().error( "In ProgressBarDialog.run() - " + e.toString() );
             }
         }
 
@@ -91,9 +88,6 @@ public class ProgressBarDialog implements IRunnableWithProgress
     }
     // TODO : Not used, don't know why.
     /*
-    private void getTotalTime()
-    {
-        // TODO Auto-generated method stub
-        TOTAL_TIME = project.getArtifactId().length();
-    }*/
+     * private void getTotalTime() { // TODO Auto-generated method stub TOTAL_TIME = project.getArtifactId().length(); }
+     */
 }
