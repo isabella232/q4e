@@ -25,12 +25,11 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
-public class MavenSiteAction
-    extends AbstractMavenAction
+public class MavenSiteAction extends AbstractMavenAction
 {
 
-    protected void runInternal( IAction action )
-        throws CoreException
+    @Override
+    protected void runInternal( IAction action ) throws CoreException
     {
         IMavenProject project = getMavenProject();
         if ( project != null )
@@ -40,7 +39,7 @@ public class MavenSiteAction
             IMavenListener listener = new SiteBuildListener( project, browserSupport );
 
             MavenManager.getMaven().addEventListener( listener );
-            MavenManager.getMaven().scheduleGoal( project, "site" );
+            MavenManager.getMaven().scheduleGoal( project, "site", getDefaultParameters() );
         }
     }
 
@@ -89,8 +88,7 @@ public class MavenSiteAction
      * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
      * @version $Id$
      */
-    private class SiteBuildListener
-        implements IMavenListener
+    private class SiteBuildListener implements IMavenListener
     {
 
         private final IMavenProject project;

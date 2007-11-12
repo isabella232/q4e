@@ -11,17 +11,16 @@ import org.devzuz.q.maven.embedder.MavenManager;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 
-public class MavenInstallAction
-    extends AbstractMavenAction
+public class MavenInstallAction extends AbstractMavenAction
 {
 
-    protected void runInternal( IAction action )
-        throws CoreException
+    @Override
+    protected void runInternal( IAction action ) throws CoreException
     {
         IMavenProject project = getMavenProject();
         if ( project != null )
         {
-            MavenManager.getMaven().install( project );
+            MavenManager.getMaven().install( project, getDefaultParameters() );
         }
     }
 }

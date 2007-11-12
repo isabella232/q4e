@@ -89,9 +89,9 @@ public class EclipseMaven implements IMaven
 
     private int state = STOPPED;
 
-    public void deploy( IMavenProject mavenProject ) throws CoreException
+    public void deploy( IMavenProject mavenProject, MavenExecutionParameter parameters ) throws CoreException
     {
-        scheduleGoal( mavenProject, GOAL_DEPLOY );
+        scheduleGoal( mavenProject, GOAL_DEPLOY, parameters );
     }
 
     public void addMavenListener( IMavenListener listener )
@@ -114,8 +114,9 @@ public class EclipseMaven implements IMaven
         return executeGoal( mavenProject, goal, null, monitor );
     }
 
-    public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter,
-                                              IProgressMonitor monitor ) throws CoreException
+    public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal,
+                                              MavenExecutionParameter parameter, IProgressMonitor monitor )
+        throws CoreException
     {
         return executeGoals( mavenProject, Collections.singletonList( goal ), parameter, monitor );
     }
@@ -126,8 +127,9 @@ public class EclipseMaven implements IMaven
         return executeGoals( mavenProject, goals, null, monitor );
     }
 
-    public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals, MavenExecutionParameter parameter,
-                                               IProgressMonitor monitor ) throws CoreException
+    public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals,
+                                               MavenExecutionParameter parameter, IProgressMonitor monitor )
+        throws CoreException
     {
         MavenExecutionRequest request = generateRequest( mavenProject, parameter );
         request.setGoals( goals );
@@ -158,17 +160,19 @@ public class EclipseMaven implements IMaven
         return request;
     }
 
-    public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter ) throws CoreException
+    public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter )
+        throws CoreException
     {
         scheduleRequest( baseDirectory, generateRequest( baseDirectory, goal, parameter ), null );
     }
 
-    public void scheduleGoal( IMavenProject mavenProject, String goal ) throws CoreException
-    {
-        scheduleGoal( mavenProject, goal, null );
-    }
+// public void scheduleGoal( IMavenProject mavenProject, String goal ) throws CoreException
+// {
+// scheduleGoal( mavenProject, goal, null );
+// }
 
-    public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter ) throws CoreException
+    public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter )
+        throws CoreException
     {
         scheduleGoal( mavenProject, goal, parameter, null );
     }
@@ -254,11 +258,11 @@ public class EclipseMaven implements IMaven
 
     private MavenExecutionRequest generateRequest( IMavenProject mavenProject, MavenExecutionParameter parameter )
     {
-        if( parameter == null )
+        if ( parameter == null )
         {
             parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter();
         }
-        
+
         DefaultMavenExecutionRequest request = new DefaultMavenExecutionRequest();
 
         request.setOffline( parameter.isOffline() ); // false
@@ -395,9 +399,9 @@ public class EclipseMaven implements IMaven
         return state;
     }
 
-    public void install( IMavenProject mavenProject ) throws CoreException
+    public void install( IMavenProject mavenProject, MavenExecutionParameter parameters ) throws CoreException
     {
-        scheduleGoal( mavenProject, GOAL_INSTALL );
+        scheduleGoal( mavenProject, GOAL_INSTALL, parameters );
     }
 
     public void start() throws CoreException
@@ -427,8 +431,8 @@ public class EclipseMaven implements IMaven
             // Fail when you have a settings.xml file and it does not parse
             if ( validationResult.isUserSettingsFilePresent() && !validationResult.isUserSettingsFileParses() )
             {
-                throw new QCoreException(
-                                          new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, "The settings file is invalid" ) );
+                throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID,
+                                                      "The settings file is invalid" ) );
             }
 
             mavenEmbedder = new MavenEmbedder( config );

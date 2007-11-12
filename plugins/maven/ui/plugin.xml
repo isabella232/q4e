@@ -105,6 +105,13 @@
                 label="%mavenManageDependenciesAction"
                 menubarPath="org.devzuz.q.maven.ui.project.submenu/contents">
           </action>
+           <action
+                 class="org.devzuz.q.maven.ui.actions.MavenToggleRecursiveAction"
+                 enablesFor="*"
+                 id="org.devzuz.q.maven.ui.actions.MavenToggleRecursiveAction"
+                 label="%mavenToggleRecursiveAction"
+                 menubarPath="org.devzuz.q.maven.ui.project.submenu/contents"
+                 style="toggle"/>
        </objectContribution>
        <objectContribution
              id="org.devzuz.q.maven.ui.project.antConvertMenu"

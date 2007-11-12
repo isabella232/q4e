@@ -114,8 +114,9 @@ public interface IMaven
      *            properties of this goal
      * @throws CoreException
      */
-    public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter,
-                                              IProgressMonitor monitor ) throws CoreException;
+    public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal,
+                                              MavenExecutionParameter parameter, IProgressMonitor monitor )
+        throws CoreException;
 
     /**
      * Allows you to execute several goals against a MavenProject.
@@ -141,8 +142,9 @@ public interface IMaven
      *            properties of this goal. Might be <code>null</code> when no properties are used.
      * @throws CoreException
      */
-    public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals, MavenExecutionParameter parameter,
-                                               IProgressMonitor monitor ) throws CoreException;
+    public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals,
+                                               MavenExecutionParameter parameter, IProgressMonitor monitor )
+        throws CoreException;
 
     /**
      * Allows you to schedule the execution of a given goal without an existing project. For example, "archetype:create"
@@ -156,7 +158,8 @@ public interface IMaven
      *            properties of this goal
      * @throws CoreException
      */
-    public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter ) throws CoreException;
+    public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter )
+        throws CoreException;
 
     /**
      * Allows you to schedule the execution of a given goal name against a MavenProject.
@@ -169,8 +172,7 @@ public interface IMaven
      *            goal name
      * @throws CoreException
      */
-    public void scheduleGoal( IMavenProject mavenProject, String goal ) throws CoreException;
-
+// public void scheduleGoal( IMavenProject mavenProject, String goal ) throws CoreException;
     /**
      * Allows you to schedule the execution of a given goal name against a MavenProject.
      * 
@@ -185,7 +187,8 @@ public interface IMaven
      *            properties of this goal
      * @throws CoreException
      */
-    public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter ) throws CoreException;
+    public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter )
+        throws CoreException;
 
     /**
      * Allows you to schedule the execution of a given goal name against a MavenProject.
@@ -255,7 +258,7 @@ public interface IMaven
      * @param mavenProject
      * @throws CoreException
      */
-    public void install( IMavenProject mavenProject ) throws CoreException;
+    public void install( IMavenProject mavenProject, MavenExecutionParameter parameters ) throws CoreException;
 
     /**
      * Same as calling {@link #scheduleGoal(IMavenProject, String)} with (mavenProject, "deploy")
@@ -263,7 +266,7 @@ public interface IMaven
      * @param mavenProject
      * @throws CoreException
      */
-    public void deploy( IMavenProject mavenProject ) throws CoreException;
+    public void deploy( IMavenProject mavenProject, MavenExecutionParameter parameters ) throws CoreException;
 
     /**
      * 
@@ -328,10 +331,9 @@ public interface IMaven
      * @param remoteRepositories
      * @throws CoreException
      */
-    public void resolveArtifact( IMavenArtifact artifact , String type , String suffix , 
-                                 List<ArtifactRepository> remoteRepositories )
-        throws CoreException;
-    
+    public void resolveArtifact( IMavenArtifact artifact, String type, String suffix,
+                                 List<ArtifactRepository> remoteRepositories ) throws CoreException;
+
     /**
      * <p>
      * Refresh the Maven Embedder instance, deleting cache, rereading settings,...

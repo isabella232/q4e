@@ -7,7 +7,9 @@
 package org.devzuz.q.maven.ui.actions;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.ui.MavenUiActivator;
+import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.devzuz.q.maven.ui.views.MavenEventView;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -21,8 +23,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-public abstract class AbstractMavenAction
-    implements IObjectActionDelegate
+public abstract class AbstractMavenAction implements IObjectActionDelegate
 {
 
     public static final String POM_XML = "pom.xml";
@@ -84,13 +85,24 @@ public abstract class AbstractMavenAction
         }
     }
 
-    protected void runInternal( IAction action )
-        throws CoreException
+    protected void runInternal( IAction action ) throws CoreException
     {
     }
 
     protected IStructuredSelection getSelection()
     {
         return selection;
+    }
+
+    /**
+     * Creates default maven parameters including information about recursion from the preferences.
+     * 
+     * @return the maven parameters, configured for recursion as specified on maven preferences.
+     */
+    protected MavenExecutionParameter getDefaultParameters()
+    {
+        MavenExecutionParameter parameters = MavenExecutionParameter.newDefaultMavenExecutionParameter();
+        parameters.setRecursive( MavenPreferenceManager.getMavenPreferenceManager().isRecursive() );
+        return parameters;
     }
 }

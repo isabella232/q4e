@@ -17,18 +17,18 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.window.Window;
 
-public class MavenCustomGoalAction
-    extends AbstractMavenAction
+public class MavenCustomGoalAction extends AbstractMavenAction
 {
     public static String PACKAGING_POM = "pom";
-    
-    protected void runInternal( IAction action )
-        throws CoreException
+
+    @Override
+    protected void runInternal( IAction action ) throws CoreException
     {
         IMavenProject project = getMavenProject();
         if ( project != null )
         {
-            MavenCustomGoalDialog customGoalDialog = MavenCustomGoalDialog.getCustomGoalDialog( project.getPackaging().equals( PACKAGING_POM ) );
+            MavenCustomGoalDialog customGoalDialog =
+                MavenCustomGoalDialog.getCustomGoalDialog( project.getPackaging().equals( PACKAGING_POM ) );
 
             if ( customGoalDialog.open() == Window.OK )
             {
@@ -40,15 +40,16 @@ public class MavenCustomGoalAction
 
                 if ( properties == null || properties.size() <= 0 )
                 {
-                    MavenManager.getMaven().scheduleGoal( project, goal );
+                    MavenManager.getMaven().scheduleGoal( project, goal, getDefaultParameters() );
                 }
                 else
                 {
-                    MavenExecutionParameter parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter( properties );
+                    MavenExecutionParameter parameter =
+                        MavenExecutionParameter.newDefaultMavenExecutionParameter( properties );
                     parameter.setRecursive( customGoalDialog.isExecutionRecursive() );
                     MavenManager.getMaven().scheduleGoal( project, goal, parameter );
                 }
             }
-        }        
+        }
     }
 }

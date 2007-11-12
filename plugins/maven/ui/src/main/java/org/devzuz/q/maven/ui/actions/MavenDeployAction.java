@@ -12,8 +12,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.swt.widgets.Shell;
 
-public class MavenDeployAction
-    extends AbstractMavenAction
+public class MavenDeployAction extends AbstractMavenAction
 {
 
     protected void configureShell( Shell shell )
@@ -24,13 +23,13 @@ public class MavenDeployAction
         shell.setText( "Show Progress" );
     }
 
-    protected void runInternal( IAction action )
-        throws CoreException
+    @Override
+    protected void runInternal( IAction action ) throws CoreException
     {
         IMavenProject project = getMavenProject();
         if ( project != null )
         {
-            MavenManager.getMaven().deploy( project );
+            MavenManager.getMaven().deploy( project, getDefaultParameters() );
         }
     }
 

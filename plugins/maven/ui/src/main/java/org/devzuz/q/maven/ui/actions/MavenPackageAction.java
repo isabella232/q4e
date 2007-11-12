@@ -11,17 +11,16 @@ import org.devzuz.q.maven.embedder.MavenManager;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 
-public class MavenPackageAction
-    extends AbstractMavenAction
+public class MavenPackageAction extends AbstractMavenAction
 {
 
-    protected void runInternal( IAction action )
-        throws CoreException
+    @Override
+    protected void runInternal( IAction action ) throws CoreException
     {
         IMavenProject project = getMavenProject();
         if ( project != null )
         {
-            MavenManager.getMaven().scheduleGoal( project, "package" );
+            MavenManager.getMaven().scheduleGoal( project, "package", getDefaultParameters() );
         }
     }
 
