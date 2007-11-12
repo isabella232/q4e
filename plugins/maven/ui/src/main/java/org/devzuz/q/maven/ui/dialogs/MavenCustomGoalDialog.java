@@ -12,6 +12,7 @@ import java.util.TreeMap;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.customcomponents.PropertiesComponent;
+import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -27,8 +28,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
-public class MavenCustomGoalDialog
-    extends AbstractResizableDialog
+public class MavenCustomGoalDialog extends AbstractResizableDialog
 {
     private static MavenCustomGoalDialog customGoalDialog = null;
 
@@ -36,8 +36,8 @@ public class MavenCustomGoalDialog
     {
         if ( customGoalDialog == null )
         {
-            customGoalDialog = new MavenCustomGoalDialog( PlatformUI.getWorkbench().getActiveWorkbenchWindow()
-                .getShell() );
+            customGoalDialog =
+                new MavenCustomGoalDialog( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell() );
         }
         customGoalDialog.setParentPom( isParentPom );
         return customGoalDialog;
@@ -46,23 +46,24 @@ public class MavenCustomGoalDialog
     private PropertiesComponent propertiesComponent;
 
     private Text customGoalText;
-    
+
     private Button setRecursiveRadioButton;
 
     private boolean isParentPom;
-    
+
     private Map<String, String> customGoalProperties;
 
     private String goal;
-    
+
     private boolean executionIsRecursive = false;
 
     public MavenCustomGoalDialog( Shell shell )
-    {   
+    {
         super( shell );
         customGoalProperties = new TreeMap<String, String>();
     }
 
+    @Override
     protected Control internalCreateDialogArea( Composite container )
     {
         ModifyListener modifyingListener = new ModifyListener()
@@ -76,7 +77,8 @@ public class MavenCustomGoalDialog
         container.setLayout( new GridLayout( 1, false ) );
 
         // Custom goal
-        Composite container1 = new Composite( container, SWT.NULL );;
+        Composite container1 = new Composite( container, SWT.NULL );
+        ;
         container1.setLayout( new GridLayout( 2, false ) );
         container1.setLayoutData( new GridData( GridData.FILL, GridData.BEGINNING, true, false ) );
 
@@ -93,30 +95,33 @@ public class MavenCustomGoalDialog
         propertiesComponent.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 
         // radio button for recursive
-        Composite container2 = new Composite( container, SWT.NULL );;
+        Composite container2 = new Composite( container, SWT.NULL );
+        ;
         container2.setLayout( new GridLayout( 2, false ) );
         container2.setLayoutData( new GridData( GridData.FILL, GridData.BEGINNING, true, false ) );
         container2.setEnabled( isParentPom );
-        
-        setRecursiveRadioButton = new Button( container2 , SWT.CHECK );
-        setRecursiveRadioButton.setLayoutData(  new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        setRecursiveRadioButton.setSelection( false );
+
+        setRecursiveRadioButton = new Button( container2, SWT.CHECK );
+        setRecursiveRadioButton.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
+        setRecursiveRadioButton.setSelection( MavenPreferenceManager.getMavenPreferenceManager().isRecursive() );
         setRecursiveRadioButton.setEnabled( isParentPom );
-        
+
         Label label2 = new Label( container2, SWT.NULL );
         label2.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
         label2.setText( "Recursive" );
         label2.setEnabled( isParentPom );
-        
+
         return container;
     }
 
+    @Override
     public void onWindowActivate()
     {
         validate();
         propertiesComponent.hasActivated();
     }
 
+    @Override
     public void onWindowDeactivate()
     {
         goal = customGoalText.getText().trim();
@@ -152,12 +157,13 @@ public class MavenCustomGoalDialog
     {
         return customGoalProperties;
     }
-    
+
     public boolean isExecutionRecursive()
     {
         return executionIsRecursive;
     }
 
+    @Override
     protected Preferences getDialogPreferences()
     {
         return MavenUiActivator.getDefault().getPluginPreferences();
