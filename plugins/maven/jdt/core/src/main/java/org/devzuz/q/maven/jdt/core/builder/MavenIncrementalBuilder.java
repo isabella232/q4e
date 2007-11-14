@@ -12,7 +12,6 @@ import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
-import org.devzuz.q.maven.jdt.core.exception.MavenCoreProblemMarker;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -33,16 +32,14 @@ import org.eclipse.jdt.core.JavaModelException;
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
  */
-public class MavenIncrementalBuilder
-    extends IncrementalProjectBuilder
+public class MavenIncrementalBuilder extends IncrementalProjectBuilder
 {
 
-    public static final String MAVEN_INCREMENTAL_BUILDER_ID = MavenJdtCoreActivator.PLUGIN_ID + ".mavenIncrementalBuilder"; //$NON-NLS-1$
- 
-    
+    public static final String MAVEN_INCREMENTAL_BUILDER_ID =
+        MavenJdtCoreActivator.PLUGIN_ID + ".mavenIncrementalBuilder"; //$NON-NLS-1$
+
     @Override
-    protected IProject[] build( int kind, Map args, IProgressMonitor monitor )
-        throws CoreException
+    protected IProject[] build( int kind, Map args, IProgressMonitor monitor ) throws CoreException
     {
         if ( ( kind == INCREMENTAL_BUILD ) || ( kind == AUTO_BUILD ) )
         {
@@ -70,10 +67,9 @@ public class MavenIncrementalBuilder
         {
             new IWorkspaceRunnable()
             {
-                public void run( IProgressMonitor monitor )
-                    throws CoreException
+                public void run( IProgressMonitor monitor ) throws CoreException
                 {
-                    pom.deleteMarkers( MavenCoreProblemMarker.getMavenPOMMarker(), false, IResource.DEPTH_ZERO );
+                    pom.deleteMarkers( MavenJdtCoreActivator.MARKER_ID, false, IResource.DEPTH_ZERO );
                 }
             }.run( monitor );
         }
@@ -92,8 +88,8 @@ public class MavenIncrementalBuilder
         {
             try
             {
-                IClasspathContainer container = JavaCore
-                    .getClasspathContainer( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH, javaProject );
+                IClasspathContainer container =
+                    JavaCore.getClasspathContainer( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH, javaProject );
                 return (MavenClasspathContainer) container;
             }
             catch ( JavaModelException e )
