@@ -21,7 +21,7 @@
   </parent>
   <groupId>org.apache.maven</groupId>
   <artifactId>embedder</artifactId>
-  <version>2.1.0-587793</version>
+  <version>2.1.0-594740</version>
   <packaging>bundle</packaging>
   <name>Q for Eclipse Maven Embedder</name>
   <description>Maven Embedder for the Q project</description>
@@ -163,6 +163,7 @@
                 !javax.crypto.*,
                 !junit.*,
                 !org.jaxen.*,
+                !org.aspectj.runtime.internal.*,
                 !org.apache.commons.lang.*,
                 org.apache.commons.cli;version="[1.0.0,2.0.0)",
                 *
@@ -202,6 +203,10 @@
         <exclusion>
           <groupId>jtidy</groupId>
           <artifactId>jtidy</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>aspectj</groupId>
+          <artifactId>aspectjrt</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
