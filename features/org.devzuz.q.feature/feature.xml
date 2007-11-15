@@ -37,7 +37,7 @@
       <import plugin="org.eclipse.swt" version="3.3.0" match="compatible"/>
       <import feature="org.apache.commons.collections.feature" version="3.2.0.200705282147"/>
       <import feature="org.prefuse.feature" version="1.0.0.v20060715"/>
-      <import feature="org.apache.maven.feature" version="2.1.0.571188-shaded"/>
+      <import feature="org.apache.maven.feature" version="2.1.0.594740"/>
    </requires>
 
    <plugin
