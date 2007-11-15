@@ -2,7 +2,8 @@ Manifest-Version: 1.0
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Created-By: 1.5.0_10 (Sun Microsystems Inc.)
 Import-Package: com.jcraft.jsch,org.apache.commons.cli;version="[1.0.0
- ,2.0.0)",org.aspectj.lang,org.w3c.dom,org.w3c.tidy
+ ,2.0.0)",org.aspectj.lang,org.aspectj.runtime.internal,org.w3c.dom,or
+ g.w3c.tidy
 Embed-Transitive: true
 Embed-StripGroup: true
 Include-Resource: LICENSE.txt,NOTICE.txt,lib/maven-project-2.1-SNAPSHO
@@ -12,22 +13,22 @@ Include-Resource: LICENSE.txt,NOTICE.txt,lib/maven-project-2.1-SNAPSHO
  sitory\org\apache\maven\maven-model\2.1-SNAPSHOT\maven-model-2.1-SNAP
  SHOT.jar,lib/maven-build-context-2.1-SNAPSHOT.jar=C:\Documents and Se
  ttings\csanchez\.m2\repository\org\apache\maven\maven-build-context\2
- .1-SNAPSHOT\maven-build-context-2.1-SNAPSHOT.jar,lib/wagon-http-light
- weight-1.0-beta-2.jar=C:\Documents and Settings\csanchez\.m2\reposito
- ry\org\apache\maven\wagon\wagon-http-lightweight\1.0-beta-2\wagon-htt
- p-lightweight-1.0-beta-2.jar,lib/plexus-classworlds-1.2-alpha-10.jar=
- C:\Documents and Settings\csanchez\.m2\repository\org\codehaus\plexus
- \plexus-classworlds\1.2-alpha-10\plexus-classworlds-1.2-alpha-10.jar,
+ .1-SNAPSHOT\maven-build-context-2.1-SNAPSHOT.jar,lib/plexus-classworl
+ ds-1.2-alpha-10.jar=C:\Documents and Settings\csanchez\.m2\repository
+ \org\codehaus\plexus\plexus-classworlds\1.2-alpha-10\plexus-classworl
+ ds-1.2-alpha-10.jar,lib/wagon-http-lightweight-1.0-beta-2.jar=C:\Docu
+ ments and Settings\csanchez\.m2\repository\org\apache\maven\wagon\wag
+ on-http-lightweight\1.0-beta-2\wagon-http-lightweight-1.0-beta-2.jar,
  lib/maven-lifecycle-2.1-SNAPSHOT.jar=C:\Documents and Settings\csanch
  ez\.m2\repository\org\apache\maven\maven-lifecycle\2.1-SNAPSHOT\maven
  -lifecycle-2.1-SNAPSHOT.jar,lib/maven-profile-2.1-SNAPSHOT.jar=C:\Doc
  uments and Settings\csanchez\.m2\repository\org\apache\maven\maven-pr
- ofile\2.1-SNAPSHOT\maven-profile-2.1-SNAPSHOT.jar,lib/wagon-file-1.0-
- beta-2.jar=C:\Documents and Settings\csanchez\.m2\repository\org\apac
- he\maven\wagon\wagon-file\1.0-beta-2\wagon-file-1.0-beta-2.jar,lib/wa
- gon-ssh-external-1.0-beta-2.jar=C:\Documents and Settings\csanchez\.m
- 2\repository\org\apache\maven\wagon\wagon-ssh-external\1.0-beta-2\wag
- on-ssh-external-1.0-beta-2.jar,lib/wagon-ssh-common-1.0-beta-2.jar=C:
+ ofile\2.1-SNAPSHOT\maven-profile-2.1-SNAPSHOT.jar,lib/wagon-ssh-exter
+ nal-1.0-beta-2.jar=C:\Documents and Settings\csanchez\.m2\repository\
+ org\apache\maven\wagon\wagon-ssh-external\1.0-beta-2\wagon-ssh-extern
+ al-1.0-beta-2.jar,lib/wagon-file-1.0-beta-2.jar=C:\Documents and Sett
+ ings\csanchez\.m2\repository\org\apache\maven\wagon\wagon-file\1.0-be
+ ta-2\wagon-file-1.0-beta-2.jar,lib/wagon-ssh-common-1.0-beta-2.jar=C:
  \Documents and Settings\csanchez\.m2\repository\org\apache\maven\wago
  n\wagon-ssh-common\1.0-beta-2\wagon-ssh-common-1.0-beta-2.jar,lib/mav
  en-plugin-api-2.1-SNAPSHOT.jar=C:\Documents and Settings\csanchez\.m2
@@ -60,7 +61,7 @@ Include-Resource: LICENSE.txt,NOTICE.txt,lib/maven-project-2.1-SNAPSHO
  1.0-beta-2.jar=C:\Documents and Settings\csanchez\.m2\repository\org\
  apache\maven\wagon\wagon-provider-api\1.0-beta-2\wagon-provider-api-1
  .0-beta-2.jar
-Bnd-LastModified: 1195013152843
+Bnd-LastModified: 1195097811328
 Export-Package: org.apache.maven.project.inheritance;uses:="org.apache
  .maven.project,org.codehaus.plexus.util,org.apache.maven.model",org.a
  pache.maven.plugin.version;uses:="org.apache.maven.artifact.repositor
@@ -561,18 +562,17 @@ Export-Package: org.apache.maven.project.inheritance;uses:="org.apache
  n.artifact.resolver,org.apache.maven.project,org.apache.maven.compat.
  plugin,org.codehaus.plexus.context,org.apache.maven.context"
 Bundle-Version: 2.1.0.594740
-Ignore-Package: org.aspectj.runtime.internal,org.codehaus.plexus.util.
- cli.shell,org.codehaus.plexus.util.dag,org.codehaus.plexus.util,org.c
- odehaus.plexus.util.cli,org.codehaus.plexus.util.reflection,org.codeh
- aus.plexus.util.interpolation,junit.framework,org.codehaus.plexus.uti
- l.introspection
+Ignore-Package: org.codehaus.plexus.util.cli.shell,org.codehaus.plexus
+ .util.dag,org.codehaus.plexus.util,org.codehaus.plexus.util.cli,org.c
+ odehaus.plexus.util.reflection,org.codehaus.plexus.util.interpolation
+ ,junit.framework,org.codehaus.plexus.util.introspection
 Bundle-Name: Q for Eclipse Maven Embedder
 Bundle-Description: Maven Embedder for the Q project
 Bundle-ClassPath: .,lib/maven-project-2.1-SNAPSHOT.jar,lib/maven-model
- -2.1-SNAPSHOT.jar,lib/maven-build-context-2.1-SNAPSHOT.jar,lib/wagon-
- http-lightweight-1.0-beta-2.jar,lib/plexus-classworlds-1.2-alpha-10.j
+ -2.1-SNAPSHOT.jar,lib/maven-build-context-2.1-SNAPSHOT.jar,lib/plexus
+ -classworlds-1.2-alpha-10.jar,lib/wagon-http-lightweight-1.0-beta-2.j
  ar,lib/maven-lifecycle-2.1-SNAPSHOT.jar,lib/maven-profile-2.1-SNAPSHO
- T.jar,lib/wagon-file-1.0-beta-2.jar,lib/wagon-ssh-external-1.0-beta-2
+ T.jar,lib/wagon-ssh-external-1.0-beta-2.jar,lib/wagon-file-1.0-beta-2
  .jar,lib/wagon-ssh-common-1.0-beta-2.jar,lib/maven-plugin-api-2.1-SNA
  PSHOT.jar,lib/maven-core-2.1-SNAPSHOT.jar,lib/doxia-sink-api-1.0-alph
  a-9.jar,lib/maven-reporting-api-2.1-SNAPSHOT.jar,lib/plexus-container

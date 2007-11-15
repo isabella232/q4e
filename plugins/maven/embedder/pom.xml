@@ -163,7 +163,6 @@
                 !javax.crypto.*,
                 !junit.*,
                 !org.jaxen.*,
-                !org.aspectj.runtime.internal.*,
                 !org.apache.commons.lang.*,
                 org.apache.commons.cli;version="[1.0.0,2.0.0)",
                 *
