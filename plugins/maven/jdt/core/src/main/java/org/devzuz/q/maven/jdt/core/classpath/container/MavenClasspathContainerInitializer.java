@@ -59,7 +59,7 @@ public class MavenClasspathContainerInitializer extends ClasspathContainerInitia
             {
                 /* prevent refreshing the classpath of several projects as uses too much cpu */
                 UpdateClasspathJob job = new UpdateClasspathJob( project );
-                job.setRule( project.getProject().getParent() );
+                job.setRule( project.getProject().getWorkspace().getRoot() );
                 job.setPriority( Job.BUILD );
                 job.schedule();
             }
