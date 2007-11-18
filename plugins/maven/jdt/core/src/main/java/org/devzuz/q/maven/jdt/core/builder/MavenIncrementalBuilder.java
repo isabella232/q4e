@@ -21,6 +21,7 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -78,7 +79,10 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             MavenJdtCoreActivator.getLogger().log( ce );
         }
 
-        new UpdateClasspathJob( project ).schedule();
+        UpdateClasspathJob job = new UpdateClasspathJob( project );
+        job.setRule( project.getProject().getWorkspace().getRoot() );
+        job.setPriority( Job.BUILD );
+        job.schedule();
     }
 
     private MavenClasspathContainer getClasspathContainer()

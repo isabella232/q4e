@@ -109,7 +109,7 @@ public class MavenExceptionHandler
         instance.markPom( project, msg, IMarker.SEVERITY_WARNING );
     }
 
-    public static void handle( IProject project, Exception e )
+    public static void handle( IProject project, Throwable e )
     {
         Throwable cause = e;
 
@@ -153,9 +153,19 @@ public class MavenExceptionHandler
         }
         else
         {
-            String s = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getName();
-            error( project, "Error: " + s );
-            MavenJdtCoreActivator.getLogger().log( "Unexpected error: " + s, cause );
+            Throwable deepCause = cause.getCause();
+            if ( deepCause != null )
+            {
+                // FIX for Issue 113: Unexpected exceptions can come from maven.
+                // Unwrap unknown exceptions until a known one is found, or fail.
+                handle( project, deepCause );
+            }
+            else
+            {
+                String s = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getName();
+                error( project, "Error: " + s );
+                MavenJdtCoreActivator.getLogger().log( "Unexpected error: " + s, cause );
+            }
         }
     }
 
