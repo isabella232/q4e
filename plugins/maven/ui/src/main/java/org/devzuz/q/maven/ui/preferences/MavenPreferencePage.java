@@ -29,6 +29,9 @@ public class MavenPreferencePage
         addField( new IntegerFieldEditor( MavenPreferenceManager.ARCHETYPE_PAGE_CONN_TIMEOUT,
                                           Messages.MavenPreference_ArchetypeConnectionTimeout, getFieldEditorParent() ) );
         
+        addField( new BooleanFieldEditor( MavenPreferenceManager.RECURSIVE_EXECUTION, Messages.MavenPreference_RecursiveExecution,
+                                          getFieldEditorParent() ) );
+        
         addField( new BooleanFieldEditor( IMaven.GLOBAL_PREFERENCE_OFFLINE, Messages.MavenPreference_Offline,
                                           getFieldEditorParent() ) );
 

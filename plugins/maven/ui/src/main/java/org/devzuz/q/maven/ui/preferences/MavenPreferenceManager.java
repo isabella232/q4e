@@ -8,7 +8,7 @@ public class MavenPreferenceManager
 {
     public static final String ARCHETYPE_PAGE_CONN_TIMEOUT = MavenUiActivator.PLUGIN_ID + ".archetypeConnTimeout";
 
-    private static final String RECURSIVE_EXECUTION = MavenUiActivator.PLUGIN_ID + ".recursive";
+    public static final String RECURSIVE_EXECUTION = MavenUiActivator.PLUGIN_ID + ".recursive";
 
     public static final int ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT = 30000;
 
