@@ -12,5 +12,5 @@ Export-Package: org.apache.maven.aardvark.ant,
  org.apache.maven.aardvark.converter,
  org.apache.maven.aardvark.converter.ant,
  org.apache.maven.aardvark.converter.maven1
-Require-Bundle: org.apache.maven.embedder;bundle-version="2.1.0.587793";visibility:=reexport
+Require-Bundle: org.apache.maven.embedder;bundle-version="2.1.0.594740";visibility:=reexport
 Bundle-Vendor: DevZuz
