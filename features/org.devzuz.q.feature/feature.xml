@@ -40,6 +40,7 @@
       <import feature="org.apache.maven.feature" version="2.1.0.594740"/>
    </requires>
 
+   <!-- Disable from builds
    <plugin
          id="org.devzuz.q.repository.ui"
          download-size="0"
@@ -60,7 +61,7 @@
          install-size="0"
          version="0.3.0.qualifier"
          unpack="false"/>
-
+   -->
    <plugin
          id="org.devzuz.q.maven.jdt.ui"
          download-size="0"
@@ -82,6 +83,7 @@
          version="0.3.0.qualifier"
          unpack="false"/>
 
+   <!-- Disable from builds
    <plugin
          id="org.devzuz.q.maven.wagon"
          download-size="0"
@@ -102,7 +104,8 @@
          install-size="0"
          version="0.3.0.qualifier"
          unpack="false"/>
-
+   -->
+   
    <plugin
          id="org.devzuz.q.maven.wizard"
          download-size="0"
@@ -110,13 +113,15 @@
          version="0.3.0.qualifier"
          unpack="false"/>
 
+   <!-- Disable from builds
    <plugin
          id="org.devzuz.q.bundle.classpath"
          download-size="0"
          install-size="0"
          version="0.3.0.qualifier"
          unpack="false"/>
-
+   -->
+   
    <plugin
          id="org.devzuz.q.maven.core"
          download-size="0"
