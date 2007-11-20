@@ -9,7 +9,7 @@ Require-Bundle: org.devzuz.q.maven.core;bundle-version="[0.3.0,0.4.0)";visibilit
  org.prefuse;bundle-version="1.0.0";visibility:=reexport,
  org.eclipse.ui;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.apache.commons.collections;bundle-version="[3.2.0,4.0.0)",
- org.devzuz.q.maven.aardvark
+ org.devzuz.q.maven.aardvark;bundle-version="0.3.0.200711200008"
 Eclipse-LazyStart: true
 Bundle-Localization: plugin
 Bundle-ClassPath: lucene-core-2.1.0.jar,
