@@ -213,7 +213,14 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         {
             FileReader filetoread = new FileReader( pom );
             Model pomModel = new MavenXpp3Reader().read( filetoread );
-            strProjectInfoData.append( pomModel.getGroupId() + "-" );
+            String groupId = pomModel.getGroupId();
+            
+            if( groupId == null )
+            {
+                groupId = pomModel.getParent().getGroupId();
+            }
+            
+            strProjectInfoData.append( groupId + "-" );
             strProjectInfoData.append( pomModel.getArtifactId() + "-" );
             strProjectInfoData.append( pomModel.getVersion() );
             pomModel = null;
