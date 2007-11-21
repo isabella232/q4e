@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Maven Aardvark
 Bundle-SymbolicName: org.devzuz.q.maven.aardvark
-Bundle-Version: 0.3.0.200711200008
+Bundle-Version: 1.0.0.200711210751
 Bundle-ClassPath: aardvark-core-1.0-SNAPSHOT.jar,
  aardvark-ant-1.0-SNAPSHOT.jar,
  maven-shared-jar-1.0.jar,
