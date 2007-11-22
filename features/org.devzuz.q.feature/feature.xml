@@ -77,6 +77,13 @@
 
    <!-- Disable from builds
    <plugin
+         id="org.devzuz.q.maven.conversion"
+         download-size="0"
+         install-size="0"
+         version="0.3.0.qualifier"
+         unpack="false"/>
+
+   <plugin
          id="org.devzuz.q.repository.ui"
          download-size="0"
          install-size="0"
