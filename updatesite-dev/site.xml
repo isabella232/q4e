@@ -15,6 +15,9 @@
    <feature url="features/org.prefuse.feature_1.0.0.v20060715.jar" id="org.prefuse.feature" version="1.0.0.v20060715">
       <category name="Enabling Features"/>
    </feature>
+   <feature url="features/org.apache.maven.aardvark.feature_1.0.0.200711210751.jar" id="org.apache.maven.aardvark.feature" version="1.0.0.200711210751">
+      <category name="Enabling Features"/>
+   </feature>
    <category-def name="Community" label="Community"/>
    <category-def name="Enabling Features" label="Enabling Features"/>
 </site>
