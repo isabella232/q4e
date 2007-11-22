@@ -334,7 +334,8 @@ public class EclipseMaven implements IMaven
 
                 ArtifactResolutionResult artifactResolutionResult = status.getArtifactResolutionResult();
                 boolean hasResolutionExceptions =
-                    ArtifactResolutionResultHelper.hasExceptions( artifactResolutionResult );
+                    ( artifactResolutionResult != null )
+                                    && ArtifactResolutionResultHelper.hasExceptions( artifactResolutionResult );
 
                 if ( hasResolutionExceptions || status.hasExceptions() )
                 {
