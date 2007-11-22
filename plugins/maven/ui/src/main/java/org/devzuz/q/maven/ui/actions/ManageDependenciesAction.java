@@ -9,6 +9,7 @@ package org.devzuz.q.maven.ui.actions;
 import java.io.IOException;
 
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.dialogs.ManageDependenciesDialog;
@@ -29,7 +30,7 @@ public class ManageDependenciesAction
         Object selectedProject = getSelection().iterator().next();
         if ( selectedProject instanceof IProject )
         {
-            IFile pomFile = ( (IProject) selectedProject ).getFile( POM_XML );
+            IFile pomFile = ( (IProject) selectedProject ).getFile( IMavenProject.POM_FILENAME );
             // Check if it is a maven project
             if ( pomFile.exists() )
             {

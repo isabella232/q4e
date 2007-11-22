@@ -23,10 +23,15 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
-public abstract class AbstractMavenAction implements IObjectActionDelegate
+public abstract class AbstractMavenAction
+    implements IObjectActionDelegate
 {
 
-    public static final String POM_XML = "pom.xml";
+    /**
+     * @deprecated use {@link IMavenProject#POM_FILENAME}
+     */
+    @Deprecated
+    public static final String POM_XML = IMavenProject.POM_FILENAME;
 
     private IStructuredSelection selection;
 
