@@ -19,6 +19,7 @@ import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.embedder.Configuration;
 import org.apache.maven.embedder.ConfigurationValidationResult;
@@ -330,7 +331,12 @@ public class EclipseMaven implements IMaven
             {
                 MavenExecutionResult status =
                     getMavenEmbedder().readProjectWithDependencies( generateRequest( mavenProject, null ) );
-                if ( status.hasExceptions() )
+
+                ArtifactResolutionResult artifactResolutionResult = status.getArtifactResolutionResult();
+                boolean hasResolutionExceptions =
+                    ArtifactResolutionResultHelper.hasExceptions( artifactResolutionResult );
+
+                if ( hasResolutionExceptions || status.hasExceptions() )
                 {
                     EclipseMavenExecutionResult eclipseMavenExecutionResult =
                         new EclipseMavenExecutionResult( status, mavenProject.getProject() );
@@ -347,7 +353,7 @@ public class EclipseMaven implements IMaven
             {
                 MavenProject mavenRawProject = null;
                 try
-                {
+            {
                     mavenRawProject = getMavenEmbedder().readProject( mavenProject.getPomFile() );
                 }
                 catch ( ExtensionScanningException e )

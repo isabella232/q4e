@@ -7,9 +7,11 @@
  */
 package org.devzuz.q.maven.embedder.internal;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
@@ -62,6 +64,24 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
             exceptions = Collections.EMPTY_LIST;
         }
 
+        List<Exception> executionExceptions = (List<Exception>) result.getExceptions();
+        List<Exception> resolutionExceptions = Collections.emptyList();
+
+        ArtifactResolutionResult artifactResolutionResult = result.getArtifactResolutionResult();
+        if ( artifactResolutionResult != null )
+        {
+            resolutionExceptions = ArtifactResolutionResultHelper.getExceptions( artifactResolutionResult );
+        }
+
+        if ( executionExceptions == null )
+        {
+            executionExceptions = Collections.emptyList();
+        }
+
+        exceptions = new ArrayList<Exception>( executionExceptions.size() + resolutionExceptions.size() );
+        exceptions.addAll( executionExceptions );
+        exceptions.addAll( resolutionExceptions );
+
         MavenProject mavenProject = result.getProject();
 
         if ( mavenProject != null )
@@ -73,7 +93,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
             // TODO: Trace or log this. Why is result.getMavenProject() null?
             if ( project != null )
             {
-                this.mavenProject = new EclipseMavenProject( project );
+            this.mavenProject = new EclipseMavenProject( project );
             }
             else
             {
