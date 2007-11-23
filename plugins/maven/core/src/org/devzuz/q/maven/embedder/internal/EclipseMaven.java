@@ -322,6 +322,19 @@ public class EclipseMaven implements IMaven
         return getMavenProject( mavenProject, resolveTransitively );
     }
 
+    public IMavenProject getMavenSuperProject() throws CoreException
+    {
+        try
+        {
+            MavenProject superProject = getMavenProjectBuilder().buildStandaloneSuperProject();
+            return new EclipseMavenProject( superProject, null );
+        }
+        catch ( ProjectBuildingException e )
+        {
+            throw new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID, e.getMessage(), e ) );
+        }
+    }
+
     private IMavenProject getMavenProject( EclipseMavenProject mavenProject, boolean resolveTransitively )
         throws CoreException
     {
@@ -377,27 +390,35 @@ public class EclipseMaven implements IMaven
     {
         try
         {
-            if ( mavenProjectBuilder == null )
-            {
-                mavenProjectBuilder =
-                    (MavenProjectBuilder) getMavenEmbedder().getPlexusContainer().lookup( MavenProjectBuilder.ROLE );
-            }
             MavenProject mavenRawProject =
-                mavenProjectBuilder.buildFromRepository( artifact, remoteArtifactRepositories,
-                                                         getMavenEmbedder().getLocalRepository(), true );
+                getMavenProjectBuilder().buildFromRepository( artifact, remoteArtifactRepositories,
+                                                              getMavenEmbedder().getLocalRepository(), true );
             EclipseMavenProject mavenProject = new EclipseMavenProject( new EclipseMavenArtifact( artifact ) );
             mavenProject.refreshProject( mavenRawProject );
             return mavenProject;
-        }
-        catch ( ComponentLookupException e )
-        {
-            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
-                                                  "Unable to lookup project builder", e ) );
         }
         catch ( ProjectBuildingException e )
         {
             throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
                                                   "Unable to build project from artifact " + artifact, e ) );
+        }
+    }
+
+    private MavenProjectBuilder getMavenProjectBuilder() throws QCoreException
+    {
+        try
+        {
+            if ( mavenProjectBuilder == null )
+            {
+                mavenProjectBuilder =
+                    (MavenProjectBuilder) getMavenEmbedder().getPlexusContainer().lookup( MavenProjectBuilder.ROLE );
+            }
+            return mavenProjectBuilder;
+        }
+        catch ( ComponentLookupException e )
+        {
+            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
+                                                  "Unable to lookup project builder", e ) );
         }
     }
 
@@ -473,7 +494,6 @@ public class EclipseMaven implements IMaven
     public void addEventListener( IMavenListener listener )
     {
         getEventPropagator().addMavenListener( listener );
-
     }
 
     public void removeEventListener( IMavenListener listener )

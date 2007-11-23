@@ -348,4 +348,12 @@ public interface IMaven
      * @throws CoreException
      */
     public void refresh() throws CoreException;
+
+    /**
+     * Get the Maven super project with all the default values
+     *  
+     * @return the Maven super project
+     * @throws CoreException
+     */
+    public IMavenProject getMavenSuperProject() throws CoreException;
 }
