@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -73,6 +74,8 @@ public class MavenNature
     private static IPath[] RESOURCE_EXCLUDES = SOURCE_INCLUDES;
     
     private static final List<String> SOURCE_VERSIONS = Arrays.asList( "1.1,1.2,1.3,1.4,1.5,1.6,1.7".split(",") );
+    
+    private static final String DEFAULT_OUTPUT_FOLDER = "target/classes";
 
     private IProject project;
 
@@ -106,7 +109,6 @@ public class MavenNature
         }
         catch ( CoreException e )
         {
-            // TODO: handle exception
             MavenExceptionHandler.handle( project, e );
         }
     }
@@ -182,12 +184,16 @@ public class MavenNature
         }
         
         IJavaProject javaProject = JavaCore.create( project );
+
+        // use a Set that will keep the order of elements added
+        Set<IClasspathEntry> classpathEntriesSet = new ListOrderedSet();
+        
+        IMavenProject mavenProject;
+        String outputDirectory = null;
+
         try
         {
-            IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, false );
-            
-            // use a Set that will keep the order of elements added
-            Set<IClasspathEntry> classpathEntriesSet = new ListOrderedSet();
+            mavenProject = MavenManager.getMaven().getMavenProject( project, false );
             
             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Executing process-test-resources on ", project
                 .getName() );
@@ -207,47 +213,71 @@ public class MavenNature
                 // Exchange the old maven project for the new one from the result
                 mavenProject = result.getMavenProject();
             }
+
             // Refresh ourself, to include the generated sources
             project.refreshLocal( IResource.DEPTH_INFINITE, null );
             
-            // (x) Add the generated sources folder
-            classpathEntriesSet.addAll( getSourceFoldersClasspath( project, javaProject, mavenProject ) );
-            
-            // (x) Add the maven classpath container
-            classpathEntriesSet.add( getMavenClasspathContainer( javaProject ) );
-            
-            // (x) Add the JRE container to the classpath
-            classpathEntriesSet.add( getJREClasspathContainer( javaProject, mavenProject ) );
-            
-            IClasspathEntry[] classpathEntries =
-                (IClasspathEntry[]) classpathEntriesSet.toArray( new IClasspathEntry[classpathEntriesSet.size()] );
+            outputDirectory = mavenProject.getBuildOutputDirectory();
+        }
+        catch ( CoreException e )
+        {
+            MavenJdtCoreActivator.getLogger().log( "Exception adding classpath to project " + project, e );
+            MavenExceptionHandler.handle( project, e );
 
-            String outputDirectory = mavenProject.getBuildOutputDirectory();
-            IFolder outputFolder =
-                project.getFolder( getRelativePath( mavenProject.getBaseDirectory(), outputDirectory ) );
+            /* try to gracefully recover using the super pom default values */
+            try
+            {
+                mavenProject = MavenManager.getMaven().getMavenSuperProject();
 
+                /*
+                 * TODO quick hack, the output directory will be an absolute path in the Eclipse
+                 * launch folder, use it relative
+                 * And add the default source folder
+                 */
+                outputDirectory = DEFAULT_OUTPUT_FOLDER;
+                IPath src = project.getLocation().append( "src/main/java" );
+                addEntryToClasspath( classpathEntriesSet, getClasspathFolders( project, Collections.singletonList( src
+                    .toPortableString() ) ), SOURCE_INCLUDES, SOURCE_EXCLUDES, null );
+            }
+            catch ( CoreException e1 )
+            {
+                MavenJdtCoreActivator.getLogger().log( "Exception trying to get the Maven super project", e );
+                return;
+            }
+        }
+
+        // (x) Add the generated sources folder
+        classpathEntriesSet.addAll( getSourceFoldersClasspath( project, javaProject, mavenProject ) );
+
+        // (x) Add the maven classpath container
+        classpathEntriesSet.add( getMavenClasspathContainer( javaProject ) );
+
+        // (x) Add the JRE container to the classpath
+        classpathEntriesSet.add( getJREClasspathContainer( javaProject, mavenProject ) );
+
+        IClasspathEntry[] classpathEntries = (IClasspathEntry[]) classpathEntriesSet
+            .toArray( new IClasspathEntry[classpathEntriesSet.size()] );
+
+        IFolder outputFolder = project.getFolder( getRelativePath( project.getLocation(), outputDirectory ) );
+
+        try
+        {
             javaProject.setRawClasspath( classpathEntries, outputFolder.getFullPath(), null );
         }
         catch ( JavaModelException e )
         {
-            MavenJdtCoreActivator.getLogger().error("Exception '" + e.getClass().getName() +  "' in adding classpath. - " + e.getMessage() );
-            MavenExceptionHandler.handle( project, e );
-        }
-        catch ( CoreException e )
-        {
-            MavenJdtCoreActivator.getLogger().error("Exception '" + e.getClass().getName() +  "' in adding classpath. - " + e.getMessage() );
+            MavenJdtCoreActivator.getLogger().log( "Exception adding classpath to project " + project, e );
             MavenExceptionHandler.handle( project, e );
         }
     }
     
-    private Set<IClasspathEntry> getSourceFoldersClasspath( IProject project , IJavaProject javaProject , IMavenProject mavenProject )
-        throws CoreException
+    private Set<IClasspathEntry> getSourceFoldersClasspath( IProject project, IJavaProject javaProject,
+                                                            IMavenProject mavenProject )
+
     {
         // Add generated source folders to the classpath
-        File basedir = mavenProject.getBaseDirectory();
-        
         String testOutputDirectory = mavenProject.getBuildTestOutputDirectory();
-        IPath testTargetFolder = project.getFolder( getRelativePath( basedir, testOutputDirectory ) ).getFullPath();
+        IPath testTargetFolder = project.getFolder( getRelativePath( project.getLocation(), testOutputDirectory ) ).getFullPath();
 
         
         // ReactorManager reactorManager = result.getReactorManager();
@@ -263,19 +293,19 @@ public class MavenNature
         Set<IClasspathEntry> classpathEntries = new ListOrderedSet();
          
         addEntryToClasspath( classpathEntries , 
-                             getClasspathFolders( project, basedir, mavenProject.getCompileSourceRoots() ) ,
+                             getClasspathFolders( project, mavenProject.getCompileSourceRoots() ) ,
                              SOURCE_INCLUDES, SOURCE_EXCLUDES, null );
         
         addEntryToClasspath( classpathEntries , 
-                             getClasspathFolders( project, basedir, mavenProject.getTestCompileSourceRoots() ) ,
+                             getClasspathFolders( project, mavenProject.getTestCompileSourceRoots() ) ,
                              SOURCE_INCLUDES, SOURCE_EXCLUDES, testTargetFolder );
         
         addEntryToClasspath( classpathEntries , 
-                             getResourceFolders( project, basedir, mavenProject.getResources() ) ,
+                             getResourceFolders( project, mavenProject.getResources() ) ,
                              RESOURCE_INCLUDES, RESOURCE_EXCLUDES, null );
         
         addEntryToClasspath( classpathEntries , 
-                             getResourceFolders( project, basedir, mavenProject.getTestResources() ) ,
+                             getResourceFolders( project, mavenProject.getTestResources() ) ,
                              RESOURCE_INCLUDES, RESOURCE_EXCLUDES, testTargetFolder );
         
         for( IClasspathEntry entry : classpathEntries )
@@ -317,7 +347,7 @@ public class MavenNature
         return false;
     }
 
-    private Set<String> getResourceFolders( IProject project, File basedir, List<Resource> resources )
+    private Set<String> getResourceFolders( IProject project, List<Resource> resources )
     {
         List<String> resourceRoots = new ArrayList<String>( resources.size() );
         for ( Resource mavenResource : resources )
@@ -325,10 +355,10 @@ public class MavenNature
             resourceRoots.add( mavenResource.getDirectory() );
         }
         
-        return getClasspathFolders( project, basedir, resourceRoots );
+        return getClasspathFolders( project, resourceRoots );
     }
     
-    private Set<String> getClasspathFolders( IProject project, File basedir, List<String> sourceRoots )
+    private Set<String> getClasspathFolders( IProject project, List<String> sourceRoots )
     {
         Set<String> classpathEntries = new HashSet<String>();
         for ( String sourceRoot : sourceRoots )
@@ -336,17 +366,20 @@ public class MavenNature
             File sourceRootFile = new File( sourceRoot );
             if ( sourceRootFile.exists() && sourceRootFile.isDirectory() )
             {
-                String relativePath = getRelativePath( basedir, sourceRoot );
+                String relativePath = getRelativePath( project.getLocation(), sourceRoot );
                 classpathEntries.add( relativePath );
             }
         }
         return classpathEntries;
     }
 
-    String getRelativePath( File basedir, String fullPath )
+    String getRelativePath( IPath basedirPath, String fullPath )
     {
         IPath path = new Path( fullPath );
-        IPath basedirPath = new Path( basedir.getAbsolutePath() );
+        if ( !path.isAbsolute() )
+        {
+            return basedirPath.append( path ).toPortableString();
+        }
         if ( !basedirPath.isPrefixOf( path ) )
         {
             throw new IllegalArgumentException( "Path " + path + " is not child of " + basedirPath );
@@ -359,6 +392,12 @@ public class MavenNature
         }
         result = result.makeRelative();
         return result.toPortableString();
+    }
+    
+    String getRelativePath( File basedir, String fullPath )
+    {
+        IPath basedirPath = new Path( basedir.getAbsolutePath() );
+        return getRelativePath( basedirPath, fullPath );
     }
     
     private IClasspathEntry getMavenClasspathContainer( IJavaProject javaProject )
