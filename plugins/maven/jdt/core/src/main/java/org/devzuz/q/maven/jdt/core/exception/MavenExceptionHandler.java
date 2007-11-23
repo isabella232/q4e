@@ -10,13 +10,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
+import org.apache.maven.extension.ExtensionScanningException;
+import org.apache.maven.lifecycle.LifecycleExecutionException;
 import org.apache.maven.project.InvalidProjectModelException;
+import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.project.validation.ModelValidationResult;
 import org.apache.maven.reactor.MavenExecutionException;
 import org.devzuz.q.maven.embedder.IMavenProject;
@@ -39,7 +45,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MavenExceptionHandler
 {
 
+    private static final Set<Class<?>> EXCEPTIONS_TO_EXPAND = new HashSet<Class<?>>();
+
     private static MavenExceptionHandler instance = new MavenExceptionHandler();
+
+    static
+    {
+        EXCEPTIONS_TO_EXPAND.add( LifecycleExecutionException.class );
+        EXCEPTIONS_TO_EXPAND.add( ArtifactMetadataRetrievalException.class );
+        EXCEPTIONS_TO_EXPAND.add( ProjectBuildingException.class );
+        EXCEPTIONS_TO_EXPAND.add( ArtifactResolutionException.class );
+        EXCEPTIONS_TO_EXPAND.add( ExtensionScanningException.class );
+    }
 
     public static void handle( IProject project, Collection<Exception> exceptions )
     {
@@ -111,27 +128,9 @@ public class MavenExceptionHandler
 
     public static void handle( IProject project, Throwable e )
     {
-        Throwable cause = e;
+        Throwable cause = getCause(e);
 
-        if ( cause instanceof CoreException )
-        {
-            cause = ( (CoreException) cause ).getStatus().getException();
-        }
-
-        if ( cause == null )
-        {
-            if ( e.getCause() != null )
-            {
-                MavenJdtCoreActivator.getLogger().log( "Unknown error: ", e.getCause() );
-                error( project, "Unknown error: " + e.getCause().getMessage() );
-            }
-            else
-            {
-                MavenJdtCoreActivator.getLogger().log( "Unknown error: ", e );
-                error( project, "Unknown error: " + e.getMessage() );
-            }
-        }
-        else if ( cause instanceof MultipleArtifactsNotFoundException )
+        if ( cause instanceof MultipleArtifactsNotFoundException )
         {
             instance.handle( project, (MultipleArtifactsNotFoundException) cause );
         }
@@ -272,5 +271,27 @@ public class MavenExceptionHandler
     private void markPom( final IProject project, final String msg, final int severity )
     {
         markPom( project, Arrays.asList( new String[] { msg } ), severity );
+    }
+
+    static Throwable getCause( Throwable e )
+    {
+        Throwable cause = e;
+        
+        /* CoreException is special as we can not call getCause and we need to access the status for the cause */
+        if ( e instanceof CoreException )
+        {
+            cause = ( (CoreException) e ).getStatus().getException();
+            if ( cause == null )
+            {
+                return e;
+            }
+        }
+
+        while ( ( cause.getCause() != null ) && EXCEPTIONS_TO_EXPAND.contains( cause.getClass() ) )
+        {
+            cause = cause.getCause();
+        }
+
+        return cause;
     }
 }
