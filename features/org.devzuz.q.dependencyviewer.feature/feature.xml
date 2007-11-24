@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.devzuz.q.dependency.viewer.feature"
+      id="org.devzuz.q.dependencyviewer.feature"
       label="%featureName"
       version="0.3.0.qualifier"
       provider-name="%providerName">
@@ -26,31 +26,31 @@
    </requires>
 
    <plugin
-         id="org.devzuz.q.dependency.viewer"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.mylyn.zest.core"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.eclipse.mylyn.zest.layouts"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.draw2d"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="3.2.100.v20070529"
+         unpack="false"/>
+
+   <plugin
+         id="org.devzuz.q.maven.dependencyviewer"
+         download-size="0"
+         install-size="0"
+         version="0.3.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.zest.core"
+         download-size="0"
+         install-size="0"
+         version="0.7.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.zest.layouts"
+         download-size="0"
+         install-size="0"
+         version="0.7.0.qualifier"
          unpack="false"/>
 
 </feature>
