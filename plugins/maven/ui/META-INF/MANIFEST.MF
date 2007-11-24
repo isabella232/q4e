@@ -6,7 +6,6 @@ Bundle-Version: 0.3.0.qualifier
 Bundle-Activator: org.devzuz.q.maven.ui.MavenUiActivator
 Bundle-Vendor: DevZuz
 Require-Bundle: org.devzuz.q.maven.core;bundle-version="[0.3.0,0.4.0)";visibility:=reexport,
- org.prefuse;bundle-version="1.0.0";visibility:=reexport,
  org.eclipse.ui;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.apache.commons.collections;bundle-version="[3.2.0,4.0.0)"
 Eclipse-LazyStart: true

@@ -81,15 +81,7 @@
                 label="%mavenSiteAction"
                 menubarPath="org.devzuz.q.maven.ui.project.submenu/contents">
           </action>
-          
-          <action
-                class="org.devzuz.q.maven.ui.actions.ViewDependencyGraphAction"
-                enablesFor="1"
-                icon="src/main/resources/icons/Maven_M(16)-TP.gif"
-                id="org.devzuz.q.maven.uii.actions.ViewDependencyGraphAction"
-                label="%mavenViewDependencyGraphAction"
-                menubarPath="org.devzuz.q.maven.ui.project.submenu/contents"/>
-                
+                         
           <action
                 class="org.devzuz.q.maven.ui.actions.MavenCustomGoalAction"
                 enablesFor="1"
