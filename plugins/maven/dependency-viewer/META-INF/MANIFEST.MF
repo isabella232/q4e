@@ -1,7 +1,7 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Dependency Viewer Plug-in
-Bundle-SymbolicName: org.devzuz.q.maven.dependency;singleton:=true
+Bundle-SymbolicName: org.devzuz.q.maven.dependencyviewer;singleton:=true
 Bundle-Version: 0.3.0.qualifier
 Bundle-Activator: org.devzuz.q.maven.dependency.Activator
 Require-Bundle: org.devzuz.q.maven.ui;bundle-version="[0.3.0,0.4.0)",
