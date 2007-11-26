@@ -9,6 +9,7 @@ package org.devzuz.q.maven.embedder.internal;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
@@ -29,6 +30,8 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
     private List<Exception> exceptions;
 
     private IMavenProject mavenProject;
+
+    private MavenExecutionResult result;
 
     /**
      * Creates an instance of this class populating it from the given {@link MavenExecutionResult}.
@@ -58,6 +61,8 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
     @SuppressWarnings( "unchecked" )
     public EclipseMavenExecutionResult( MavenExecutionResult result, IProject project )
     {
+        this.result = result;
+
         exceptions = result.getExceptions();
         if ( exceptions == null )
         {
@@ -93,7 +98,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
             // TODO: Trace or log this. Why is result.getMavenProject() null?
             if ( project != null )
             {
-            this.mavenProject = new EclipseMavenProject( project );
+                this.mavenProject = new EclipseMavenProject( project );
             }
             else
             {
@@ -115,5 +120,17 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
     public IMavenProject getMavenProject()
     {
         return mavenProject;
+    }
+
+    public List<IMavenProject> getSortedProjects()
+    {
+        List<MavenProject> mavenProjects = result.getTopologicallySortedProjects();
+        List<IMavenProject> projects = new ArrayList<IMavenProject>( mavenProjects.size() );
+        for ( MavenProject mavenProject : mavenProjects )
+        {
+            IMavenProject project = new EclipseMavenProject( mavenProject );
+            projects.add( project );
+        }
+        return projects;
     }
 }

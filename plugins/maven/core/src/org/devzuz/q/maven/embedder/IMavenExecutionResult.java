@@ -38,4 +38,11 @@ public interface IMavenExecutionResult
      * @return <code>true</code> if {@link #getExceptions()} will return a non-empty list.
      */
     public boolean hasErrors();
+
+    /**
+     * Get the list of Maven projects ordered by build order as returned by the Maven reactor
+     * 
+     * @return the list of Maven projects
+     */
+    public List<IMavenProject> getSortedProjects();
 }
