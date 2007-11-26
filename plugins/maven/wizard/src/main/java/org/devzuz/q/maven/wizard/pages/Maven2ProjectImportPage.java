@@ -257,6 +257,11 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
                 {
                     public void run()
                     {
+                        if ( pomList.getControl().isDisposed() )
+                        {
+                            /* in case the user cancels after the scan is finished */
+                            return;
+                        }
                         if ( pomDescriptors.size() == 0 )
                         {
                             setMessage( Messages.wizard_importProject_no_projects_found );
