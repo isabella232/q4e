@@ -45,7 +45,7 @@ public class MavenJdtCoreActivator extends Plugin
      */
     public static final String MARKER_ID = PLUGIN_ID + ".pomproblemmarker";
 
-    // The shared instance
+    /** The shared instance */
     private static MavenJdtCoreActivator plugin;
 
     private IResourceChangeListener iResourceListener;
