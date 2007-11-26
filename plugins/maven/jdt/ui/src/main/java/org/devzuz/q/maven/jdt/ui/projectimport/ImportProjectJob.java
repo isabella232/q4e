@@ -32,7 +32,7 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 /**
  * Imports a number of maven projects in the workspace.
  * 
- * @author Abel Mui–o <amuino@gmail.com>
+ * @author Abel Muiï¿½o <amuino@gmail.com>
  */
 public class ImportProjectJob extends WorkspaceJob
 {
@@ -40,7 +40,7 @@ public class ImportProjectJob extends WorkspaceJob
 
     public ImportProjectJob( PomFileDescriptor pomDescriptor )
     {
-        this( Arrays.asList( new PomFileDescriptor[] { pomDescriptor } ) );
+        this( Collections.singleton( pomDescriptor ) );
     }
 
     public ImportProjectJob( Collection<PomFileDescriptor> pomDescriptors )
