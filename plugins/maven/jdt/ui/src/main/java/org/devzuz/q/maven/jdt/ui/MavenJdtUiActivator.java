@@ -18,10 +18,10 @@ public class MavenJdtUiActivator
     extends AbstractUIPlugin
 {
 
-    // The plug-in ID
+    /** The plug-in ID */
     public static final String PLUGIN_ID = "org.devzuz.q.maven.jdt.ui";
 
-    // The shared instance
+    /** The shared instance */
     private static MavenJdtUiActivator plugin;
 
     private Logger logger;
