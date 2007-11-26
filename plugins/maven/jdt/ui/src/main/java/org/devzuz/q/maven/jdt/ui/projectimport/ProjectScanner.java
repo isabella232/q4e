@@ -17,21 +17,27 @@ import java.util.List;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenExecutionParameter;
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
 /**
- * Scans a folder for Maven projects. Currently it checks for a pom file and the modules listed in it.
+ * Scans a folder for Maven projects. Currently it checks for a pom file and the modules listed in
+ * it.
  * 
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
  */
 public class ProjectScanner
 {
-    public Collection<PomFileDescriptor> scanFolder( File file, IProgressMonitor monitor ) throws InterruptedException
+    public Collection<PomFileDescriptor> scanFolder( File file, IProgressMonitor monitor )
+        throws InterruptedException
     {
 
         if ( monitor.isCanceled() )
@@ -54,21 +60,32 @@ public class ProjectScanner
             return Collections.emptyList();
         }
 
+        /* if we can we get the list of projects ordered by the reactor */
+        List<PomFileDescriptor> sortedProjects = getSortedProjects( pom, monitor );
+        if ( sortedProjects != null )
+        {
+            /* we are done */
+            return sortedProjects;
+        }
+
         PomFileDescriptor pomDescriptor;
         try
         {
             Model pomModel = new MavenXpp3Reader().read( new FileReader( pom ) );
             pomDescriptor = new PomFileDescriptor( pom, pomModel );
+
         }
         catch ( IOException e )
         {
-            // TODO the project doesn't build, but we should add it anyways or show the error to the user
+            // TODO the project doesn't build, but we should add it anyways or show the error to the
+            // user
             MavenJdtUiActivator.getLogger().log( "Unable to read Maven project: " + pom, e );
             return Collections.emptyList();
         }
         catch ( XmlPullParserException e )
         {
-            // TODO the project's pom can't be parsed, but we should add it anyways or show the error to the user
+            // TODO the project's pom can't be parsed, but we should add it anyways or show the
+            // error to the user
             MavenJdtUiActivator.getLogger().log( "Maven project contains wrong markup: " + pom, e );
             return Collections.emptyList();
         }
@@ -92,34 +109,51 @@ public class ProjectScanner
 
         return pomDescriptors;
     }
-    /*
-     * private static DirectoryFilter directoryFilter = new DirectoryFilter(); public Collection<IMavenProject>
-     * scanFolder( File dir, IProgressMonitor monitor ) throws InterruptedException { if ( !dir.exists() ||
-     * !dir.isDirectory() ) { Activator.getLogger().error( "Ignoring " + dir + " : Not a directory or does not exist" );
-     * return Collections.emptyList(); }
+
+    private List<PomFileDescriptor> getSortedProjects( File pom, IProgressMonitor monitor )
+        throws InterruptedException
+    {
+        List<IMavenProject> sortedProjects;
+        try
+        {
+            IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( pom, false );
+
+            MavenExecutionParameter parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter();
+            parameter.setRecursive( true );
+            IMavenExecutionResult result = MavenManager.getMaven().executeGoal( mavenProject, "validate", parameter,
+                                                                                monitor );
+            sortedProjects = result.getSortedProjects();
+        }
+        catch ( CoreException e )
+        {
+            /* the project doesn't build so we can't get the list of sorted projects */
+            return null;
+        }
+
+        if ( monitor.isCanceled() )
+        {
+            throw new InterruptedException();
+        }
+
+        List<PomFileDescriptor> projects = new ArrayList<PomFileDescriptor>( sortedProjects.size() );
+        for ( IMavenProject mavenProject : sortedProjects )
+        {
+            if ( importModel( mavenProject.getModel() ) )
+            {
+                projects.add( new PomFileDescriptor( mavenProject.getPomFile(), mavenProject.getModel() ) );
+            }
+        }
+        return projects;
+    }
+
+    /**
+     * Whether the model should be imported or not. By default all non "pom" models are imported
      * 
-     * return findPom( dir , monitor ); }
-     * 
-     * private Collection<IMavenProject> findPom( File dir, IProgressMonitor monitor ) throws InterruptedException { if (
-     * monitor.isCanceled() ) { throw new InterruptedException(); }
-     * 
-     * monitor.worked( 1 );
-     * 
-     * Collection<IMavenProject> mavenProjects = new ArrayList<IMavenProject>(); // Check if current directory
-     * contains a POM File pom = new File( dir, IMavenProject.POM_FILENAME ); if ( pom.exists() ) { // It does! Try to
-     * create an IMavenProject of it IMavenProject mavenProject; try { if ( monitor.isCanceled() ) { throw new
-     * InterruptedException(); }
-     * 
-     * mavenProject = MavenManager.getMaven().getMavenProject( pom, false ); // If POM is not a parent of a multi-module
-     * project, include it if( mavenProject.getMavenProject().getModules().isEmpty() ) { mavenProjects.add( mavenProject ); } }
-     * catch ( CoreException e ) { Activator.getLogger().log( "Unable to read Maven project " + pom, e ); // TODO the
-     * project doesn't build, but we should add it anyways or show the error to the user } }
-     * 
-     * for( File childDir : dir.listFiles( directoryFilter ) ) { mavenProjects.addAll( findPom( childDir , monitor ) ); }
-     * 
-     * return mavenProjects; }
-     * 
-     * private static class DirectoryFilter implements FileFilter { public boolean accept( File pathname ) { if(
-     * pathname.isDirectory() ) return true; return false; } }
+     * @param model
+     * @return true if the model has not a "pom" packaging
      */
+    protected boolean importModel( Model model )
+    {
+        return !"pom".equals( model.getPackaging() );
+    }
 }
