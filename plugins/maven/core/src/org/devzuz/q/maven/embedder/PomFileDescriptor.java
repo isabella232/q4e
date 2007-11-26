@@ -13,7 +13,7 @@ import org.apache.maven.model.Model;
 /**
  * This class is a javabean-like object for a parsed pom.xml anywhere in the filesystem (even outside the workspace).
  * 
- * @author Abel Mui–o <amuino@gmail.com>
+ * @author Abel Muiï¿½o <amuino@gmail.com>
  */
 public class PomFileDescriptor
 {
@@ -94,5 +94,11 @@ public class PomFileDescriptor
     public File getBaseDirectory()
     {
         return file.getParentFile();
+    }
+
+    @Override
+    public String toString()
+    {
+        return getModel().toString() + ":" + getFile();
     }
 }
