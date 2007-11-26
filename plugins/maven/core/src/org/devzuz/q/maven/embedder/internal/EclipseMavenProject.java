@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
@@ -30,7 +31,7 @@ import org.eclipse.core.runtime.CoreException;
  * well and executing and handling goals
  * 
  * @author pdodds
- * 
+ * TODO carlos do we really need to copy the fields from MavenProject or just wrap it?
  */
 public class EclipseMavenProject implements IMavenProject
 {
@@ -110,6 +111,17 @@ public class EclipseMavenProject implements IMavenProject
 
     /**
      * Build an Eclipse Maven project from a Embedder MavenProject
+     * 
+     * @param mavenProject
+     *            Maven project from the embedder.
+     */
+    public EclipseMavenProject( MavenProject mavenProject )
+    {
+        this( mavenProject, null );
+    }
+
+    /**
+     * Build an Eclipse Maven project from a Embedder MavenProject for a project in the workspace
      * 
      * @param mavenProject
      *            Maven project from the embedder.
@@ -353,6 +365,11 @@ public class EclipseMavenProject implements IMavenProject
     public MavenProject getRawMavenProject()
     {
         return mavenProject;
+    }
+
+    public Model getModel()
+    {
+        return mavenProject.getModel();
     }
 
     @Override
