@@ -128,7 +128,7 @@ public class MavenExceptionHandler
 
     public static void handle( IProject project, Throwable e )
     {
-        Throwable cause = getCause(e);
+        Throwable cause = getCause( e );
 
         if ( cause instanceof MultipleArtifactsNotFoundException )
         {
@@ -163,7 +163,7 @@ public class MavenExceptionHandler
             {
                 String s = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getName();
                 error( project, "Error: " + s );
-                MavenJdtCoreActivator.getLogger().log( "Unexpected error: " + s, cause );
+                MavenJdtCoreActivator.getLogger().log( "Unexpected error on project " + project + ": " + s, cause );
             }
         }
     }
@@ -276,7 +276,7 @@ public class MavenExceptionHandler
     static Throwable getCause( Throwable e )
     {
         Throwable cause = e;
-        
+
         /* CoreException is special as we can not call getCause and we need to access the status for the cause */
         if ( e instanceof CoreException )
         {
