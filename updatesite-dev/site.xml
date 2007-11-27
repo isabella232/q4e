@@ -6,13 +6,7 @@
    <feature url="features/org.apache.maven.feature_2.1.0.594741.jar" id="org.apache.maven.feature" version="2.1.0.594741">
       <category name="Enabling Features"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature_0.3.0.200711200008.jar" id="org.devzuz.q.feature" version="0.3.0.200711200008">
-      <category name="Community"/>
-   </feature>
    <feature url="features/org.apache.commons.collections.feature_3.2.0.200705282147.jar" id="org.apache.commons.collections.feature" version="3.2.0.200705282147">
-      <category name="Enabling Features"/>
-   </feature>
-   <feature url="features/org.apache.maven.aardvark.feature_1.0.0.200711210751.jar" id="org.apache.maven.aardvark.feature" version="1.0.0.200711210751">
       <category name="Enabling Features"/>
    </feature>
    <feature url="features/org.devzuz.q.feature_0.3.0.200711240237.jar" id="org.devzuz.q.feature" version="0.3.0.200711240237">
