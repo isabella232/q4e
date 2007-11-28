@@ -2,7 +2,7 @@
 <feature
       id="org.devzuz.q.dependencyviewer.feature"
       label="%featureName"
-      version="0.3.0.qualifier"
+      version="0.4.0.qualifier"
       provider-name="%providerName">
 
    <description>
@@ -24,7 +24,7 @@
    <requires>
       <import plugin="org.eclipse.swt" version="3.2.0" match="compatible"/>
       <import plugin="com.ibm.icu"/>
-      <import plugin="org.devzuz.q.maven.ui" version="0.3.0" match="equivalent"/>
+      <import plugin="org.devzuz.q.maven.ui" version="0.4.0" match="equivalent"/>
       <import plugin="org.eclipse.zest.core" version="0.7.0" match="compatible"/>
       <import plugin="org.eclipse.zest.layouts" version="0.7.0" match="compatible"/>
       <import plugin="org.eclipse.ui"/>
@@ -44,7 +44,7 @@
          id="org.devzuz.q.maven.dependencyviewer"
          download-size="0"
          install-size="0"
-         version="0.3.0.qualifier"
+         version="0.4.0.qualifier"
          unpack="false"/>
 
    <plugin
