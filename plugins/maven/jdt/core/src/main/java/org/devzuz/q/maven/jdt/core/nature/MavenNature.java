@@ -28,6 +28,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.jdt.core.MavenClasspathHelper;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
@@ -193,7 +194,7 @@ public class MavenNature
 
         try
         {
-            mavenProject = MavenManager.getMaven().getMavenProject( project, false );
+            mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, true );
             
             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Executing process-test-resources on ", project
                 .getName() );
@@ -326,25 +327,12 @@ public class MavenNature
             IClasspathEntry classpathEntry = JavaCore.newSourceEntry( resource.getFullPath(), 
                                                                       inclussionPattern, exclussionPattern,
                                                                       specificDestination );
-            if ( !classpathContainsFolder( classpathSrcEntries , classpathEntry ) )
+            if ( ! MavenClasspathHelper.classpathContainsFolder( classpathSrcEntries , classpathEntry ) )
             {
                 
                 classpathSrcEntries.add( classpathEntry );
             }
         }
-    }
-    
-    private boolean classpathContainsFolder( Set<IClasspathEntry> classpathSrcEntries , IClasspathEntry folder )
-    {
-        for( IClasspathEntry entry : classpathSrcEntries )
-        {
-            if( entry.getPath().equals( folder.getPath() ) ) 
-            {
-                return true;
-            }
-        }
-        
-        return false;
     }
 
     private Set<String> getResourceFolders( IProject project, List<Resource> resources )

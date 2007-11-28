@@ -43,7 +43,7 @@ public class AbstractMavenAction
         {
             try
             {
-                return MavenManager.getMaven().getMavenProject( (IProject) obj, true );
+                return MavenManager.getMavenProjectManager().getMavenProject( (IProject) obj, true );
             }
             catch ( CoreException e )
             {
@@ -63,7 +63,7 @@ public class AbstractMavenAction
             {
                 try
                 {
-                    projects.add( MavenManager.getMaven().getMavenProject( (IProject) obj, true ) );
+                    projects.add( MavenManager.getMavenProjectManager().getMavenProject( (IProject) obj, true ) );
                 }
                 catch ( CoreException e )
                 {

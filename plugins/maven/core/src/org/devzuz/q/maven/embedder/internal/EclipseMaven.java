@@ -35,13 +35,13 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
-import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.ILocalMavenRepository;
 import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenListener;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
@@ -282,6 +282,8 @@ public class EclipseMaven implements IMaven
         }
 
         request.setBaseDirectory( mavenProject.getBaseDirectory() );
+        // TODO : shouldn't we use request.setPom( mavenProject.getPomFile() ); since this is 
+        // deprecated.
         request.setPomFile( mavenProject.getPomFile().getAbsolutePath() );
 
         Properties executionProperties = new Properties();
@@ -358,8 +360,6 @@ public class EclipseMaven implements IMaven
                                                                         "Unable to read project",
                                                                         eclipseMavenExecutionResult ) );
                 }
-                // TODO should we call refreshProject?
-                // -erle- : I think we should, otherwise, I can't get the mavenProject object, it is null.
                 mavenProject.refreshDependencies( status.getProject() );
                 mavenProject.refreshProject( status.getProject() );
             }
@@ -367,7 +367,7 @@ public class EclipseMaven implements IMaven
             {
                 MavenProject mavenRawProject = null;
                 try
-            {
+                {
                     mavenRawProject = getMavenEmbedder().readProject( mavenProject.getPomFile() );
                 }
                 catch ( ExtensionScanningException e )

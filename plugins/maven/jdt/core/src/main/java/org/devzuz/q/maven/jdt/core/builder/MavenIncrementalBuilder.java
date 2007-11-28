@@ -9,8 +9,8 @@ package org.devzuz.q.maven.jdt.core.builder;
 import java.util.Map;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
-import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -22,10 +22,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.jdt.core.IClasspathContainer;
-import org.eclipse.jdt.core.IJavaProject;
-import org.eclipse.jdt.core.JavaCore;
-import org.eclipse.jdt.core.JavaModelException;
 
 /**
  * Maven builder that will update the classpath container when pom changes
@@ -50,7 +46,9 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             IResourceDelta member = delta.findMember( pomPath );
             if ( member != null )
             {
-                onPomChange( member.getResource().getProject(), monitor );
+                IProject project = member.getResource().getProject(); 
+                MavenManager.getMavenProjectManager().setMavenProjectModified( project );
+                onPomChange( project , monitor );
             }
         }
         else
@@ -84,24 +82,4 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
         job.setPriority( Job.BUILD );
         job.schedule();
     }
-
-    private MavenClasspathContainer getClasspathContainer()
-    {
-        IJavaProject javaProject = JavaCore.create( getProject() );
-        if ( javaProject != null )
-        {
-            try
-            {
-                IClasspathContainer container =
-                    JavaCore.getClasspathContainer( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH, javaProject );
-                return (MavenClasspathContainer) container;
-            }
-            catch ( JavaModelException e )
-            {
-                MavenJdtCoreActivator.getLogger().log( e );
-            }
-        }
-        return null;
-    }
-
 }

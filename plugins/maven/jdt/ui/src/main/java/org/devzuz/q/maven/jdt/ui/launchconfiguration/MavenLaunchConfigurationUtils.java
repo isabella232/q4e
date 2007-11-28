@@ -14,7 +14,6 @@ import java.util.List;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.ui.Messages;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -63,8 +62,8 @@ public class MavenLaunchConfigurationUtils
     
     public static IMavenProject getMavenProjectWithName( String projectName ) throws CoreException
     {
-        return MavenManager.getMaven().getMavenProject( getProjectWithName( projectName ),
-                                                        false );
+        return MavenManager.getMavenProjectManager().getMavenProject( getProjectWithName( projectName ),
+                                                                       false );
     }
     
     public static String goalsListToString( List<String> goals )

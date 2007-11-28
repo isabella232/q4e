@@ -67,11 +67,10 @@ public class MavenJdtCoreActivator extends Plugin
         logger = new EclipseLogger( PLUGIN_ID, this.getLog() );
 
         iResourceListener = new MavenProjectJdtResourceListener();
-        ResourcesPlugin.getWorkspace().addResourceChangeListener(
-                                                                  iResourceListener,
-                                                                  IResourceChangeEvent.POST_CHANGE
-                                                                                  | IResourceChangeEvent.PRE_CLOSE
-                                                                                  | IResourceChangeEvent.PRE_DELETE );
+        ResourcesPlugin.getWorkspace().addResourceChangeListener( iResourceListener,
+                                                                  IResourceChangeEvent.POST_CHANGE | 
+                                                                  IResourceChangeEvent.PRE_CLOSE | 
+                                                                  IResourceChangeEvent.PRE_DELETE );
     }
 
     @Override

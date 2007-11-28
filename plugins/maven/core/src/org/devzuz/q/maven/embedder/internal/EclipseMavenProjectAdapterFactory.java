@@ -7,8 +7,8 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder.internal;
 
-import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -27,7 +27,7 @@ public class EclipseMavenProjectAdapterFactory implements IAdapterFactory
             if ( adaptableObject instanceof IProject )
                 try
                 {
-                    return MavenManager.getMaven().getMavenProject( (IProject) adaptableObject, true );
+                    return MavenManager.getMavenProjectManager().getMavenProject( (IProject) adaptableObject, true );
                 }
                 catch ( CoreException e )
                 {
@@ -38,7 +38,7 @@ public class EclipseMavenProjectAdapterFactory implements IAdapterFactory
             {
                 try
                 {
-                    return MavenManager.getMaven().getMavenProject( ( (IFile) adaptableObject ).getProject(), true );
+                    return MavenManager.getMavenProjectManager().getMavenProject( ( (IFile) adaptableObject ).getProject(), true );
                 }
                 catch ( CoreException e )
                 {

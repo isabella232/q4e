@@ -6,19 +6,13 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.internal;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
+import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -98,6 +92,8 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                                                  "Skipping because it has no pom.xml: " + project );
                 }
             }
+            
+            MavenManager.getMavenProjectManager().removeMavenProject( project );
         }
     }
 
@@ -178,71 +174,22 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         }
         else if ( classpath.getEntryKind() == IClasspathEntry.CPE_LIBRARY )
         {
-            return getMavenProjectTriplet( classpath ).equals( getMavenProjectTriplet( project ) );
+            try
+            {
+                IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, false );
+                String [] classpathMavenInfo = getMavenProjectInfo( classpath );
+                
+                return mavenProject.getGroupId().equals( classpathMavenInfo[0] ) &&
+                       mavenProject.getArtifactId().equals( classpathMavenInfo[1] ) &&
+                       mavenProject.getVersion().equals( classpathMavenInfo[2] );
+            }
+            catch( CoreException e )
+            {
+                MavenExceptionHandler.handle( project , e );
+            }
         }
 
         return false;
-    }
-
-    private static String getMavenProjectTriplet( IClasspathEntry classpathEntry )
-    {
-        int repoSegmentCount = MavenManager.getMaven().getLocalRepository().getBaseDirectoryPath().segmentCount();
-        IPath classpath = classpathEntry.getPath();
-        int segmentCount = classpath.segmentCount();
-        String version = classpath.segment( segmentCount - 2 );
-        String artifactId = classpath.segment( segmentCount - 3 );
-
-        StringBuilder groupId = new StringBuilder( "" );
-        for ( int i = repoSegmentCount; i < segmentCount - 3; i++ )
-        {
-            // Attach the dot
-            if ( i != repoSegmentCount )
-                groupId.append( "." );
-            groupId.append( classpath.segment( i ) );
-        }
-
-        return groupId.toString() + "-" + artifactId + "-" + version;
-    }
-
-    private static String getMavenProjectTriplet( IProject iproject )
-    {
-        StringBuilder strProjectInfoData = new StringBuilder( "" );
-
-        File pom = new File( iproject.getFile( POM_XML ).getLocation().toOSString() );
-        try
-        {
-            FileReader filetoread = new FileReader( pom );
-            Model pomModel = new MavenXpp3Reader().read( filetoread );
-            String groupId = pomModel.getGroupId();
-            
-            if( groupId == null )
-            {
-                groupId = pomModel.getParent().getGroupId();
-            }
-            
-            strProjectInfoData.append( groupId + "-" );
-            strProjectInfoData.append( pomModel.getArtifactId() + "-" );
-            strProjectInfoData.append( pomModel.getVersion() );
-            pomModel = null;
-            filetoread.close();
-        }
-        catch ( FileNotFoundException fnfe )
-        {
-            // TODO Auto-generated catch block
-            fnfe.printStackTrace();
-        }
-        catch ( IOException ioe )
-        {
-            // TODO Auto-generated catch block
-            ioe.printStackTrace();
-        }
-        catch ( XmlPullParserException xppe )
-        {
-            // TODO Auto-generated catch block
-            xppe.printStackTrace();
-        }
-        pom = null;
-        return strProjectInfoData.toString();
     }
 
     /**
@@ -257,5 +204,27 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
     {
         // TODO: Check if the project has the q4e maven nature??: MavenNatureHelper.hasMavenNature( project );
         return project.getFile( POM_XML ).exists();
+    }
+    
+    private static String[] getMavenProjectInfo( IClasspathEntry classpathEntry )
+    {
+        int repoSegmentCount = MavenManager.getMaven().getLocalRepository().getBaseDirectoryPath().segmentCount();
+        IPath classpath = classpathEntry.getPath();
+        int segmentCount = classpath.segmentCount();
+        String[] mavenProjectInfo = new String[3]; 
+        mavenProjectInfo[2] = classpath.segment( segmentCount - 2 );
+        mavenProjectInfo[1] = classpath.segment( segmentCount - 3 );
+
+        StringBuilder groupId = new StringBuilder( "" );
+        for ( int i = repoSegmentCount; i < segmentCount - 3; i++ )
+        {
+            // Attach the dot
+            if ( i != repoSegmentCount )
+                groupId.append( "." );
+            groupId.append( classpath.segment( i ) );
+        }
+        mavenProjectInfo[0] = groupId.toString();
+        
+        return mavenProjectInfo;
     }
 }
