@@ -6,7 +6,6 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.projectimport;
 
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -45,7 +44,7 @@ public class ImportProjectJob extends WorkspaceJob
 
     public ImportProjectJob( Collection<PomFileDescriptor> pomDescriptors )
     {
-        super( "Importing Maven 2 projects" );
+        super( "Importing " + pomDescriptors.size() + " Maven 2 projects" );
         this.pomDescriptors = pomDescriptors;
     }
 
@@ -77,6 +76,7 @@ public class ImportProjectJob extends WorkspaceJob
     {
         Status status = null;
         // TODO set a better number
+        monitor.beginTask( "Importing projects...", pomDescriptors.size() );
         for ( PomFileDescriptor pomDescriptor : pomDescriptors )
         {
             SubProgressMonitor subProgressMonitor = new SubProgressMonitor( monitor, 1 );
@@ -101,9 +101,7 @@ public class ImportProjectJob extends WorkspaceJob
             }
 
             subProgressMonitor.done();
-            monitor.worked( 1 );
         }
-
         return status;
     }
 
