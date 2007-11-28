@@ -6,18 +6,17 @@ import org.eclipse.jdt.core.IClasspathEntry;
 
 public class MavenClasspathHelper
 {
-    public static String POM_XML = "pom.xml";
-    
-    public static boolean classpathContainsFolder( Collection<IClasspathEntry> classpathSrcEntries , IClasspathEntry folder )
+    public static boolean classpathContainsFolder( Collection<IClasspathEntry> classpathSrcEntries,
+                                                   IClasspathEntry folder )
     {
-        for( IClasspathEntry entry : classpathSrcEntries )
+        for ( IClasspathEntry entry : classpathSrcEntries )
         {
-            if( entry.getPath().equals( folder.getPath() ) ) 
+            if ( entry.getPath().equals( folder.getPath() ) )
             {
                 return true;
             }
         }
-        
+
         return false;
     }
 }
