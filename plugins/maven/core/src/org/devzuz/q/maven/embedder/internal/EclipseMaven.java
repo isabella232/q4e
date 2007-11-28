@@ -132,11 +132,21 @@ public class EclipseMaven implements IMaven
                                                MavenExecutionParameter parameter, IProgressMonitor monitor )
         throws CoreException
     {
-        MavenExecutionRequest request = generateRequest( mavenProject, parameter );
-        request.setGoals( goals );
-        EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
-        eclipseMavenRequest.run( monitor );
-        return eclipseMavenRequest.getExecutionResult();
+        try
+        {
+            MavenExecutionRequest request = generateRequest( mavenProject, parameter );
+            request.setGoals( goals );
+            EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
+            eclipseMavenRequest.run( monitor );
+            IMavenExecutionResult result = eclipseMavenRequest.getExecutionResult();
+            return result;
+        }
+        catch ( RuntimeException e )
+        {
+            // These are thrown, for example, by Modello
+            // TODO: Should these exception be included in the IMavenExecutionResult?
+            throw new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID, e.getMessage(), e ) );
+        }
     }
 
     private MavenExecutionRequest generateRequest( IPath baseDirectory, String goal, MavenExecutionParameter parameter )
