@@ -10,6 +10,7 @@ package org.devzuz.q.maven.wizard.importwizard;
 
 import org.devzuz.q.maven.jdt.ui.projectimport.ImportProjectJob;
 import org.devzuz.q.maven.wizard.pages.Maven2ProjectImportPage;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.IImportWizard;
@@ -32,6 +33,7 @@ public class Maven2ImportWizard extends Wizard implements IImportWizard
     {
         ImportProjectJob projectImporter = new ImportProjectJob( projectImportPage.getSelectedMavenProjects() );
         projectImporter.setUser( true );
+        projectImporter.setRule( ResourcesPlugin.getWorkspace().getRoot() );
         projectImporter.schedule();
 
         return true;
