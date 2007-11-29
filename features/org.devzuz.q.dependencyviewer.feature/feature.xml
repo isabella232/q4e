@@ -51,14 +51,14 @@
          id="org.eclipse.zest.core"
          download-size="0"
          install-size="0"
-         version="0.7.0.qualifier"
+         version="0.7.0.200711240245"
          unpack="false"/>
 
    <plugin
          id="org.eclipse.zest.layouts"
          download-size="0"
          install-size="0"
-         version="0.7.0.qualifier"
+         version="0.7.0.200711240245"
          unpack="false"/>
 
 </feature>
