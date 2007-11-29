@@ -213,10 +213,10 @@ public class MavenNature
             {
                 // Exchange the old maven project for the new one from the result
                 mavenProject = result.getMavenProject();
-            }
 
-            // Refresh ourself, to include the generated sources
-            project.refreshLocal( IResource.DEPTH_INFINITE, null );
+                // Refresh ourself, to include the generated sources
+                project.refreshLocal( IResource.DEPTH_INFINITE, null );
+            }
             
             outputDirectory = mavenProject.getBuildOutputDirectory();
         }
