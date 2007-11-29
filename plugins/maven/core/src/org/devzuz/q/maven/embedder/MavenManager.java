@@ -7,13 +7,31 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder;
 
+/**
+ * Utility class for accessing the maven objects.
+ * 
+ * This class is a thin wrapper / shortcut for the methods in {@link MavenCoreActivator}, and it is the preferred way
+ * for accessing the maven objects.
+ * 
+ * @author amuino
+ */
 public class MavenManager
 {
+    /**
+     * Get the active maven instance.
+     * 
+     * @return the maven instance.
+     */
     public static IMaven getMaven()
     {
         return MavenCoreActivator.getDefault().getMavenInstance();
     }
-    
+
+    /**
+     * Get the maven project manager.
+     * 
+     * @return the maven project manager.
+     */
     public static MavenProjectManager getMavenProjectManager()
     {
         return MavenCoreActivator.getDefault().getMavenProjectManager();
