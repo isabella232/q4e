@@ -3,20 +3,11 @@
    <description url="http://q4e.googlecode.com/svn/trunk/updatesite-dev">
       Q for Eclipse
    </description>
-   <feature url="features/org.apache.maven.feature_2.1.0.594741.jar" id="org.apache.maven.feature" version="2.1.0.594741">
-      <category name="Enabling Features"/>
-   </feature>
-   <feature url="features/org.apache.commons.collections.feature_3.2.0.200705282147.jar" id="org.apache.commons.collections.feature" version="3.2.0.200705282147">
-      <category name="Enabling Features"/>
-   </feature>
-   <feature url="features/org.devzuz.q.feature_0.3.0.200711240237.jar" id="org.devzuz.q.feature" version="0.3.0.200711240237">
+   <feature url="features/org.devzuz.q.feature_0.4.0.200711291733.jar" id="org.devzuz.q.feature" version="0.4.0.200711291733">
       <category name="Community"/>
    </feature>
-   <feature url="features/org.devzuz.q.dependencyviewer.feature_0.3.0.200711240245.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.3.0.200711240245">
+   <feature url="features/org.devzuz.q.dependencyviewer.feature_0.4.0.200711291737.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.4.0.200711291737">
       <category name="Optional"/>
-   </feature>
-   <feature url="features/org.devzuz.q.feature_0.4.0.200711291726.jar" id="org.devzuz.q.feature" version="0.4.0.200711291726">
-      <category name="Community"/>
    </feature>
    <category-def name="Community" label="Community"/>
    <category-def name="Enabling Features" label="Enabling Features"/>
