@@ -3,10 +3,10 @@
    <description url="http://q4e.googlecode.com/svn/trunk/updatesite-dev">
       Q for Eclipse
    </description>
-   <feature url="features/org.devzuz.q.feature_0.4.0.200711291733.jar" id="org.devzuz.q.feature" version="0.4.0.200711291733">
+   <feature url="features/org.devzuz.q.feature_0.4.0.200711291753.jar" id="org.devzuz.q.feature" version="0.4.0.200711291753">
       <category name="Community"/>
    </feature>
-   <feature url="features/org.devzuz.q.dependencyviewer.feature_0.4.0.200711291737.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.4.0.200711291737">
+   <feature url="features/org.devzuz.q.dependencyviewer.feature_0.4.0.200711291753.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.4.0.200711291753">
       <category name="Optional"/>
    </feature>
    <category-def name="Community" label="Community"/>
