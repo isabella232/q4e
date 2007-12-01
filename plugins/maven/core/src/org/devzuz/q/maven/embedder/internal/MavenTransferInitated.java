@@ -8,6 +8,7 @@
 package org.devzuz.q.maven.embedder.internal;
 
 import org.apache.maven.wagon.events.TransferEvent;
+import org.apache.maven.wagon.resource.Resource;
 import org.devzuz.q.maven.embedder.IMavenTransferInitiated;
 
 public class MavenTransferInitated extends AbstractMavenTransferEvent implements IMavenTransferInitiated
@@ -21,8 +22,12 @@ public class MavenTransferInitated extends AbstractMavenTransferEvent implements
     @Override
     public String getDescriptionText()
     {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append( "Initiated transfer of " );
+        Resource resource = getEvent().getResource();
+        sb.append( resource.getName() );
+        appendRepository( sb );
+        return sb.toString();
     }
 
     @Override

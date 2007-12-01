@@ -8,7 +8,9 @@
 package org.devzuz.q.maven.embedder.internal;
 
 import org.apache.maven.wagon.events.TransferEvent;
+import org.apache.maven.wagon.resource.Resource;
 import org.devzuz.q.maven.embedder.IMavenTransferCompleted;
+import org.devzuz.q.maven.embedder.Severity;
 
 public class MavenTransferCompleted extends AbstractMavenTransferEvent implements IMavenTransferCompleted
 {
@@ -21,8 +23,13 @@ public class MavenTransferCompleted extends AbstractMavenTransferEvent implement
     @Override
     public String getDescriptionText()
     {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder sb = new StringBuilder();
+
+        sb.append( "Finished downloading " );
+        Resource resource = getEvent().getResource();
+        sb.append( resource.getName() );
+        appendRepository( sb );
+        return sb.toString();
     }
 
     @Override
@@ -31,4 +38,9 @@ public class MavenTransferCompleted extends AbstractMavenTransferEvent implement
         return Messages.MavenTransferCompleted_Type;
     }
 
+    @Override
+    public Severity getSeverity()
+    {
+        return Severity.info;
+    }
 }

@@ -7,6 +7,7 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder.internal;
 
+import org.apache.maven.wagon.Wagon;
 import org.apache.maven.wagon.events.TransferEvent;
 
 public abstract class AbstractMavenTransferEvent extends AbstractMavenEvent
@@ -21,5 +22,15 @@ public abstract class AbstractMavenTransferEvent extends AbstractMavenEvent
     public TransferEvent getEvent()
     {
         return event;
+    }
+
+    protected void appendRepository( StringBuilder sb )
+    {
+        if ( getEvent().getSource() instanceof Wagon )
+        {
+            Wagon wagon = (Wagon) getEvent().getSource();
+            sb.append( " from " );
+            sb.append( wagon.getRepository().toString() );
+        }
     }
 }

@@ -8,7 +8,9 @@
 package org.devzuz.q.maven.embedder.internal;
 
 import org.apache.maven.wagon.events.TransferEvent;
+import org.apache.maven.wagon.resource.Resource;
 import org.devzuz.q.maven.embedder.IMavenTransferStarted;
+import org.devzuz.q.maven.embedder.Severity;
 
 public class MavenTransferStarted extends AbstractMavenTransferEvent implements IMavenTransferStarted
 {
@@ -21,13 +23,23 @@ public class MavenTransferStarted extends AbstractMavenTransferEvent implements 
     @Override
     public String getDescriptionText()
     {
-        // TODO Auto-generated method stub
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append( "Started transfer of " );
+        Resource resource = getEvent().getResource();
+        sb.append( resource.getName() );
+        appendRepository( sb );
+        return sb.toString();
     }
 
     @Override
     public String getTypeText()
     {
         return Messages.MavenTransferStarted_Type;
+    }
+
+    @Override
+    public Severity getSeverity()
+    {
+        return Severity.info;
     }
 }
