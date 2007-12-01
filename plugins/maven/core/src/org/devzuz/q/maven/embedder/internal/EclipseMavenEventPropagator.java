@@ -32,15 +32,7 @@ public class EclipseMavenEventPropagator implements TransferListener, EventMonit
 
     private void notifyListeners( IMavenEvent event )
     {
-        /*
-         * create a copy to be able to add/remove listeners without causing ConcurrentModificationExceptions
-         */
-        IMavenListener[] newListeners;
-        synchronized ( listeners )
-        {
-            newListeners = listeners.toArray( new IMavenListener[0] );
-        }
-        for ( IMavenListener listener : newListeners )
+        for ( IMavenListener listener : listeners )
         {
             listener.handleEvent( event );
         }
