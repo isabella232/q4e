@@ -13,15 +13,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-import org.apache.commons.collections.set.ListOrderedSet;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Resource;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -62,8 +60,7 @@ import org.eclipse.jdt.launching.LibraryLocation;
  * @author pdodds
  * 
  */
-public class MavenNature
-    implements IProjectNature
+public class MavenNature implements IProjectNature
 {
 
     private static IPath[] SOURCE_INCLUDES = new IPath[] { new Path( "**/*.java" ) };
@@ -73,15 +70,14 @@ public class MavenNature
     private static IPath[] RESOURCE_INCLUDES = new IPath[] { new Path( "**" ) };
 
     private static IPath[] RESOURCE_EXCLUDES = SOURCE_INCLUDES;
-    
-    private static final List<String> SOURCE_VERSIONS = Arrays.asList( "1.1,1.2,1.3,1.4,1.5,1.6,1.7".split(",") );
-    
+
+    private static final List<String> SOURCE_VERSIONS = Arrays.asList( "1.1,1.2,1.3,1.4,1.5,1.6,1.7".split( "," ) );
+
     private static final String DEFAULT_OUTPUT_FOLDER = "target/classes";
 
     private IProject project;
 
-    private void addBuilder()
-        throws CoreException
+    private void addBuilder() throws CoreException
     {
         IProjectDescription desc = getProject().getDescription();
         List<ICommand> buildSpecList = new ArrayList<ICommand>();
@@ -98,11 +94,10 @@ public class MavenNature
         desc.setBuildSpec( buildSpecList.toArray( new ICommand[buildSpecList.size()] ) );
         getProject().setDescription( desc, null );
     }
-    
-    public void configure()
-        throws CoreException
+
+    public void configure() throws CoreException
     {
-        
+
         try
         {
             addBuilder();
@@ -114,8 +109,7 @@ public class MavenNature
         }
     }
 
-    public void deconfigure()
-        throws CoreException
+    public void deconfigure() throws CoreException
     {
         removeBuilder();
         removeClasspathContainer();
@@ -126,8 +120,7 @@ public class MavenNature
         return project;
     }
 
-    private void removeBuilder()
-        throws CoreException
+    private void removeBuilder() throws CoreException
     {
         IProjectDescription description = getProject().getDescription();
         ICommand[] commands = description.getBuildSpec();
@@ -145,14 +138,13 @@ public class MavenNature
 
     }
 
-    private void removeClasspathContainer()
-        throws JavaModelException
+    private void removeClasspathContainer() throws JavaModelException
     {
         IJavaProject javaProject = JavaCore.create( project );
         if ( javaProject != null )
         {
-            List<IClasspathEntry> classpathEntries = new ArrayList<IClasspathEntry>( Arrays.asList( javaProject
-                .getRawClasspath() ) );
+            List<IClasspathEntry> classpathEntries =
+                new ArrayList<IClasspathEntry>( Arrays.asList( javaProject.getRawClasspath() ) );
             IClasspathEntry entryToRemove = null;
             for ( IClasspathEntry entry : classpathEntries )
             {
@@ -165,8 +157,8 @@ public class MavenNature
             if ( entryToRemove != null )
             {
                 classpathEntries.remove( entryToRemove );
-                javaProject.setRawClasspath( (IClasspathEntry[]) classpathEntries
-                    .toArray( new IClasspathEntry[classpathEntries.size()] ), null );
+                javaProject.setRawClasspath( classpathEntries.toArray( new IClasspathEntry[classpathEntries.size()] ),
+                                             null );
             }
         }
     }
@@ -175,7 +167,7 @@ public class MavenNature
     {
         this.project = project;
     }
-    
+
     private void addClasspath( IProject project )
     {
         IFile pom = project.getFile( IMavenProject.POM_FILENAME );
@@ -183,26 +175,25 @@ public class MavenNature
         {
             return;
         }
-        
+
         IJavaProject javaProject = JavaCore.create( project );
 
-        // use a Set that will keep the order of elements added
-        Set<IClasspathEntry> classpathEntriesSet = new ListOrderedSet();
-        
+        // use a List to manage the order of the elements
+        List<IClasspathEntry> classpathEntriesList = new LinkedList();
+
         IMavenProject mavenProject;
         String outputDirectory = null;
 
         try
         {
             mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, true );
-            
-            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Executing process-test-resources on ", project
-                .getName() );
+
+            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Executing process-test-resources on ",
+                                         project.getName() );
             // (x) Execute process-test-resources on the maven project
-            IMavenExecutionResult result = MavenManager.getMaven().executeGoal( mavenProject, 
-                                                                                "process-test-resources", 
-                                                                                new NullProgressMonitor() );
-            
+            IMavenExecutionResult result =
+                MavenManager.getMaven().executeGoal( mavenProject, "process-test-resources", new NullProgressMonitor() );
+
             List<Exception> mavenExceptions = result.getExceptions();
             // Mark any errors, particularly, on the launching of the process-test-resources goal
             if ( ( mavenExceptions != null ) && ( mavenExceptions.size() > 0 ) )
@@ -217,7 +208,7 @@ public class MavenNature
                 // Refresh ourself, to include the generated sources
                 project.refreshLocal( IResource.DEPTH_INFINITE, null );
             }
-            
+
             outputDirectory = mavenProject.getBuildOutputDirectory();
         }
         catch ( CoreException e )
@@ -231,14 +222,15 @@ public class MavenNature
                 mavenProject = MavenManager.getMaven().getMavenSuperProject();
 
                 /*
-                 * TODO quick hack, the output directory will be an absolute path in the Eclipse
-                 * launch folder, use it relative
-                 * And add the default source folder
+                 * TODO quick hack, the output directory will be an absolute path in the Eclipse launch folder, use it
+                 * relative. And add the default source folder
                  */
                 outputDirectory = DEFAULT_OUTPUT_FOLDER;
                 IPath src = project.getLocation().append( "src/main/java" );
-                addEntryToClasspath( classpathEntriesSet, getClasspathFolders( project, Collections.singletonList( src
-                    .toPortableString() ) ), SOURCE_INCLUDES, SOURCE_EXCLUDES, null );
+                addEntryToClasspath(
+                                     classpathEntriesList,
+                                     getClasspathFolders( project, Collections.singletonList( src.toPortableString() ) ),
+                                     SOURCE_INCLUDES, SOURCE_EXCLUDES, null );
             }
             catch ( CoreException e1 )
             {
@@ -247,17 +239,17 @@ public class MavenNature
             }
         }
 
-        // (x) Add the generated sources folder
-        classpathEntriesSet.addAll( getSourceFoldersClasspath( project, javaProject, mavenProject ) );
+        // (x) Add sources and resources (compile and test, generated and provided)
+        classpathEntriesList.addAll( getSourceFoldersClasspath( project, javaProject, mavenProject ) );
 
         // (x) Add the maven classpath container
-        classpathEntriesSet.add( getMavenClasspathContainer( javaProject ) );
+        classpathEntriesList.add( getMavenClasspathContainer( javaProject ) );
 
         // (x) Add the JRE container to the classpath
-        classpathEntriesSet.add( getJREClasspathContainer( javaProject, mavenProject ) );
+        classpathEntriesList.add( getJREClasspathContainer( javaProject, mavenProject ) );
 
-        IClasspathEntry[] classpathEntries = (IClasspathEntry[]) classpathEntriesSet
-            .toArray( new IClasspathEntry[classpathEntriesSet.size()] );
+        IClasspathEntry[] classpathEntries =
+            classpathEntriesList.toArray( new IClasspathEntry[classpathEntriesList.size()] );
 
         IFolder outputFolder = project.getFolder( getRelativePath( project.getLocation(), outputDirectory ) );
 
@@ -271,91 +263,93 @@ public class MavenNature
             MavenExceptionHandler.handle( project, e );
         }
     }
-    
-    private Set<IClasspathEntry> getSourceFoldersClasspath( IProject project, IJavaProject javaProject,
-                                                            IMavenProject mavenProject )
+
+    private List<IClasspathEntry> getSourceFoldersClasspath( IProject project, IJavaProject javaProject,
+                                                             IMavenProject mavenProject )
 
     {
         // Add generated source folders to the classpath
         String testOutputDirectory = mavenProject.getBuildTestOutputDirectory();
-        IPath testTargetFolder = project.getFolder( getRelativePath( project.getLocation(), testOutputDirectory ) ).getFullPath();
+        IPath testTargetFolder =
+            project.getFolder( getRelativePath( project.getLocation(), testOutputDirectory ) ).getFullPath();
 
-        
-        // ReactorManager reactorManager = result.getReactorManager();
-        // if( ( reactorManager != null ) && ( reactorManager.getSortedProjects() != null ) )
-        // {
-        // for ( MavenProject rawProject : (List<MavenProject>) reactorManager.getSortedProjects() )
-        // {
-        // System.out.println("-erle- : " + rawProject.getArtifactId() );
-        // addSourceFolders( classpathSrcEntries , project , basedir , rawProject , testTargetFolder );
-        // }
-        // }
+        List<IClasspathEntry> classpathEntries = new LinkedList<IClasspathEntry>();
 
-        Set<IClasspathEntry> classpathEntries = new ListOrderedSet();
-         
-        addEntryToClasspath( classpathEntries , 
-                             getClasspathFolders( project, mavenProject.getCompileSourceRoots() ) ,
-                             SOURCE_INCLUDES, SOURCE_EXCLUDES, null );
-        
-        addEntryToClasspath( classpathEntries , 
-                             getClasspathFolders( project, mavenProject.getTestCompileSourceRoots() ) ,
-                             SOURCE_INCLUDES, SOURCE_EXCLUDES, testTargetFolder );
-        
-        addEntryToClasspath( classpathEntries , 
-                             getResourceFolders( project, mavenProject.getResources() ) ,
-                             RESOURCE_INCLUDES, RESOURCE_EXCLUDES, null );
-        
-        addEntryToClasspath( classpathEntries , 
-                             getResourceFolders( project, mavenProject.getTestResources() ) ,
+        // Per Issue 142: Test sources/resources go first
+        addEntryToClasspath( classpathEntries,
+                             getClasspathFolders( project, mavenProject.getTestCompileSourceRoots() ), SOURCE_INCLUDES,
+                             SOURCE_EXCLUDES, testTargetFolder );
+        addEntryToClasspath( classpathEntries, getResourceFolders( project, mavenProject.getTestResources() ),
                              RESOURCE_INCLUDES, RESOURCE_EXCLUDES, testTargetFolder );
-        
-        for( IClasspathEntry entry : classpathEntries )
+
+        addEntryToClasspath( classpathEntries, getClasspathFolders( project, mavenProject.getCompileSourceRoots() ),
+                             SOURCE_INCLUDES, SOURCE_EXCLUDES, null );
+        addEntryToClasspath( classpathEntries, getResourceFolders( project, mavenProject.getResources() ),
+                             RESOURCE_INCLUDES, RESOURCE_EXCLUDES, null );
+
+        for ( IClasspathEntry entry : classpathEntries )
         {
             MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Adding ", entry.getPath().toOSString(),
-                             " to classpath of ", project.getName() );
+                                         " to classpath of ", project.getName() );
         }
-        
+
         return classpathEntries;
     }
-    
-    private void addEntryToClasspath( Set<IClasspathEntry> classpathSrcEntries , Set<String> folders , 
-                                      IPath[] inclussionPattern, IPath[] exclussionPattern, IPath specificDestination  )
+
+    /**
+     * Adds one classpath entry to the provided list per given folder, avoiding duplicates.
+     * 
+     * @param classpathSrcEntries
+     *            the list of classpath entries where new entries will be added.
+     * @param folders
+     *            the folders used to generate classpath entries.
+     * @param inclussionPattern
+     *            each classpath entry will use this (possibly empty) list of inclusion patterns.
+     * @param exclussionPattern
+     *            each classpath entry will use this (possibly empty) list of exclusion pattern.
+     * @param specificDestination
+     *            each classpath entry will generate the compiled output in this path (specify <code>null</code> to
+     *            use the default location).
+     */
+    private void addEntryToClasspath( List<IClasspathEntry> classpathSrcEntries, List<String> folders,
+                                      IPath[] inclussionPattern, IPath[] exclussionPattern, IPath specificDestination )
     {
-        for( String folder : folders )
+        for ( String folder : folders )
         {
             IResource resource = project.findMember( folder );
-            IClasspathEntry classpathEntry = JavaCore.newSourceEntry( resource.getFullPath(), 
-                                                                      inclussionPattern, exclussionPattern,
-                                                                      specificDestination );
-            if ( ! MavenClasspathHelper.classpathContainsFolder( classpathSrcEntries , classpathEntry ) )
+            IClasspathEntry classpathEntry =
+                JavaCore.newSourceEntry( resource.getFullPath(), inclussionPattern, exclussionPattern,
+                                         specificDestination );
+            if ( !MavenClasspathHelper.classpathContainsFolder( classpathSrcEntries, classpathEntry ) )
             {
-                
+                // Avoid duplicates
                 classpathSrcEntries.add( classpathEntry );
             }
         }
     }
 
-    private Set<String> getResourceFolders( IProject project, List<Resource> resources )
+    private List<String> getResourceFolders( IProject project, List<Resource> resources )
     {
         List<String> resourceRoots = new ArrayList<String>( resources.size() );
         for ( Resource mavenResource : resources )
         {
             resourceRoots.add( mavenResource.getDirectory() );
         }
-        
+
         return getClasspathFolders( project, resourceRoots );
     }
-    
-    private Set<String> getClasspathFolders( IProject project, List<String> sourceRoots )
+
+    private List<String> getClasspathFolders( IProject project, List<String> sourceRoots )
     {
-        Set<String> classpathEntries = new HashSet<String>();
+        List<String> classpathEntries = new LinkedList<String>();
         for ( String sourceRoot : sourceRoots )
         {
             File sourceRootFile = new File( sourceRoot );
             if ( sourceRootFile.exists() && sourceRootFile.isDirectory() )
             {
                 String relativePath = getRelativePath( project.getLocation(), sourceRoot );
-                classpathEntries.add( relativePath );
+                // Maven returns generated folders last. Per Issue 142 they should be first, so the list is reversed.
+                classpathEntries.add( 0, relativePath );
             }
         }
         return classpathEntries;
@@ -381,27 +375,26 @@ public class MavenNature
         result = result.makeRelative();
         return result.toPortableString();
     }
-    
+
     String getRelativePath( File basedir, String fullPath )
     {
         IPath basedirPath = new Path( basedir.getAbsolutePath() );
         return getRelativePath( basedirPath, fullPath );
     }
-    
+
     private IClasspathEntry getMavenClasspathContainer( IJavaProject javaProject )
     {
         return JavaCore.newContainerEntry( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH );
     }
-    
-    private IClasspathEntry getJREClasspathContainer( IJavaProject javaProject , IMavenProject mavenProject )
+
+    private IClasspathEntry getJREClasspathContainer( IJavaProject javaProject, IMavenProject mavenProject )
     {
         // Set the compiler version options given in mavenProject to javaProject
         Map<String, String> compilerVersionOptions = getMavenProjectCompilerVersionOptions( mavenProject );
-        setJavaProjectCompilerVersionOptions( javaProject , compilerVersionOptions );
+        setJavaProjectCompilerVersionOptions( javaProject, compilerVersionOptions );
         // Add to classpath the appropriate JRE Container
         String compilerSourceVersion = compilerVersionOptions.get( JavaCore.COMPILER_SOURCE );
-        if( ( compilerSourceVersion != null ) && 
-            ( compilerSourceVersion.length() > 0 ) )
+        if ( ( compilerSourceVersion != null ) && ( compilerSourceVersion.length() > 0 ) )
         {
             return getJREContainerClasspathWithVersion( compilerSourceVersion );
         }
@@ -410,15 +403,15 @@ public class MavenNature
             return JavaRuntime.getDefaultJREContainerEntry();
         }
     }
-    
+
     private Map<String, String> getMavenProjectCompilerVersionOptions( IMavenProject mavenProject )
     {
-        Map< String, String > compilerOptions = new HashMap< String , String >();
-        
-        String projSourceVersion = getArtifactSettings( mavenProject , "maven-compiler-plugin", "source" );
-        if( projSourceVersion != null )
+        Map<String, String> compilerOptions = new HashMap<String, String>();
+
+        String projSourceVersion = getArtifactSettings( mavenProject, "maven-compiler-plugin", "source" );
+        if ( projSourceVersion != null )
         {
-            if( SOURCE_VERSIONS.contains( projSourceVersion ) )
+            if ( SOURCE_VERSIONS.contains( projSourceVersion ) )
             {
                 compilerOptions.put( JavaCore.COMPILER_COMPLIANCE, projSourceVersion );
                 compilerOptions.put( JavaCore.COMPILER_SOURCE, projSourceVersion );
@@ -426,81 +419,80 @@ public class MavenNature
         }
         else
         {
-            compilerOptions.put( JavaCore.COMPILER_COMPLIANCE, (String) JavaCore.getDefaultOptions().get( JavaCore.COMPILER_COMPLIANCE ) );
-            compilerOptions.put( JavaCore.COMPILER_SOURCE, (String) JavaCore.getDefaultOptions().get( JavaCore.COMPILER_SOURCE ) );
+            compilerOptions.put( JavaCore.COMPILER_COMPLIANCE,
+                                 (String) JavaCore.getDefaultOptions().get( JavaCore.COMPILER_COMPLIANCE ) );
+            compilerOptions.put( JavaCore.COMPILER_SOURCE,
+                                 (String) JavaCore.getDefaultOptions().get( JavaCore.COMPILER_SOURCE ) );
         }
-        
-        String projTargetVersion = getArtifactSettings( mavenProject , "maven-compiler-plugin", "target" );
-        if( projTargetVersion != null )
+
+        String projTargetVersion = getArtifactSettings( mavenProject, "maven-compiler-plugin", "target" );
+        if ( projTargetVersion != null )
         {
-            if( SOURCE_VERSIONS.contains( projTargetVersion ) )
+            if ( SOURCE_VERSIONS.contains( projTargetVersion ) )
             {
                 compilerOptions.put( JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, projTargetVersion );
             }
         }
         else
         {
-            compilerOptions.put( JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, 
+            compilerOptions.put( JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM,
                                  (String) JavaCore.getDefaultOptions().get( JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM ) );
         }
-        
+
         return compilerOptions;
     }
-    
-    private String getArtifactSettings( IMavenProject mavenProject , String artifactId , String settingsName )
+
+    private String getArtifactSettings( IMavenProject mavenProject, String artifactId, String settingsName )
     {
-        for( Plugin plugin : mavenProject.getBuildPlugins() )
+        for ( Plugin plugin : mavenProject.getBuildPlugins() )
         {
-            if( artifactId.equals( plugin.getArtifactId() ) )
+            if ( artifactId.equals( plugin.getArtifactId() ) )
             {
                 Xpp3Dom config = (Xpp3Dom) plugin.getConfiguration();
-                if( ( config != null ) && 
-                    ( config.getChild( settingsName ) != null ) ) 
+                if ( ( config != null ) && ( config.getChild( settingsName ) != null ) )
                 {
                     return config.getChild( settingsName ).getValue();
                 }
             }
         }
-        
+
         return null;
     }
-    
-    private void setJavaProjectCompilerVersionOptions( IJavaProject javaProject , Map<String, String> compilerVersionOptions )
+
+    private void setJavaProjectCompilerVersionOptions( IJavaProject javaProject,
+                                                       Map<String, String> compilerVersionOptions )
     {
-        setJavaProjectOption( javaProject , 
-                              JavaCore.COMPILER_COMPLIANCE , 
+        setJavaProjectOption( javaProject, JavaCore.COMPILER_COMPLIANCE,
                               compilerVersionOptions.get( JavaCore.COMPILER_COMPLIANCE ) );
-        setJavaProjectOption( javaProject , 
-                              JavaCore.COMPILER_SOURCE , 
+        setJavaProjectOption( javaProject, JavaCore.COMPILER_SOURCE,
                               compilerVersionOptions.get( JavaCore.COMPILER_SOURCE ) );
-        setJavaProjectOption( javaProject , 
-                              JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM , 
+        setJavaProjectOption( javaProject, JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM,
                               compilerVersionOptions.get( JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM ) );
     }
-    
-    private void setJavaProjectOption( IJavaProject javaProject , String key , String value )
+
+    private void setJavaProjectOption( IJavaProject javaProject, String key, String value )
     {
-        if( ( value != null ) && ( value.length() > 0 ) )
+        if ( ( value != null ) && ( value.length() > 0 ) )
         {
-            String oldOption = javaProject.getOption( key , false );
-            if( ( oldOption == null ) || ( !oldOption.equals( value ) ) )
+            String oldOption = javaProject.getOption( key, false );
+            if ( ( oldOption == null ) || ( !oldOption.equals( value ) ) )
             {
-                javaProject.setOption( key , value );
+                javaProject.setOption( key, value );
             }
         }
     }
-    
+
     private IClasspathEntry getJREContainerClasspathWithVersion( String version )
     {
         int n = SOURCE_VERSIONS.indexOf( version );
-        
-        if( n >= 0 )
+
+        if ( n >= 0 )
         {
-            Map< String , IClasspathEntry > jreContainers = getJREContainersMap();
-            for(int i = n; i < SOURCE_VERSIONS.size(); i++ ) 
+            Map<String, IClasspathEntry> jreContainers = getJREContainersMap();
+            for ( int i = n; i < SOURCE_VERSIONS.size(); i++ )
             {
-                IClasspathEntry classpathEntry = (IClasspathEntry) jreContainers.get( SOURCE_VERSIONS.get( i ) );
-                if( classpathEntry != null ) 
+                IClasspathEntry classpathEntry = jreContainers.get( SOURCE_VERSIONS.get( i ) );
+                if ( classpathEntry != null )
                 {
                     return classpathEntry;
                 }
@@ -509,42 +501,43 @@ public class MavenNature
 
         return JavaRuntime.getDefaultJREContainerEntry();
     }
-    
-    private Map< String, IClasspathEntry > getJREContainersMap()
+
+    private Map<String, IClasspathEntry> getJREContainersMap()
     {
-        Map< String, IClasspathEntry > jreContainers = new HashMap< String , IClasspathEntry >();
-        
-        jreContainers.put( getJREVersion( JavaRuntime.getDefaultVMInstall() ), JavaRuntime.getDefaultJREContainerEntry());
-        for( IVMInstallType installType : JavaRuntime.getVMInstallTypes() )
+        Map<String, IClasspathEntry> jreContainers = new HashMap<String, IClasspathEntry>();
+
+        jreContainers.put( getJREVersion( JavaRuntime.getDefaultVMInstall() ),
+                           JavaRuntime.getDefaultJREContainerEntry() );
+        for ( IVMInstallType installType : JavaRuntime.getVMInstallTypes() )
         {
-            for( IVMInstall install : installType.getVMInstalls() )
+            for ( IVMInstall install : installType.getVMInstalls() )
             {
                 String version = getJREVersion( install );
-                if( !jreContainers.containsKey( version ) )
+                if ( !jreContainers.containsKey( version ) )
                 {
                     jreContainers.put( version, JavaCore.newContainerEntry( JavaRuntime.newJREContainerPath( install ) ) );
                 }
             }
         }
-        
+
         return jreContainers;
     }
-    
-    private String getJREVersion( IVMInstall install ) 
+
+    private String getJREVersion( IVMInstall install )
     {
-        if( install instanceof IVMInstall2 )
+        if ( install instanceof IVMInstall2 )
         {
-            return ( ( IVMInstall2 ) install ).getJavaVersion();
+            return ( (IVMInstall2) install ).getJavaVersion();
         }
         else
         {
             LibraryLocation[] libLocations = install.getLibraryLocations();
-            if( libLocations != null )
+            if ( libLocations != null )
             {
-                for( LibraryLocation libLocation : libLocations )
+                for ( LibraryLocation libLocation : libLocations )
                 {
                     IPath systemLibraryPath = libLocation.getSystemLibraryPath();
-                    if( "rt.jar".equals( systemLibraryPath.lastSegment() ) )
+                    if ( "rt.jar".equals( systemLibraryPath.lastSegment() ) )
                     {
                         try
                         {
@@ -553,16 +546,16 @@ public class MavenNature
                             Attributes attributes = manifest.getMainAttributes();
                             return attributes.getValue( Attributes.Name.SPECIFICATION_VERSION );
                         }
-                        catch( IOException e )
+                        catch ( IOException e )
                         {
                             // TODO : Handle!
-                            MavenJdtCoreActivator.getLogger().log( e ); 
+                            MavenJdtCoreActivator.getLogger().log( e );
                         }
                     }
                 }
             }
         }
-        
+
         return null;
     }
 }
