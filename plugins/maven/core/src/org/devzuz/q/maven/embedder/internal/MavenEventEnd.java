@@ -8,6 +8,7 @@
 package org.devzuz.q.maven.embedder.internal;
 
 import org.devzuz.q.maven.embedder.IMavenEventEnd;
+import org.devzuz.q.maven.embedder.Severity;
 
 public class MavenEventEnd extends AbstractMavenEvent implements IMavenEventEnd
 {
@@ -20,7 +21,7 @@ public class MavenEventEnd extends AbstractMavenEvent implements IMavenEventEnd
     @Override
     public String getDescriptionText()
     {
-        return mergeMessages( Messages.MavenEventEnd_Description, new Object[] { getType(), getTarget(), getTime() } );
+        return mergeMessages( Messages.MavenEventEnd_Description, getType(), getTarget(), getTime() );
     }
 
     @Override
@@ -29,4 +30,9 @@ public class MavenEventEnd extends AbstractMavenEvent implements IMavenEventEnd
         return Messages.MavenEventEnd_Type;
     }
 
+    @Override
+    public Severity getSeverity()
+    {
+        return Severity.info;
+    }
 }

@@ -33,13 +33,23 @@ public class Messages extends NLS
 
     public static String MavenLog_Type;
 
+    public static String MavenTransferCompleted_Description;
+
     public static String MavenTransferCompleted_Type;
+
+    public static String MavenTransferError_Description;
 
     public static String MavenTransferError_Type;
 
+    public static String MavenTransferInitiated_Description;
+
     public static String MavenTransferInitiated_Type;
 
+    public static String MavenTransferProgress_Description;
+
     public static String MavenTransferProgress_Type;
+
+    public static String MavenTransferStarted_Description;
 
     public static String MavenTransferStarted_Type;
 

@@ -8,7 +8,6 @@
 package org.devzuz.q.maven.embedder.internal;
 
 import org.apache.maven.wagon.events.TransferEvent;
-import org.apache.maven.wagon.resource.Resource;
 import org.devzuz.q.maven.embedder.IMavenTransferError;
 import org.devzuz.q.maven.embedder.Severity;
 
@@ -23,12 +22,7 @@ public class MavenTransferError extends AbstractMavenTransferEvent implements IM
     @Override
     public String getDescriptionText()
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append( "Error transferring " );
-        Resource resource = getEvent().getResource();
-        sb.append( resource.getName() );
-        appendRepository( sb );
-        return sb.toString();
+        return getDescriptionText( Messages.MavenTransferError_Description );
     }
 
     @Override

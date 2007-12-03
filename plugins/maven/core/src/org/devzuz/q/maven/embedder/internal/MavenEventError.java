@@ -21,8 +21,7 @@ public class MavenEventError extends AbstractMavenEvent implements IMavenEventEr
     @Override
     public String getDescriptionText()
     {
-        return mergeMessages( Messages.MavenEventError_Description, new Object[] { getType(), getTarget(), getTime(),
-            getThrowable() } );
+        return mergeMessages( Messages.MavenEventError_Description, getType(), getTarget(), getTime(), getThrowable() );
     }
 
     @Override

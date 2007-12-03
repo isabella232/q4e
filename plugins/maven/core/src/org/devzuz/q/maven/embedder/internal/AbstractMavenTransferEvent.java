@@ -24,13 +24,14 @@ public abstract class AbstractMavenTransferEvent extends AbstractMavenEvent
         return event;
     }
 
-    protected void appendRepository( StringBuilder sb )
+    protected Wagon getWagon()
     {
-        if ( getEvent().getSource() instanceof Wagon )
-        {
-            Wagon wagon = (Wagon) getEvent().getSource();
-            sb.append( " from " );
-            sb.append( wagon.getRepository().toString() );
-        }
+        return (Wagon) getEvent().getSource();
     }
+
+    protected String getDescriptionText( String msg )
+    {
+        return mergeMessages( msg, getEvent().getResource().getName(), getWagon().getRepository() );
+    }
+
 }

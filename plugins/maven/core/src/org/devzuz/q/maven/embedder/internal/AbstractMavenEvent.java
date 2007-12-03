@@ -92,7 +92,7 @@ public abstract class AbstractMavenEvent implements IMavenEvent
 
     public abstract String getDescriptionText();
 
-    protected String mergeMessages( String description, Object[] objects )
+    protected String mergeMessages( String description, Object... objects )
     {
         for ( int i = 0; i < objects.length; i++ )
         {

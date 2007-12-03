@@ -8,7 +8,6 @@
 package org.devzuz.q.maven.embedder.internal;
 
 import org.apache.maven.wagon.events.TransferEvent;
-import org.apache.maven.wagon.resource.Resource;
 import org.devzuz.q.maven.embedder.IMavenTransferProgress;
 
 public class MavenTransferProgress extends AbstractMavenTransferEvent implements IMavenTransferProgress
@@ -28,14 +27,8 @@ public class MavenTransferProgress extends AbstractMavenTransferEvent implements
     @Override
     public String getDescriptionText()
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append( "Downloaded " );
-        sb.append( length );
-        sb.append( " bytes of " );
-        Resource resource = getEvent().getResource();
-        sb.append( resource.getName() );
-        appendRepository( sb );
-        return sb.toString();
+        return mergeMessages( Messages.MavenTransferProgress_Description, getEvent().getResource().getName(),
+                              getWagon().getRepository(), Integer.toString( length ) );
     }
 
     @Override

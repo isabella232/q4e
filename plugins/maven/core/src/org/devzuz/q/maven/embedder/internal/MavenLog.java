@@ -29,13 +29,13 @@ public class MavenLog extends AbstractMavenEvent implements IMavenLog
     @Override
     public String getDescriptionText()
     {
-        return mergeMessages( Messages.MavenLog_Description, new Object[] { msg, t } );
+        return mergeMessages( Messages.MavenLog_Description, msg, t );
     }
 
     @Override
     public String getTypeText()
     {
-        return mergeMessages( Messages.MavenLog_Type, new Object[] { severity } );
+        return mergeMessages( Messages.MavenLog_Type, severity );
     }
 
     public Severity getSeverity()
