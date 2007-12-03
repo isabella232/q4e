@@ -24,7 +24,7 @@
    <requires>
       <import plugin="com.ibm.icu" version="3.6.0" match="compatible"/>
       <import plugin="org.eclipse.jface" version="3.3.0" match="compatible"/>
-      <import feature="org.devzuz.q.feature" version="0.4.0.qualifier" match="compatible"/>
+      <import feature="org.devzuz.q.feature" version="0.4.0" match="compatible"/>
    </requires>
 
    <plugin
