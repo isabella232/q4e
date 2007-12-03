@@ -110,6 +110,15 @@ public class ProjectScanner
         return pomDescriptors;
     }
 
+    /**
+     * Get the project and subprojects of the given pom, ordered by build order
+     * 
+     * @param pom
+     * @param monitor
+     * @return the list of sorted projects or null if the order can't be determined (eg. if there's
+     *         an error executing <code>mvn validate</code>).
+     * @throws InterruptedException
+     */
     private List<PomFileDescriptor> getSortedProjects( File pom, IProgressMonitor monitor )
         throws InterruptedException
     {
