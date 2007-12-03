@@ -125,12 +125,18 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
     public List<IMavenProject> getSortedProjects()
     {
         List<MavenProject> mavenProjects = result.getTopologicallySortedProjects();
-        List<IMavenProject> projects = new ArrayList<IMavenProject>( mavenProjects.size() );
-        for ( MavenProject mavenProject : mavenProjects )
+        
+        if ( mavenProjects != null )
         {
-            IMavenProject project = new EclipseMavenProject( mavenProject );
-            projects.add( project );
+            List<IMavenProject> projects = new ArrayList<IMavenProject>( mavenProjects.size() );
+            for ( MavenProject mavenProject : mavenProjects )
+            {
+                IMavenProject project = new EclipseMavenProject( mavenProject );
+                projects.add( project );
+            }
+            return projects;
         }
-        return projects;
+        
+        return null;
     }
 }

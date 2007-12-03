@@ -67,47 +67,10 @@ public class ProjectScanner
             /* we are done */
             return sortedProjects;
         }
-
-        PomFileDescriptor pomDescriptor;
-        try
+        else
         {
-            Model pomModel = new MavenXpp3Reader().read( new FileReader( pom ) );
-            pomDescriptor = new PomFileDescriptor( pom, pomModel );
-
+            return getProjects( file , monitor );
         }
-        catch ( IOException e )
-        {
-            // TODO the project doesn't build, but we should add it anyways or show the error to the
-            // user
-            MavenJdtUiActivator.getLogger().log( "Unable to read Maven project: " + pom, e );
-            return Collections.emptyList();
-        }
-        catch ( XmlPullParserException e )
-        {
-            // TODO the project's pom can't be parsed, but we should add it anyways or show the
-            // error to the user
-            MavenJdtUiActivator.getLogger().log( "Maven project contains wrong markup: " + pom, e );
-            return Collections.emptyList();
-        }
-
-        List<String> modules = pomDescriptor.getModel().getModules();
-
-        Collection<PomFileDescriptor> pomDescriptors = new ArrayList<PomFileDescriptor>();
-
-        for ( String module : modules )
-        {
-            File moduleDir = new File( pomDescriptor.getBaseDirectory(), module );
-
-            Collection<PomFileDescriptor> scanned = scanFolder( moduleDir, new SubProgressMonitor( monitor, 10 ) );
-            pomDescriptors.addAll( scanned );
-        }
-
-        if ( modules.isEmpty() )
-        {
-            pomDescriptors.add( pomDescriptor );
-        }
-
-        return pomDescriptors;
     }
 
     /**
@@ -132,6 +95,11 @@ public class ProjectScanner
             IMavenExecutionResult result = MavenManager.getMaven().executeGoal( mavenProject, "validate", parameter,
                                                                                 monitor );
             sortedProjects = result.getSortedProjects();
+            if( sortedProjects == null )
+            {
+                /* the project doesn't build so we can't get the list of sorted projects */
+                return null;
+            }
         }
         catch ( CoreException e )
         {
@@ -164,5 +132,63 @@ public class ProjectScanner
     protected boolean importModel( Model model )
     {
         return !"pom".equals( model.getPackaging() );
+    }
+    
+    private Collection<PomFileDescriptor> getProjects( File file, IProgressMonitor monitor )
+        throws InterruptedException
+    {
+        if ( monitor.isCanceled() )
+        {
+            throw new InterruptedException();
+        }
+
+        monitor.worked( 1 );
+       
+        File pom = new File( file, IMavenProject.POM_FILENAME );
+        if ( !pom.exists() )
+        {
+            return Collections.emptyList();
+        }
+        
+        PomFileDescriptor pomDescriptor;
+        try
+        {
+            Model pomModel = new MavenXpp3Reader().read( new FileReader( pom ) );
+            pomDescriptor = new PomFileDescriptor( pom, pomModel );
+
+        }
+        catch ( IOException e )
+        {
+            // TODO the project doesn't build, but we should add it anyways or show the error to the
+            // user
+            MavenJdtUiActivator.getLogger().log( "Unable to read Maven project: " + pom, e );
+            return Collections.emptyList();
+        }
+        catch ( XmlPullParserException e )
+        {
+            // TODO the project's pom can't be parsed, but we should add it anyways or show the
+            // error to the user
+            MavenJdtUiActivator.getLogger().log( "Maven project contains wrong markup: " + pom, e );
+            return Collections.emptyList();
+        }
+
+        List<String> modules = pomDescriptor.getModel().getModules();
+
+        Collection<PomFileDescriptor> pomDescriptors = new ArrayList<PomFileDescriptor>();
+
+        for ( String module : modules )
+        {
+            File moduleDir = new File( pomDescriptor.getBaseDirectory(), module );
+
+            Collection<PomFileDescriptor> scanned = getProjects( moduleDir, new SubProgressMonitor( monitor, 10 ) );
+            pomDescriptors.addAll( scanned );
+        }
+
+        if ( modules.isEmpty() )
+        {
+            pomDescriptors.add( pomDescriptor );
+        }
+
+        return pomDescriptors;
     }
 }
