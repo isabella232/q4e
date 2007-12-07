@@ -3,13 +3,12 @@ package org.devzuz.q.maven.embedder.internal;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
+import junit.framework.TestCase;
+
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.QCoreException;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-
-import junit.framework.TestCase;
 
 public class QCoreExceptionTest extends TestCase
 {

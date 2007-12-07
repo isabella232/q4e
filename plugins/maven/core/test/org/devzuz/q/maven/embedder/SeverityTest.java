@@ -7,8 +7,6 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder;
 
-import org.devzuz.q.maven.embedder.Severity;
-
 import junit.framework.TestCase;
 
 public class SeverityTest extends TestCase

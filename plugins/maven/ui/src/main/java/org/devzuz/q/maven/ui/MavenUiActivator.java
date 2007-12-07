@@ -6,6 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.ui;
 
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.log.EclipseLogger;
 import org.devzuz.q.maven.embedder.log.Logger;
 import org.eclipse.ui.plugin.AbstractUIPlugin;

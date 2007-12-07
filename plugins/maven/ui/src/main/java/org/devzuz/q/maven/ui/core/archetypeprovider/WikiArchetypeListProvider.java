@@ -17,9 +17,9 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.devzuz.q.maven.embedder.MavenPreferenceManager;
 import org.devzuz.q.maven.embedder.QCoreException;
 import org.devzuz.q.maven.ui.MavenUiActivator;
-import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;

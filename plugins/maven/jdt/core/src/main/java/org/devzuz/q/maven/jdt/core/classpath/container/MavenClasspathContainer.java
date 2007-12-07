@@ -24,7 +24,6 @@ import org.devzuz.q.maven.jdt.core.MavenClasspathHelper;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
-import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -255,7 +254,7 @@ public class MavenClasspathContainer implements IClasspathContainer
     private void resolveArtifacts( IMavenProject mavenProject, List<IClasspathEntry> classpathEntries,
                                    Set<IMavenArtifact> artifacts )
     {
-        boolean downloadSources = MavenPreferenceManager.getMavenPreferenceManager().downloadSources();
+        boolean downloadSources = MavenManager.getMavenPreferenceManager().downloadSources();
         for ( IMavenArtifact artifact : artifacts )
         {
             IClasspathEntry entry = resolveArtifact( mavenProject, artifact, downloadSources );

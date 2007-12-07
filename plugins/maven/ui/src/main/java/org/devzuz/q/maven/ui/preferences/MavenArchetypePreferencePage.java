@@ -7,6 +7,8 @@
 
 package org.devzuz.q.maven.ui.preferences;
 
+import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.embedder.MavenPreferenceManager;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.core.archetypeprovider.WikiArchetypeListProvider;
 import org.devzuz.q.maven.ui.preferences.editor.MavenArchetypePreferenceTableEditor;
@@ -16,7 +18,6 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 public class MavenArchetypePreferencePage extends FieldEditorPreferencePage implements IWorkbenchPreferencePage
 {
-    public static String ARCHETYPE_LIST_KEY = Messages.MavenArchetypePreferenceEditor_PrefKey;
     public static String ARCHETYPE_LIST_LS = Messages.MavenArchetypePreferenceEditor_LineSeparator;
     public static String ARCHETYPE_LIST_FS = Messages.MavenArchetypePreferenceEditor_FieldSeparator;
     public static String DEFAULT_ARCHETYPE_LIST_WIKI = "http://docs.codehaus.org/pages/viewpagesrc.action?pageId=48400";
@@ -25,13 +26,14 @@ public class MavenArchetypePreferencePage extends FieldEditorPreferencePage impl
     public MavenArchetypePreferencePage()
     {
         super( GRID );
-        setPreferenceStore( MavenPreferenceManager.getMavenPreferenceManager().getPreferenceStore() );
+        setPreferenceStore( MavenManager.getMavenPreferenceManager().getPreferenceStore() );
     }
 
     protected void createFieldEditors()
     {
         //noDefaultAndApplyButton();
-        addField( new MavenArchetypePreferenceTableEditor( ARCHETYPE_LIST_KEY, Messages.MavenArchetypePreferencePage_description,
+        addField( new MavenArchetypePreferenceTableEditor( MavenPreferenceManager.ARCHETYPE_LIST_KEY, 
+                                                           Messages.MavenArchetypePreferencePage_description,
                                                            getFieldEditorParent() ) );
     }
 

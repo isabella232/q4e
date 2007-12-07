@@ -29,13 +29,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface IMaven
 {
-
-    public static final String GLOBAL_PREFERENCE_OFFLINE = MavenCoreActivator.PLUGIN_ID + ".offline";
-
-    public static final String GLOBAL_PREFERENCE_DOWNLOAD_SOURCES = MavenCoreActivator.PLUGIN_ID + ".downloadSources";
-
-    public static final String GLOBAL_PREFERENCE_DOWNLOAD_JAVADOC = MavenCoreActivator.PLUGIN_ID + ".downloadJavadoc";
-
     public static final String SETTINGS_FILENAME = "settings.xml";
 
     public static final String USER_CONFIGURATION_DIRECTORY_NAME = ".m2";

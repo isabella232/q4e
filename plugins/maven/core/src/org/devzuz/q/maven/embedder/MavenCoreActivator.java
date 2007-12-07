@@ -12,6 +12,8 @@ import org.devzuz.q.maven.embedder.internal.ExtensionPointHelper;
 import org.devzuz.q.maven.embedder.log.EclipseLogger;
 import org.devzuz.q.maven.embedder.log.Logger;
 import org.eclipse.core.internal.runtime.Log;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
@@ -31,8 +33,9 @@ public class MavenCoreActivator implements BundleActivator
     
     private MavenProjectManager projectManager;
 
+    private MavenPreferenceManager preferenceManager;
+    
     private Logger logger;
-
     /**
      * The constructor
      */
@@ -45,12 +48,16 @@ public class MavenCoreActivator implements BundleActivator
     {
         logger = new EclipseLogger( PLUGIN_ID, new Log( context.getBundle() ) );
 
-        // Initialize the maven instance
-        mavenInstance = new EclipseMaven();
-        mavenInstance.start();
+        // Initialize the maven preference manager
+        preferenceManager = new MavenPreferenceManager( new ScopedPreferenceStore( new InstanceScope(), 
+                                                                                   context.getBundle().getSymbolicName()) );
         
         // Initialize the maven workspace projects manager
         projectManager = new MavenProjectManager();
+        
+        // Initialize the maven instance
+        mavenInstance = new EclipseMaven();
+        mavenInstance.start();
         
         ExtensionPointHelper.resolveExtensionPoints( this );
     }
@@ -80,6 +87,11 @@ public class MavenCoreActivator implements BundleActivator
     {
         return projectManager;
     }
+    
+    public MavenPreferenceManager getMavenPreferenceManager()
+    {
+        return preferenceManager;
+    }
 
     public void setMavenInstance( EclipseMaven mavenInstance )
     {
@@ -90,5 +102,4 @@ public class MavenCoreActivator implements BundleActivator
     {
         return getDefault().logger;
     }
-
 }

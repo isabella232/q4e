@@ -3,13 +3,14 @@ package org.devzuz.q.maven.ui.core.archetypeprovider;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Collections;
 
+import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.embedder.MavenPreferenceManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage;
-import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.core.runtime.CoreException;
 
 
@@ -42,7 +43,7 @@ public class MavenArchetypeProviderManager
     public static Map<String, Archetype> getArchetypes()
     {
         Map<String , Archetype> archetypeMap = new HashMap<String, Archetype>(); 
-        String archetypeSourceList = MavenPreferenceManager.getMavenPreferenceManager().getArchetypeSourceList();
+        String archetypeSourceList = MavenManager.getMavenPreferenceManager().getArchetypeSourceList();
         
         if ( archetypeSourceList.trim().length() <= 0 )
         {
@@ -50,12 +51,12 @@ public class MavenArchetypeProviderManager
                            MavenArchetypePreferencePage.ARCHETYPE_LIST_FS + 
                            MavenArchetypePreferencePage.DEFAULT_ARCHETYPE_LIST_KIND;
             
-            MavenPreferenceManager.getMavenPreferenceManager().setArchetypeSourceList( value );
+            MavenManager.getMavenPreferenceManager().setArchetypeSourceList( value );
             archetypeSourceList = value;
         }
         
         // Get the timeout from preference, use default if timeout is 0
-        int timeout = MavenPreferenceManager.getMavenPreferenceManager().getArchetypeConnectionTimeout();
+        int timeout = MavenManager.getMavenPreferenceManager().getArchetypeConnectionTimeout();
         if( timeout <= 0 )
         {
             timeout = MavenPreferenceManager.ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT;

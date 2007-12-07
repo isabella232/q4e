@@ -7,10 +7,10 @@
 
 package org.devzuz.q.maven.ui.preferences.editor;
 
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.dialogs.ArchetypeListSourceDialog;
 import org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage;
-import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -175,7 +175,7 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
     protected void doLoad()
     {
         artifactsTable.clearAll();
-        String archetypeListPref = MavenPreferenceManager.getMavenPreferenceManager().getArchetypeSourceList();
+        String archetypeListPref = MavenManager.getMavenPreferenceManager().getArchetypeSourceList();
         if ( !archetypeListPref.trim().equals( "" ) )
         {
         	

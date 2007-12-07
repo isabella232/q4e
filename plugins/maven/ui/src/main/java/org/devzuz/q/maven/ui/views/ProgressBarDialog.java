@@ -13,7 +13,6 @@ import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
-import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -61,7 +60,7 @@ public class ProgressBarDialog implements IRunnableWithProgress
             {
                 MavenExecutionParameter parameters =
                     MavenExecutionParameter.newDefaultMavenExecutionParameter( properties );
-                parameters.setRecursive( MavenPreferenceManager.getMavenPreferenceManager().isRecursive() );
+                parameters.setRecursive( MavenManager.getMavenPreferenceManager().isRecursive() );
                 if ( goal.equals( "deploy" ) )
                 {
                     MavenManager.getMaven().deploy( project, parameters );

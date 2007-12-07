@@ -9,7 +9,6 @@ package org.devzuz.q.maven.embedder.internal;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
@@ -88,7 +87,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
         exceptions.addAll( resolutionExceptions );
 
         MavenProject mavenProject = result.getProject();
-
+        
         if ( mavenProject != null )
         {
             this.mavenProject = new EclipseMavenProject( mavenProject, project );
@@ -121,7 +120,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
     {
         return mavenProject;
     }
-
+    
     public List<IMavenProject> getSortedProjects()
     {
         List<MavenProject> mavenProjects = result.getTopologicallySortedProjects();

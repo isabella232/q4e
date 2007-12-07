@@ -45,6 +45,7 @@ import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.QCoreException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -442,56 +443,80 @@ public class EclipseMaven implements IMaven
         scheduleGoal( mavenProject, GOAL_INSTALL, parameters );
     }
 
-    public void start() throws CoreException
+    public boolean start() throws CoreException
     {
-
-        try
+        if ( state == STOPPED )
         {
-            // Lets initialize the MavenEmbedder
-            Configuration config = new DefaultConfiguration();
-            config.setConfigurationCustomizer( new EclipsePlexusContainerCustomizer() );
-            config.setMavenEmbedderLogger( getEventPropagator() );
-
-            /* add the settings.xml */
-            if ( USER_HOME != null )
+            try
             {
-                File m2Dir = new File( new File( USER_HOME ), USER_CONFIGURATION_DIRECTORY_NAME );
-                File userSettings = new File( m2Dir, SETTINGS_FILENAME );
-                if ( userSettings.exists() )
+                // Lets initialize the MavenEmbedder
+                Configuration config = new DefaultConfiguration();
+                config.setConfigurationCustomizer( new EclipsePlexusContainerCustomizer() );
+                config.setMavenEmbedderLogger( getEventPropagator() );
+                
+                /* add global settings.xml */
+                String globalSettingsXmlFilename = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
+                if ( ( globalSettingsXmlFilename != null ) && !( globalSettingsXmlFilename.trim().equals( "" ) ) )
                 {
-                    config.setUserSettingsFile( userSettings );
+                    File globalSettingsFile = new File( globalSettingsXmlFilename.trim() );
+                    if ( globalSettingsFile.exists() )
+                    {
+                        config.setGlobalSettingsFile( globalSettingsFile );
+                    }
                 }
+                
+                /* add the settings.xml */
+                if ( USER_HOME != null )
+                {
+                    File m2Dir = new File( new File( USER_HOME ), USER_CONFIGURATION_DIRECTORY_NAME );
+                    File userSettings = new File( m2Dir, SETTINGS_FILENAME );
+                    if ( userSettings.exists() )
+                    {
+                        config.setUserSettingsFile( userSettings );
+                    }
+                }
+                ConfigurationValidationResult validationResult = MavenEmbedder.validateConfiguration( config );
+                // TODO present the error in a user friendly way
+                // Fail when you have a settings.xml file and it does not parse
+                if ( validationResult.isUserSettingsFilePresent() && !validationResult.isUserSettingsFileParses() )
+                {
+                    throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID,
+                                                          "The user settings file is invalid" ) );
+                }
+                if ( validationResult.isGlobalSettingsFilePresent() && !validationResult.isGlobalSettingsFileParses() )
+                {
+                    throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID,
+                                                          "The global settings file is invalid" ) );
+                }
+                
+                mavenEmbedder = new MavenEmbedder( config );
+                
+                state = STARTED;
+                
+                return true;
             }
-
-            ConfigurationValidationResult validationResult = MavenEmbedder.validateConfiguration( config );
-
-            // TODO present the error in a user friendly way
-            // Fail when you have a settings.xml file and it does not parse
-            if ( validationResult.isUserSettingsFilePresent() && !validationResult.isUserSettingsFileParses() )
+            catch ( MavenEmbedderException e )
             {
-                throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID,
-                                                      "The settings file is invalid" ) );
+                throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
+                                                      "Unable to start Maven Embedder", e ) );
             }
 
-            mavenEmbedder = new MavenEmbedder( config );
-
-            state = STARTED;
         }
-        catch ( MavenEmbedderException e )
-        {
-            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
-                                                  "Unable to start Maven Embedder", e ) );
-        }
+        
+        return false;
     }
 
-    public void stop() throws CoreException
+    public boolean stop() throws CoreException
     {
-        if ( getMavenEmbedder() != null )
+        if ( ( getMavenEmbedder() != null ) &&
+             ( state == STARTED ) )
         {
             try
             {
                 getMavenEmbedder().stop();
                 state = STOPPED;
+                
+                return true;
             }
             catch ( MavenEmbedderException e )
             {
@@ -499,6 +524,8 @@ public class EclipseMaven implements IMaven
                                                       "Unable to stop Maven Embedder", e ) );
             }
         }
+        
+        return false;
     }
 
     public void addEventListener( IMavenListener listener )
@@ -686,14 +713,16 @@ public class EclipseMaven implements IMaven
     {
         synchronized ( this )
         {
-            stop();
-            start();
+            if( stop() )
+            {
+                start();
+            }
         }
     }
 
     private MavenEmbedder getMavenEmbedder()
     {
-        if ( mavenEmbedder == null )
+        if ( ( mavenEmbedder == null ) && ( state == STARTED ) )
         {
             throw new IllegalStateException( "The plugin has not been properly started, try restarting eclipse" );
         }

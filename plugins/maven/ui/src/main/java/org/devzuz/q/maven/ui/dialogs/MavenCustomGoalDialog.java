@@ -9,10 +9,10 @@ package org.devzuz.q.maven.ui.dialogs;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.customcomponents.PropertiesComponent;
-import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -103,7 +103,7 @@ public class MavenCustomGoalDialog extends AbstractResizableDialog
 
         setRecursiveRadioButton = new Button( container2, SWT.CHECK );
         setRecursiveRadioButton.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        setRecursiveRadioButton.setSelection( MavenPreferenceManager.getMavenPreferenceManager().isRecursive() );
+        setRecursiveRadioButton.setSelection( MavenManager.getMavenPreferenceManager().isRecursive() );
         setRecursiveRadioButton.setEnabled( isParentPom );
 
         Label label2 = new Label( container2, SWT.NULL );

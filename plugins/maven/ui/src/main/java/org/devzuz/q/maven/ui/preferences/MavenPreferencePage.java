@@ -6,10 +6,14 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.ui.preferences;
 
-import org.devzuz.q.maven.embedder.IMaven;
+import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.embedder.MavenPreferenceManager;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
+import org.eclipse.jface.preference.FileFieldEditor;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
@@ -18,27 +22,32 @@ public class MavenPreferencePage
     extends FieldEditorPreferencePage
     implements IWorkbenchPreferencePage
 {
+    private String previousGlobalSettingsXmlValue = "";
+    
     public MavenPreferencePage()
     {
         super( GRID );
-        setPreferenceStore( MavenPreferenceManager.getMavenPreferenceManager().getPreferenceStore() );
+        setPreferenceStore( MavenManager.getMavenPreferenceManager().getPreferenceStore() );
     }
 
     public void createFieldEditors()
-    {
+    {   
         addField( new IntegerFieldEditor( MavenPreferenceManager.ARCHETYPE_PAGE_CONN_TIMEOUT,
                                           Messages.MavenPreference_ArchetypeConnectionTimeout, getFieldEditorParent() ) );
+        
+        addField( new FileFieldEditor( MavenPreferenceManager.GLOBAL_SETTINGS_XML_FILENAME,
+                                       Messages.MavenPreference_GlobalSettingsXml, true , getFieldEditorParent() ) );
         
         addField( new BooleanFieldEditor( MavenPreferenceManager.RECURSIVE_EXECUTION, Messages.MavenPreference_RecursiveExecution,
                                           getFieldEditorParent() ) );
         
-        addField( new BooleanFieldEditor( IMaven.GLOBAL_PREFERENCE_OFFLINE, Messages.MavenPreference_Offline,
+        addField( new BooleanFieldEditor( MavenPreferenceManager.GLOBAL_PREFERENCE_OFFLINE, Messages.MavenPreference_Offline,
                                           getFieldEditorParent() ) );
 
-        addField( new BooleanFieldEditor( IMaven.GLOBAL_PREFERENCE_DOWNLOAD_SOURCES,
+        addField( new BooleanFieldEditor( MavenPreferenceManager.GLOBAL_PREFERENCE_DOWNLOAD_SOURCES,
                                           Messages.MavenPreference_DownloadSources, getFieldEditorParent() ) );
 
-        addField( new BooleanFieldEditor( IMaven.GLOBAL_PREFERENCE_DOWNLOAD_JAVADOC,
+        addField( new BooleanFieldEditor( MavenPreferenceManager.GLOBAL_PREFERENCE_DOWNLOAD_JAVADOC,
                                           Messages.MavenPreference_DownloadJavaDocs, getFieldEditorParent() ) );
     }
 
@@ -49,11 +58,33 @@ public class MavenPreferencePage
     
     protected void initialize()
     {
-        if( MavenPreferenceManager.getMavenPreferenceManager().getArchetypeConnectionTimeout() == 0 )
+        if( MavenManager.getMavenPreferenceManager().getArchetypeConnectionTimeout() == 0 )
         {
-            MavenPreferenceManager.getMavenPreferenceManager().setArchetypeConnectionTimeout( MavenPreferenceManager.ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT );
+            MavenManager.getMavenPreferenceManager().setArchetypeConnectionTimeout( MavenPreferenceManager.ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT );
         }
         
+        previousGlobalSettingsXmlValue = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
+        
         super.initialize();
+    }
+
+    @Override
+    public boolean performOk()
+    {
+        String newGlobalSettingsXmlValue = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
+        if( !previousGlobalSettingsXmlValue.equals( newGlobalSettingsXmlValue ) )
+        {
+            // Restart IMaven
+            try
+            {
+                MavenManager.getMaven().refresh();
+            }
+            catch( CoreException e )
+            {
+                MavenUiActivator.getLogger().error( "Unable to restart Maven with new global settings.xml file - " + e.getMessage() );
+            }
+        }
+        
+        return super.performOk();
     }
 }

@@ -20,11 +20,5 @@
          </adapter>
       </factory>
    </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="org.devzuz.q.maven.embedder.internal.EclipseMavenPreferenceInitializer">
-      </initializer>
-   </extension>
 
 </plugin>

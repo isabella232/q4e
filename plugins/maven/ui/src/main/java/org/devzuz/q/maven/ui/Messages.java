@@ -46,6 +46,8 @@ public class Messages
     public static String MavenPreference_RecursiveExecution;
     
     public static String MavenPreference_ArchetypeConnectionTimeout;
+    
+    public static String MavenPreference_GlobalSettingsXml;
 
     public static String MavenEventView_Column_Description;
 
@@ -108,8 +110,6 @@ public class Messages
     public static String MavenArchetypePreferencePage_sourceurl;
     
     public static String MavenArchetypePreferencePage_type;
-    
-    public static String MavenArchetypePreferenceEditor_PrefKey;
     
     public static String MavenArchetypePreferenceEditor_LineSeparator;
     

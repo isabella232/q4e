@@ -36,4 +36,14 @@ public class MavenManager
     {
         return MavenCoreActivator.getDefault().getMavenProjectManager();
     }
+    
+    /**
+     * Get the maven preference manager.
+     * 
+     * @return the maven preference manager.
+     */
+    public static MavenPreferenceManager getMavenPreferenceManager()
+    {
+        return MavenCoreActivator.getDefault().getMavenPreferenceManager();
+    }
 }

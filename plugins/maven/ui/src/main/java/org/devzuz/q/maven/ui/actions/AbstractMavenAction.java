@@ -8,8 +8,8 @@ package org.devzuz.q.maven.ui.actions;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
-import org.devzuz.q.maven.ui.preferences.MavenPreferenceManager;
 import org.devzuz.q.maven.ui.views.MavenEventView;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -107,7 +107,7 @@ public abstract class AbstractMavenAction
     protected MavenExecutionParameter getDefaultParameters()
     {
         MavenExecutionParameter parameters = MavenExecutionParameter.newDefaultMavenExecutionParameter();
-        parameters.setRecursive( MavenPreferenceManager.getMavenPreferenceManager().isRecursive() );
+        parameters.setRecursive( MavenManager.getMavenPreferenceManager().isRecursive() );
         return parameters;
     }
 }

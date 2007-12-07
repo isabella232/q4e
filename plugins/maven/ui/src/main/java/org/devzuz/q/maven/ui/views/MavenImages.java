@@ -14,8 +14,6 @@ package org.devzuz.q.maven.ui.views;
  * Contributors: IBM Corporation - initial API and implementation
  **********************************************************************************************************************/
 
-import java.net.URL;
-
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -24,10 +22,6 @@ import org.eclipse.swt.graphics.Image;
 
 public class MavenImages
 {
-
-    // TODO
-    private final static URL BASE_URL = null;
-
     // PDERuntimePlugin.getDefault().getDescriptor().getInstallURL();
     // TODO
     private final static ImageRegistry PLUGIN_REGISTRY = null;

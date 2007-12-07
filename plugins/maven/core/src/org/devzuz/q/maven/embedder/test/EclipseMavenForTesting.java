@@ -7,15 +7,15 @@ public class EclipseMavenForTesting extends EclipseMaven
 {
 
     @Override
-    public void start() throws CoreException
+    public boolean start() throws CoreException
     {
-        super.start();
+        return super.start();
     }
 
     @Override
-    public void stop() throws CoreException
+    public boolean stop() throws CoreException
     {
-        super.stop();
+        return super.stop();
     }
 
 }
