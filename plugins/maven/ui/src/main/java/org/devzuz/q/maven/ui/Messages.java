@@ -24,6 +24,12 @@ public class Messages
     public static String MavenEventView_FilterDialog_error;
 
     public static String MavenEventView_FilterDialog_fatal;
+    
+    public static String MavenEventView_MavenEventDetailDialog_ViewDetailMenuLabel;
+    
+    public static String MavenEventView_MavenEventDetailDialog_ViewPreviousEvent;
+    
+    public static String MavenEventView_MavenEventDetailDialog_ViewNextEvent;
 
     public static String MavenLaunchConfigurationCustomGoalTab_Browse;
 
@@ -61,7 +67,7 @@ public class Messages
 
     public static String MavenEventView_ClearView;
     
-    public static String MavenEventView_CopyToClipboard;
+    public static String MavenEventView_Copy;
 
     public static String MavenEventView_ScrollLock;
 
