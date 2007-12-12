@@ -78,8 +78,11 @@ public class RepositoryIndexer
 
                 if ( versionfield != null )
                     hit[2] = versionfield.stringValue();
-
-                setOfHits.add( hit );
+                
+                if( !tripletAddedAlready( setOfHits , hit ) )
+                {
+                    setOfHits.add( hit );
+                }
             }
 
             monitor.done();
@@ -216,5 +219,21 @@ public class RepositoryIndexer
             ret = file.getName();
 
         return ret;
+    }
+    
+    private static boolean tripletAddedAlready( Set<String[]> triplets , String[] newTriplet )
+    {
+        for( String[] triplet : triplets )
+        {
+            if( triplet[0].equals( newTriplet[0] ) &&
+                triplet[1].equals( newTriplet[1] ) &&
+                triplet[2].equals( newTriplet[2] ) )
+            {
+                return true;
+            }
+                
+        }
+        
+        return false;
     }
 }
