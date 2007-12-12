@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -23,8 +24,7 @@ public class RepositoryIndexerManager
     public static File INDEX_DIR;
     static
     {
-        M2_LOCAL_REPO = new File( System.getProperty( "user.home" ) + File.separatorChar + ".m2" + File.separatorChar
-            + "repository" );
+        M2_LOCAL_REPO = MavenManager.getMaven().getLocalRepository().getBaseDirectory(); 
         INDEX_DIR = new File( System.getProperty( "user.home" ) + File.separatorChar + ".m2index" );
     }
 
