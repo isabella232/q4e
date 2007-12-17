@@ -9,7 +9,7 @@ package org.devzuz.q.maven.wizard.pages.core.internal;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
+import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.devzuz.q.maven.wizard.config.core.IWizardConfigFactory;
 import org.devzuz.q.maven.wizard.core.internal.MavenWizardContext;
 import org.devzuz.q.maven.wizard.pages.ui.IMavenWizardPage;

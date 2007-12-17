@@ -19,7 +19,7 @@ import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.projectimport.ScanImportProjectJob;
-import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
+import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.devzuz.q.maven.wizard.MavenWizardActivator;
 import org.devzuz.q.maven.wizard.postprocessor.core.IMavenProjectPostprocessor;
 import org.eclipse.core.runtime.CoreException;
@@ -56,7 +56,9 @@ public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
         IMavenListener listener = new ArchetypeGenerationListener( baseDir.append( artifactId ), wizardContext );
 
         MavenManager.getMaven().addEventListener( listener );
-        MavenManager.getMaven().scheduleGoal( baseDir, ARCHETYPE_PLUGIN_ID + ":create", 
+        MavenManager.getMaven().scheduleGoal(
+                                              baseDir,
+                                              ARCHETYPE_PLUGIN_ID + ":create",
                                               MavenExecutionParameter.newDefaultMavenExecutionParameter( archetypeProperties ) );
     }
 
