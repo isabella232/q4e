@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
-import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
+import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.devzuz.q.maven.wizard.MavenWizardActivator;
 import org.devzuz.q.maven.wizard.core.Maven2ArchetypeManager;
 import org.devzuz.q.maven.wizard.core.internal.MavenWizardContext;

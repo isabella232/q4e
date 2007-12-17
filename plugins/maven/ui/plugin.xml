@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
+   <extension-point id="org.devzuz.q.maven.ui.archetypeProvider" name="archetypeExtender" schema="schema/org.devzuz.q.maven.ui.archetypeProvider.exsd"/>
    <extension
          point="org.eclipse.ui.views">
       <category
@@ -130,5 +131,13 @@
             name="%MavenArchetypePreferencePage"
             category="org.devzuz.q.maven.ui.preferences.MavenPreferencePage">
       </page>
+   </extension>
+   <extension
+         point="org.devzuz.q.maven.ui.archetypeProvider">
+      <provider-type
+            class="org.devzuz.q.maven.ui.archetype.provider.impl.WikiArchetypeProvider"
+            type="%archetypeProvider.wiki"
+            ui-builder="org.devzuz.q.maven.ui.archetype.provider.impl.WikiArchetypeProviderUiBuilder">
+      </provider-type>
    </extension>
 </plugin>

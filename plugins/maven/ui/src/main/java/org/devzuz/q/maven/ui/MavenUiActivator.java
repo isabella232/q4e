@@ -6,17 +6,16 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.ui;
 
-import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.log.EclipseLogger;
 import org.devzuz.q.maven.embedder.log.Logger;
+import org.devzuz.q.maven.ui.archetype.provider.ArchetypeProviderFactory;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class MavenUiActivator
-    extends AbstractUIPlugin
+public class MavenUiActivator extends AbstractUIPlugin
 {
 
     // The plug-in ID
@@ -28,22 +27,28 @@ public class MavenUiActivator
     private Logger logger;
 
     /**
+     * Reference to the archetype provider factory. Only this instance must be used.
+     */
+    private ArchetypeProviderFactory archetypeProviderFactory;
+
+    /**
      * The constructor
      */
     public MavenUiActivator()
     {
     }
 
-    public void start( BundleContext context )
-        throws Exception
+    @Override
+    public void start( BundleContext context ) throws Exception
     {
         super.start( context );
         logger = new EclipseLogger( PLUGIN_ID, this.getLog() );
+        archetypeProviderFactory = new ArchetypeProviderFactory();
         plugin = this;
     }
 
-    public void stop( BundleContext context )
-        throws Exception
+    @Override
+    public void stop( BundleContext context ) throws Exception
     {
         plugin = null;
         super.stop( context );
@@ -62,5 +67,15 @@ public class MavenUiActivator
     public static Logger getLogger()
     {
         return getDefault().logger;
+    }
+
+    /**
+     * Returns the shared instance of the archetype provider factory.
+     * 
+     * @return the archetype provider factory
+     */
+    public ArchetypeProviderFactory getArchetypeProviderFactory()
+    {
+        return archetypeProviderFactory;
     }
 }

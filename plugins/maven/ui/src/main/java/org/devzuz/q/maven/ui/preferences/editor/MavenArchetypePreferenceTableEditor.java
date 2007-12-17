@@ -7,12 +7,26 @@
 
 package org.devzuz.q.maven.ui.preferences.editor;
 
-import org.devzuz.q.maven.embedder.MavenManager;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
-import org.devzuz.q.maven.ui.dialogs.ArchetypeListSourceDialog;
+import org.devzuz.q.maven.ui.archetype.provider.ArchetypeProviderLabelProvider;
+import org.devzuz.q.maven.ui.archetype.provider.IArchetypeProvider;
+import org.devzuz.q.maven.ui.archetype.provider.impl.WikiArchetypeProvider;
+import org.devzuz.q.maven.ui.archetype.provider.internal.wizard.EditArchetypeProviderWizard;
+import org.devzuz.q.maven.ui.archetype.provider.internal.wizard.NewArchetypeProviderWizard;
 import org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage;
+import org.devzuz.q.maven.ui.preferences.MavenUIPreferenceManagerAdapter;
 import org.eclipse.jface.preference.FieldEditor;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.DisposeEvent;
 import org.eclipse.swt.events.DisposeListener;
@@ -30,7 +44,9 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class MavenArchetypePreferenceTableEditor extends FieldEditor
 {
-    private Table artifactsTable;
+    private Table providerTable;
+
+    private TableViewer providerTableViewer;
 
     private Button addPropertyButton;
 
@@ -42,12 +58,17 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
 
     private Composite buttonBox;
 
+    private List<IArchetypeProvider> archetypeProviders;
+
+    private IStructuredContentProvider archetypeProviderContentProvider;
+
     public MavenArchetypePreferenceTableEditor( String name, String labelText, Composite parent )
     {
         init( name, labelText );
         createControl( parent );
     }
-    
+
+    @Override
     protected void doFillIntoGrid( Composite parent, int numColumns )
     {
         Control control = getLabelControl( parent );
@@ -55,54 +76,60 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
         gd.horizontalSpan = numColumns;
         control.setLayoutData( gd );
 
-        artifactsTable = getTableControl( parent );
+        providerTable = getTableControl( parent );
         gd = new GridData( GridData.FILL_BOTH );
         gd.verticalAlignment = GridData.FILL;
         gd.horizontalSpan = numColumns - 1;
         gd.grabExcessHorizontalSpace = true;
-        artifactsTable.setLayoutData( gd );
+        providerTable.setLayoutData( gd );
+
+        providerTableViewer = new TableViewer( providerTable );
+        archetypeProviderContentProvider = new ArchetypeProviderContentProvider();
+        providerTableViewer.setContentProvider( archetypeProviderContentProvider );
+        providerTableViewer.setLabelProvider( new ArchetypeProviderLabelProvider() );
+        providerTableViewer.setInput( Collections.EMPTY_LIST );
 
         buttonBox = getButtonBoxControl( parent );
         gd = new GridData();
         gd.verticalAlignment = GridData.BEGINNING;
         buttonBox.setLayoutData( gd );
     }
-    
+
     public Table getTableControl( Composite parent )
     {
-        if ( artifactsTable == null )
+        if ( providerTable == null )
         {
-            artifactsTable = new Table( parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
-            artifactsTable.setFont( parent.getFont() );
+            providerTable = new Table( parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
+            providerTable.setFont( parent.getFont() );
 
             PreferencesTableListener tableListener = new PreferencesTableListener();
-            artifactsTable.addSelectionListener( tableListener );
-            artifactsTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
-            artifactsTable.setHeaderVisible( true );
-            artifactsTable.setLinesVisible( true );
+            providerTable.addSelectionListener( tableListener );
+            providerTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
+            providerTable.setHeaderVisible( true );
+            providerTable.setLinesVisible( true );
 
-            TableColumn column = new TableColumn( artifactsTable, SWT.LEFT, 0 );
-            column.setText( Messages.MavenArchetypePreferencePage_sourceurl );
+            TableColumn column = new TableColumn( providerTable, SWT.LEFT, 0 );
+            column.setText( Messages.MavenArchetypePreferencePage_name );
             column.setWidth( 300 );
-            column = new TableColumn( artifactsTable, SWT.LEFT , 1 );
+            column = new TableColumn( providerTable, SWT.LEFT, 1 );
             column.setText( Messages.MavenArchetypePreferencePage_type );
             column.setWidth( 50 );
 
-            artifactsTable.addDisposeListener( new DisposeListener()
+            providerTable.addDisposeListener( new DisposeListener()
             {
                 public void widgetDisposed( DisposeEvent event )
                 {
-                    artifactsTable = null;
+                    providerTable = null;
                 }
             } );
         }
         else
         {
-            checkParent( artifactsTable, parent );
+            checkParent( providerTable, parent );
         }
-        return artifactsTable;
+        return providerTable;
     }
-    
+
     public Composite getButtonBoxControl( Composite parent )
     {
         if ( buttonBox == null )
@@ -146,7 +173,7 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
         button.addSelectionListener( getSelectionListener() );
         return button;
     }
-    
+
     private SelectionListener getSelectionListener()
     {
         if ( selectionListener == null )
@@ -160,11 +187,13 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
     {
         selectionListener = new SelectionAdapter()
         {
+            @Override
             public void widgetDefaultSelected( SelectionEvent e )
             {
                 buttonSelected( e );
             }
 
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 buttonSelected( e );
@@ -172,42 +201,35 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
         };
     }
 
+    @Override
     protected void doLoad()
     {
-        artifactsTable.clearAll();
-        String archetypeListPref = MavenManager.getMavenPreferenceManager().getArchetypeSourceList();
-        if ( !archetypeListPref.trim().equals( "" ) )
+        archetypeProviders = MavenUIPreferenceManagerAdapter.getInstance().getConfiguredArchetypeProviders();
+        if ( !archetypeProviders.isEmpty() )
         {
-        	
-            String[] arrayStr = archetypeListPref.split( MavenArchetypePreferencePage.ARCHETYPE_LIST_LS );
-            for ( int i = 0; i < arrayStr.length; i++ )
-            {
-                String tabledata[] = arrayStr[i].split( MavenArchetypePreferencePage.ARCHETYPE_LIST_FS );
-                TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
-                item.setText( new String[] { tabledata[0], tabledata[1] } );
-            }
+            providerTableViewer.setInput( archetypeProviders );
         }
         else
         {
             doLoadDefault();
         }
+        providerTableViewer.setInput( archetypeProviders );
     }
 
+    @Override
     protected void doLoadDefault()
     {
-        artifactsTable.removeAll();        
-        TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
-        item.setText( new String[] { MavenArchetypePreferencePage.DEFAULT_ARCHETYPE_LIST_WIKI , 
-                                     MavenArchetypePreferencePage.DEFAULT_ARCHETYPE_LIST_KIND } );
+        archetypeProviders = new LinkedList<IArchetypeProvider>();
+        WikiArchetypeProvider defaultProvider = new WikiArchetypeProvider();
+        defaultProvider.setName( "Codehaus wiki" );
+        defaultProvider.setType( "Wiki" );
+        archetypeProviders.add( defaultProvider );
     }
-    
+
+    @Override
     protected void doStore()
     {
-        String strDataPreference = createTableDataList( artifactsTable.getItems() ).trim();
-        if ( strDataPreference != null )
-        {
-            getPreferenceStore().setValue( getPreferenceName(), strDataPreference );
-        }
+        MavenUIPreferenceManagerAdapter.getInstance().setConfiguredArchetypeProviders( archetypeProviders );
     }
 
     private void disableEditRemoveButtons()
@@ -216,13 +238,15 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
         removePropertyButton.setEnabled( false );
     }
 
+    @Override
     protected void adjustForNumColumns( int numColumns )
     {
         Control control = getLabelControl();
         ( (GridData) control.getLayoutData() ).horizontalSpan = numColumns;
-        ( (GridData) artifactsTable.getLayoutData() ).horizontalSpan = numColumns - 1;
+        ( (GridData) providerTable.getLayoutData() ).horizontalSpan = numColumns - 1;
     }
 
+    @Override
     public int getNumberOfControls()
     {
         return 2;
@@ -232,30 +256,44 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
     {
         if ( e.getSource() == addPropertyButton )
         {
-            ArchetypeListSourceDialog dialog = ArchetypeListSourceDialog.getArchetypeListSourceDialog();
+            NewArchetypeProviderWizard wizard = new NewArchetypeProviderWizard();
+            WizardDialog dialog = new WizardDialog( getPage().getShell(), wizard );
             if ( dialog.open() == Window.OK )
             {
-                if ( !isItemPresent( dialog.getArchetypeListSource(), dialog.getType() ) )
+                IArchetypeProvider provider = wizard.getArchetypeProvider();
+                if ( !archetypeProviders.contains( provider ) )
                 {
-                    TableItem item = new TableItem( artifactsTable, SWT.LEFT );
-                    item.setText( new String[] { dialog.getArchetypeListSource(), dialog.getType() } );
+                    archetypeProviders.add( provider );
+                    // TODO: Should notify the content provider and add just this element
+                    providerTableViewer.setInput( archetypeProviders );
                 }
             }
         }
         else if ( e.getSource() == editPropertyButton )
         {
-            ArchetypeListSourceDialog dialog = ArchetypeListSourceDialog.getArchetypeListSourceDialog();
-            TableItem[] items = artifactsTable.getSelection();
-            dialog.openWithEntry( items[0].getText( 0 ), items[0].getText( 1 ) );
-            if ( !isItemPresent( dialog.getArchetypeListSource(), dialog.getType() ) )
+            IStructuredSelection selection = (IStructuredSelection) providerTableViewer.getSelection();
+            if ( selection.size() != 1 )
             {
-                items[0].setText( new String[] { dialog.getArchetypeListSource(), dialog.getType() } );
+                // Sanity check
+                MavenUiActivator.getLogger().error(
+                                                    "Exactly one selected archetype provider was expected,"
+                                                                    + " aborting edition" );
+                return;
+            }
+            IArchetypeProvider provider = (IArchetypeProvider) selection.getFirstElement();
+            EditArchetypeProviderWizard wizard = new EditArchetypeProviderWizard( provider );
+            WizardDialog dialog = new WizardDialog( getPage().getShell(), wizard );
+            if ( dialog.open() == Window.OK )
+            {
+                // Refresh the list
+                // TODO: Should notify the content provider and update just this element
+                providerTableViewer.setInput( archetypeProviders );
             }
         }
         else if ( e.getSource() == removePropertyButton )
         {
-            artifactsTable.remove( artifactsTable.getSelectionIndex() );
-            if ( artifactsTable.getItemCount() < 1 )
+            providerTable.remove( providerTable.getSelectionIndex() );
+            if ( providerTable.getItemCount() < 1 )
             {
                 disableEditRemoveButtons();
             }
@@ -269,9 +307,9 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
 
     private boolean isItemPresent( String archeTypeListSource, String type )
     {
-        for ( int iCount = 0; iCount < artifactsTable.getItemCount(); iCount++ )
+        for ( int iCount = 0; iCount < providerTable.getItemCount(); iCount++ )
         {
-            TableItem items = artifactsTable.getItem( iCount );
+            TableItem items = providerTable.getItem( iCount );
 
             if ( items.getText( 0 ).equals( archeTypeListSource ) && items.getText( 1 ).equals( type ) )
             {
@@ -281,16 +319,53 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
         return false;
     }
 
+    /**
+     * TODO Document
+     * 
+     * @author amuino
+     */
+    private final class ArchetypeProviderContentProvider implements IStructuredContentProvider
+    {
+        /*
+         * (non-Javadoc)
+         * 
+         * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
+         */
+        public Object[] getElements( Object inputElement )
+        {
+            if ( archetypeProviders != null )
+            {
+                return archetypeProviders.toArray( new IArchetypeProvider[0] );
+            }
+            else
+            {
+                return new IArchetypeProvider[0];
+            }
+        }
+
+        public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
+        {
+            viewer.refresh();
+        }
+
+        public void dispose()
+        {
+            // Nothing to do
+        }
+    }
+
     private class PreferencesTableListener extends SelectionAdapter
     {
+        @Override
         public void widgetDefaultSelected( SelectionEvent e )
         {
             widgetSelected( e );
         }
 
+        @Override
         public void widgetSelected( SelectionEvent e )
         {
-            TableItem[] items = artifactsTable.getSelection();
+            TableItem[] items = providerTable.getSelection();
             if ( ( items != null ) && ( items.length > 0 ) )
             {
                 editPropertyButton.setEnabled( true );
@@ -304,9 +379,9 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
         StringBuilder strBuffer = new StringBuilder();
         for ( int x = 0; x < items.length; x++ )
         {
-            if( x > 0 )
+            if ( x > 0 )
                 strBuffer.append( MavenArchetypePreferencePage.ARCHETYPE_LIST_LS );
-            
+
             strBuffer.append( ( items[x].getText( 0 ) + MavenArchetypePreferencePage.ARCHETYPE_LIST_FS + items[x].getText( 1 ) ) );
         }
         return strBuffer.toString();

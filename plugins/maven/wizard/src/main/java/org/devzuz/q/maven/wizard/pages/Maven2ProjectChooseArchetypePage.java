@@ -8,12 +8,12 @@ package org.devzuz.q.maven.wizard.pages;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Map;
+import java.util.Collection;
 
-import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
-import org.devzuz.q.maven.ui.core.archetypeprovider.MavenArchetypeProviderManager;
+import org.devzuz.q.maven.ui.archetype.provider.Archetype;
+import org.devzuz.q.maven.ui.archetype.provider.ArchetypeLabelProvider;
+import org.devzuz.q.maven.ui.archetype.provider.MavenArchetypeProviderManager;
 import org.devzuz.q.maven.wizard.Messages;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -43,7 +43,7 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 
     private FilteredList archetypeList;
 
-    private Map<String, Archetype> archetypeMap;
+    private Collection<Archetype> archetypeMap;
 
     private Label archetypeDescriptionLabel;
 
@@ -128,7 +128,8 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
         Composite archetypeFilterGroup = new Composite( publishedArchetypesGroup, SWT.NULL );
         archetypeFilterGroup.setLayout( new GridLayout( 1, true ) );
         filterText = new Text( archetypeFilterGroup, SWT.SEARCH );
-        archetypeList = new FilteredList( archetypeFilterGroup, SWT.SINGLE, new LabelProvider(), true, false, true );
+        archetypeList =
+            new FilteredList( archetypeFilterGroup, SWT.SINGLE, new ArchetypeLabelProvider(), true, false, true );
         filterText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false ) );
         GridData archetypeListGridData = new GridData( GridData.FILL, GridData.CENTER, true, true );
         archetypeListGridData.minimumHeight = 150;
@@ -237,7 +238,7 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
     {
         if ( publishedArchetypesButton.getSelection() )
         {
-            return archetypeMap.get( archetypeList.getSelection()[0] );
+            return (Archetype) archetypeList.getSelection()[0];
         }
         else
         {
@@ -249,8 +250,9 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
     private void initialize()
     {
         archetypeMap = MavenArchetypeProviderManager.getArchetypes();
-        archetypeList.setElements( archetypeMap.keySet().toArray( new String[0] ) );
+        archetypeList.setElements( archetypeMap.toArray( new Archetype[0] ) );
 
+        // FIXME:
         archetypeList.setSelection( new String[] { DEFAULT_ARCHETYPE } );
 
         publishedArchetypesButton.setSelection( true );
@@ -262,7 +264,7 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
     {
         if ( archetypeList.getSelection().length == 1 )
         {
-            archetypeDescriptionLabel.setText( archetypeMap.get( archetypeList.getSelection()[0] ).getDescription() );
+            archetypeDescriptionLabel.setText( ( (Archetype) archetypeList.getSelection()[0] ).getDescription() );
             setPageComplete( true );
         }
         else

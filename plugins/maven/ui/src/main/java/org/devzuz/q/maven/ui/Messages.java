@@ -8,8 +8,7 @@ package org.devzuz.q.maven.ui;
 
 import org.eclipse.osgi.util.NLS;
 
-public class Messages
-    extends NLS
+public class Messages extends NLS
 {
     private static final String BUNDLE_NAME = "org.devzuz.q.maven.ui.messages"; //$NON-NLS-1$
 
@@ -24,7 +23,7 @@ public class Messages
     public static String MavenEventView_FilterDialog_error;
 
     public static String MavenEventView_FilterDialog_fatal;
-    
+
     public static String MavenEventView_MavenEventDetailDialog_ViewDetailMenuLabel;
     
     public static String MavenEventView_MavenEventDetailDialog_ViewPreviousEvent;
@@ -46,13 +45,13 @@ public class Messages
     public static String MavenPreference_Offline;
 
     public static String MavenPreference_DownloadJavaDocs;
-    
+
     public static String MavenPreference_DownloadSources;
-    
+
     public static String MavenPreference_RecursiveExecution;
-    
+
     public static String MavenPreference_ArchetypeConnectionTimeout;
-    
+
     public static String MavenPreference_GlobalSettingsXml;
 
     public static String MavenEventView_Column_Description;
@@ -66,13 +65,13 @@ public class Messages
     public static String MavenEventView_Filter;
 
     public static String MavenEventView_ClearView;
-    
+
     public static String MavenEventView_Copy;
 
     public static String MavenEventView_ScrollLock;
 
     public static String MavenCustomGoalDialog_CustomGoalProject;
-    
+
     public static String MavenCustomGoalDialog_CustomGoalLabel;
 
     public static String MavenCustomComponent_GoalPropertiesLabel;
@@ -98,7 +97,7 @@ public class Messages
     public static String MavenCustomComponent_ScopeLabel;
 
     public static String MavenCustomComponent_TypeLabel;
-    
+
     public static String MavenCustomComponent_SearchLabel;
 
     public static String MavenAddEditDependencyDialog_groupIdLabel;
@@ -110,33 +109,37 @@ public class Messages
     public static String MavenAddEditDependencyDialog_scopeLabel;
 
     public static String MavenDependencyLookupDialog_Label;
-    
+
     public static String MavenArchetypePreferencePage_description;
-    
-    public static String MavenArchetypePreferencePage_sourceurl;
-    
+
+    public static String MavenArchetypePreferencePage_name;
+
+    public static String MavenArchetypePreferencePage_nameExample;
+
     public static String MavenArchetypePreferencePage_type;
-    
+
+    public static String MavenArchetypePreferencePage_errorNoName;
+
     public static String MavenArchetypePreferenceEditor_LineSeparator;
-    
+
     public static String MavenArchetypePreferenceEditor_FieldSeparator;
-    
+
     public static String MavenLifeCycleView_Project;
-    
+
     public static String MavenLifeCycleView_PluginID;
-    
+
     public static String MavenLifeCycleView_PhaseName;
-    
+
     public static String MavenLifeCycleView_AssociatedPluginGoal;
-    
+
     public static String MavenLifeCycleView_TableRefresh;
-    
+
     public static String MavenLifeCycleView_TableRefreshToolTip;
-    
+
     public static String MavenProjectView_MavenParentProject;
-    
+
     public static String MavenProjectView_MavenChildProject;
-    
+
     static
     {
         // initialize resource bundle
