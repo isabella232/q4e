@@ -15,7 +15,7 @@ public class MavenArchetypeProviderManager
 {
     private static IArchetypeProvider[] listProviders = null;
 
-    private static Collection<Archetype> DEFAULT_ARCHERTYPES = getDefaultArchetypes();
+    private static Collection<Archetype> DEFAULT_ARCHETYPES = getDefaultArchetypes();
 
     public static synchronized IArchetypeProvider[] getArchetypeProviders()
     {
@@ -58,7 +58,7 @@ public class MavenArchetypeProviderManager
         else
         {
             // There are no archetype providers, return the default list of archetypes
-            return DEFAULT_ARCHERTYPES;
+            return DEFAULT_ARCHETYPES;
         }
     }
 
