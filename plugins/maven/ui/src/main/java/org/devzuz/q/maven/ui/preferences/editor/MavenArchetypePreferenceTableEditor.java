@@ -8,14 +8,12 @@
 package org.devzuz.q.maven.ui.preferences.editor;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.archetype.provider.ArchetypeProviderLabelProvider;
 import org.devzuz.q.maven.ui.archetype.provider.IArchetypeProvider;
-import org.devzuz.q.maven.ui.archetype.provider.impl.WikiArchetypeProvider;
 import org.devzuz.q.maven.ui.archetype.provider.internal.wizard.EditArchetypeProviderWizard;
 import org.devzuz.q.maven.ui.archetype.provider.internal.wizard.NewArchetypeProviderWizard;
 import org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage;
@@ -211,7 +209,9 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
         }
         else
         {
-            doLoadDefault();
+            // Should never happen. MavenUIPreferenceManagerAdapter#getConfiguredArchetypeProviders() always provides a
+            // non-empty list.
+            MavenUiActivator.getLogger().error( "No archetype providers available." );
         }
         providerTableViewer.setInput( archetypeProviders );
     }
@@ -219,11 +219,8 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
     @Override
     protected void doLoadDefault()
     {
-        archetypeProviders = new LinkedList<IArchetypeProvider>();
-        WikiArchetypeProvider defaultProvider = new WikiArchetypeProvider();
-        defaultProvider.setName( "Codehaus wiki" );
-        defaultProvider.setType( "Wiki" );
-        archetypeProviders.add( defaultProvider );
+        // Nothing to to, defaults are always provided by
+        // MavenUIPreferenceManagerAdapter#getConfiguredArchetypeProviders()
     }
 
     @Override

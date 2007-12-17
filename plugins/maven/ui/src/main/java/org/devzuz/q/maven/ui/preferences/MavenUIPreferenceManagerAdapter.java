@@ -12,6 +12,7 @@ import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.archetype.provider.ArchetypeProviderFactory;
 import org.devzuz.q.maven.ui.archetype.provider.ArchetypeProviderNotAvailableException;
 import org.devzuz.q.maven.ui.archetype.provider.IArchetypeProvider;
+import org.devzuz.q.maven.ui.archetype.provider.impl.WikiArchetypeProvider;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.WorkbenchException;
@@ -55,22 +56,34 @@ public class MavenUIPreferenceManagerAdapter
      */
     public List<IArchetypeProvider> getConfiguredArchetypeProviders()
     {
+        try
+        {
+            return readArchetypeProvidersFromPreferences();
+        }
+        catch ( WorkbenchException e )
+        {
+            // Invalid format of the stored preference, can happen on first run.
+            MavenUiActivator.getLogger().log( "Invalid format for the archetype list preference.", e );
+            return buildDefaultArchetypeProviderList();
+        }
+    }
+
+    /**
+     * Parses the preferences to build a list of archetype providers from the stored value.
+     * 
+     * @return the list of archetype providers.
+     * @throws WorkbenchException
+     *             if there is an error reading the preferences.
+     */
+    private List<IArchetypeProvider> readArchetypeProvidersFromPreferences() throws WorkbenchException
+    {
         // Create an empty list for holding the decoded archetypes.
         List<IArchetypeProvider> archetypeProviders = new LinkedList<IArchetypeProvider>();
         // Read the prefernce.
         String storedArchetypeProviders = MavenManager.getMavenPreferenceManager().getArchetypeSourceList();
         IMemento preferenceMemento;
-        try
-        {
-            // Parse the preference in IMemento form.
-            preferenceMemento = XMLMemento.createReadRoot( new StringReader( storedArchetypeProviders ) );
-        }
-        catch ( WorkbenchException e )
-        {
-            // Invalid format of the stored preference, should never happen.
-            MavenUiActivator.getLogger().log( "Invalid format for the archetype list preference.", e );
-            return archetypeProviders; // a modifiable empty list.
-        }
+        // Parse the preference in IMemento form.
+        preferenceMemento = XMLMemento.createReadRoot( new StringReader( storedArchetypeProviders ) );
         // Get the memento for every archetype provider.
         IMemento[] providerMementos =
             preferenceMemento.getChildren( ArchetypeProviderFactory.MEMENTO_ARCHETYPE_PROVIDER_ELEMENT );
@@ -100,6 +113,21 @@ public class MavenUIPreferenceManagerAdapter
             }
         }
         // Done!
+        return archetypeProviders;
+    }
+
+    /**
+     * Returns a modifiable list with the default archetype providers.
+     * 
+     * @return the default list of archetype providers.
+     */
+    private List<IArchetypeProvider> buildDefaultArchetypeProviderList()
+    {
+        List<IArchetypeProvider> archetypeProviders = new LinkedList<IArchetypeProvider>();
+        WikiArchetypeProvider defaultProvider = new WikiArchetypeProvider();
+        defaultProvider.setName( "Codehaus wiki" );
+        defaultProvider.setType( "Wiki" );
+        archetypeProviders.add( defaultProvider );
         return archetypeProviders;
     }
 
