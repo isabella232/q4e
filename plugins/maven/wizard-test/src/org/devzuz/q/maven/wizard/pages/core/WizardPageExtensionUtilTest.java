@@ -12,7 +12,7 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import org.devzuz.q.maven.ui.core.archetypeprovider.Archetype;
+import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.devzuz.q.maven.wizard.core.internal.MavenWizardContext;
 import org.devzuz.q.maven.wizard.pages.core.internal.WizardPageExtensionUtil;
 import org.devzuz.q.maven.wizard.pages.ui.IMavenWizardPage;
