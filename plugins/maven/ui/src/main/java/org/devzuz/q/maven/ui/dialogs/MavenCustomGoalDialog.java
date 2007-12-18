@@ -78,7 +78,6 @@ public class MavenCustomGoalDialog extends AbstractResizableDialog
 
         // Custom goal
         Composite container1 = new Composite( container, SWT.NULL );
-        ;
         container1.setLayout( new GridLayout( 2, false ) );
         container1.setLayoutData( new GridData( GridData.FILL, GridData.BEGINNING, true, false ) );
 

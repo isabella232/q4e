@@ -54,3 +54,5 @@ Export-Package: org.devzuz.q.maven.ui;
    org.eclipse.core.runtime,
    org.eclipse.swt.widgets,
    org.eclipse.ui"
+Import-Package: org.eclipse.ui.forms.events,
+ org.eclipse.ui.forms.widgets

@@ -98,6 +98,14 @@
                 label="%mavenManageDependenciesAction"
                 menubarPath="org.devzuz.q.maven.ui.project.submenu/contents">
           </action>
+          <action
+                class="org.devzuz.q.maven.ui.actions.MavenInstallArtifactAction"
+                enablesFor="*"
+                icon="src/main/resources/icons/Maven_M(16)-TP.gif"
+                id="org.devzuz.q.maven.ui.actions.InstallArtifactAction"
+                label="%mavenInstallArtifact"
+                menubarPath="org.devzuz.q.maven.ui.project.submenu/contents">
+           </action>
            <action
                  class="org.devzuz.q.maven.ui.actions.MavenToggleRecursiveAction"
                  enablesFor="*"
