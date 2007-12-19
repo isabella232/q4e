@@ -293,7 +293,7 @@ public class EclipseMaven implements IMaven
         }
 
         request.setBaseDirectory( mavenProject.getBaseDirectory() );
-        // TODO : shouldn't we use request.setPom( mavenProject.getPomFile() ); since this is 
+        // TODO : shouldn't we use request.setPom( mavenProject.getPomFile() ); since this is
         // deprecated.
         request.setPomFile( mavenProject.getPomFile().getAbsolutePath() );
 
@@ -453,9 +453,10 @@ public class EclipseMaven implements IMaven
                 Configuration config = new DefaultConfiguration();
                 config.setConfigurationCustomizer( new EclipsePlexusContainerCustomizer() );
                 config.setMavenEmbedderLogger( getEventPropagator() );
-                
+
                 /* add global settings.xml */
-                String globalSettingsXmlFilename = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
+                String globalSettingsXmlFilename =
+                    MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
                 if ( ( globalSettingsXmlFilename != null ) && !( globalSettingsXmlFilename.trim().equals( "" ) ) )
                 {
                     File globalSettingsFile = new File( globalSettingsXmlFilename.trim() );
@@ -464,7 +465,7 @@ public class EclipseMaven implements IMaven
                         config.setGlobalSettingsFile( globalSettingsFile );
                     }
                 }
-                
+
                 /* add the settings.xml */
                 if ( USER_HOME != null )
                 {
@@ -478,21 +479,23 @@ public class EclipseMaven implements IMaven
                 ConfigurationValidationResult validationResult = MavenEmbedder.validateConfiguration( config );
                 // TODO present the error in a user friendly way
                 // Fail when you have a settings.xml file and it does not parse
+                // FIXME: isUserSettingsFilePresent is deprecated
                 if ( validationResult.isUserSettingsFilePresent() && !validationResult.isUserSettingsFileParses() )
                 {
                     throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID,
                                                           "The user settings file is invalid" ) );
                 }
+                // FIXME: isGlobalSettingsFilePresent is deprecated
                 if ( validationResult.isGlobalSettingsFilePresent() && !validationResult.isGlobalSettingsFileParses() )
                 {
                     throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID,
                                                           "The global settings file is invalid" ) );
                 }
-                
+
                 mavenEmbedder = new MavenEmbedder( config );
-                
+
                 state = STARTED;
-                
+
                 return true;
             }
             catch ( MavenEmbedderException e )
@@ -502,20 +505,19 @@ public class EclipseMaven implements IMaven
             }
 
         }
-        
+
         return false;
     }
 
     public boolean stop() throws CoreException
     {
-        if ( ( getMavenEmbedder() != null ) &&
-             ( state == STARTED ) )
+        if ( ( getMavenEmbedder() != null ) && ( state == STARTED ) )
         {
             try
             {
                 getMavenEmbedder().stop();
                 state = STOPPED;
-                
+
                 return true;
             }
             catch ( MavenEmbedderException e )
@@ -524,7 +526,7 @@ public class EclipseMaven implements IMaven
                                                       "Unable to stop Maven Embedder", e ) );
             }
         }
-        
+
         return false;
     }
 
@@ -713,7 +715,7 @@ public class EclipseMaven implements IMaven
     {
         synchronized ( this )
         {
-            if( stop() )
+            if ( stop() )
             {
                 start();
             }
