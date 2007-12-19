@@ -23,13 +23,13 @@ import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenUtils;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
 
 /**
  * Provides a set of methods that allow you to interact with a MavenProject, both handling the extraction of metadata as
  * well and executing and handling goals
  * 
- * @author pdodds
+ * @author pdodds 
+ *
  * TODO carlos do we really need to copy the fields from MavenProject or just wrap it?
  */
 public class EclipseMavenProject implements IMavenProject
@@ -55,8 +55,6 @@ public class EclipseMavenProject implements IMavenProject
 
     private Set<IMavenArtifact> allArtifacts = new HashSet<IMavenArtifact>();
 
-    private MavenArtifactResolver artifactResolver;
-
     private String artifactId;
 
     private String groupId;
@@ -66,7 +64,7 @@ public class EclipseMavenProject implements IMavenProject
     private String buildOutputDirectory;
 
     private String buildTestOutputDirectory;
-    
+
     private String packaging;
 
     private List<String> compileSourceRoots;
@@ -161,11 +159,6 @@ public class EclipseMavenProject implements IMavenProject
         return artifactId;
     }
 
-    public MavenArtifactResolver getDependencyResolver() throws CoreException
-    {
-        return artifactResolver;
-    }
-
     public String getGroupId()
     {
         return groupId;
@@ -190,7 +183,7 @@ public class EclipseMavenProject implements IMavenProject
     {
         return pomFile;
     }
-    
+
     public String getPackaging()
     {
         return packaging;
@@ -204,7 +197,6 @@ public class EclipseMavenProject implements IMavenProject
     public void refreshProject( MavenProject mavenRawProject )
     {
         mavenProject = mavenRawProject;
-        artifactResolver = new MavenArtifactResolver( mavenRawProject.getArtifacts() );
         artifactId = mavenRawProject.getArtifactId();
         groupId = mavenRawProject.getGroupId();
         version = mavenRawProject.getVersion();
