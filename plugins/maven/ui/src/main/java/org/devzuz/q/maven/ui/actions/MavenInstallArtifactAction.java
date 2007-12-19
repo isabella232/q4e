@@ -1,6 +1,12 @@
 package org.devzuz.q.maven.ui.actions;
 
+import java.util.Map;
+import java.util.Properties;
+
+import org.devzuz.q.maven.embedder.MavenExecutionParameter;
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.dialogs.InstallArtifactDialog;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.window.Window;
@@ -13,7 +19,15 @@ public class MavenInstallArtifactAction extends AbstractMavenAction
         
         if( installArtifactDialog.open() == Window.OK )
         {
-            System.out.println("Execute mvn install:install-file or mvn deploy:deploy-file here");
+            String goal = installArtifactDialog.getGoal();
+            Map<String, String> propertyMap = installArtifactDialog.getGoalParameters();
+
+            Properties properties = new Properties();
+            properties.putAll( propertyMap );
+
+            MavenExecutionParameter parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter( properties );
+            /* We don't really need a baseDirectory because the goal doesnt require it, so we'll just pass any directory */
+            MavenManager.getMaven().scheduleGoal( ResourcesPlugin.getWorkspace().getRoot().getFullPath() , goal, parameter );
         }
     }
 }
