@@ -17,9 +17,12 @@ public class MavenProjectPostprocessor1 extends AbstractMavenProjectPostprocesso
 
     public IStatus run( IMavenProject mavenProject )
     {
-        // TODO Auto-generated method stub
+        System.out.println( "The project is: " + mavenProject.toString() );
+        System.out.println( "The eclipse project is: " + mavenProject.getProject() );
+        System.out.println( "The pom file is: " + mavenProject.getPomFile() );
         System.out.println( "Now is: " + Calendar.getInstance().getTime() + "\nMy parameter is: " + getConfig()
                         + ( getConfig() != null ? "\n\t... of type: " + getConfig().getClass().getName() : "" ) );
+
         return Status.OK_STATUS;
     }
 }

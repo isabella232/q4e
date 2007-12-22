@@ -8,6 +8,8 @@ package org.devzuz.q.maven.jdt.ui.projectimport;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
@@ -36,6 +38,8 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 public class ImportProjectJob extends WorkspaceJob
 {
     private Collection<PomFileDescriptor> pomDescriptors;
+
+    private List<IProject> importedProjects = new LinkedList<IProject>();
 
     public ImportProjectJob( PomFileDescriptor pomDescriptor )
     {
@@ -71,10 +75,22 @@ public class ImportProjectJob extends WorkspaceJob
         this.pomDescriptors = pomDescriptor;
     }
 
+    /**
+     * Returns the list of projects successfully imported to the eclipse Workspace, in the same order they have been
+     * imported.
+     * 
+     * @return the importedProjects the list of projects imported. Never <code>null</code>. Might be empty if no
+     *         project could be imported.
+     */
+    public List<IProject> getImportedProjects()
+    {
+        return importedProjects;
+    }
+
     @Override
     public IStatus runInWorkspace( IProgressMonitor monitor )
     {
-        Status status = null;
+        int errorCount = 0;
         // TODO set a better number
         monitor.beginTask( "Importing projects...", pomDescriptors.size() );
         for ( PomFileDescriptor pomDescriptor : pomDescriptors )
@@ -90,17 +106,28 @@ public class ImportProjectJob extends WorkspaceJob
 
             try
             {
-                createMavenProject( pomDescriptor, new SubProgressMonitor( subProgressMonitor, 100 ) );
-                status = new Status( IStatus.OK, MavenJdtUiActivator.PLUGIN_ID, "Success" );
+                IProject project =
+                    createMavenProject( pomDescriptor, new SubProgressMonitor( subProgressMonitor, 100 ) );
+                importedProjects.add( project );
             }
             catch ( CoreException e )
             {
                 String s = "Unable to import project from " + pomDescriptor.getBaseDirectory();
                 MavenJdtUiActivator.getLogger().log( s, e );
-                status = new Status( IStatus.ERROR, MavenJdtUiActivator.PLUGIN_ID, s, e );
+                errorCount++;
             }
-
             subProgressMonitor.done();
+        }
+        IStatus status;
+        if ( errorCount > 0 )
+        {
+            status =
+                new Status( IStatus.ERROR, MavenJdtUiActivator.PLUGIN_ID, errorCount
+                                + " projects failed to import. See the error log for details." );
+        }
+        else
+        {
+            status = new Status( IStatus.OK, MavenJdtUiActivator.PLUGIN_ID, "Success" );
         }
         return status;
     }
@@ -109,6 +136,8 @@ public class ImportProjectJob extends WorkspaceJob
      * Get the eclipse project name from the maven project
      * 
      * @param pomDescriptor
+     *            the contents of the pom.
+     * @return the name of the project, calculated from the information in the pom.
      */
     protected String getProjectName( final PomFileDescriptor pomDescriptor )
     {
@@ -121,7 +150,7 @@ public class ImportProjectJob extends WorkspaceJob
         return pomDescriptor.getBaseDirectory().getName();
     }
 
-    private void createMavenProject( final PomFileDescriptor pomDescriptor, IProgressMonitor monitor )
+    private IProject createMavenProject( final PomFileDescriptor pomDescriptor, IProgressMonitor monitor )
         throws CoreException
     {
         final String projectName = getProjectName( pomDescriptor );
@@ -133,7 +162,8 @@ public class ImportProjectJob extends WorkspaceJob
         if ( project.exists() )
         {
             MavenJdtUiActivator.getLogger().error( "Project " + project + " already exists in the workspace" );
-            return;
+            // TODO: Shouldn't this case throw an exception?
+            return project;
         }
 
         IProjectDescription description = workspace.newProjectDescription( projectName );
@@ -162,5 +192,6 @@ public class ImportProjectJob extends WorkspaceJob
         }
 
         MavenNatureHelper.addNature( project );
+        return project;
     }
 }

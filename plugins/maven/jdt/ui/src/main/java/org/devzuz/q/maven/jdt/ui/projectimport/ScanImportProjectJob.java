@@ -8,15 +8,25 @@ package org.devzuz.q.maven.jdt.ui.projectimport;
 
 import java.io.File;
 import java.util.Collection;
+import java.util.List;
 
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+/**
+ * Scans for maven projects and modules at a given path and imports them to the workspace.
+ * 
+ * This class is intended for blindly importing every module to the workspace. For allowing the selection of modules to
+ * be included in the import, use the {@link ImportProjectJob} class.
+ * 
+ * @author amuino
+ */
 public class ScanImportProjectJob extends Job
 {
 
@@ -24,12 +34,30 @@ public class ScanImportProjectJob extends Job
 
     private Collection<PomFileDescriptor> pomDescriptors;
 
+    private List<IProject> importedProjects;
+
     public ScanImportProjectJob( File directory )
     {
         super( "Import Maven 2 projects" );
         this.directory = directory;
     }
 
+    /**
+     * Returns the list of projects successfully imported to the eclipse Workspace, in the same order they have been
+     * imported.
+     * 
+     * @return the importedProjects the list of projects imported. Never <code>null</code>. Might be empty if no
+     *         project could be imported.
+     */
+    public List<IProject> getImportedProjects()
+    {
+        return importedProjects;
+    }
+
+    /**
+     * Runs this job for finding the maven project and modules at the given path. The job finishes after importing the
+     * projects to the Eclipse workspace.
+     */
     @Override
     protected IStatus run( IProgressMonitor monitor )
     {
@@ -43,17 +71,24 @@ public class ScanImportProjectJob extends Job
             return new Status( IStatus.CANCEL, MavenJdtUiActivator.PLUGIN_ID, "Cancelled" );
         }
 
-        // ImportProjectsRunnable importProjectsRunnable = new ImportProjectsRunnable( pomDescriptors );
-        ImportProjectJob importProjectsJob = new ImportProjectJob( pomDescriptors );
-        importProjectsJob.setPriority( Job.BUILD );
-        importProjectsJob.setRule( ResourcesPlugin.getWorkspace().getRoot() );
-
         if ( monitor.isCanceled() )
         {
             return Status.CANCEL_STATUS;
         }
-
+        ImportProjectJob importProjectsJob = new ImportProjectJob( pomDescriptors );
+        importProjectsJob.setPriority( Job.BUILD );
+        importProjectsJob.setRule( ResourcesPlugin.getWorkspace().getRoot() );
         importProjectsJob.schedule();
+
+        try
+        {
+            importProjectsJob.join();
+            importedProjects = importProjectsJob.getImportedProjects();
+        }
+        catch ( InterruptedException e )
+        {
+            return Status.CANCEL_STATUS;
+        }
 
         return Status.OK_STATUS;
     }
