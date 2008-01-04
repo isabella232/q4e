@@ -21,6 +21,8 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.apache.maven.extension.ExtensionScanningException;
 import org.apache.maven.lifecycle.LifecycleExecutionException;
+import org.apache.maven.plugin.AbstractMojoExecutionException;
+import org.apache.maven.plugin.PluginConfigurationException;
 import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.project.validation.ModelValidationResult;
@@ -150,6 +152,14 @@ public class MavenExceptionHandler
         {
             instance.handle( project, (MavenExecutionException) cause );
         }
+        else if ( cause instanceof AbstractMojoExecutionException )
+        {
+            instance.handle( project, (AbstractMojoExecutionException) cause );
+        }
+        else if ( cause instanceof PluginConfigurationException )
+        {
+            instance.handle( project, (PluginConfigurationException) cause );
+        }
         else
         {
             Throwable deepCause = cause.getCause();
@@ -219,6 +229,16 @@ public class MavenExceptionHandler
     }
 
     private void handle( IProject project, MavenExecutionException e )
+    {
+        error( project, e.getMessage() );
+    }
+
+    private void handle( IProject project, AbstractMojoExecutionException e )
+    {
+        error( project, e.getLongMessage() );
+    }
+
+    private void handle( IProject project, PluginConfigurationException e )
     {
         error( project, e.getMessage() );
     }
