@@ -14,6 +14,7 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -270,16 +271,35 @@ public class InstallArtifactDialog extends AbstractResizableDialog
         advanceOptions.setClient( advanceGroup );
         advanceOptions.addExpansionListener( new ExpansionAdapter()
         {
+            private int heightToSubtract;
             @Override
             public void expansionStateChanged( ExpansionEvent e )
             {
-                /* TODO : Add code here to collapse/expand the dialog */
                 container.layout();
+                Shell shell = InstallArtifactDialog.this.getShell();
+                Point size = shell.getSize();
+                if( e.getState() )
+                {
+                    // Expand
+                    heightToSubtract = advanceOptions.getSize().y;
+                    shell.setSize( size.x , size.y + heightToSubtract );
+                }
+                else
+                {
+                    // Shrink
+                    shell.setSize( size.x , size.y - heightToSubtract );
+                }
+                
                 super.expansionStateChanged( e );
             }            
         });
         
         return container;
+    }
+    
+    public void onWindowActivate()
+    {
+        validate();
     }
 
     private void buttonSelected( SelectionEvent e )
@@ -361,7 +381,6 @@ public class InstallArtifactDialog extends AbstractResizableDialog
                     return false;
                 }
             }
-            
             return true;
         }
         return false;
