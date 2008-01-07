@@ -9,7 +9,6 @@ Require-Bundle: org.devzuz.q.maven.aardvark;visibility:=reexport,
  org.devzuz.q.maven.ui;visibility:=reexport
 Eclipse-LazyStart: true
 Bundle-Localization: plugin
-Bundle-ClassPath: lucene-core-2.1.0.jar,
- .
+Bundle-ClassPath: .
 Export-Package: org.devzuz.q.maven.conversion,
  org.devzuz.q.maven.conversion.actions

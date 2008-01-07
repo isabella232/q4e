@@ -12,20 +12,21 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Collections;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.lucene.analysis.WhitespaceAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexWriter;
-import org.apache.lucene.index.Term;
+import org.apache.lucene.queryParser.ParseException;
+import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
-import org.apache.lucene.search.WildcardQuery;
+import org.apache.lucene.search.Query;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.runtime.IProgressMonitor;
 
@@ -39,12 +40,17 @@ public class RepositoryIndexer
 
     public static final String FULL_NAME = "f";
 
-    public static final String JAR_NAME = "j";
-
-    public Set<String[]> search( File indexPath, String queryString, IProgressMonitor monitor )
-        throws IOException
+    public Set<Dependency> search( File indexPath, String queryString, IProgressMonitor monitor )
+        throws IOException, ParseException
     {
-        WildcardQuery query = new WildcardQuery( new Term( FULL_NAME, "*" + queryString + "*" ) );
+        if ( queryString.indexOf( ':' ) == -1 )
+        {
+            queryString = queryString + "*";
+        }
+        QueryParser parser = new QueryParser( FULL_NAME, new WhitespaceAnalyzer() );
+        parser.setAllowLeadingWildcard( true );
+        parser.setDefaultOperator( QueryParser.AND_OPERATOR );
+        Query query = parser.parse( queryString );
 
         IndexReader reader = IndexReader.open( indexPath );
         IndexSearcher searcher = new IndexSearcher( reader );
@@ -59,7 +65,8 @@ public class RepositoryIndexer
         }
         else
         {
-            Set<String[]> setOfHits = new LinkedHashSet<String[]>( hits.length() );
+
+            Set<Dependency> setOfHits = new HashSet<Dependency>( hits.length() );
 
             for ( int i = 0; i < hits.length(); i++ )
             {
@@ -68,21 +75,18 @@ public class RepositoryIndexer
                 Field artifactIdfield = doc.getField( ARTIFACT_ID );
                 Field versionfield = doc.getField( VERSION );
 
-                String[] hit = new String[] { "", "", "" };
+                Dependency hit = new Dependency();
 
                 if ( groupIdfield != null )
-                    hit[0] = groupIdfield.stringValue();
+                    hit.setGroupId( groupIdfield.stringValue() );
 
                 if ( artifactIdfield != null )
-                    hit[1] = artifactIdfield.stringValue();
+                    hit.setArtifactId( artifactIdfield.stringValue() );
 
                 if ( versionfield != null )
-                    hit[2] = versionfield.stringValue();
-                
-                if( !tripletAddedAlready( setOfHits , hit ) )
-                {
-                    setOfHits.add( hit );
-                }
+                    hit.setVersion( versionfield.stringValue() );
+
+                setOfHits.add( hit );
             }
 
             monitor.done();
@@ -90,17 +94,18 @@ public class RepositoryIndexer
         }
     }
 
-    public void index( File indexPath, File repositoryDir, IProgressMonitor monitor )
-        throws IOException
+    public void index( File indexPath, File repositoryDir, IProgressMonitor monitor ) throws IOException
     {
         monitor.beginTask( "Creating index on " + indexPath, IProgressMonitor.UNKNOWN );
         IndexWriter writer = null;
 
         try
         {
-            writer = new IndexWriter( indexPath, new StandardAnalyzer(), true );
+            writer = new IndexWriter( indexPath, new WhitespaceAnalyzer(), true );
 
-            process( writer, repositoryDir.getAbsoluteFile(), monitor );
+            // this prevents duplicates
+            Set<Dependency> processedSet = new HashSet<Dependency>();
+            process( writer, repositoryDir.getAbsoluteFile(), processedSet, monitor );
 
             writer.optimize();
             monitor.worked( 1 );
@@ -120,7 +125,7 @@ public class RepositoryIndexer
                 catch ( IOException e )
                 {
                     // TODO : what to do here?
-                    MavenUiActivator.getLogger().error("In RepositoryIndexer.index() - " + e.toString() );
+                    MavenUiActivator.getLogger().error( "In RepositoryIndexer.index() - " + e.toString() );
                 }
             }
 
@@ -128,7 +133,7 @@ public class RepositoryIndexer
         }
     }
 
-    protected void process( IndexWriter writer, File dir, IProgressMonitor monitor )
+    protected void process( IndexWriter writer, File dir, Set<Dependency> processedSet, IProgressMonitor monitor )
     {
         if ( dir.isDirectory() )
         {
@@ -137,7 +142,7 @@ public class RepositoryIndexer
 
             for ( int i = 0; i < fileList.length; i++ )
             {
-                process( writer, fileList[i], monitor );
+                process( writer, fileList[i], processedSet, monitor );
             }
         }
         else if ( dir.isFile() )
@@ -145,12 +150,12 @@ public class RepositoryIndexer
             if ( isPom( dir.getPath() ) )
             {
                 monitor.beginTask( "Processing " + dir.getPath(), IProgressMonitor.UNKNOWN );
-                processPom( writer, dir, monitor );
+                processPom( writer, dir, processedSet, monitor );
             }
         }
     }
 
-    protected void processPom( IndexWriter writer, File file, IProgressMonitor monitor )
+    protected void processPom( IndexWriter writer, File file, Set<Dependency> processedSet, IProgressMonitor monitor )
     {
         BufferedReader reader = null;
         try
@@ -165,31 +170,39 @@ public class RepositoryIndexer
                 sb.append( buffer, 0, len );
             }
 
-            Pattern pattern = Pattern.compile( "<groupId>([0-9A-Za-z.-]+)</groupId>[ \\t\\n\\x0B\\f\\r]+" + 
-                                               "<artifactId>([0-9A-Za-z.-]+)</artifactId>[ \\t\\n\\x0B\\f\\r]+" + 
-                                               "<version>([0-9A-Za-z.-]+)</version>" );
+            Pattern pattern =
+                Pattern.compile( "<groupId>([0-9A-Za-z.-]+)</groupId>[ \\t\\n\\x0B\\f\\r]+"
+                                + "<artifactId>([0-9A-Za-z.-]+)</artifactId>[ \\t\\n\\x0B\\f\\r]+"
+                                + "<version>([0-9A-Za-z.-]+)</version>" );
             Matcher matcher = pattern.matcher( sb.toString() );
             while ( matcher.find() )
             {
-                monitor.beginTask( "Found artifact " + matcher.group( 1 ) + "." + matcher.group( 2 ) + "."
-                                   + matcher.group( 3 ), IProgressMonitor.UNKNOWN );
+                String groupId = matcher.group( 1 );
+                String artifactId = matcher.group( 2 );
+                String version = matcher.group( 3 );
+
+                monitor.beginTask( "Found artifact " + groupId + "." + artifactId + "." + version,
+                                   IProgressMonitor.UNKNOWN );
                 Document doc = new Document();
 
-                doc.add( new Field( JAR_NAME, getJarOfPom( file ), Field.Store.YES, Field.Index.TOKENIZED ) );
-                doc.add( new Field( FULL_NAME,
-                                    matcher.group( 1 ) + "." + matcher.group( 2 ) + "." + matcher.group( 3 ),
-                                    Field.Store.YES, Field.Index.TOKENIZED ) );
-                doc.add( new Field( GROUP_ID, matcher.group( 1 ), Field.Store.YES, Field.Index.TOKENIZED ) );
-                doc.add( new Field( ARTIFACT_ID, matcher.group( 2 ), Field.Store.YES, Field.Index.NO ) );
-                doc.add( new Field( VERSION, matcher.group( 3 ), Field.Store.YES, Field.Index.NO ) );
+                doc.add( new Field( FULL_NAME, groupId + " " + artifactId + " " + version, Field.Store.NO,
+                                    Field.Index.TOKENIZED ) );
+                doc.add( new Field( GROUP_ID, groupId, Field.Store.YES, Field.Index.UN_TOKENIZED ) );
+                doc.add( new Field( ARTIFACT_ID, artifactId, Field.Store.YES, Field.Index.UN_TOKENIZED ) );
+                doc.add( new Field( VERSION, version, Field.Store.YES, Field.Index.UN_TOKENIZED ) );
 
-                writer.addDocument( doc );
+                Dependency dependency = new Dependency( groupId, artifactId, version );
+                if ( !processedSet.contains( dependency ) )
+                {
+                    writer.addDocument( doc );
+                    processedSet.add( dependency );
+                }
             }
         }
         catch ( IOException e )
         {
             // TODO : ?
-            MavenUiActivator.getLogger().error("In RepositoryIndexer.processPom() - " + e.toString() );
+            MavenUiActivator.getLogger().error( "In RepositoryIndexer.processPom() - " + e.toString() );
         }
         finally
         {
@@ -200,7 +213,7 @@ public class RepositoryIndexer
             catch ( IOException e )
             {
                 // TODO : ?
-                MavenUiActivator.getLogger().error("In RepositoryIndexer.processPom() - " + e.toString() );
+                MavenUiActivator.getLogger().error( "In RepositoryIndexer.processPom() - " + e.toString() );
             }
         }
     }
@@ -210,30 +223,4 @@ public class RepositoryIndexer
         return path.substring( path.length() - 4 ).equals( ".pom" );
     }
 
-    private static String getJarOfPom( File pomFile )
-    {
-        String ret = "";
-
-        File file = new File( pomFile.getAbsolutePath().replaceAll( ".pom", ".jar" ) );
-        if ( file.exists() )
-            ret = file.getName();
-
-        return ret;
-    }
-    
-    private static boolean tripletAddedAlready( Set<String[]> triplets , String[] newTriplet )
-    {
-        for( String[] triplet : triplets )
-        {
-            if( triplet[0].equals( newTriplet[0] ) &&
-                triplet[1].equals( newTriplet[1] ) &&
-                triplet[2].equals( newTriplet[2] ) )
-            {
-                return true;
-            }
-                
-        }
-        
-        return false;
-    }
 }

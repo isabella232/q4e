@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Set;
 
+import org.apache.lucene.queryParser.ParseException;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -92,7 +93,7 @@ public class RepositoryIndexerManager
     {
         private String queryString;
 
-        private Set<String[]> setOfHits;
+        private Set<Dependency> setOfHits;
 
         private RepositorySearchJob()
         {
@@ -115,7 +116,7 @@ public class RepositoryIndexerManager
             return queryString;
         }
 
-        public Set<String[]> getHits()
+        public Set<Dependency> getHits()
         {
             return setOfHits;
         }
@@ -136,6 +137,12 @@ public class RepositoryIndexerManager
             {
                 status = new Status( IStatus.ERROR, MavenUiActivator.PLUGIN_ID, -1, "Indexing error", e );
                 return status;
+            }
+            catch ( ParseException e )
+            {
+            	// squash parse errors
+            	// this is mainly for the cases where you begin a field search.. v:[1.2 TO 1.4]
+            	return status;
             }
         }
 

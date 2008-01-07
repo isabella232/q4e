@@ -8,10 +8,17 @@ package org.devzuz.q.maven.ui.dialogs;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
+import org.devzuz.q.maven.ui.core.Dependency;
+import org.devzuz.q.maven.ui.core.DependencySorter;
 import org.devzuz.q.maven.ui.core.RepositoryIndexerManager;
+import org.devzuz.q.maven.ui.core.Sorter;
+import org.devzuz.q.maven.ui.core.Sorter.ArtifactIdSorter;
+import org.devzuz.q.maven.ui.core.Sorter.GroupIdSorter;
+import org.devzuz.q.maven.ui.core.Sorter.VersionSorter;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
@@ -30,7 +37,9 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -57,18 +66,20 @@ public class DependencyLookup
     RepositoryIndexerManager.RepositorySearchJob searchJob = RepositoryIndexerManager.getRepositorySearchJob();
 
     private boolean okToEnable = false;
+    
+    private boolean okToSearch = false;
 
     private Table dependencyTable;
 
     private Text searchText;
-
-    private Button lookupButton;
 
     private String groupId;
 
     private String artifactId;
 
     private String version;
+    
+    private DependencySorter dependencySorter;
 
     public DependencyLookup( Shell shell )
     {
@@ -101,24 +112,26 @@ public class DependencyLookup
 
     protected Control internalCreateDialogArea( Composite container )
     {
-        ModifyListener modifyingListener = new ModifyListener()
+    	ModifyListener findAsYouTypeListener = new ModifyListener()
         {
-            public void modifyText( ModifyEvent e )
+            public void modifyText(ModifyEvent e)
             {
-                validate();
-            }
-        };
-
-        SelectionAdapter buttonListener = new SelectionAdapter()
-        {
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-                buttonSelected( e );
-            }
-
-            public void widgetSelected( SelectionEvent e )
-            {
-                buttonSelected( e );
+            	validate();
+        		if (okToSearch)
+        		{
+        			try
+					{
+						doSearch();
+					} catch (RuntimeException e1)
+					{
+						MavenUiActivator.getLogger().error( e.getClass().getName() + " - " + e.toString() );
+					}
+        		}
+        		else
+        		{
+                	// clear table
+        			dependencyTable.removeAll();
+        		}
             }
         };
 
@@ -144,12 +157,7 @@ public class DependencyLookup
 
         searchText = new Text( container2, SWT.BORDER | SWT.SINGLE );
         searchText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false ) );
-        searchText.addModifyListener( modifyingListener );
-
-        lookupButton = new Button( container2, SWT.PUSH );
-        lookupButton.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        lookupButton.setText( Messages.MavenCustomComponent_SearchLabel );
-        lookupButton.addSelectionListener( buttonListener );
+        searchText.addModifyListener(findAsYouTypeListener);
 
         dependencyTable = new Table( container2, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
         dependencyTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true, 2, 1 ) );
@@ -166,39 +174,63 @@ public class DependencyLookup
             }
         } );
 
-        TableColumn column = new TableColumn( dependencyTable, SWT.CENTER, 0 );
+        Listener sortListener = new Listener()
+        {
+            public void handleEvent(Event e)
+            {
+            	if (e.widget instanceof TableColumn)
+            	{
+                TableColumn column = (TableColumn)e.widget;
+                String label = column.getText();
+                Sorter[] sorters = null;
+                if (label.equals(Messages.MavenCustomComponent_GroupIdLabel))
+                {
+                	sorters = new Sorter[] { new GroupIdSorter(), new ArtifactIdSorter(), new VersionSorter() };
+                }
+                else if (label.equals(Messages.MavenCustomComponent_ArtifactIdLabel))
+                {
+                	sorters = new Sorter[] { new ArtifactIdSorter(), new GroupIdSorter(), new VersionSorter() };
+                }
+                else if (label.equals(Messages.MavenCustomComponent_VersionLabel))
+                {
+                	sorters = new Sorter[] { new VersionSorter(), new GroupIdSorter(), new ArtifactIdSorter() };
+                }
+                dependencySorter = new DependencySorter(sorters);
+                updateArtifactsTable();
+                dependencyTable.setSortColumn(column);
+            	}
+            }
+        };
+        
+        TableColumn column = new TableColumn( dependencyTable, SWT.LEAD, 0 );
         column.setText( Messages.MavenCustomComponent_GroupIdLabel );
         column.setWidth( 180 );
-
-        column = new TableColumn( dependencyTable, SWT.CENTER, 1 );
+        column.addListener(SWT.Selection, sortListener);
+        dependencyTable.setSortColumn(column);
+        dependencyTable.setSortDirection(SWT.UP);
+        
+        column = new TableColumn( dependencyTable, SWT.LEAD, 1 );
         column.setText( Messages.MavenCustomComponent_ArtifactIdLabel );
         column.setWidth( 150 );
+        column.addListener(SWT.Selection, sortListener);
 
-        column = new TableColumn( dependencyTable, SWT.CENTER, 2 );
+        column = new TableColumn( dependencyTable, SWT.LEAD, 2 );
         column.setText( Messages.MavenCustomComponent_VersionLabel );
         column.setWidth( 70 );
-
+        column.addListener(SWT.Selection, sortListener);
+        
         validate();
 
         return container;
     }
 
-    private void buttonSelected( SelectionEvent e )
-    {
-        try
-        {
-            if ( searchJob.getState() == Job.NONE )
-            {
-                searchJob.setQuery( searchText.getText().trim() );
-                searchJob.schedule();
-            }
-        }
-        catch ( Exception e1 )
-        {
-            // TODO : Handle gracefully
-            MavenUiActivator.getLogger().error( e.getClass().getName() + " - " + e.toString() );
-        }
-    }
+	private void doSearch() {
+		if ( searchJob.getState() == Job.NONE )
+		{
+		    searchJob.setQuery( searchText.getText().trim() );
+		    searchJob.schedule();
+		}
+	}
 
     protected void okPressed()
     {
@@ -222,7 +254,7 @@ public class DependencyLookup
 
     public void validate()
     {
-        lookupButton.setEnabled( searchText.getText().trim().length() > 0 && okToEnable );
+        okToSearch = searchText.getText().trim().length() > 0 && okToEnable;
 
         TableItem[] items = dependencyTable.getSelection();
         Button okButton = getButton( IDialogConstants.OK_ID );
@@ -236,14 +268,22 @@ public class DependencyLookup
 
     public void updateArtifactsTable()
     {
-        Set<String[]> hits = searchJob.getHits();
-        dependencyTable.removeAll();
-        for ( Iterator<String[]> i = hits.iterator(); i.hasNext(); )
-        {
-            String[] hit = i.next();
-            TableItem item = new TableItem( dependencyTable, SWT.BEGINNING );
-            item.setText( hit );
-        }
+        try
+		{
+			Set<Dependency> hits = new TreeSet<Dependency>(dependencySorter);
+			hits.addAll(searchJob.getHits());
+			dependencyTable.removeAll();
+			for ( Iterator<Dependency> i = hits.iterator(); i.hasNext(); )
+			{
+			    Dependency hit = i.next();
+			    TableItem item = new TableItem( dependencyTable, SWT.BEGINNING );
+			    item.setText( new String[] { hit.getGroupId(), hit.getArtifactId(), hit.getVersion() } );
+			}
+		} catch (RuntimeException e)
+		{
+			// TODO things failed silently here
+			MavenUiActivator.getLogger().error( e.getClass().getName() + " - " + e.toString() );
+		}
     }
 
     @Override
