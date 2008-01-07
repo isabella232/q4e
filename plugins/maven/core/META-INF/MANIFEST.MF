@@ -7,7 +7,7 @@ Bundle-Activator: org.devzuz.q.maven.embedder.MavenCoreActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.eclipse.core.resources;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
- org.apache.maven.embedder;bundle-version="2.1.0.594740";visibility:=reexport,
+ org.apache.maven.embedder;bundle-version="2.1.0.609729";visibility:=reexport,
  org.eclipse.core.commands;bundle-version="[3.3.0,4.0.0)";visibility:=reexport
 Eclipse-LazyStart: true
 Export-Package: org.devzuz.q.maven.embedder;
