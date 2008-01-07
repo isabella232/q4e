@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry exported="true" kind="lib" path="lib/doxia-sink-api-1.0-alpha-9.jar" sourcepath="sources/doxia-sink-api-1.0-alpha-9-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/maven-artifact-3.0-SNAPSHOT.jar" sourcepath="sources/maven-artifact-3.0-SNAPSHOT-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/maven-build-context-2.1-SNAPSHOT.jar" sourcepath="sources/maven-build-context-2.1-SNAPSHOT-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/maven-core-2.1-SNAPSHOT.jar" sourcepath="sources/maven-core-2.1-SNAPSHOT-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/maven-embedder-2.1-SNAPSHOT.jar" sourcepath="sources/maven-embedder-2.1-SNAPSHOT-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/maven-lifecycle-2.1-SNAPSHOT.jar" sourcepath="sources/maven-lifecycle-2.1-SNAPSHOT-sources.jar"/>
