@@ -325,6 +325,11 @@ public class MavenNature implements IProjectNature
                 // Avoid duplicates
                 classpathSrcEntries.add( classpathEntry );
             }
+            else
+            {
+            	// TODO Fix Issue 181
+            	// combine the inclusions/exclusions with the previous classpath entry for that folder
+            }
         }
     }
 
