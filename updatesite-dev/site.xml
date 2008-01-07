@@ -27,6 +27,9 @@
    <feature url="features/org.devzuz.q.feature_0.4.0.200801072212.jar" id="org.devzuz.q.feature" version="0.4.0.200801072212">
       <category name="Community"/>
    </feature>
+   <feature url="features/org.devzuz.q.feature_0.4.0.200801072224.jar" id="org.devzuz.q.feature" version="0.4.0.200801072224">
+      <category name="Community"/>
+   </feature>
    <category-def name="Community" label="Community"/>
    <category-def name="Enabling Features" label="Enabling Features"/>
    <category-def name="Optional" label="Optional">
