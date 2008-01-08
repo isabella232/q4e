@@ -46,14 +46,12 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             IResourceDelta member = delta.findMember( pomPath );
             if ( member != null )
             {
-                IProject project = member.getResource().getProject(); 
-                MavenManager.getMavenProjectManager().setMavenProjectModified( project );
-                onPomChange( project , monitor );
+                IProject project = member.getResource().getProject();
+                onPomChange( project, monitor );
             }
         }
         else
         {
-            MavenManager.getMavenProjectManager().setMavenProjectModified( getProject() );
             onPomChange( getProject(), monitor );
         }
         return null;
@@ -61,6 +59,7 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
 
     private void onPomChange( IProject project, IProgressMonitor monitor )
     {
+        MavenManager.getMavenProjectManager().setMavenProjectModified( project );
         final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
 
         try
