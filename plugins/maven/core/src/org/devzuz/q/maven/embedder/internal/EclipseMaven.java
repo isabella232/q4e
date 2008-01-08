@@ -466,16 +466,17 @@ public class EclipseMaven implements IMaven
                     }
                 }
 
-                /* add the settings.xml */
-                if ( USER_HOME != null )
+                /* add the user settings.xml */
+                String userSettingsXmlFilename = MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename();
+                if ( userSettingsXmlFilename != null && !( userSettingsXmlFilename.trim().equals( "" ) ) )
                 {
-                    File m2Dir = new File( new File( USER_HOME ), USER_CONFIGURATION_DIRECTORY_NAME );
-                    File userSettings = new File( m2Dir, SETTINGS_FILENAME );
-                    if ( userSettings.exists() )
+                    File userSettingsFile = new File( userSettingsXmlFilename.trim() );
+                    if ( userSettingsFile.exists() )
                     {
-                        config.setUserSettingsFile( userSettings );
+                        config.setUserSettingsFile( userSettingsFile );
                     }
                 }
+
                 ConfigurationValidationResult validationResult = MavenEmbedder.validateConfiguration( config );
                 // TODO present the error in a user friendly way
                 // Fail when you have a settings.xml file and it does not parse

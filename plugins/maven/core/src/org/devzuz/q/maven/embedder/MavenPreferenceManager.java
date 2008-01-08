@@ -22,6 +22,8 @@ public class MavenPreferenceManager
 
     public static final String RECURSIVE_EXECUTION = MavenCoreActivator.PLUGIN_ID + ".recursive";
     
+    public static final String USER_SETTINGS_XML_FILENAME = MavenCoreActivator.PLUGIN_ID + ".userSettingsXml";
+    
     public static final String GLOBAL_SETTINGS_XML_FILENAME = MavenCoreActivator.PLUGIN_ID + ".globalSettingsXml";
 
     public static final int ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT = 30000;
@@ -71,6 +73,16 @@ public class MavenPreferenceManager
     public String getGlobalSettingsXmlFilename()
     {
         return preferenceStore.getString( GLOBAL_SETTINGS_XML_FILENAME );
+    }
+    
+    public String getUserSettingsXmlFilename()
+    {
+        return preferenceStore.getString( USER_SETTINGS_XML_FILENAME );
+    }
+    
+    public void setUserSettingsXmlFilename( String userSettingsXml )
+    {
+        preferenceStore.setValue( USER_SETTINGS_XML_FILENAME, userSettingsXml );
     }
 
     public IPreferenceStore getPreferenceStore()

@@ -79,6 +79,8 @@ public class Messages extends NLS
     public static String MavenPreference_ArchetypeConnectionTimeout;
 
     public static String MavenPreference_GlobalSettingsXml;
+    
+    public static String MavenPreference_UserSettingsXml;
 
     public static String MavenEventView_Column_Description;
 

@@ -6,6 +6,9 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.ui.preferences;
 
+import java.io.File;
+
+import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.MavenPreferenceManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
@@ -23,6 +26,7 @@ public class MavenPreferencePage
     implements IWorkbenchPreferencePage
 {
     private String previousGlobalSettingsXmlValue = "";
+    private String previousUserSettingsXmlValue = "";
     
     public MavenPreferencePage()
     {
@@ -37,6 +41,9 @@ public class MavenPreferencePage
         
         addField( new FileFieldEditor( MavenPreferenceManager.GLOBAL_SETTINGS_XML_FILENAME,
                                        Messages.MavenPreference_GlobalSettingsXml, true , getFieldEditorParent() ) );
+        
+        addField( new FileFieldEditor( MavenPreferenceManager.USER_SETTINGS_XML_FILENAME,
+                                       Messages.MavenPreference_UserSettingsXml, true , getFieldEditorParent() ) );
         
         addField( new BooleanFieldEditor( MavenPreferenceManager.RECURSIVE_EXECUTION, Messages.MavenPreference_RecursiveExecution,
                                           getFieldEditorParent() ) );
@@ -62,6 +69,17 @@ public class MavenPreferencePage
         {
             MavenManager.getMavenPreferenceManager().setArchetypeConnectionTimeout( MavenPreferenceManager.ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT );
         }
+        previousUserSettingsXmlValue = MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename();
+        if( previousUserSettingsXmlValue.trim().equals( "" ) )
+        {
+            File m2Dir = new File( new File( System.getProperty( "user.home" ) ), IMaven.USER_CONFIGURATION_DIRECTORY_NAME );
+            File userSettings = new File( m2Dir, IMaven.SETTINGS_FILENAME );
+            if( userSettings.exists() )
+            {
+                MavenManager.getMavenPreferenceManager().setUserSettingsXmlFilename(  userSettings.getAbsolutePath()  );
+                previousUserSettingsXmlValue = userSettings.getAbsolutePath();
+            }
+        }
         
         previousGlobalSettingsXmlValue = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
         
@@ -72,7 +90,9 @@ public class MavenPreferencePage
     public boolean performOk()
     {
         String newGlobalSettingsXmlValue = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
-        if( !previousGlobalSettingsXmlValue.equals( newGlobalSettingsXmlValue ) )
+        String newUserSettingsXmlValue = MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename();
+        if( ( !previousGlobalSettingsXmlValue.equals( newGlobalSettingsXmlValue ) ) ||
+            ( !previousUserSettingsXmlValue.equals( newUserSettingsXmlValue ) ) )
         {
             // Restart IMaven
             try
