@@ -9,10 +9,12 @@ package org.devzuz.q.maven.embedder.internal;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.execution.MavenExecutionResult;
+import org.apache.maven.lifecycle.LifecycleExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
@@ -68,7 +70,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
             exceptions = Collections.EMPTY_LIST;
         }
 
-        List<Exception> executionExceptions = (List<Exception>) result.getExceptions();
+        List<Exception> executionExceptions = result.getExceptions();
         List<Exception> resolutionExceptions = Collections.emptyList();
 
         ArtifactResolutionResult artifactResolutionResult = result.getArtifactResolutionResult();
@@ -87,7 +89,11 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
         exceptions.addAll( resolutionExceptions );
 
         MavenProject mavenProject = result.getProject();
-        
+        if ( mavenProject == null )
+        {
+            mavenProject = getMavenProjectFromExceptions();
+        }
+
         if ( mavenProject != null )
         {
             this.mavenProject = new EclipseMavenProject( mavenProject, project );
@@ -95,6 +101,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
         else
         {
             // TODO: Trace or log this. Why is result.getMavenProject() null?
+
             if ( project != null )
             {
                 this.mavenProject = new EclipseMavenProject( project );
@@ -104,6 +111,28 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
                 // FIXME: Can't initialize! Fingers crossed and hope this does not blow up later
             }
         }
+    }
+
+    /**
+     * Try to get a valid {@link MavenProject} from the information provided by the exceptions in this result.
+     * 
+     * @return the maven project found in the exceptions. Might be <code>null</code> if no project can be found.
+     */
+    private MavenProject getMavenProjectFromExceptions()
+    {
+        // Try to find a project in the nested exceptions.
+        MavenProject exceptionProject = null;
+        Iterator<Exception> it = exceptions.iterator();
+        while ( exceptionProject == null && it.hasNext() )
+        {
+            Exception currentException = it.next();
+            if ( currentException instanceof LifecycleExecutionException )
+            {
+                LifecycleExecutionException e = (LifecycleExecutionException) currentException;
+                exceptionProject = e.getProject();
+            }
+        }
+        return exceptionProject;
     }
 
     public List<Exception> getExceptions()
@@ -120,11 +149,11 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
     {
         return mavenProject;
     }
-    
+
     public List<IMavenProject> getSortedProjects()
     {
         List<MavenProject> mavenProjects = result.getTopologicallySortedProjects();
-        
+
         if ( mavenProjects != null )
         {
             List<IMavenProject> projects = new ArrayList<IMavenProject>( mavenProjects.size() );
@@ -135,7 +164,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
             }
             return projects;
         }
-        
+
         return null;
     }
 }

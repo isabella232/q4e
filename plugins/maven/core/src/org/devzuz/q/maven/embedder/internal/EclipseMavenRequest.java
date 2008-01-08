@@ -9,9 +9,11 @@ package org.devzuz.q.maven.embedder.internal;
 
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
-import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
+import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.jobs.Job;
@@ -31,11 +33,19 @@ public class EclipseMavenRequest extends Job
 
     private IMavenExecutionResult executionResult;
 
-    public EclipseMavenRequest( String name, EclipseMaven maven, MavenExecutionRequest request )
+    private IProject project;
+
+    public EclipseMavenRequest( String name, EclipseMaven maven, MavenExecutionRequest request, IProject project )
     {
         super( name );
         this.maven = maven;
         this.request = request;
+        this.project = project;
+    }
+
+    public EclipseMavenRequest( String name, EclipseMaven maven, MavenExecutionRequest request )
+    {
+        this( name, maven, request, null );
     }
 
     @Override
@@ -54,13 +64,18 @@ public class EclipseMavenRequest extends Job
         try
         {
             MavenExecutionResult status = this.maven.executeRequest( this.request );
-            executionResult = new EclipseMavenExecutionResult( status );
+            executionResult = new EclipseMavenExecutionResult( status, project );
             if ( ( status.getExceptions() != null ) && ( status.getExceptions().size() > 0 ) )
             {
-                return new MavenExecutionStatus( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID, "Errors during Maven execution",
-                                                 executionResult );
+                return new MavenExecutionStatus( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID,
+                                                 "Errors during Maven execution", executionResult );
             }
-
+            if ( !executionResult.hasErrors() )
+            {
+                // TODO: LifecycleExecutionExceptions provide the raw maven project needed for refreshing.
+                IMavenProject mavenProject = executionResult.getMavenProject();
+                RefreshOutputFoldersListener.INSTANCE.refreshOutputFolders( mavenProject );
+            }
             return new MavenExecutionStatus( IStatus.OK, MavenCoreActivator.PLUGIN_ID, "Success", executionResult );
         }
         finally

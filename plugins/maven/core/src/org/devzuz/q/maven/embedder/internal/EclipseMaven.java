@@ -137,9 +137,14 @@ public class EclipseMaven implements IMaven
         {
             MavenExecutionRequest request = generateRequest( mavenProject, parameter );
             request.setGoals( goals );
-            EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
+            EclipseMavenRequest eclipseMavenRequest =
+                new EclipseMavenRequest( "MavenRequest", this, request, mavenProject.getProject() );
             eclipseMavenRequest.run( monitor );
             IMavenExecutionResult result = eclipseMavenRequest.getExecutionResult();
+            if ( result.getMavenProject() != null )
+            {
+                RefreshOutputFoldersListener.INSTANCE.refreshOutputFolders( result.getMavenProject() );
+            }
             return result;
         }
         catch ( RuntimeException e )
@@ -227,12 +232,14 @@ public class EclipseMaven implements IMaven
     public void scheduleRequest( IMavenProject mavenProject, MavenExecutionRequest request,
                                  MavenExecutionJobAdapter jobAdapter )
     {
-        EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
+        EclipseMavenRequest eclipseMavenRequest =
+            new EclipseMavenRequest( "MavenRequest", this, request, mavenProject.getProject() );
 
         if ( jobAdapter != null )
         {
             jobAdapter.setMavenExecutionJob( eclipseMavenRequest );
         }
+        eclipseMavenRequest.addJobChangeListener( new RefreshOutputFoldersListener() );
 
         eclipseMavenRequest.setRule( mavenProject.getProject() );
         eclipseMavenRequest.setPriority( Job.BUILD );
