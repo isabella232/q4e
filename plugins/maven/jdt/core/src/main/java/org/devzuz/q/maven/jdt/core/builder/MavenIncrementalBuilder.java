@@ -53,6 +53,7 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
         }
         else
         {
+            MavenManager.getMavenProjectManager().setMavenProjectModified( getProject() );
             onPomChange( getProject(), monitor );
         }
         return null;
