@@ -44,7 +44,23 @@ public interface IMavenProject extends IAdaptable
 
     public abstract String getActiveProfiles(); // TODO : is this supposed to be here ?
 
+    /**
+     * 
+     * Expose all dependencies including transitive dependencies
+     * 
+     * @return All artifacts including transitive dependencies
+     * 
+     */
     public abstract Set<IMavenArtifact> getArtifacts();
+    
+    /**
+     * 
+     * Expose all direct dependencies not including transitive dependencies
+     * 
+     * @return All direct dependencies as artifacts minus transitive dependencies
+     * 
+     */
+    public abstract Set<IMavenArtifact> getDependencyArtifacts();
 
     public abstract String getBuildOutputDirectory();
 

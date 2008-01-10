@@ -378,8 +378,8 @@ public class EclipseMaven implements IMaven
                                                                         "Unable to read project",
                                                                         eclipseMavenExecutionResult ) );
                 }
-                mavenProject.refreshDependencies( status.getProject() );
                 mavenProject.refreshProject( status.getProject() );
+                mavenProject.refreshDependencies( status.getProject() );
             }
             else
             {

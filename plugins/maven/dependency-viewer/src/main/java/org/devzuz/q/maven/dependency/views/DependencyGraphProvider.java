@@ -17,7 +17,7 @@ import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
 /**
  * TODO Document
  * 
- * @author Abel Muiño <amuino@gmail.com>
+ * @author Abel Mui√±o <amuino@gmail.com>
  */
 public class DependencyGraphProvider implements IGraphEntityContentProvider
 {
@@ -39,15 +39,13 @@ public class DependencyGraphProvider implements IGraphEntityContentProvider
         if ( entity instanceof IMavenProject )
         {
             IMavenProject project = (IMavenProject) entity;
-            Set<IMavenArtifact> linkedTo = project.getArtifacts();
+            Set<IMavenArtifact> linkedTo = project.getDependencyArtifacts();
             return linkedTo.toArray( new IMavenArtifact[linkedTo.size()] );
         }
         else
         {
             IMavenArtifact artifact = (IMavenArtifact) entity;
             Set<IMavenArtifact> linkedTo = artifact.getChildren();
-            // XXX why is an artifact child of itself?
-            linkedTo.remove( artifact );
             return linkedTo.toArray( new IMavenArtifact[linkedTo.size()] );
         }
     }

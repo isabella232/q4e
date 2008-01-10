@@ -51,9 +51,11 @@ public class EclipseMavenProject implements IMavenProject
 
     private File baseDirectory;
 
-    private Set<IMavenArtifact> artifacts = new HashSet<IMavenArtifact>();
-
+    /* Contains all the artifacts including the transitive dependencies */
     private Set<IMavenArtifact> allArtifacts = new HashSet<IMavenArtifact>();
+    
+    /* Contains all the direct dependencies */
+    private Set<IMavenArtifact> dependencyArtifacts = new HashSet<IMavenArtifact>();
 
     private String artifactId;
 
@@ -216,7 +218,6 @@ public class EclipseMavenProject implements IMavenProject
     public void refreshDependencies( MavenProject mavenRawProject )
     {
         // TODO use the dependency graph tool
-
         allArtifacts.clear();
         for ( Object obj : mavenRawProject.getArtifacts() )
         {
@@ -226,19 +227,32 @@ public class EclipseMavenProject implements IMavenProject
                 allArtifacts.add( mavenArtifact );
             }
         }
-
+        
+        Set<IMavenArtifact> tempArtifactCache = new HashSet<IMavenArtifact>();
         for ( Object obj : mavenRawProject.getArtifacts() )
         {
             if ( obj instanceof DefaultArtifact )
             {
                 IMavenArtifact mavenArtifact = MavenUtils.createMavenArtifact( (DefaultArtifact) obj );
-                addThroughDependencyTrail( mavenRawProject, mavenArtifact, (DefaultArtifact) obj );
+                addThroughDependencyTrail( mavenRawProject, tempArtifactCache, mavenArtifact, (DefaultArtifact) obj );
+            }
+        }
+        
+        /* The tempArtifactCache contains, as a first element, this project with its direct dependencies as children */
+        for( IMavenArtifact artifact : tempArtifactCache )
+        {
+            if( artifact.getGroupId().equals( getGroupId() ) && 
+                artifact.getArtifactId().equals( getArtifactId() ) &&
+                artifact.getVersion().equals( getVersion() ) )
+            {
+                dependencyArtifacts = artifact.getChildren();
+                break;
             }
         }
     }
 
-    private void addThroughDependencyTrail( MavenProject mavenRawProject, IMavenArtifact mavenArtifact,
-                                            DefaultArtifact defaultArtifact )
+    private void addThroughDependencyTrail( MavenProject mavenRawProject, Set<IMavenArtifact> artifactCache,
+                                            IMavenArtifact mavenArtifact, DefaultArtifact defaultArtifact )
     {
         IMavenArtifact parentArtifact = null;
         for ( Object obj : defaultArtifact.getDependencyTrail() )
@@ -250,13 +264,13 @@ public class EclipseMavenProject implements IMavenProject
                 if ( parentArtifact == null )
                 {
                     // Start at the top
-                    if ( artifacts.contains( resolvedArtifact ) )
+                    if ( artifactCache.contains( resolvedArtifact ) )
                     {
-                        parentArtifact = getArtifactInstanceFromSet( artifacts, resolvedArtifact );
+                        parentArtifact = getArtifactInstanceFromSet( artifactCache, resolvedArtifact );
                     }
                     else
                     {
-                        artifacts.add( resolvedArtifact );
+                        artifactCache.add( resolvedArtifact );
                         parentArtifact = resolvedArtifact;
                     }
                 }
@@ -275,9 +289,10 @@ public class EclipseMavenProject implements IMavenProject
             }
         }
         if ( parentArtifact == null )
-            artifacts.add( mavenArtifact );
-        else
-            parentArtifact.addChild( mavenArtifact );
+            artifactCache.add( mavenArtifact );
+        // XXX - This causes the "The Artifact is a child of itself" problem
+        //else
+        //    parentArtifact.addChild( mavenArtifact );
     }
 
     private IMavenArtifact createDummyMavenArtifact( String string )
@@ -307,12 +322,17 @@ public class EclipseMavenProject implements IMavenProject
     {
         return allArtifacts;
     }
-
+    
+    public Set<IMavenArtifact> getDependencyArtifacts()
+    {
+        return dependencyArtifacts;
+    }
+/*
     public void setArtifacts( Set<IMavenArtifact> artifacts )
     {
         this.artifacts = artifacts;
     }
-
+*/
     public String getBuildOutputDirectory()
     {
         return buildOutputDirectory;
