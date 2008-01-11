@@ -627,4 +627,4 @@ Include-Resource: LICENSE.txt,NOTICE.txt,lib/plexus-container-default-
  \csanchez\.m2\repository\org\apache\maven\maven-reporting-api\2.1-SNA
  PSHOT\maven-reporting-api-2.1-SNAPSHOT.jar
 Embed-Dependency: *;scope=compile|runtime;inline=false
-
+Eclipse-BuddyPolicy: registered

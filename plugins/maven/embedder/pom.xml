@@ -170,6 +170,7 @@
             <Embed-StripGroup>true</Embed-StripGroup>
             <Embed-Directory>lib</Embed-Directory>
             <Include-Resource>LICENSE.txt,NOTICE.txt</Include-Resource>
+            <Eclipse-BuddyPolicy>registered</Eclipse-BuddyPolicy>
           </instructions>
         </configuration>
       </plugin>
