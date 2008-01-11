@@ -81,35 +81,39 @@ public class MavenUIPreferenceManagerAdapter
         List<IArchetypeProvider> archetypeProviders = new LinkedList<IArchetypeProvider>();
         // Read the prefernce.
         String storedArchetypeProviders = MavenManager.getMavenPreferenceManager().getArchetypeSourceList();
-        IMemento preferenceMemento;
-        // Parse the preference in IMemento form.
-        preferenceMemento = XMLMemento.createReadRoot( new StringReader( storedArchetypeProviders ) );
-        // Get the memento for every archetype provider.
-        IMemento[] providerMementos =
-            preferenceMemento.getChildren( ArchetypeProviderFactory.MEMENTO_ARCHETYPE_PROVIDER_ELEMENT );
-        // For every memento, use the factory to instantiate each archetype provider
-        ArchetypeProviderFactory factory = MavenUiActivator.getDefault().getArchetypeProviderFactory();
-        for ( IMemento m : providerMementos )
+        
+        if ( ( storedArchetypeProviders != null ) && ( storedArchetypeProviders.trim().length() > 0 ) )
         {
-            try
+            IMemento preferenceMemento;
+            // Parse the preference in IMemento form.
+            preferenceMemento = XMLMemento.createReadRoot( new StringReader( storedArchetypeProviders ) );
+            // Get the memento for every archetype provider.
+            IMemento[] providerMementos =
+                preferenceMemento.getChildren( ArchetypeProviderFactory.MEMENTO_ARCHETYPE_PROVIDER_ELEMENT );
+            // For every memento, use the factory to instantiate each archetype provider
+            ArchetypeProviderFactory factory = MavenUiActivator.getDefault().getArchetypeProviderFactory();
+            for ( IMemento m : providerMementos )
             {
-                IArchetypeProvider restoreProvider = factory.restoreProvider( m );
-                archetypeProviders.add( restoreProvider );
-            }
-            catch ( ArchetypeProviderNotAvailableException e )
-            {
-                // TODO: Review exception handling. Should this be reported at the UI level?
-                MavenUiActivator.getLogger().log(
-                                                  "Could not restore one of the configured archetype providers ("
-                                                                  + e.getName() + ") since its type (" + e.getType()
-                                                                  + ") is not availble.", e );
-            }
-            catch ( CoreException e )
-            {
-                // TODO: Review exception handling. Should this be reported at the UI level?
-                MavenUiActivator.getLogger().error(
-                                                    "An archetype provider could not be restored with the"
-                                                                    + " provided information: " + m.toString() );
+                try
+                {
+                    IArchetypeProvider restoreProvider = factory.restoreProvider( m );
+                    archetypeProviders.add( restoreProvider );
+                }
+                catch ( ArchetypeProviderNotAvailableException e )
+                {
+                    // TODO: Review exception handling. Should this be reported at the UI level?
+                    MavenUiActivator.getLogger().log(
+                                                      "Could not restore one of the configured archetype providers (" +
+                                                                      e.getName() + ") since its type (" + e.getType() +
+                                                                      ") is not availble.", e );
+                }
+                catch ( CoreException e )
+                {
+                    // TODO: Review exception handling. Should this be reported at the UI level?
+                    MavenUiActivator.getLogger().error(
+                                                        "An archetype provider could not be restored with the" +
+                                                                        " provided information: " + m.toString() );
+                }
             }
         }
         // Done!
