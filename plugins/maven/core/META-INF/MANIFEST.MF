@@ -21,3 +21,4 @@ Export-Package: org.devzuz.q.maven.embedder;
 Bundle-Vendor: DevZuz
 Import-Package: org.eclipse.jface.preference,
  org.eclipse.ui.preferences
+Eclipse-RegisterBuddy: org.apache.maven.embedder
