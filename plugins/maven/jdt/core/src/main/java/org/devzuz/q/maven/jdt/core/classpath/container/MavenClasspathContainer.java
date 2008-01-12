@@ -103,7 +103,8 @@ public class MavenClasspathContainer implements IClasspathContainer
         if ( mavenProject != null )
         {
             MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Refreshing classpath for maven project ",
-                             mavenProject.getArtifactId() + " - Processing " + artifacts.size() + " artifacts" );
+                                         mavenProject.getArtifactId() + " - Processing " + artifacts.size()
+                                                         + " artifacts" );
 
             this.project = mavenProject.getProject();
 
@@ -201,6 +202,7 @@ public class MavenClasspathContainer implements IClasspathContainer
             {
                 MultipleArtifactsNotFoundException artifactsNotFoundException =
                     (MultipleArtifactsNotFoundException) exception;
+                // TODO: Remove when the EclipseMavenArtifactResolver is enabled.
                 resolveMissingArtifacts( mavenProject, container, artifactsNotFoundException );
             }
             else
@@ -260,7 +262,7 @@ public class MavenClasspathContainer implements IClasspathContainer
             IClasspathEntry entry = resolveArtifact( mavenProject, artifact, downloadSources );
             if ( entry != null )
             {
-                if ( ! MavenClasspathHelper.classpathContainsFolder( classpathEntries, entry ) )
+                if ( !MavenClasspathHelper.classpathContainsFolder( classpathEntries, entry ) )
                 {
                     classpathEntries.add( entry );
                 }
@@ -275,16 +277,17 @@ public class MavenClasspathContainer implements IClasspathContainer
      * @param workspaceProjects
      * @return the resulting classpath entry or null if should not be added to the classpath
      */
-    protected IClasspathEntry resolveArtifact( IMavenProject mavenProject, IMavenArtifact artifact, boolean downloadSources )
+    protected IClasspathEntry resolveArtifact( IMavenProject mavenProject, IMavenArtifact artifact,
+                                               boolean downloadSources )
     {
         IClasspathAttribute[] attributes = new IClasspathAttribute[0];
 
         /*
          * if dependency is a project in the workspace use a project dependency instead of the jar dependency
          */
-        project = MavenManager.getMavenProjectManager().getWorkspaceProject( artifact.getGroupId() , 
-                                                                              artifact.getArtifactId(), 
-                                                                              artifact.getVersion() );
+        project =
+            MavenManager.getMavenProjectManager().getWorkspaceProject( artifact.getGroupId(), artifact.getArtifactId(),
+                                                                       artifact.getVersion() );
 
         boolean export = false;
         String scope = artifact.getScope();
@@ -319,8 +322,9 @@ public class MavenClasspathContainer implements IClasspathContainer
         else
         {
             MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "The dependency ", artifact.getGroupId(), ":",
-                             artifact.getArtifactId(), ":", artifact.getVersion(), " with type ", artifact.getType(),
-                             " on project ", mavenProject, " does not require being added to the classpath." );
+                                         artifact.getArtifactId(), ":", artifact.getVersion(), " with type ",
+                                         artifact.getType(), " on project ", mavenProject,
+                                         " does not require being added to the classpath." );
         }
 
         return null;

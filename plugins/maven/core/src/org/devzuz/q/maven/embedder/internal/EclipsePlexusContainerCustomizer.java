@@ -7,8 +7,10 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder.internal;
 
+import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.embedder.ContainerCustomizer;
 import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.ComponentDescriptor;
 
 /**
  * An implementation of a Plexus Container Customizer to allow the Embedder to switch into an Eclipse Environment
@@ -24,9 +26,12 @@ public class EclipsePlexusContainerCustomizer implements ContainerCustomizer
      * 
      * @see org.apache.maven.embedder.ContainerCustomizer#customize(org.codehaus.plexus.PlexusContainer)
      */
-    public void customize( PlexusContainer arg0 )
+    public void customize( PlexusContainer container )
     {
-
+    	// TODO: Enable after fixing issues with EclipseMavenArtifactResolver and maven-compiler-plugin
+        //ComponentDescriptor resolverDescriptor = container.getComponentDescriptor( ArtifactResolver.ROLE );
+        //String defaultImplementation = resolverDescriptor.getImplementation();
+        //resolverDescriptor.setImplementation( EclipseMavenArtifactResolver.class.getName() );
     }
 
 }
