@@ -3,6 +3,9 @@
    <description url="http://q4e.googlecode.com/svn/trunk/updatesite-dev">
       Q for Eclipse
    </description>
+   <feature url="features/org.apache.commons.collections.feature_3.2.0.200705282147.jar" id="org.apache.commons.collections.feature" version="3.2.0.200705282147">
+      <category name="Enabling Features"/>
+   </feature>
    <feature url="features/org.devzuz.q.feature_0.4.0.200711291753.jar" id="org.devzuz.q.feature" version="0.4.0.200711291753">
       <category name="Community"/>
    </feature>
