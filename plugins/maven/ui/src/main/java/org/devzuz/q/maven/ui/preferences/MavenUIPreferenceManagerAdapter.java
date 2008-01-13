@@ -58,11 +58,19 @@ public class MavenUIPreferenceManagerAdapter
     {
         try
         {
-            return readArchetypeProvidersFromPreferences();
+            List<IArchetypeProvider> archetypeProviders = readArchetypeProvidersFromPreferences();
+            if ( archetypeProviders.isEmpty() )
+            {
+                // Empty preference, can happen on first run.
+                MavenUiActivator.getLogger().info(
+                                                   "Preference for the archetype provider list is empty, using default list." );
+                archetypeProviders = buildDefaultArchetypeProviderList();
+            }
+            return archetypeProviders;
         }
         catch ( WorkbenchException e )
         {
-            // Invalid format of the stored preference, can happen on first run.
+            // Invalid format of the stored preference.
             MavenUiActivator.getLogger().log( "Invalid format for the archetype list preference.", e );
             return buildDefaultArchetypeProviderList();
         }
@@ -81,7 +89,7 @@ public class MavenUIPreferenceManagerAdapter
         List<IArchetypeProvider> archetypeProviders = new LinkedList<IArchetypeProvider>();
         // Read the prefernce.
         String storedArchetypeProviders = MavenManager.getMavenPreferenceManager().getArchetypeSourceList();
-        
+
         if ( ( storedArchetypeProviders != null ) && ( storedArchetypeProviders.trim().length() > 0 ) )
         {
             IMemento preferenceMemento;
@@ -103,16 +111,16 @@ public class MavenUIPreferenceManagerAdapter
                 {
                     // TODO: Review exception handling. Should this be reported at the UI level?
                     MavenUiActivator.getLogger().log(
-                                                      "Could not restore one of the configured archetype providers (" +
-                                                                      e.getName() + ") since its type (" + e.getType() +
-                                                                      ") is not availble.", e );
+                                                      "Could not restore one of the configured archetype providers ("
+                                                                      + e.getName() + ") since its type ("
+                                                                      + e.getType() + ") is not availble.", e );
                 }
                 catch ( CoreException e )
                 {
                     // TODO: Review exception handling. Should this be reported at the UI level?
                     MavenUiActivator.getLogger().error(
-                                                        "An archetype provider could not be restored with the" +
-                                                                        " provided information: " + m.toString() );
+                                                        "An archetype provider could not be restored with the"
+                                                                        + " provided information: " + m.toString() );
                 }
             }
         }
