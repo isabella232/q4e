@@ -153,6 +153,24 @@ public interface IMaven
      */
     public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter )
         throws CoreException;
+    
+    /**
+     * Allows you to schedule the execution of a given goal without an existing project. For example, "archetype:create"
+     * can be executed without an existing maven project.
+     * 
+     * @param baseDirectory
+     *            The location of the execution of the goal
+     * @param goal
+     *            goal name
+     * @param properties
+     *            properties of this goal
+     * @param jobAdapter 
+     *            listener to the thread that executes the maven goal
+     * @throws CoreException
+     */
+    public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter ,  
+                              MavenExecutionJobAdapter jobAdapter )
+        throws CoreException;
 
     /**
      * Allows you to schedule the execution of a given goal name against a MavenProject.

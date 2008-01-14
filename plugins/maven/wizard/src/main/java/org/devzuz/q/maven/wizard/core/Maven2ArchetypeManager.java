@@ -6,9 +6,6 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.wizard.core;
 
-import org.devzuz.q.maven.ui.archetype.provider.Archetype;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 
 public class Maven2ArchetypeManager
 {
@@ -18,19 +15,9 @@ public class Maven2ArchetypeManager
     {
         if ( archetypeExecutor == null )
         {
-            // archetypeExecutor = new InstalledMavenArchetypeExecutor();
             archetypeExecutor = new Maven2EmbedderArchetypeExecutor();
         }
 
         return archetypeExecutor;
-    }
-
-    static public void executeArchetype( Archetype archetype, IPath baseDir, String groupId, String artifactId,
-                                         String version, String packageName, IMavenWizardContext wizardContext )
-        throws CoreException
-    {
-        IArchetypeExecutor executor = getArchetypeExecutor();
-
-        executor.executeArchetype( archetype, baseDir, groupId, artifactId, version, packageName, wizardContext );
     }
 }

@@ -12,6 +12,8 @@ import java.util.List;
 
 import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.devzuz.q.maven.wizard.MavenWizardActivator;
+import org.devzuz.q.maven.wizard.core.ArchetypeGenerationJobAdapter;
+import org.devzuz.q.maven.wizard.core.IArchetypeExecutor;
 import org.devzuz.q.maven.wizard.core.Maven2ArchetypeManager;
 import org.devzuz.q.maven.wizard.core.internal.MavenWizardContext;
 import org.devzuz.q.maven.wizard.pages.Maven2ProjectArchetypeInfoPage;
@@ -96,8 +98,11 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
                         List<IMavenProjectPostprocessor> postProcessors =
                             WizardPageExtensionUtil.getPostProcessors( archetype, wizardContext );
                         wizardContext.setPostProcessors( postProcessors );
-                        Maven2ArchetypeManager.executeArchetype( archetype, projectPath, groupID, artifactID, version,
-                                                                 packageName, wizardContext );
+                        
+                        ArchetypeGenerationJobAdapter jobAdapter = new ArchetypeGenerationJobAdapter( projectPath.append( artifactID ) , wizardContext ); 
+                        IArchetypeExecutor archetypeExecutor = Maven2ArchetypeManager.getArchetypeExecutor();
+                        archetypeExecutor.executeArchetype( archetype, projectPath, groupID, artifactID, version, 
+                                                            packageName, wizardContext , jobAdapter );
                     }
                     catch ( CoreException e )
                     {

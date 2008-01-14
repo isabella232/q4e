@@ -182,11 +182,18 @@ public class EclipseMaven implements IMaven
     {
         scheduleRequest( baseDirectory, generateRequest( baseDirectory, goal, parameter ), null );
     }
+    
+    public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter ,  
+                              MavenExecutionJobAdapter jobAdapter )
+        throws CoreException
+    {
+        scheduleRequest( baseDirectory, generateRequest( baseDirectory, goal, parameter ), jobAdapter );
+    }
 
-// public void scheduleGoal( IMavenProject mavenProject, String goal ) throws CoreException
-// {
-// scheduleGoal( mavenProject, goal, null );
-// }
+    // public void scheduleGoal( IMavenProject mavenProject, String goal ) throws CoreException
+    // {
+    // scheduleGoal( mavenProject, goal, null );
+    // }
 
     public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter )
         throws CoreException
