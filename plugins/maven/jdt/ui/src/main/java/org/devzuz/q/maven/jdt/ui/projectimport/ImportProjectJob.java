@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
@@ -191,7 +192,14 @@ public class ImportProjectJob extends WorkspaceJob
             project.open( monitor );
         }
 
+        /* Add maven nature to project */
         MavenNatureHelper.addNature( project );
+        
+        /* Add information we want to be persisted with the IProject */
+        project.setPersistentProperty( IMavenProject.GROUP_ID , pomDescriptor.getModel().getGroupId() );
+        project.setPersistentProperty( IMavenProject.ARTIFACT_ID , pomDescriptor.getModel().getArtifactId() );
+        project.setPersistentProperty( IMavenProject.VERSION , pomDescriptor.getModel().getVersion() );
+        
         return project;
     }
 }

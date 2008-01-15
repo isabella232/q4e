@@ -18,10 +18,16 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.QualifiedName;
 
 public interface IMavenProject extends IAdaptable
 {
-
+    public static final QualifiedName GROUP_ID = new QualifiedName( MavenCoreActivator.PLUGIN_ID , ".groupId" );
+    
+    public static final QualifiedName ARTIFACT_ID = new QualifiedName( MavenCoreActivator.PLUGIN_ID , ".artifactId" );
+    
+    public static final QualifiedName VERSION = new QualifiedName( MavenCoreActivator.PLUGIN_ID , ".version" );
+    
     public String POM_FILENAME = "pom.xml";
 
     public abstract void executeGoals( String goals );
