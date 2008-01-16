@@ -35,7 +35,7 @@ import org.eclipse.ui.dialogs.FilteredList;
  * Implementation of a page for the New Maven Project wizard which allows the user to select an archetype from the list
  * or to manually specify one.
  * 
- * @author Abel Muiño <amuino@gmail.com>
+ * @author Abel Mui√±o <amuino@gmail.com>
  */
 public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 {
@@ -162,7 +162,7 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
         customArchetypesButton = new Button( container, SWT.RADIO );
         customArchetypesButton.setText( Messages.wizard_project_chooseArchetype_custom_label );
         customArchetypesButton.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false, 3, 1 ) );
-        // customArchetypesButton.addSelectionListener( buttonListener );
+        customArchetypesButton.addSelectionListener( buttonListener );
 
         customArchetypeGroup = new Group( container, SWT.NULL );
         customArchetypeGroup.setLayout( new GridLayout( 2, false ) );
@@ -224,6 +224,10 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
             {
                 setError( Messages.wizard_project_archetypeInfo_error_artifactId );
             }
+        }
+        else
+        {
+            return true;
         }
 
         return false;
