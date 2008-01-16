@@ -66,23 +66,26 @@ public class EclipseMavenArtifactResolver extends DefaultArtifactResolver
             IMavenProject mavenProject =
                 mavenProjectManager.getMavenProject( artifact.getGroupId(), artifact.getArtifactId(),
                                                      artifact.getVersion(), false );
-            File file = null;
-            boolean resolved;
-            if ( Artifact.SCOPE_SYSTEM.equals( artifact.getScope() ) )
+            if ( mavenProject != null )
             {
-                // system dependencies specify their path
-                File providedFile = artifact.getFile();
-                resolved = providedFile != null && providedFile.isFile() && providedFile.canRead();
+                File file = null;
+                boolean resolved;
+                if ( Artifact.SCOPE_SYSTEM.equals( artifact.getScope() ) )
+                {
+                    // system dependencies specify their path
+                    File providedFile = artifact.getFile();
+                    resolved = providedFile != null && providedFile.isFile() && providedFile.canRead();
+                }
+                else
+                {
+                    // TODO: Confirm if this is correct
+                    file = mavenProject.getPomFile();
+                    resolved = file != null;
+                }
+                System.out.println( artifact.getScope() + " -> " + file );
+                artifact.setFile( file );
+                artifact.setResolved( resolved );
             }
-            else
-            {
-                // TODO: Confirm if this is correct
-                file = mavenProject.getPomFile();
-                resolved = file != null;
-            }
-            System.out.println( artifact.getScope() + " -> " + file );
-            artifact.setFile( file );
-            artifact.setResolved( resolved );
         }
         catch ( CoreException e )
         {
