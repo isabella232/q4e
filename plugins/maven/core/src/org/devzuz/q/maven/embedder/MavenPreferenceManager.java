@@ -12,11 +12,11 @@ public class MavenPreferenceManager
 {
     public static final String ARCHETYPE_LIST_KEY = MavenCoreActivator.PLUGIN_ID + ".archetypeListKey";
     
-    public static final String GLOBAL_PREFERENCE_OFFLINE = MavenCoreActivator.PLUGIN_ID + ".offline";
+    public static final String OFFLINE = MavenCoreActivator.PLUGIN_ID + ".offline";
 
-    public static final String GLOBAL_PREFERENCE_DOWNLOAD_SOURCES = MavenCoreActivator.PLUGIN_ID + ".downloadSources";
+    public static final String DOWNLOAD_SOURCES = MavenCoreActivator.PLUGIN_ID + ".downloadSources";
 
-    public static final String GLOBAL_PREFERENCE_DOWNLOAD_JAVADOC = MavenCoreActivator.PLUGIN_ID + ".downloadJavadoc";
+    public static final String DOWNLOAD_JAVADOC = MavenCoreActivator.PLUGIN_ID + ".downloadJavadoc";
     
     public static final String ARCHETYPE_PAGE_CONN_TIMEOUT = MavenCoreActivator.PLUGIN_ID + ".archetypeConnTimeout";
 
@@ -26,8 +26,12 @@ public class MavenPreferenceManager
     
     public static final String GLOBAL_SETTINGS_XML_FILENAME = MavenCoreActivator.PLUGIN_ID + ".globalSettingsXml";
 
+    /* default values for preferences */
+    
     public static final int ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT = 30000;
 
+    public static final boolean DOWNLOAD_SOURCES_DEFAULT = true;
+    
     private IPreferenceStore preferenceStore;
     
     public MavenPreferenceManager( IPreferenceStore prefStore )
@@ -47,7 +51,12 @@ public class MavenPreferenceManager
 
     public boolean downloadSources()
     {
-        return preferenceStore.getBoolean( GLOBAL_PREFERENCE_DOWNLOAD_SOURCES );
+        return preferenceStore.getBoolean( DOWNLOAD_SOURCES );
+    }
+    
+    public void setDownloadSources( boolean downloadSources )
+    {
+        preferenceStore.setValue( DOWNLOAD_SOURCES, downloadSources );
     }
 
     public int getArchetypeConnectionTimeout()
