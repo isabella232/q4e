@@ -158,14 +158,7 @@ public class MavenProjectManager
         Map.Entry<IProject, MavenProjectCachedInfo> entry = getEntry( groupId, artifactId, version );
         if ( entry != null )
         {
-            if ( entry.getValue() == null )
-            {
-                return getMavenProject( entry.getKey(), resolveTransitively );
-            }
-            else
-            {
-                return entry.getValue().getMavenProject();
-            }
+            return getMavenProject( entry.getKey(), resolveTransitively );
         }
 
         return null;
@@ -217,11 +210,27 @@ public class MavenProjectManager
         {
             try
             {
-                IProject project = entry.getKey();
+                String _groupId = "" , _artifactId = "", _version = "";
+                MavenProjectCachedInfo info = entry.getValue();
+                // This entry has a cached IMavenProject
+                if ( info != null )
+                {
+                    IMavenProject mavenProject = info.getMavenProject();
+                    
+                    _groupId = mavenProject.getGroupId();
+                    _artifactId = mavenProject.getArtifactId();
+                    _version = mavenProject.getVersion();
+                }
+                // No cached IMavenProject, we need to retrieve the triplet from the
+                // persistent properties of the IProject
+                else
+                {
+                    IProject project = entry.getKey();
 
-                String _groupId = project.getPersistentProperty( IMavenProject.GROUP_ID );
-                String _artifactId = project.getPersistentProperty( IMavenProject.ARTIFACT_ID );
-                String _version = project.getPersistentProperty( IMavenProject.VERSION );
+                    _groupId = project.getPersistentProperty( IMavenProject.GROUP_ID );
+                    _artifactId = project.getPersistentProperty( IMavenProject.ARTIFACT_ID );
+                    _version = project.getPersistentProperty( IMavenProject.VERSION );
+                }
 
                 // The artifact resolver executes this loop before the project has been created, so ALWAYS skip maven
                 // projects without persistent properties.
