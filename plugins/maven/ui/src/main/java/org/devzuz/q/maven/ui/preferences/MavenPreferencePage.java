@@ -69,7 +69,7 @@ public class MavenPreferencePage
         MavenPreferenceManager mavenPreferenceManager = MavenManager.getMavenPreferenceManager();
         if( mavenPreferenceManager.getArchetypeConnectionTimeout() == 0 )
         {
-            mavenPreferenceManager.setArchetypeConnectionTimeout( MavenPreferenceManager.ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT );
+            mavenPreferenceManager.setArchetypeConnectionTimeout( MavenPreferenceManager.DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT );
         }
         
         previousUserSettingsXmlValue = mavenPreferenceManager.getUserSettingsXmlFilename();
@@ -88,7 +88,7 @@ public class MavenPreferencePage
         
         if( !getPreferenceStore().contains( MavenPreferenceManager.DOWNLOAD_SOURCES ) )
         {
-            mavenPreferenceManager.setDownloadSources( MavenPreferenceManager.DOWNLOAD_SOURCES_DEFAULT );
+            mavenPreferenceManager.setDownloadSources( MavenPreferenceManager.DEFAULT_DOWNLOAD_SOURCES );
         }
         
         super.initialize();

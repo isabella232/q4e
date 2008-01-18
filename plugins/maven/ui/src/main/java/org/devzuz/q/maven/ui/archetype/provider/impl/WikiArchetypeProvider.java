@@ -149,7 +149,8 @@ public class WikiArchetypeProvider extends AbstractArchetypeProvider
         }
         catch ( Exception e )
         {
-            MavenUiActivator.getLogger().error( "Error while accessing page - " + e.getMessage() );
+            MavenUiActivator.getLogger().error( "Error while accessing page - " + e.getMessage() + 
+                                                " - URL = " + url.toString() + " Timeout = " + timeout );
             throw new QCoreException( new Status( IStatus.ERROR, MavenUiActivator.PLUGIN_ID,
                                                   "Error while accessing page", e ) );
         }

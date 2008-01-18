@@ -28,9 +28,11 @@ public class MavenPreferenceManager
 
     /* default values for preferences */
     
-    public static final int ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT = 30000;
+    public static final int DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT = 30000;
 
-    public static final boolean DOWNLOAD_SOURCES_DEFAULT = true;
+    public static final boolean DEFAULT_DOWNLOAD_SOURCES = true;
+    
+    public static final boolean DEFAULT_IS_RECURSIVE = false;
     
     private IPreferenceStore preferenceStore;
     
@@ -51,6 +53,12 @@ public class MavenPreferenceManager
 
     public boolean downloadSources()
     {
+        if( ! preferenceStore.contains( DOWNLOAD_SOURCES ) )
+        {
+            setDownloadSources( DEFAULT_DOWNLOAD_SOURCES );
+            return DEFAULT_DOWNLOAD_SOURCES;
+        }
+        
         return preferenceStore.getBoolean( DOWNLOAD_SOURCES );
     }
     
@@ -61,6 +69,12 @@ public class MavenPreferenceManager
 
     public int getArchetypeConnectionTimeout()
     {
+        if( ! preferenceStore.contains( ARCHETYPE_PAGE_CONN_TIMEOUT ) )
+        {
+            setArchetypeConnectionTimeout( DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT );
+            return DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT;
+        }
+        
         return preferenceStore.getInt( ARCHETYPE_PAGE_CONN_TIMEOUT );
     }
 
@@ -69,14 +83,20 @@ public class MavenPreferenceManager
         preferenceStore.setValue( ARCHETYPE_PAGE_CONN_TIMEOUT, timeout );
     }
 
+    public boolean isRecursive()
+    {
+        if( ! preferenceStore.contains( RECURSIVE_EXECUTION ) )
+        {
+            setRecursive( DEFAULT_IS_RECURSIVE );
+            return DEFAULT_IS_RECURSIVE;
+        }
+            
+        return preferenceStore.getBoolean( RECURSIVE_EXECUTION );
+    }
+    
     public void setRecursive( boolean value )
     {
         preferenceStore.setValue( RECURSIVE_EXECUTION, value );
-    }
-
-    public boolean isRecursive()
-    {
-        return preferenceStore.getBoolean( RECURSIVE_EXECUTION );
     }
     
     public String getGlobalSettingsXmlFilename()
