@@ -6,9 +6,6 @@
    <feature url="features/org.apache.commons.collections.feature_3.2.0.200705282147.jar" id="org.apache.commons.collections.feature" version="3.2.0.200705282147">
       <category name="Enabling Features"/>
    </feature>
-   <feature url="features/org.prefuse.feature_1.0.0.v20060715.jar" id="org.prefuse.feature" version="1.0.0.v20060715">
-      <category name="Enabling Features"/>
-   </feature>
    <feature url="features/org.apache.maven.feature_2.1.0.571188.jar" id="org.apache.maven.feature" version="2.1.0.571188">
       <category name="Enabling Features"/>
    </feature>
@@ -39,6 +36,16 @@
    </feature>
    <feature url="features/org.devzuz.q.dependencyviewer.feature_0.3.0.200711240245.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.3.0.200711240245">
       <category name="Optional"/>
+   </feature>
+   <!-- New in 0.4.0 -->
+   <feature url="features/org.apache.maven.feature_2.1.0.609729.jar" id="org.apache.maven.feature" version="2.1.0.609729">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.devzuz.q.dependencyviewer.feature_0.4.0.200801130017.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.4.0.200801130017">
+      <category name="Optional"/>
+   </feature>
+   <feature url="features/org.devzuz.q.feature_0.4.0.200801172257.jar" id="org.devzuz.q.feature" version="0.4.0.200801172257">
+      <category name="Community"/>
    </feature>
    
    <category-def name="Community" label="Community"/>
