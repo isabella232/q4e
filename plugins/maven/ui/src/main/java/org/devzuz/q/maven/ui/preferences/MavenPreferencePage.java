@@ -48,13 +48,13 @@ public class MavenPreferencePage
         addField( new BooleanFieldEditor( MavenPreferenceManager.RECURSIVE_EXECUTION, Messages.MavenPreference_RecursiveExecution,
                                           getFieldEditorParent() ) );
         
-        addField( new BooleanFieldEditor( MavenPreferenceManager.OFFLINE, Messages.MavenPreference_Offline,
+        addField( new BooleanFieldEditor( MavenPreferenceManager.GLOBAL_PREFERENCE_OFFLINE, Messages.MavenPreference_Offline,
                                           getFieldEditorParent() ) );
 
-        addField( new BooleanFieldEditor( MavenPreferenceManager.DOWNLOAD_SOURCES,
+        addField( new BooleanFieldEditor( MavenPreferenceManager.GLOBAL_PREFERENCE_DOWNLOAD_SOURCES,
                                           Messages.MavenPreference_DownloadSources, getFieldEditorParent() ) );
 
-        addField( new BooleanFieldEditor( MavenPreferenceManager.DOWNLOAD_JAVADOC,
+        addField( new BooleanFieldEditor( MavenPreferenceManager.GLOBAL_PREFERENCE_DOWNLOAD_JAVADOC,
                                           Messages.MavenPreference_DownloadJavaDocs, getFieldEditorParent() ) );
     }
 
@@ -65,31 +65,23 @@ public class MavenPreferencePage
     
     protected void initialize()
     {
-        
-        MavenPreferenceManager mavenPreferenceManager = MavenManager.getMavenPreferenceManager();
-        if( mavenPreferenceManager.getArchetypeConnectionTimeout() == 0 )
+        if( MavenManager.getMavenPreferenceManager().getArchetypeConnectionTimeout() == 0 )
         {
-            mavenPreferenceManager.setArchetypeConnectionTimeout( MavenPreferenceManager.DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT );
+            MavenManager.getMavenPreferenceManager().setArchetypeConnectionTimeout( MavenPreferenceManager.ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT );
         }
-        
-        previousUserSettingsXmlValue = mavenPreferenceManager.getUserSettingsXmlFilename();
+        previousUserSettingsXmlValue = MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename();
         if( previousUserSettingsXmlValue.trim().equals( "" ) )
         {
             File m2Dir = new File( new File( System.getProperty( "user.home" ) ), IMaven.USER_CONFIGURATION_DIRECTORY_NAME );
             File userSettings = new File( m2Dir, IMaven.SETTINGS_FILENAME );
             if( userSettings.exists() )
             {
-                mavenPreferenceManager.setUserSettingsXmlFilename(  userSettings.getAbsolutePath()  );
+                MavenManager.getMavenPreferenceManager().setUserSettingsXmlFilename(  userSettings.getAbsolutePath()  );
                 previousUserSettingsXmlValue = userSettings.getAbsolutePath();
             }
         }
         
-        previousGlobalSettingsXmlValue = mavenPreferenceManager.getGlobalSettingsXmlFilename();
-        
-        if( !getPreferenceStore().contains( MavenPreferenceManager.DOWNLOAD_SOURCES ) )
-        {
-            mavenPreferenceManager.setDownloadSources( MavenPreferenceManager.DEFAULT_DOWNLOAD_SOURCES );
-        }
+        previousGlobalSettingsXmlValue = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
         
         super.initialize();
     }

@@ -12,11 +12,11 @@ public class MavenPreferenceManager
 {
     public static final String ARCHETYPE_LIST_KEY = MavenCoreActivator.PLUGIN_ID + ".archetypeListKey";
     
-    public static final String OFFLINE = MavenCoreActivator.PLUGIN_ID + ".offline";
+    public static final String GLOBAL_PREFERENCE_OFFLINE = MavenCoreActivator.PLUGIN_ID + ".offline";
 
-    public static final String DOWNLOAD_SOURCES = MavenCoreActivator.PLUGIN_ID + ".downloadSources";
+    public static final String GLOBAL_PREFERENCE_DOWNLOAD_SOURCES = MavenCoreActivator.PLUGIN_ID + ".downloadSources";
 
-    public static final String DOWNLOAD_JAVADOC = MavenCoreActivator.PLUGIN_ID + ".downloadJavadoc";
+    public static final String GLOBAL_PREFERENCE_DOWNLOAD_JAVADOC = MavenCoreActivator.PLUGIN_ID + ".downloadJavadoc";
     
     public static final String ARCHETYPE_PAGE_CONN_TIMEOUT = MavenCoreActivator.PLUGIN_ID + ".archetypeConnTimeout";
 
@@ -26,14 +26,8 @@ public class MavenPreferenceManager
     
     public static final String GLOBAL_SETTINGS_XML_FILENAME = MavenCoreActivator.PLUGIN_ID + ".globalSettingsXml";
 
-    /* default values for preferences */
-    
-    public static final int DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT = 30000;
+    public static final int ARCHETYPE_PAGE_CONN_TIMEOUT_DEFAULT = 30000;
 
-    public static final boolean DEFAULT_DOWNLOAD_SOURCES = true;
-    
-    public static final boolean DEFAULT_IS_RECURSIVE = false;
-    
     private IPreferenceStore preferenceStore;
     
     public MavenPreferenceManager( IPreferenceStore prefStore )
@@ -53,28 +47,11 @@ public class MavenPreferenceManager
 
     public boolean downloadSources()
     {
-        if( ! preferenceStore.contains( DOWNLOAD_SOURCES ) )
-        {
-            setDownloadSources( DEFAULT_DOWNLOAD_SOURCES );
-            return DEFAULT_DOWNLOAD_SOURCES;
-        }
-        
-        return preferenceStore.getBoolean( DOWNLOAD_SOURCES );
-    }
-    
-    public void setDownloadSources( boolean downloadSources )
-    {
-        preferenceStore.setValue( DOWNLOAD_SOURCES, downloadSources );
+        return preferenceStore.getBoolean( GLOBAL_PREFERENCE_DOWNLOAD_SOURCES );
     }
 
     public int getArchetypeConnectionTimeout()
     {
-        if( ! preferenceStore.contains( ARCHETYPE_PAGE_CONN_TIMEOUT ) )
-        {
-            setArchetypeConnectionTimeout( DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT );
-            return DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT;
-        }
-        
         return preferenceStore.getInt( ARCHETYPE_PAGE_CONN_TIMEOUT );
     }
 
@@ -83,20 +60,14 @@ public class MavenPreferenceManager
         preferenceStore.setValue( ARCHETYPE_PAGE_CONN_TIMEOUT, timeout );
     }
 
-    public boolean isRecursive()
-    {
-        if( ! preferenceStore.contains( RECURSIVE_EXECUTION ) )
-        {
-            setRecursive( DEFAULT_IS_RECURSIVE );
-            return DEFAULT_IS_RECURSIVE;
-        }
-            
-        return preferenceStore.getBoolean( RECURSIVE_EXECUTION );
-    }
-    
     public void setRecursive( boolean value )
     {
         preferenceStore.setValue( RECURSIVE_EXECUTION, value );
+    }
+
+    public boolean isRecursive()
+    {
+        return preferenceStore.getBoolean( RECURSIVE_EXECUTION );
     }
     
     public String getGlobalSettingsXmlFilename()
