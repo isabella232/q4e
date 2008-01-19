@@ -34,7 +34,7 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 /**
  * Imports a number of maven projects in the workspace.
  * 
- * @author Abel Mui�o <amuino@gmail.com>
+ * @author amuino
  */
 public class ImportProjectJob extends WorkspaceJob
 {
@@ -194,12 +194,12 @@ public class ImportProjectJob extends WorkspaceJob
 
         /* Add maven nature to project */
         MavenNatureHelper.addNature( project );
-        
+
         /* Add information we want to be persisted with the IProject */
-        project.setPersistentProperty( IMavenProject.GROUP_ID , pomDescriptor.getModel().getGroupId() );
-        project.setPersistentProperty( IMavenProject.ARTIFACT_ID , pomDescriptor.getModel().getArtifactId() );
-        project.setPersistentProperty( IMavenProject.VERSION , pomDescriptor.getModel().getVersion() );
-        
+        project.setPersistentProperty( IMavenProject.GROUP_ID, pomDescriptor.getModel().getGroupId() );
+        project.setPersistentProperty( IMavenProject.ARTIFACT_ID, pomDescriptor.getModel().getArtifactId() );
+        project.setPersistentProperty( IMavenProject.VERSION, pomDescriptor.getModel().getVersion() );
+
         return project;
     }
 }
