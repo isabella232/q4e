@@ -19,7 +19,7 @@ import org.devzuz.q.maven.wizard.postprocessor.core.IMavenProjectPostprocessor;
  * 
  * Additionally, this class extends {@link IMavenWizardContext} with non API methods that should not be used by clients.
  * 
- * @author Abel Mui–o <amuino@gmail.com>
+ * @author amuino
  */
 public class MavenWizardContext implements IMavenWizardContext
 {
