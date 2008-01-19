@@ -15,7 +15,7 @@ import org.eclipse.jface.wizard.WizardPage;
 /**
  * This abstract class implements the get/set methods in {@link IMavenWizardPage}.
  * 
- * @author Abel Mui–o <amuino@gmail.com>
+ * @author amuino
  */
 public abstract class AbstractMavenWizardPage extends WizardPage implements IMavenWizardPage
 {
@@ -72,11 +72,7 @@ public abstract class AbstractMavenWizardPage extends WizardPage implements IMav
         this.wizardContext = context;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.jface.wizard.WizardPage#getPreviousPage()
-     * 
+    /**
      * Removes use of cached previous page and always asks the wizard.
      */
     @Override
