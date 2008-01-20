@@ -7,18 +7,21 @@
 package org.devzuz.q.maven.wizard.pages;
 
 import org.devzuz.q.maven.wizard.Messages;
+import org.devzuz.q.maven.wizard.projectwizard.Maven2ProjectWizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-public class Maven2ProjectArchetypeInfoPage
-    extends Maven2ValidatingWizardPage
+public class Maven2ProjectArchetypeInfoPage extends Maven2ValidatingWizardPage
 {
     public static String DEFAULT_VERSION = "1.0-SNAPSHOT";
 
@@ -32,6 +35,8 @@ public class Maven2ProjectArchetypeInfoPage
 
     private Text descriptionText;
 
+    private Button importParentsButton;
+
     public Maven2ProjectArchetypeInfoPage()
     {
         super( Messages.wizard_project_archetypeInfo_name );
@@ -40,9 +45,13 @@ public class Maven2ProjectArchetypeInfoPage
         setPageComplete( false );
     }
 
-    public void createControl( Composite parent )
+    public void createControl( Composite root )
     {
+        Composite parent = new Composite( root, SWT.NULL );
+        parent.setLayout( new GridLayout() );
+
         Group group = new Group( parent, SWT.NONE );
+        group.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
         group.setLayout( new GridLayout( 2, false ) );
         group.setText( Messages.wizard_project_archetypeInfo_group_label );
 
@@ -74,7 +83,7 @@ public class Maven2ProjectArchetypeInfoPage
 
         packageNameText = new Text( group, SWT.BORDER | SWT.SINGLE );
         packageNameText.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, false ) );
-        //packageNameText.addModifyListener( modifyingListener );
+        // packageNameText.addModifyListener( modifyingListener );
 
         Label versionLabel = new Label( group, SWT.NULL );
         versionLabel.setText( Messages.wizard_project_archetypeInfo_version_label );
@@ -89,6 +98,25 @@ public class Maven2ProjectArchetypeInfoPage
 
         descriptionText = new Text( group, SWT.BORDER | SWT.MULTI );
         descriptionText.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
+
+        importParentsButton = new Button( parent, SWT.CHECK );
+        importParentsButton.setText( "Import parent projects (EXPERIMENTAL)" );
+        importParentsButton.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
+        importParentsButton.addSelectionListener( new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                if ( importParentsButton.getSelection() )
+                {
+                    setMessage( "Importing parent poms might confuse other plug-ins.", WARNING );
+                }
+                else
+                {
+                    setMessage( null );
+                }
+            }
+        } );
 
         validate();
 
@@ -130,6 +158,7 @@ public class Maven2ProjectArchetypeInfoPage
         return versionText.getText().trim();
     }
 
+    @Override
     public String getDescription()
     {
         return descriptionText.getText().trim();
@@ -155,5 +184,24 @@ public class Maven2ProjectArchetypeInfoPage
         }
 
         return false;
+    }
+
+    /**
+     * @return
+     */
+    public boolean isImportParentEnabled()
+    {
+        return importParentsButton.getSelection();
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.jface.wizard.WizardPage#canFlipToNextPage()
+     */
+    @Override
+    public boolean canFlipToNextPage()
+    {
+        return ( (Maven2ProjectWizard) getWizard() ).hasExtraPages();
     }
 }

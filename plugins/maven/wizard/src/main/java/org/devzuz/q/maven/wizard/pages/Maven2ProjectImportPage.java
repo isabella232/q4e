@@ -48,6 +48,8 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
 
     private ProjectScannerJob projectScannerJob;
 
+    private Button importParentsButton;
+
     public Maven2ProjectImportPage()
     {
         super( Messages.wizard_importProject_title );
@@ -167,12 +169,37 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
             }
         } );
 
+        importParentsButton = new Button( container, SWT.CHECK );
+        importParentsButton.setText( "Import parent projects (EXPERIMENTAL)" );
+        importParentsButton.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false, 3, 1 ) );
+        importParentsButton.addSelectionListener( new SelectionAdapter()
+        {
+            @Override
+            public void widgetSelected( SelectionEvent e )
+            {
+                // TODO: Remove when importing parent projects works ok!
+                if ( importParentsButton.getSelection() )
+                {
+                    setMessage( "Importing parent poms might confuse other plug-ins.", WARNING );
+                }
+                else
+                {
+                    setMessage( null );
+                }
+            }
+        } );
+
         projectScannerJob = new ProjectScannerJob( "Project Scanner" );
         projectScannerJob.addJobChangeListener( new ProjectScannerJobAdapter() );
 
         setControl( container );
     }
 
+    /**
+     * Gets the value entered for the folder containing the project to be imported.
+     * 
+     * @return the path to the folder for the project to be imported.
+     */
     public String getProjectDirectory()
     {
         return directoryText.getText().trim();
@@ -194,6 +221,7 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
     private void scheduleProjectScanningJob()
     {
         projectScannerJob.setDirectory( Path.fromOSString( getProjectDirectory() ).toFile() );
+        projectScannerJob.setImportParentsEnabled( importParentsButton.getSelection() );
         projectScannerJob.schedule();
         setMessage( Messages.wizard_importProject_scanning + " " + getProjectDirectory() );
     }

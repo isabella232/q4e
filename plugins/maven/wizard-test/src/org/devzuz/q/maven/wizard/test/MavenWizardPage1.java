@@ -29,9 +29,10 @@ public class MavenWizardPage1 extends AbstractMavenWizardPage
 
     public void createControl( Composite parent )
     {
-        Label l = new Label( parent, SWT.NONE );
+        Composite c = new Composite( parent, SWT.NONE );
+        Label l = new Label( c, SWT.NONE );
         l.setText( "Hello world" );
-        setControl( l );
+        setControl( c );
     }
 
 }

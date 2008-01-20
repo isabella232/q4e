@@ -28,16 +28,27 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
 /**
- * Scans a folder for Maven projects. Currently it checks for a pom file and the modules listed in
- * it.
+ * Scans a folder for Maven projects. Currently it checks for a pom file and the modules listed in it.
  * 
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
  */
 public class ProjectScanner
 {
-    public Collection<PomFileDescriptor> scanFolder( File file, IProgressMonitor monitor )
-        throws InterruptedException
+    private boolean importParentProjects;
+
+    /**
+     * Creates a new project scanner.
+     * 
+     * @param importParentProjects
+     *            <code>true</code> to import pom packaging projects, <code>false</code> to skip them.
+     */
+    public ProjectScanner( boolean importParentProjects )
+    {
+        this.importParentProjects = importParentProjects;
+    }
+
+    public Collection<PomFileDescriptor> scanFolder( File file, IProgressMonitor monitor ) throws InterruptedException
     {
 
         if ( monitor.isCanceled() )
@@ -69,7 +80,7 @@ public class ProjectScanner
         }
         else
         {
-            return getProjects( file , monitor );
+            return getProjects( file, monitor );
         }
     }
 
@@ -78,12 +89,11 @@ public class ProjectScanner
      * 
      * @param pom
      * @param monitor
-     * @return the list of sorted projects or null if the order can't be determined (eg. if there's
-     *         an error executing <code>mvn validate</code>).
+     * @return the list of sorted projects or null if the order can't be determined (eg. if there's an error executing
+     *         <code>mvn validate</code>).
      * @throws InterruptedException
      */
-    private List<PomFileDescriptor> getSortedProjects( File pom, IProgressMonitor monitor )
-        throws InterruptedException
+    private List<PomFileDescriptor> getSortedProjects( File pom, IProgressMonitor monitor ) throws InterruptedException
     {
         List<IMavenProject> sortedProjects;
         try
@@ -92,10 +102,10 @@ public class ProjectScanner
 
             MavenExecutionParameter parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter();
             parameter.setRecursive( true );
-            IMavenExecutionResult result = MavenManager.getMaven().executeGoal( mavenProject, "validate", parameter,
-                                                                                monitor );
+            IMavenExecutionResult result =
+                MavenManager.getMaven().executeGoal( mavenProject, "validate", parameter, monitor );
             sortedProjects = result.getSortedProjects();
-            if( sortedProjects == null )
+            if ( sortedProjects == null )
             {
                 /* the project doesn't build so we can't get the list of sorted projects */
                 return null;
@@ -115,7 +125,7 @@ public class ProjectScanner
         List<PomFileDescriptor> projects = new ArrayList<PomFileDescriptor>( sortedProjects.size() );
         for ( IMavenProject mavenProject : sortedProjects )
         {
-            if ( importModel( mavenProject.getModel() ) )
+            if ( isImportable( mavenProject.getModel() ) )
             {
                 projects.add( new PomFileDescriptor( mavenProject.getPomFile(), mavenProject.getModel() ) );
             }
@@ -129,11 +139,11 @@ public class ProjectScanner
      * @param model
      * @return true if the model has not a "pom" packaging
      */
-    protected boolean importModel( Model model )
+    protected boolean isImportable( Model model )
     {
-        return !"pom".equals( model.getPackaging() );
+        return importParentProjects || !"pom".equals( model.getPackaging() );
     }
-    
+
     private Collection<PomFileDescriptor> getProjects( File file, IProgressMonitor monitor )
         throws InterruptedException
     {
@@ -143,13 +153,13 @@ public class ProjectScanner
         }
 
         monitor.worked( 1 );
-       
+
         File pom = new File( file, IMavenProject.POM_FILENAME );
         if ( !pom.exists() )
         {
             return Collections.emptyList();
         }
-        
+
         PomFileDescriptor pomDescriptor;
         try
         {

@@ -24,6 +24,8 @@ public class ProjectScannerJob extends Job
 
     private IProgressMonitor monitor;
 
+    private boolean importParentsEnabled;
+
     public ProjectScannerJob( String name )
     {
         super( name );
@@ -48,7 +50,7 @@ public class ProjectScannerJob extends Job
     @Override
     protected IStatus run( IProgressMonitor monitor )
     {
-        ProjectScanner scanner = new ProjectScanner();
+        ProjectScanner scanner = new ProjectScanner( importParentsEnabled );
 
         this.monitor = monitor;
 
@@ -71,5 +73,17 @@ public class ProjectScannerJob extends Job
     {
         monitor.setCanceled( true );
         super.canceling();
+    }
+
+    /**
+     * Controls whether maven projects with pom packaging should be imported.
+     * 
+     * @param enable
+     *            <code>true</code> to import pom packaging projects, <code>false</code> to skip them.
+     */
+    public void setImportParentsEnabled( boolean enable )
+    {
+        this.importParentsEnabled = enable;
+
     }
 }

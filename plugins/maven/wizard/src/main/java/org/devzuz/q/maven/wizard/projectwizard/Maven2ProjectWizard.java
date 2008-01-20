@@ -59,6 +59,8 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
 
     private String description = "";
 
+    private boolean importParentEnabled = false;
+
     /** Holds the current wizard context, shared with every extension page */
     private MavenWizardContext wizardContext = new MavenWizardContext();
 
@@ -85,6 +87,7 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
         packageName = archetypeInfoPage.getPackageName();
         version = archetypeInfoPage.getVersion();
         description = archetypeInfoPage.getDescription();
+        importParentEnabled = archetypeInfoPage.isImportParentEnabled();
 
         try
         {
@@ -98,11 +101,13 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
                         List<IMavenProjectPostprocessor> postProcessors =
                             WizardPageExtensionUtil.getPostProcessors( archetype, wizardContext );
                         wizardContext.setPostProcessors( postProcessors );
-                        
-                        ArchetypeGenerationJobAdapter jobAdapter = new ArchetypeGenerationJobAdapter( projectPath.append( artifactID ) , wizardContext ); 
+
+                        ArchetypeGenerationJobAdapter jobAdapter =
+                            new ArchetypeGenerationJobAdapter( projectPath.append( artifactID ), importParentEnabled,
+                                                               wizardContext );
                         IArchetypeExecutor archetypeExecutor = Maven2ArchetypeManager.getArchetypeExecutor();
-                        archetypeExecutor.executeArchetype( archetype, projectPath, groupID, artifactID, version, 
-                                                            packageName, wizardContext , jobAdapter );
+                        archetypeExecutor.executeArchetype( archetype, projectPath, groupID, artifactID, version,
+                                                            packageName, wizardContext, jobAdapter );
                     }
                     catch ( CoreException e )
                     {
@@ -154,6 +159,19 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
             addExtraPages();
         }
         return super.getNextPage( page );
+    }
+
+    public boolean hasExtraPages()
+    {
+        Archetype selectedArchetype = archetypePage.getArchetype();
+        try
+        {
+            return WizardPageExtensionUtil.getExtraPages( selectedArchetype, wizardContext ).size() > 0;
+        }
+        catch ( CoreException e )
+        {
+            return false;
+        }
     }
 
     @Override

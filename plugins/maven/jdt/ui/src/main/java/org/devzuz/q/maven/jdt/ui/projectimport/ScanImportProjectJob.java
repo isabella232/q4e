@@ -36,10 +36,13 @@ public class ScanImportProjectJob extends Job
 
     private List<IProject> importedProjects;
 
-    public ScanImportProjectJob( File directory )
+    private final boolean importParentEnabled;
+
+    public ScanImportProjectJob( File directory, boolean importParentEnabled )
     {
         super( "Import Maven 2 projects" );
         this.directory = directory;
+        this.importParentEnabled = importParentEnabled;
     }
 
     /**
@@ -61,7 +64,7 @@ public class ScanImportProjectJob extends Job
     @Override
     protected IStatus run( IProgressMonitor monitor )
     {
-        ProjectScanner scanner = new ProjectScanner();
+        ProjectScanner scanner = new ProjectScanner( importParentEnabled );
         try
         {
             pomDescriptors = scanner.scanFolder( directory, monitor );
