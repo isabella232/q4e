@@ -177,6 +177,9 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
             @Override
             public void widgetSelected( SelectionEvent e )
             {
+                // refresh the view
+                scheduleProjectScanningJob();
+
                 // TODO: Remove when importing parent projects works ok!
                 if ( importParentsButton.getSelection() )
                 {
