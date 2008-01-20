@@ -170,7 +170,7 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
         } );
 
         importParentsButton = new Button( container, SWT.CHECK );
-        importParentsButton.setText( "Import parent projects (EXPERIMENTAL)" );
+        importParentsButton.setText( Messages.wizard_importProject_import_parent );
         importParentsButton.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false, 3, 1 ) );
         importParentsButton.addSelectionListener( new SelectionAdapter()
         {
@@ -180,7 +180,7 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
                 // TODO: Remove when importing parent projects works ok!
                 if ( importParentsButton.getSelection() )
                 {
-                    setMessage( "Importing parent poms might confuse other plug-ins.", WARNING );
+                    setMessage( Messages.wizard_importProject_import_parent_warning, WARNING );
                 }
                 else
                 {

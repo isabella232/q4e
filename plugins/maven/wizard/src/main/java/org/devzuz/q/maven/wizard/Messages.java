@@ -108,4 +108,8 @@ public class Messages
     public static String wizard_importProject_finished_scanning = "Finished scanning for projects";
 
     public static String wizard_importProject_no_projects_found = "No projects found";
+
+    public static String wizard_importProject_import_parent = "Import parent projects (EXPERIMENTAL)";
+
+    public static String wizard_importProject_import_parent_warning = "Importing parent poms might confuse other plug-ins.";
 }
