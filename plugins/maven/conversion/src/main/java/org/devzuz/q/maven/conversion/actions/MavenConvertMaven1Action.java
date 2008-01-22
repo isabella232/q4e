@@ -62,17 +62,17 @@ public class MavenConvertMaven1Action
             catch ( ComponentLookupException e )
             {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }  
             catch ( IOException e )
             {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
             catch ( ConversionFailedException e )
             {
                 // TODO Auto-generated catch block
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }           
 
         }
