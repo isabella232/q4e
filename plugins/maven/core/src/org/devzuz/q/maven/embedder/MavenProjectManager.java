@@ -195,13 +195,7 @@ public class MavenProjectManager
 
     private void addCachedInfo( IProject project, MavenProjectCachedInfo cachedProject )
     {
-        // TODO : Do we need to explicitly set the old value contained therein to null so it could be garbage collected
-        // ?
-        MavenProjectCachedInfo oldInfo = mavenProjects.put( project, cachedProject );
-        if ( oldInfo != null )
-        {
-            oldInfo = null;
-        }
+        mavenProjects.put( project, cachedProject );
     }
 
     private Map.Entry<IProject, MavenProjectCachedInfo> getEntry( String groupId, String artifactId, String version )
@@ -210,13 +204,13 @@ public class MavenProjectManager
         {
             try
             {
-                String _groupId = "" , _artifactId = "", _version = "";
+                String _groupId = "", _artifactId = "", _version = "";
                 MavenProjectCachedInfo info = entry.getValue();
                 // This entry has a cached IMavenProject
                 if ( info != null )
                 {
                     IMavenProject mavenProject = info.getMavenProject();
-                    
+
                     _groupId = mavenProject.getGroupId();
                     _artifactId = mavenProject.getArtifactId();
                     _version = mavenProject.getVersion();
