@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="maven-model-converter-2.2.jar"/>
-	<classpathentry exported="true" kind="lib" path="maven-shared-jar-1.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="aardvark-core-1.0-5993.jar"/>
-	<classpathentry exported="true" kind="lib" path="aardvark-ant-1.0-5993.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/maven-model-converter-2.2.jar" sourcepath="sources/maven-model-converter-2.2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/maven-shared-jar-1.0.jar" sourcepath="sources/maven-shared-jar-1.0-sources.jar"/>
+    <classpathentry exported="true" kind="lib" path="lib/aardvark-ant-1.0-6818.jar" sourcepath="sources/aardvark-ant-1.0-6818-sources.jar"/>
+    <classpathentry exported="true" kind="lib" path="lib/aardvark-core-1.0-6818.jar" sourcepath="sources/aardvark-core-1.0-6818-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="bin"/>
