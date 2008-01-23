@@ -205,8 +205,9 @@ public class MavenNature implements IProjectNature
                 // Exchange the old maven project for the new one from the result
                 mavenProject = result.getMavenProject();
 
+                MavenManager.getMavenProjectManager().addMavenProject( project, mavenProject, true );
                 // Refresh ourself, to include the generated sources
-                project.refreshLocal( IResource.DEPTH_INFINITE, null );
+                // project.refreshLocal( IResource.DEPTH_INFINITE, null );
             }
 
             outputDirectory = mavenProject.getBuildOutputDirectory();
@@ -243,7 +244,7 @@ public class MavenNature implements IProjectNature
         classpathEntriesList.addAll( getSourceFoldersClasspath( project, javaProject, mavenProject ) );
 
         // (x) Add the maven classpath container
-        classpathEntriesList.add( getMavenClasspathContainer( javaProject ) );
+        classpathEntriesList.add( getMavenClasspathContainer( ) );
 
         // (x) Add the JRE container to the classpath
         classpathEntriesList.add( getJREClasspathContainer( javaProject, mavenProject ) );
@@ -327,8 +328,8 @@ public class MavenNature implements IProjectNature
             }
             else
             {
-            	// TODO Fix Issue 181
-            	// combine the inclusions/exclusions with the previous classpath entry for that folder
+                // TODO Fix Issue 181
+                // combine the inclusions/exclusions with the previous classpath entry for that folder
             }
         }
     }
@@ -387,7 +388,7 @@ public class MavenNature implements IProjectNature
         return getRelativePath( basedirPath, fullPath );
     }
 
-    private IClasspathEntry getMavenClasspathContainer( IJavaProject javaProject )
+    private IClasspathEntry getMavenClasspathContainer( )
     {
         return JavaCore.newContainerEntry( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH );
     }
