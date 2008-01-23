@@ -135,8 +135,18 @@ public class MavenProjectManager
         if ( ( cachedProject == null ) || ( cachedProject.isModified() )
                         || ( ( cachedProject.resolvedTransitively == false ) && ( resolveTransitively == true ) ) )
         {
+            /* get maven project from maven embedder */
             IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, resolveTransitively );
+            
+            /* Add information we want to be persisted with the IProject */
+            project.setPersistentProperty( IMavenProject.GROUP_ID, mavenProject.getGroupId() );
+            project.setPersistentProperty( IMavenProject.ARTIFACT_ID, mavenProject.getArtifactId() );
+            project.setPersistentProperty( IMavenProject.VERSION, mavenProject.getVersion() );
+            
+            /* Create cache object */
             cachedProject = MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolveTransitively );
+            
+            /* Add to cache */
             addCachedInfo( project, cachedProject );
         }
 
@@ -205,20 +215,21 @@ public class MavenProjectManager
             try
             {
                 String _groupId = "", _artifactId = "", _version = "";
+                
                 MavenProjectCachedInfo info = entry.getValue();
-                // This entry has a cached IMavenProject
                 if ( info != null )
                 {
+                    // This entry has a cached IMavenProject
                     IMavenProject mavenProject = info.getMavenProject();
 
                     _groupId = mavenProject.getGroupId();
                     _artifactId = mavenProject.getArtifactId();
                     _version = mavenProject.getVersion();
                 }
-                // No cached IMavenProject, we need to retrieve the triplet from the
-                // persistent properties of the IProject
                 else
                 {
+                    // No cached IMavenProject, we need to retrieve the triplet from the
+                    // persistent properties of the IProject
                     IProject project = entry.getKey();
 
                     _groupId = project.getPersistentProperty( IMavenProject.GROUP_ID );
