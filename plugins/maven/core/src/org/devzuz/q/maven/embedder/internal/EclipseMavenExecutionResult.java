@@ -142,7 +142,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
 
     public boolean hasErrors()
     {
-        return exceptions != Collections.EMPTY_LIST;
+        return exceptions != null && !exceptions.isEmpty();
     }
 
     public IMavenProject getMavenProject()
