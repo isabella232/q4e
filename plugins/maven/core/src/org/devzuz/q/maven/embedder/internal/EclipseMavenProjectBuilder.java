@@ -224,7 +224,7 @@ public class EclipseMavenProjectBuilder extends DefaultMavenProjectBuilder
                         {
                             mavenProject =
                                 mavenProjectManager.getMavenProject( a.getGroupId(), a.getArtifactId(), a.getVersion(),
-                                                                     false );
+                                                                     true );
 
                         }
                         catch ( CoreException e )
@@ -234,8 +234,8 @@ public class EclipseMavenProjectBuilder extends DefaultMavenProjectBuilder
                         }
                         if ( mavenProject != null )
                         {
-                            list.addAll( mavenProject.getCompileSourceRoots() );
-                            list.addAll( mavenProject.getTestCompileSourceRoots() );
+                            list.addAll( mavenProject.getRawMavenProject().getCompileClasspathElements() );
+                            list.addAll( mavenProject.getRawMavenProject().getTestClasspathElements() );
                         }
                         else
                         {

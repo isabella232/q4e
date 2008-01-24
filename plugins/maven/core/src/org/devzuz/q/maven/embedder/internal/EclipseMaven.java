@@ -141,10 +141,6 @@ public class EclipseMaven implements IMaven
                 new EclipseMavenRequest( "MavenRequest", this, request, mavenProject.getProject() );
             eclipseMavenRequest.run( monitor );
             IMavenExecutionResult result = eclipseMavenRequest.getExecutionResult();
-            if ( result.getMavenProject() != null )
-            {
-                RefreshOutputFoldersListener.INSTANCE.refreshOutputFolders( result.getMavenProject() );
-            }
             return result;
         }
         catch ( RuntimeException e )
@@ -182,10 +178,9 @@ public class EclipseMaven implements IMaven
     {
         scheduleRequest( baseDirectory, generateRequest( baseDirectory, goal, parameter ), null );
     }
-    
-    public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter ,  
-                              MavenExecutionJobAdapter jobAdapter )
-        throws CoreException
+
+    public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter,
+                              MavenExecutionJobAdapter jobAdapter ) throws CoreException
     {
         scheduleRequest( baseDirectory, generateRequest( baseDirectory, goal, parameter ), jobAdapter );
     }

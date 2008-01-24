@@ -28,8 +28,8 @@ import org.eclipse.core.resources.IProject;
  * Provides a set of methods that allow you to interact with a MavenProject, both handling the extraction of metadata as
  * well and executing and handling goals
  * 
- * @author pdodds 
- *
+ * @author pdodds
+ * 
  * TODO carlos do we really need to copy the fields from MavenProject or just wrap it?
  */
 public class EclipseMavenProject implements IMavenProject
@@ -40,6 +40,13 @@ public class EclipseMavenProject implements IMavenProject
     @Deprecated
     public static final String POM_XML = POM_FILENAME;
 
+    /**
+     * Checks if the given eclipse project has a <code>pom.xml</code> descriptor.
+     * 
+     * @param project
+     *            the project to check.
+     * @return <code>true</code> if the project has a descriptor, <code>false</code> otherwise.
+     */
     public static boolean hasDescriptor( IProject project )
     {
         return ( project.getFile( POM_FILENAME ).exists() );
@@ -53,7 +60,7 @@ public class EclipseMavenProject implements IMavenProject
 
     /* Contains all the artifacts including the transitive dependencies */
     private Set<IMavenArtifact> allArtifacts = new HashSet<IMavenArtifact>();
-    
+
     /* Contains all the direct dependencies */
     private Set<IMavenArtifact> dependencyArtifacts = new HashSet<IMavenArtifact>();
 
@@ -227,7 +234,7 @@ public class EclipseMavenProject implements IMavenProject
                 allArtifacts.add( mavenArtifact );
             }
         }
-        
+
         Set<IMavenArtifact> tempArtifactCache = new HashSet<IMavenArtifact>();
         for ( Object obj : mavenRawProject.getArtifacts() )
         {
@@ -237,13 +244,12 @@ public class EclipseMavenProject implements IMavenProject
                 addThroughDependencyTrail( mavenRawProject, tempArtifactCache, mavenArtifact, (DefaultArtifact) obj );
             }
         }
-        
+
         /* The tempArtifactCache contains, as a first element, this project with its direct dependencies as children */
-        for( IMavenArtifact artifact : tempArtifactCache )
+        for ( IMavenArtifact artifact : tempArtifactCache )
         {
-            if( artifact.getGroupId().equals( getGroupId() ) && 
-                artifact.getArtifactId().equals( getArtifactId() ) &&
-                artifact.getVersion().equals( getVersion() ) )
+            if ( artifact.getGroupId().equals( getGroupId() ) && artifact.getArtifactId().equals( getArtifactId() )
+                            && artifact.getVersion().equals( getVersion() ) )
             {
                 dependencyArtifacts = artifact.getChildren();
                 break;
@@ -291,8 +297,8 @@ public class EclipseMavenProject implements IMavenProject
         if ( parentArtifact == null )
             artifactCache.add( mavenArtifact );
         // XXX - This causes the "The Artifact is a child of itself" problem
-        //else
-        //    parentArtifact.addChild( mavenArtifact );
+        // else
+        // parentArtifact.addChild( mavenArtifact );
     }
 
     private IMavenArtifact createDummyMavenArtifact( String string )
@@ -322,17 +328,15 @@ public class EclipseMavenProject implements IMavenProject
     {
         return allArtifacts;
     }
-    
+
     public Set<IMavenArtifact> getDependencyArtifacts()
     {
         return dependencyArtifacts;
     }
+
 /*
-    public void setArtifacts( Set<IMavenArtifact> artifacts )
-    {
-        this.artifacts = artifacts;
-    }
-*/
+ * public void setArtifacts( Set<IMavenArtifact> artifacts ) { this.artifacts = artifacts; }
+ */
     public String getBuildOutputDirectory()
     {
         return buildOutputDirectory;

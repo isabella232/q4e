@@ -8,13 +8,14 @@ package org.devzuz.q.maven.embedder.internal;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.maven.lifecycle.LifecycleExecutionException;
 import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
-import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -52,24 +53,21 @@ public class RefreshOutputFoldersListener extends JobChangeAdapter
     {
         EclipseMavenRequest request = (EclipseMavenRequest) event.getJob();
         IMavenExecutionResult executionResult = request.getExecutionResult();
-        if ( !executionResult.hasErrors() )
-        {
-            // TODO: LifecycleExecutionExceptions provide the raw maven project needed for refreshing.
-            refreshOutputFolders( executionResult.getMavenProject() );
-        }
+        refreshOutputFolders( executionResult );
     }
 
-    public void refreshOutputFolders( IMavenProject mavenProject )
+    public void refreshOutputFolders( IMavenExecutionResult mavenResult )
     {
+        MavenProject mavenProject = getMavenProject( mavenResult );
         // Only refresh if running in a project and maven execution was "more or less" successful.
-        if ( mavenProject.getProject() != null && mavenProject.getRawMavenProject() != null )
+        if ( mavenProject != null )
         {
             // subset of all paths which contain all the paths to be refreshed
             Set<IPath> paths = new HashSet<IPath>();
             // Get the Workspace root to calculate workspace-relative routes
             IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
             // NOTE: This is different from mavenProject.getBuildOutputDirectory, which point to compiled java folder.
-            String buildDirectory = mavenProject.getRawMavenProject().getBuild().getDirectory();
+            String buildDirectory = mavenProject.getBuild().getDirectory();
             if ( buildDirectory != null )
             {
                 paths.add( new Path( buildDirectory ) );
@@ -91,6 +89,37 @@ public class RefreshOutputFoldersListener extends JobChangeAdapter
                 }
             }
             refreshPaths( filterNestedPaths( paths ), workspaceRoot );
+        }
+    }
+
+    /**
+     * Gets the maven project from the execution result or from a nested exception providing it.
+     * 
+     * @param executionResult
+     *            where to look for a project.
+     * @return a maven project.
+     */
+    private MavenProject getMavenProject( IMavenExecutionResult executionResult )
+    {
+        if ( !executionResult.hasErrors() )
+        {
+            return executionResult.getMavenProject().getRawMavenProject();
+        }
+        else
+        {
+            List<Exception> exceptions = executionResult.getExceptions();
+            boolean handled = false;
+            Iterator<Exception> iterator = exceptions.iterator();
+            if ( !handled && iterator.hasNext() )
+            {
+                Exception e = iterator.next();
+                if ( e instanceof LifecycleExecutionException )
+                {
+                    LifecycleExecutionException lifecycleException = (LifecycleExecutionException) e;
+                    return lifecycleException.getProject();
+                }
+            }
+            return null;
         }
     }
 
@@ -151,6 +180,7 @@ public class RefreshOutputFoldersListener extends JobChangeAdapter
             IContainer[] containers = workspaceRoot.findContainersForLocation( path );
             for ( IContainer c : containers )
             {
+                System.out.println( "Refreshing " + c );
                 refreshContainer( c );
             }
         }

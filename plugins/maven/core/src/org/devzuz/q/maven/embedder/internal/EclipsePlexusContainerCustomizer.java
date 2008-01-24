@@ -30,10 +30,10 @@ public class EclipsePlexusContainerCustomizer implements ContainerCustomizer
     public void customize( PlexusContainer container )
     {
         // TODO: Enable after fixing issues with EclipseMavenArtifactResolver and maven-compiler-plugin
-        //ComponentDescriptor resolverDescriptor = container.getComponentDescriptor( ArtifactResolver.ROLE );
-        //resolverDescriptor.setImplementation( EclipseMavenArtifactResolver.class.getName() );
-        //ComponentDescriptor projectBuilderDescriptor = container.getComponentDescriptor( MavenProjectBuilder.ROLE );
-        //projectBuilderDescriptor.setImplementation( EclipseMavenProjectBuilder.class.getName() );
+        ComponentDescriptor resolverDescriptor = container.getComponentDescriptor( ArtifactResolver.ROLE );
+        resolverDescriptor.setImplementation( EclipseMavenArtifactResolver.class.getName() );
+        ComponentDescriptor projectBuilderDescriptor = container.getComponentDescriptor( MavenProjectBuilder.ROLE );
+        projectBuilderDescriptor.setImplementation( EclipseMavenProjectBuilder.class.getName() );
     }
 
 }

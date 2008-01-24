@@ -10,7 +10,6 @@ package org.devzuz.q.maven.embedder.internal;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
-import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.eclipse.core.resources.IProject;
@@ -65,16 +64,11 @@ public class EclipseMavenRequest extends Job
         {
             MavenExecutionResult status = this.maven.executeRequest( this.request );
             executionResult = new EclipseMavenExecutionResult( status, project );
+            RefreshOutputFoldersListener.INSTANCE.refreshOutputFolders( executionResult );
             if ( ( status.getExceptions() != null ) && ( status.getExceptions().size() > 0 ) )
             {
                 return new MavenExecutionStatus( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID,
                                                  "Errors during Maven execution", executionResult );
-            }
-            if ( !executionResult.hasErrors() )
-            {
-                // TODO: LifecycleExecutionExceptions provide the raw maven project needed for refreshing.
-                IMavenProject mavenProject = executionResult.getMavenProject();
-                RefreshOutputFoldersListener.INSTANCE.refreshOutputFolders( mavenProject );
             }
             return new MavenExecutionStatus( IStatus.OK, MavenCoreActivator.PLUGIN_ID, "Success", executionResult );
         }

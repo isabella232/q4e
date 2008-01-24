@@ -8,18 +8,15 @@ package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.jdt.core.MavenClasspathHelper;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
@@ -108,8 +105,7 @@ public class MavenClasspathContainer implements IClasspathContainer
 
             this.project = mavenProject.getProject();
 
-            List<IClasspathEntry> newClasspathEntries = new ArrayList<IClasspathEntry>( artifacts.size() );
-            resolveArtifacts( mavenProject, newClasspathEntries, artifacts );
+            List<IClasspathEntry> newClasspathEntries = resolveArtifacts( mavenProject, artifacts );
             classpathEntries = newClasspathEntries.toArray( new IClasspathEntry[newClasspathEntries.size()] );
         }
     }
@@ -183,9 +179,6 @@ public class MavenClasspathContainer implements IClasspathContainer
     /**
      * Iterates over the exceptions in the maven execution and handles them.
      * 
-     * The only special case is when the exception is {@link MultipleArtifactsNotFoundException}, where we try to
-     * resolve them from the workspace.
-     * 
      * @param mavenProject
      *            the project with errors.
      * @param container
@@ -198,45 +191,7 @@ public class MavenClasspathContainer implements IClasspathContainer
     {
         for ( Exception exception : exceptions )
         {
-            if ( exception instanceof MultipleArtifactsNotFoundException )
-            {
-                MultipleArtifactsNotFoundException artifactsNotFoundException =
-                    (MultipleArtifactsNotFoundException) exception;
-                // TODO: Remove when the EclipseMavenArtifactResolver is enabled.
-                resolveMissingArtifacts( mavenProject, container, artifactsNotFoundException );
-            }
-            else
-            {
-                MavenExceptionHandler.handle( mavenProject.getProject(), exception );
-            }
-        }
-    }
-
-    /**
-     * Try to resolve the missing artifacts from the workspace.
-     * 
-     * TODO: We need better integration so we can resolve them before the exception is raised.
-     * 
-     * @param mavenProject
-     *            the project with missing dependencies.
-     * @param container
-     *            the classpath container to update.
-     * @param artifactsNotFoundException
-     *            the exception containing the missing artifacts.
-     */
-    private static void resolveMissingArtifacts( IMavenProject mavenProject, MavenClasspathContainer container,
-                                                 MultipleArtifactsNotFoundException artifactsNotFoundException )
-    {
-        Set<IMavenArtifact> artifactToBeResolved = new LinkedHashSet<IMavenArtifact>();
-        artifactToBeResolved.addAll( MavenUtils.getMissingArtifacts( artifactsNotFoundException ) );
-        artifactToBeResolved.addAll( MavenUtils.getResolvedArtifacts( artifactsNotFoundException ) );
-        if ( mavenProject != null )
-        {
-            container.refreshClasspath( mavenProject, artifactToBeResolved );
-        }
-        else
-        {
-            MavenExceptionHandler.handle( mavenProject.getProject(), artifactsNotFoundException );
+            MavenExceptionHandler.handle( mavenProject.getProject(), exception );
         }
     }
 
@@ -245,17 +200,16 @@ public class MavenClasspathContainer implements IClasspathContainer
      * 
      * This function works recursively
      * 
-     * @param classpathEntries
-     *            list of entries in the resulting classpath
+     * @param mavenProject
+     *            The project being updated.
      * @param artifacts
-     *            maven artifacts
-     * @param workspaceProjects
-     *            projects in the workspace, indexed by name
+     *            maven artifacts to resolve.
+     * @return classpathEntries list of entries in the resulting classpath
      */
     @SuppressWarnings( "unchecked" )
-    private void resolveArtifacts( IMavenProject mavenProject, List<IClasspathEntry> classpathEntries,
-                                   Set<IMavenArtifact> artifacts )
+    private List<IClasspathEntry> resolveArtifacts( IMavenProject mavenProject, Set<IMavenArtifact> artifacts )
     {
+        List classpathEntries = new ArrayList<IClasspathEntry>( artifacts.size() );
         boolean downloadSources = MavenManager.getMavenPreferenceManager().downloadSources();
         for ( IMavenArtifact artifact : artifacts )
         {
@@ -268,6 +222,7 @@ public class MavenClasspathContainer implements IClasspathContainer
                 }
             }
         }
+        return classpathEntries;
     }
 
     /**
@@ -285,7 +240,7 @@ public class MavenClasspathContainer implements IClasspathContainer
         /*
          * if dependency is a project in the workspace use a project dependency instead of the jar dependency
          */
-        project =
+        IProject workspaceProject =
             MavenManager.getMavenProjectManager().getWorkspaceProject( artifact.getGroupId(), artifact.getArtifactId(),
                                                                        artifact.getVersion() );
 
@@ -296,15 +251,15 @@ public class MavenClasspathContainer implements IClasspathContainer
             export = true;
         }
 
-        if ( ( project != null ) && ( project.isOpen() ) )
+        if ( ( workspaceProject != null ) && ( workspaceProject.isOpen() ) )
         {
             if ( MavenJdtCoreActivator.getDefault().isDebugging() )
             {
                 MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added as project dependency - "
-                                + project.getFullPath() );
+                                + workspaceProject.getFullPath() );
             }
 
-            return JavaCore.newProjectEntry( project.getFullPath(), export );
+            return JavaCore.newProjectEntry( workspaceProject.getFullPath(), export );
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {

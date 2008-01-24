@@ -82,7 +82,6 @@ public class EclipseMavenArtifactResolver extends DefaultArtifactResolver
                     file = mavenProject.getPomFile();
                     resolved = file != null;
                 }
-                System.out.println( artifact.getScope() + " -> " + file );
                 artifact.setFile( file );
                 artifact.setResolved( resolved );
             }
