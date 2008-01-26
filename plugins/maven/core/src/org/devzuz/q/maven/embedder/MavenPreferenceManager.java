@@ -1,10 +1,13 @@
-/***************************************************************************************************
- * Copyright (c) 2007 DevZuz, Inc. (AKA Simula Labs, Inc.) All rights reserved. This program and the
- * accompanying materials are made available under the terms of the Eclipse Public License v1.0
+/*
+ * Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- **************************************************************************************************/
+ */
 package org.devzuz.q.maven.embedder;
+
+import java.io.File;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -28,17 +31,53 @@ public class MavenPreferenceManager
 
     /* default values for preferences */
     
-    public static final int DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT = 30000;
+    private static final boolean DEFAULT_OFFLINE = false;
 
-    public static final boolean DEFAULT_DOWNLOAD_SOURCES = true;
+    private static final boolean DEFAULT_DOWNLOAD_SOURCES = true;
     
-    public static final boolean DEFAULT_IS_RECURSIVE = false;
+    private static final boolean DEFAULT_DOWNLOAD_JAVADOC = false;
     
+    private static final boolean DEFAULT_RECURSIVE_EXECUTION = false;
+
+    private static final int DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT = 30000;
+
     private IPreferenceStore preferenceStore;
     
     public MavenPreferenceManager( IPreferenceStore prefStore )
     {
         this.preferenceStore = prefStore;
+        if( ! preferenceStore.contains( DOWNLOAD_SOURCES ) )
+        {
+            setDownloadSources( DEFAULT_DOWNLOAD_SOURCES );
+        }
+        if( ! preferenceStore.contains( DOWNLOAD_JAVADOC ) )
+        {
+            setDownloadJavadoc( DEFAULT_DOWNLOAD_JAVADOC );
+        }
+        if( ! preferenceStore.contains( ARCHETYPE_PAGE_CONN_TIMEOUT ) )
+        {
+            setArchetypeConnectionTimeout( DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT );
+        }
+        if( ! preferenceStore.contains( RECURSIVE_EXECUTION ) )
+        {
+            setRecursive( DEFAULT_RECURSIVE_EXECUTION );
+        }
+        if( !preferenceStore.contains( USER_SETTINGS_XML_FILENAME ) )
+        {
+            File m2Dir = new File( new File( System.getProperty( "user.home" ) ), IMaven.USER_CONFIGURATION_DIRECTORY_NAME );
+            File userSettings = new File( m2Dir, IMaven.SETTINGS_FILENAME );
+            if( userSettings.exists() )
+            {
+                setUserSettingsXmlFilename( userSettings.getAbsolutePath() );
+            } else
+            {
+                setUserSettingsXmlFilename( "" );
+            }
+        }
+        if( ! preferenceStore.contains( OFFLINE ) )
+        {
+            setOffline( DEFAULT_OFFLINE );
+        }
     }
 
     public String getArchetypeSourceList()
@@ -51,15 +90,17 @@ public class MavenPreferenceManager
         preferenceStore.setValue( ARCHETYPE_LIST_KEY, archetypeSourceList );
     }
 
+    public boolean isDownloadSources()
+    {
+        return preferenceStore.getBoolean( DOWNLOAD_SOURCES );
+    }
+    
+    /**
+     * @deprecated use {@link #isDownloadSources()}
+     */
     public boolean downloadSources()
     {
-        if( ! preferenceStore.contains( DOWNLOAD_SOURCES ) )
-        {
-            setDownloadSources( DEFAULT_DOWNLOAD_SOURCES );
-            return DEFAULT_DOWNLOAD_SOURCES;
-        }
-        
-        return preferenceStore.getBoolean( DOWNLOAD_SOURCES );
+        return isDownloadSources();
     }
     
     public void setDownloadSources( boolean downloadSources )
@@ -67,14 +108,18 @@ public class MavenPreferenceManager
         preferenceStore.setValue( DOWNLOAD_SOURCES, downloadSources );
     }
 
+    public boolean isDownloadJavadoc()
+    {
+        return preferenceStore.getBoolean( DOWNLOAD_JAVADOC );
+    }
+    
+    public void setDownloadJavadoc( boolean downloadJavadoc )
+    {
+        preferenceStore.setValue( DOWNLOAD_JAVADOC, downloadJavadoc );
+    }
+
     public int getArchetypeConnectionTimeout()
     {
-        if( ! preferenceStore.contains( ARCHETYPE_PAGE_CONN_TIMEOUT ) )
-        {
-            setArchetypeConnectionTimeout( DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT );
-            return DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT;
-        }
-        
         return preferenceStore.getInt( ARCHETYPE_PAGE_CONN_TIMEOUT );
     }
 
@@ -85,12 +130,6 @@ public class MavenPreferenceManager
 
     public boolean isRecursive()
     {
-        if( ! preferenceStore.contains( RECURSIVE_EXECUTION ) )
-        {
-            setRecursive( DEFAULT_IS_RECURSIVE );
-            return DEFAULT_IS_RECURSIVE;
-        }
-            
         return preferenceStore.getBoolean( RECURSIVE_EXECUTION );
     }
     
@@ -122,5 +161,15 @@ public class MavenPreferenceManager
     public void setPreferenceStore( IPreferenceStore preferenceStore )
     {
         this.preferenceStore = preferenceStore;
+    }
+
+    public boolean isOffline()
+    {
+        return preferenceStore.getBoolean( OFFLINE );
+    }
+    
+    private void setOffline( boolean offline )
+    {
+        preferenceStore.setValue( OFFLINE, offline );
     }
 }
