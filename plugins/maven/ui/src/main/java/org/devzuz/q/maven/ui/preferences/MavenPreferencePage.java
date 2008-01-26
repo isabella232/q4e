@@ -6,9 +6,6 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.ui.preferences;
 
-import java.io.File;
-
-import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.MavenPreferenceManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
@@ -54,8 +51,9 @@ public class MavenPreferencePage
         addField( new BooleanFieldEditor( MavenPreferenceManager.DOWNLOAD_SOURCES,
                                           Messages.MavenPreference_DownloadSources, getFieldEditorParent() ) );
 
-        addField( new BooleanFieldEditor( MavenPreferenceManager.DOWNLOAD_JAVADOC,
-                                          Messages.MavenPreference_DownloadJavaDocs, getFieldEditorParent() ) );
+//TODO enable when it's actually used
+//        addField( new BooleanFieldEditor( MavenPreferenceManager.DOWNLOAD_JAVADOC,
+//                                          Messages.MavenPreference_DownloadJavaDocs, getFieldEditorParent() ) );
     }
 
     public void init( IWorkbench workbench )
@@ -67,29 +65,10 @@ public class MavenPreferencePage
     {
         
         MavenPreferenceManager mavenPreferenceManager = MavenManager.getMavenPreferenceManager();
-        if( mavenPreferenceManager.getArchetypeConnectionTimeout() == 0 )
-        {
-            mavenPreferenceManager.setArchetypeConnectionTimeout( MavenPreferenceManager.DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT );
-        }
         
         previousUserSettingsXmlValue = mavenPreferenceManager.getUserSettingsXmlFilename();
-        if( previousUserSettingsXmlValue.trim().equals( "" ) )
-        {
-            File m2Dir = new File( new File( System.getProperty( "user.home" ) ), IMaven.USER_CONFIGURATION_DIRECTORY_NAME );
-            File userSettings = new File( m2Dir, IMaven.SETTINGS_FILENAME );
-            if( userSettings.exists() )
-            {
-                mavenPreferenceManager.setUserSettingsXmlFilename(  userSettings.getAbsolutePath()  );
-                previousUserSettingsXmlValue = userSettings.getAbsolutePath();
-            }
-        }
         
         previousGlobalSettingsXmlValue = mavenPreferenceManager.getGlobalSettingsXmlFilename();
-        
-        if( !getPreferenceStore().contains( MavenPreferenceManager.DOWNLOAD_SOURCES ) )
-        {
-            mavenPreferenceManager.setDownloadSources( MavenPreferenceManager.DEFAULT_DOWNLOAD_SOURCES );
-        }
         
         super.initialize();
     }
@@ -109,7 +88,7 @@ public class MavenPreferencePage
             }
             catch( CoreException e )
             {
-                MavenUiActivator.getLogger().error( "Unable to restart Maven with new global settings.xml file - " + e.getMessage() );
+                MavenUiActivator.getLogger().log( "Unable to restart Maven with new global settings.xml file", e );
             }
         }
         
