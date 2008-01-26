@@ -7,7 +7,9 @@
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import org.devzuz.q.maven.embedder.IMavenJob;
+import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.WorkspaceJob;
@@ -42,7 +44,16 @@ public class UpdateClasspathJob
     @Override
     public IStatus runInWorkspace( IProgressMonitor monitor )
     {
-        MavenClasspathContainer.newClasspath( project, monitor );
+        MavenMonitorHolder.setProgressMonitor( monitor );
+
+        try
+        {
+            MavenClasspathContainer.newClasspath( project, monitor );
+        }
+        catch ( MavenInterruptedException e )
+        {
+            return Status.CANCEL_STATUS;
+        }
         
         //TODO this is needed for now to avoid out of memory errors
         try
