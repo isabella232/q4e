@@ -6,6 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
+import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.eclipse.core.resources.IProject;
@@ -22,8 +23,9 @@ import org.eclipse.core.runtime.Status;
  * @version $Id$
  */
 public class UpdateClasspathJob
-    extends WorkspaceJob
+    extends WorkspaceJob implements IMavenJob
 {
+
     private IProject project;
 
     /**
