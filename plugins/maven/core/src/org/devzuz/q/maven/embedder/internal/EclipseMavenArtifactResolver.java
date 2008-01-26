@@ -63,9 +63,7 @@ public class EclipseMavenArtifactResolver extends DefaultArtifactResolver
         {
             MavenProjectManager mavenProjectManager = MavenManager.getMavenProjectManager();
 
-            IMavenProject mavenProject =
-                mavenProjectManager.getMavenProject( artifact.getGroupId(), artifact.getArtifactId(),
-                                                     artifact.getVersion(), false );
+            IMavenProject mavenProject = mavenProjectManager.getMavenProject( artifact, false );
             if ( mavenProject != null )
             {
                 File file = null;

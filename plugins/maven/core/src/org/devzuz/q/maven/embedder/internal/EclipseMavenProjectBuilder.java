@@ -222,9 +222,7 @@ public class EclipseMavenProjectBuilder extends DefaultMavenProjectBuilder
                         IMavenProject mavenProject = null;
                         try
                         {
-                            mavenProject =
-                                mavenProjectManager.getMavenProject( a.getGroupId(), a.getArtifactId(), a.getVersion(),
-                                                                     true );
+                            mavenProject = mavenProjectManager.getMavenProject( a, true );
 
                         }
                         catch ( CoreException e )

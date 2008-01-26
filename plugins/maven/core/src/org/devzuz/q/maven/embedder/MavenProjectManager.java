@@ -9,6 +9,7 @@ package org.devzuz.q.maven.embedder;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.maven.artifact.Artifact;
 import org.devzuz.q.maven.embedder.internal.EclipseMavenProject;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -137,15 +138,15 @@ public class MavenProjectManager
         {
             /* get maven project from maven embedder */
             IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, resolveTransitively );
-            
+
             /* Add information we want to be persisted with the IProject */
             project.setPersistentProperty( IMavenProject.GROUP_ID, mavenProject.getGroupId() );
             project.setPersistentProperty( IMavenProject.ARTIFACT_ID, mavenProject.getArtifactId() );
             project.setPersistentProperty( IMavenProject.VERSION, mavenProject.getVersion() );
-            
+
             /* Create cache object */
             cachedProject = MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolveTransitively );
-            
+
             /* Add to cache */
             addCachedInfo( project, cachedProject );
         }
@@ -156,15 +157,21 @@ public class MavenProjectManager
     /**
      * Retrieves the IMavenProject for the given IProject from the cache or the maven embedder following a set of rules.
      * 
-     * @param groupId
-     * @param artifactId
-     * @param version
+     * @param artifact
+     *            the maven artifact to look for.
+     * @param resolveTransitively
+     *            <code>true</code> if the artifact must be resolved transitively.
      * @return The maven project
      * @throws CoreException
      */
-    public IMavenProject getMavenProject( String groupId, String artifactId, String version, boolean resolveTransitively )
-        throws CoreException
+    public IMavenProject getMavenProject( Artifact artifact, boolean resolveTransitively ) throws CoreException
     {
+        String groupId = artifact.getGroupId();
+        String artifactId = artifact.getArtifactId();
+        String version = artifact.getVersion();
+        String baseVersion = artifact.getBaseVersion();
+        boolean isSnapshot = artifact.isSnapshot();
+
         Map.Entry<IProject, MavenProjectCachedInfo> entry = getEntry( groupId, artifactId, version );
         if ( entry != null )
         {
@@ -215,7 +222,7 @@ public class MavenProjectManager
             try
             {
                 String _groupId = "", _artifactId = "", _version = "";
-                
+
                 MavenProjectCachedInfo info = entry.getValue();
                 if ( info != null )
                 {
