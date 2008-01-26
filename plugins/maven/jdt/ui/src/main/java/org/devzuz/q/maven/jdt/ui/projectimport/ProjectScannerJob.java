@@ -10,6 +10,8 @@ import java.io.File;
 import java.util.Collection;
 
 import org.devzuz.q.maven.embedder.IMavenJob;
+import org.devzuz.q.maven.embedder.MavenInterruptedException;
+import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -51,6 +53,8 @@ public class ProjectScannerJob extends Job implements IMavenJob
     @Override
     protected IStatus run( IProgressMonitor monitor )
     {
+        MavenMonitorHolder.setProgressMonitor( monitor );
+
         ProjectScanner scanner = new ProjectScanner( importParentsEnabled );
 
         this.monitor = monitor;
@@ -64,6 +68,10 @@ public class ProjectScannerJob extends Job implements IMavenJob
         catch ( InterruptedException e )
         {
             return new Status( IStatus.CANCEL, MavenJdtUiActivator.PLUGIN_ID, "Cancelled" );
+        }
+        catch ( MavenInterruptedException e )
+        {
+            return Status.CANCEL_STATUS;
         }
 
         return new Status( IStatus.OK, MavenJdtUiActivator.PLUGIN_ID, "Ok" );

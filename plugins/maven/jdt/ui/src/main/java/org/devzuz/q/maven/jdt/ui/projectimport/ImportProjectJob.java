@@ -12,6 +12,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.devzuz.q.maven.embedder.IMavenJob;
+import org.devzuz.q.maven.embedder.MavenInterruptedException;
+import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
@@ -91,6 +93,8 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
     @Override
     public IStatus runInWorkspace( IProgressMonitor monitor )
     {
+        MavenMonitorHolder.setProgressMonitor( monitor );
+
         int errorCount = 0;
         // TODO set a better number
         monitor.beginTask( "Importing projects...", pomDescriptors.size() );
@@ -110,6 +114,10 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
                 IProject project =
                     createMavenProject( pomDescriptor, new SubProgressMonitor( subProgressMonitor, 100 ) );
                 importedProjects.add( project );
+            }
+            catch ( MavenInterruptedException e )
+            {
+                return Status.CANCEL_STATUS;
             }
             catch ( CoreException e )
             {
