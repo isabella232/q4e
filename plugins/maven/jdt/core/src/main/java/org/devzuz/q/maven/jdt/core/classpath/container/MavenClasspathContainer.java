@@ -210,7 +210,7 @@ public class MavenClasspathContainer implements IClasspathContainer
     private List<IClasspathEntry> resolveArtifacts( IMavenProject mavenProject, Set<IMavenArtifact> artifacts )
     {
         List classpathEntries = new ArrayList<IClasspathEntry>( artifacts.size() );
-        boolean downloadSources = MavenManager.getMavenPreferenceManager().downloadSources();
+        boolean downloadSources = MavenManager.getMavenPreferenceManager().isDownloadSources();
         for ( IMavenArtifact artifact : artifacts )
         {
             IClasspathEntry entry = resolveArtifact( mavenProject, artifact, downloadSources );
