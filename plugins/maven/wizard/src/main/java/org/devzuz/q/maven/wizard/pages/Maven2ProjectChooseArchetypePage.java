@@ -139,7 +139,12 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 
             public void modifyText( ModifyEvent e )
             {
-                archetypeList.setFilter( filterText.getText() );
+                String prefixFilter = filterText.getText();
+                if ( prefixFilter.length() > 0 && prefixFilter.charAt( 0 ) != '*' )
+                {
+                    prefixFilter = "*" + prefixFilter;
+                }
+                archetypeList.setFilter( prefixFilter );
 
             }
 
