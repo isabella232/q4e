@@ -8,6 +8,7 @@ package org.devzuz.q.maven.jdt.core.internal;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.embedder.MavenProjectManager;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
@@ -17,9 +18,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
@@ -27,24 +28,27 @@ import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
 
+/**
+ * This class is used for processing changes to resources in the workspace and reacting to them. TODO Document
+ * 
+ * @author amuino
+ */
 public class MavenProjectJdtResourceListener implements IResourceChangeListener
 {
-    private static String POM_XML = "pom.xml";
-
-    public MavenProjectJdtResourceListener()
-    {
-    }
-
+    // TODO: Needs refactoring to reduce complexity. Maybe use the IResourceDeltaVisitor
     public void resourceChanged( IResourceChangeEvent event )
     {
         if ( event.getType() == IResourceChangeEvent.POST_CHANGE )
         {
-            for ( IResourceDelta delta : event.getDelta().getAffectedChildren() )
+            for ( IResourceDelta projectDelta : event.getDelta().getAffectedChildren() )
             {
+                boolean needsProjectRefresh = false;
+                ;
+
+                IProject project = (IProject) projectDelta.getResource();
                 // for open and close events
-                if ( delta.getFlags() == IResourceDelta.OPEN && delta.getResource() instanceof IProject )
+                if ( projectDelta.getFlags() == IResourceDelta.OPEN && projectDelta.getResource() instanceof IProject )
                 {
-                    IProject project = (IProject) delta.getResource();
                     if ( MavenJdtCoreActivator.getDefault().isDebugging() )
                     {
                         MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Received open event for ",
@@ -53,17 +57,36 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                     // check if its an "open" event and the project is managed by maven.
                     if ( project.isOpen() && isMavenManagedProject( project ) )
                     {
-                        updateProjectsClasspathWithProject( ResourcesPlugin.getWorkspace().getRoot().getProjects(),
-                                                            project );
+                        needsProjectRefresh = true;
                     }
                     else
                     {
                         if ( MavenJdtCoreActivator.getDefault().isDebugging() )
                         {
                             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
-                                                         "Skipping because it has no pom.xml: " + project );
+                                                         "Skipping because it is not managed by q4e: " + project );
                         }
                     }
+                }
+                else if ( projectDelta.getKind() == IResourceDelta.CHANGED )
+                {
+                    IResourceDelta pomDelta = projectDelta.findMember( new Path( "/pom.xml" ) );
+                    if ( pomDelta != null )
+                    {
+                        if ( MavenJdtCoreActivator.getDefault().isDebugging() )
+                        {
+                            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
+                                                         pomDelta.getResource().getFullPath(), " changed in ",
+                                                         project.getName(),
+                                                         ". Invalidating cached data in maven project manager cache." );
+                        }
+                        MavenManager.getMavenProjectManager().setMavenProjectModified( project );
+                        needsProjectRefresh = true;
+                    }
+                }
+                if ( needsProjectRefresh )
+                {
+                    updateProjectsClasspathWithProject( project );
                 }
             }
         }
@@ -81,8 +104,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
 
             if ( project.isOpen() && isMavenManagedProject( project.getProject() ) )
             {
-                updateProjectsClasspathWithProject( ResourcesPlugin.getWorkspace().getRoot().getProjects(),
-                                                    project.getProject() );
+                updateProjectsClasspathWithProject( project.getProject() );
             }
             else
             {
@@ -92,54 +114,45 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                                                  "Skipping because it has no pom.xml: " + project );
                 }
             }
-            
+
             MavenManager.getMavenProjectManager().removeMavenProject( project );
         }
     }
 
-    public static void updateProjectsClasspathWithProject( IProject[] iprojects, IProject iresProject )
+    public static void updateProjectsClasspathWithProject( IProject iresProject )
     {
+        MavenProjectManager mavenProjectManager = MavenManager.getMavenProjectManager();
+        IProject[] iprojects = mavenProjectManager.getWorkspaceProjects();
         for ( IProject iproject : iprojects )
         {
-            if ( iproject.isOpen() && !( iresProject.equals( iproject.getProject() ) ) )
+            // Check every other project
+            if ( !( iresProject.equals( iproject.getProject() ) ) )
             {
-                boolean isMavenNatureEnabled = false;
                 try
                 {
-                    isMavenNatureEnabled = MavenNatureHelper.hasMavenNature( iproject );
-                }
-                catch ( CoreException e )
-                {
-                    MavenJdtCoreActivator.getLogger().log( "Could not read nature for project: " + iproject, e );
-                }
-                if ( isMavenNatureEnabled )
-                {
-                    try
+                    /* Get current entries. */
+                    IClasspathEntry[] classPathEntries = getCurrentClasspathEntries( iproject );
+                    for ( IClasspathEntry classPathEntry : classPathEntries )
                     {
-                        /* Get current entries. */
-                        IClasspathEntry[] classPathEntries = getCurrentClasspathEntries( iproject );
-                        for ( IClasspathEntry classPathEntry : classPathEntries )
+                        if ( classpathEqualsProject( classPathEntry, iresProject ) )
                         {
-                            if ( classpathEqualsProject( classPathEntry, iresProject ) )
+                            if ( MavenJdtCoreActivator.getDefault().isDebugging() )
                             {
-                                if ( MavenJdtCoreActivator.getDefault().isDebugging() )
-                                {
-                                    MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
-                                                                 "Scheduling update for ", iproject );
-                                }
-                                UpdateClasspathJob job = new UpdateClasspathJob( iproject );
-                                job.setRule( iproject.getProject().getWorkspace().getRoot() );
-                                job.setPriority( Job.BUILD );
-                                job.schedule();
-                                break;
+                                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
+                                                             "Scheduling update for ", iproject );
                             }
+                            UpdateClasspathJob job = new UpdateClasspathJob( iproject );
+                            job.setRule( iproject.getProject().getWorkspace().getRoot() );
+                            job.setPriority( Job.BUILD );
+                            job.schedule();
+                            break;
                         }
                     }
-                    catch ( JavaModelException e )
-                    {
-                        // Could not get project's classpath, ignore and try next.
-                        MavenJdtCoreActivator.getLogger().log( "Could not read classpath for project: " + iproject, e );
-                    }
+                }
+                catch ( JavaModelException e )
+                {
+                    // Could not get project's classpath, ignore and try next.
+                    MavenJdtCoreActivator.getLogger().log( "Could not read classpath for project: " + iproject, e );
                 }
             }
         }
@@ -177,15 +190,15 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
             try
             {
                 IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, false );
-                String [] classpathMavenInfo = getMavenProjectInfo( classpath );
-                
-                return mavenProject.getGroupId().equals( classpathMavenInfo[0] ) &&
-                       mavenProject.getArtifactId().equals( classpathMavenInfo[1] ) &&
-                       mavenProject.getVersion().equals( classpathMavenInfo[2] );
+                String[] classpathMavenInfo = getMavenProjectInfo( classpath );
+
+                return mavenProject.getGroupId().equals( classpathMavenInfo[0] )
+                                && mavenProject.getArtifactId().equals( classpathMavenInfo[1] )
+                                && mavenProject.getVersion().equals( classpathMavenInfo[2] );
             }
-            catch( CoreException e )
+            catch ( CoreException e )
             {
-                MavenExceptionHandler.handle( project , e );
+                MavenExceptionHandler.handle( project, e );
             }
         }
 
@@ -202,16 +215,24 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
      */
     private boolean isMavenManagedProject( IProject project )
     {
-        // TODO: Check if the project has the q4e maven nature??: MavenNatureHelper.hasMavenNature( project );
-        return project.getFile( POM_XML ).exists();
+        try
+        {
+            return MavenNatureHelper.hasMavenNature( project );
+        }
+        catch ( CoreException e )
+        {
+            MavenJdtCoreActivator.getLogger().log( "Unable to check q4e nature, asuming it is not present", e );
+            return false;
+        }
+        // return project.getFile( POM_XML ).exists();
     }
-    
+
     private static String[] getMavenProjectInfo( IClasspathEntry classpathEntry )
     {
         int repoSegmentCount = MavenManager.getMaven().getLocalRepository().getBaseDirectoryPath().segmentCount();
         IPath classpath = classpathEntry.getPath();
         int segmentCount = classpath.segmentCount();
-        String[] mavenProjectInfo = new String[3]; 
+        String[] mavenProjectInfo = new String[3];
         mavenProjectInfo[2] = classpath.segment( segmentCount - 2 );
         mavenProjectInfo[1] = classpath.segment( segmentCount - 3 );
 
@@ -224,7 +245,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
             groupId.append( classpath.segment( i ) );
         }
         mavenProjectInfo[0] = groupId.toString();
-        
+
         return mavenProjectInfo;
     }
 }
