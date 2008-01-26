@@ -46,7 +46,7 @@
   </distributionManagement>
 
   <repositories>
-     <repository>
+    <repository>
       <id>code.google.com</id>
       <url>http://q4e.googlecode.com/svn/repository/snapshots</url>
       <releases>
@@ -55,43 +55,8 @@
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
-     </repository>
-   </repositories>
-  <pluginRepositories>
-    <pluginRepository>
-      <id>code.google.com</id>
-      <name>Q Snapshot Repository</name>
-      <url>http://q4e.googlecode.com/svn/repository/snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>apache.org</id>
-      <name>Apache Snapshot Repository</name>
-      <url>http://people.apache.org/repo/m2-snapshot-repository</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </pluginRepository>
-    <pluginRepository>
-      <id>codehaus.org</id>
-      <name>Maven Central Development Plugin Repository</name>
-      <url>http://snapshots.repository.codehaus.org</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </pluginRepository>
-  </pluginRepositories>
+    </repository>
+  </repositories>
 
   <build>
 
@@ -163,7 +128,7 @@
         <plugin>
           <groupId>org.apache.felix</groupId>
           <artifactId>maven-bundle-plugin</artifactId>
-          <version>1.1.0-SNAPSHOT</version>
+          <version>1.2.0</version>
           <configuration>
             <supportedProjectTypes>
               <supportedProjectType>jar</supportedProjectType>
