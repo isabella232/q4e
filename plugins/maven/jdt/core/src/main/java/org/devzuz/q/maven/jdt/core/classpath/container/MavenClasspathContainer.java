@@ -255,7 +255,8 @@ public class MavenClasspathContainer implements IClasspathContainer
         {
             if ( MavenJdtCoreActivator.getDefault().isDebugging() )
             {
-                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added as project dependency - "
+                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in "
+                                + mavenProject.getArtifactId() + " as project dependency - "
                                 + workspaceProject.getFullPath() );
             }
 
@@ -265,7 +266,8 @@ public class MavenClasspathContainer implements IClasspathContainer
         {
             if ( MavenJdtCoreActivator.getDefault().isDebugging() )
             {
-                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added as jar dependency - "
+                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in "
+                                + mavenProject.getArtifactId() + " as jar dependency - "
                                 + artifact.getFile().getAbsolutePath() );
             }
 
