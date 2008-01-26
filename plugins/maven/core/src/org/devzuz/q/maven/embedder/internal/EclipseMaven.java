@@ -135,8 +135,7 @@ public class EclipseMaven implements IMaven
     {
         try
         {
-            MavenExecutionRequest request = generateRequest( mavenProject, parameter );
-            request.setGoals( goals );
+            MavenExecutionRequest request = generateRequest( mavenProject, goals, parameter );
             EclipseMavenRequest eclipseMavenRequest =
                 new EclipseMavenRequest( "MavenRequest", this, request, mavenProject.getProject() );
             eclipseMavenRequest.run( monitor );
@@ -153,23 +152,8 @@ public class EclipseMaven implements IMaven
 
     private MavenExecutionRequest generateRequest( IPath baseDirectory, String goal, MavenExecutionParameter parameter )
     {
-        Properties executionProperties = new Properties();
-        if ( ( parameter != null ) && ( parameter.getExecutionProperties() != null ) )
-            executionProperties.putAll( parameter.getExecutionProperties() );
-        // executionProperties.putAll( System.getProperties() );
-
-        // Use all defaults except the indicated parameters
-        MavenExecutionRequest request = new DefaultMavenExecutionRequest();
+        MavenExecutionRequest request = generateRequest( parameter, Collections.singletonList( goal ) );
         request.setBaseDirectory( new File( baseDirectory.toOSString() ) );
-        request.setGoals( Collections.singletonList( goal ) );
-        request.setProperties( executionProperties );
-
-        request.addEventMonitor( getEventPropagator() );
-        request.setTransferListener( getEventPropagator() );
-
-        request.setShowErrors( true );
-        request.setLoggingLevel( MavenExecutionRequest.LOGGING_LEVEL_DEBUG );
-
         return request;
     }
 
@@ -216,8 +200,7 @@ public class EclipseMaven implements IMaven
     public void scheduleGoals( IMavenProject mavenProject, List<String> goals, MavenExecutionParameter parameter,
                                MavenExecutionJobAdapter jobAdapter ) throws CoreException
     {
-        MavenExecutionRequest request = generateRequest( mavenProject, parameter );
-        request.setGoals( goals );
+        MavenExecutionRequest request = generateRequest( mavenProject, goals, parameter );
         scheduleRequest( mavenProject, request, jobAdapter );
     }
 
@@ -277,7 +260,7 @@ public class EclipseMaven implements IMaven
         return getMavenEmbedder().execute( request );
     }
 
-    private MavenExecutionRequest generateRequest( IMavenProject mavenProject, MavenExecutionParameter parameter )
+    private MavenExecutionRequest generateRequest( MavenExecutionParameter parameter, List<String> goals )
     {
         if ( parameter == null )
         {
@@ -301,27 +284,37 @@ public class EclipseMaven implements IMaven
             request.setLoggingLevel( MavenExecutionRequest.LOGGING_LEVEL_INFO );
         }
 
-        request.setBaseDirectory( mavenProject.getBaseDirectory() );
-        // TODO : shouldn't we use request.setPom( mavenProject.getPomFile() ); since this is
-        // deprecated.
-        request.setPomFile( mavenProject.getPomFile().getAbsolutePath() );
+        request.setGoals( goals );
 
         Properties executionProperties = new Properties();
         executionProperties.putAll( System.getProperties() );
         Properties properties = parameter.getExecutionProperties();
         if ( properties != null )
+        {
             executionProperties.putAll( properties );
+        }
 
         request.setProperties( executionProperties );
+
+        request.addEventMonitor( getEventPropagator() );
+        request.setTransferListener( getEventPropagator() );
+
+        return request;
+    }
+
+    private MavenExecutionRequest generateRequest( IMavenProject mavenProject, List<String> goals,
+                                                   MavenExecutionParameter parameter )
+    {
+        MavenExecutionRequest request = generateRequest( parameter, goals );
+
+        request.setBaseDirectory( mavenProject.getBaseDirectory() );
+        request.setPom( mavenProject.getPomFile() );
 
         String profiles = mavenProject.getActiveProfiles();
         if ( profiles != null )
         {
             request.addActiveProfiles( Arrays.asList( profiles.split( ", " ) ) );
         }
-
-        request.addEventMonitor( getEventPropagator() );
-        request.setTransferListener( getEventPropagator() );
 
         return request;
     }
@@ -365,7 +358,7 @@ public class EclipseMaven implements IMaven
             if ( resolveTransitively )
             {
                 MavenExecutionResult status =
-                    getMavenEmbedder().readProjectWithDependencies( generateRequest( mavenProject, null ) );
+                    getMavenEmbedder().readProjectWithDependencies( generateRequest( mavenProject, Collections.EMPTY_LIST, null ) );
 
                 ArtifactResolutionResult artifactResolutionResult = status.getArtifactResolutionResult();
                 boolean hasResolutionExceptions =
