@@ -8,7 +8,6 @@
 package org.devzuz.q.maven.embedder;
 
 import org.devzuz.q.maven.embedder.internal.EclipseMaven;
-import org.devzuz.q.maven.embedder.internal.ExtensionPointHelper;
 import org.devzuz.q.maven.embedder.log.EclipseLogger;
 import org.devzuz.q.maven.embedder.log.Logger;
 import org.eclipse.core.internal.runtime.Log;
@@ -31,12 +30,13 @@ public class MavenCoreActivator implements BundleActivator
     private static MavenCoreActivator plugin;
 
     private EclipseMaven mavenInstance;
-    
+
     private MavenProjectManager projectManager;
 
     private MavenPreferenceManager preferenceManager;
 
     private Logger logger;
+
     /**
      * The constructor
      */
@@ -50,17 +50,16 @@ public class MavenCoreActivator implements BundleActivator
         logger = new EclipseLogger( PLUGIN_ID, new Log( context.getBundle() ) );
 
         // Initialize the maven preference manager
-        preferenceManager = new MavenPreferenceManager( new ScopedPreferenceStore( new InstanceScope(), 
-                                                                                   context.getBundle().getSymbolicName()) );
-        
+        preferenceManager =
+            new MavenPreferenceManager( new ScopedPreferenceStore( new InstanceScope(),
+                                                                   context.getBundle().getSymbolicName() ) );
+
         // Initialize the maven instance
         mavenInstance = new EclipseMaven();
         mavenInstance.start();
-        
+
         // Initialize the maven workspace projects manager
         projectManager = new MavenProjectManager( ResourcesPlugin.getWorkspace() );
-        
-        ExtensionPointHelper.resolveExtensionPoints( this );
     }
 
     public void stop( BundleContext context ) throws Exception
@@ -83,12 +82,12 @@ public class MavenCoreActivator implements BundleActivator
     {
         return mavenInstance;
     }
-    
+
     public MavenProjectManager getMavenProjectManager()
     {
         return projectManager;
     }
-    
+
     public MavenPreferenceManager getMavenPreferenceManager()
     {
         return preferenceManager;
