@@ -10,6 +10,7 @@ import java.io.File;
 import java.util.Collection;
 import java.util.List;
 
+import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.eclipse.core.resources.IProject;
@@ -27,7 +28,7 @@ import org.eclipse.core.runtime.jobs.Job;
  * 
  * @author amuino
  */
-public class ScanImportProjectJob extends Job
+public class ScanImportProjectJob extends Job implements IMavenJob
 {
 
     private File directory;

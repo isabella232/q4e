@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
@@ -36,7 +36,7 @@ import org.eclipse.core.runtime.SubProgressMonitor;
  * 
  * @author amuino
  */
-public class ImportProjectJob extends WorkspaceJob
+public class ImportProjectJob extends WorkspaceJob implements IMavenJob
 {
     private Collection<PomFileDescriptor> pomDescriptors;
 

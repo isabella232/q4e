@@ -9,6 +9,7 @@ package org.devzuz.q.maven.jdt.ui.projectimport;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -19,7 +20,7 @@ import org.eclipse.core.runtime.IStatus;
  * @deprecated use {@link ImportProjectJob}.
  */
 @Deprecated
-public class ImportProjectWorkspaceJob extends WorkspaceJob
+public class ImportProjectWorkspaceJob extends WorkspaceJob implements IMavenJob
 {
     private IStatus status;
 

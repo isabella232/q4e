@@ -9,6 +9,7 @@ package org.devzuz.q.maven.jdt.ui.projectimport;
 import java.io.File;
 import java.util.Collection;
 
+import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -16,7 +17,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-public class ProjectScannerJob extends Job
+public class ProjectScannerJob extends Job implements IMavenJob
 {
     private File directoryToScan;
 
