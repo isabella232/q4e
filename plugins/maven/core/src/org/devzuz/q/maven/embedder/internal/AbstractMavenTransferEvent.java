@@ -16,6 +16,7 @@ public abstract class AbstractMavenTransferEvent extends AbstractMavenEvent
 
     public AbstractMavenTransferEvent( TransferEvent event )
     {
+        super();
         this.event = event;
     }
 

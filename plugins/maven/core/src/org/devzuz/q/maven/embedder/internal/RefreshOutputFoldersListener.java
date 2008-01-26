@@ -51,9 +51,12 @@ public class RefreshOutputFoldersListener extends JobChangeAdapter
     @Override
     public void done( IJobChangeEvent event )
     {
-        EclipseMavenRequest request = (EclipseMavenRequest) event.getJob();
-        IMavenExecutionResult executionResult = request.getExecutionResult();
-        refreshOutputFolders( executionResult );
+        if ( event.getResult().isOK() )
+        {
+            EclipseMavenRequest request = (EclipseMavenRequest) event.getJob();
+            IMavenExecutionResult executionResult = request.getExecutionResult();
+            refreshOutputFolders( executionResult );
+        }
     }
 
     public void refreshOutputFolders( IMavenExecutionResult mavenResult )

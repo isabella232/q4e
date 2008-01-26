@@ -21,6 +21,8 @@ public class MavenLog extends AbstractMavenEvent implements IMavenLog
 
     public MavenLog( Severity severity, String msg, Throwable t )
     {
+        super();
+        checkForCancelation();
         this.severity = severity;
         this.msg = msg;
         this.t = t;

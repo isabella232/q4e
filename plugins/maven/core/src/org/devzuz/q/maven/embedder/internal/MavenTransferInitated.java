@@ -16,6 +16,7 @@ public class MavenTransferInitated extends AbstractMavenTransferEvent implements
     public MavenTransferInitated( TransferEvent event )
     {
         super( event );
+        checkForCancelation();
     }
 
     @Override

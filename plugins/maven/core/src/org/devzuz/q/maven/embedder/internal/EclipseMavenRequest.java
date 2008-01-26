@@ -10,11 +10,15 @@ package org.devzuz.q.maven.embedder.internal;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
+import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
+import org.devzuz.q.maven.embedder.MavenInterruptedException;
+import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
@@ -23,7 +27,7 @@ import org.eclipse.core.runtime.jobs.Job;
  * 
  * @author pdodds
  */
-public class EclipseMavenRequest extends Job
+public class EclipseMavenRequest extends Job implements IMavenJob
 {
 
     private EclipseMaven maven;
@@ -50,6 +54,8 @@ public class EclipseMavenRequest extends Job
     @Override
     protected IStatus run( IProgressMonitor monitor )
     {
+        MavenMonitorHolder.setProgressMonitor( monitor );
+
         // TODO the number should be the number of projects in the reactor * maven phases to execute
         monitor.beginTask( "Maven build", 100 );
         monitor.setTaskName( "Maven " + request.getGoals() );
@@ -71,6 +77,10 @@ public class EclipseMavenRequest extends Job
                                                  "Errors during Maven execution", executionResult );
             }
             return new MavenExecutionStatus( IStatus.OK, MavenCoreActivator.PLUGIN_ID, "Success", executionResult );
+        }
+        catch ( MavenInterruptedException e )
+        {
+            return Status.CANCEL_STATUS;
         }
         finally
         {

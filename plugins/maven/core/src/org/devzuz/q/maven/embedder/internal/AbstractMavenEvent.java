@@ -11,6 +11,8 @@ import java.util.Date;
 
 import org.devzuz.q.maven.embedder.EventType;
 import org.devzuz.q.maven.embedder.IMavenEvent;
+import org.devzuz.q.maven.embedder.MavenInterruptedException;
+import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.devzuz.q.maven.embedder.Severity;
 
 public abstract class AbstractMavenEvent implements IMavenEvent
@@ -37,6 +39,7 @@ public abstract class AbstractMavenEvent implements IMavenEvent
 
     public AbstractMavenEvent( String type, String target, long time, Throwable throwable )
     {
+        this();
         this.setType( EventType.parseEvent( type ) );
         this.setTarget( target );
         this.setTime( time );
@@ -147,4 +150,14 @@ public abstract class AbstractMavenEvent implements IMavenEvent
         return getSeverity() + " : " + getDescriptionText();
     }
 
+    /**
+     * Checks if the current Maven execution has been canceled and throws {@link MavenInterruptedException} if so
+     */
+    protected void checkForCancelation()
+    {
+        if ( MavenMonitorHolder.isCanceled() )
+        {
+            throw new MavenInterruptedException();
+        }
+    }
 }

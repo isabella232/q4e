@@ -16,6 +16,7 @@ public class MavenEventStart extends AbstractMavenEvent implements IMavenEventSt
     public MavenEventStart( String event, String target, long time )
     {
         super( event, target, time );
+        checkForCancelation();
     }
 
     @Override
