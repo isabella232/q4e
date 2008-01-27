@@ -1,5 +1,5 @@
 /***************************************************************************************************
- * Copyright (c) 2007 DevZuz, Inc. (AKA Simula Labs, Inc.) All rights reserved. This program and the
+ * Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.) All rights reserved. This program and the
  * accompanying materials are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
@@ -98,9 +98,14 @@ public class CommonDataPage extends WizardPage
 
         ArchetypeProviderFactory archetypeProviderFactory = MavenUiActivator.getDefault().getArchetypeProviderFactory();
         Collection<String> providerTypes = archetypeProviderFactory.getTypes();
-        for ( String type : providerTypes )
+        for ( String currentType : providerTypes )
         {
-            typeCombo.add( type );
+            if ( type == null )
+            {
+                // Issue 210: Initialize type field for linux-gtk
+                this.type = currentType;
+            }
+            typeCombo.add( currentType );
         }
         typeCombo.select( 0 );
 
