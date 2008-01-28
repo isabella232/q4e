@@ -3,7 +3,13 @@
    <description url="http://q4e.googlecode.com/svn/trunk/updatesite-dev">
       Q for Eclipse
    </description>
+   <feature url="features/org.devzuz.q.feature_0.5.0.200801261344.jar" id="org.devzuz.q.feature" version="0.5.0.200801261344">
+      <category name="Community"/>
+   </feature>
    <feature url="features/org.apache.commons.collections.feature_3.2.0.200705282147.jar" id="org.apache.commons.collections.feature" version="3.2.0.200705282147">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.apache.maven.feature_2.1.0.609730.jar" id="org.apache.maven.feature" version="2.1.0.609730">
       <category name="Enabling Features"/>
    </feature>
    <feature url="features/org.apache.maven.feature_2.1.0.609729.jar" id="org.apache.maven.feature" version="2.1.0.609729">
