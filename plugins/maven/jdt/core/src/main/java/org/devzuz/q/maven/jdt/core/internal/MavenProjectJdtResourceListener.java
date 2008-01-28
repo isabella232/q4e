@@ -43,11 +43,10 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
             for ( IResourceDelta projectDelta : event.getDelta().getAffectedChildren() )
             {
                 boolean needsProjectRefresh = false;
-                ;
 
                 IProject project = (IProject) projectDelta.getResource();
                 // for open and close events
-                if ( projectDelta.getFlags() == IResourceDelta.OPEN && projectDelta.getResource() instanceof IProject )
+                if ( projectDelta.getFlags() == IResourceDelta.OPEN )
                 {
                     if ( MavenJdtCoreActivator.getDefault().isDebugging() )
                     {
@@ -71,7 +70,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                 else if ( projectDelta.getKind() == IResourceDelta.CHANGED )
                 {
                     IResourceDelta pomDelta = projectDelta.findMember( new Path( "/pom.xml" ) );
-                    if ( pomDelta != null )
+                    if ( ( pomDelta != null ) && isMavenManagedProject( project ) )
                     {
                         if ( MavenJdtCoreActivator.getDefault().isDebugging() )
                         {
