@@ -8,10 +8,11 @@ package org.devzuz.q.maven.wizard.pages;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 
+import org.devzuz.q.maven.embedder.QCoreException;
 import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.devzuz.q.maven.ui.archetype.provider.ArchetypeLabelProvider;
+import org.devzuz.q.maven.ui.archetype.provider.ArchetypeRetrievalResult;
 import org.devzuz.q.maven.ui.archetype.provider.MavenArchetypeProviderManager;
 import org.devzuz.q.maven.wizard.Messages;
 import org.eclipse.swt.SWT;
@@ -28,6 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredList;
 
@@ -42,8 +44,6 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
     private static final String DEFAULT_ARCHETYPE = "maven-archetype-quickstart";
 
     private FilteredList archetypeList;
-
-    private Collection<Archetype> archetypeMap;
 
     private Label archetypeDescriptionLabel;
 
@@ -258,8 +258,21 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 
     private void initialize()
     {
-        archetypeMap = MavenArchetypeProviderManager.getArchetypes();
-        archetypeList.setElements( archetypeMap.toArray( new Archetype[0] ) );
+        ArchetypeRetrievalResult archetypes = MavenArchetypeProviderManager.getArchetypes();
+        
+        if ( archetypes.getExceptions().size() > 0 )
+        {
+            MessageBox messageBox = new MessageBox( this.getShell(), SWT.ERROR_IO | SWT.OK );
+            StringBuffer errorMessage = new StringBuffer();
+            for( QCoreException e : archetypes.getExceptions() )
+            {
+                errorMessage.append( e.getStatus().getMessage() );
+            }
+            messageBox.setMessage( errorMessage.toString() );
+            messageBox.open();
+        }
+        
+        archetypeList.setElements( archetypes.getArchetypes().toArray( new Archetype[0] ) );
 
         // FIXME:
         archetypeList.setSelection( new String[] { DEFAULT_ARCHETYPE } );

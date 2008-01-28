@@ -1,7 +1,12 @@
+/***************************************************************************************************
+ * Copyright (c) 2007 DevZuz, Inc. (AKA Simula Labs, Inc.) All rights reserved. This program and the
+ * accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ **************************************************************************************************/
 package org.devzuz.q.maven.ui.archetype.provider;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -32,7 +37,7 @@ public class MavenArchetypeProviderManager
      * 
      * @return the unordered collection of available archetypes.
      */
-    public static Collection<Archetype> getArchetypes()
+    public static ArchetypeRetrievalResult getArchetypes()
     {
         List<IArchetypeProvider> archetypeProviders =
             MavenUIPreferenceManagerAdapter.getInstance().getConfiguredArchetypeProviders();
@@ -40,6 +45,7 @@ public class MavenArchetypeProviderManager
         List<Archetype> archetypes = new LinkedList<Archetype>();
         if ( archetypeProviders.size() > 0 )
         {
+            Collection<QCoreException> exceptions = new ArrayList<QCoreException>();
             for ( IArchetypeProvider p : archetypeProviders )
             {
                 try
@@ -48,17 +54,26 @@ public class MavenArchetypeProviderManager
                 }
                 catch ( QCoreException e )
                 {
-                    MavenUiActivator.getLogger().log(
-                                                      "Could not retrieve archetypes from " + p.getName() + " ("
+                    MavenUiActivator.getLogger().log( "Could not retrieve archetypes from " + p.getName() + " ("
                                                                       + p.getType() + "):", e );
+                    exceptions.add( e );
                 }
             }
-            return archetypes;
+            
+            if( archetypes.size() > 0 )
+            {
+                return new ArchetypeRetrievalResult( archetypes , exceptions );
+            }
+            else
+            {
+                return new ArchetypeRetrievalResult( DEFAULT_ARCHETYPES , exceptions );
+            }
         }
         else
         {
             // There are no archetype providers, return the default list of archetypes
-            return DEFAULT_ARCHETYPES;
+            Collection<QCoreException> emptyExceptions = Collections.emptyList();
+            return new ArchetypeRetrievalResult( DEFAULT_ARCHETYPES , emptyExceptions );
         }
     }
 
@@ -70,8 +85,7 @@ public class MavenArchetypeProviderManager
     private static Collection<Archetype> getDefaultArchetypes()
     {
         List<Archetype> arch = new LinkedList<Archetype>();
-        arch.add( new Archetype( "maven-archetype-j2ee-simple", "org.apache.maven.archetypes", "",
-                                 "http://www.ibiblio.org/maven2", "A simple J2EE Java application" ) );
+        
         arch.add( new Archetype( "maven-archetype-j2ee-simple", "org.apache.maven.archetypes", "",
                                  "http://www.ibiblio.org/maven2", "A simple J2EE Java application" ) );
         arch.add( new Archetype( "maven-archetype-marmalade-mojo", "org.apache.maven.archetypes", "",
@@ -92,11 +106,5 @@ public class MavenArchetypeProviderManager
                                  "http://www.ibiblio.org/maven2", "" ) );
 
         return Collections.unmodifiableCollection( arch );
-    }
-
-    private static URL getURL( String url ) throws MalformedURLException
-    {
-        url.replaceAll( "\\r|\\n|\\s{2,}|\\[|\\]|\\&nbsp;", "" );
-        return new URL( url );
     }
 }
