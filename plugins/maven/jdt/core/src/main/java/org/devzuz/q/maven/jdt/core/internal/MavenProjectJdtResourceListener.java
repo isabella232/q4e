@@ -33,8 +33,11 @@ import org.eclipse.jdt.core.JavaModelException;
  * 
  * @author amuino
  */
-public class MavenProjectJdtResourceListener implements IResourceChangeListener
+public class MavenProjectJdtResourceListener
+    implements IResourceChangeListener
 {
+    private static final Path POM_PATH = new Path( "/" + IMavenProject.POM_FILENAME );
+
     // TODO: Needs refactoring to reduce complexity. Maybe use the IResourceDeltaVisitor
     public void resourceChanged( IResourceChangeEvent event )
     {
@@ -69,7 +72,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                 }
                 else if ( projectDelta.getKind() == IResourceDelta.CHANGED )
                 {
-                    IResourceDelta pomDelta = projectDelta.findMember( new Path( "/pom.xml" ) );
+                    IResourceDelta pomDelta = projectDelta.findMember( POM_PATH );
                     if ( ( pomDelta != null ) && isMavenManagedProject( project ) )
                     {
                         if ( MavenJdtCoreActivator.getDefault().isDebugging() )
