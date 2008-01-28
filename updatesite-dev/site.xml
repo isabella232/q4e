@@ -37,15 +37,4 @@
          Features that are not required for basic functionality and that have additional dependencies.
       </description>
    </category-def>
-   <archive path="features/org.apache.maven.feature_2.1.0.609729.jar" url="http://q4e.googlecode.com/svn/trunk/updatesite/features/org.apache.maven.feature_2.1.0.609729.jar"/>
-   <archive path="features/org.apache.commons.collections.feature_3.2.0.200705282147.jar" url="http://q4e.googlecode.com/svn/trunk/updatesite/features/org.apache.commons.collections.feature_3.2.0.200705282147.jar"/>
-   <archive path="plugins/org.apache.commons.cli_1.0.0.v200709131616.jar" url="http://q4e.googlecode.com/svn/trunk/updatesite/plugins/org.apache.commons.cli_1.0.0.v200709131616.jar"/>
-   <archive path="plugins/org.apache.commons.collections_3.2.0.jar" url="http://q4e.googlecode.com/svn/trunk/updatesite/plugins/org.apache.commons.collections_3.2.0.jar"/>
-   <archive path="plugins/org.apache.commons.lang_2.1.0.v200709131643.jar" url="http://q4e.googlecode.com/svn/trunk/updatesite/plugins/org.apache.commons.lang_2.1.0.v200709131643.jar"/>
-   <archive path="plugins/org.apache.maven.embedder_2.1.0.609729.jar" url="http://q4e.googlecode.com/svn/trunk/updatesite/plugins/org.apache.maven.embedder_2.1.0.609729.jar"/>
-   <archive path="plugins/org.aspectj.runtime_1.5.4.200705211336.jar" url="http://q4e.googlecode.com/svn/trunk/updatesite/plugins/org.aspectj.runtime_1.5.4.200705211336.jar"/>
-   <archive path="plugins/org.eclipse.draw2d_3.2.100.v20070529.jar" url="http://q4e.googlecode.com/svn/trunk/updatesite/plugins/org.eclipse.draw2d_3.2.100.v20070529.jar"/>
-   <archive path="plugins/org.eclipse.zest.core_0.7.0.200711240245.jar" url="http://q4e.googlecode.com/svn/trunk/updatesite/plugins/org.eclipse.zest.core_0.7.0.200711240245.jar"/>
-   <archive path="plugins/org.eclipse.zest.layouts_0.7.0.200711240245.jar" url="http://q4e.googlecode.com/svn/trunk/updatesite/plugins/org.eclipse.zest.layouts_0.7.0.200711240245.jar"/>
-   <archive path="plugins/org.w3c.tidy_0.0.0.4aug2000r7-dev-200711190855.jar" url="http://q4e.googlecode.com/svn/trunk/updatesite/plugins/200711190855.jar"/>
 </site>
