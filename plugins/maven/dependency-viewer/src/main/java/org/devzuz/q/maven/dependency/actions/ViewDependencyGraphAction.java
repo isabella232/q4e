@@ -26,7 +26,7 @@ import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 /**
  * Action which displays the dependency graph for the selected maven project.
  * 
- * @author Abel Mui–o <amuino@gmail.com>
+ * @author Abel Muiï¿½o <amuino@gmail.com>
  */
 public class ViewDependencyGraphAction extends AbstractMavenAction
 {
@@ -35,6 +35,12 @@ public class ViewDependencyGraphAction extends AbstractMavenAction
     protected void runInternal( IAction action ) throws CoreException
     {
         IMavenProject project = getMavenProject();
+
+        if ( project == null )
+        {
+            // nothing to do, the user should have been already warned
+            return;
+        }
 
         // Adapted from http://www.eclipse.org/mylyn/sandbox/zest/GraphJFaceSnippet1.html
         Shell shell = new Shell( Display.getCurrent() );
