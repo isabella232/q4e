@@ -45,6 +45,12 @@ public abstract class AbstractMavenAction
 
     }
 
+    /**
+     * Get the Maven project for the Eclipse project in which this action has been called.
+     * 
+     * @return the Maven Project or null if any error occurred. In the latter case the user has already been presented
+     *         the error.
+     */
     public IMavenProject getMavenProject()
     {
         Object obj = selection.iterator().next();
