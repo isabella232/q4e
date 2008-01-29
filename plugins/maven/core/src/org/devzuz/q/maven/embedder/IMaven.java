@@ -15,6 +15,7 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.model.Dependency;
+import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -372,4 +373,13 @@ public interface IMaven
      * @throws CoreException
      */
     public IMavenProject getMavenSuperProject() throws CoreException;
+
+    /**
+     * Re-resolve the dependencies for a give project using local repository
+     * 
+     * @param project
+     * @return root node of dependency heirarcy
+     * @throws CoreException
+     */
+    public DependencyNode resolveDependencies(IMavenProject project) throws CoreException;
 }

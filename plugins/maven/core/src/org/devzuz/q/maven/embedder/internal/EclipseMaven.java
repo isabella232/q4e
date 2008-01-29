@@ -14,9 +14,11 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.resolver.ArtifactCollector;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
@@ -34,6 +36,9 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
+import org.apache.maven.shared.dependency.tree.DependencyNode;
+import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
+import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.devzuz.q.maven.embedder.ILocalMavenRepository;
 import org.devzuz.q.maven.embedder.IMaven;
@@ -585,20 +590,7 @@ public class EclipseMaven implements IMaven
         throws CoreException
     {
         // TODO use mavenEmbedder.getArtifactVersions when MNG-2940 is resolved
-        if ( artifactMetadataSource == null )
-        {
-            try
-            {
-                artifactMetadataSource =
-                    (ArtifactMetadataSource) getMavenEmbedder().getPlexusContainer().lookup(
-                                                                                             ArtifactMetadataSource.ROLE );
-            }
-            catch ( ComponentLookupException e )
-            {
-                throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
-                                                      "Unable to lookup the artifact metadata source", e ) );
-            }
-        }
+        getArtifactMetadataSource();
 
         // skip this dependency if it is a snapshot, even if flagged
         // if (artifact.isSnapshot()) {
@@ -619,6 +611,26 @@ public class EclipseMaven implements IMaven
             // + artifact.getArtifactId() );
             return Collections.emptyList();
         }
+    }
+
+    private ArtifactMetadataSource getArtifactMetadataSource() throws QCoreException
+    {
+        if ( artifactMetadataSource == null )
+        {
+            try
+            {
+                artifactMetadataSource =
+                    (ArtifactMetadataSource) getMavenEmbedder().getPlexusContainer().lookup(
+                                                                                             ArtifactMetadataSource.ROLE );
+                
+            }
+            catch ( ComponentLookupException e )
+            {
+                throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
+                                                      "Unable to lookup the artifact metadata source", e ) );
+            }
+        }
+        return artifactMetadataSource;
     }
 
     public Artifact createArtifact( String groupId, String artifactId, String version, String scope, String type )
@@ -750,5 +762,24 @@ public class EclipseMaven implements IMaven
             throw new IllegalStateException( "The plugin has not been properly started, try restarting eclipse" );
         }
         return mavenEmbedder;
+    }
+    
+    public DependencyNode resolveDependencies(IMavenProject project) throws CoreException { 
+        try
+        {
+            ArtifactRepository localRepository = getMavenEmbedder().getLocalRepository();
+            DependencyTreeBuilder dependencyTreeBuilder = (DependencyTreeBuilder) getMavenEmbedder().getPlexusContainer().lookup(DependencyTreeBuilder.ROLE);
+            ArtifactFactory factory = (ArtifactFactory) getMavenEmbedder().getPlexusContainer().lookup(ArtifactFactory.ROLE);
+            ArtifactCollector collector = (ArtifactCollector) getMavenEmbedder().getPlexusContainer().lookup(ArtifactCollector.ROLE);
+            return dependencyTreeBuilder.buildDependencyTree( project.getRawMavenProject(), localRepository, factory, getArtifactMetadataSource(), null, collector );
+        }
+        catch ( DependencyTreeBuilderException e )
+        {
+            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE, "Unable to build dependency tree", e ) );
+        }
+        catch ( ComponentLookupException e )
+        {
+            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE, "Could not find component", e ) );
+        }
     }
 }
