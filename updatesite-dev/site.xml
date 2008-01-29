@@ -36,6 +36,9 @@
    <feature url="features/org.devzuz.q.dependencyviewer.feature_0.5.0.200801281132.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.5.0.200801281132">
       <category name="Optional"/>
    </feature>
+   <feature url="features/org.devzuz.q.dependencyviewer.feature_0.5.0.200801281614.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.5.0.200801281614">
+      <category name="Optional"/>
+   </feature>
    <category-def name="Community" label="Community"/>
    <category-def name="Enabling Features" label="Enabling Features"/>
    <category-def name="Optional" label="Optional">
