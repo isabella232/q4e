@@ -45,6 +45,7 @@ import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
+import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.QCoreException;
 import org.eclipse.core.resources.IFile;
@@ -106,8 +107,16 @@ public class EclipseMaven implements IMaven
     {
         MavenExecutionRequest request = generateRequest( baseDirectory, goal, parameter );
         EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
-        eclipseMavenRequest.run( monitor );
-        return eclipseMavenRequest.getExecutionResult();
+        IStatus status = eclipseMavenRequest.run( monitor );
+
+        if ( status.getSeverity() == IStatus.CANCEL )
+        {
+            throw new MavenInterruptedException();
+        }
+        else
+        {
+            return eclipseMavenRequest.getExecutionResult();
+        }
     }
 
     public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal, IProgressMonitor monitor )
@@ -133,20 +142,29 @@ public class EclipseMaven implements IMaven
                                                MavenExecutionParameter parameter, IProgressMonitor monitor )
         throws CoreException
     {
+        IStatus status = null;
+        EclipseMavenRequest eclipseMavenRequest = null;
         try
         {
             MavenExecutionRequest request = generateRequest( mavenProject, goals, parameter );
-            EclipseMavenRequest eclipseMavenRequest =
-                new EclipseMavenRequest( "MavenRequest", this, request, mavenProject.getProject() );
-            eclipseMavenRequest.run( monitor );
-            IMavenExecutionResult result = eclipseMavenRequest.getExecutionResult();
-            return result;
+            eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request, mavenProject.getProject() );
+            status = eclipseMavenRequest.run( monitor );
         }
         catch ( RuntimeException e )
         {
             // These are thrown, for example, by Modello
             // TODO: Should these exception be included in the IMavenExecutionResult?
             throw new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID, e.getMessage(), e ) );
+        }
+
+        if ( status.getSeverity() == IStatus.CANCEL )
+        {
+            throw new MavenInterruptedException();
+        }
+        else
+        {
+            IMavenExecutionResult result = eclipseMavenRequest.getExecutionResult();
+            return result;
         }
     }
 

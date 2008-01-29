@@ -79,6 +79,7 @@ public interface IMaven
      * @param properties
      *            properties of this goal
      * @throws CoreException
+     * @throws MavenInterruptedException if the build is canceled
      */
     public IMavenExecutionResult executeGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter,
                                               IProgressMonitor monitor ) throws CoreException;
@@ -93,6 +94,7 @@ public interface IMaven
      * @param goal
      *            goal name
      * @throws CoreException
+     * @throws MavenInterruptedException if the build is canceled
      */
     public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal, IProgressMonitor monitor )
         throws CoreException;
@@ -106,6 +108,7 @@ public interface IMaven
      * @param properties
      *            properties of this goal
      * @throws CoreException
+     * @throws MavenInterruptedException if the build is canceled
      */
     public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal,
                                               MavenExecutionParameter parameter, IProgressMonitor monitor )
@@ -121,6 +124,7 @@ public interface IMaven
      * @param goals
      *            list of goals to execute
      * @throws CoreException
+     * @throws MavenInterruptedException if the build is canceled
      */
     public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals, IProgressMonitor monitor )
         throws CoreException;
@@ -134,6 +138,7 @@ public interface IMaven
      * @param properties
      *            properties of this goal. Might be <code>null</code> when no properties are used.
      * @throws CoreException
+     * @throws MavenInterruptedException if the build is canceled
      */
     public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals,
                                                MavenExecutionParameter parameter, IProgressMonitor monitor )
