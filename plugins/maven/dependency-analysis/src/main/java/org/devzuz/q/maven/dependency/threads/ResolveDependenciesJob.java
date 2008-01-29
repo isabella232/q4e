@@ -1,0 +1,101 @@
+package org.devzuz.q.maven.dependency.threads;
+
+import org.apache.maven.shared.dependency.tree.DependencyNode;
+import org.devzuz.q.maven.dependency.Activator;
+import org.devzuz.q.maven.dependency.model.DuplicatesListManager;
+import org.devzuz.q.maven.dependency.model.Instance;
+import org.devzuz.q.maven.dependency.model.VersionListManager;
+import org.devzuz.q.maven.dependency.views.AnalyserGui;
+import org.devzuz.q.maven.embedder.IMaven;
+import org.devzuz.q.maven.embedder.IMavenProject;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.swt.widgets.Display;
+
+/**
+ * dependency resolution may take some time for projects with many dependencies. This resolves the project dependency in
+ * a eclipse background job and then initialises the gui
+ * 
+ * @author jake pezaro
+ */
+public class ResolveDependenciesJob
+    extends Job
+{
+
+    private IMavenProject project;
+
+    private IMaven maven;
+
+    private Display display;
+
+    public ResolveDependenciesJob( IMavenProject project, IMaven maven, Display display )
+    {
+        super( "Analyse dependencies of " + project.getBaseDirectory().getName() );
+        this.project = project;
+        this.maven = maven;
+        this.display = display;
+    }
+
+    public IStatus run( IProgressMonitor monitor )
+    {
+        try
+        {
+            monitor.beginTask( "Resolving dependencies", IProgressMonitor.UNKNOWN );
+
+            // resolve the dependencies. this is the long running part
+            DependencyNode mavenDependencyRoot = maven.resolveDependencies( project );
+
+            // create the gui
+
+            VersionListManager versions = new VersionListManager();
+            DuplicatesListManager duplicates = new DuplicatesListManager();
+            Instance rootInstance = new Instance( null, mavenDependencyRoot, versions, duplicates );
+
+            DependencyFilteringCompleteThread complete =
+                new DependencyFilteringCompleteThread( project.getBaseDirectory().getName(), versions, duplicates,
+                                                       rootInstance );
+
+            display.asyncExec( complete );
+
+            return new Status( IStatus.OK, Activator.PLUGIN_ID, "Dependency resolution complete" );
+        }
+        catch ( CoreException e )
+        {
+            return new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Dependency resolution failed", e );
+        }
+
+    }
+
+    private class DependencyFilteringCompleteThread
+        implements Runnable
+    {
+        private String projectName;
+
+        private VersionListManager versions;
+
+        private DuplicatesListManager duplicates;
+
+        private Instance rootInstance;
+
+        public DependencyFilteringCompleteThread( String projectName, VersionListManager versions,
+                                                  DuplicatesListManager duplicates, Instance rootInstance )
+        {
+            this.projectName = projectName;
+            this.versions = versions;
+            this.duplicates = duplicates;
+            this.rootInstance = rootInstance;
+        }
+
+        public void run()
+        {
+            AnalyserGui gui = new AnalyserGui( projectName, display );
+            gui.setModelInputs( rootInstance, versions, duplicates );
+
+        }
+
+    }
+
+}
