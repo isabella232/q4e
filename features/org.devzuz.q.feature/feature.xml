@@ -74,4 +74,11 @@
          version="0.5.0.qualifier"
          unpack="false"/>
 
+   <plugin
+         id="org.apache.maven.shared.dependency.tree"
+         download-size="34"
+         install-size="34"
+         version="1.1.0.v200801301117"
+         unpack="false"/>
+
 </feature>
