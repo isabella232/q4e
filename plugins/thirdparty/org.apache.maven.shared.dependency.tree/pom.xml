@@ -20,7 +20,8 @@
   </parent>
   <groupId>org.apache.maven.shared.dependency</groupId>
   <artifactId>tree</artifactId>
-  <version>1.1.0.200801301117</version>
+<!-- added the v to work around https://issues.apache.org/jira/browse/FELIX-477 -->
+  <version>1.1.0-v200801301117</version>
   <packaging>bundle</packaging>
   <name>Maven Dependency Tree</name>
 
