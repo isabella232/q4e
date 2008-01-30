@@ -7,7 +7,9 @@ import org.devzuz.q.maven.dependency.model.Instance;
 import org.devzuz.q.maven.dependency.model.VersionListManager;
 import org.devzuz.q.maven.dependency.views.AnalyserGui;
 import org.devzuz.q.maven.embedder.IMaven;
+import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -22,7 +24,7 @@ import org.eclipse.swt.widgets.Display;
  * @author jake pezaro
  */
 public class ResolveDependenciesJob
-    extends Job
+    extends Job implements IMavenJob
 {
 
     private IMavenProject project;
@@ -41,6 +43,8 @@ public class ResolveDependenciesJob
 
     public IStatus run( IProgressMonitor monitor )
     {
+        // TODO needs to handle Maven execution cancellation?
+
         try
         {
             monitor.beginTask( "Resolving dependencies", IProgressMonitor.UNKNOWN );
