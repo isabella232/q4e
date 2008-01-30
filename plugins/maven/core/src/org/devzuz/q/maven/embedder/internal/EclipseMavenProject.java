@@ -1,10 +1,10 @@
-/*******************************************************************************
- * Copyright (c) 2007 Simula Labs
+/*
+ * Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.) and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *******************************************************************************/
+ */
 package org.devzuz.q.maven.embedder.internal;
 
 import java.io.File;
@@ -21,6 +21,7 @@ import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenUtils;
+import org.devzuz.q.maven.embedder.nature.MavenNatureHelper;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
@@ -41,11 +42,13 @@ public class EclipseMavenProject implements IMavenProject
     public static final String POM_XML = POM_FILENAME;
 
     /**
-     * Checks if the given eclipse project has a <code>pom.xml</code> descriptor.
+     * Checks if the given eclipse project has a <code>pom.xml</code> descriptor. Usually you should refer to
+     * {@link MavenNatureHelper#hasQ4ENature(IProject)}
      * 
      * @param project
      *            the project to check.
      * @return <code>true</code> if the project has a descriptor, <code>false</code> otherwise.
+     * @see {@link MavenNatureHelper#hasQ4ENature(IProject)}
      */
     public static boolean hasDescriptor( IProject project )
     {

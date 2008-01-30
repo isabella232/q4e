@@ -43,7 +43,7 @@ public class EclipseMavenWorkspace
         for ( IProject project : workspace.getRoot().getProjects() )
         {
             monitor.subTask( "Checking project " + project.getName() );
-            if ( EclipseMavenProject.hasDescriptor( project ) )
+            if ( MavenNatureHelper.getInstance().hasQ4ENature( project ) )
             {
                 IMavenProject mavenProject = new EclipseMavenProject( project );
                 artifacts =

@@ -10,14 +10,10 @@ Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.3.0,4.0.0)";visibili
  org.apache.maven.embedder;bundle-version="2.1.0.609730";visibility:=reexport,
  org.eclipse.core.commands;bundle-version="[3.3.0,4.0.0)";visibility:=reexport
 Eclipse-LazyStart: true
-Export-Package: org.devzuz.q.maven.embedder;
-  uses:="org.osgi.framework,
-   org.eclipse.ui.plugin,
-   org.eclipse.core.resources,
-   org.devzuz.q.maven.embedder.internal,
-   org.eclipse.core.runtime",
- org.devzuz.q.maven.embedder.log,
- org.devzuz.q.maven.embedder.test
+Export-Package: org.devzuz.q.maven.embedder;uses:="junit.framework",
+ org.devzuz.q.maven.embedder.log;uses:="org.eclipse.core.runtime",
+ org.devzuz.q.maven.embedder.nature;uses:="org.eclipse.core.resources",
+ org.devzuz.q.maven.embedder.test;uses:="org.devzuz.q.maven.embedder.internal,org.apache.maven.artifact,org.devzuz.q.maven.embedder"
 Bundle-Vendor: DevZuz
 Import-Package: org.eclipse.jface.preference,
  org.eclipse.ui.preferences
