@@ -1,10 +1,10 @@
-/*******************************************************************************
- * Copyright (c) 2007 Simula Labs
+/*
+ * Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.) and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *******************************************************************************/
+ */
 package org.devzuz.q.maven.embedder.internal;
 
 import java.util.Iterator;
@@ -12,8 +12,10 @@ import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.nature.MavenNatureHelper;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
@@ -21,7 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * open
  * 
  * @author pdodds
- * 
+ * @deprecated doesn't seem to be used
  */
 public class EclipseMavenWorkspace
 {
@@ -34,6 +36,7 @@ public class EclipseMavenWorkspace
      * @param monitor
      */
     public static Set resolveProjectArtifacts( Set artifacts, IWorkspace workspace, IProgressMonitor monitor )
+        throws CoreException
     {
 
         // Iterate through the projects and remove project artifacts
