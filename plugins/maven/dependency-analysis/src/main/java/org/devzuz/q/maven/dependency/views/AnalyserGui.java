@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
 package org.devzuz.q.maven.dependency.views;
 
 import java.util.Iterator;
@@ -92,10 +99,10 @@ public class AnalyserGui
 
         // populate the versions table
         VersionListComparator versionListSorter = new VersionListComparator();
-        createColumnWithListener( versionsTable.getTable(), "Group Id", 125, versionListSorter, 0, versionsTable );
-        createColumnWithListener( versionsTable.getTable(), "Artifact Id", 200, versionListSorter, 1, versionsTable );
-        createColumnWithListener( versionsTable.getTable(), "Version", 75, versionListSorter, 2, versionsTable );
-        createColumnWithListener( versionsTable.getTable(), "Instances", 50, versionListSorter, 3, versionsTable );
+        createColumnWithListener( versionsTable.getTable(), "Group Id", 125, versionListSorter, Column.GROUPID, versionsTable );
+        createColumnWithListener( versionsTable.getTable(), "Artifact Id", 200, versionListSorter, Column.ARTIFACTID, versionsTable );
+        createColumnWithListener( versionsTable.getTable(), "Version", 75, versionListSorter, Column.VERSION, versionsTable );
+        createColumnWithListener( versionsTable.getTable(), "Instances", 50, versionListSorter, Column.INSTANCES, versionsTable );
         versionsTable.getTable().setHeaderVisible( true );
         versionsTable.getTable().setLinesVisible( true );
         versionsTable.setContentProvider( new VersionsListContentProvider() ); // IStructuredContentProvider
@@ -155,16 +162,16 @@ public class AnalyserGui
     }
 
     private void createColumnWithListener( Table table, String title, int width,
-                                           final VersionListComparator versionListSorter, final int columnIndex,
+                                           final VersionListComparator versionListSorter, final Column column,
                                            final TableViewer versionsTable )
     {
-        TableColumn column = createColumn( table, title, width );
-        column.addListener( SWT.Selection, new Listener()
+        TableColumn tableColumn = createColumn( table, title, width );
+        tableColumn.addListener( SWT.Selection, new Listener()
         {
 
             public void handleEvent( Event event )
             {
-                versionListSorter.selectColumn( columnIndex );
+                versionListSorter.selectColumn( column );
                 versionsTable.refresh();
             }
 

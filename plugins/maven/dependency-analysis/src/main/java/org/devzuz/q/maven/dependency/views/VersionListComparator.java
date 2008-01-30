@@ -19,20 +19,20 @@ public class VersionListComparator
     extends ViewerComparator
 {
 
-    private int column;
+    private Column column;
 
     private boolean direction;
 
     public VersionListComparator()
     {
         super();
-        column = 0;
+        column = Column.GROUPID;
         direction = true;
     }
 
-    public void selectColumn( int column )
+    public void selectColumn( Column column )
     {
-        if ( this.column == column )
+        if ( this.column.equals(column) )
         {
             direction = !direction;
         }
@@ -42,6 +42,7 @@ public class VersionListComparator
         }
     }
 
+    @Override
     public int compare( Viewer viewer, Object e1, Object e2 )
     {
         Comparable comparable1 = getComparable( e1 );
@@ -67,15 +68,16 @@ public class VersionListComparator
         Version version = (Version) o;
         switch ( column )
         {
-            case 0:
+            case GROUPID:
                 return version.getGroupId();
-            case 1:
+            case ARTIFACTID:
                 return version.getArtifactId();
-            case 2:
+            case VERSION:
                 return version.getVersion();
-            case 3:
+            case INSTANCES:
                 return new Integer( version.getInstances().size() );
             default:
+                // never can happen
                 throw new RuntimeException( "Unrecognised column " + column );
         }
     }
