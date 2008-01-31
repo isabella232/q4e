@@ -46,6 +46,12 @@ public class UpdateClasspathJob
     {
         MavenMonitorHolder.setProgressMonitor( monitor );
 
+        if ( !project.isOpen() )
+        {
+            /* the project was closed while the job was waiting */
+            return Status.CANCEL_STATUS;
+        }
+
         try
         {
             MavenClasspathContainer.newClasspath( project, monitor );
