@@ -6,6 +6,9 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenManager;
@@ -17,6 +20,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
 
 /**
@@ -29,6 +34,7 @@ public class UpdateClasspathJob
     extends WorkspaceJob
     implements IMavenJob
 {
+    private static final Set<String> projectsAlreadyScheduled = new HashSet<String>();
 
     private IProject project;
 
@@ -41,6 +47,11 @@ public class UpdateClasspathJob
     {
         super( "Updating classpath container: " + project.getName() );
         this.project = project;
+    }
+
+    public IProject getProject()
+    {
+        return project;
     }
 
     @Override
@@ -77,18 +88,67 @@ public class UpdateClasspathJob
     }
 
     /**
-     * Create and schedule a new {@link UpdateClasspathJob}
+     * Create and schedule a new {@link UpdateClasspathJob}. If there is another {@link UpdateClasspathJob} scheduled
+     * or running no new job will be created.
      * 
      * @param project
-     * @return the scheduled job
+     * @return the scheduled job or null if the project was not scheduled
      */
     public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project )
     {
-        UpdateClasspathJob job = new UpdateClasspathJob( project );
-        /* prevent refreshing the classpath of several projects as uses too much cpu */
-        job.setRule( project.getProject().getWorkspace().getRoot() );
-        job.setPriority( Job.BUILD );
-        job.schedule();
-        return job;
+        if ( projectsAlreadyScheduled.contains( project.getName() ) )
+        {
+            return null;
+        }
+        else
+        {
+            UpdateClasspathJob job = new UpdateClasspathJob( project );
+            /* prevent refreshing the classpath of several projects as uses too much cpu */
+            job.setRule( project.getProject().getWorkspace().getRoot() );
+            job.setPriority( Job.BUILD );
+            job.addJobChangeListener( new DuplicateJobListener() );
+            job.schedule();
+            return job;
+        }
+    }
+
+    static class DuplicateJobListener
+        implements IJobChangeListener
+    {
+
+        public void done( IJobChangeEvent event )
+        {
+            UpdateClasspathJob job = (UpdateClasspathJob) event.getJob();
+            synchronized ( projectsAlreadyScheduled )
+            {
+                projectsAlreadyScheduled.remove( job.getProject().getName() );
+            }
+        }
+
+        public void scheduled( IJobChangeEvent event )
+        {
+            UpdateClasspathJob job = (UpdateClasspathJob) event.getJob();
+            synchronized ( projectsAlreadyScheduled )
+            {
+                projectsAlreadyScheduled.add( job.getProject().getName() );
+            }
+        }
+
+        public void aboutToRun( IJobChangeEvent arg0 )
+        {
+        }
+
+        public void awake( IJobChangeEvent arg0 )
+        {
+        }
+
+        public void running( IJobChangeEvent arg0 )
+        {
+        }
+
+        public void sleeping( IJobChangeEvent arg0 )
+        {
+        }
+
     }
 }
