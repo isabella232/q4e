@@ -39,7 +39,7 @@ public class MavenProjectManager
         this();
         for ( IProject project : workspace.getRoot().getProjects() )
         {
-            if ( MavenNatureHelper.getInstance().hasQ4ENature( project ) )
+            if ( project.isOpen() && MavenNatureHelper.getInstance().hasQ4ENature( project ) )
             {
                 // put project to cache
                 addMavenProject( project );
