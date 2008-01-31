@@ -21,7 +21,6 @@ import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * Maven builder that will update the classpath container when pom changes
@@ -77,9 +76,6 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             MavenJdtCoreActivator.getLogger().log( ce );
         }
 
-        UpdateClasspathJob job = new UpdateClasspathJob( project );
-        job.setRule( project.getProject().getWorkspace().getRoot() );
-        job.setPriority( Job.BUILD );
-        job.schedule();
+        UpdateClasspathJob.scheduleNewUpdateClasspathJob( project );
     }
 }

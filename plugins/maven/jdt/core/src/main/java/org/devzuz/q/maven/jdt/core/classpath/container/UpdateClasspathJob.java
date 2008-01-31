@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 
 /**
  * Updates the Maven classpath container
@@ -25,7 +26,8 @@ import org.eclipse.core.runtime.Status;
  * @version $Id$
  */
 public class UpdateClasspathJob
-    extends WorkspaceJob implements IMavenJob
+    extends WorkspaceJob
+    implements IMavenJob
 {
 
     private IProject project;
@@ -35,7 +37,7 @@ public class UpdateClasspathJob
      * 
      * @param project
      */
-    public UpdateClasspathJob( IProject project )
+    private UpdateClasspathJob( IProject project )
     {
         super( "Updating classpath container: " + project.getName() );
         this.project = project;
@@ -60,8 +62,8 @@ public class UpdateClasspathJob
         {
             return Status.CANCEL_STATUS;
         }
-        
-        //TODO this is needed for now to avoid out of memory errors
+
+        // TODO this is needed for now to avoid out of memory errors
         try
         {
             MavenManager.getMaven().refresh();
@@ -74,4 +76,19 @@ public class UpdateClasspathJob
         return new Status( IStatus.OK, MavenJdtCoreActivator.PLUGIN_ID, "Updated classpath container" );
     }
 
+    /**
+     * Create and schedule a new {@link UpdateClasspathJob}
+     * 
+     * @param project
+     * @return the scheduled job
+     */
+    public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project )
+    {
+        UpdateClasspathJob job = new UpdateClasspathJob( project );
+        /* prevent refreshing the classpath of several projects as uses too much cpu */
+        job.setRule( project.getProject().getWorkspace().getRoot() );
+        job.setPriority( Job.BUILD );
+        job.schedule();
+        return job;
+    }
 }

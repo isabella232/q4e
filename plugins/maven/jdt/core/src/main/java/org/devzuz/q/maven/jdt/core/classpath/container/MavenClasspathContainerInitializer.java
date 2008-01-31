@@ -12,7 +12,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.ClasspathContainerInitializer;
 import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IJavaProject;
@@ -57,11 +56,7 @@ public class MavenClasspathContainerInitializer extends ClasspathContainerInitia
 
             if ( container == null )
             {
-                /* prevent refreshing the classpath of several projects as uses too much cpu */
-                UpdateClasspathJob job = new UpdateClasspathJob( project );
-                job.setRule( project.getProject().getWorkspace().getRoot() );
-                job.setPriority( Job.BUILD );
-                job.schedule();
+                UpdateClasspathJob.scheduleNewUpdateClasspathJob( project );
             }
         }
     }

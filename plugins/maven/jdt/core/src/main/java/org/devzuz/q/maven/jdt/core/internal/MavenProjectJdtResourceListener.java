@@ -21,7 +21,6 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jdt.core.IClasspathContainer;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
@@ -143,10 +142,7 @@ public class MavenProjectJdtResourceListener
                                 MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
                                                              "Scheduling update for ", iproject );
                             }
-                            UpdateClasspathJob job = new UpdateClasspathJob( iproject );
-                            job.setRule( iproject.getProject().getWorkspace().getRoot() );
-                            job.setPriority( Job.BUILD );
-                            job.schedule();
+                            UpdateClasspathJob.scheduleNewUpdateClasspathJob( iproject );
                             break;
                         }
                     }
