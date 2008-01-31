@@ -71,7 +71,7 @@ public class MavenNature implements IProjectNature
 
     private static IPath[] RESOURCE_EXCLUDES = SOURCE_INCLUDES;
 
-    private static final List<String> SOURCE_VERSIONS = Arrays.asList( "1.1,1.2,1.3,1.4,1.5,1.6,1.7".split( "," ) );
+    private static final List<String> SOURCE_VERSIONS = Arrays.asList( "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7" );
 
     private static final String DEFAULT_OUTPUT_FOLDER = "target/classes";
 
@@ -179,7 +179,7 @@ public class MavenNature implements IProjectNature
         IJavaProject javaProject = JavaCore.create( project );
 
         // use a List to manage the order of the elements
-        List<IClasspathEntry> classpathEntriesList = new LinkedList();
+        List<IClasspathEntry> classpathEntriesList = new LinkedList<IClasspathEntry>();
 
         IMavenProject mavenProject;
         String outputDirectory = null;
