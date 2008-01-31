@@ -10,6 +10,7 @@ package org.devzuz.q.maven.embedder;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.maven.artifact.Artifact;
 import org.devzuz.q.maven.embedder.nature.MavenNatureHelper;
 import org.eclipse.core.resources.IProject;
@@ -314,6 +315,16 @@ public class MavenProjectManager
         public void setModified( boolean modified )
         {
             this.modified = modified;
+        }
+
+        @Override
+        public String toString()
+        {
+            return new ToStringBuilder(this).
+                append("mavenProject", mavenProject).
+                append("resolvedTransitively", resolvedTransitively).
+                append("modified", modified).
+                toString();
         }
     }
 }
