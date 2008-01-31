@@ -183,7 +183,6 @@ public class RefreshOutputFoldersListener extends JobChangeAdapter
             IContainer[] containers = workspaceRoot.findContainersForLocation( path );
             for ( IContainer c : containers )
             {
-                System.out.println( "Refreshing " + c );
                 refreshContainer( c );
             }
         }
@@ -199,8 +198,6 @@ public class RefreshOutputFoldersListener extends JobChangeAdapter
     {
         try
         {
-            // FIXME: Use traces
-            System.out.println( "Refreshing: " + c );
             c.refreshLocal( IContainer.DEPTH_INFINITE, null );
         }
         catch ( CoreException e )
