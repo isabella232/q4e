@@ -2,7 +2,7 @@
 <feature
       id="org.apache.commons.collections.feature"
       label="%featureName"
-      version="3.2.0.200705282147"
+      version="3.2.0.200801311913"
       provider-name="%providerName">
 
    <description>
@@ -25,7 +25,7 @@
          id="org.apache.commons.collections"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="3.2.0"
          unpack="false"/>
 
 </feature>
