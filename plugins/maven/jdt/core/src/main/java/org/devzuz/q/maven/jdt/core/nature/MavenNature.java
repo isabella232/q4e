@@ -340,6 +340,10 @@ public class MavenNature implements IProjectNature
         for ( Resource mavenResource : resources )
         {
             resourceRoots.add( mavenResource.getDirectory() );
+            // TODO set a warning if the resource target path is set, as Eclipse doesn't allow a source folder ti set
+            // its output in another source folder
+            // (or we could put the output in a different folder than Maven, which is probably better)
+            // mavenResource.getTargetPath();
         }
 
         return getClasspathFolders( project, resourceRoots );
