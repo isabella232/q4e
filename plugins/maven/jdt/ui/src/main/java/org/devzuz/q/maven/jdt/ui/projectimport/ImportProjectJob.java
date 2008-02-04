@@ -17,6 +17,7 @@ import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
+import org.devzuz.q.maven.jdt.ui.internal.TraceOption;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
@@ -93,6 +94,7 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
     @Override
     public IStatus runInWorkspace( IProgressMonitor monitor )
     {
+        MavenJdtUiActivator.trace( TraceOption.PROJECT_IMPORT, "Starting ", pomDescriptors );
         MavenMonitorHolder.setProgressMonitor( monitor );
 
         int errorCount = 0;
@@ -138,6 +140,7 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
         {
             status = new Status( IStatus.OK, MavenJdtUiActivator.PLUGIN_ID, "Success" );
         }
+        MavenJdtUiActivator.trace( TraceOption.PROJECT_IMPORT, "Done " + pomDescriptors );
         return status;
     }
 
