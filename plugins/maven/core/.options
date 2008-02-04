@@ -1,0 +1,6 @@
+# Global trace switch for this plug-in
+org.devzuz.q.maven.core/debug=false
+# Trace for events related to the eclipse artifact resolver
+org.devzuz.q.maven.core/debug/artifact-resolver=false
+# This switch enables/disables time information in every other trace 
+org.devzuz.q.maven.core/debug/timing=false
