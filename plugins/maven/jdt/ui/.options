@@ -1,0 +1,6 @@
+# Global trace switch for this plug-in
+org.devzuz.q.maven.jdt.ui/debug=false
+# Trace for events related to importing projects
+org.devzuz.q.maven.jdt.ui/debug/import=false
+# This switch enables/disables time information in every other trace 
+org.devzuz.q.maven.jdt.ui/debug/timing=false
