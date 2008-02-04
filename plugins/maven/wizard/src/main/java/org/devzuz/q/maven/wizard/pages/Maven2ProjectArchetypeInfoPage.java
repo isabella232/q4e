@@ -120,7 +120,7 @@ public class Maven2ProjectArchetypeInfoPage extends Maven2ValidatingWizardPage
 
         validate();
 
-        setControl( group );
+        setControl( parent );
     }
 
     public String getGroupID()

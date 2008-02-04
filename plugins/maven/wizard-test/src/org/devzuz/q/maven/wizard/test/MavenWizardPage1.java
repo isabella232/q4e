@@ -8,13 +8,14 @@ package org.devzuz.q.maven.wizard.test;
 
 import org.devzuz.q.maven.wizard.pages.ui.AbstractMavenWizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 /**
  * TODO Document
  * 
- * @author Abel Mui–o <amuino@gmail.com>
+ * @author Abel Muiï¿½o <amuino@gmail.com>
  */
 public class MavenWizardPage1 extends AbstractMavenWizardPage
 {
@@ -30,6 +31,7 @@ public class MavenWizardPage1 extends AbstractMavenWizardPage
     public void createControl( Composite parent )
     {
         Composite c = new Composite( parent, SWT.NONE );
+        c.setLayout( new FillLayout() );
         Label l = new Label( c, SWT.NONE );
         l.setText( "Hello world" );
         setControl( c );
