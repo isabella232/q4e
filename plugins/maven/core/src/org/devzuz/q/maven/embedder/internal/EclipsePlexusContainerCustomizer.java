@@ -12,6 +12,7 @@ import org.apache.maven.embedder.ContainerCustomizer;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.ComponentDescriptor;
+import org.devzuz.q.maven.embedder.internal.resolver.EclipseMavenArtifactResolver;
 
 /**
  * An implementation of a Plexus Container Customizer to allow the Embedder to switch into an Eclipse Environment
