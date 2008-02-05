@@ -34,18 +34,6 @@ public class Activator
 
     private Logger logger;
 
-    /**
-     * The constructor
-     */
-    public Activator()
-    {
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
-     */
     @Override
     public void start( BundleContext context )
         throws Exception
@@ -65,11 +53,6 @@ public class Activator
         reg.put( "grey", ImageDescriptor.createFromImageData( new ImageData( grey ) ) );
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
-     */
     @Override
     public void stop( BundleContext context )
         throws Exception
