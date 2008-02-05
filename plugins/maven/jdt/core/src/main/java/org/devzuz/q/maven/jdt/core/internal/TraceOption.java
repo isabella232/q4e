@@ -15,7 +15,8 @@ import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
  */
 public enum TraceOption
 {
-    JDT_RESOURCE_LISTENER( "/jdtResourceListener" ), CLASSPATH_UPDATE( "/classpathUpdate" );
+    JDT_RESOURCE_LISTENER( "/jdtResourceListener" ), CLASSPATH_UPDATE( "/classpathUpdate" ), MAVEN_INCREMENTAL_BUILDER(
+        "/mavenBuilder" ), ;
 
     private final String value;
 

@@ -4,5 +4,7 @@ org.devzuz.q.maven.jdt.core/debug=false
 org.devzuz.q.maven.jdt.core/debug/jdtResourceListener=false
 # Trace for events related to classpath updates
 org.devzuz.q.maven.jdt.core/debug/classpathUpdate=false
+# Trace for events related to the maven incremental builder
+org.devzuz.q.maven.jdt.core/debug/mavenBuilder=false
 # This switch enables/disables time information in every other trace 
 org.devzuz.q.maven.jdt.core/debug/timing=false
