@@ -27,7 +27,11 @@ public class Activator
 {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "org.devzuz.q.dependency.viewer";
+    public static final String PLUGIN_ID = "org.devzuz.q.dependency.analysis";
+
+    private static final String NORMAL_ICON = "/icons/dependency-view.gif";
+
+    private static final String GREY_ICON = "/icons/dependency-view-grey.gif";
 
     // The shared instance
     private static Activator plugin;
@@ -46,10 +50,20 @@ public class Activator
     @Override
     protected void initializeImageRegistry( ImageRegistry reg )
     {
-        InputStream normal = getClass().getClassLoader().getResourceAsStream( "/icons/dependency-view.gif" );
+        InputStream normal = getClass().getClassLoader().getResourceAsStream( NORMAL_ICON );
+        if ( normal == null )
+        {
+            throw new RuntimeException( "Icon in " + NORMAL_ICON +
+                " could not be resolved. Probably wrong bundle packaging" );
+        }
         reg.put( "normal", ImageDescriptor.createFromImageData( new ImageData( normal ) ) );
 
-        InputStream grey = getClass().getClassLoader().getResourceAsStream( "/icons/dependency-view-grey.gif" );
+        InputStream grey = getClass().getClassLoader().getResourceAsStream( GREY_ICON );
+        if ( grey == null )
+        {
+            throw new RuntimeException( "Icon in " + GREY_ICON +
+                " could not be resolved. Probably wrong bundle packaging" );
+        }
         reg.put( "grey", ImageDescriptor.createFromImageData( new ImageData( grey ) ) );
     }
 
