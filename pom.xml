@@ -32,6 +32,12 @@
     </license>
   </licenses>
 
+  <properties>
+    <libdir>${basedir}/lib</libdir>
+    <srcdir>${basedir}/sources</srcdir>
+    <manifestdir>${basedir}/META-INF</manifestdir>
+  </properties>
+
   <distributionManagement>
     <repository>
       <id>code.google.com</id>
@@ -57,6 +63,19 @@
       </snapshots>
     </repository>
   </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>codehaus.org</id>
+      <name>Maven Central Development Plugin Repository</name>
+      <url>http://snapshots.repository.codehaus.org</url>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </pluginRepository>
+  </pluginRepositories>
 
   <build>
 
