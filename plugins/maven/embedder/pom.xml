@@ -39,12 +39,6 @@
   </organization>
   <url>http://www.apache.org/</url>
 
-  <properties>
-    <libdir>${basedir}/lib</libdir>
-    <srcdir>${basedir}/sources</srcdir>
-    <manifestdir>${basedir}/META-INF</manifestdir>
-  </properties>
-
   <prerequisites>
     <maven>2.0.8</maven>
   </prerequisites>
