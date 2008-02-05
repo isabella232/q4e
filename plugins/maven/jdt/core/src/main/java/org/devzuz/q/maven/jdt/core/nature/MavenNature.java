@@ -244,7 +244,7 @@ public class MavenNature implements IProjectNature
         classpathEntriesList.addAll( getSourceFoldersClasspath( project, javaProject, mavenProject ) );
 
         // (x) Add the maven classpath container
-        classpathEntriesList.add( getMavenClasspathContainer( ) );
+        classpathEntriesList.add( getMavenClasspathContainer() );
 
         // (x) Add the JRE container to the classpath
         classpathEntriesList.add( getJREClasspathContainer( javaProject, mavenProject ) );
@@ -280,13 +280,13 @@ public class MavenNature implements IProjectNature
         addEntryToClasspath( classpathEntries,
                              getClasspathFolders( project, mavenProject.getTestCompileSourceRoots() ), SOURCE_INCLUDES,
                              SOURCE_EXCLUDES, testTargetFolder );
-        addEntryToClasspath( classpathEntries, getResourceFolders( project, mavenProject.getTestResources() ),
-                             RESOURCE_INCLUDES, RESOURCE_EXCLUDES, testTargetFolder );
+        // addEntryToClasspath( classpathEntries, getResourceFolders( project, mavenProject.getTestResources() ),
+        // RESOURCE_INCLUDES, RESOURCE_EXCLUDES, testTargetFolder );
 
         addEntryToClasspath( classpathEntries, getClasspathFolders( project, mavenProject.getCompileSourceRoots() ),
                              SOURCE_INCLUDES, SOURCE_EXCLUDES, null );
-        addEntryToClasspath( classpathEntries, getResourceFolders( project, mavenProject.getResources() ),
-                             RESOURCE_INCLUDES, RESOURCE_EXCLUDES, null );
+        // addEntryToClasspath( classpathEntries, getResourceFolders( project, mavenProject.getResources() ),
+        // RESOURCE_INCLUDES, RESOURCE_EXCLUDES, null );
 
         for ( IClasspathEntry entry : classpathEntries )
         {
@@ -392,7 +392,7 @@ public class MavenNature implements IProjectNature
         return getRelativePath( basedirPath, fullPath );
     }
 
-    private IClasspathEntry getMavenClasspathContainer( )
+    private IClasspathEntry getMavenClasspathContainer()
     {
         return JavaCore.newContainerEntry( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH );
     }

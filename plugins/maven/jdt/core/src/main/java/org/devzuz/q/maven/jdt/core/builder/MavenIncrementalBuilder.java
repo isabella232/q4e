@@ -6,19 +6,27 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.builder;
 
+import java.io.File;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.model.Resource;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
+import org.devzuz.q.maven.jdt.core.internal.TraceOption;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
@@ -34,6 +42,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     public static final String MAVEN_INCREMENTAL_BUILDER_ID =
         MavenJdtCoreActivator.PLUGIN_ID + ".mavenIncrementalBuilder"; //$NON-NLS-1$
 
+    private static final Path POM_PATH = new Path( IMavenProject.POM_FILENAME );
+
     @Override
     protected IProject[] build( int kind, Map args, IProgressMonitor monitor ) throws CoreException
     {
@@ -41,12 +51,23 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
         {
             IResourceDelta delta = getDelta( getProject() );
 
-            Path pomPath = new Path( IMavenProject.POM_FILENAME );
-            IResourceDelta member = delta.findMember( pomPath );
+            IResourceDelta member = delta.findMember( POM_PATH );
             if ( member != null )
             {
                 IProject project = member.getResource().getProject();
                 onPomChange( project, monitor );
+            }
+
+            IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( getProject(), false );
+            List<Resource> resources = mavenProject.getResources();
+            if ( deltaContainsResource( delta, resources ) )
+            {
+                onResourcesChange( mavenProject, "resources:resources" );
+            }
+            List<Resource> testResources = mavenProject.getTestResources();
+            if ( deltaContainsResource( delta, testResources ) )
+            {
+                onResourcesChange( mavenProject, "resources:testResources" );
             }
         }
         else
@@ -54,6 +75,58 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             onPomChange( getProject(), monitor );
         }
         return null;
+    }
+
+    /**
+     * @param mavenProject
+     * @param goal
+     * @throws CoreException
+     */
+    private void onResourcesChange( IMavenProject mavenProject, String goal ) throws CoreException
+    {
+        MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "Processing resources on ", getProject(),
+                                     " : ", goal );
+        MavenExecutionParameter params = MavenExecutionParameter.newDefaultMavenExecutionParameter();
+        params.setRecursive( false );
+        MavenManager.getMaven().scheduleGoal( mavenProject, goal, params );
+    }
+
+    /**
+     * @param testResources
+     * @return
+     */
+    private boolean deltaContainsResource( IResourceDelta delta, List<Resource> resourceList )
+    {
+        IWorkspaceRoot workspaceRoot = getProject().getWorkspace().getRoot();
+        IProject project = getProject();
+        for ( Resource r : resourceList )
+        {
+            String dirName = r.getDirectory();
+            File directory = new File( dirName );
+            if ( directory.isAbsolute() )
+            {
+                // Make relative to the project.
+                IContainer[] containers = workspaceRoot.findContainersForLocationURI( directory.toURI() );
+                for ( IContainer c : containers )
+                {
+                    if ( !project.equals( c.getProject() ) )
+                    {
+                        // Mapped to a resource in a different project
+                        continue;
+                    }
+                    IPath relative = c.getProjectRelativePath();
+                    MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "Looking at: ", relative );
+                    if ( delta.findMember( relative ) != null )
+                    {
+                        // at least one resource is affected by this change.
+                        MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "Found modification: ",
+                                                     relative );
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     private void onPomChange( IProject project, IProgressMonitor monitor )
@@ -75,7 +148,6 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
         {
             MavenJdtCoreActivator.getLogger().log( ce );
         }
-
         UpdateClasspathJob.scheduleNewUpdateClasspathJob( project );
     }
 }
