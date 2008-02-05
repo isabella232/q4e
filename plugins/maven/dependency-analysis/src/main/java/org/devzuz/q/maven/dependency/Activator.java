@@ -6,6 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.dependency;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 import org.devzuz.q.maven.embedder.log.EclipseLogger;
@@ -33,6 +34,8 @@ public class Activator
 
     private static final String GREY_ICON = "/icons/dependency-view-grey.gif";
 
+    private static final String RESOURCES_FOLDER = "/src/main/resources";
+
     // The shared instance
     private static Activator plugin;
 
@@ -50,21 +53,36 @@ public class Activator
     @Override
     protected void initializeImageRegistry( ImageRegistry reg )
     {
-        InputStream normal = getClass().getClassLoader().getResourceAsStream( NORMAL_ICON );
-        if ( normal == null )
-        {
-            throw new RuntimeException( "Icon in " + NORMAL_ICON +
-                " could not be resolved. Probably wrong bundle packaging" );
-        }
-        reg.put( "normal", ImageDescriptor.createFromImageData( new ImageData( normal ) ) );
+        reg.put( "normal", ImageDescriptor.createFromImageData( getIcon( NORMAL_ICON ) ) );
+        reg.put( "grey", ImageDescriptor.createFromImageData( getIcon( GREY_ICON ) ) );
+    }
 
-        InputStream grey = getClass().getClassLoader().getResourceAsStream( GREY_ICON );
-        if ( grey == null )
+    private ImageData getIcon( String path )
+    {
+        InputStream is = getClass().getClassLoader().getResourceAsStream( path );
+        if ( is == null )
         {
-            throw new RuntimeException( "Icon in " + GREY_ICON +
-                " could not be resolved. Probably wrong bundle packaging" );
+            is = getClass().getClassLoader().getResourceAsStream( RESOURCES_FOLDER + path );
         }
-        reg.put( "grey", ImageDescriptor.createFromImageData( new ImageData( grey ) ) );
+        if ( is == null )
+        {
+            throw new RuntimeException( "Icon in " + path + " could not be resolved. Probably wrong bundle packaging" );
+        }
+        try
+        {
+            ImageData id = new ImageData( is );
+            return id;
+        }
+        finally
+        {
+            try
+            {
+                is.close();
+            }
+            catch ( IOException e )
+            {
+            }
+        }
     }
 
     @Override
