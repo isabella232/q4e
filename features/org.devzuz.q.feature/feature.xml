@@ -83,9 +83,9 @@
 
    <plugin
          id="org.apache.maven.shared.dependency.tree"
-         download-size="34"
-         install-size="34"
-         version="1.1.0.v200801301827"
+         download-size="41"
+         install-size="41"
+         version="1.1.0.v200802050958"
          unpack="false"/>
 
    <plugin
