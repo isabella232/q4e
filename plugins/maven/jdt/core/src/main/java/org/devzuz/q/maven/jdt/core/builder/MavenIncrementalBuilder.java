@@ -56,6 +56,7 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             {
                 IProject project = member.getResource().getProject();
                 onPomChange( project, monitor );
+                // TODO: <resource> and/or <filter> settings could have changed.
             }
 
             IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( getProject(), false );
@@ -69,10 +70,16 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             {
                 onResourcesChange( mavenProject, "resources:testResources" );
             }
+            // TODO: if <filter> is set on the pom.xml, the referenced file could have changed
         }
         else
         {
+            // full build
             onPomChange( getProject(), monitor );
+            // get the maven project after refreshing the pom so it is updated
+            IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( getProject(), false );
+            onResourcesChange( mavenProject, "resources:resources" );
+            onResourcesChange( mavenProject, "resources:testResources" );
         }
         return null;
     }
