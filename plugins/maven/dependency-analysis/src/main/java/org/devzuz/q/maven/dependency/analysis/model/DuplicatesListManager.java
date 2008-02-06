@@ -4,7 +4,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.dependency.model;
+package org.devzuz.q.maven.dependency.analysis.model;
 
 import java.util.Collection;
 import java.util.HashMap;

@@ -4,47 +4,48 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.dependency.views;
+package org.devzuz.q.maven.dependency.analysis.views;
 
-import org.devzuz.q.maven.dependency.model.Version;
+import org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator;
+import org.devzuz.q.maven.dependency.analysis.model.Instance;
 import org.eclipse.jface.viewers.IColorProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * Label provider for the Versions table
+ * Label provider for the Instances Tree
  * 
  * @author jake pezaro
  */
-public class VersionsListLabelProvider
-    implements ITableLabelProvider, IColorProvider
+public class InstanceTreeLabelProvider
+    implements ILabelProvider, IColorProvider
 {
 
-    public Image getColumnImage( Object element, int columnIndex )
+    private Color LIGHT_YELLOW;
+
+    public InstanceTreeLabelProvider()
     {
-        return null;
+        LIGHT_YELLOW = new Color( Display.getCurrent(), 255, 255, 180 );
     }
 
-    public String getColumnText( Object element, int columnIndex )
+    public Image getImage( Object element )
     {
-        Version instanceMap = (Version) element;
-        switch ( columnIndex )
+        Instance node = (Instance) element;
+        if ( node.getState() == Instance.STATE_INCLUDED )
         {
-            case 0:
-                return instanceMap.getGroupId();
-            case 1:
-                return instanceMap.getArtifactId();
-            case 2:
-                return instanceMap.getVersion();
-            case 3:
-                return String.valueOf( instanceMap.getInstances().size() );
-            default:
-                throw new RuntimeException( "Unrecognised column index " + columnIndex );
+            return DependencyAnalysisActivator.getDefault().getImageRegistry().get( "normal" );
         }
+        return DependencyAnalysisActivator.getDefault().getImageRegistry().get( "grey" );
+    }
+
+    public String getText( Object element )
+    {
+        Instance node = (Instance) element;
+        return node.getNodeString();
     }
 
     public void addListener( ILabelProviderListener listener )
@@ -73,17 +74,21 @@ public class VersionsListLabelProvider
 
     public Color getBackground( Object element )
     {
-        Version version = (Version) element;
-        if ( version.isSelected() )
+        Instance node = (Instance) element;
+        if ( node.getSelected() == Instance.SELECTED_PRINCIPLE )
         {
             return Display.getCurrent().getSystemColor( SWT.COLOR_YELLOW );
         }
-        return null; // Display.getCurrent().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
+        if ( node.getSelected() == Instance.SELECTED_SECONDARY )
+        {
+            return LIGHT_YELLOW;
+        }
+        return null;
     }
 
     public Color getForeground( Object element )
     {
-        return null; // Display.getCurrent().getSystemColor(SWT.COLOR_LIST_FOREGROUND);
+        return null;
     }
 
 }

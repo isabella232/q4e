@@ -4,48 +4,47 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.dependency.views;
+package org.devzuz.q.maven.dependency.analysis.views;
 
-import org.devzuz.q.maven.dependency.DependencyAnalysisActivator;
-import org.devzuz.q.maven.dependency.model.Instance;
+import org.devzuz.q.maven.dependency.analysis.model.Version;
 import org.eclipse.jface.viewers.IColorProvider;
-import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
+import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * Label provider for the Instances Tree
+ * Label provider for the Versions table
  * 
  * @author jake pezaro
  */
-public class InstanceTreeLabelProvider
-    implements ILabelProvider, IColorProvider
+public class VersionsListLabelProvider
+    implements ITableLabelProvider, IColorProvider
 {
 
-    private Color LIGHT_YELLOW;
-
-    public InstanceTreeLabelProvider()
+    public Image getColumnImage( Object element, int columnIndex )
     {
-        LIGHT_YELLOW = new Color( Display.getCurrent(), 255, 255, 180 );
+        return null;
     }
 
-    public Image getImage( Object element )
+    public String getColumnText( Object element, int columnIndex )
     {
-        Instance node = (Instance) element;
-        if ( node.getState() == Instance.STATE_INCLUDED )
+        Version instanceMap = (Version) element;
+        switch ( columnIndex )
         {
-            return DependencyAnalysisActivator.getDefault().getImageRegistry().get( "normal" );
+            case 0:
+                return instanceMap.getGroupId();
+            case 1:
+                return instanceMap.getArtifactId();
+            case 2:
+                return instanceMap.getVersion();
+            case 3:
+                return String.valueOf( instanceMap.getInstances().size() );
+            default:
+                throw new RuntimeException( "Unrecognised column index " + columnIndex );
         }
-        return DependencyAnalysisActivator.getDefault().getImageRegistry().get( "grey" );
-    }
-
-    public String getText( Object element )
-    {
-        Instance node = (Instance) element;
-        return node.getNodeString();
     }
 
     public void addListener( ILabelProviderListener listener )
@@ -74,21 +73,17 @@ public class InstanceTreeLabelProvider
 
     public Color getBackground( Object element )
     {
-        Instance node = (Instance) element;
-        if ( node.getSelected() == Instance.SELECTED_PRINCIPLE )
+        Version version = (Version) element;
+        if ( version.isSelected() )
         {
             return Display.getCurrent().getSystemColor( SWT.COLOR_YELLOW );
         }
-        if ( node.getSelected() == Instance.SELECTED_SECONDARY )
-        {
-            return LIGHT_YELLOW;
-        }
-        return null;
+        return null; // Display.getCurrent().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
     }
 
     public Color getForeground( Object element )
     {
-        return null;
+        return null; // Display.getCurrent().getSystemColor(SWT.COLOR_LIST_FOREGROUND);
     }
 
 }

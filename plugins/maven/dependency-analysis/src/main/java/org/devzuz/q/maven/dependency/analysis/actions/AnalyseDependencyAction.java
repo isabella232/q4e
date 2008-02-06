@@ -4,9 +4,9 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.dependency.actions;
+package org.devzuz.q.maven.dependency.analysis.actions;
 
-import org.devzuz.q.maven.dependency.threads.ResolveDependenciesJob;
+import org.devzuz.q.maven.dependency.analysis.threads.ResolveDependenciesJob;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.actions.AbstractMavenAction;

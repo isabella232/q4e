@@ -4,9 +4,9 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.dependency.views;
+package org.devzuz.q.maven.dependency.analysis.views;
 
-import org.devzuz.q.maven.dependency.model.Instance;
+import org.devzuz.q.maven.dependency.analysis.model.Instance;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 

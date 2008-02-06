@@ -4,9 +4,9 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.dependency.views;
+package org.devzuz.q.maven.dependency.analysis.views;
 
-import org.devzuz.q.maven.dependency.model.Duplicate;
+import org.devzuz.q.maven.dependency.analysis.model.Duplicate;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;

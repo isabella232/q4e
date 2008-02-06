@@ -4,13 +4,13 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.dependency.views;
+package org.devzuz.q.maven.dependency.analysis.views;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.devzuz.q.maven.dependency.model.Duplicate;
-import org.devzuz.q.maven.dependency.model.DuplicatesListManager;
+import org.devzuz.q.maven.dependency.analysis.model.Duplicate;
+import org.devzuz.q.maven.dependency.analysis.model.DuplicatesListManager;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 

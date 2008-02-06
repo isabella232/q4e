@@ -1,11 +1,11 @@
-package org.devzuz.q.maven.dependency.threads;
+package org.devzuz.q.maven.dependency.analysis.threads;
 
 import org.apache.maven.shared.dependency.tree.DependencyNode;
-import org.devzuz.q.maven.dependency.DependencyAnalysisActivator;
-import org.devzuz.q.maven.dependency.model.DuplicatesListManager;
-import org.devzuz.q.maven.dependency.model.Instance;
-import org.devzuz.q.maven.dependency.model.VersionListManager;
-import org.devzuz.q.maven.dependency.views.AnalyserGui;
+import org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator;
+import org.devzuz.q.maven.dependency.analysis.model.DuplicatesListManager;
+import org.devzuz.q.maven.dependency.analysis.model.Instance;
+import org.devzuz.q.maven.dependency.analysis.model.VersionListManager;
+import org.devzuz.q.maven.dependency.analysis.views.AnalyserGui;
 import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.IMavenProject;
