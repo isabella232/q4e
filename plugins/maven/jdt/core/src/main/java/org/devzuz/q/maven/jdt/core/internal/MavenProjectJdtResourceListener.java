@@ -32,8 +32,7 @@ import org.eclipse.jdt.core.JavaModelException;
  * 
  * @author amuino
  */
-public class MavenProjectJdtResourceListener
-    implements IResourceChangeListener
+public class MavenProjectJdtResourceListener implements IResourceChangeListener
 {
     private static final Path POM_PATH = new Path( "/" + IMavenProject.POM_FILENAME );
 
@@ -50,11 +49,7 @@ public class MavenProjectJdtResourceListener
                 // for open and close events
                 if ( projectDelta.getFlags() == IResourceDelta.OPEN )
                 {
-                    if ( MavenJdtCoreActivator.getDefault().isDebugging() )
-                    {
-                        MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Received open event for ",
-                                                     project );
-                    }
+                    MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Received open event for ", project );
                     // check if its an "open" event and the project is managed by maven.
                     if ( project.isOpen() && isMavenManagedProject( project ) )
                     {
@@ -62,11 +57,8 @@ public class MavenProjectJdtResourceListener
                     }
                     else
                     {
-                        if ( MavenJdtCoreActivator.getDefault().isDebugging() )
-                        {
-                            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
-                                                         "Skipping because it is not managed by q4e: " + project );
-                        }
+                        MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
+                                                     "Skipping because it is not managed by q4e: " + project );
                     }
                 }
                 else if ( projectDelta.getKind() == IResourceDelta.CHANGED )
@@ -74,13 +66,10 @@ public class MavenProjectJdtResourceListener
                     IResourceDelta pomDelta = projectDelta.findMember( POM_PATH );
                     if ( ( pomDelta != null ) && isMavenManagedProject( project ) )
                     {
-                        if ( MavenJdtCoreActivator.getDefault().isDebugging() )
-                        {
-                            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
-                                                         pomDelta.getResource().getFullPath(), " changed in ",
-                                                         project.getName(),
-                                                         ". Invalidating cached data in maven project manager cache." );
-                        }
+                        MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
+                                                     pomDelta.getResource().getFullPath(), " changed in ",
+                                                     project.getName(),
+                                                     ". Invalidating cached data in maven project manager cache." );
                         MavenManager.getMavenProjectManager().setMavenProjectModified( project );
                         needsProjectRefresh = true;
                     }
@@ -97,11 +86,7 @@ public class MavenProjectJdtResourceListener
             /* IResourceChangeEvent documents that an IProject is always returned */
             IProject project = (IProject) event.getResource();
 
-            if ( MavenJdtCoreActivator.getDefault().isDebugging() )
-            {
-                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Received close/delete event for ",
-                                             project );
-            }
+            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Received close/delete event for ", project );
 
             if ( project.isOpen() && isMavenManagedProject( project.getProject() ) )
             {
@@ -109,11 +94,8 @@ public class MavenProjectJdtResourceListener
             }
             else
             {
-                if ( MavenJdtCoreActivator.getDefault().isDebugging() )
-                {
-                    MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
-                                                 "Skipping because it has no pom.xml: " + project );
-                }
+                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Skipping because it has no pom.xml: "
+                                + project );
             }
 
             MavenManager.getMavenProjectManager().removeMavenProject( project );
@@ -137,11 +119,8 @@ public class MavenProjectJdtResourceListener
                     {
                         if ( classpathEqualsProject( classPathEntry, iresProject ) )
                         {
-                            if ( MavenJdtCoreActivator.getDefault().isDebugging() )
-                            {
-                                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
-                                                             "Scheduling update for ", iproject );
-                            }
+                            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for ",
+                                                         iproject );
                             UpdateClasspathJob.scheduleNewUpdateClasspathJob( iproject );
                             break;
                         }

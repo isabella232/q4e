@@ -261,23 +261,15 @@ public class MavenClasspathContainer implements IClasspathContainer
 
         if ( ( workspaceProject != null ) && ( workspaceProject.isOpen() ) )
         {
-            if ( MavenJdtCoreActivator.getDefault().isDebugging() )
-            {
-                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in "
-                                + mavenProject.getArtifactId() + " as project dependency - "
-                                + workspaceProject.getFullPath() );
-            }
+            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in " + mavenProject.getArtifactId()
+                            + " as project dependency - " + workspaceProject.getFullPath() );
 
             return JavaCore.newProjectEntry( workspaceProject.getFullPath(), export );
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {
-            if ( MavenJdtCoreActivator.getDefault().isDebugging() )
-            {
-                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in "
-                                + mavenProject.getArtifactId() + " as jar dependency - "
-                                + artifact.getFile().getAbsolutePath() );
-            }
+            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in " + mavenProject.getArtifactId()
+                            + " as jar dependency - " + artifact.getFile().getAbsolutePath() );
 
             Path sourcePath =
                 getArtifactPath( mavenProject, artifact, "java-source", SOURCES_CLASSIFIER, downloadSources );
