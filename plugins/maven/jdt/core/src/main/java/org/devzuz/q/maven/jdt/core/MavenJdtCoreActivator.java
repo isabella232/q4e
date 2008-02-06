@@ -67,10 +67,11 @@ public class MavenJdtCoreActivator extends Plugin
         logger = new EclipseLogger( PLUGIN_ID, this.getLog() );
 
         iResourceListener = new MavenProjectJdtResourceListener();
-        ResourcesPlugin.getWorkspace().addResourceChangeListener( iResourceListener,
-                                                                  IResourceChangeEvent.POST_CHANGE | 
-                                                                  IResourceChangeEvent.PRE_CLOSE | 
-                                                                  IResourceChangeEvent.PRE_DELETE );
+        ResourcesPlugin.getWorkspace().addResourceChangeListener(
+                                                                  iResourceListener,
+                                                                  IResourceChangeEvent.POST_CHANGE
+                                                                                  | IResourceChangeEvent.PRE_CLOSE
+                                                                                  | IResourceChangeEvent.PRE_DELETE );
     }
 
     @Override
@@ -114,8 +115,7 @@ public class MavenJdtCoreActivator extends Plugin
         {
             return;
         }
-        String globalTraceValue = Platform.getDebugOption( PLUGIN_GLOBAL_TRACE_OPTION );
-        if ( null == globalTraceValue || !globalTraceValue.equals( "true" ) )
+        if ( !getDefault().isDebugging() )
         {
             return;
         }
