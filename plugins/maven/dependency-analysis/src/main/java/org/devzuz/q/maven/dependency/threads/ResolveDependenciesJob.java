@@ -1,7 +1,7 @@
 package org.devzuz.q.maven.dependency.threads;
 
 import org.apache.maven.shared.dependency.tree.DependencyNode;
-import org.devzuz.q.maven.dependency.Activator;
+import org.devzuz.q.maven.dependency.DependencyAnalysisActivator;
 import org.devzuz.q.maven.dependency.model.DuplicatesListManager;
 import org.devzuz.q.maven.dependency.model.Instance;
 import org.devzuz.q.maven.dependency.model.VersionListManager;
@@ -64,11 +64,11 @@ public class ResolveDependenciesJob
 
             display.asyncExec( complete );
 
-            return new Status( IStatus.OK, Activator.PLUGIN_ID, "Dependency resolution complete" );
+            return new Status( IStatus.OK, DependencyAnalysisActivator.PLUGIN_ID, "Dependency resolution complete" );
         }
         catch ( CoreException e )
         {
-            return new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Dependency resolution failed", e );
+            return new Status( IStatus.ERROR, DependencyAnalysisActivator.PLUGIN_ID, "Dependency resolution failed", e );
         }
 
     }

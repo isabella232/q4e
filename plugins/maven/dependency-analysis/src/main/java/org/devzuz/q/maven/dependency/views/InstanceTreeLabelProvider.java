@@ -6,7 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.dependency.views;
 
-import org.devzuz.q.maven.dependency.Activator;
+import org.devzuz.q.maven.dependency.DependencyAnalysisActivator;
 import org.devzuz.q.maven.dependency.model.Instance;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -37,9 +37,9 @@ public class InstanceTreeLabelProvider
         Instance node = (Instance) element;
         if ( node.getState() == Instance.STATE_INCLUDED )
         {
-            return Activator.getDefault().getImageRegistry().get( "normal" );
+            return DependencyAnalysisActivator.getDefault().getImageRegistry().get( "normal" );
         }
-        return Activator.getDefault().getImageRegistry().get( "grey" );
+        return DependencyAnalysisActivator.getDefault().getImageRegistry().get( "grey" );
     }
 
     public String getText( Object element )

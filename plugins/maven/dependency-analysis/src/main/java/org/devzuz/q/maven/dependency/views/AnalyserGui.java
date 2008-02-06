@@ -9,7 +9,7 @@ package org.devzuz.q.maven.dependency.views;
 
 import java.util.Iterator;
 
-import org.devzuz.q.maven.dependency.Activator;
+import org.devzuz.q.maven.dependency.DependencyAnalysisActivator;
 import org.devzuz.q.maven.dependency.model.Duplicate;
 import org.devzuz.q.maven.dependency.model.DuplicatesListManager;
 import org.devzuz.q.maven.dependency.model.Instance;
@@ -82,7 +82,7 @@ public class AnalyserGui
         shell.setLayout( new RowLayout( SWT.VERTICAL ) );
         shell.setSize( 1000, 700 );
         shell.setText( "Dependency Tree For: " + projectName );
-        shell.setImage( Activator.getDefault().getImageRegistry().get( "normal" ) );
+        shell.setImage( DependencyAnalysisActivator.getDefault().getImageRegistry().get( "normal" ) );
 
         SashForm mainForm = new SashForm( shell, SWT.HORIZONTAL );
 
