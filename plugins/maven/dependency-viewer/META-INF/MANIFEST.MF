@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Dependency Viewer Plug-in
 Bundle-SymbolicName: org.devzuz.q.maven.dependencyviewer;singleton:=true
 Bundle-Version: 0.5.0.qualifier
-Bundle-Activator: org.devzuz.q.maven.dependency.Activator
+Bundle-Activator: org.devzuz.q.maven.dependency.DependencyViewerActivator
 Require-Bundle: org.devzuz.q.maven.ui;bundle-version="[0.5.0,0.6.0)",
  org.eclipse.zest.core;bundle-version="[0.7.0,0.7.1)",
  org.eclipse.zest.layouts;bundle-version="[0.7.0,0.7.1)"

@@ -16,7 +16,7 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator
+public class DependencyViewerActivator
     extends AbstractUIPlugin
 {
 
@@ -24,16 +24,9 @@ public class Activator
     public static final String PLUGIN_ID = "org.devzuz.q.dependency.viewer";
 
     // The shared instance
-    private static Activator plugin;
+    private static DependencyViewerActivator plugin;
 
     private Logger logger;
-
-    /**
-     * The constructor
-     */
-    public Activator()
-    {
-    }
 
     @Override
     public void start( BundleContext context )
@@ -57,7 +50,7 @@ public class Activator
      * 
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static DependencyViewerActivator getDefault()
     {
         return plugin;
     }
