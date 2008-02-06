@@ -18,13 +18,11 @@ import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
-public class Maven2EmbedderArchetypeExecutor
-    implements IArchetypeExecutor
+public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
 {
     public void executeArchetype( Archetype archetype, IPath baseDir, String groupId, String artifactId,
                                   String version, String packageName, IMavenWizardContext wizardContext,
-                                  MavenExecutionJobAdapter jobAdapter )
-        throws CoreException
+                                  MavenExecutionJobAdapter jobAdapter ) throws CoreException
     {
         Properties archetypeProperties = new Properties( wizardContext.getArchetypeCreationProperties() );
 
@@ -36,10 +34,10 @@ public class Maven2EmbedderArchetypeExecutor
         archetypeProperties.setProperty( "archetypeGroupId", archetype.getGroupId() );
         archetypeProperties.setProperty( "basedir", baseDir.makeAbsolute().toOSString() );
 
-        if ( !archetype.getVersion().isEmpty() )
+        if ( archetype.getVersion().length() > 0 )
             archetypeProperties.setProperty( "archetypeVersion", archetype.getVersion() );
 
-        if ( !archetype.getRemoteRepositories().isEmpty() )
+        if ( archetype.getRemoteRepositories().length() > 0 )
             archetypeProperties.setProperty( "remoteRepositories", archetype.getRemoteRepositories() );
 
         if ( jobAdapter == null )
