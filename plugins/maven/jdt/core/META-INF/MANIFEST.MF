@@ -9,7 +9,8 @@ Require-Bundle: org.eclipse.jdt.core;bundle-version="[3.3.0,4.0.0)";visibility:=
  org.devzuz.q.maven.core;bundle-version="[0.5.0,0.6.0)";visibility:=reexport,
  org.eclipse.jdt.launching;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.apache.commons.collections;bundle-version="[3.2.0,4.0.0)",
- org.devzuz.q.maven.ui;bundle-version="[0.5.0,0.6.0)";visibility:=reexport
+ org.devzuz.q.maven.ui;bundle-version="[0.5.0,0.6.0)";visibility:=reexport,
+ org.apache.ant;bundle-version="1.7.0"
 Eclipse-LazyStart: true
 Bundle-Vendor: DevZuz
 Export-Package: org.devzuz.q.maven.jdt.core,
