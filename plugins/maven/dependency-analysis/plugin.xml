@@ -22,7 +22,11 @@
                 icon="src/main/resources/icons/dependency-view.gif"
                 id="org.devzuz.q.maven.dependency.analysis.actions.AnalyseDependencyAction"
                 label="Analyse dependencies"
-                menubarPath="org.devzuz.q.maven.ui.project.submenu/contents"/>
+                menubarPath="org.devzuz.q.maven.ui.project.submenu/contents">
+		          <enablement>
+		         	<objectState name="projectNature" value="org.devzuz.q.maven.jdt.core.mavenNature"/>
+		          </enablement>
+           </action>
      </objectContribution>
 
      </extension>
