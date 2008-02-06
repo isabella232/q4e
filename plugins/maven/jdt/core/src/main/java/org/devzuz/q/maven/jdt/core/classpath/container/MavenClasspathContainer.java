@@ -8,6 +8,7 @@ package org.devzuz.q.maven.jdt.core.classpath.container;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 
@@ -106,7 +107,14 @@ public class MavenClasspathContainer implements IClasspathContainer
             this.project = mavenProject.getProject();
 
             List<IClasspathEntry> newClasspathEntries = resolveArtifacts( mavenProject, artifacts );
-            classpathEntries = newClasspathEntries.toArray( new IClasspathEntry[newClasspathEntries.size()] );
+
+            /* compare before setting to new value to avoid clean and rebuild */
+            IClasspathEntry[] newEntries =
+                newClasspathEntries.toArray( new IClasspathEntry[newClasspathEntries.size()] );
+            if ( !Arrays.equals( classpathEntries, newEntries ) )
+            {
+                classpathEntries = newEntries;
+            }
         }
     }
 
