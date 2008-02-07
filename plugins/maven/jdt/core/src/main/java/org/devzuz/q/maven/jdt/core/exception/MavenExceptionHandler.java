@@ -28,6 +28,7 @@ import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.project.validation.ModelValidationResult;
 import org.apache.maven.reactor.MavenExecutionException;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.eclipse.core.resources.IFile;
@@ -111,7 +112,7 @@ public class MavenExceptionHandler
      */
     public static void error( final IProject project, final List<String> msgs )
     {
-        instance.markPom( project, msgs, IMarker.SEVERITY_ERROR );
+        instance.markPom( project, msgs, new MarkerInfo( IMarker.SEVERITY_ERROR ) );
     }
 
     /**
@@ -126,7 +127,7 @@ public class MavenExceptionHandler
      */
     public static void warning( final IProject project, final List<String> msg )
     {
-        instance.markPom( project, msg, IMarker.SEVERITY_WARNING );
+        instance.markPom( project, msg, new MarkerInfo( IMarker.SEVERITY_WARNING ) );
     }
 
     public static void handle( IProject project, Throwable e )
@@ -164,6 +165,10 @@ public class MavenExceptionHandler
         else if ( cause instanceof InvalidArtifactRTException )
         {
             instance.handle( project, (InvalidArtifactRTException) cause );
+        }
+        else if ( cause instanceof XmlPullParserException )
+        {
+            instance.handle( project, (XmlPullParserException) cause );
         }
         else
         {
@@ -250,10 +255,17 @@ public class MavenExceptionHandler
 
     private void handle( IProject project, InvalidArtifactRTException e )
     {
-        error( project, e.getMessage() );
+        error( project, e.getBaseMessage() );
     }
 
-    private void markPom( final IProject project, final List<String> problems, final int severity )
+    private void handle( IProject project, XmlPullParserException e )
+    {
+        MarkerInfo markerInfo =
+            new MarkerInfo( IMarker.SEVERITY_ERROR, e.getLineNumber(), e.getColumnNumber(), e.getColumnNumber() + 1 );
+        markPom( project, e.getMessage(), markerInfo );
+    }
+
+    private void markPom( final IProject project, final List<String> problems, final MarkerInfo markerInfo )
     {
         final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
 
@@ -269,9 +281,10 @@ public class MavenExceptionHandler
                     {
                         IMarker marker = pom.createMarker( MavenJdtCoreActivator.MARKER_ID );
                         marker.setAttribute( IMarker.MESSAGE, problem );
-                        marker.setAttribute( IMarker.SEVERITY, severity );
-                        // TODO improve line numbers usage
-                        marker.setAttribute( IMarker.LINE_NUMBER, 1 );
+                        marker.setAttribute( IMarker.SEVERITY, markerInfo.getSeverity() );
+                        marker.setAttribute( IMarker.LINE_NUMBER, markerInfo.getLineNumber() );
+                        marker.setAttribute( IMarker.CHAR_START, markerInfo.getCharStart() );
+                        marker.setAttribute( IMarker.CHAR_END, markerInfo.getCharEnd() );
                     }
                     catch ( CoreException ce )
                     {
@@ -296,11 +309,11 @@ public class MavenExceptionHandler
      * 
      * @param project
      * @param msg
-     * @param severity
+     * @param markerInfo
      */
-    private void markPom( final IProject project, final String msg, final int severity )
+    private void markPom( final IProject project, final String msg, final MarkerInfo markerInfo )
     {
-        markPom( project, Arrays.asList( new String[] { msg } ), severity );
+        markPom( project, Arrays.asList( new String[] { msg } ), markerInfo );
     }
 
     static Throwable getCause( Throwable e )
