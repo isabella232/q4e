@@ -13,7 +13,6 @@ import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
-import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -105,6 +104,17 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
     public static void updateProjectsClasspathWithProject( IProject iresProject )
     {
         MavenProjectManager mavenProjectManager = MavenManager.getMavenProjectManager();
+        IMavenProject mavenProject = null;
+        try
+        {
+            mavenProject = mavenProjectManager.getMavenProject( iresProject, false );
+        }
+        catch ( CoreException e )
+        {
+            /* project doesn't build, skip updates in related projects */
+            return;
+        }
+
         IProject[] iprojects = mavenProjectManager.getWorkspaceProjects();
         for ( IProject iproject : iprojects )
         {
@@ -117,7 +127,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                     IClasspathEntry[] classPathEntries = getCurrentClasspathEntries( iproject );
                     for ( IClasspathEntry classPathEntry : classPathEntries )
                     {
-                        if ( classpathEqualsProject( classPathEntry, iresProject ) )
+                        if ( classpathEqualsProject( classPathEntry, mavenProject ) )
                         {
                             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for ",
                                                          iproject );
@@ -156,27 +166,19 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         return classpathContainer.getClasspathEntries();
     }
 
-    private static boolean classpathEqualsProject( IClasspathEntry classpath, IProject project )
+    private static boolean classpathEqualsProject( IClasspathEntry classpath, IMavenProject mavenProject )
     {
         if ( classpath.getEntryKind() == IClasspathEntry.CPE_PROJECT )
         {
-            return classpath.getPath().lastSegment().equals( project.getName() );
+            return classpath.getPath().lastSegment().equals( mavenProject.getProject().getName() );
         }
         else if ( classpath.getEntryKind() == IClasspathEntry.CPE_LIBRARY )
         {
-            try
-            {
-                IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, false );
-                String[] classpathMavenInfo = getMavenProjectInfo( classpath );
+            String[] classpathMavenInfo = getMavenProjectInfo( classpath );
 
-                return mavenProject.getGroupId().equals( classpathMavenInfo[0] )
-                                && mavenProject.getArtifactId().equals( classpathMavenInfo[1] )
-                                && mavenProject.getVersion().equals( classpathMavenInfo[2] );
-            }
-            catch ( CoreException e )
-            {
-                MavenExceptionHandler.handle( project, e );
-            }
+            return mavenProject.getGroupId().equals( classpathMavenInfo[0] ) &&
+                mavenProject.getArtifactId().equals( classpathMavenInfo[1] ) &&
+                mavenProject.getVersion().equals( classpathMavenInfo[2] );
         }
 
         return false;
@@ -186,8 +188,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
      * Checks if the project is a maven project managed by q4e. This is used to check if maven classpaths need to be
      * recalculated when the project is opened/closed/deleted.
      * 
-     * @param project
-     *            the project.
+     * @param project the project.
      * @return <code>true</code> if the project is managed by q4e.
      */
     private boolean isMavenManagedProject( IProject project )

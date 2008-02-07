@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.InvalidArtifactRTException;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
@@ -160,6 +161,10 @@ public class MavenExceptionHandler
         {
             instance.handle( project, (PluginConfigurationException) cause );
         }
+        else if ( cause instanceof InvalidArtifactRTException )
+        {
+            instance.handle( project, (InvalidArtifactRTException) cause );
+        }
         else
         {
             Throwable deepCause = cause.getCause();
@@ -239,6 +244,11 @@ public class MavenExceptionHandler
     }
 
     private void handle( IProject project, PluginConfigurationException e )
+    {
+        error( project, e.getMessage() );
+    }
+
+    private void handle( IProject project, InvalidArtifactRTException e )
     {
         error( project, e.getMessage() );
     }

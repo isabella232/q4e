@@ -16,6 +16,7 @@ import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
+import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -36,7 +37,8 @@ import org.eclipse.core.runtime.Path;
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
  */
-public class MavenIncrementalBuilder extends IncrementalProjectBuilder
+public class MavenIncrementalBuilder
+    extends IncrementalProjectBuilder
 {
 
     public static final String MAVEN_INCREMENTAL_BUILDER_ID =
@@ -45,7 +47,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     private static final Path POM_PATH = new Path( IMavenProject.POM_FILENAME );
 
     @Override
-    protected IProject[] build( int kind, Map args, IProgressMonitor monitor ) throws CoreException
+    protected IProject[] build( int kind, Map args, IProgressMonitor monitor )
+        throws CoreException
     {
         if ( ( kind == INCREMENTAL_BUILD ) || ( kind == AUTO_BUILD ) )
         {
@@ -59,29 +62,55 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
                 // TODO: <resource> and/or <filter> settings could have changed.
             }
 
-            IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( getProject(), false );
-            List<Resource> resources = mavenProject.getResources();
-            if ( deltaContainsResource( delta, resources ) )
+            IMavenProject mavenProject = getMavenProject();
+
+            if ( mavenProject != null )
             {
-                onResourcesChange( mavenProject, "resources:resources" );
+                List<Resource> resources = mavenProject.getResources();
+                if ( deltaContainsResource( delta, resources ) )
+                {
+                    onResourcesChange( mavenProject, "resources:resources" );
+                }
+                List<Resource> testResources = mavenProject.getTestResources();
+                if ( deltaContainsResource( delta, testResources ) )
+                {
+                    onResourcesChange( mavenProject, "resources:testResources" );
+                }
+                // TODO: if <filter> is set on the pom.xml, the referenced file could have changed
             }
-            List<Resource> testResources = mavenProject.getTestResources();
-            if ( deltaContainsResource( delta, testResources ) )
-            {
-                onResourcesChange( mavenProject, "resources:testResources" );
-            }
-            // TODO: if <filter> is set on the pom.xml, the referenced file could have changed
         }
         else
         {
             // full build
             onPomChange( getProject(), monitor );
             // get the maven project after refreshing the pom so it is updated
-            IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( getProject(), false );
-            onResourcesChange( mavenProject, "resources:resources" );
-            onResourcesChange( mavenProject, "resources:testResources" );
+            IMavenProject mavenProject = getMavenProject();
+            if ( mavenProject != null )
+            {
+                onResourcesChange( mavenProject, "resources:resources" );
+                onResourcesChange( mavenProject, "resources:testResources" );
+            }
         }
         return null;
+    }
+
+    /**
+     * Get the maven project, handling exceptions
+     * 
+     * @return the maven project or null if it can't be built.
+     */
+    private IMavenProject getMavenProject()
+    {
+        try
+        {
+            return MavenManager.getMavenProjectManager().getMavenProject( getProject(), false );
+        }
+        catch ( CoreException e )
+        {
+            /* project doesn't build */
+            MavenExceptionHandler.handle( getProject(), e );
+            return null;
+        }
     }
 
     /**
@@ -89,7 +118,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
      * @param goal
      * @throws CoreException
      */
-    private void onResourcesChange( IMavenProject mavenProject, String goal ) throws CoreException
+    private void onResourcesChange( IMavenProject mavenProject, String goal )
+        throws CoreException
     {
         MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "Processing resources on ", getProject(),
                                      " : ", goal );
@@ -145,7 +175,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
         {
             new IWorkspaceRunnable()
             {
-                public void run( IProgressMonitor monitor ) throws CoreException
+                public void run( IProgressMonitor monitor )
+                    throws CoreException
                 {
                     pom.deleteMarkers( MavenJdtCoreActivator.MARKER_ID, false, IResource.DEPTH_ZERO );
                 }
