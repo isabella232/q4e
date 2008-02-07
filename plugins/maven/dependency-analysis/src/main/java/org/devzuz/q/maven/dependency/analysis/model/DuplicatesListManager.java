@@ -29,7 +29,7 @@ public class DuplicatesListManager
 
     public void add( Version version )
     {
-        // check artifact agains duplicate version map
+        // check artifact against duplicate version map
         String artifactKey = version.getGroupId() + ":" + version.getArtifactId();
 
         Duplicate duplicate = duplicates.get( artifactKey );

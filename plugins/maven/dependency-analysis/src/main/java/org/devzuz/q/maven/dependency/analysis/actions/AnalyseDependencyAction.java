@@ -7,6 +7,7 @@
 package org.devzuz.q.maven.dependency.analysis.actions;
 
 import org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator;
+import org.devzuz.q.maven.dependency.analysis.Messages;
 import org.devzuz.q.maven.dependency.analysis.threads.ResolveDependenciesJob;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
@@ -39,10 +40,10 @@ public class AnalyseDependencyAction
         {
             // Need to explain to the user that their requested action has failed and why
             ErrorDialog error =
-                new ErrorDialog( new Shell( Display.getCurrent() ), "Maven Dependency Analysis Error",
-                                 "Project is not a valid maven project",
+                new ErrorDialog( new Shell( Display.getCurrent() ), Messages.AnalyseDependencyAction_Error_Title,
+                                 Messages.AnalyseDependencyAction_Error_Maven_Project,
                                  new Status( Status.ERROR, DependencyAnalysisActivator.PLUGIN_ID,
-                                             "Dependency analysis can only be used on valid maven projects" ),
+                                             Messages.AnalyseDependencyAction_Error_Maven_Project_Detail ),
                                  IStatus.ERROR );
             error.open();
         }
