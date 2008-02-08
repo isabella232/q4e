@@ -10,8 +10,8 @@
 	<classpathentry exported="true" kind="lib" path="lib/maven-profile-2.1-SNAPSHOT.jar" sourcepath="sources/maven-profile-2.1-SNAPSHOT-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/maven-project-2.1-SNAPSHOT.jar" sourcepath="sources/maven-project-2.1-SNAPSHOT-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/maven-reporting-api-2.1-SNAPSHOT.jar" sourcepath="sources/maven-reporting-api-2.1-SNAPSHOT-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/plexus-classworlds-1.2-alpha-11.jar" sourcepath="sources/plexus-classworlds-1.2-alpha-11-sources.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/plexus-container-default-1.0-alpha-40.jar" sourcepath="sources/plexus-container-default-1.0-alpha-40-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/plexus-classworlds-1.2-alpha-12.jar" sourcepath="sources/plexus-classworlds-1.2-alpha-12-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/plexus-container-default-1.0-alpha-44.jar" sourcepath="sources/plexus-container-default-1.0-alpha-44-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/plexus-interactivity-api-1.0-alpha-6.jar" sourcepath="sources/plexus-interactivity-api-1.0-alpha-6-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/plexus-utils-1.4.5.jar" sourcepath="sources/plexus-utils-1.4.5-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/wagon-file-1.0-beta-2.jar" sourcepath="sources/wagon-file-1.0-beta-2-sources.jar"/>
@@ -21,6 +21,8 @@
 	<classpathentry exported="true" kind="lib" path="lib/wagon-ssh-1.0-beta-2.jar" sourcepath="sources/wagon-ssh-1.0-beta-2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/wagon-ssh-common-1.0-beta-2.jar" sourcepath="sources/wagon-ssh-common-1.0-beta-2-sources.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/wagon-ssh-external-1.0-beta-2.jar" sourcepath="sources/wagon-ssh-external-1.0-beta-2-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/backport-util-concurrent-3.0.jar" sourcepath="sources/backport-util-concurrent-3.0-sources.jar"/>
+	<classpathentry exported="true" kind="lib" path="lib/retrotranslator-runtime-1.2.1.jar" sourcepath="sources/retrotranslator-runtime-1.2.1-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.pde.core.requiredPlugins"/>
 	<classpathentry kind="output" path="target/classes"/>

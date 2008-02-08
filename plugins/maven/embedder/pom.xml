@@ -21,7 +21,7 @@
   </parent>
   <groupId>org.apache.maven</groupId>
   <artifactId>embedder</artifactId>
-  <version>2.1.0-609730</version>
+  <version>2.1.0-v619946</version>
   <packaging>bundle</packaging>
   <name>Q for Eclipse Maven Embedder</name>
   <description>Maven Embedder for the Q project</description>
@@ -143,6 +143,7 @@
           <manifestLocation>${manifestdir}</manifestLocation>
           <instructions>
             <!-- org.apache.maven.embedder.* should not be needed but it gets imported if not -->
+<!--
             <_exportcontents>
                 !org.apache.maven.doxia..svn,
                 org.apache.maven.embedder.*;-noimport:=true,
@@ -151,11 +152,10 @@
                 !org.codehaus.plexus.util.*,
                 org.codehaus.plexus.*;-noimport:=true,
             </_exportcontents>
+-->
             <Import-Package>
-                !javax.crypto.*,
                 !junit.*,
-                !org.jaxen.*,
-                !org.apache.commons.lang.*,
+                !sun.misc.*,
                 org.apache.commons.cli;version="[1.0.0,2.0.0)",
                 *
             </Import-Package>
