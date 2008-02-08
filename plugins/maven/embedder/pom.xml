@@ -143,16 +143,13 @@
           <manifestLocation>${manifestdir}</manifestLocation>
           <instructions>
             <!-- org.apache.maven.embedder.* should not be needed but it gets imported if not -->
-<!--
             <_exportcontents>
-                !org.apache.maven.doxia..svn,
                 org.apache.maven.embedder.*;-noimport:=true,
                 org.apache.maven.*;-noimport:=true,
                 org.codehaus.plexus.util.xml.*;-noimport:=true,
                 !org.codehaus.plexus.util.*,
                 org.codehaus.plexus.*;-noimport:=true,
             </_exportcontents>
--->
             <Import-Package>
                 !junit.*,
                 !sun.misc.*,
