@@ -37,6 +37,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
+import org.apache.maven.reactor.MavenExecutionException;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
@@ -412,13 +413,19 @@ public class EclipseMaven implements IMaven
                     throw new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID,
                                                           "Unable to read pom file.", e ) );
                 }
+                catch ( MavenExecutionException e )
+                {
+                    throw new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID,
+                                                          "Unable to read pom file.", e ) );
+                }
+                catch ( ProjectBuildingException e )
+                {
+                    throw new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID,
+                                                          "Unable to read pom file.", e ) );
+                }
                 mavenProject.refreshProject( mavenRawProject );
             }
             return mavenProject;
-        }
-        catch ( ProjectBuildingException e )
-        {
-            throw new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID, e.getMessage(), e ) );
         }
         catch ( InvalidArtifactRTException e )
         {
