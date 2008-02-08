@@ -44,4 +44,5 @@ Embed-Dependency: *;scope=compile|runtime;inline=true
 Originally-Created-By: Apache Maven
 Eclipse-RegisterBuddy: org.apache.maven.embedder
 Archiver-Version: Plexus Archiver
+Bundle-ClassPath: lib/maven-dependency-tree-1.1.jar
 
