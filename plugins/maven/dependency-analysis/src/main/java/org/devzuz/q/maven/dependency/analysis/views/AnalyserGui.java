@@ -22,6 +22,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.RowData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Display;
@@ -99,10 +100,14 @@ public class AnalyserGui
 
         // populate the versions table
         VersionListComparator versionListSorter = new VersionListComparator();
-        createColumnWithListener( versionsTable.getTable(), "Group Id", 125, versionListSorter, Column.GROUPID, versionsTable );
-        createColumnWithListener( versionsTable.getTable(), "Artifact Id", 200, versionListSorter, Column.ARTIFACTID, versionsTable );
-        createColumnWithListener( versionsTable.getTable(), "Version", 75, versionListSorter, Column.VERSION, versionsTable );
-        createColumnWithListener( versionsTable.getTable(), "Instances", 50, versionListSorter, Column.INSTANCES, versionsTable );
+        createColumnWithListener( versionsTable.getTable(), "Group Id", 125, versionListSorter, Column.GROUPID,
+                                  versionsTable );
+        createColumnWithListener( versionsTable.getTable(), "Artifact Id", 200, versionListSorter, Column.ARTIFACTID,
+                                  versionsTable );
+        createColumnWithListener( versionsTable.getTable(), "Version", 75, versionListSorter, Column.VERSION,
+                                  versionsTable );
+        createColumnWithListener( versionsTable.getTable(), "Instances", 50, versionListSorter, Column.INSTANCES,
+                                  versionsTable );
         versionsTable.getTable().setHeaderVisible( true );
         versionsTable.getTable().setLinesVisible( true );
         versionsTable.setContentProvider( new VersionsListContentProvider() ); // IStructuredContentProvider
@@ -116,6 +121,8 @@ public class AnalyserGui
                 IStructuredSelection selection2 = (IStructuredSelection) event.getSelection();
                 getVersions().clearSelections();
                 getDuplicates().clearSelections();
+                instanceTree.setSelection( null );
+                duplicatesTable.setSelection( null );
                 for ( Iterator iterator = selection2.iterator(); iterator.hasNext(); )
                 {
                     Version instanceMap = (Version) iterator.next();
@@ -124,6 +131,8 @@ public class AnalyserGui
                 refreshAll();
             }
         } );
+
+        versionsTable.getTable().addListener( SWT.EraseItem, new SelectionListener() );
 
         // populate the duplicates table
         createColumn( duplicatesTable.getTable(), "Artifact", 200 );
@@ -140,6 +149,15 @@ public class AnalyserGui
             {
                 IStructuredSelection selection2 = (IStructuredSelection) event.getSelection();
                 getDuplicates().clearSelections();
+                instanceTree.setSelection( null );
+                if ( !event.getSelection().isEmpty() )
+                {
+                    /*
+                     * if the event selection is null then it is a setselection( null ) from another table. if this is
+                     * the case then don't propagate as it will cause and endless loop and a stackoverflow
+                     */
+                    versionsTable.setSelection( null );
+                }
                 for ( Iterator iterator = selection2.iterator(); iterator.hasNext(); )
                 {
                     Duplicate duplicate = (Duplicate) iterator.next();
@@ -148,17 +166,15 @@ public class AnalyserGui
                 refreshAll();
             }
         } );
+        duplicatesTable.getTable().addListener( SWT.EraseItem, new SelectionListener() );
 
     }
 
     public final void refreshAll()
     {
         duplicatesTable.refresh();
-        // duplicatesTable.getTable().deselectAll();
         versionsTable.refresh();
-        // versionsTable.getTable().deselectAll();
         instanceTree.refresh();
-        // instanceTree.getTree().deselectAll();
     }
 
     private void createColumnWithListener( Table table, String title, int width,
@@ -184,6 +200,28 @@ public class AnalyserGui
         column.setText( title );
         column.setWidth( width );
         return column;
+    }
+
+    /**
+     * colours the selected table rows correctly
+     */
+    public class SelectionListener implements Listener
+    {
+
+        public void handleEvent( Event event )
+        {
+            event.detail &= ~SWT.HOT;
+            if ( ( event.detail & SWT.SELECTED ) != 0 )
+            {
+                GC gc = event.gc;
+                gc.setBackground( shell.getDisplay().getSystemColor( SWT.COLOR_YELLOW ) );
+                gc.setForeground( shell.getDisplay().getSystemColor( SWT.COLOR_LIST_FOREGROUND ) );
+                gc.fillRectangle( event.getBounds() );
+                event.detail &= ~SWT.SELECTED;
+            }
+
+        }
+
     }
 
 }
