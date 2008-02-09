@@ -12,9 +12,9 @@ import org.devzuz.q.maven.ui.archetype.provider.IArchetypeProviderUIBuilder;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -43,14 +43,18 @@ public class EditDataPage extends CustomDataPage
     public void createControl( Composite parent )
     {
         Composite root = new Composite( parent, SWT.NONE );
-        RowLayout rowLayout = new RowLayout( SWT.VERTICAL );
-        rowLayout.fill = true;
-        root.setLayout( rowLayout );
+        GridLayout gridLayout = new GridLayout( 1, false );
+        root.setLayout( gridLayout );
 
         // Key and type Label and Text
-        createNameEditControls( root );
+        Composite top = new Composite( root, SWT.NONE );
+        top.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false ) );
+        createNameEditControls( top );
 
-        super.createControl( root );
+        Composite bottom = new Composite( root, SWT.NONE );
+        bottom.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false ) );
+        bottom.setLayout( new FillLayout() );
+        super.createControl( bottom );
         setControl( root );
     }
 
@@ -65,19 +69,18 @@ public class EditDataPage extends CustomDataPage
     }
 
     /**
-     * Creates the controls for editing the name of the archetype provider.
+     * Populates the parent with the controls for editing the name of the archetype provider.
      * 
      * @param parent
      *            the parent component where the controls must be rendered.
      */
     private void createNameEditControls( Composite parent )
     {
-        Composite top = new Composite( parent, SWT.NONE );
-        top.setLayout( new GridLayout( 2, false ) );
-        Label nameLabel = new Label( top, SWT.NULL );
+        parent.setLayout( new GridLayout( 2, false ) );
+        Label nameLabel = new Label( parent, SWT.NULL );
         nameLabel.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
         nameLabel.setText( Messages.MavenArchetypePreferencePage_name );
-        final Text nameText = new Text( top, SWT.BORDER | SWT.SINGLE );
+        final Text nameText = new Text( parent, SWT.BORDER | SWT.SINGLE );
         nameText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false ) );
         nameText.addModifyListener( new ModifyListener()
         {
