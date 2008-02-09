@@ -78,4 +78,13 @@ public abstract class AbstractArchetypeProvider implements IArchetypeProvider
     {
         // Nothing to do.
     }
+
+    /**
+     * Returns the name and type of this archetype provider.
+     */
+    @Override
+    public String toString()
+    {
+        return getName() + ":" + getType();
+    }
 }
