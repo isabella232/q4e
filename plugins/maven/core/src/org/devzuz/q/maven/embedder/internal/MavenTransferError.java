@@ -11,11 +11,6 @@ import org.apache.maven.wagon.events.TransferEvent;
 import org.devzuz.q.maven.embedder.IMavenTransferError;
 import org.devzuz.q.maven.embedder.Severity;
 
-/**
- * Event fired if there's an error during the download of the file, after a {@link MavenTransferStarted} event. If
- * there's an error before the transfer starts and after a {@link MavenTransferInitated} event, ie. the file is not
- * found, then this event is not fired.
- */
 public class MavenTransferError extends AbstractMavenTransferEvent implements IMavenTransferError
 {
 

@@ -11,9 +11,6 @@ import org.apache.maven.wagon.events.TransferEvent;
 import org.devzuz.q.maven.embedder.IMavenTransferInitiated;
 import org.devzuz.q.maven.embedder.Severity;
 
-/**
- * Event fired when Maven tries to download a file. If the file is found then a {@link MavenTransferStarted} is fired.
- */
 public class MavenTransferInitated extends AbstractMavenTransferEvent implements IMavenTransferInitiated
 {
 
