@@ -12,6 +12,7 @@ import org.devzuz.q.maven.dependency.analysis.threads.ResolveDependenciesJob;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.ui.actions.AbstractMavenAction;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -25,13 +26,11 @@ import org.eclipse.swt.widgets.Shell;
  * 
  * @author jake pezaro
  */
-public class AnalyseDependencyAction
-    extends AbstractMavenAction
+public class AnalyseDependencyAction extends AbstractMavenAction
 {
 
     @Override
-    protected void runInternal( IAction action )
-        throws CoreException
+    protected void runInternal( IAction action ) throws CoreException
     {
 
         IMavenProject mavenProject = getMavenProject();
@@ -52,6 +51,8 @@ public class AnalyseDependencyAction
 
             ResolveDependenciesJob resolver =
                 new ResolveDependenciesJob( mavenProject, MavenManager.getMaven(), Display.getCurrent() );
+            // Lock the workspace: avoid running at the same time as other maven invocation, jdt build...
+            resolver.setRule( ResourcesPlugin.getWorkspace().getRoot() );
             resolver.schedule();
         }
     }
