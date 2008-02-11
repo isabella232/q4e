@@ -197,10 +197,7 @@ public class MavenClasspathContainer implements IClasspathContainer
     private static void processExecutionExceptions( IMavenProject mavenProject, MavenClasspathContainer container,
                                                     List<Exception> exceptions )
     {
-        for ( Exception exception : exceptions )
-        {
-            MavenExceptionHandler.handle( mavenProject.getProject(), exception );
-        }
+        MavenExceptionHandler.handle( mavenProject.getProject(), exceptions );
     }
 
     /**

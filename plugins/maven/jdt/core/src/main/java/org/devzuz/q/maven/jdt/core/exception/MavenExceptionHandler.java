@@ -7,30 +7,22 @@
 package org.devzuz.q.maven.jdt.core.exception;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
-import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.InvalidArtifactRTException;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
-import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.apache.maven.extension.ExtensionScanningException;
 import org.apache.maven.lifecycle.LifecycleExecutionException;
-import org.apache.maven.plugin.AbstractMojoExecutionException;
-import org.apache.maven.plugin.PluginConfigurationException;
-import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.project.ProjectBuildingException;
-import org.apache.maven.project.validation.ModelValidationResult;
-import org.apache.maven.reactor.MavenExecutionException;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
+import org.devzuz.q.maven.jdt.core.exception.handlers.IMavenExceptionHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -49,7 +41,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MavenExceptionHandler
 {
 
-    private static final Set<Class<?>> EXCEPTIONS_TO_EXPAND = new HashSet<Class<?>>();
+    private static final Set<Class<? extends Exception>> EXCEPTIONS_TO_EXPAND =
+        new HashSet<Class<? extends Exception>>();
+
+    /**
+     * Has to allow null values
+     */
+    private static final Map<Class<? extends Throwable>, IMavenExceptionHandler> handlers =
+        new HashMap<Class<? extends Throwable>, IMavenExceptionHandler>();
 
     private static MavenExceptionHandler instance = new MavenExceptionHandler();
 
@@ -64,21 +63,20 @@ public class MavenExceptionHandler
 
     public static void handle( IProject project, Collection<Exception> exceptions )
     {
+        List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>();
         for ( Exception e : exceptions )
         {
-            handle( project, e );
+            markerInfos.addAll( instance.doHandle( project, e ) );
         }
+        instance.markPom( project, markerInfos );
     }
 
     /**
-     * Marks a single error in the pom.xml for the given project.
+     * Marks a single error in the pom.xml for the given project. Note that this method removes any other marker in the
+     * pom.xml.
      * 
-     * Note that this method removes any other marker in the pom.xml.
-     * 
-     * @param project
-     *            the project where pom.xml is contained.
-     * @param msg
-     *            the error message to display in the marker.
+     * @param project the project where pom.xml is contained.
+     * @param msg the error message to display in the marker.
      */
     public static void error( final IProject project, final String msg )
     {
@@ -86,14 +84,11 @@ public class MavenExceptionHandler
     }
 
     /**
-     * Marks a single warning in the pom.xml for the given project.
+     * Marks a single warning in the pom.xml for the given project. Note that this method removes any other marker in
+     * the pom.xml.
      * 
-     * Note that this method removes any other marker in the pom.xml.
-     * 
-     * @param project
-     *            the project where pom.xml is contained.
-     * @param msg
-     *            the warning message to display in the marker.
+     * @param project the project where pom.xml is contained.
+     * @param msg the warning message to display in the marker.
      */
     public static void warning( final IProject project, final String msg )
     {
@@ -101,186 +96,150 @@ public class MavenExceptionHandler
     }
 
     /**
-     * Marks several errors in the pom.xml for the given project.
+     * Marks several errors in the pom.xml for the given project. Note that this method removes any other markers in the
+     * pom.xml.
      * 
-     * Note that this method removes any other markers in the pom.xml.
-     * 
-     * @param project
-     *            the project where pom.xml is contained.
-     * @param msgs
-     *            the error messages to display in the marker.
+     * @param project the project where pom.xml is contained.
+     * @param msgs the error messages to display in the marker.
      */
     public static void error( final IProject project, final List<String> msgs )
     {
-        instance.markPom( project, msgs, new MarkerInfo( IMarker.SEVERITY_ERROR ) );
+        List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>( msgs.size() );
+        for ( String msg : msgs )
+        {
+            markerInfos.add( new MarkerInfo( msg, IMarker.SEVERITY_ERROR ) );
+        }
+        instance.markPom( project, markerInfos );
     }
 
     /**
-     * Marks several warnings in the pom.xml for the given project.
+     * Marks several warnings in the pom.xml for the given project. Note that this method removes any other markers in
+     * the pom.xml.
      * 
-     * Note that this method removes any other markers in the pom.xml.
-     * 
-     * @param project
-     *            the project where pom.xml is contained.
-     * @param msgs
-     *            the warning messages to display in the marker.
+     * @param project the project where pom.xml is contained.
+     * @param msgs the warning messages to display in the marker.
      */
-    public static void warning( final IProject project, final List<String> msg )
+    public static void warning( final IProject project, final List<String> msgs )
     {
-        instance.markPom( project, msg, new MarkerInfo( IMarker.SEVERITY_WARNING ) );
+        List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>( msgs.size() );
+        for ( String msg : msgs )
+        {
+            markerInfos.add( new MarkerInfo( msg, IMarker.SEVERITY_WARNING ) );
+        }
+        instance.markPom( project, markerInfos );
+    }
+
+    @SuppressWarnings( "unchecked" )
+    /**
+     * Find the handler for the provided exception
+     */
+    protected IMavenExceptionHandler getHandler( Class<? extends Throwable> exceptionClass )
+    {
+        IMavenExceptionHandler handler = handlers.get( exceptionClass );
+        if ( handlers.containsKey( exceptionClass ) )
+        {
+            return handler;
+        }
+
+        Class<? extends Throwable> classToHandle = exceptionClass;
+        Set<Class<? extends Throwable>> classesTested = new HashSet<Class<? extends Throwable>>();
+
+        while ( !handlers.containsKey( exceptionClass ) && ( classToHandle != null ) )
+        {
+            classesTested.add( classToHandle );
+
+            if ( classToHandle.equals( Exception.class ) )
+            {
+                handler = null;
+                break;
+            }
+
+            String handlerClassName =
+                IMavenExceptionHandler.class.getPackage().getName() + "." + classToHandle.getSimpleName() + "Handler";
+            try
+            {
+                Class<IMavenExceptionHandler> handlerClass =
+                    (Class<IMavenExceptionHandler>) this.getClass().getClassLoader().loadClass( handlerClassName );
+                handler = handlerClass.newInstance();
+
+                /*
+                 * we have found the handler. Put it in the cache for the exception and all the superclasses we needed
+                 * to lookup
+                 */
+                for ( Class<? extends Throwable> classTested : classesTested )
+                {
+                    handlers.put( classTested, handler );
+                }
+                break;
+            }
+            catch ( InstantiationException e )
+            {
+                throw new RuntimeException( e );
+            }
+            catch ( IllegalAccessException e )
+            {
+                throw new RuntimeException( e );
+            }
+            catch ( ClassNotFoundException e )
+            {
+                /* handler not found for this class try with its superclass */
+                classToHandle = (Class<? extends Exception>) classToHandle.getSuperclass();
+            }
+        }
+
+        return handler;
     }
 
     public static void handle( IProject project, Throwable e )
     {
-        Throwable cause = getCause( e );
+        instance.doHandle( project, e );
+    }
 
-        if ( cause instanceof MultipleArtifactsNotFoundException )
+    public List<MarkerInfo> doHandle( IProject project, Throwable e )
+    {
+        Throwable cause = getCause( e );
+        MarkerInfo markerInfo;
+
+        IMavenExceptionHandler handler = instance.getHandler( cause.getClass() );
+
+        if ( handler != null )
         {
-            instance.handle( project, (MultipleArtifactsNotFoundException) cause );
+            return handler.handle( cause );
         }
-        else if ( cause instanceof ArtifactResolutionException )
+
+        Throwable deepCause = cause.getCause();
+        if ( deepCause != null )
         {
-            instance.handle( project, (ArtifactResolutionException) cause );
-        }
-        else if ( cause instanceof ArtifactNotFoundException )
-        {
-            instance.handle( project, (ArtifactNotFoundException) cause );
-        }
-        else if ( cause instanceof InvalidProjectModelException )
-        {
-            instance.handle( project, (InvalidProjectModelException) cause );
-        }
-        else if ( cause instanceof MavenExecutionException )
-        {
-            instance.handle( project, (MavenExecutionException) cause );
-        }
-        else if ( cause instanceof AbstractMojoExecutionException )
-        {
-            instance.handle( project, (AbstractMojoExecutionException) cause );
-        }
-        else if ( cause instanceof PluginConfigurationException )
-        {
-            instance.handle( project, (PluginConfigurationException) cause );
-        }
-        else if ( cause instanceof InvalidArtifactRTException )
-        {
-            instance.handle( project, (InvalidArtifactRTException) cause );
-        }
-        else if ( cause instanceof XmlPullParserException )
-        {
-            instance.handle( project, (XmlPullParserException) cause );
+            // FIX for Issue 113: Unexpected exceptions can come from maven.
+            // Unwrap unknown exceptions until a known one is found, or fail.
+            return doHandle( project, deepCause );
         }
         else
         {
-            Throwable deepCause = cause.getCause();
-            if ( deepCause != null )
-            {
-                // FIX for Issue 113: Unexpected exceptions can come from maven.
-                // Unwrap unknown exceptions until a known one is found, or fail.
-                handle( project, deepCause );
-            }
-            else
-            {
-                String s = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getName();
-                error( project, "Error: " + s );
-                MavenJdtCoreActivator.getLogger().log( "Unexpected error on project " + project + ": " + s, cause );
-            }
+            String s = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getName();
+            markerInfo = new MarkerInfo( "Error: " + s );
+            MavenJdtCoreActivator.getLogger().log( "Unexpected error on project " + project + ": " + s, cause );
+            return Collections.singletonList( markerInfo );
         }
     }
 
-    private void handle( final IProject project, final ArtifactResolutionException e )
-    {
-        error( project, "Error while resolving "
-                        + getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(),
-                                         e.getClassifier() ) + " : " + e.getMessage() );
-    }
-
-    private void handle( final IProject project, final ArtifactNotFoundException e )
-    {
-        error( project, "Artifact cannot be found - "
-                        + getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(),
-                                         e.getClassifier() ) + " : " + e.getMessage() );
-    }
-
-    private String getArtifactId( String groupId, String artifactId, String version, String type, String classifier )
-    {
-        StringBuilder sb = new StringBuilder();
-        sb.append( groupId );
-        sb.append( ":" );
-        sb.append( artifactId );
-        sb.append( ":" );
-        sb.append( version );
-        sb.append( ":" );
-        sb.append( type );
-        if ( classifier != null )
-        {
-            sb.append( ":" );
-            sb.append( classifier );
-        }
-        return sb.toString();
-    }
-
-    private void handle( final IProject project, final MultipleArtifactsNotFoundException e )
-    {
-        List<Artifact> missingArtifacts = e.getMissingArtifacts();
-        List<String> problems = new ArrayList<String>( missingArtifacts.size() );
-        for ( Artifact artifact : missingArtifacts )
-        {
-            problems.add( "Missing dependency: " + artifact.toString() );
-        }
-        error( project, problems );
-    }
-
-    @SuppressWarnings( "unchecked" )
-    private void handle( IProject project, InvalidProjectModelException e )
-    {
-        ModelValidationResult validationResult = e.getValidationResult();
-        error( project, validationResult.getMessages() );
-    }
-
-    private void handle( IProject project, MavenExecutionException e )
-    {
-        error( project, e.getMessage() );
-    }
-
-    private void handle( IProject project, AbstractMojoExecutionException e )
-    {
-        error( project, e.getLongMessage() );
-    }
-
-    private void handle( IProject project, PluginConfigurationException e )
-    {
-        error( project, e.getMessage() );
-    }
-
-    private void handle( IProject project, InvalidArtifactRTException e )
-    {
-        error( project, e.getBaseMessage() );
-    }
-
-    private void handle( IProject project, XmlPullParserException e )
-    {
-        MarkerInfo markerInfo =
-            new MarkerInfo( IMarker.SEVERITY_ERROR, e.getLineNumber(), e.getColumnNumber(), e.getColumnNumber() + 1 );
-        markPom( project, e.getMessage(), markerInfo );
-    }
-
-    private void markPom( final IProject project, final List<String> problems, final MarkerInfo markerInfo )
+    private void markPom( final IProject project, final List<MarkerInfo> markerInfos )
     {
         final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
 
         IWorkspaceRunnable r = new IWorkspaceRunnable()
         {
-            public void run( IProgressMonitor monitor ) throws CoreException
+            public void run( IProgressMonitor monitor )
+                throws CoreException
             {
                 pom.deleteMarkers( MavenJdtCoreActivator.MARKER_ID, true, IResource.DEPTH_INFINITE );
 
-                for ( String problem : problems )
+                for ( MarkerInfo markerInfo : markerInfos )
                 {
                     try
                     {
                         IMarker marker = pom.createMarker( MavenJdtCoreActivator.MARKER_ID );
-                        marker.setAttribute( IMarker.MESSAGE, problem );
+                        marker.setAttribute( IMarker.MESSAGE, markerInfo.getMessage() );
                         marker.setAttribute( IMarker.SEVERITY, markerInfo.getSeverity() );
                         marker.setAttribute( IMarker.LINE_NUMBER, markerInfo.getLineNumber() );
                         marker.setAttribute( IMarker.CHAR_START, markerInfo.getCharStart() );
@@ -302,18 +261,6 @@ public class MavenExceptionHandler
         {
             MavenJdtCoreActivator.getLogger().log( ce );
         }
-    }
-
-    /**
-     * Add only one marker, note that all previous markers will be deleted
-     * 
-     * @param project
-     * @param msg
-     * @param markerInfo
-     */
-    private void markPom( final IProject project, final String msg, final MarkerInfo markerInfo )
-    {
-        markPom( project, Arrays.asList( new String[] { msg } ), markerInfo );
     }
 
     static Throwable getCause( Throwable e )

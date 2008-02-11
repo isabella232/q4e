@@ -17,6 +17,8 @@ import org.eclipse.core.resources.IMarker;
  */
 public class MarkerInfo
 {
+    private String message;
+
     private int severity = IMarker.SEVERITY_ERROR;
 
     private int lineNumber = 1;
@@ -30,18 +32,41 @@ public class MarkerInfo
         super();
     }
 
+    public MarkerInfo( String message )
+    {
+        this();
+        this.message = message;
+    }
+
+    public MarkerInfo( String message, int severity )
+    {
+        this( message );
+        this.severity = severity;
+    }
+
+    @Deprecated
     public MarkerInfo( int severity )
     {
         this();
         this.severity = severity;
     }
 
-    public MarkerInfo( int severity, int lineNumber, int charStart, int charEnd )
+    public MarkerInfo( String message, int severity, int lineNumber, int charStart, int charEnd )
     {
-        this( severity );
+        this( message, severity );
         this.lineNumber = lineNumber;
         this.charStart = charStart;
         this.charEnd = charEnd;
+    }
+
+    public String getMessage()
+    {
+        return message;
+    }
+
+    public void setMessage( String message )
+    {
+        this.message = message;
     }
 
     public int getSeverity()
