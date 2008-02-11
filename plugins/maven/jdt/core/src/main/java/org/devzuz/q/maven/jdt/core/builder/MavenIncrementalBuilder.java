@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.maven.model.Resource;
 import org.apache.tools.ant.types.selectors.SelectorUtils;
@@ -46,9 +45,6 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
 {
     public static final String MAVEN_INCREMENTAL_BUILDER_ID =
         MavenJdtCoreActivator.PLUGIN_ID + ".mavenIncrementalBuilder"; //$NON-NLS-1$
-    
-    private static final Map<IProject, IMavenProject> previousProjectVersions = 
-    	new ConcurrentHashMap<IProject, IMavenProject>();
 
     private static final Path POM_PATH = new Path( IMavenProject.POM_FILENAME );
 
@@ -57,53 +53,54 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     {
         if ( ( kind == INCREMENTAL_BUILD ) || ( kind == AUTO_BUILD ) )
         {
-        	IMavenProject mavenProject = getMavenProject();
+            IMavenProject mavenProject = getMavenProject();
             IResourceDelta delta = getDelta( getProject() );
             boolean resourcesUpdated = false;
-            
-            //Check if the project's POM was updated.
+
+            // Check if the project's POM was updated.
             IResourceDelta member = delta.findMember( POM_PATH );
             if ( member != null )
             {
                 IProject project = member.getResource().getProject();
                 onPomChange( project, monitor );
-                
-                //The resources or filters elements might have changed,
-                //and we have no history to diff against, so just update
-                //all the resources too on a POM change.
+
+                // The resources or filters elements might have changed,
+                // and we have no history to diff against, so just update
+                // all the resources too on a POM change.
                 onResourcesChange( mavenProject, "resources:resources" );
                 onResourcesChange( mavenProject, "resources:testResources" );
                 resourcesUpdated = true;
             }
-            
-            //If the change was to a file listed in <filters>
-            //we need to reprocess the resources.
+
+            // If the change was to a file listed in <filters>
+            // we need to reprocess the resources.
             if ( mavenProject != null && !resourcesUpdated )
             {
-            	List<String> filters = mavenProject.getFilters();
-            	if( filters != null )
-            	{
-            		for ( String filter : filters ) 
-            		{
-            			IPath filterPath = new Path( filter );
-            			if( filterPath.isAbsolute() )
-            			{
-            				filterPath = filterPath.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
-            			}
-            			IResourceDelta filterMember = delta.findMember( filterPath );
-						if( filterMember != null ) 
-						{
-							onResourcesChange( mavenProject, "resources:resources" );
-			                onResourcesChange( mavenProject, "resources:testResources" );
-			                resourcesUpdated = true;
-			                break;
-						}
-					}
-            	}
+                List<String> filters = mavenProject.getFilters();
+                if ( filters != null )
+                {
+                    for ( String filter : filters )
+                    {
+                        IPath filterPath = new Path( filter );
+                        if ( filterPath.isAbsolute() )
+                        {
+                            filterPath =
+                                filterPath.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
+                        }
+                        IResourceDelta filterMember = delta.findMember( filterPath );
+                        if ( filterMember != null )
+                        {
+                            onResourcesChange( mavenProject, "resources:resources" );
+                            onResourcesChange( mavenProject, "resources:testResources" );
+                            resourcesUpdated = true;
+                            break;
+                        }
+                    }
+                }
             }
 
-            //If the change was to a resource file we need to 
-            //reprocess the resources.
+            // If the change was to a resource file we need to
+            // reprocess the resources.
             if ( mavenProject != null && !resourcesUpdated )
             {
                 handleAllResources( mavenProject, delta );
@@ -175,80 +172,87 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
                                     final String goal ) throws CoreException
     {
         Map<Resource, IPath> resourcePathMap = getPathForResources( mavenProject, resources );
-        
+
         for ( Map.Entry<Resource, IPath> e : resourcePathMap.entrySet() )
         {
-        	final Resource mavenResource = e.getKey();
-        	
-        	//Initialize include/exclude defaults.
-        	final List<String> includes = 
-        		( mavenResource.getIncludes() == null || mavenResource.getIncludes().isEmpty() ) ?
-        				Collections.singletonList("**/**") : mavenResource.getIncludes();
-			final List<String> excludes = 
-        		( mavenResource.getExcludes() == null ) ?
-        				Collections.EMPTY_LIST : mavenResource.getExcludes();
-			
-			final boolean[] matchedResource = { false };
+            final Resource mavenResource = e.getKey();
+
+            // Initialize include/exclude defaults.
+            final List<String> includes =
+                ( mavenResource.getIncludes() == null || mavenResource.getIncludes().isEmpty() ) ? Collections.singletonList( "**/**" )
+                                : mavenResource.getIncludes();
+            final List<String> excludes =
+                ( mavenResource.getExcludes() == null ) ? Collections.EMPTY_LIST : mavenResource.getExcludes();
+
+            final boolean[] matchedResource = { false };
             IResourceDelta deltaMember = delta.findMember( e.getValue() );
             if ( deltaMember != null )
             {
-            	deltaMember.accept(new IResourceDeltaVisitor() 
-            	{
-            		public boolean visit(IResourceDelta delta)
-            				throws CoreException {
-            			
-            			//We only process the delta if it's a file
-            			if( delta.getResource().getType() == IResource.FILE ) 
-            			{
-            				String deltaPath = delta.getResource().getProjectRelativePath().toString();
-            				
-            				//If it matches any includes, and no excludes
-            				if( matchesAnyPattern( deltaPath, includes ) && !matchesAnyPattern( deltaPath, excludes ) ) 
-            				{
-            					
-            					//If the file was removed, delete it from the target
-            					//directory.
-            					if( delta.getKind() == IResourceDelta.REMOVED )
-            					{
-            						IPath resourcePath = delta.getResource().getProjectRelativePath();
-            						IPath resourceRoot = new Path( mavenResource.getDirectory() == null ? "" : mavenResource.getDirectory() );
-            						if( resourceRoot.isAbsolute() ) 
-            						{
-            							resourceRoot = resourceRoot.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
-            						}
-            						resourcePath = resourcePath.removeFirstSegments( resourceRoot.segments().length );
-            						String targetPath = mavenResource.getTargetPath() == null ? "" : mavenResource.getTargetPath();
-            						String buildOutputDir = null;
-            						if( goal.indexOf("test") > -1 )
-            						{
-            							buildOutputDir = mavenProject.getBuildTestOutputDirectory() + "/";
-            						}
-            						else 
-            						{
-            							buildOutputDir = mavenProject.getBuildOutputDirectory() + "/";
-            						}
-            						IPath targetResourcePath = new Path( buildOutputDir + targetPath + "/" + delta.getResource().getLocation().lastSegment() );
-            						if( targetResourcePath.isAbsolute() )
-            						{
-            							targetResourcePath = targetResourcePath.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
-            						}
-            						IFile targetFile = getProject().getFile( targetResourcePath );
-            						if( targetFile.exists() )  
-            						{
-            							targetFile.delete( true, new NullProgressMonitor() );
-            						}
-            					} 
-            					//Otherwise, list this file as being a match.
-            					else
-            					{
-            						matchedResource[0] = true;
-            					}
-            				}
-            			}
-            			return true;
-            		}
-            	});
-                
+                deltaMember.accept( new IResourceDeltaVisitor()
+                {
+                    public boolean visit( IResourceDelta delta ) throws CoreException
+                    {
+
+                        // We only process the delta if it's a file
+                        if ( delta.getResource().getType() == IResource.FILE )
+                        {
+                            String deltaPath = delta.getResource().getProjectRelativePath().toString();
+
+                            // If it matches any includes, and no excludes
+                            if ( matchesAnyPattern( deltaPath, includes ) && !matchesAnyPattern( deltaPath, excludes ) )
+                            {
+
+                                // If the file was removed, delete it from the target
+                                // directory.
+                                if ( delta.getKind() == IResourceDelta.REMOVED )
+                                {
+                                    IPath resourcePath = delta.getResource().getProjectRelativePath();
+                                    IPath resourceRoot =
+                                        new Path( mavenResource.getDirectory() == null ? ""
+                                                        : mavenResource.getDirectory() );
+                                    if ( resourceRoot.isAbsolute() )
+                                    {
+                                        resourceRoot =
+                                            resourceRoot.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
+                                    }
+                                    resourcePath = resourcePath.removeFirstSegments( resourceRoot.segments().length );
+                                    String targetPath =
+                                        mavenResource.getTargetPath() == null ? "" : mavenResource.getTargetPath();
+                                    String buildOutputDir = null;
+                                    if ( goal.indexOf( "test" ) > -1 )
+                                    {
+                                        buildOutputDir = mavenProject.getBuildTestOutputDirectory() + "/";
+                                    }
+                                    else
+                                    {
+                                        buildOutputDir = mavenProject.getBuildOutputDirectory() + "/";
+                                    }
+                                    IPath targetResourcePath =
+                                        new Path( buildOutputDir + targetPath + "/"
+                                                        + delta.getResource().getLocation().lastSegment() );
+                                    if ( targetResourcePath.isAbsolute() )
+                                    {
+                                        targetResourcePath =
+                                            targetResourcePath.removeFirstSegments(
+                                                                                    getProject().getLocation().segmentCount() ).makeRelative();
+                                    }
+                                    IFile targetFile = getProject().getFile( targetResourcePath );
+                                    if ( targetFile.exists() )
+                                    {
+                                        targetFile.delete( true, new NullProgressMonitor() );
+                                    }
+                                }
+                                // Otherwise, list this file as being a match.
+                                else
+                                {
+                                    matchedResource[0] = true;
+                                }
+                            }
+                        }
+                        return true;
+                    }
+                } );
+
                 if ( matchedResource[0] )
                 {
                     onResourcesChange( mavenProject, goal );
@@ -256,7 +260,6 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             }
         }
     }
-
 
     /**
      * Checks if the given path matches any of the specified patterns.
