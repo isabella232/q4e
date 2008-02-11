@@ -23,8 +23,8 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -58,7 +58,6 @@ public class AnalyserGui
         versionsTable.setInput( versions );
         duplicatesTable.setInput( duplicates );
         refreshAll();
-        shell.pack();
         shell.open();
     }
 
@@ -80,19 +79,22 @@ public class AnalyserGui
     public AnalyserGui( String projectName, Display display )
     {
         shell = new Shell( display );
-        shell.setLayout( new RowLayout( SWT.VERTICAL ) );
-        shell.setSize( 1000, 700 );
+        shell.setLayout( new FillLayout() );
+        shell.setSize( 700, 500 ); // don't use shell.pack() or it will override these values
         shell.setText( "Dependency Tree For: " + projectName );
         shell.setImage( DependencyAnalysisActivator.getDefault().getImageRegistry().get( "normal" ) );
 
         SashForm mainForm = new SashForm( shell, SWT.HORIZONTAL );
+        mainForm.setLayout( new FillLayout() );
 
         // create view components and layouts
         instanceTree = new TreeViewer( mainForm, SWT.BORDER );
         SashForm rightPanel = new SashForm( mainForm, SWT.VERTICAL );
+        rightPanel.setLayout( new FillLayout() );
         versionsTable = new TableViewer( rightPanel, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION );
         versionsTable.getTable().setLayoutData( new RowData() );
         duplicatesTable = new TableViewer( rightPanel, SWT.SINGLE | SWT.BORDER | SWT.FULL_SELECTION );
+        rightPanel.setWeights( new int[] { 2, 1 } );
 
         // populate the instances tree
         instanceTree.setContentProvider( new InstanceTreeContentProvider() );
@@ -205,7 +207,8 @@ public class AnalyserGui
     /**
      * colours the selected table rows correctly
      */
-    public class SelectionListener implements Listener
+    public class SelectionListener
+        implements Listener
     {
 
         public void handleEvent( Event event )
