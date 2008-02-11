@@ -82,6 +82,8 @@ public class EclipseMavenProject implements IMavenProject
     private List<String> compileSourceRoots;
 
     private List<String> testCompileSourceRoots;
+    
+    private List<String> filters;
 
     private List<Resource> resources;
 
@@ -223,6 +225,7 @@ public class EclipseMavenProject implements IMavenProject
         buildPlugins = mavenRawProject.getBuild().getPlugins();
         remoteArtifactRepositories = mavenRawProject.getRemoteArtifactRepositories();
         packaging = mavenRawProject.getPackaging();
+        filters = mavenRawProject.getFilters();
     }
 
     public void refreshDependencies( MavenProject mavenRawProject )
@@ -358,6 +361,11 @@ public class EclipseMavenProject implements IMavenProject
     public List<String> getCompileSourceRoots()
     {
         return compileSourceRoots;
+    }
+    
+    public List<String> getFilters() 
+    {
+        return filters;
     }
 
     public List<Resource> getResources()

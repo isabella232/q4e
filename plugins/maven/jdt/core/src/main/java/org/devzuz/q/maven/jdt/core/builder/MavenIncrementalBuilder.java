@@ -7,13 +7,11 @@
 package org.devzuz.q.maven.jdt.core.builder;
 
 import java.io.File;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
-import java.util.Queue;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.maven.model.Resource;
 import org.apache.tools.ant.types.selectors.SelectorUtils;
@@ -29,12 +27,14 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
 /**
@@ -44,9 +44,11 @@ import org.eclipse.core.runtime.Path;
  */
 public class MavenIncrementalBuilder extends IncrementalProjectBuilder
 {
-
     public static final String MAVEN_INCREMENTAL_BUILDER_ID =
         MavenJdtCoreActivator.PLUGIN_ID + ".mavenIncrementalBuilder"; //$NON-NLS-1$
+    
+    private static final Map<IProject, IMavenProject> previousProjectVersions = 
+    	new ConcurrentHashMap<IProject, IMavenProject>();
 
     private static final Path POM_PATH = new Path( IMavenProject.POM_FILENAME );
 
@@ -55,22 +57,56 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     {
         if ( ( kind == INCREMENTAL_BUILD ) || ( kind == AUTO_BUILD ) )
         {
+        	IMavenProject mavenProject = getMavenProject();
             IResourceDelta delta = getDelta( getProject() );
-
+            boolean resourcesUpdated = false;
+            
+            //Check if the project's POM was updated.
             IResourceDelta member = delta.findMember( POM_PATH );
             if ( member != null )
             {
                 IProject project = member.getResource().getProject();
                 onPomChange( project, monitor );
-                // TODO: <resource> and/or <filter> settings could have changed.
+                
+                //The resources or filters elements might have changed,
+                //and we have no history to diff against, so just update
+                //all the resources too on a POM change.
+                onResourcesChange( mavenProject, "resources:resources" );
+                onResourcesChange( mavenProject, "resources:testResources" );
+                resourcesUpdated = true;
+            }
+            
+            //If the change was to a file listed in <filters>
+            //we need to reprocess the resources.
+            if ( mavenProject != null && !resourcesUpdated )
+            {
+            	List<String> filters = mavenProject.getFilters();
+            	if( filters != null )
+            	{
+            		for ( String filter : filters ) 
+            		{
+            			IPath filterPath = new Path( filter );
+            			if( filterPath.isAbsolute() )
+            			{
+            				filterPath = filterPath.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
+            			}
+            			IResourceDelta filterMember = delta.findMember( filterPath );
+						if( filterMember != null ) 
+						{
+							onResourcesChange( mavenProject, "resources:resources" );
+			                onResourcesChange( mavenProject, "resources:testResources" );
+			                resourcesUpdated = true;
+			                break;
+						}
+					}
+            	}
             }
 
-            IMavenProject mavenProject = getMavenProject();
-
-            if ( mavenProject != null )
+            //If the change was to a resource file we need to 
+            //reprocess the resources.
+            if ( mavenProject != null && !resourcesUpdated )
             {
                 handleAllResources( mavenProject, delta );
-                // TODO: if <filter> is set on the pom.xml, the referenced file could have changed
             }
         }
         else
@@ -135,26 +171,85 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
      * @throws CoreException
      *             if there is a problem updating the resources.
      */
-    private void doHandleResources( IMavenProject mavenProject, IResourceDelta delta, List<Resource> resources,
-                                    String goal ) throws CoreException
+    private void doHandleResources( final IMavenProject mavenProject, IResourceDelta delta, List<Resource> resources,
+                                    final String goal ) throws CoreException
     {
         Map<Resource, IPath> resourcePathMap = getPathForResources( mavenProject, resources );
+        
         for ( Map.Entry<Resource, IPath> e : resourcePathMap.entrySet() )
         {
+        	final Resource mavenResource = e.getKey();
+        	
+        	//Initialize include/exclude defaults.
+        	final List<String> includes = 
+        		( mavenResource.getIncludes() == null || mavenResource.getIncludes().isEmpty() ) ?
+        				Collections.singletonList("**/**") : mavenResource.getIncludes();
+			final List<String> excludes = 
+        		( mavenResource.getExcludes() == null ) ?
+        				Collections.EMPTY_LIST : mavenResource.getExcludes();
+			
+			final boolean[] matchedResource = { false };
             IResourceDelta deltaMember = delta.findMember( e.getValue() );
             if ( deltaMember != null )
             {
-                Resource mavenResource = e.getKey();
-                List<String> allPaths = getAllPaths( deltaMember );
-                MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "All affected resources: ",
-                                             allPaths );
-                filterExclusions( allPaths, mavenResource.getExcludes() );
-                MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "Affected after excludes: ",
-                                             mavenResource.getExcludes(), "->", allPaths );
-                filterInclusions( allPaths, mavenResource.getIncludes() );
-                MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "Affected after includes: ",
-                                             mavenResource.getIncludes(), "->", allPaths );
-                if ( !allPaths.isEmpty() )
+            	deltaMember.accept(new IResourceDeltaVisitor() 
+            	{
+            		public boolean visit(IResourceDelta delta)
+            				throws CoreException {
+            			
+            			//We only process the delta if it's a file
+            			if( delta.getResource().getType() == IResource.FILE ) 
+            			{
+            				String deltaPath = delta.getResource().getProjectRelativePath().toString();
+            				
+            				//If it matches any includes, and no excludes
+            				if( matchesAnyPattern( deltaPath, includes ) && !matchesAnyPattern( deltaPath, excludes ) ) 
+            				{
+            					
+            					//If the file was removed, delete it from the target
+            					//directory.
+            					if( delta.getKind() == IResourceDelta.REMOVED )
+            					{
+            						IPath resourcePath = delta.getResource().getProjectRelativePath();
+            						IPath resourceRoot = new Path( mavenResource.getDirectory() == null ? "" : mavenResource.getDirectory() );
+            						if( resourceRoot.isAbsolute() ) 
+            						{
+            							resourceRoot = resourceRoot.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
+            						}
+            						resourcePath = resourcePath.removeFirstSegments( resourceRoot.segments().length );
+            						String targetPath = mavenResource.getTargetPath() == null ? "" : mavenResource.getTargetPath();
+            						String buildOutputDir = null;
+            						if( goal.indexOf("test") > -1 )
+            						{
+            							buildOutputDir = mavenProject.getBuildTestOutputDirectory() + "/";
+            						}
+            						else 
+            						{
+            							buildOutputDir = mavenProject.getBuildOutputDirectory() + "/";
+            						}
+            						IPath targetResourcePath = new Path( buildOutputDir + targetPath + "/" + delta.getResource().getLocation().lastSegment() );
+            						if( targetResourcePath.isAbsolute() )
+            						{
+            							targetResourcePath = targetResourcePath.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
+            						}
+            						IFile targetFile = getProject().getFile( targetResourcePath );
+            						if( targetFile.exists() )  
+            						{
+            							targetFile.delete( true, new NullProgressMonitor() );
+            						}
+            					} 
+            					//Otherwise, list this file as being a match.
+            					else
+            					{
+            						matchedResource[0] = true;
+            					}
+            				}
+            			}
+            			return true;
+            		}
+            	});
+                
+                if ( matchedResource[0] )
                 {
                     onResourcesChange( mavenProject, goal );
                 }
@@ -162,61 +257,6 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
         }
     }
 
-    /**
-     * Modifies the <code>resourcePaths</code> list removing all the paths matched by the exclusion patterns.
-     * 
-     * If there are no exclusion patterns, the original list is not modified.
-     * 
-     * @param resourcePaths
-     *            the original resource paths for every modified resources in a resource folder.
-     * @param patterns
-     *            the exclusion patterns.
-     */
-    private void filterExclusions( List<String> resourcePaths, List<String> patterns )
-    {
-        if ( patterns.isEmpty() )
-        {
-            // No exclusion patterns, nothing to filter
-            return;
-        }
-
-        for ( ListIterator<String> it = resourcePaths.listIterator(); it.hasNext(); )
-        {
-            String path = it.next();
-            if ( matchesAnyPattern( path, patterns ) )
-            {
-                it.remove();
-            }
-        }
-    }
-
-    /**
-     * Modifies the <code>resourcePaths</code> list removing all the paths not matched by the inclussion patterns.
-     * 
-     * If there are no inclusion patterns, the original list is not modified.
-     * 
-     * @param resourcePaths
-     *            the original resource paths for every modified resources in a resource folder.
-     * @param patterns
-     *            the inclusion patterns.
-     */
-    private void filterInclusions( List<String> resourcePaths, List<String> patterns )
-    {
-        if ( patterns.isEmpty() )
-        {
-            // No exclussion patterns, nothing to filter
-            return;
-        }
-
-        for ( ListIterator<String> it = resourcePaths.listIterator(); it.hasNext(); )
-        {
-            String path = it.next();
-            if ( !matchesAnyPattern( path, patterns ) )
-            {
-                it.remove();
-            }
-        }
-    }
 
     /**
      * Checks if the given path matches any of the specified patterns.
@@ -238,34 +278,6 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             }
         }
         return false;
-    }
-
-    /**
-     * Gets the path of the affected files in any nesting level.
-     * 
-     * An affected file is any file contained in the delta. Folders and Projects are always ignored.
-     * 
-     * @param delta
-     *            the delta whose affected paths are being recovered.
-     * @return the affected paths, as <code>String</code>s.
-     */
-    private List<String> getAllPaths( IResourceDelta delta )
-    {
-        List<String> result = new LinkedList<String>();
-        Queue<IResourceDelta> pendingDeltas = new LinkedList<IResourceDelta>();
-        pendingDeltas.add( delta );
-        while ( !pendingDeltas.isEmpty() )
-        {
-            // get the first element in the queue
-            IResourceDelta currentDelta = pendingDeltas.remove();
-            if ( currentDelta.getResource().getType() == IResource.FILE )
-            {
-                // Only update on file changes
-                result.add( currentDelta.getResource().getProjectRelativePath().toString() );
-            }
-            pendingDeltas.addAll( Arrays.asList( currentDelta.getAffectedChildren() ) );
-        }
-        return result;
     }
 
     /**

@@ -75,6 +75,8 @@ public interface IMavenProject extends IAdaptable
     public abstract List<String> getCompileSourceRoots();
 
     public abstract List<String> getTestCompileSourceRoots();
+    
+    public abstract List<String> getFilters();
 
     public abstract List<Resource> getResources();
 
