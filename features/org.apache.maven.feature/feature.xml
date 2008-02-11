@@ -2,7 +2,7 @@
 <feature
       id="org.apache.maven.feature"
       label="%featureName"
-      version="2.1.0.v619946"
+      version="2.1.0.v620417"
       provider-name="%providerName">
 
    <description>
@@ -29,7 +29,7 @@
          id="org.apache.maven.embedder"
          download-size="0"
          install-size="0"
-         version="2.1.0.v619946"
+         version="2.1.0.v620417"
          unpack="false"/>
 
    <plugin
