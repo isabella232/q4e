@@ -60,19 +60,6 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                                                      "Skipping because it is not managed by q4e: " + project );
                     }
                 }
-                else if ( projectDelta.getKind() == IResourceDelta.CHANGED )
-                {
-                    IResourceDelta pomDelta = projectDelta.findMember( POM_PATH );
-                    if ( ( pomDelta != null ) && isMavenManagedProject( project ) )
-                    {
-                        MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
-                                                     pomDelta.getResource().getFullPath(), " changed in ",
-                                                     project.getName(),
-                                                     ". Invalidating cached data in maven project manager cache." );
-                        MavenManager.getMavenProjectManager().setMavenProjectModified( project );
-                        needsProjectRefresh = true;
-                    }
-                }
                 if ( needsProjectRefresh )
                 {
                     updateProjectsClasspathWithProject( project );
