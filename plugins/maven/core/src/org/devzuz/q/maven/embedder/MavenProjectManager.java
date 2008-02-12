@@ -87,8 +87,21 @@ public class MavenProjectManager
      */
     public void addMavenProject( IProject project, IMavenProject mavenProject, boolean resolvedTransitively )
     {
+        try
+        {
+            /* Add information we want to be persisted with the IProject */
+            setPersistentProperties( project, mavenProject );
+        }
+        catch ( CoreException e )
+        {
+            MavenCoreActivator.getLogger().log( "Unable to persist important information to Project '" + 
+                                                project.getName() + "'", e );
+        }
+        
+        /* Create the cache object and add to cache*/
         MavenProjectCachedInfo cachedProject =
             MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolvedTransitively );
+        
         addCachedInfo( project, cachedProject );
     }
 
@@ -142,9 +155,7 @@ public class MavenProjectManager
             IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, resolveTransitively );
 
             /* Add information we want to be persisted with the IProject */
-            project.setPersistentProperty( IMavenProject.GROUP_ID, mavenProject.getGroupId() );
-            project.setPersistentProperty( IMavenProject.ARTIFACT_ID, mavenProject.getArtifactId() );
-            project.setPersistentProperty( IMavenProject.VERSION, mavenProject.getVersion() );
+            setPersistentProperties( project, mavenProject );
 
             /* Create cache object */
             cachedProject = MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolveTransitively );
@@ -154,6 +165,13 @@ public class MavenProjectManager
         }
 
         return cachedProject.getMavenProject();
+    }
+
+    private void setPersistentProperties( IProject project, IMavenProject mavenProject ) throws CoreException
+    {
+        project.setPersistentProperty( IMavenProject.GROUP_ID, mavenProject.getGroupId() );
+        project.setPersistentProperty( IMavenProject.ARTIFACT_ID, mavenProject.getArtifactId() );
+        project.setPersistentProperty( IMavenProject.VERSION, mavenProject.getVersion() );
     }
 
     /**
