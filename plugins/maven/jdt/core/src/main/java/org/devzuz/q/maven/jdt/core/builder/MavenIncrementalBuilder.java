@@ -9,6 +9,7 @@ package org.devzuz.q.maven.jdt.core.builder;
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,82 +44,409 @@ import org.eclipse.core.runtime.Path;
  */
 public class MavenIncrementalBuilder extends IncrementalProjectBuilder
 {
+    /**
+     * TODO Document
+     * 
+     * @author amuino
+     */
+    private final class DeltaVisitor implements IResourceDeltaVisitor
+    {
+        private final String goal;
+
+        private final IMavenProject mavenProject;
+
+        private final Resource mavenResource;
+
+        private boolean matchedResource;
+
+        private final List<String> includes;
+
+        private final List<String> excludes;
+
+        /**
+         * @param goal
+         * @param mavenProject
+         * @param mavenResource
+         */
+        public DeltaVisitor( String goal, IMavenProject mavenProject, Resource mavenResource )
+        {
+            this.goal = goal;
+            this.mavenProject = mavenProject;
+            this.mavenResource = mavenResource;
+            // Initialize include/exclude defaults.
+            this.includes =
+                ( mavenResource.getIncludes().isEmpty() ) ? Collections.singletonList( "**/**" )
+                                : mavenResource.getIncludes();
+            this.excludes = mavenResource.getExcludes();
+        }
+
+        public boolean visit( IResourceDelta delta ) throws CoreException
+        {
+            if ( delta.getResource().getType() == IResource.FILE )
+            {
+                // We only process the delta if it's a file
+                String deltaPath = delta.getResource().getProjectRelativePath().toString();
+                // If it matches any includes, and no excludes
+                if ( matchesAnyPattern( deltaPath, includes ) && !matchesAnyPattern( deltaPath, excludes ) )
+                {
+                    // If the file was removed, delete it from the target
+                    // directory.
+                    if ( delta.getKind() == IResourceDelta.REMOVED )
+                    {
+                        processFileDelete( delta );
+                    }
+                    else
+                    {
+                        // Otherwise, list this file as being a match.
+                        matchedResource = true;
+                    }
+                }
+            }
+            // process all changed resources (so we can delete generated files for deleted source files)
+            return true;
+        }
+
+        /**
+         * Returns true if any resource has been modified, matched by the inclusion patterns and not matched by the
+         * exclusion patterns.
+         * 
+         * @return
+         */
+        public boolean isMatched()
+        {
+            return matchedResource;
+        }
+
+        /**
+         * Handles deleting the file in the output folder.
+         * 
+         * @param delta
+         *            the delta describing the delete.
+         * @throws CoreException
+         *             if an error occurs deleting the resource in the output folder.
+         */
+        private void processFileDelete( IResourceDelta delta ) throws CoreException
+        {
+            IPath resourcePath = delta.getResource().getProjectRelativePath();
+            IPath resourceRoot = new Path( mavenResource.getDirectory() );
+            if ( resourceRoot.isAbsolute() )
+            {
+                resourceRoot =
+                    resourceRoot.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
+            }
+            resourcePath = resourcePath.removeFirstSegments( resourceRoot.segments().length );
+            String buildOutputDir = null;
+            if ( goal.equals( TEST_RESOURCES_GOAL ) )
+            {
+                buildOutputDir = mavenProject.getBuildTestOutputDirectory() + "/";
+            }
+            else
+            {
+                buildOutputDir = mavenProject.getBuildOutputDirectory() + "/";
+            }
+            IPath targetResourcePath = new Path( buildOutputDir );
+            if ( null != mavenResource.getTargetPath() )
+            {
+                targetResourcePath = targetResourcePath.append( mavenResource.getTargetPath() );
+            }
+            targetResourcePath = targetResourcePath.append( resourcePath );
+            if ( targetResourcePath.isAbsolute() )
+            {
+                targetResourcePath =
+                    targetResourcePath.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
+            }
+            IFile targetFile = getProject().getFile( targetResourcePath );
+            if ( targetFile.exists() )
+            {
+                MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "Deleting ", targetFile );
+                targetFile.delete( true, new NullProgressMonitor() );
+            }
+        }
+
+        /**
+         * Checks if the given path matches any of the specified patterns.
+         * 
+         * @param resourcePath
+         *            the path to check.
+         * @param patterns
+         *            the path patterns (ant style).
+         * @return <code>true</code> if the path is matched by at least one of the patterns.
+         */
+        private boolean matchesAnyPattern( String resourcePath, List<String> patterns )
+        {
+            for ( String pattern : patterns )
+            {
+                boolean matches = SelectorUtils.matchPath( pattern, resourcePath );
+                if ( matches )
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    /**
+     * Helper class to manage the data passed to different methods of the builder.
+     * 
+     * This class acts as a register and intentionally has no accessor methods.
+     * 
+     * @author amuino
+     */
+    private class BuildStatus
+    {
+
+        public boolean resourcesRefreshed = false;
+
+        public boolean testResourcesRefreshed = false;
+
+        public IMavenProject mavenProject = null;
+
+        public IResourceDelta delta = null;
+
+        public IProgressMonitor monitor = null;
+    }
+
+    /**
+     * 
+     */
+    private static final String TEST_RESOURCES_GOAL = "resources:testResources";
+
+    /**
+     * 
+     */
+    private static final String RESOURCES_GOAL = "resources:resources";
+
     public static final String MAVEN_INCREMENTAL_BUILDER_ID =
         MavenJdtCoreActivator.PLUGIN_ID + ".mavenIncrementalBuilder"; //$NON-NLS-1$
 
     private static final Path POM_PATH = new Path( IMavenProject.POM_FILENAME );
 
+    private IMavenProject lastGoodProject = null;
+
     @Override
     protected IProject[] build( int kind, Map args, IProgressMonitor monitor ) throws CoreException
     {
+        BuildStatus status = new BuildStatus();
+        status.monitor = monitor;
+        // The project as cached before the change.
+        status.mavenProject = lastGoodProject;
+
         if ( ( kind == INCREMENTAL_BUILD ) || ( kind == AUTO_BUILD ) )
         {
-            IMavenProject mavenProject = getMavenProject();
-            IResourceDelta delta = getDelta( getProject() );
-            boolean resourcesUpdated = false;
+            status.delta = getDelta( getProject() );
 
             // Check if the project's POM was updated.
-            IResourceDelta member = delta.findMember( POM_PATH );
+            IResourceDelta member = status.delta.findMember( POM_PATH );
             if ( member != null )
             {
-                IProject project = member.getResource().getProject();
-                onPomChange( project, monitor );
-
-                // The resources or filters elements might have changed,
-                // and we have no history to diff against, so just update
-                // all the resources too on a POM change.
-                onResourcesChange( mavenProject, "resources:resources" );
-                onResourcesChange( mavenProject, "resources:testResources" );
-                resourcesUpdated = true;
+                handlePom( status, member );
+            }
+            if ( null == status.mavenProject )
+            {
+                // The pom.xml does not parse, don not continue
+                return null;
             }
 
-            // If the change was to a file listed in <filters>
-            // we need to reprocess the resources.
-            if ( mavenProject != null && !resourcesUpdated )
+            // If the change was to a file listed in <filters>, pom.xml parses and at least one resource has not been
+            // synced we need to re-process the resources.
+            if ( !status.resourcesRefreshed || !status.testResourcesRefreshed )
             {
-                List<String> filters = mavenProject.getFilters();
-                if ( filters != null )
-                {
-                    for ( String filter : filters )
-                    {
-                        IPath filterPath = new Path( filter );
-                        if ( filterPath.isAbsolute() )
-                        {
-                            filterPath =
-                                filterPath.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
-                        }
-                        IResourceDelta filterMember = delta.findMember( filterPath );
-                        if ( filterMember != null )
-                        {
-                            onResourcesChange( mavenProject, "resources:resources" );
-                            onResourcesChange( mavenProject, "resources:testResources" );
-                            resourcesUpdated = true;
-                            break;
-                        }
-                    }
-                }
+                handleFilterFiles( status );
             }
 
-            // If the change was to a resource file we need to
-            // reprocess the resources.
-            if ( mavenProject != null && !resourcesUpdated )
+            // If the change was to a resource file, pom.xml parses and at least on resource has not been synced we
+            // need to process the resources.
+            if ( !status.resourcesRefreshed || !status.testResourcesRefreshed )
             {
-                handleAllResources( mavenProject, delta );
+                handleAllResources( status );
             }
         }
         else
         {
             // full build
-            onPomChange( getProject(), monitor );
+            onPomChange( status );
             // get the maven project after refreshing the pom so it is updated
-            IMavenProject mavenProject = getMavenProject();
-            if ( mavenProject != null )
+            status.mavenProject = getMavenProject();
+            if ( status.mavenProject != null )
             {
-                onResourcesChange( mavenProject, "resources:resources" );
-                onResourcesChange( mavenProject, "resources:testResources" );
+                onResourcesChange( status );
             }
         }
+        if ( status.mavenProject != null )
+        {
+            lastGoodProject = status.mavenProject;
+        }
         return null;
+    }
+
+    /**
+     * @param status
+     * @param member
+     * @return
+     * @throws CoreException
+     */
+    private void handlePom( BuildStatus status, IResourceDelta member ) throws CoreException
+    {
+        // Process change event
+        onPomChange( status );
+        // Re-read project after processing change to the pom
+        status.mavenProject = getMavenProject();
+        if ( status.mavenProject == null )
+        {
+            // Non parseable after modification, do not try to run any goals
+            MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER,
+                                         "pom.xml not parseable, skipping refreshing resources" );
+            return;
+        }
+        else if ( lastGoodProject == null )
+        {
+            // No previous version to compare, process resources
+            MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER,
+                                         "Previous version of pom.xml not parseable, forced refreshing resources" );
+            onResourcesChange( status );
+        }
+        else
+        {
+            status.resourcesRefreshed =
+                handleResourceConfig( status.mavenProject, lastGoodProject.getResources(),
+                                      status.mavenProject.getResources(), RESOURCES_GOAL, status.monitor );
+            status.testResourcesRefreshed =
+                handleResourceConfig( status.mavenProject, lastGoodProject.getTestResources(),
+                                      status.mavenProject.getTestResources(), TEST_RESOURCES_GOAL, status.monitor );
+        }
+    }
+
+    /**
+     * Checks for changes in the <filters> section of the pom and refreshes the affected resources when needed.
+     * 
+     * @param status
+     *            the current build status.
+     * @throws CoreException
+     *             if there is an error refreshing the resources.
+     */
+    private void handleFilterFiles( BuildStatus status ) throws CoreException
+    {
+        List<String> filters = status.mavenProject.getFilters();
+        if ( filters != null )
+        {
+            for ( String filter : filters )
+            {
+                IPath filterPath = new Path( filter );
+                if ( filterPath.isAbsolute() )
+                {
+                    filterPath =
+                        filterPath.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
+                }
+                IResourceDelta filterMember = status.delta.findMember( filterPath );
+                if ( filterMember != null )
+                {
+                    // At least one filter file has changed, update all filtered resources left
+                    onResourcesChange( status, false );
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
+     * Refreshes the resources with the given goal if the change detected in the pom requires it.
+     * 
+     * @param status
+     *            the current build status.
+     * @param oldProject
+     *            the maven project before the change to the pom.
+     * @return <code>true</code> if the resources have been refreshed as a result of the changes to the pom.
+     * @throws CoreException
+     *             if an error occurs while refreshing resources.
+     */
+    private boolean handleResourceConfig( IMavenProject mavenProject, List<Resource> oldResources,
+                                          List<Resource> newResources, String goal, IProgressMonitor monitor )
+        throws CoreException
+    {
+        boolean refreshRequired = false;
+        boolean isResourceFiltered = isAnyResourceFiltered( newResources );
+        if ( isResourceFiltered )
+        {
+            // Filtered resources can use almost any part of the pom. Refresh always.
+            MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "Filtering enabled: ", goal );
+            refreshRequired = true;
+        }
+        else
+        {
+            // Non filtered resources, refresh if the resources configuration has changed
+            refreshRequired = resourcesModified( newResources, oldResources );
+            if ( refreshRequired )
+            {
+                MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER,
+                                             "Resources configuration changed: ", goal );
+            }
+        }
+        if ( refreshRequired )
+        {
+            onResourcesChange( mavenProject, goal, monitor );
+        }
+        return refreshRequired;
+    }
+
+    /**
+     * Utility method to compare two lists of resources, since {@link Resource} does not implement equals.
+     * 
+     * @param l1
+     *            a non-null list of resources.
+     * @param l2
+     *            another non-null list of resources.
+     * @return
+     */
+    private boolean resourcesModified( List<Resource> l1, List<Resource> l2 )
+    {
+        if ( l1 == null || l2 == null )
+        {
+            throw new IllegalArgumentException( "Resource lists can't be null for comparing." );
+        }
+        if ( l1.size() != l2.size() )
+        {
+            return false;
+        }
+        else
+        {
+            // same size, iterate in parallel
+            Iterator<Resource> it1 = l1.iterator();
+            Iterator<Resource> it2 = l2.iterator();
+            boolean stillEquals = true;
+            while ( stillEquals && it1.hasNext() )
+            {
+                Resource r1 = it1.next();
+                Resource r2 = it2.next();
+                stillEquals =
+                    r1.getDirectory().equals( r2.getDirectory() )
+                                    && r1.getExcludes().equals( r2.getExcludes() )
+                                    && r1.getIncludes().equals( r2.getIncludes() )
+                                    && r1.getModelEncoding().equals( r2.getModelEncoding() )
+                                    && r1.isFiltering() == r2.isFiltering()
+                                    && ( ( r1.getTargetPath() == null && r2.getTargetPath() == null ) || r1.equals( r2.getTargetPath() ) );
+            }
+            return !stillEquals;
+        }
+    }
+
+    /**
+     * Checks if any of the resources in the list is being filtered.
+     * 
+     * @param resources
+     *            the resources to check.
+     * @return <code>true</code> if any of the passed resources is filtering, <code>false</code> otherwise.
+     */
+    private boolean isAnyResourceFiltered( List<Resource> resources )
+    {
+        for ( Resource r : resources )
+        {
+            if ( r.isFiltering() )
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -143,17 +471,17 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     /**
      * Handles updates to the generated resources and test resources when needed.
      * 
-     * @param mavenProject
-     *            the project to update.
+     * @param status
+     *            the status of the in-progress build.
      * @throws CoreException
      *             if there is a problem updating the resources.
      */
-    private void handleAllResources( IMavenProject mavenProject, IResourceDelta delta ) throws CoreException
+    private void handleAllResources( BuildStatus status ) throws CoreException
     {
-        List<Resource> resources = mavenProject.getResources();
-        List<Resource> testResources = mavenProject.getTestResources();
-        doHandleResources( mavenProject, delta, resources, "resources:resources" );
-        doHandleResources( mavenProject, delta, testResources, "resources:testResources" );
+        List<Resource> resources = status.mavenProject.getResources();
+        List<Resource> testResources = status.mavenProject.getTestResources();
+        doHandleResources( status, resources, RESOURCES_GOAL );
+        doHandleResources( status, testResources, TEST_RESOURCES_GOAL );
     }
 
     /**
@@ -168,119 +496,26 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
      * @throws CoreException
      *             if there is a problem updating the resources.
      */
-    private void doHandleResources( final IMavenProject mavenProject, IResourceDelta delta, List<Resource> resources,
-                                    final String goal ) throws CoreException
+    private void doHandleResources( BuildStatus status, List<Resource> resources, final String goal )
+        throws CoreException
     {
-        Map<Resource, IPath> resourcePathMap = getPathForResources( mavenProject, resources );
+        Map<Resource, IPath> resourcePathMap = getPathForResources( status.mavenProject, resources );
 
         for ( Map.Entry<Resource, IPath> e : resourcePathMap.entrySet() )
         {
             final Resource mavenResource = e.getKey();
 
-            // Initialize include/exclude defaults.
-            final List<String> includes =
-                ( mavenResource.getIncludes() == null || mavenResource.getIncludes().isEmpty() ) ? Collections.singletonList( "**/**" )
-                                : mavenResource.getIncludes();
-            final List<String> excludes =
-                ( mavenResource.getExcludes() == null ) ? Collections.EMPTY_LIST : mavenResource.getExcludes();
-
-            final boolean[] matchedResource = { false };
-            IResourceDelta deltaMember = delta.findMember( e.getValue() );
+            IResourceDelta deltaMember = status.delta.findMember( e.getValue() );
             if ( deltaMember != null )
             {
-                deltaMember.accept( new IResourceDeltaVisitor()
+                DeltaVisitor deltaVisitor = new DeltaVisitor( goal, status.mavenProject, mavenResource );
+                deltaMember.accept( deltaVisitor );
+                if ( deltaVisitor.isMatched() )
                 {
-                    public boolean visit( IResourceDelta delta ) throws CoreException
-                    {
-
-                        // We only process the delta if it's a file
-                        if ( delta.getResource().getType() == IResource.FILE )
-                        {
-                            String deltaPath = delta.getResource().getProjectRelativePath().toString();
-
-                            // If it matches any includes, and no excludes
-                            if ( matchesAnyPattern( deltaPath, includes ) && !matchesAnyPattern( deltaPath, excludes ) )
-                            {
-
-                                // If the file was removed, delete it from the target
-                                // directory.
-                                if ( delta.getKind() == IResourceDelta.REMOVED )
-                                {
-                                    IPath resourcePath = delta.getResource().getProjectRelativePath();
-                                    IPath resourceRoot =
-                                        new Path( mavenResource.getDirectory() == null ? ""
-                                                        : mavenResource.getDirectory() );
-                                    if ( resourceRoot.isAbsolute() )
-                                    {
-                                        resourceRoot =
-                                            resourceRoot.removeFirstSegments( getProject().getLocation().segmentCount() ).makeRelative();
-                                    }
-                                    resourcePath = resourcePath.removeFirstSegments( resourceRoot.segments().length );
-                                    String targetPath =
-                                        mavenResource.getTargetPath() == null ? "" : mavenResource.getTargetPath();
-                                    String buildOutputDir = null;
-                                    if ( goal.indexOf( "test" ) > -1 )
-                                    {
-                                        buildOutputDir = mavenProject.getBuildTestOutputDirectory() + "/";
-                                    }
-                                    else
-                                    {
-                                        buildOutputDir = mavenProject.getBuildOutputDirectory() + "/";
-                                    }
-                                    IPath targetResourcePath =
-                                        new Path( buildOutputDir + targetPath + "/"
-                                                        + delta.getResource().getLocation().lastSegment() );
-                                    if ( targetResourcePath.isAbsolute() )
-                                    {
-                                        targetResourcePath =
-                                            targetResourcePath.removeFirstSegments(
-                                                                                    getProject().getLocation().segmentCount() ).makeRelative();
-                                    }
-                                    IFile targetFile = getProject().getFile( targetResourcePath );
-                                    if ( targetFile.exists() )
-                                    {
-                                        targetFile.delete( true, new NullProgressMonitor() );
-                                    }
-                                }
-                                // Otherwise, list this file as being a match.
-                                else
-                                {
-                                    matchedResource[0] = true;
-                                }
-                            }
-                        }
-                        return true;
-                    }
-                } );
-
-                if ( matchedResource[0] )
-                {
-                    onResourcesChange( mavenProject, goal );
+                    onResourcesChange( status.mavenProject, goal, status.monitor );
                 }
             }
         }
-    }
-
-    /**
-     * Checks if the given path matches any of the specified patterns.
-     * 
-     * @param resourcePath
-     *            the path to check.
-     * @param patterns
-     *            the path patterns (ant style).
-     * @return <code>true</code> if the path is matched by at least one of the patterns.
-     */
-    private boolean matchesAnyPattern( String resourcePath, List<String> patterns )
-    {
-        for ( String pattern : patterns )
-        {
-            boolean matches = SelectorUtils.matchPath( pattern, resourcePath );
-            if ( matches )
-            {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -321,21 +556,71 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     }
 
     /**
-     * @param mavenProject
-     * @param goal
+     * Updates resources as required by the current build status.
+     * 
+     * @param status
+     *            the current build status
      * @throws CoreException
+     *             if there is a problem running maven to update the resources.
      */
-    private void onResourcesChange( IMavenProject mavenProject, String goal ) throws CoreException
+    private void onResourcesChange( BuildStatus status ) throws CoreException
+    {
+        onResourcesChange( status, true );
+    }
+
+    /**
+     * Updates resources as required by the current build status.
+     * 
+     * @param status
+     *            the current build status
+     * @param force
+     *            set to <code>true</code> to process any resource not yet refreshed. Use <code>false</code> to only
+     *            update resources which are filtered.
+     * @throws CoreException
+     *             if there is a problem running maven to update the resources.
+     */
+    private void onResourcesChange( BuildStatus status, boolean force ) throws CoreException
+    {
+        if ( !status.resourcesRefreshed && ( force || isAnyResourceFiltered( status.mavenProject.getResources() ) ) )
+        {
+            onResourcesChange( status.mavenProject, RESOURCES_GOAL, status.monitor );
+            status.resourcesRefreshed = true;
+        }
+        if ( !status.testResourcesRefreshed
+                        && ( force || isAnyResourceFiltered( status.mavenProject.getTestResources() ) ) )
+        {
+            onResourcesChange( status.mavenProject, TEST_RESOURCES_GOAL, status.monitor );
+            status.resourcesRefreshed = true;
+        }
+    }
+
+    /**
+     * Runs the given refresh resources goal on a maven project.
+     * 
+     * @param mavenProject
+     *            the maven project where the goal is to be executed.
+     * @param goal
+     *            the goal to execute.
+     * @param monitor
+     *            the progress monitor used for progress reporting and job cancellation.
+     * @throws CoreException
+     *             if there is a problem executing the goal.
+     * @see #RESOURCES_GOAL
+     * @see #TEST_RESOURCES_GOAL
+     */
+    private void onResourcesChange( IMavenProject mavenProject, String goal, IProgressMonitor monitor )
+        throws CoreException
     {
         MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "Processing resources on ", getProject(),
                                      " : ", goal );
         MavenExecutionParameter params = MavenExecutionParameter.newDefaultMavenExecutionParameter();
         params.setRecursive( false );
-        MavenManager.getMaven().scheduleGoal( mavenProject, goal, params );
+        MavenManager.getMaven().executeGoal( mavenProject, goal, params, monitor );
     }
 
-    private void onPomChange( IProject project, IProgressMonitor monitor )
+    private void onPomChange( BuildStatus status )
     {
+        IProject project = getProject();
         MavenManager.getMavenProjectManager().setMavenProjectModified( project );
         final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
 
@@ -347,7 +632,7 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
                 {
                     pom.deleteMarkers( MavenJdtCoreActivator.MARKER_ID, false, IResource.DEPTH_ZERO );
                 }
-            }.run( monitor );
+            }.run( status.monitor );
         }
         catch ( CoreException ce )
         {
