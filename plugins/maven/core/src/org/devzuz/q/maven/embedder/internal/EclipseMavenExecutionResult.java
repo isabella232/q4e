@@ -18,6 +18,7 @@ import org.apache.maven.lifecycle.LifecycleExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.eclipse.core.resources.IProject;
 
 /**
@@ -100,8 +101,7 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
         }
         else
         {
-            // TODO: Trace or log this. Why is result.getMavenProject() null?
-
+            MavenCoreActivator.getLogger().error( "ERROR : MavenExecutionResult.getMavenProject() is null" );
             if ( project != null )
             {
                 this.mavenProject = new EclipseMavenProject( project );
