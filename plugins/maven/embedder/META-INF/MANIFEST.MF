@@ -596,8 +596,7 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Embed-Dependency: *;scope=compile|runtime;inline=false
 Bundle-DocURL: http://www.apache.org/
 Import-Package: com.jcraft.jsch,org.apache.commons.cli;version="[1.0.0
- ,2.0.0)",org.aspectj.lang,org.aspectj.runtime.internal,org.w3c.dom,or
- g.w3c.tidy
+ ,2.0.0)",org.aspectj.lang,org.aspectj.runtime.internal,org.w3c.dom,org.w3c.tidy
 Embed-StripGroup: true
 Bundle-SymbolicName: org.apache.maven.embedder
 
