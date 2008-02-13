@@ -1,10 +1,10 @@
-/*******************************************************************************
- * Copyright (c) 2007 Simula Labs
+/*
+ * Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.) and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *******************************************************************************/
+ */
 package org.devzuz.q.maven.embedder;
 
 import java.io.File;
@@ -375,10 +375,10 @@ public interface IMaven
     public IMavenProject getMavenSuperProject() throws CoreException;
 
     /**
-     * Re-resolve the dependencies for a give project using local repository
+     * Re-resolve the dependencies for a given project using local repository
      * 
      * @param project
-     * @return root node of dependency heirarcy
+     * @return root node of dependency hierarchy
      * @throws CoreException
      */
     public DependencyNode resolveDependencies(IMavenProject project) throws CoreException;
