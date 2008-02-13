@@ -9,13 +9,14 @@ import org.devzuz.q.maven.dependency.analysis.views.AnalyserGui;
 import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.IMavenProject;
-import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * dependency resolution may take some time for projects with many dependencies. This resolves the project dependency in
@@ -24,7 +25,8 @@ import org.eclipse.swt.widgets.Display;
  * @author jake pezaro
  */
 public class ResolveDependenciesJob
-    extends Job implements IMavenJob
+    extends Job
+    implements IMavenJob
 {
 
     private IMavenProject project;
@@ -95,11 +97,19 @@ public class ResolveDependenciesJob
 
         public void run()
         {
-            AnalyserGui gui = new AnalyserGui( projectName, display );
-            gui.setModelInputs( rootInstance, versions, duplicates );
+            try
+            {
+                AnalyserGui gui =
+                    (AnalyserGui) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(
+                                                                                                                 AnalyserGui.VIEW_ID );
+                gui.setModelInputs( rootInstance, versions, duplicates, projectName );
+            }
+            catch ( PartInitException e )
+            {
+                e.printStackTrace();
+            }
 
         }
-
     }
 
 }

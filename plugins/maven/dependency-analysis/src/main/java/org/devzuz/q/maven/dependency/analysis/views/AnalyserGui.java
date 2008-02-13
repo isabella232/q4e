@@ -9,7 +9,6 @@ package org.devzuz.q.maven.dependency.analysis.views;
 
 import java.util.Iterator;
 
-import org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator;
 import org.devzuz.q.maven.dependency.analysis.model.Duplicate;
 import org.devzuz.q.maven.dependency.analysis.model.DuplicatesListManager;
 import org.devzuz.q.maven.dependency.analysis.model.Instance;
@@ -25,15 +24,19 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowData;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.ui.part.ViewPart;
 
 public class AnalyserGui
+    extends ViewPart
 {
+
+    public static final String VIEW_ID = "org.devzuz.q.maven.dependency.analysis.views.AnalyseDependencyView";
 
     private TreeViewer instanceTree;
 
@@ -47,18 +50,22 @@ public class AnalyserGui
 
     private DuplicatesListManager duplicates;
 
-    private Shell shell;
+    private String projectName;
 
-    public void setModelInputs( Instance rootInstance, VersionListManager versions, DuplicatesListManager duplicates )
+    // private Shell shell;
+
+    public void setModelInputs( Instance rootInstance, VersionListManager versions, DuplicatesListManager duplicates,
+                                String projectName )
     {
         this.rootInstance = rootInstance;
         this.versions = versions;
         this.duplicates = duplicates;
+        this.projectName = projectName;
         instanceTree.setInput( rootInstance );
         versionsTable.setInput( versions );
         duplicatesTable.setInput( duplicates );
         refreshAll();
-        shell.open();
+        // shell.open();
     }
 
     private Instance getRootInstance()
@@ -76,15 +83,16 @@ public class AnalyserGui
         return duplicates;
     }
 
-    public AnalyserGui( String projectName, Display display )
+    @Override
+    public void createPartControl( Composite parent )
     {
-        shell = new Shell( display );
-        shell.setLayout( new FillLayout() );
-        shell.setSize( 700, 500 ); // don't use shell.pack() or it will override these values
-        shell.setText( "Dependency Tree For: " + projectName );
-        shell.setImage( DependencyAnalysisActivator.getDefault().getImageRegistry().get( "normal" ) );
+        // shell = new Shell( display );
+        parent.setLayout( new FillLayout() );
+        // shell.setSize( 700, 500 ); // don't use shell.pack() or it will override these values
+        // parent.setText( "Dependency Tree For: " + projectName );
+        // shell.setImage( DependencyAnalysisActivator.getDefault().getImageRegistry().get( "normal" ) );
 
-        SashForm mainForm = new SashForm( shell, SWT.HORIZONTAL );
+        SashForm mainForm = new SashForm( parent, SWT.HORIZONTAL );
         mainForm.setLayout( new FillLayout() );
 
         // create view components and layouts
@@ -217,13 +225,20 @@ public class AnalyserGui
             if ( ( event.detail & SWT.SELECTED ) != 0 )
             {
                 GC gc = event.gc;
-                gc.setBackground( shell.getDisplay().getSystemColor( SWT.COLOR_YELLOW ) );
-                gc.setForeground( shell.getDisplay().getSystemColor( SWT.COLOR_LIST_FOREGROUND ) );
+                gc.setBackground( Display.getCurrent().getSystemColor( SWT.COLOR_YELLOW ) );
+                gc.setForeground( Display.getCurrent().getSystemColor( SWT.COLOR_LIST_FOREGROUND ) );
                 gc.fillRectangle( event.getBounds() );
                 event.detail &= ~SWT.SELECTED;
             }
 
         }
+
+    }
+
+    @Override
+    public void setFocus()
+    {
+        // TODO Auto-generated method stub
 
     }
 
