@@ -94,7 +94,7 @@ public class MavenCoreActivator implements BundleActivator
         return plugin;
     }
 
-    public EclipseMaven getMavenInstance()
+    public IMaven getMavenInstance()
     {
         return mavenInstance;
     }
@@ -109,7 +109,7 @@ public class MavenCoreActivator implements BundleActivator
         return preferenceManager;
     }
 
-    public void setMavenInstance( EclipseMaven mavenInstance )
+    void setMavenInstance( EclipseMaven mavenInstance )
     {
         this.mavenInstance = mavenInstance;
     }
