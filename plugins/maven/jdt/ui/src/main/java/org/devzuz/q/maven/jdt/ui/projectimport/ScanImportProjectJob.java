@@ -32,8 +32,9 @@ import org.eclipse.core.runtime.jobs.Job;
  */
 public class ScanImportProjectJob extends Job implements IMavenJob
 {
-
     private File directory;
+    
+    private IMavenProjectNamingScheme namingScheme;
 
     private Collection<PomFileDescriptor> pomDescriptors;
 
@@ -41,11 +42,12 @@ public class ScanImportProjectJob extends Job implements IMavenJob
 
     private final boolean importParentEnabled;
 
-    public ScanImportProjectJob( File directory, boolean importParentEnabled )
+    public ScanImportProjectJob( File directory, IMavenProjectNamingScheme namingScheme , boolean importParentEnabled )
     {
         super( "Import Maven 2 projects" );
         this.directory = directory;
         this.importParentEnabled = importParentEnabled;
+        this.namingScheme = namingScheme;
     }
 
     /**
@@ -87,7 +89,7 @@ public class ScanImportProjectJob extends Job implements IMavenJob
         {
             return Status.CANCEL_STATUS;
         }
-        ImportProjectJob importProjectsJob = new ImportProjectJob( pomDescriptors );
+        ImportProjectJob importProjectsJob = ImportProjectJob.newImportProjectJob( pomDescriptors , namingScheme );
         importProjectsJob.setPriority( Job.BUILD );
         importProjectsJob.setRule( ResourcesPlugin.getWorkspace().getRoot() );
         importProjectsJob.schedule();

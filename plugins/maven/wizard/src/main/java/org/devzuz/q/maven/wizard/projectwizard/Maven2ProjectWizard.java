@@ -10,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
+import org.devzuz.q.maven.jdt.ui.projectimport.DefaultMavenProjectNamingScheme;
 import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.devzuz.q.maven.wizard.MavenWizardActivator;
 import org.devzuz.q.maven.wizard.core.ArchetypeGenerationJobAdapter;
@@ -42,10 +43,10 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
     private Maven2ProjectChooseArchetypePage archetypePage;
 
     private Maven2ProjectArchetypeInfoPage archetypeInfoPage;
+    
+    private String projectNamingScheme = "";
 
     private IPath projectPath = null;
-
-    private String projectName = "";
 
     private Archetype archetype = null;
 
@@ -53,9 +54,9 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
 
     private String artifactID = "";
 
-    private String packageName = "";
-
     private String version = "";
+    
+    private String packageName = "";
 
     private String description = "";
 
@@ -67,25 +68,25 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
     @Override
     public void addPages()
     {
-        locationPage = new Maven2ProjectLocationPage();
-        archetypePage = new Maven2ProjectChooseArchetypePage();
         archetypeInfoPage = new Maven2ProjectArchetypeInfoPage();
-
+        archetypePage = new Maven2ProjectChooseArchetypePage();
+        locationPage = new Maven2ProjectLocationPage();
+        
+        addPage( archetypeInfoPage );
         addPage( locationPage );
         addPage( archetypePage );
-        addPage( archetypeInfoPage );
     }
 
     @Override
     public boolean performFinish()
     {
-        projectName = locationPage.getProjectName().trim();
+        projectNamingScheme = locationPage.getProjectNamingScheme();
         projectPath = locationPage.getProjectLocation();
         archetype = archetypePage.getArchetype();
-        groupID = archetypeInfoPage.getGroupID();
-        artifactID = archetypeInfoPage.getArtifactID();
-        packageName = archetypeInfoPage.getPackageName();
+        groupID = archetypeInfoPage.getGroupId();
+        artifactID = archetypeInfoPage.getArtifactId();
         version = archetypeInfoPage.getVersion();
+        packageName = archetypeInfoPage.getPackageName();
         description = archetypeInfoPage.getDescription();
         importParentEnabled = archetypeInfoPage.isImportParentEnabled();
 
@@ -103,8 +104,8 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
                         wizardContext.setPostProcessors( postProcessors );
 
                         ArchetypeGenerationJobAdapter jobAdapter =
-                            new ArchetypeGenerationJobAdapter( projectPath.append( artifactID ), importParentEnabled,
-                                                               wizardContext );
+                            new ArchetypeGenerationJobAdapter( projectPath.append( artifactID ), importParentEnabled, wizardContext , 
+                                                               new DefaultMavenProjectNamingScheme( projectNamingScheme ) );
                         IArchetypeExecutor archetypeExecutor = Maven2ArchetypeManager.getArchetypeExecutor();
                         archetypeExecutor.executeArchetype( archetype, projectPath, groupID, artifactID, version,
                                                             packageName, wizardContext, jobAdapter );
@@ -135,29 +136,22 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
 
     }
 
-    /* Commented due to Eclipse having unstable API. This should be changed when 3.3 is finalized. */
-    /*
-     * public void pageTransition(PageTransitionEvent event) { if( event.getType() == PageTransitionEvent.EVENT_NEXT &&
-     * event.getSelectedPage() == locationPage) { setArchetypeInfoUIElements(); } }
-     */
-
     public void setProjectInfo()
     {
-        projectName = locationPage.getProjectName().trim();
-
-        /* Workaround to problem above */
-        archetypeInfoPage.setGroupID( projectName );
-        archetypeInfoPage.setArtifactID( projectName );
-        archetypeInfoPage.setPackageName( projectName );
+        locationPage.setGroupId( archetypeInfoPage.getGroupId() );
+        locationPage.setArtifactId( archetypeInfoPage.getArtifactId() );
+        locationPage.setVersion( archetypeInfoPage.getVersion() );
+        locationPage.validate();
     }
 
     @Override
     public IWizardPage getNextPage( IWizardPage page )
     {
-        if ( archetypeInfoPage == page )
+        if ( archetypePage == page )
         {
             addExtraPages();
         }
+        
         return super.getNextPage( page );
     }
 

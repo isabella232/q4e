@@ -15,6 +15,7 @@ import org.devzuz.q.maven.ui.archetype.provider.ArchetypeLabelProvider;
 import org.devzuz.q.maven.ui.archetype.provider.ArchetypeRetrievalResult;
 import org.devzuz.q.maven.ui.archetype.provider.MavenArchetypeProviderManager;
 import org.devzuz.q.maven.wizard.Messages;
+import org.devzuz.q.maven.wizard.projectwizard.Maven2ProjectWizard;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -316,5 +317,16 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
         {
             return false;
         }
+    }
+    
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.eclipse.jface.wizard.WizardPage#canFlipToNextPage()
+     */
+    @Override
+    public boolean canFlipToNextPage()
+    {
+        return ( (Maven2ProjectWizard) getWizard() ).hasExtraPages();
     }
 }

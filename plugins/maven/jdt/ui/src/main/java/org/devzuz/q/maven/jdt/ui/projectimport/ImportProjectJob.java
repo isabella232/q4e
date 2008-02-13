@@ -6,17 +6,21 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.projectimport;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import org.devzuz.q.maven.embedder.IMavenJob;
+import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenInterruptedException;
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
+import org.devzuz.q.maven.jdt.ui.MavenJdtUiUtils;
 import org.devzuz.q.maven.jdt.ui.internal.TraceOption;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -33,6 +37,8 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.jobs.IJobChangeEvent;
+import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 
 /**
  * Imports a number of maven projects in the workspace.
@@ -41,19 +47,48 @@ import org.eclipse.core.runtime.SubProgressMonitor;
  */
 public class ImportProjectJob extends WorkspaceJob implements IMavenJob
 {
+    private final boolean resolveTransitively = true;
+    
     private Collection<PomFileDescriptor> pomDescriptors;
 
     private List<IProject> importedProjects = new LinkedList<IProject>();
-
-    public ImportProjectJob( PomFileDescriptor pomDescriptor )
+    
+    private IMavenProjectNamingScheme namingScheme;
+    
+    public static ImportProjectJob newImportProjectJob( PomFileDescriptor pomDescriptor , IMavenProjectNamingScheme namingScheme )
     {
-        this( Collections.singleton( pomDescriptor ) );
+        return newImportProjectJob( Collections.singleton( pomDescriptor ) , namingScheme );
+    }
+    
+    public static ImportProjectJob newImportProjectJob( Collection<PomFileDescriptor> pomDescriptors , IMavenProjectNamingScheme namingScheme )
+    {
+        final ImportProjectJob importProjectJob = new ImportProjectJob( pomDescriptors , namingScheme );
+        
+        importProjectJob.addJobChangeListener( new JobChangeAdapter()
+        {
+            @Override
+            public void done( IJobChangeEvent event )
+            {
+                importProjectJob.removeJobChangeListener( this );
+                super.done( event );
+            }
+
+            @Override
+            public void running( IJobChangeEvent event )
+            {
+                MavenJdtUiUtils.runMavenEventView();
+                super.running( event );
+            }
+        });
+        
+        return importProjectJob;
     }
 
-    public ImportProjectJob( Collection<PomFileDescriptor> pomDescriptors )
+    private ImportProjectJob( Collection<PomFileDescriptor> pomDescriptors , IMavenProjectNamingScheme namingScheme )
     {
         super( "Importing " + pomDescriptors.size() + " Maven 2 projects" );
         this.pomDescriptors = pomDescriptors;
+        this.namingScheme = namingScheme;
     }
 
     /**
@@ -77,6 +112,25 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
     public void setMavenProjects( Collection<PomFileDescriptor> pomDescriptor )
     {
         this.pomDescriptors = pomDescriptor;
+    }
+    
+    /**
+     * Gets the naming scheme of the projects to be imported.
+     */
+    public IMavenProjectNamingScheme getNamingScheme()
+    {
+        return namingScheme;
+    }
+
+    /**
+     * Sets the naming scheme of the projects to be imported.
+     * 
+     * @param namingScheme
+     *            the naming scheme
+     */
+    public void setNamingScheme( IMavenProjectNamingScheme namingScheme )
+    {
+        this.namingScheme = namingScheme;
     }
 
     /**
@@ -104,8 +158,7 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
         {
             SubProgressMonitor subProgressMonitor = new SubProgressMonitor( monitor, 1 );
             subProgressMonitor.beginTask( "Importing Maven project", 100 );
-            subProgressMonitor.setTaskName( "Importing Maven project: " + getProjectName( pomDescriptor ) );
-
+            subProgressMonitor.setTaskName( "Importing Maven project from : " + pomDescriptor.getBaseDirectory().getAbsolutePath() );
             if ( monitor.isCanceled() )
             {
                 throw new OperationCanceledException();
@@ -113,8 +166,36 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
 
             try
             {
-                IProject project =
-                    createMavenProject( pomDescriptor, new SubProgressMonitor( subProgressMonitor, 100 ) );
+                IMavenProject mavenProject = null;
+                
+                /* If pomDescriptor has incomplete triplet and base directory info, get the actual maven project */
+                File baseDirectory = pomDescriptor.getBaseDirectory();
+                String projectName = namingScheme.getMavenProjectName( pomDescriptor );
+                if( ( pomDescriptor.getModel().getGroupId() == null ) ||
+                    ( pomDescriptor.getModel().getArtifactId() == null ) ||
+                    ( pomDescriptor.getModel().getVersion() == null ) ||
+                    ( baseDirectory == null ) )
+                {
+                    /* Get the IMavenProject on this directory , this will give us groupId, artifactId, version and basedirectory
+                     * lets put it in cache after so the execution doesnt go to waste. */
+                    mavenProject = MavenManager.getMaven().getMavenProject( pomDescriptor.getFile() , resolveTransitively );
+                    projectName = namingScheme.getMavenProjectName( mavenProject );
+                    baseDirectory = mavenProject.getBaseDirectory();
+                }
+                    
+                MavenJdtUiActivator.getLogger().info( "Trying to import '" + baseDirectory.getAbsolutePath() + "' " + 
+                                                      "to Project '" + projectName + "'" );
+                
+                /* Import the project */
+                IProject project = 
+                    createMavenProject( projectName , baseDirectory , new SubProgressMonitor( subProgressMonitor, 100 ) );
+                
+                /* Add to cache the maven project we just got from the embedder */
+                if( mavenProject != null )
+                {
+                    MavenManager.getMavenProjectManager().addMavenProject( project, mavenProject , resolveTransitively );
+                }
+                
                 importedProjects.add( project );
             }
             catch ( MavenInterruptedException e )
@@ -144,28 +225,9 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
         return status;
     }
 
-    /**
-     * Get the eclipse project name from the maven project
-     * 
-     * @param pomDescriptor
-     *            the contents of the pom.
-     * @return the name of the project, calculated from the information in the pom.
-     */
-    protected String getProjectName( final PomFileDescriptor pomDescriptor )
-    {
-        // TODO this should be configurable
-        // return mavenProject.getGroupId() + "." + mavenProject.getArtifactId();
-        // NOTE by Erle : Commented above because the eclipse project name should be THE SAME
-        // as its location IF it is on the workspace root due to us not being
-        // able to specify a project location if it is on the workspace root .
-        // (the location should be set to ("") if it is on the workspace root)
-        return pomDescriptor.getBaseDirectory().getName();
-    }
-
-    private IProject createMavenProject( final PomFileDescriptor pomDescriptor, IProgressMonitor monitor )
+    private IProject createMavenProject( String projectName , File baseDirectory , IProgressMonitor monitor )
         throws CoreException
     {
-        final String projectName = getProjectName( pomDescriptor );
         final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
         IWorkspaceRoot root = workspace.getRoot();
@@ -180,7 +242,7 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
 
         IProjectDescription description = workspace.newProjectDescription( projectName );
 
-        IPath locationPath = new Path( pomDescriptor.getBaseDirectory().getAbsolutePath() );
+        IPath locationPath = new Path( baseDirectory.getAbsolutePath() );
 
         /*
          * If is at the root of the workspace we need to use the default location, see
@@ -189,6 +251,11 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
         IPath parentPath = locationPath.removeLastSegments( 1 );
         if ( Platform.getLocation().isPrefixOf( parentPath ) && parentPath.isPrefixOf( Platform.getLocation() ) )
         {
+            // project is in workspace, we need to do some tweaking since the directory name of a project
+            // must be the same as its project name due to an eclipse behaviour where a project in the workspace
+            // can't set a location ( must set it to null if in the workspace).
+            File newDirectory = new File( baseDirectory.getParent() , projectName );
+            baseDirectory.renameTo( newDirectory );
             description.setLocation( null );
         }
         else

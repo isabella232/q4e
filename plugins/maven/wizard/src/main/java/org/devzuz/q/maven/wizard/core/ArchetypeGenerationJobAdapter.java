@@ -12,6 +12,7 @@ import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
 import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.jdt.ui.projectimport.IMavenProjectNamingScheme;
 import org.devzuz.q.maven.jdt.ui.projectimport.ScanImportProjectJob;
 import org.devzuz.q.maven.wizard.MavenWizardActivator;
 import org.devzuz.q.maven.wizard.postprocessor.core.IMavenProjectPostprocessor;
@@ -30,6 +31,7 @@ public class ArchetypeGenerationJobAdapter extends MavenExecutionJobAdapter
 
     private final boolean importParentEnabled;
 
+    private IMavenProjectNamingScheme namingScheme;
     /**
      * Creates a new maven job adapter for handling archetype creation.
      * 
@@ -41,17 +43,18 @@ public class ArchetypeGenerationJobAdapter extends MavenExecutionJobAdapter
      *            additional information provided through new project wizard extensions.
      */
     public ArchetypeGenerationJobAdapter( IPath generatedDir, boolean importParentEnabled,
-                                          IMavenWizardContext wizardContext )
+                                          IMavenWizardContext wizardContext, IMavenProjectNamingScheme namingScheme )
     {
         this.generatedDir = generatedDir;
         this.importParentEnabled = importParentEnabled;
         this.wizardContext = wizardContext;
+        this.namingScheme = namingScheme;
     }
 
     @Override
     public void done( IJobChangeEvent event, IMavenExecutionResult result )
     {
-        ScanImportProjectJob job = new ScanImportProjectJob( generatedDir.toFile(), importParentEnabled );
+        ScanImportProjectJob job = new ScanImportProjectJob( generatedDir.toFile(), namingScheme , importParentEnabled );
         job.addJobChangeListener( new JobChangeAdapter()
         {
             @Override

@@ -8,7 +8,7 @@ package org.devzuz.q.maven.wizard.pages;
 
 import org.devzuz.q.maven.wizard.Messages;
 import org.devzuz.q.maven.wizard.customcontrol.Maven2LocationComponent;
-import org.devzuz.q.maven.wizard.projectwizard.Maven2ProjectWizard;
+import org.devzuz.q.maven.wizard.customcontrol.Maven2ProjectNamingComponent;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -20,14 +20,14 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 
 public class Maven2ProjectLocationPage
     extends Maven2ValidatingWizardPage
 {
-    private Text projectNameText;
-
+    private String groupId, artifactId , version;
+    
+    Maven2ProjectNamingComponent namingComponent;
+    
     Maven2LocationComponent locationComponent;
 
     public Maven2ProjectLocationPage()
@@ -42,7 +42,7 @@ public class Maven2ProjectLocationPage
     {
         Composite container = new Composite( parent, SWT.NULL );
         container.setLayout( new GridLayout( 2, false ) );
-
+        
         ModifyListener modifyListener = new ModifyListener()
         {
             public void modifyText( ModifyEvent e )
@@ -51,14 +51,11 @@ public class Maven2ProjectLocationPage
             }
         };
 
-        // project name
-        Label label = new Label( container, SWT.NULL );
-        label.setLayoutData( new GridData( GridData.BEGINNING , GridData.CENTER , false , false ) );
-        label.setText( Messages.wizard_project_location_label_project_name );
-        projectNameText = new Text( container, SWT.BORDER | SWT.SINGLE );
-        projectNameText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-        projectNameText.addModifyListener( modifyListener );
-
+        // Naming scheme
+        namingComponent = new Maven2ProjectNamingComponent( container , SWT.None , true );
+        namingComponent.setLayoutData( new GridData( SWT.FILL , SWT.BEGINNING, true, false , 2 , 1 ) );
+        namingComponent.setModifyListener( modifyListener );
+        
         // location group
         locationComponent = new Maven2LocationComponent( container, SWT.NONE );
         locationComponent.setLayoutData( new GridData( SWT.FILL , SWT.BEGINNING, true, false , 2 , 1 ) );
@@ -69,11 +66,11 @@ public class Maven2ProjectLocationPage
         setControl( container );
     }
 
-    public String getProjectName()
+    public String getProjectNamingScheme()
     {
-        return projectNameText.getText();
+        return namingComponent.getProjectNamingExpression();
     }
-
+    
     public IPath getProjectLocation()
     {
         if ( !locationComponent.isLocationInWorkspace() )
@@ -90,52 +87,66 @@ public class Maven2ProjectLocationPage
     @Override
     protected boolean isPageValid()
     {
-        String name = getProjectName();
         IWorkspace workspace = ResourcesPlugin.getWorkspace();
-
-        // Check if project name is valid
-        if ( isProjectNameValid( workspace, name ) )
+        
+        if( namingComponent.isValidated() )
         {
-            // if project should be in workspace
-            if ( locationComponent.isLocationInWorkspace() )
+            String name = namingComponent.getProposedProjectName( groupId, artifactId , version );
+            // Check if project name is valid
+            if (  isProjectNameValid( workspace, name ) )
             {
-                // Check if an existing project with the same name is already in workspace
-                if ( !isProjectInWorkspace( workspace, name ) )
+                // if project should be in workspace
+                if ( locationComponent.isLocationInWorkspace() )
                 {
-                    return true;
+                    // Check if an existing project with the same name is already in workspace
+                    if ( !isProjectInWorkspace( workspace, name ) )
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        setError( Messages.wizard_project_already_exist );
+                    }
                 }
                 else
                 {
-                    setError( Messages.wizard_project_already_exist );
+                    // Check if directory is valid for the given project
+                    if ( isDirectoryValid( workspace, locationComponent.getLocationPath(), name ) )
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        setError( Messages.wizard_projectDirectory_Invalid );
+                    }
                 }
             }
             else
             {
-                // Check if directory is valid for the given project
-                if ( isDirectoryValid( workspace, locationComponent.getLocationPath(), name ) )
-                {
-                    return true;
-                }
-                else
-                {
-                    setError( Messages.wizard_projectDirectory_Invalid );
-                }
+                setError( Messages.wizard_invalid_projectName );
             }
         }
         else
         {
-            setError( Messages.wizard_invalid_projectName );
+            setError( namingComponent.getError() );
         }
-
+        
         return false;
     }
-
+    
     @Override
     protected void onPageValidated()
     {
-        ( (Maven2ProjectWizard) getWizard() ).setProjectInfo();
+        String name = namingComponent.getProposedProjectName( groupId, artifactId , version );
+        namingComponent.setProjectName( name );
     }
-
+    
+    @Override
+    protected void onPageNotValidated()
+    {
+        namingComponent.setProjectName( "" );
+    }
+    
     private static boolean isProjectInWorkspace( IWorkspace workspace, String name )
     {
         return workspace.getRoot().getProject( name ).exists();
@@ -156,5 +167,20 @@ public class Maven2ProjectLocationPage
     {
         String projectName = name.trim();
         return ( projectName.length() > 0 ) && ( workspace.validateName( projectName, IResource.PROJECT ).isOK() );
+    }
+
+    public void setGroupId( String groupId )
+    {
+        this.groupId = groupId;
+    }
+
+    public void setArtifactId( String artifactId )
+    {
+        this.artifactId = artifactId;
+    }
+
+    public void setVersion( String version )
+    {
+        this.version = version;
     }
 }

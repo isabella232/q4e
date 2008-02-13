@@ -18,6 +18,8 @@ public class Messages
     public static String wizard_project_location_label_project_name = "Project Name";
 
     public static String wizard_project_location_group_name = "Contents";
+    
+    public static String wizard_project_naming = "Project Naming";
 
     public static String wizard_project_location_radio_workspace = "Create new project in workspace";
 
@@ -26,6 +28,10 @@ public class Messages
     public static String wizard_project_location_label_directory = "Directory";
 
     public static String wizard_project_location_button_browse = "Browse ...";
+    
+    public static String wizard_project_naming_variables = "Variables ...";
+    
+    public static String wizard_project_name_label = "Project Name:";
 
     public static String wizard_project_chooseArchetype_name = "Maven Archetypes";
 

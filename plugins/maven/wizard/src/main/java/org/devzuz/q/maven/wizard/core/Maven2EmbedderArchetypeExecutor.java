@@ -42,15 +42,13 @@ public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
 
         if ( jobAdapter == null )
         {
-            MavenManager.getMaven().scheduleGoal(
-                                                  baseDir,
+            MavenManager.getMaven().scheduleGoal( baseDir,
                                                   getArchetypePluginCreationId(),
                                                   MavenExecutionParameter.newDefaultMavenExecutionParameter( archetypeProperties ) );
         }
         else
         {
-            MavenManager.getMaven().scheduleGoal(
-                                                  baseDir,
+            MavenManager.getMaven().scheduleGoal( baseDir,
                                                   getArchetypePluginCreationId(),
                                                   MavenExecutionParameter.newDefaultMavenExecutionParameter( archetypeProperties ),
                                                   jobAdapter );

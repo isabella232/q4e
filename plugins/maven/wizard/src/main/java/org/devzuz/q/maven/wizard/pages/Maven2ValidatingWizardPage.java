@@ -29,11 +29,12 @@ public abstract class Maven2ValidatingWizardPage
         setErrorMessage( getError() );
     }
 
-    protected boolean validate()
+    public boolean validate()
     {
         boolean didValidate = isPageValid();
         if ( !didValidate )
         {
+            onPageNotValidated();
             setErrorMessage( getError() );
         }
         else
@@ -52,6 +53,10 @@ public abstract class Maven2ValidatingWizardPage
         return false;
     }
 
+    protected void onPageNotValidated()
+    {
+    }
+    
     protected void onPageValidated()
     {
     }

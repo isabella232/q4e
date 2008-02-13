@@ -76,8 +76,7 @@ public class Maven2ProjectArchetypeInfoPage extends Maven2ValidatingWizardPage
         artifactIDText = new Text( group, SWT.BORDER | SWT.SINGLE );
         artifactIDText.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, false ) );
         artifactIDText.addModifyListener( modifyingListener );
-        artifactIDText.setEnabled( false );
-
+        
         Label packageNameLabel = new Label( group, SWT.NULL );
         packageNameLabel.setText( Messages.wizard_project_archetypeInfo_packageName_label );
 
@@ -123,22 +122,22 @@ public class Maven2ProjectArchetypeInfoPage extends Maven2ValidatingWizardPage
         setControl( parent );
     }
 
-    public String getGroupID()
+    public String getGroupId()
     {
         return groupIDText.getText().trim();
     }
 
-    public void setGroupID( String groupID )
+    public void setGroupId( String groupID )
     {
         groupIDText.setText( groupID );
     }
 
-    public String getArtifactID()
+    public String getArtifactId()
     {
         return artifactIDText.getText().trim();
     }
 
-    public void setArtifactID( String artifactID )
+    public void setArtifactId( String artifactID )
     {
         artifactIDText.setText( artifactID );
     }
@@ -193,15 +192,10 @@ public class Maven2ProjectArchetypeInfoPage extends Maven2ValidatingWizardPage
     {
         return importParentsButton.getSelection();
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.jface.wizard.WizardPage#canFlipToNextPage()
-     */
+    
     @Override
-    public boolean canFlipToNextPage()
+    protected void onPageValidated()
     {
-        return ( (Maven2ProjectWizard) getWizard() ).hasExtraPages();
+        ( (Maven2ProjectWizard) getWizard() ).setProjectInfo();
     }
 }

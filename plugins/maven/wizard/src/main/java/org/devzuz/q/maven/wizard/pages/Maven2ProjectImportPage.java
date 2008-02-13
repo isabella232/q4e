@@ -13,6 +13,7 @@ import java.util.Collection;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.projectimport.ProjectScannerJob;
 import org.devzuz.q.maven.wizard.Messages;
+import org.devzuz.q.maven.wizard.customcontrol.Maven2ProjectNamingComponent;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
@@ -49,6 +50,8 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
     private ProjectScannerJob projectScannerJob;
 
     private Button importParentsButton;
+    
+    private Maven2ProjectNamingComponent namingComponent;
 
     public Maven2ProjectImportPage()
     {
@@ -168,6 +171,16 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
                 scheduleProjectScanningJob();
             }
         } );
+        
+        namingComponent = new Maven2ProjectNamingComponent( container , SWT.None , false );
+        namingComponent.setLayoutData( new GridData( SWT.FILL , SWT.BEGINNING, true, false , 3 , 1 ) );
+        namingComponent.setModifyListener( new ModifyListener()
+        {
+            public void modifyText( ModifyEvent e )
+            {
+                validate();
+            }
+        } );
 
         importParentsButton = new Button( container, SWT.CHECK );
         importParentsButton.setText( Messages.wizard_importProject_import_parent );
@@ -195,6 +208,8 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
         projectScannerJob = new ProjectScannerJob( "Project Scanner" );
         projectScannerJob.addJobChangeListener( new ProjectScannerJobAdapter() );
 
+        validate();
+        
         setControl( container );
     }
 
@@ -244,7 +259,14 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
             Object[] checkedElements = pomList.getCheckedElements();
             if ( ( checkedElements != null ) && ( checkedElements.length > 0 ) )
             {
-                return true;
+                if( namingComponent.isValidated() )
+                {
+                    return true;
+                }
+                else
+                {
+                    setError( namingComponent.getError() );
+                }
             }
             else
             {
@@ -310,6 +332,11 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
         }
     }
 
+    public String getMavenProjectNamingScheme()
+    {
+        return namingComponent.getProjectNamingExpression();
+    }
+    
     public Collection<PomFileDescriptor> getSelectedMavenProjects()
     {
         Collection<PomFileDescriptor> pomDescriptors = new ArrayList<PomFileDescriptor>();

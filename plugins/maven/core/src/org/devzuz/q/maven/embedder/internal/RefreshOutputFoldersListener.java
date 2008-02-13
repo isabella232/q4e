@@ -63,7 +63,7 @@ public class RefreshOutputFoldersListener extends JobChangeAdapter
     {
         MavenProject mavenProject = getMavenProject( mavenResult );
         // Only refresh if running in a project and maven execution was "more or less" successful.
-        if ( mavenProject != null )
+        if ( ( mavenProject != null ) && ( mavenProject.getPackaging() != "pom" ) )
         {
             // subset of all paths which contain all the paths to be refreshed
             Set<IPath> paths = new HashSet<IPath>();

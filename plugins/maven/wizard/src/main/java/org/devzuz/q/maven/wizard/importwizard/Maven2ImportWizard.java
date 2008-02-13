@@ -8,6 +8,7 @@
 
 package org.devzuz.q.maven.wizard.importwizard;
 
+import org.devzuz.q.maven.jdt.ui.projectimport.DefaultMavenProjectNamingScheme;
 import org.devzuz.q.maven.jdt.ui.projectimport.ImportProjectJob;
 import org.devzuz.q.maven.wizard.pages.Maven2ProjectImportPage;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -31,7 +32,9 @@ public class Maven2ImportWizard extends Wizard implements IImportWizard
     @Override
     public boolean performFinish()
     {
-        ImportProjectJob projectImporter = new ImportProjectJob( projectImportPage.getSelectedMavenProjects() );
+        String namingScheme = projectImportPage.getMavenProjectNamingScheme();
+        ImportProjectJob projectImporter = ImportProjectJob.newImportProjectJob( projectImportPage.getSelectedMavenProjects() ,
+                                                                                 new DefaultMavenProjectNamingScheme( namingScheme ) );
         projectImporter.setUser( true );
         projectImporter.setRule( ResourcesPlugin.getWorkspace().getRoot() );
         projectImporter.schedule();

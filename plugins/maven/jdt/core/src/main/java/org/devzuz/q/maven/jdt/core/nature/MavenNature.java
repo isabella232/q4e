@@ -97,7 +97,6 @@ public class MavenNature implements IProjectNature
 
     public void configure() throws CoreException
     {
-
         try
         {
             addBuilder();

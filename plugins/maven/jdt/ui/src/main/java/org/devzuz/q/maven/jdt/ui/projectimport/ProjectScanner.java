@@ -98,6 +98,7 @@ public class ProjectScanner
         List<IMavenProject> sortedProjects;
         try
         {
+            /* TODO : an awful waste of embedder execution if we can't put this in the cache */
             IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( pom, false );
 
             MavenExecutionParameter parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter();
@@ -105,6 +106,9 @@ public class ProjectScanner
             IMavenExecutionResult result =
                 MavenManager.getMaven().executeGoal( mavenProject, "validate", parameter, monitor );
             sortedProjects = result.getSortedProjects();
+            
+            MavenJdtUiActivator.getLogger().info("Scanned " + sortedProjects.size() + " Maven 2 Projects by using the reactor");
+            
             if ( sortedProjects == null )
             {
                 /* the project doesn't build so we can't get the list of sorted projects */
@@ -165,7 +169,6 @@ public class ProjectScanner
         {
             Model pomModel = new MavenXpp3Reader().read( new FileReader( pom ) );
             pomDescriptor = new PomFileDescriptor( pom, pomModel );
-
         }
         catch ( IOException e )
         {
@@ -189,15 +192,17 @@ public class ProjectScanner
         for ( String module : modules )
         {
             File moduleDir = new File( pomDescriptor.getBaseDirectory(), module );
-
+            
             Collection<PomFileDescriptor> scanned = getProjects( moduleDir, new SubProgressMonitor( monitor, 10 ) );
-            pomDescriptors.addAll( scanned );
+            pomDescriptors.addAll( scanned );            
         }
 
-        if ( modules.isEmpty() )
+        if ( importParentProjects || modules.isEmpty() )
         {
             pomDescriptors.add( pomDescriptor );
         }
+        
+        MavenJdtUiActivator.getLogger().info("Scanned " + pomDescriptors.size() + " Maven 2 Projects by reading the poms.");
 
         return pomDescriptors;
     }

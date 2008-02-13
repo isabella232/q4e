@@ -14,6 +14,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -37,7 +38,7 @@ public class Maven2LocationComponent extends Composite
     public Maven2LocationComponent(final Composite parent, int style)
     {
         super(parent, style);
-        setLayout(new GridLayout( 1 , false ));
+        setLayout( new FillLayout() );
         
         SelectionAdapter buttonListener = new SelectionAdapter()
         {
@@ -61,7 +62,7 @@ public class Maven2LocationComponent extends Composite
         
         Group groupBox = new Group( this, SWT.NONE );
         groupBox.setText( Messages.wizard_project_location_group_name );
-        groupBox.setLayoutData(new GridData( GridData.FILL, GridData.FILL, true, true ));
+        //groupBox.setLayoutData(new GridData( GridData.FILL, GridData.FILL, true, true ));
         groupBox.setLayout( new GridLayout( 3 , false ) );
         
         workspaceButton = new Button( groupBox, SWT.RADIO );
