@@ -43,6 +43,7 @@ public class MavenExecutionStatus extends Status
             }
             else
             {
+                //TODO we need to unwrap exceptions to provide a meaningful message. Should reuse the ExceptionHandler
                 setException( e );
             }
         }
