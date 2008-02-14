@@ -1,10 +1,10 @@
-/*******************************************************************************
- * Copyright (c) 2007 Simula Labs
+/*
+ * Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.) and others.
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *******************************************************************************/
+ */
 package org.devzuz.q.maven.embedder.internal;
 
 import java.io.File;
@@ -15,11 +15,9 @@ import java.util.Properties;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.InvalidArtifactRTException;
-import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.resolver.ArtifactCollector;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
@@ -38,9 +36,6 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.reactor.MavenExecutionException;
-import org.apache.maven.shared.dependency.tree.DependencyNode;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
-import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.devzuz.q.maven.embedder.ILocalMavenRepository;
 import org.devzuz.q.maven.embedder.IMaven;
@@ -48,6 +43,7 @@ import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenListener;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenComponentHelper;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
@@ -775,23 +771,9 @@ public class EclipseMaven implements IMaven
         }
         return mavenEmbedder;
     }
-    
-    public DependencyNode resolveDependencies(IMavenProject project) throws CoreException { 
-        try
-        {
-            ArtifactRepository localRepository = getMavenEmbedder().getLocalRepository();
-            DependencyTreeBuilder dependencyTreeBuilder = (DependencyTreeBuilder) getMavenEmbedder().getPlexusContainer().lookup(DependencyTreeBuilder.ROLE);
-            ArtifactFactory factory = (ArtifactFactory) getMavenEmbedder().getPlexusContainer().lookup(ArtifactFactory.ROLE);
-            ArtifactCollector collector = (ArtifactCollector) getMavenEmbedder().getPlexusContainer().lookup(ArtifactCollector.ROLE);
-            return dependencyTreeBuilder.buildDependencyTree( project.getRawMavenProject(), localRepository, factory, getArtifactMetadataSource(), null, collector );
-        }
-        catch ( DependencyTreeBuilderException e )
-        {
-            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE, "Unable to build dependency tree", e ) );
-        }
-        catch ( ComponentLookupException e )
-        {
-            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE, "Could not find component", e ) );
-        }
+
+    public MavenComponentHelper getMavenComponentHelper()
+    {
+        return new MavenComponentHelper( getMavenEmbedder() );
     }
 }

@@ -15,7 +15,6 @@ import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.model.Dependency;
-import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -80,7 +79,8 @@ public interface IMaven
      * @param properties
      *            properties of this goal
      * @throws CoreException
-     * @throws MavenInterruptedException if the build is canceled
+     * @throws MavenInterruptedException
+     *             if the build is canceled
      */
     public IMavenExecutionResult executeGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter,
                                               IProgressMonitor monitor ) throws CoreException;
@@ -95,7 +95,8 @@ public interface IMaven
      * @param goal
      *            goal name
      * @throws CoreException
-     * @throws MavenInterruptedException if the build is canceled
+     * @throws MavenInterruptedException
+     *             if the build is canceled
      */
     public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal, IProgressMonitor monitor )
         throws CoreException;
@@ -109,7 +110,8 @@ public interface IMaven
      * @param properties
      *            properties of this goal
      * @throws CoreException
-     * @throws MavenInterruptedException if the build is canceled
+     * @throws MavenInterruptedException
+     *             if the build is canceled
      */
     public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal,
                                               MavenExecutionParameter parameter, IProgressMonitor monitor )
@@ -125,7 +127,8 @@ public interface IMaven
      * @param goals
      *            list of goals to execute
      * @throws CoreException
-     * @throws MavenInterruptedException if the build is canceled
+     * @throws MavenInterruptedException
+     *             if the build is canceled
      */
     public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals, IProgressMonitor monitor )
         throws CoreException;
@@ -139,7 +142,8 @@ public interface IMaven
      * @param properties
      *            properties of this goal. Might be <code>null</code> when no properties are used.
      * @throws CoreException
-     * @throws MavenInterruptedException if the build is canceled
+     * @throws MavenInterruptedException
+     *             if the build is canceled
      */
     public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals,
                                                MavenExecutionParameter parameter, IProgressMonitor monitor )
@@ -159,7 +163,7 @@ public interface IMaven
      */
     public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter )
         throws CoreException;
-    
+
     /**
      * Allows you to schedule the execution of a given goal without an existing project. For example, "archetype:create"
      * can be executed without an existing maven project.
@@ -170,13 +174,12 @@ public interface IMaven
      *            goal name
      * @param properties
      *            properties of this goal
-     * @param jobAdapter 
+     * @param jobAdapter
      *            listener to the thread that executes the maven goal
      * @throws CoreException
      */
-    public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter ,  
-                              MavenExecutionJobAdapter jobAdapter )
-        throws CoreException;
+    public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter,
+                              MavenExecutionJobAdapter jobAdapter ) throws CoreException;
 
     /**
      * Allows you to schedule the execution of a given goal name against a MavenProject.
@@ -368,18 +371,16 @@ public interface IMaven
 
     /**
      * Get the Maven super project with all the default values
-     *  
+     * 
      * @return the Maven super project
      * @throws CoreException
      */
     public IMavenProject getMavenSuperProject() throws CoreException;
 
     /**
-     * Re-resolve the dependencies for a given project using local repository
+     * Get an utility class to retrieve widely used Maven components
      * 
-     * @param project
-     * @return root node of dependency hierarchy
-     * @throws CoreException
+     * @return the component helper
      */
-    public DependencyNode resolveDependencies(IMavenProject project) throws CoreException;
+    public MavenComponentHelper getMavenComponentHelper();
 }

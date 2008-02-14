@@ -9,6 +9,8 @@ package org.devzuz.q.maven.embedder;
 
 import java.util.List;
 
+import org.apache.maven.artifact.repository.ArtifactRepository;
+
 public interface IMavenRepository
 {
 
@@ -20,4 +22,10 @@ public interface IMavenRepository
 
     public IMavenArtifact findArtifact( String groupId, String artifactId, String version, String classifier );
 
+    /**
+     * Get Maven component for this repository
+     * 
+     * @return
+     */
+    public ArtifactRepository getArtifactRepository();
 }

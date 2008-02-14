@@ -21,6 +21,11 @@ public class LocalMavenRepository implements ILocalMavenRepository
 
     private ArtifactRepository artifactRepository;
 
+    public ArtifactRepository getArtifactRepository()
+    {
+        return artifactRepository;
+    }
+
     public LocalMavenRepository( ArtifactRepository localRepository )
     {
         this.artifactRepository = localRepository;
@@ -28,22 +33,22 @@ public class LocalMavenRepository implements ILocalMavenRepository
 
     public String getBaseDirectoryAbsolutePath()
     {
-        return artifactRepository.getBasedir();
+        return getArtifactRepository().getBasedir();
     }
 
     public File getBaseDirectory()
     {
-        return new File( artifactRepository.getBasedir() );
+        return new File( getArtifactRepository().getBasedir() );
     }
 
     public IPath getBaseDirectoryPath()
     {
-        return new Path( artifactRepository.getBasedir() );
+        return new Path( getArtifactRepository().getBasedir() );
     }
 
     public IPath getPath( IMavenArtifact artifact )
     {
-        String pathOf = artifactRepository.pathOf( artifact.toMaven() );
+        String pathOf = getArtifactRepository().pathOf( artifact.toMaven() );
         return new Path( pathOf );
     }
 
