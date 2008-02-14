@@ -190,6 +190,8 @@ public class EclipseMavenArtifact implements IMavenArtifact
     @Override
     public boolean equals( Object arg0 )
     {
+        if( arg0 == this )
+            return true;
         if ( arg0 instanceof IMavenArtifact )
         {
             IMavenArtifact secondArtifact = (IMavenArtifact) arg0;
@@ -201,6 +203,11 @@ public class EclipseMavenArtifact implements IMavenArtifact
                 return false;
             if ( !secondArtifact.getType().equals( getType() ) )
                 return false;
+            if ( secondArtifact.getClassifier() == null ? getClassifier() != null : 
+                                                          !secondArtifact.getClassifier().equals( getClassifier() ) )
+            {
+                return false;
+            }
             
             return true;
         }
@@ -231,6 +238,9 @@ public class EclipseMavenArtifact implements IMavenArtifact
         sb.append( "] " );
         sb.append( "scope[" );
         sb.append( getScope() );
+        sb.append( "] " );
+        sb.append( "classifier[" );
+        sb.append( getClassifier() != null ? getClassifier() : "null" );
         sb.append( "] " );
         return sb.toString();
     }
