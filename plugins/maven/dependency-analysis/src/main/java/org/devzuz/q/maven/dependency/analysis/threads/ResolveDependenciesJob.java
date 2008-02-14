@@ -1,6 +1,13 @@
 package org.devzuz.q.maven.dependency.analysis.threads;
 
+import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
+import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.resolver.ArtifactCollector;
+import org.apache.maven.shared.dependency.tree.DefaultDependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
+import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
+import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator;
 import org.devzuz.q.maven.dependency.analysis.model.DuplicatesListManager;
 import org.devzuz.q.maven.dependency.analysis.model.Instance;
@@ -9,6 +16,7 @@ import org.devzuz.q.maven.dependency.analysis.views.AnalyserGui;
 import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.QCoreException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -43,6 +51,26 @@ public class ResolveDependenciesJob
         this.display = display;
     }
 
+    public DependencyNode resolveDependencies( IMavenProject project )
+        throws CoreException
+    {
+        try
+        {
+            DependencyTreeBuilder dependencyTreeBuilder = new DefaultDependencyTreeBuilder();
+            ArtifactRepository localRepository = maven.getLocalRepository().getArtifactRepository();
+            ArtifactFactory factory = maven.getMavenComponentHelper().getArtifactFactory();
+            ArtifactCollector collector = maven.getMavenComponentHelper().getArtifactCollector();
+            ArtifactMetadataSource artifactMetadataSource = maven.getMavenComponentHelper().getArtifactMetadataSource();
+            return dependencyTreeBuilder.buildDependencyTree( project.getRawMavenProject(), localRepository, factory,
+                                                              artifactMetadataSource, null, collector );
+        }
+        catch ( DependencyTreeBuilderException e )
+        {
+            throw new QCoreException( new Status( Status.ERROR, DependencyAnalysisActivator.PLUGIN_ID,
+                                                  "Unable to build dependency tree", e ) );
+        }
+    }
+
     public IStatus run( IProgressMonitor monitor )
     {
         // TODO needs to handle Maven execution cancellation?
@@ -52,7 +80,7 @@ public class ResolveDependenciesJob
             monitor.beginTask( "Resolving dependencies", IProgressMonitor.UNKNOWN );
 
             // resolve the dependencies. this is the long running part
-            DependencyNode mavenDependencyRoot = maven.resolveDependencies( project );
+            DependencyNode mavenDependencyRoot = resolveDependencies( project );
 
             // create the gui
 
