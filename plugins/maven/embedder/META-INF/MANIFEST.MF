@@ -116,12 +116,12 @@ Export-Package: org.codehaus.plexus.component.factory;uses:="org.codeh
  ecycle.plan,org.codehaus.plexus.util.xml,org.apache.maven.plugin.desc
  riptor,org.apache.maven.compat,org.apache.maven.artifact.resolver,org
  .apache.maven.plugin.loader,org.codehaus.plexus,org.apache.maven,org.
- apache.maven.lifecycle.model,org.codehaus.plexus.classworlds.realm,or
+ codehaus.plexus.classworlds.realm,org.apache.maven.lifecycle.model,or
  g.codehaus.plexus.logging,org.apache.maven.errors,org.aspectj.runtime
  .internal,org.apache.maven.lifecycle.binding,org.codehaus.plexus.util
  .xml.pull,org.codehaus.plexus.context,org.apache.maven.monitor.event,
  org.apache.maven.lifecycle.model.io.xpp3,org.apache.maven.execution,o
- rg.apache.maven.project,org.apache.maven.realm,org.apache.maven.proje
+ rg.apache.maven.realm,org.apache.maven.project,org.apache.maven.proje
  ct.artifact,org.codehaus.plexus.personality.plexus.lifecycle.phase,or
  g.apache.maven.plugin",org.codehaus.plexus.component.manager;uses:="o
  rg.codehaus.plexus.component.factory,org.codehaus.plexus.component.re
@@ -189,9 +189,9 @@ Export-Package: org.codehaus.plexus.component.factory;uses:="org.codeh
  ,org.apache.maven.project,org.codehaus.plexus.util,org.apache.maven.w
  agon,org.apache.maven,org.apache.maven.wagon.repository,org.apache.ma
  ven.wagon.resource,org.codehaus.plexus.logging,org.apache.maven.error
- s",org.apache.maven.lifecycle.mapping,org.apache.maven.profiles.injec
- tion;uses:="org.apache.maven.model,org.codehaus.plexus.util.xml,org.a
- pache.maven.project,org.codehaus.plexus.util",org.apache.maven.artifa
+ s",org.apache.maven.profiles.injection;uses:="org.apache.maven.model,
+ org.codehaus.plexus.util.xml,org.apache.maven.project,org.codehaus.pl
+ exus.util",org.apache.maven.lifecycle.mapping,org.apache.maven.artifa
  ct.handler.manager;uses:="org.apache.maven.artifact.handler",org.apac
  he.maven.profiles.io.xpp3;uses:="org.codehaus.plexus.util.xml.pull,or
  g.codehaus.plexus.util.xml,org.apache.maven.profiles,org.codehaus.ple
@@ -240,15 +240,15 @@ Export-Package: org.codehaus.plexus.component.factory;uses:="org.codeh
  ven.artifact.resolver,org.apache.maven.artifact.transform,org.codehau
  s.plexus,org.apache.maven.artifact,org.apache.maven.artifact.factory,
  org.codehaus.plexus.logging",org.apache.maven.messages,org.apache.mav
- en.model,org.apache.maven.project.build.model;uses:="org.apache.maven
- .model.io.xpp3,org.codehaus.plexus.util.xml.pull,org.codehaus.plexus.
- util.xml,org.apache.maven.project,org.apache.maven.artifact.resolver,
- org.apache.maven.artifact.repository,org.codehaus.plexus.util,org.apa
- che.maven,org.apache.maven.profiles.activation,org.apache.maven.model
- ,org.apache.maven.artifact,org.codehaus.plexus.logging.console,org.ap
- ache.maven.artifact.factory,org.apache.maven.profiles.build,org.codeh
- aus.plexus.logging,org.apache.maven.project.aspect,org.apache.maven.p
- rofiles,org.aspectj.runtime.internal",org.apache.maven.artifact.facto
+ en.project.build.model;uses:="org.apache.maven.model.io.xpp3,org.code
+ haus.plexus.util.xml.pull,org.codehaus.plexus.util.xml,org.apache.mav
+ en.project,org.apache.maven.artifact.resolver,org.apache.maven.artifa
+ ct.repository,org.codehaus.plexus.util,org.apache.maven,org.apache.ma
+ ven.profiles.activation,org.apache.maven.model,org.apache.maven.artif
+ act,org.codehaus.plexus.logging.console,org.apache.maven.artifact.fac
+ tory,org.apache.maven.profiles.build,org.codehaus.plexus.logging,org.
+ apache.maven.project.aspect,org.apache.maven.profiles,org.aspectj.run
+ time.internal",org.apache.maven.model,org.apache.maven.artifact.facto
  ry;uses:="org.apache.maven.artifact.handler.manager,org.apache.maven.
  artifact,org.apache.maven.artifact.versioning,org.apache.maven.artifa
  ct.handler",org.codehaus.plexus.component.repository;uses:="org.codeh
@@ -285,11 +285,11 @@ Export-Package: org.codehaus.plexus.component.factory;uses:="org.codeh
  sonality.plexus.lifecycle.phase",org.apache.maven.profiles;uses:="org
  .codehaus.plexus.util.xml.pull,org.apache.maven.profiles.io.xpp3,org.
  codehaus.plexus.context,org.codehaus.plexus.component.repository.exce
- ption,org.codehaus.plexus.util.xml,org.apache.maven.project,org.apach
- e.maven.realm,org.codehaus.plexus.util,org.codehaus.plexus,org.apache
+ ption,org.codehaus.plexus.util.xml,org.apache.maven.realm,org.apache.
+ maven.project,org.codehaus.plexus.util,org.codehaus.plexus,org.apache
  .maven.profiles.activation,org.codehaus.plexus.classworlds.realm,org.
- apache.maven.model,org.codehaus.plexus.logging,org.codehaus.plexus.ut
- il.interpolation,org.apache.maven.project.aspect,org.aspectj.runtime.
+ apache.maven.model,org.codehaus.plexus.util.interpolation,org.codehau
+ s.plexus.logging,org.apache.maven.project.aspect,org.aspectj.runtime.
  internal",org.apache.maven.project.aspect;uses:="org.apache.maven.pro
  ject.error,org.codehaus.plexus.util.xml.pull,org.codehaus.plexus.comp
  onent.repository.exception,org.aspectj.lang,org.apache.maven.project,
@@ -406,9 +406,9 @@ Export-Package: org.codehaus.plexus.component.factory;uses:="org.codeh
  org.apache.maven.plugin.descriptor,org.apache.maven.project,org.apach
  e.maven.plugin.loader,org.apache.maven.lifecycle.model,org.codehaus.p
  lexus.logging,org.aspectj.runtime.internal,org.apache.maven.errors",o
- rg.codehaus.plexus.component.configurator.expression,org.codehaus.ple
- xus.classworlds.launcher;uses:="org.codehaus.plexus.classworlds.realm
- ,org.codehaus.plexus.classworlds",org.apache.maven.project.interpolat
+ rg.codehaus.plexus.classworlds.launcher;uses:="org.codehaus.plexus.cl
+ assworlds.realm,org.codehaus.plexus.classworlds",org.codehaus.plexus.
+ component.configurator.expression,org.apache.maven.project.interpolat
  ion;uses:="org.codehaus.plexus.util.cli,org.apache.maven.model.io.xpp
  3,org.codehaus.plexus.util.introspection,org.codehaus.plexus.util.xml
  .pull,org.apache.maven.model,org.codehaus.plexus.logging,org.codehaus
@@ -422,13 +422,13 @@ Export-Package: org.codehaus.plexus.component.factory;uses:="org.codeh
  ang,org.apache.maven.compat,org.codehaus.plexus.util,org.codehaus.ple
  xus,org.codehaus.plexus.util.dag,org.apache.maven.extension,org.apach
  e.maven.lifecycle.model,org.apache.maven.artifact.versioning,org.code
- haus.plexus.logging,org.apache.maven.profiles,org.apache.maven.projec
- t.aspect,org.apache.maven.errors,org.aspectj.runtime.internal,org.apa
- che.maven.artifact.resolver.filter,org.apache.maven.reactor,org.codeh
+ haus.plexus.logging,org.apache.maven.project.aspect,org.apache.maven.
+ profiles,org.apache.maven.errors,org.aspectj.runtime.internal,org.apa
+ che.maven.reactor,org.apache.maven.artifact.resolver.filter,org.codeh
  aus.plexus.context,org.apache.maven.monitor.event,org.apache.maven.ex
  ecution,org.apache.maven.project,org.apache.maven.artifact.repository
  ,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.ma
- ven.model,org.apache.maven.artifact,org.apache.maven.plugin",org.apac
+ ven.artifact,org.apache.maven.model,org.apache.maven.plugin",org.apac
  he.maven.wagon.providers.ssh.knownhost;uses:="org.apache.maven.wagon.
  authentication,org.codehaus.plexus.util",org.codehaus.plexus.classwor
  lds.realm;uses:="org.codehaus.plexus.classworlds.strategy,org.codehau
@@ -567,17 +567,17 @@ Ignore-Package: org.codehaus.plexus.util.reflection,org.codehaus.plexu
  s.util.cli,org.codehaus.plexus.util.dag,org.codehaus.plexus.util.intr
  ospection,org.codehaus.plexus.util.cli.shell,junit.framework,org.code
  haus.plexus.util.interpolation,sun.misc,org.codehaus.plexus.util
-Bundle-ClassPath: .,lib/maven-plugin-api-2.1-SNAPSHOT.jar,lib/backport
- -util-concurrent-3.0.jar,lib/plexus-container-default-1.0-alpha-44.ja
- r,lib/plexus-utils-1.4.5.jar,lib/wagon-ssh-external-1.0-beta-2.jar,li
- b/wagon-provider-api-1.0-beta-2.jar,lib/maven-lifecycle-2.1-SNAPSHOT.
- jar,lib/wagon-ssh-1.0-beta-2.jar,lib/maven-reporting-api-2.1-SNAPSHOT
- .jar,lib/doxia-sink-api-1.0-alpha-9.jar,lib/wagon-http-shared-1.0-bet
- a-2.jar,lib/maven-artifact-3.0-SNAPSHOT.jar,lib/plexus-classworlds-1.
- 2-alpha-12.jar,lib/plexus-interactivity-api-1.0-alpha-6.jar,lib/maven
- -profile-2.1-SNAPSHOT.jar,lib/maven-project-2.1-SNAPSHOT.jar,lib/mave
- n-core-2.1-SNAPSHOT.jar,lib/retrotranslator-runtime-1.2.1.jar,lib/mav
- en-model-2.1-SNAPSHOT.jar,lib/maven-embedder-2.1-SNAPSHOT.jar,lib/wag
+Bundle-ClassPath: .,lib/maven-reporting-api-2.1-SNAPSHOT.jar,lib/backp
+ ort-util-concurrent-3.0.jar,lib/plexus-container-default-1.0-alpha-44
+ .jar,lib/plexus-utils-1.4.5.jar,lib/maven-core-2.1-SNAPSHOT.jar,lib/w
+ agon-ssh-external-1.0-beta-2.jar,lib/maven-plugin-api-2.1-SNAPSHOT.ja
+ r,lib/maven-model-2.1-SNAPSHOT.jar,lib/maven-artifact-3.0-SNAPSHOT.ja
+ r,lib/wagon-provider-api-1.0-beta-2.jar,lib/maven-project-2.1-SNAPSHO
+ T.jar,lib/wagon-ssh-1.0-beta-2.jar,lib/maven-lifecycle-2.1-SNAPSHOT.j
+ ar,lib/doxia-sink-api-1.0-alpha-9.jar,lib/wagon-http-shared-1.0-beta-
+ 2.jar,lib/maven-profile-2.1-SNAPSHOT.jar,lib/plexus-classworlds-1.2-a
+ lpha-12.jar,lib/plexus-interactivity-api-1.0-alpha-6.jar,lib/maven-em
+ bedder-2.1-SNAPSHOT.jar,lib/retrotranslator-runtime-1.2.1.jar,lib/wag
  on-http-lightweight-1.0-beta-2.jar,lib/wagon-file-1.0-beta-2.jar,lib/
  wagon-ssh-common-1.0-beta-2.jar
 Built-By: csanchez
@@ -586,9 +586,9 @@ Bundle-Name: Q for Eclipse Maven Embedder
 Created-By: Apache Maven Bundle Plugin
 Bundle-Vendor: The Apache Software Foundation
 Build-Jdk: 1.6.0_03
-Bundle-Version: 2.1.0.v620417
+Bundle-Version: 2.1.0.v627670
 Eclipse-BuddyPolicy: registered
-Bnd-LastModified: 1202709052203
+Bnd-LastModified: 1202971355765
 Embed-Transitive: true
 Bundle-ManifestVersion: 2
 Bundle-Description: Maven Embedder for the Q project
@@ -596,7 +596,8 @@ Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
 Embed-Dependency: *;scope=compile|runtime;inline=false
 Bundle-DocURL: http://www.apache.org/
 Import-Package: com.jcraft.jsch,org.apache.commons.cli;version="[1.0.0
- ,2.0.0)",org.aspectj.lang,org.aspectj.runtime.internal,org.w3c.dom,org.w3c.tidy
+ ,2.0.0)",org.aspectj.lang,org.aspectj.runtime.internal,org.w3c.dom,or
+ g.w3c.tidy
 Embed-StripGroup: true
 Bundle-SymbolicName: org.apache.maven.embedder
 
