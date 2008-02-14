@@ -9,7 +9,8 @@ import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
  */
 public enum TraceOption
 {
-    PROJECT_IMPORT( "/import" );
+    PROJECT_IMPORT( "/import" ),
+    PROJECT_SCANNING( "/scanning" );
 
     private final String value;
 

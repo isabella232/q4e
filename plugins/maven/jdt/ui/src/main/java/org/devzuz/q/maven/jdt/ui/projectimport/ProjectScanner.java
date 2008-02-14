@@ -23,6 +23,7 @@ import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
+import org.devzuz.q.maven.jdt.ui.internal.TraceOption;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
@@ -98,6 +99,7 @@ public class ProjectScanner
         List<IMavenProject> sortedProjects;
         try
         {
+            /* TODO : an awful waste of embedder execution if we can't put this in the cache */
             IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( pom, false );
 
             MavenExecutionParameter parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter();
@@ -105,6 +107,9 @@ public class ProjectScanner
             IMavenExecutionResult result =
                 MavenManager.getMaven().executeGoal( mavenProject, "validate", parameter, monitor );
             sortedProjects = result.getSortedProjects();
+            
+            MavenJdtUiActivator.trace( TraceOption.PROJECT_SCANNING, "Scanned " + sortedProjects.size() + " Maven 2 Projects by using the reactor");
+            
             if ( sortedProjects == null )
             {
                 /* the project doesn't build so we can't get the list of sorted projects */
@@ -165,7 +170,6 @@ public class ProjectScanner
         {
             Model pomModel = new MavenXpp3Reader().read( new FileReader( pom ) );
             pomDescriptor = new PomFileDescriptor( pom, pomModel );
-
         }
         catch ( IOException e )
         {
@@ -186,18 +190,21 @@ public class ProjectScanner
 
         Collection<PomFileDescriptor> pomDescriptors = new ArrayList<PomFileDescriptor>();
 
-        for ( String module : modules )
-        {
-            File moduleDir = new File( pomDescriptor.getBaseDirectory(), module );
-
-            Collection<PomFileDescriptor> scanned = getProjects( moduleDir, new SubProgressMonitor( monitor, 10 ) );
-            pomDescriptors.addAll( scanned );
-        }
-
-        if ( modules.isEmpty() )
+        // Add the parent project first if that option is turned on
+        if( importParentProjects || modules.isEmpty() )
         {
             pomDescriptors.add( pomDescriptor );
         }
+        
+        for ( String module : modules )
+        {
+            File moduleDir = new File( pomDescriptor.getBaseDirectory(), module );
+            
+            Collection<PomFileDescriptor> scanned = getProjects( moduleDir, new SubProgressMonitor( monitor, 10 ) );
+            pomDescriptors.addAll( scanned );
+        }
+        
+        MavenJdtUiActivator.trace( TraceOption.PROJECT_SCANNING, "Scanned " + pomDescriptors.size() + " Maven 2 Projects by reading the poms.");
 
         return pomDescriptors;
     }
