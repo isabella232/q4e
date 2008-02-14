@@ -4,7 +4,6 @@ import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.resolver.ArtifactCollector;
-import org.apache.maven.shared.dependency.tree.DefaultDependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
@@ -56,7 +55,7 @@ public class ResolveDependenciesJob
     {
         try
         {
-            DependencyTreeBuilder dependencyTreeBuilder = new DefaultDependencyTreeBuilder();
+            DependencyTreeBuilder dependencyTreeBuilder = maven.getMavenComponentHelper().getDependencyTreeBuilder();
             ArtifactRepository localRepository = maven.getLocalRepository().getArtifactRepository();
             ArtifactFactory factory = maven.getMavenComponentHelper().getArtifactFactory();
             ArtifactCollector collector = maven.getMavenComponentHelper().getArtifactCollector();
