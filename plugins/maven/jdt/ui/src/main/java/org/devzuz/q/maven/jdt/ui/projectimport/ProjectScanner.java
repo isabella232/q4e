@@ -107,9 +107,10 @@ public class ProjectScanner
             IMavenExecutionResult result =
                 MavenManager.getMaven().executeGoal( mavenProject, "validate", parameter, monitor );
             sortedProjects = result.getSortedProjects();
-            
-            MavenJdtUiActivator.trace( TraceOption.PROJECT_SCANNING, "Scanned " + sortedProjects.size() + " Maven 2 Projects by using the reactor");
-            
+
+            MavenJdtUiActivator.trace( TraceOption.PROJECT_SCANNING, "Scanned ", sortedProjects.size(),
+                                       " Maven 2 Projects by using the reactor" );
+
             if ( sortedProjects == null )
             {
                 /* the project doesn't build so we can't get the list of sorted projects */
@@ -191,20 +192,21 @@ public class ProjectScanner
         Collection<PomFileDescriptor> pomDescriptors = new ArrayList<PomFileDescriptor>();
 
         // Add the parent project first if that option is turned on
-        if( importParentProjects || modules.isEmpty() )
+        if ( importParentProjects || modules.isEmpty() )
         {
             pomDescriptors.add( pomDescriptor );
         }
-        
+
         for ( String module : modules )
         {
             File moduleDir = new File( pomDescriptor.getBaseDirectory(), module );
-            
+
             Collection<PomFileDescriptor> scanned = getProjects( moduleDir, new SubProgressMonitor( monitor, 10 ) );
             pomDescriptors.addAll( scanned );
         }
-        
-        MavenJdtUiActivator.trace( TraceOption.PROJECT_SCANNING, "Scanned " + pomDescriptors.size() + " Maven 2 Projects by reading the poms.");
+
+        MavenJdtUiActivator.trace( TraceOption.PROJECT_SCANNING, "Scanned ", pomDescriptors.size(),
+                                   " Maven 2 Projects by reading the poms." );
 
         return pomDescriptors;
     }
