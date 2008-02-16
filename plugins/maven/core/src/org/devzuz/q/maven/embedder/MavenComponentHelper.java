@@ -8,6 +8,7 @@
 package org.devzuz.q.maven.embedder;
 
 import org.apache.maven.artifact.factory.ArtifactFactory;
+import org.apache.maven.artifact.handler.manager.ArtifactHandlerManager;
 import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.resolver.ArtifactCollector;
 import org.apache.maven.embedder.MavenEmbedder;
@@ -63,6 +64,11 @@ public class MavenComponentHelper
     public ArtifactMetadataSource getArtifactMetadataSource()
     {
         return (ArtifactMetadataSource) lookup( ArtifactMetadataSource.ROLE );
+    }
+
+    public ArtifactHandlerManager getArtifactHandlerManager()
+    {
+        return (ArtifactHandlerManager) lookup( ArtifactHandlerManager.ROLE );
     }
 
 }
