@@ -237,11 +237,11 @@ public class EclipseMavenProject implements IMavenProject
         allArtifacts.clear();
         Set<IMavenArtifact> tempArtifactCache = new HashSet<IMavenArtifact>();
 
-        for ( Artifact obj : (Set<Artifact>) mavenRawProject.getArtifacts() )
+        for ( Artifact artifact : (Set<Artifact>) mavenRawProject.getArtifacts() )
         {
-                IMavenArtifact mavenArtifact = MavenUtils.createMavenArtifact( obj );
+                IMavenArtifact mavenArtifact = MavenUtils.createMavenArtifact( artifact );
                 allArtifacts.add( mavenArtifact );
-                addThroughDependencyTrail( mavenRawProject, tempArtifactCache, mavenArtifact, obj );
+                addThroughDependencyTrail( mavenRawProject, tempArtifactCache, mavenArtifact, artifact );
         }
 
         /* The tempArtifactCache contains, as a first element, this project with its direct dependencies as children */
@@ -256,40 +256,38 @@ public class EclipseMavenProject implements IMavenProject
         }
     }
 
+    @SuppressWarnings("unchecked")
     private void addThroughDependencyTrail( MavenProject mavenRawProject, Set<IMavenArtifact> artifactCache,
                                             IMavenArtifact mavenArtifact, Artifact defaultArtifact )
     {
         IMavenArtifact parentArtifact = null;
-        for ( Object obj : defaultArtifact.getDependencyTrail() )
+        for ( String obj : (List<String>) defaultArtifact.getDependencyTrail() )
         {
-            if ( obj instanceof String )
+            IMavenArtifact dummyArtifact = createDummyMavenArtifact( (String) obj );
+            IMavenArtifact resolvedArtifact = getArtifactInstanceFromSet( allArtifacts, dummyArtifact );
+            if ( parentArtifact == null )
             {
-                IMavenArtifact dummyArtifact = createDummyMavenArtifact( (String) obj );
-                IMavenArtifact resolvedArtifact = getArtifactInstanceFromSet( allArtifacts, dummyArtifact );
-                if ( parentArtifact == null )
+                // Start at the top
+                if ( artifactCache.contains( resolvedArtifact ) )
                 {
-                    // Start at the top
-                    if ( artifactCache.contains( resolvedArtifact ) )
-                    {
-                        parentArtifact = getArtifactInstanceFromSet( artifactCache, resolvedArtifact );
-                    }
-                    else
-                    {
-                        artifactCache.add( resolvedArtifact );
-                        parentArtifact = resolvedArtifact;
-                    }
+                    parentArtifact = getArtifactInstanceFromSet( artifactCache, resolvedArtifact );
                 }
                 else
                 {
-                    if ( parentArtifact.getChildren().contains( resolvedArtifact ) )
-                    {
-                        parentArtifact = getArtifactInstanceFromSet( parentArtifact.getChildren(), resolvedArtifact );
-                    }
-                    else
-                    {
-                        parentArtifact.addChild( resolvedArtifact );
-                        parentArtifact = resolvedArtifact;
-                    }
+                    artifactCache.add( resolvedArtifact );
+                    parentArtifact = resolvedArtifact;
+                }
+            }
+            else
+            {
+                if ( parentArtifact.getChildren().contains( resolvedArtifact ) )
+                {
+                    parentArtifact = getArtifactInstanceFromSet( parentArtifact.getChildren(), resolvedArtifact );
+                }
+                else
+                {
+                    parentArtifact.addChild( resolvedArtifact );
+                    parentArtifact = resolvedArtifact;
                 }
             }
         }
