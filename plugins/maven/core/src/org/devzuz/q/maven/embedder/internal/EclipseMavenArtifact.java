@@ -11,6 +11,9 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.commons.lang.builder.EqualsBuilder;
+import org.apache.commons.lang.builder.HashCodeBuilder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.versioning.VersionRange;
@@ -189,76 +192,49 @@ public class EclipseMavenArtifact
     }
 
     @Override
-    public boolean equals( Object arg0 )
+    public boolean equals( Object obj )
     {
-        if ( arg0 == this )
-            return true;
-        if ( arg0 instanceof IMavenArtifact )
+        if ( !( obj instanceof IMavenArtifact ) )
         {
-            IMavenArtifact secondArtifact = (IMavenArtifact) arg0;
-            if ( !secondArtifact.getArtifactId().equals( getArtifactId() ) )
-                return false;
-            if ( !secondArtifact.getGroupId().equals( getGroupId() ) )
-                return false;
-            if ( !secondArtifact.getVersion().equals( getVersion() ) )
-                return false;
-            if ( !secondArtifact.getType().equals( getType() ) )
-                return false;
-            if ( secondArtifact.getClassifier() == null ? getClassifier() != null
-                            : !secondArtifact.getClassifier().equals( getClassifier() ) )
-            {
-                return false;
-            }
-
+            return false;
+        }
+        if ( this == obj )
+        {
             return true;
         }
-        return false;
+        IMavenArtifact rhs = (IMavenArtifact) obj;
+
+        return new EqualsBuilder().
+            appendSuper(super.equals(obj)).
+            append(getGroupId(), rhs.getGroupId()).
+            append(getArtifactId(), rhs.getArtifactId()).
+            append(getVersion(), rhs.getVersion()).
+            append(getType(), rhs.getType()).
+            append(getClassifier(), rhs.getClassifier()).
+            isEquals();
     }
 
     @Override
     public int hashCode()
     {
-        return getArtifactId().hashCode() * getGroupId().hashCode() * getVersion().hashCode();
+        return new HashCodeBuilder( 17, 37 ).
+            append( getGroupId() ).
+            append( getArtifactId() ).
+            append( getVersion() ).
+            append( getType() ).
+            append( getClassifier() ).
+            toHashCode();
     }
 
     @Override
     public String toString()
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append( "artifactId[" );
-        sb.append( getArtifactId() );
-        sb.append( "] " );
-        sb.append( "groupId[" );
-        sb.append( getGroupId() );
-        sb.append( "] " );
-        sb.append( "version[" );
-        sb.append( getVersion() );
-        sb.append( "] " );
-        sb.append( "type[" );
-        sb.append( getType() );
-        sb.append( "] " );
-        sb.append( "scope[" );
-        sb.append( getScope() );
-        sb.append( "] " );
-        sb.append( "classifier[" );
-        sb.append( getClassifier() != null ? getClassifier() : "null" );
-        sb.append( "] " );
-        return sb.toString();
-    }
-
-    @Override
-    public Object clone()
-    {
-        EclipseMavenArtifact artifact = new EclipseMavenArtifact();
-        artifact.setArtifactId( getArtifactId() );
-        artifact.setGroupId( getGroupId() );
-        artifact.setId( getId() );
-        setVersion( getVersion() );
-        artifact.setFile( getFile() );
-        artifact.setScope( getScope() );
-        artifact.setType( getType() );
-        artifact.setClassifier( getClassifier() );
-        artifact.setAddedToClasspath( isAddedToClasspath() );
-        return artifact;
+        return new ToStringBuilder( this ).
+            append( "groupId", getGroupId() ).
+            append( "artifactId", getArtifactId() ).
+            append( "version", getVersion() ).
+            append( "type", getType() ).
+            append( "classifier", getClassifier() ).
+            toString();
     }
 }
