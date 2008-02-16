@@ -108,25 +108,14 @@ public class MavenUtils
     }
     
     /**
-     * @param defaultArtifact
-     *             An maven embedder Artifact
+     * @param artifact A Maven Artifact
      * @return IMavenArtifact The artifact wrapped inside IMavenArtifact
+     * @deprecated use {@link EclipseMavenArtifact#EclipseMavenArtifact(Artifact)}
      */
-    public static IMavenArtifact createMavenArtifact( Artifact defaultArtifact )
+    @Deprecated
+    public static IMavenArtifact createMavenArtifact( Artifact artifact )
     {
-        IMavenArtifact artifact = new EclipseMavenArtifact();
-        artifact.setArtifactId( defaultArtifact.getArtifactId() );
-        artifact.setGroupId( defaultArtifact.getGroupId() );
-        artifact.setId( defaultArtifact.getId() );
-        artifact.setVersion( defaultArtifact.getVersion() );
-        artifact.setFile( defaultArtifact.getFile() );
-        artifact.setAddedToClasspath( defaultArtifact.getArtifactHandler().isAddedToClasspath() );
-        artifact.setClassifier( defaultArtifact.getClassifier() );
-        artifact.setFile( defaultArtifact.getFile() );
-        artifact.setScope( defaultArtifact.getScope() );
-        artifact.setType( defaultArtifact.getType() );
-        // System.out.println("Created Artifact "+artifact);
-        return artifact;
+        return new EclipseMavenArtifact( artifact );
     }
     
     public static PlexusContainer getPlexusContainer()

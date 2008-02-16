@@ -13,14 +13,15 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
+import org.apache.maven.artifact.versioning.VersionRange;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenProject;
-import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.embedder.nature.MavenNatureHelper;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -239,7 +240,7 @@ public class EclipseMavenProject implements IMavenProject
 
         for ( Artifact artifact : (Set<Artifact>) mavenRawProject.getArtifacts() )
         {
-                IMavenArtifact mavenArtifact = MavenUtils.createMavenArtifact( artifact );
+                IMavenArtifact mavenArtifact = new EclipseMavenArtifact( artifact );
                 allArtifacts.add( mavenArtifact );
                 addThroughDependencyTrail( mavenRawProject, tempArtifactCache, mavenArtifact, artifact );
         }
@@ -261,9 +262,9 @@ public class EclipseMavenProject implements IMavenProject
                                             IMavenArtifact mavenArtifact, Artifact defaultArtifact )
     {
         IMavenArtifact parentArtifact = null;
-        for ( String obj : (List<String>) defaultArtifact.getDependencyTrail() )
+        for ( String id : (List<String>) defaultArtifact.getDependencyTrail() )
         {
-            IMavenArtifact dummyArtifact = createDummyMavenArtifact( (String) obj );
+            IMavenArtifact dummyArtifact = createDummyMavenArtifact( id );
             IMavenArtifact resolvedArtifact = getArtifactInstanceFromSet( allArtifacts, dummyArtifact );
             if ( parentArtifact == null )
             {
@@ -301,13 +302,20 @@ public class EclipseMavenProject implements IMavenProject
     private IMavenArtifact createDummyMavenArtifact( String string )
     {
         String[] elements = string.split( ":" );
-        IMavenArtifact artifact = new EclipseMavenArtifact();
-        artifact.setArtifactId( elements[1] );
-        artifact.setGroupId( elements[0] );
-        artifact.setId( string );
-        artifact.setVersion( elements[3] );
-        artifact.setType( elements[2] );
-        return artifact;
+        String groupId = elements[0];
+        String artifactId = elements[1];
+        String type = elements[2];
+        String version = elements[3];
+        String classifier = null;
+        if ( elements.length == 5 )
+        {
+            classifier = elements[3];
+            version = elements[4];
+        }
+        DefaultArtifact defaultArtifact =
+            new DefaultArtifact( groupId, artifactId, VersionRange.createFromVersion( version ), null, type,
+                                 classifier, null, false );
+        return new EclipseMavenArtifact( defaultArtifact );
     }
 
     private IMavenArtifact getArtifactInstanceFromSet( Set<IMavenArtifact> artifactsToSearch,
