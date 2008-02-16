@@ -51,6 +51,8 @@ public class MavenClasspathContainer implements IClasspathContainer
 
     public static String SOURCES_CLASSIFIER = "sources";
 
+    private static String SOURCES_TYPE = "java-source";
+
     private IClasspathEntry[] classpathEntries;
 
     private IProject project;
@@ -268,8 +270,10 @@ public class MavenClasspathContainer implements IClasspathContainer
             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in " + mavenProject.getArtifactId()
                             + " as jar dependency - " + artifact.getFile().getAbsolutePath() );
 
-            Path sourcePath =
-                getArtifactPath( mavenProject, artifact, "java-source", SOURCES_CLASSIFIER, downloadSources );
+            IMavenArtifact clone = (IMavenArtifact) artifact.clone();
+            clone.setType( SOURCES_TYPE );
+            clone.setClassifier( SOURCES_CLASSIFIER );
+            Path sourcePath = getArtifactPath( mavenProject, clone, downloadSources );
             return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ), sourcePath, null,
                                              new IAccessRule[0], attributes, export );
         }
@@ -303,12 +307,9 @@ public class MavenClasspathContainer implements IClasspathContainer
         return project;
     }
 
-    private Path getArtifactPath( IMavenProject mavenProject, IMavenArtifact artifact, String type, String suffix,
-                                  boolean materialize )
+    private Path getArtifactPath( IMavenProject mavenProject, IMavenArtifact artifact, boolean materialize )
     {
         // TODO in the future we want to do something like:
-        // IMavenArtifact sourcesArtifact = (IMavenArtifact) artifact.clone();
-        // sourcesArtifact.setClassifier( SOURCES_CLASSIFIER );
         // IPath sourcePath = MavenManager.getMaven().getLocalRepository().getPath( sourcesArtifact );
 
         File artifactFile;
@@ -316,17 +317,20 @@ public class MavenClasspathContainer implements IClasspathContainer
         if ( artifactLocation != null )
         {
             String classifier = artifact.getClassifier();
-            if ( ( type.equals( "java-source" ) ) && ( classifier != null ) && ( classifier.equals( "test" ) ) )
+            if ( ( artifact.getType().equals( SOURCES_TYPE ) ) && ( classifier != null ) &&
+                ( classifier.equals( "test" ) ) )
             {
                 artifactFile =
-                    new File( artifactLocation.substring( 0, artifactLocation.length() - "-tests.jar".length() )
-                                    + "-test-sources.jar" );
+                    new File( artifactLocation.substring( 0, artifactLocation.length() -
+                        ( "-tests." + artifact.getType() ).length() ) +
+                        "-test-" + SOURCES_CLASSIFIER + "." + artifact.getType() );
             }
             else
             {
                 artifactFile =
-                    new File( artifactLocation.substring( 0, artifactLocation.length() - ".jar".length() ) + "-"
-                                    + suffix + ".jar" );
+                    new File( artifactLocation.substring( 0, artifactLocation.length() -
+                        ( "." + artifact.getType() ).length() ) +
+                        "-" + artifact.getClassifier() + "." + artifact.getType() );
             }
 
             if ( artifactFile.exists() )
@@ -340,7 +344,7 @@ public class MavenClasspathContainer implements IClasspathContainer
                     try
                     {
                         // Materialize this artifact
-                        MavenManager.getMaven().resolveArtifact( artifact, type, suffix,
+                        MavenManager.getMaven().resolveArtifact( artifact.getDependency(),
                                                                  mavenProject.getRemoteArtifactRepositories() );
                         return new Path( artifact.getFile().getAbsolutePath() );
                     }
