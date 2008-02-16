@@ -122,6 +122,7 @@ public class MavenUtils
     /**
      * @deprecated use {@link MavenComponentHelper} to get any MavenComponents that you may need
      */
+    @Deprecated
     public static PlexusContainer getPlexusContainer()
     {
         IMaven maven = MavenManager.getMaven();
