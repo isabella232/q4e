@@ -19,7 +19,7 @@ import org.apache.maven.model.Dependency;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 
 public class EclipseMavenArtifact
-    implements IMavenArtifact
+    implements IMavenArtifact, Cloneable
 {
 
     private String artifactId;
