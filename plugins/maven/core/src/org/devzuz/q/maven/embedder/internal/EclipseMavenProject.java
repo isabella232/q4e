@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.maven.artifact.DefaultArtifact;
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
@@ -162,6 +162,7 @@ public class EclipseMavenProject implements IMavenProject
         // TODO: Needs to do something
     }
 
+    @SuppressWarnings("unchecked")
     public Object getAdapter( Class adapter )
     {
         // TODO Auto-generated method stub
@@ -208,6 +209,7 @@ public class EclipseMavenProject implements IMavenProject
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     public void refreshProject( MavenProject mavenRawProject )
     {
         mavenProject = mavenRawProject;
@@ -228,27 +230,18 @@ public class EclipseMavenProject implements IMavenProject
         filters = mavenRawProject.getFilters();
     }
 
+    @SuppressWarnings("unchecked")
     public void refreshDependencies( MavenProject mavenRawProject )
     {
         // TODO use the dependency graph tool
         allArtifacts.clear();
-        for ( Object obj : mavenRawProject.getArtifacts() )
-        {
-            if ( obj instanceof DefaultArtifact )
-            {
-                IMavenArtifact mavenArtifact = MavenUtils.createMavenArtifact( (DefaultArtifact) obj );
-                allArtifacts.add( mavenArtifact );
-            }
-        }
-
         Set<IMavenArtifact> tempArtifactCache = new HashSet<IMavenArtifact>();
-        for ( Object obj : mavenRawProject.getArtifacts() )
+
+        for ( Artifact obj : (Set<Artifact>) mavenRawProject.getArtifacts() )
         {
-            if ( obj instanceof DefaultArtifact )
-            {
-                IMavenArtifact mavenArtifact = MavenUtils.createMavenArtifact( (DefaultArtifact) obj );
-                addThroughDependencyTrail( mavenRawProject, tempArtifactCache, mavenArtifact, (DefaultArtifact) obj );
-            }
+                IMavenArtifact mavenArtifact = MavenUtils.createMavenArtifact( obj );
+                allArtifacts.add( mavenArtifact );
+                addThroughDependencyTrail( mavenRawProject, tempArtifactCache, mavenArtifact, obj );
         }
 
         /* The tempArtifactCache contains, as a first element, this project with its direct dependencies as children */
@@ -264,7 +257,7 @@ public class EclipseMavenProject implements IMavenProject
     }
 
     private void addThroughDependencyTrail( MavenProject mavenRawProject, Set<IMavenArtifact> artifactCache,
-                                            IMavenArtifact mavenArtifact, DefaultArtifact defaultArtifact )
+                                            IMavenArtifact mavenArtifact, Artifact defaultArtifact )
     {
         IMavenArtifact parentArtifact = null;
         for ( Object obj : defaultArtifact.getDependencyTrail() )
