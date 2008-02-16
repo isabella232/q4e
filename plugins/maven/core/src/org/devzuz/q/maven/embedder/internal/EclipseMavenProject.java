@@ -13,9 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
-import org.apache.maven.artifact.versioning.VersionRange;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Resource;
@@ -312,10 +310,14 @@ public class EclipseMavenProject implements IMavenProject
             classifier = elements[3];
             version = elements[4];
         }
-        DefaultArtifact defaultArtifact =
-            new DefaultArtifact( groupId, artifactId, VersionRange.createFromVersion( version ), null, type,
-                                 classifier, null, false );
-        return new EclipseMavenArtifact( defaultArtifact );
+
+        EclipseMavenArtifact artifact = new EclipseMavenArtifact();
+        artifact.setGroupId( groupId );
+        artifact.setArtifactId( artifactId );
+        artifact.setType( type );
+        artifact.setVersion( version );
+        artifact.setClassifier( classifier );
+        return artifact;
     }
 
     private IMavenArtifact getArtifactInstanceFromSet( Set<IMavenArtifact> artifactsToSearch,
