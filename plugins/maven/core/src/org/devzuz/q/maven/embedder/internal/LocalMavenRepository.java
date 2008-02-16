@@ -48,32 +48,27 @@ public class LocalMavenRepository implements ILocalMavenRepository
 
     public IPath getPath( IMavenArtifact artifact )
     {
-        String pathOf = getArtifactRepository().pathOf( artifact.toMaven() );
-        return new Path( pathOf );
+        throw new UnsupportedOperationException();
     }
 
     public IMavenArtifact findArtifact( String groupId, String artifactId, String version, String classifier )
     {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public List<IMavenArtifact> findArtifacts( String freeText )
     {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public List<IMavenArtifact> findArtifacts( String groupId, String artifactId )
     {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     public List<IMavenArtifact> findArtifacts( String groupId, String artifactId, String version )
     {
-        // TODO Auto-generated method stub
-        return null;
+        throw new UnsupportedOperationException();
     }
 
 }
