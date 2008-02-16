@@ -10,7 +10,6 @@ package org.devzuz.q.maven.embedder.internal;
 import java.io.File;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +53,8 @@ import org.eclipse.core.runtime.CoreException;
  * 
  * @author amuino
  */
-public class MavenProjectWrapper extends MavenProject
+@SuppressWarnings("unchecked")
+public class MavenProjectWrapper extends MavenProject implements Cloneable
 {
     private MavenProject delegate;
 
@@ -149,10 +149,8 @@ public class MavenProjectWrapper extends MavenProject
             list.addAll( testCompileSourceRoots );
         }
         MavenProjectManager mavenProjectManager = MavenManager.getMavenProjectManager();
-        for ( Iterator i = getArtifacts().iterator(); i.hasNext(); )
+        for ( Artifact a : (Set<Artifact>) getArtifacts() )
         {
-            Artifact a = (Artifact) i.next();
-
             if ( a.getArtifactHandler().isAddedToClasspath() )
             {
                 // TODO: let the scope handler deal with this
@@ -259,6 +257,7 @@ public class MavenProjectWrapper extends MavenProject
     }
 
     @Override
+    @Deprecated
     public void attachArtifact( String type, String classifier, File file )
     {
         delegate.attachArtifact( type, classifier, file );
@@ -1044,5 +1043,15 @@ public class MavenProjectWrapper extends MavenProject
     public void writeOriginalModel( Writer writer ) throws IOException
     {
         delegate.writeOriginalModel( writer );
+    }
+
+    @Override
+    public Object clone()
+    // TODO this will be needed when we upgrade the embedder
+    // throws CloneNotSupportedException
+    {
+        MavenProjectWrapper clone = (MavenProjectWrapper) super.clone();
+        clone.delegate = (MavenProject) delegate.clone();
+        return clone;
     }
 }
