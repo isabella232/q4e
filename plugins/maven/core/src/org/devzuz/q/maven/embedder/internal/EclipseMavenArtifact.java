@@ -11,7 +11,6 @@ import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.versioning.VersionRange;
@@ -21,20 +20,48 @@ public class EclipseMavenArtifact
     implements IMavenArtifact
 {
 
-    private Artifact artifact;
+    private String artifactId;
+
+    private String groupId;
+
+    private String id;
+
+    private String version;
+
+    private String scope;
+
+    private String type;
+
+    private String classifier;
+
+    private boolean addedToClasspath;
+
+    private File file;
 
     private IMavenArtifact parent = null;
 
     private Set<IMavenArtifact> children = new HashSet<IMavenArtifact>();
 
-    public EclipseMavenArtifact( Artifact artifact )
+    public EclipseMavenArtifact()
     {
-        this.artifact = artifact;
     }
 
-    private Artifact getArtifact()
+    public EclipseMavenArtifact( Artifact artifact )
     {
-        return artifact;
+        fromMaven( artifact );
+    }
+
+    public void fromMaven( Artifact artifact )
+    {
+        setArtifactId( artifact.getArtifactId() );
+        setGroupId( artifact.getGroupId() );
+        setId( artifact.getId() );
+        setVersion( artifact.getVersion() );
+        setFile( artifact.getFile() );
+        setScope( artifact.getScope() );
+        setType( artifact.getType() );
+        setClassifier( artifact.getArtifactHandler().getClassifier() );
+        setAddedToClasspath( artifact.getArtifactHandler().isAddedToClasspath() );
     }
 
     public Artifact toMaven()
@@ -47,27 +74,52 @@ public class EclipseMavenArtifact
 
     public String getArtifactId()
     {
-        return getArtifact().getArtifactId();
+        return artifactId;
+    }
+
+    public void setArtifactId( String artifactId )
+    {
+        this.artifactId = artifactId;
     }
 
     public String getGroupId()
     {
-        return getArtifact().getGroupId();
+        return groupId;
+    }
+
+    public void setGroupId( String groupId )
+    {
+        this.groupId = groupId;
     }
 
     public String getId()
     {
-        return getArtifact().getId();
+        return id;
+    }
+
+    public void setId( String id )
+    {
+        this.id = id;
     }
 
     public String getVersion()
     {
-        return getArtifact().getVersion();
+        return version;
+    }
+
+    public void setVersion( String version )
+    {
+        this.version = version;
     }
 
     public File getFile()
     {
-        return getArtifact().getFile();
+        return file;
+    }
+
+    public void setFile( File file )
+    {
+        this.file = file;
     }
 
     public IMavenArtifact getParent()
@@ -82,27 +134,52 @@ public class EclipseMavenArtifact
 
     public String getScope()
     {
-        return getArtifact().getScope();
+        return scope;
+    }
+
+    public void setScope( String scope )
+    {
+        this.scope = scope;
     }
 
     public String getType()
     {
-        return getArtifact().getType();
+        return type;
+    }
+
+    public void setType( String type )
+    {
+        this.type = type;
     }
 
     public String getClassifier()
     {
-        return getArtifact().getArtifactHandler().getClassifier();
+        return classifier;
+    }
+
+    public void setClassifier( String classifier )
+    {
+        this.classifier = classifier;
     }
 
     public boolean isAddedToClasspath()
     {
-        return getArtifact().getArtifactHandler().isAddedToClasspath();
+        return addedToClasspath;
+    }
+
+    public void setAddedToClasspath( boolean addedToClasspath )
+    {
+        this.addedToClasspath = addedToClasspath;
     }
 
     public Set<IMavenArtifact> getChildren()
     {
         return children;
+    }
+
+    public void setChildren( Set<IMavenArtifact> children )
+    {
+        this.children = children;
     }
 
     public void addChild( IMavenArtifact child )
@@ -112,29 +189,76 @@ public class EclipseMavenArtifact
     }
 
     @Override
-    public boolean equals( Object obj )
+    public boolean equals( Object arg0 )
     {
-        if ( !( obj instanceof EclipseMavenArtifact ) )
+        if ( arg0 == this )
+            return true;
+        if ( arg0 instanceof IMavenArtifact )
         {
-            return false;
-        }
-        if ( this == obj )
-        {
+            IMavenArtifact secondArtifact = (IMavenArtifact) arg0;
+            if ( !secondArtifact.getArtifactId().equals( getArtifactId() ) )
+                return false;
+            if ( !secondArtifact.getGroupId().equals( getGroupId() ) )
+                return false;
+            if ( !secondArtifact.getVersion().equals( getVersion() ) )
+                return false;
+            if ( !secondArtifact.getType().equals( getType() ) )
+                return false;
+            if ( secondArtifact.getClassifier() == null ? getClassifier() != null
+                            : !secondArtifact.getClassifier().equals( getClassifier() ) )
+            {
+                return false;
+            }
+
             return true;
         }
-        EclipseMavenArtifact rhs = (EclipseMavenArtifact) obj;
-        return this.getArtifact().equals( rhs.getArtifact() );
+        return false;
     }
 
     @Override
     public int hashCode()
     {
-        return new HashCodeBuilder( 17, 37 ).append( getArtifact() ).toHashCode();
+        return getArtifactId().hashCode() * getGroupId().hashCode() * getVersion().hashCode();
     }
 
     @Override
     public String toString()
     {
-        return getArtifact().toString();
+        StringBuilder sb = new StringBuilder();
+        sb.append( "artifactId[" );
+        sb.append( getArtifactId() );
+        sb.append( "] " );
+        sb.append( "groupId[" );
+        sb.append( getGroupId() );
+        sb.append( "] " );
+        sb.append( "version[" );
+        sb.append( getVersion() );
+        sb.append( "] " );
+        sb.append( "type[" );
+        sb.append( getType() );
+        sb.append( "] " );
+        sb.append( "scope[" );
+        sb.append( getScope() );
+        sb.append( "] " );
+        sb.append( "classifier[" );
+        sb.append( getClassifier() != null ? getClassifier() : "null" );
+        sb.append( "] " );
+        return sb.toString();
+    }
+
+    @Override
+    public Object clone()
+    {
+        EclipseMavenArtifact artifact = new EclipseMavenArtifact();
+        artifact.setArtifactId( getArtifactId() );
+        artifact.setGroupId( getGroupId() );
+        artifact.setId( getId() );
+        setVersion( getVersion() );
+        artifact.setFile( getFile() );
+        artifact.setScope( getScope() );
+        artifact.setType( getType() );
+        artifact.setClassifier( getClassifier() );
+        artifact.setAddedToClasspath( isAddedToClasspath() );
+        return artifact;
     }
 }
