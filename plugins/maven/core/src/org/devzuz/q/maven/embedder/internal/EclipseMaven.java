@@ -69,8 +69,6 @@ import org.eclipse.core.runtime.jobs.Job;
  */
 public class EclipseMaven implements IMaven
 {
-    private static final String USER_HOME = System.getProperty( "user.home" );
-
     private static final String GOAL_DEPLOY = "deploy";
 
     private static final String GOAL_INSTALL = "install";
@@ -371,6 +369,7 @@ public class EclipseMaven implements IMaven
         }
     }
 
+    @SuppressWarnings("unchecked")
     private IMavenProject getMavenProject( EclipseMavenProject mavenProject, boolean resolveTransitively )
         throws CoreException
     {
@@ -594,6 +593,7 @@ public class EclipseMaven implements IMaven
         return eventPropagator;
     }
 
+    @SuppressWarnings("unchecked")
     public List<ArtifactVersion> getArtifactVersions( Artifact artifact, List<ArtifactRepository> remoteRepositories )
         throws CoreException
     {
@@ -641,11 +641,25 @@ public class EclipseMaven implements IMaven
         return artifactMetadataSource;
     }
 
+    @Deprecated
     public Artifact createArtifact( String groupId, String artifactId, String version, String scope, String type )
     {
-        return getMavenEmbedder().createArtifact( groupId, artifactId, version, scope, type );
+        Dependency dependency = new Dependency();
+        dependency.setGroupId( groupId );
+        dependency.setArtifactId( artifactId );
+        dependency.setVersion( version );
+        dependency.setScope( scope );
+        dependency.setType( type );
+        return createArtifact( dependency );
     }
 
+    public Artifact createArtifact( Dependency dependency )
+    {
+        return getMavenEmbedder().createArtifact( dependency.getGroupId(), dependency.getArtifactId(),
+                                                  dependency.getVersion(), dependency.getScope(), dependency.getType() );
+    }
+
+    @Deprecated
     public Dependency createMavenDependency( String groupId, String artifactId, String version, String scope,
                                              String type )
     {
@@ -660,14 +674,31 @@ public class EclipseMaven implements IMaven
         return dependency;
     }
 
+    @Deprecated
     public void resolveArtifact( IMavenArtifact artifact, String type, String classifier,
                                  List<ArtifactRepository> remoteRepositories ) throws CoreException
+    {
+        Dependency dependency = new Dependency();
+
+        dependency.setArtifactId( artifact.getArtifactId() );
+        dependency.setGroupId( artifact.getGroupId() );
+        dependency.setVersion( artifact.getVersion() );
+        dependency.setType( type );
+        dependency.setScope( artifact.getScope() );
+        dependency.setClassifier( classifier );
+
+        resolveArtifact( dependency, remoteRepositories );
+    }
+
+    public void resolveArtifact( Dependency dependency, List<ArtifactRepository> remoteRepositories )
+        throws CoreException
     {
         try
         {
             Artifact rawArtifact =
-                getMavenEmbedder().createArtifactWithClassifier( artifact.getGroupId(), artifact.getArtifactId(),
-                                                                 artifact.getVersion(), type, classifier );
+                getMavenEmbedder().createArtifactWithClassifier( dependency.getGroupId(), dependency.getArtifactId(),
+                                                                 dependency.getVersion(), dependency.getType(),
+                                                                 dependency.getClassifier() );
             if ( rawArtifact != null )
             {
                 getMavenEmbedder().resolve( rawArtifact, remoteRepositories, getMavenEmbedder().getLocalRepository() );
@@ -675,18 +706,18 @@ public class EclipseMaven implements IMaven
             else
             {
                 throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
-                                                      "Unknown Artifact - " + artifact, null ) );
+                                                      "Unknown Artifact - " + dependency, null ) );
             }
         }
         catch ( ArtifactNotFoundException e )
         {
             throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
-                                                  "Artifact not found - " + artifact, e ) );
+                                                  "Artifact not found - " + dependency, e ) );
         }
         catch ( ArtifactResolutionException e )
         {
             throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
-                                                  "Unable to resolve artifact - " + artifact, e ) );
+                                                  "Unable to resolve artifact - " + dependency, e ) );
         }
     }
 
