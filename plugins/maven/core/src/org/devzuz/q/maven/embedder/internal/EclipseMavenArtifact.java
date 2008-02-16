@@ -15,8 +15,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
-import org.apache.maven.artifact.versioning.VersionRange;
+import org.apache.maven.model.Dependency;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 
 public class EclipseMavenArtifact
@@ -26,8 +25,6 @@ public class EclipseMavenArtifact
     private String artifactId;
 
     private String groupId;
-
-    private String id;
 
     private String version;
 
@@ -51,14 +48,8 @@ public class EclipseMavenArtifact
 
     public EclipseMavenArtifact( Artifact artifact )
     {
-        fromMaven( artifact );
-    }
-
-    public void fromMaven( Artifact artifact )
-    {
-        setArtifactId( artifact.getArtifactId() );
         setGroupId( artifact.getGroupId() );
-        setId( artifact.getId() );
+        setArtifactId( artifact.getArtifactId() );
         setVersion( artifact.getVersion() );
         setFile( artifact.getFile() );
         setScope( artifact.getScope() );
@@ -67,12 +58,16 @@ public class EclipseMavenArtifact
         setAddedToClasspath( artifact.getArtifactHandler().isAddedToClasspath() );
     }
 
-    public Artifact toMaven()
+    public Dependency getDependency()
     {
-        Artifact artifact =
-            new DefaultArtifact( getGroupId(), getArtifactId(), VersionRange.createFromVersion( getVersion() ),
-                                 getScope(), getType(), getClassifier(), null, false );
-        return artifact;
+        Dependency dependency = new Dependency();
+        dependency.setGroupId( getGroupId() );
+        dependency.setArtifactId( getArtifactId() );
+        dependency.setVersion( getVersion() );
+        dependency.setScope( getScope() );
+        dependency.setType( getType() );
+        dependency.setClassifier( getClassifier() );
+        return dependency;
     }
 
     public String getArtifactId()
@@ -93,16 +88,6 @@ public class EclipseMavenArtifact
     public void setGroupId( String groupId )
     {
         this.groupId = groupId;
-    }
-
-    public String getId()
-    {
-        return id;
-    }
-
-    public void setId( String id )
-    {
-        this.id = id;
     }
 
     public String getVersion()
@@ -236,5 +221,28 @@ public class EclipseMavenArtifact
             append( "type", getType() ).
             append( "classifier", getClassifier() ).
             toString();
+    }
+
+    @Override
+    public Object clone()
+    {
+        EclipseMavenArtifact artifact;
+        try
+        {
+            artifact = (EclipseMavenArtifact) super.clone();
+        }
+        catch ( CloneNotSupportedException e )
+        {
+            throw new RuntimeException(e);
+        }
+        artifact.setGroupId( getGroupId() );
+        artifact.setArtifactId( getArtifactId() );
+        artifact.setVersion( getVersion() );
+        artifact.setFile( getFile() );
+        artifact.setScope( getScope() );
+        artifact.setType( getType() );
+        artifact.setClassifier( getClassifier() );
+        artifact.setAddedToClasspath( isAddedToClasspath() );
+        return artifact;
     }
 }
