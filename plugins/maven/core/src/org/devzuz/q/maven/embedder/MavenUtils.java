@@ -1,9 +1,6 @@
 package org.devzuz.q.maven.embedder;
 
 
-import org.devzuz.q.maven.embedder.internal.EclipseMaven;
-import org.devzuz.q.maven.embedder.internal.EclipseMavenArtifact;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -11,14 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.artifact.DefaultArtifact;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.apache.maven.embedder.MavenEmbedder;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
-
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.devzuz.q.maven.embedder.internal.EclipseMaven;
+import org.devzuz.q.maven.embedder.internal.EclipseMavenArtifact;
 
 
 public class MavenUtils
@@ -60,6 +57,7 @@ public class MavenUtils
      * @return List<String[]> the dependency list
      * @throws IOException
      */
+    @SuppressWarnings("unchecked")
     public static List<Dependency> getDependenciesFromPom( File pom ) throws IOException, XmlPullParserException
     {
         IMaven maven = MavenManager.getMaven();
@@ -77,6 +75,7 @@ public class MavenUtils
      *            A MultipleArtifactsNotFoundException exception
      * @return List<IMavenArtifact> the missing artifacts
      */
+    @SuppressWarnings("unchecked")
     public static List< IMavenArtifact > getMissingArtifacts( MultipleArtifactsNotFoundException exception )
     {
         return wrapArtifacts( exception.getMissingArtifacts() );
@@ -87,6 +86,7 @@ public class MavenUtils
      *            A MultipleArtifactsNotFoundException exception
      * @return List<IMavenArtifact> the resolved artifacts
      */
+    @SuppressWarnings("unchecked")
     public static List< IMavenArtifact > getResolvedArtifacts( MultipleArtifactsNotFoundException exception )
     {   
         return wrapArtifacts( exception.getResolvedArtifacts() );
@@ -100,10 +100,7 @@ public class MavenUtils
         {
             for ( Artifact artifact : artifacts )
             {
-                if ( artifact instanceof DefaultArtifact )
-                {
-                    mavenArtifacts.add( MavenUtils.createMavenArtifact( (DefaultArtifact) artifact ) );
-                }
+                mavenArtifacts.add( MavenUtils.createMavenArtifact( artifact ) );
             }
         }
         
@@ -115,7 +112,7 @@ public class MavenUtils
      *             An maven embedder Artifact
      * @return IMavenArtifact The artifact wrapped inside IMavenArtifact
      */
-    public static IMavenArtifact createMavenArtifact( DefaultArtifact defaultArtifact )
+    public static IMavenArtifact createMavenArtifact( Artifact defaultArtifact )
     {
         IMavenArtifact artifact = new EclipseMavenArtifact();
         artifact.setArtifactId( defaultArtifact.getArtifactId() );
