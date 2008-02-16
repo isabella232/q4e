@@ -351,7 +351,7 @@ public interface IMaven
      * @param remoteRepositories
      * @throws CoreException
      */
-    public void resolveArtifact( IMavenArtifact artifact, String type, String suffix,
+    public void resolveArtifact( IMavenArtifact artifact, String type, String classifier,
                                  List<ArtifactRepository> remoteRepositories ) throws CoreException;
 
     /**

@@ -660,14 +660,14 @@ public class EclipseMaven implements IMaven
         return dependency;
     }
 
-    public void resolveArtifact( IMavenArtifact artifact, String type, String suffix,
+    public void resolveArtifact( IMavenArtifact artifact, String type, String classifier,
                                  List<ArtifactRepository> remoteRepositories ) throws CoreException
     {
         try
         {
             Artifact rawArtifact =
                 getMavenEmbedder().createArtifactWithClassifier( artifact.getGroupId(), artifact.getArtifactId(),
-                                                                 artifact.getVersion(), type, suffix );
+                                                                 artifact.getVersion(), type, classifier );
             if ( rawArtifact != null )
             {
                 getMavenEmbedder().resolve( rawArtifact, remoteRepositories, getMavenEmbedder().getLocalRepository() );
