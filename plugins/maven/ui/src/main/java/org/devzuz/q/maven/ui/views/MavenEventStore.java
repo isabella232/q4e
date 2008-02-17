@@ -47,6 +47,9 @@ public class MavenEventStore extends Observable implements IMavenListener
     /**
      * Obtains every maven event in the store.
      * 
+     * <b>Warning:</b> This is very expensive operation. If you need to get the events to check some condition,
+     * consider implementing a method on the store that works with the inner data structures instead.
+     * 
      * @return a copy of the stored maven events.
      */
     @SuppressWarnings( "unchecked" )
