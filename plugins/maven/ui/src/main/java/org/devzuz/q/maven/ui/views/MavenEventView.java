@@ -165,16 +165,16 @@ public class MavenEventView extends ViewPart implements Observer
 
         mgr.add( filterAction );
     }
-    
+
     private void addTableMenuAndHandlers( final Table eventTable )
     {
         /* Add table left-click menu */
         Menu eventTableMenu = new Menu( eventTable );
-        
+
         /* Add copy menu item */
-        MenuItem copyMenuItem = new MenuItem( eventTableMenu , SWT.CASCADE );
+        MenuItem copyMenuItem = new MenuItem( eventTableMenu, SWT.CASCADE );
         copyMenuItem.setText( Messages.MavenEventView_Copy );
-        copyMenuItem.addSelectionListener(  new SelectionAdapter()
+        copyMenuItem.addSelectionListener( new SelectionAdapter()
         {
             @Override
             public void widgetSelected( SelectionEvent e )
@@ -182,9 +182,9 @@ public class MavenEventView extends ViewPart implements Observer
                 copyDatatoClipboard( getStringFromTableItem( eventTableViewer.getTable().getSelection() ) );
             }
         } );
-        
+
         /* Add View Details menu item */
-        MenuItem eventDetailMenuItem = new MenuItem( eventTableMenu , SWT.CASCADE );
+        MenuItem eventDetailMenuItem = new MenuItem( eventTableMenu, SWT.CASCADE );
         eventDetailMenuItem.setText( Messages.MavenEventView_MavenEventDetailDialog_ViewDetailMenuLabel );
         eventDetailMenuItem.addSelectionListener( new SelectionAdapter()
         {
@@ -194,9 +194,9 @@ public class MavenEventView extends ViewPart implements Observer
                 openEventDetailDialog( eventTable );
             }
         } );
-        
+
         eventTable.setMenu( eventTableMenu );
-        
+
         /* add ctrl_c Copy listener */
         KeyListener selectedDataItems = new KeyAdapter()
         {
@@ -211,7 +211,7 @@ public class MavenEventView extends ViewPart implements Observer
         };
 
         eventTable.addKeyListener( selectedDataItems );
-        
+
         /* Add double click listener */
         MouseListener clickedDataItem = new MouseAdapter()
         {
@@ -265,22 +265,14 @@ public class MavenEventView extends ViewPart implements Observer
 
     }
 
-    // This is the handler for the "events added" or "store cleared" event of MavenEventStore
+    /**
+     * This is the handler for the "events added" event of MavenEventStore
+     */
     public void update( Observable o, Object arg )
     {
         // Just in case, this should not happen.
         if ( !( o instanceof MavenEventStore ) )
         {
-            return;
-        }
-
-        MavenEventStore store = (MavenEventStore) o;
-        IMavenEvent[] events = store.getEvents();
-
-        if ( events.length <= 0 )
-        {
-            // Refresh the table when a "store cleared" is received.
-            eventTableViewer.refresh();
             return;
         }
 
@@ -341,7 +333,7 @@ public class MavenEventView extends ViewPart implements Observer
     {
         // This will generate a table refresh event with an empty store
         // thereby clearing the view.
-    	
+
         store.dispose();
         eventTableViewer.refresh();
     }
@@ -363,7 +355,7 @@ public class MavenEventView extends ViewPart implements Observer
             memento.putInteger( SELECTED_INDEX_KEY, Severity.info.ordinal() );
         }
     }
-    
+
     private String getStringFromTableItem( TableItem[] tblTemp )
     {
         if ( tblTemp.length > 0 )
@@ -381,13 +373,13 @@ public class MavenEventView extends ViewPart implements Observer
 
             return strBuff.toString();
         }
-        
+
         return null;
     }
 
     private void copyDatatoClipboard( String buffer )
     {
-        if( buffer != null )
+        if ( buffer != null )
         {
             StringSelection strSelection = new StringSelection( buffer );
             Toolkit.getDefaultToolkit().getSystemClipboard().setContents( strSelection, strSelection );
