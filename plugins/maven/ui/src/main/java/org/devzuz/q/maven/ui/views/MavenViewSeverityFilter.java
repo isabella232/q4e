@@ -11,8 +11,7 @@ import org.devzuz.q.maven.embedder.Severity;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
-public class MavenViewSeverityFilter
-    extends ViewerFilter
+public class MavenViewSeverityFilter extends ViewerFilter
 {
 
     private Severity severity;
@@ -31,19 +30,19 @@ public class MavenViewSeverityFilter
         return severity;
     }
 
+    @Override
     public boolean select( Viewer viewer, Object parentElement, Object element )
     {
         return select( (IMavenEvent) element );
     }
 
-    public boolean select( IMavenEvent element )
+    public boolean select( IMavenEvent event )
     {
         if ( severity == null )
         {
             return true;
         }
 
-        IMavenEvent event = (IMavenEvent) element;
         return event.getSeverity().compareTo( severity ) >= 0;
     }
 }
