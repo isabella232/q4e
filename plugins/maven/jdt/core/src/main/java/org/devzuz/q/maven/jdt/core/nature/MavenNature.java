@@ -20,6 +20,7 @@ import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
+import org.apache.commons.collections.list.SetUniqueList;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Resource;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
@@ -77,6 +78,10 @@ public class MavenNature implements IProjectNature
 
     private IProject project;
 
+    /**
+     * TODO add other builders depending on the project packaging
+     * eg. org.eclipse.pde.FeatureBuilder for eclipse-feature type
+     */
     private void addBuilder() throws CoreException
     {
         IProjectDescription desc = getProject().getDescription();
@@ -168,6 +173,7 @@ public class MavenNature implements IProjectNature
         this.project = project;
     }
 
+    @SuppressWarnings("unchecked")
     private void addClasspath( IProject project )
     {
         IFile pom = project.getFile( IMavenProject.POM_FILENAME );
@@ -179,7 +185,7 @@ public class MavenNature implements IProjectNature
         IJavaProject javaProject = JavaCore.create( project );
 
         // use a List to manage the order of the elements
-        List<IClasspathEntry> classpathEntriesList = new LinkedList<IClasspathEntry>();
+        List<IClasspathEntry> classpathEntriesList = SetUniqueList.decorate( new LinkedList<IClasspathEntry>() );
 
         IMavenProject mavenProject;
         String outputDirectory = null;
@@ -249,10 +255,29 @@ public class MavenNature implements IProjectNature
         // (x) Add the JRE container to the classpath
         classpathEntriesList.add( getJREClasspathContainer( javaProject, mavenProject ) );
 
+        IFolder outputFolder = project.getFolder( getRelativePath( project.getLocation(), outputDirectory ) );
+
+        /* keep any containers that already exist, like PDE */
+        try
+        {
+            IClasspathEntry[] oldClasspath = javaProject.getRawClasspath();
+            for ( IClasspathEntry classpathEntry : oldClasspath )
+            {
+                if (classpathEntry.getEntryKind() == IClasspathEntry.CPE_CONTAINER )
+                {
+                    classpathEntriesList.add( classpathEntry );
+                }
+            }
+        }
+        catch ( JavaModelException e )
+        {
+            MavenJdtCoreActivator.getLogger().log( "Exception getting classpath from project " + project, e );
+            MavenExceptionHandler.handle( project, e );
+        }
+
+        /* set the classpath */
         IClasspathEntry[] classpathEntries =
             classpathEntriesList.toArray( new IClasspathEntry[classpathEntriesList.size()] );
-
-        IFolder outputFolder = project.getFolder( getRelativePath( project.getLocation(), outputDirectory ) );
 
         try
         {
