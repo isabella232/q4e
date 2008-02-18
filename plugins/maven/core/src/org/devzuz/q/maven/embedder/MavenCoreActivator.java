@@ -33,6 +33,11 @@ public class MavenCoreActivator implements BundleActivator
     public static final String PLUGIN_ID = "org.devzuz.q.maven.core";
 
     /**
+     * Marker id
+     */
+    public static final String MARKER_ID = PLUGIN_ID + ".pomproblemmarker";
+
+    /**
      * Prefix string for all trace options
      */
     public static final String PLUGIN_GLOBAL_TRACE_OPTION = PLUGIN_ID + "/debug";

@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.jdt.core.exception;
+package org.devzuz.q.maven.embedder.exception;
 
 import junit.framework.TestCase;
 
@@ -18,16 +18,16 @@ import org.apache.maven.plugin.PluginConfigurationException;
 import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.reactor.MavenExecutionException;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.devzuz.q.maven.jdt.core.exception.handlers.AbstractMojoExecutionExceptionHandler;
-import org.devzuz.q.maven.jdt.core.exception.handlers.ArtifactNotFoundExceptionHandler;
-import org.devzuz.q.maven.jdt.core.exception.handlers.ArtifactResolutionExceptionHandler;
-import org.devzuz.q.maven.jdt.core.exception.handlers.IMavenExceptionHandler;
-import org.devzuz.q.maven.jdt.core.exception.handlers.InvalidArtifactRTExceptionHandler;
-import org.devzuz.q.maven.jdt.core.exception.handlers.InvalidProjectModelExceptionHandler;
-import org.devzuz.q.maven.jdt.core.exception.handlers.MavenExecutionExceptionHandler;
-import org.devzuz.q.maven.jdt.core.exception.handlers.MultipleArtifactsNotFoundExceptionHandler;
-import org.devzuz.q.maven.jdt.core.exception.handlers.PluginConfigurationExceptionHandler;
-import org.devzuz.q.maven.jdt.core.exception.handlers.XmlPullParserExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handlers.AbstractMojoExecutionExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handlers.ArtifactNotFoundExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handlers.ArtifactResolutionExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handlers.IMavenExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handlers.InvalidArtifactRTExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handlers.InvalidProjectModelExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handlers.MavenExecutionExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handlers.MultipleArtifactsNotFoundExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handlers.PluginConfigurationExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handlers.XmlPullParserExceptionHandler;
 
 public class MavenExceptionHandlerTest
     extends TestCase

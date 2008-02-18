@@ -4,7 +4,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.jdt.core.exception;
+package org.devzuz.q.maven.embedder.exception;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,8 +21,8 @@ import org.apache.maven.extension.ExtensionScanningException;
 import org.apache.maven.lifecycle.LifecycleExecutionException;
 import org.apache.maven.project.ProjectBuildingException;
 import org.devzuz.q.maven.embedder.IMavenProject;
-import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
-import org.devzuz.q.maven.jdt.core.exception.handlers.IMavenExceptionHandler;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
+import org.devzuz.q.maven.embedder.exception.handlers.IMavenExceptionHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -218,7 +218,7 @@ public class MavenExceptionHandler
         {
             String s = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getName();
             markerInfo = new MarkerInfo( "Error: " + s );
-            MavenJdtCoreActivator.getLogger().log( "Unexpected error on project " + project + ": " + s, cause );
+            MavenCoreActivator.getLogger().log( "Unexpected error on project " + project + ": " + s, cause );
             return Collections.singletonList( markerInfo );
         }
     }
@@ -232,13 +232,13 @@ public class MavenExceptionHandler
             public void run( IProgressMonitor monitor )
                 throws CoreException
             {
-                pom.deleteMarkers( MavenJdtCoreActivator.MARKER_ID, true, IResource.DEPTH_INFINITE );
+                pom.deleteMarkers( MavenCoreActivator.MARKER_ID, true, IResource.DEPTH_INFINITE );
 
                 for ( MarkerInfo markerInfo : markerInfos )
                 {
                     try
                     {
-                        IMarker marker = pom.createMarker( MavenJdtCoreActivator.MARKER_ID );
+                        IMarker marker = pom.createMarker( MavenCoreActivator.MARKER_ID );
                         marker.setAttribute( IMarker.MESSAGE, markerInfo.getMessage() );
                         marker.setAttribute( IMarker.SEVERITY, markerInfo.getSeverity() );
                         marker.setAttribute( IMarker.LINE_NUMBER, markerInfo.getLineNumber() );
@@ -247,7 +247,7 @@ public class MavenExceptionHandler
                     }
                     catch ( CoreException ce )
                     {
-                        MavenJdtCoreActivator.getLogger().log( ce );
+                        MavenCoreActivator.getLogger().log( ce );
                     }
                 }
             }
@@ -259,7 +259,7 @@ public class MavenExceptionHandler
         }
         catch ( CoreException ce )
         {
-            MavenJdtCoreActivator.getLogger().log( ce );
+            MavenCoreActivator.getLogger().log( ce );
         }
     }
 

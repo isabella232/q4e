@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.jdt.core.exception.handlers;
+package org.devzuz.q.maven.embedder.exception.handlers;
 
 public class MavenExecutionExceptionHandler
     extends AbstractMavenExceptionHandler

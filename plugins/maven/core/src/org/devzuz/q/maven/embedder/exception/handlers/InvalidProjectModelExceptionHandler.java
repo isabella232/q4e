@@ -5,13 +5,13 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.jdt.core.exception.handlers;
+package org.devzuz.q.maven.embedder.exception.handlers;
 
 import java.util.List;
 
 import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.project.validation.ModelValidationResult;
-import org.devzuz.q.maven.jdt.core.exception.MarkerInfo;
+import org.devzuz.q.maven.embedder.exception.MarkerInfo;
 
 public class InvalidProjectModelExceptionHandler
     extends AbstractMavenExceptionHandler

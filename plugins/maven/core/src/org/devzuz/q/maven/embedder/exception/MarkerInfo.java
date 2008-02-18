@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.jdt.core.exception;
+package org.devzuz.q.maven.embedder.exception;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.eclipse.core.resources.IMarker;
