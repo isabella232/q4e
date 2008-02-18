@@ -190,7 +190,6 @@ public class EclipseMavenArtifact
         IMavenArtifact rhs = (IMavenArtifact) obj;
 
         return new EqualsBuilder().
-            appendSuper(super.equals(obj)).
             append(getGroupId(), rhs.getGroupId()).
             append(getArtifactId(), rhs.getArtifactId()).
             append(getVersion(), rhs.getVersion()).

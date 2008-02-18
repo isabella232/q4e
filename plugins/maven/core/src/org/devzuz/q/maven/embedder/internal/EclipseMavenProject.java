@@ -242,7 +242,7 @@ public class EclipseMavenProject implements IMavenProject
                 allArtifacts.add( mavenArtifact );
                 addThroughDependencyTrail( mavenRawProject, tempArtifactCache, mavenArtifact, artifact );
         }
-
+        
         /* The tempArtifactCache contains, as a first element, this project with its direct dependencies as children */
         for ( IMavenArtifact artifact : tempArtifactCache )
         {
@@ -404,4 +404,18 @@ public class EclipseMavenProject implements IMavenProject
     {
         return this.getGroupId() + ":" + this.getArtifactId() + ":" + this.getVersion();
     }
+    
+    /* Please don't delete. This is useful for debugging the dependency tree */
+    /*
+    public void printRecursive( IMavenArtifact artifact , int num )
+    {
+        for( int i=0; i < num; i++)
+            System.out.print( "--" );
+        System.out.println( "[" + artifact.getGroupId()+","+artifact.getArtifactId()+","+artifact.getVersion()+","+artifact.getType()+","+artifact.getClassifier() );
+        for( IMavenArtifact childArtifact : artifact.getChildren() )
+        {
+            printRecursive( childArtifact , num + 1 );
+        }
+    }
+    */
 }
