@@ -10,9 +10,10 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.devzuz.q.maven.jdt.core.internal.MavenProjectJdtResourceListener;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.log.EclipseLogger;
 import org.devzuz.q.maven.embedder.log.Logger;
+import org.devzuz.q.maven.jdt.core.internal.MavenProjectJdtResourceListener;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
@@ -24,7 +25,8 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class MavenJdtCoreActivator extends Plugin
+public class MavenJdtCoreActivator
+    extends Plugin
 {
 
     /** The plug-in ID */
@@ -42,8 +44,11 @@ public class MavenJdtCoreActivator extends Plugin
 
     /**
      * Marker id
+     * 
+     * @deprecated use {@link MavenCoreActivator#MARKER_ID}
      */
-    public static final String MARKER_ID = PLUGIN_ID + ".pomproblemmarker";
+    @Deprecated
+    public static final String MARKER_ID = MavenCoreActivator.MARKER_ID;
 
     /** The shared instance */
     private static MavenJdtCoreActivator plugin;
@@ -61,7 +66,8 @@ public class MavenJdtCoreActivator extends Plugin
     }
 
     @Override
-    public void start( BundleContext context ) throws Exception
+    public void start( BundleContext context )
+        throws Exception
     {
         super.start( context );
         logger = new EclipseLogger( PLUGIN_ID, this.getLog() );
@@ -69,13 +75,14 @@ public class MavenJdtCoreActivator extends Plugin
         iResourceListener = new MavenProjectJdtResourceListener();
         ResourcesPlugin.getWorkspace().addResourceChangeListener(
                                                                   iResourceListener,
-                                                                  IResourceChangeEvent.POST_CHANGE
-                                                                                  | IResourceChangeEvent.PRE_CLOSE
-                                                                                  | IResourceChangeEvent.PRE_DELETE );
+                                                                  IResourceChangeEvent.POST_CHANGE |
+                                                                      IResourceChangeEvent.PRE_CLOSE |
+                                                                      IResourceChangeEvent.PRE_DELETE );
     }
 
     @Override
-    public void stop( BundleContext context ) throws Exception
+    public void stop( BundleContext context )
+        throws Exception
     {
         plugin = null;
         ResourcesPlugin.getWorkspace().removeResourceChangeListener( iResourceListener );
@@ -99,15 +106,12 @@ public class MavenJdtCoreActivator extends Plugin
     }
 
     /**
-     * Sends trace messages to stdout if the specified trace option is enabled.
+     * Sends trace messages to stdout if the specified trace option is enabled. This is intended only for developing and
+     * debugging. The use of variable number of parameters avoids the cost of building the message when the debug option
+     * is not enabled.
      * 
-     * This is intended only for developing and debugging. The use of variable number of parameters avoids the cost of
-     * building the message when the debug option is not enabled.
-     * 
-     * @param traceOption
-     *            the trace option enabling the message trace.
-     * @param messageParts
-     *            a variable number of objects with each part of the message to display.
+     * @param traceOption the trace option enabling the message trace.
+     * @param messageParts a variable number of objects with each part of the message to display.
      */
     public static void trace( TraceOption traceOption, Object... messageParts )
     {
