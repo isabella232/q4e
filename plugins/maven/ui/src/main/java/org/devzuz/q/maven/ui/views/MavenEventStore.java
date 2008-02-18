@@ -9,7 +9,6 @@ package org.devzuz.q.maven.ui.views;
 import java.util.Observable;
 
 import org.apache.commons.collections.Buffer;
-import org.apache.commons.collections.BufferUtils;
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 import org.devzuz.q.maven.embedder.IMavenEvent;
 import org.devzuz.q.maven.embedder.IMavenListener;
@@ -26,9 +25,14 @@ public class MavenEventStore extends Observable implements IMavenListener
 {
 
     /* TODO allow user customization */
-    private static final int BUFFER_SIZE = 50000;
+    private static final int BUFFER_SIZE = 10000;
 
-    private Buffer events = BufferUtils.synchronizedBuffer( new CircularFifoBuffer( BUFFER_SIZE ) );
+    /**
+     * Store for events reported by maven.
+     * 
+     * Since only one maven execution is allowed, no need to use a synchronized implementation.
+     */
+    private Buffer events = new CircularFifoBuffer( BUFFER_SIZE );
 
     @SuppressWarnings( "unchecked" )
     public void handleEvent( IMavenEvent event )

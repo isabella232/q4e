@@ -55,7 +55,7 @@ public class MavenEventView extends ViewPart implements Observer
     public static final int KEYBOARD_CTRL_C = 99;
 
     /** Delay updates to the event view for up to this number of milliseconds. */
-    private static final long MAX_MS_BETWEEN_UPDATES = 250;
+    private static final long MAX_MS_BETWEEN_UPDATES = 1000;
 
     private Action filterAction;
 
