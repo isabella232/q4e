@@ -31,15 +31,4 @@
       <requires-nature id="org.eclipse.jdt.core.javanature"/>
       <builder id="org.devzuz.q.maven.jdt.core.mavenIncrementalBuilder"/>
    </extension>
-   <extension
-         id="org.devzuz.q.maven.jdt.core.pomproblemmarker"
-         name="pomproblemmarker"
-         point="org.eclipse.core.resources.markers">
-      <super
-            type="org.eclipse.core.resources.problemmarker">
-      </super>
-      <persistent
-            value="true">
-      </persistent>
-   </extension>
 </plugin>
