@@ -586,7 +586,7 @@ Bundle-Name: Q for Eclipse Maven Embedder
 Created-By: Apache Maven Bundle Plugin
 Bundle-Vendor: The Apache Software Foundation
 Build-Jdk: 1.6.0_03
-Bundle-Version: 2.1.0.v627670
+Bundle-Version: 2.1.0.627670
 Eclipse-BuddyPolicy: registered
 Bnd-LastModified: 1202971355765
 Embed-Transitive: true
