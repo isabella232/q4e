@@ -8,14 +8,15 @@
 package org.devzuz.q.maven.embedder.internal;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
-import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.embedder.exception.MavenExceptionHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdapterFactory;
 
-public class EclipseMavenProjectAdapterFactory implements IAdapterFactory
+public class EclipseMavenProjectAdapterFactory
+    implements IAdapterFactory
 {
 
     private static final Class[] types = { IMavenProject.class, };
@@ -24,27 +25,28 @@ public class EclipseMavenProjectAdapterFactory implements IAdapterFactory
     {
         if ( adapterType == IMavenProject.class )
         {
+            IProject project;
+
             if ( adaptableObject instanceof IProject )
-                try
-                {
-                    return MavenManager.getMavenProjectManager().getMavenProject( (IProject) adaptableObject, true );
-                }
-                catch ( CoreException e )
-                {
-                    MavenCoreActivator.getLogger().log( e );
-                    return null;
-                }
+            {
+                project = (IProject) adaptableObject;
+            }
             else if ( adaptableObject instanceof IFile )
             {
-                try
-                {
-                    return MavenManager.getMavenProjectManager().getMavenProject( ( (IFile) adaptableObject ).getProject(), true );
-                }
-                catch ( CoreException e )
-                {
-                    MavenCoreActivator.getLogger().log( e );
-                    return null;
-                }
+                project = ( (IFile) adaptableObject ).getProject();
+            }
+            else
+            {
+                return null;
+            }
+
+            try
+            {
+                return MavenManager.getMavenProjectManager().getMavenProject( project, true );
+            }
+            catch ( CoreException e )
+            {
+                MavenExceptionHandler.handle( project, e );
             }
         }
         return null;
