@@ -26,12 +26,12 @@ import org.apache.maven.model.Resource;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenClasspathHelper;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
-import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IFile;
@@ -110,7 +110,7 @@ public class MavenNature implements IProjectNature
         }
         catch ( CoreException e )
         {
-            MavenExceptionHandler.handle( project, e );
+            MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, e );
         }
     }
 
@@ -204,7 +204,7 @@ public class MavenNature implements IProjectNature
             // Mark any errors, particularly, on the launching of the process-test-resources goal
             if ( ( mavenExceptions != null ) && ( mavenExceptions.size() > 0 ) )
             {
-                MavenExceptionHandler.handle( project, mavenExceptions );
+                MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, mavenExceptions );
             }
             else
             {
@@ -221,7 +221,7 @@ public class MavenNature implements IProjectNature
         catch ( CoreException e )
         {
             MavenJdtCoreActivator.getLogger().log( "Exception adding classpath to project " + project, e );
-            MavenExceptionHandler.handle( project, e );
+            MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, e );
 
             /* try to gracefully recover using the super pom default values */
             try
@@ -272,7 +272,7 @@ public class MavenNature implements IProjectNature
         catch ( JavaModelException e )
         {
             MavenJdtCoreActivator.getLogger().log( "Exception getting classpath from project " + project, e );
-            MavenExceptionHandler.handle( project, e );
+            MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, e );
         }
 
         /* set the classpath */
@@ -286,7 +286,7 @@ public class MavenNature implements IProjectNature
         catch ( JavaModelException e )
         {
             MavenJdtCoreActivator.getLogger().log( "Exception adding classpath to project " + project, e );
-            MavenExceptionHandler.handle( project, e );
+            MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, e );
         }
     }
 

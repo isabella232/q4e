@@ -16,11 +16,11 @@ import org.apache.maven.artifact.Artifact;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenClasspathHelper;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
-import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -167,7 +167,7 @@ public class MavenClasspathContainer implements IClasspathContainer
             }
             else
             {
-                MavenExceptionHandler.handle( project, e );
+                MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, e );
             }
         }
 
@@ -199,7 +199,7 @@ public class MavenClasspathContainer implements IClasspathContainer
     private static void processExecutionExceptions( IMavenProject mavenProject, MavenClasspathContainer container,
                                                     List<Exception> exceptions )
     {
-        MavenExceptionHandler.handle( mavenProject.getProject(), exceptions );
+        MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( mavenProject.getProject(), exceptions );
     }
 
     /**

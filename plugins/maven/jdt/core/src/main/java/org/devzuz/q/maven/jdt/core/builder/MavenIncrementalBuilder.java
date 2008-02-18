@@ -16,11 +16,11 @@ import java.util.Map;
 import org.apache.maven.model.Resource;
 import org.apache.tools.ant.types.selectors.SelectorUtils;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
-import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -463,7 +463,7 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
         catch ( CoreException e )
         {
             /* project doesn't build */
-            MavenExceptionHandler.handle( getProject(), e );
+            MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( getProject(), e );
             return null;
         }
     }
