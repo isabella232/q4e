@@ -17,5 +17,19 @@
      </objectContribution>
 
      </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            id="org.devzuz.q.maven.ui"
+            name="Apache Maven">
+      </category>
+      <view
+            category="org.devzuz.q.maven.ui"
+            class="org.devzuz.q.maven.dependency.views.DependencyGraphView"
+            icon="src/main/resources/icons/dependency-view.gif"
+            id="org.devzuz.q.maven.dependency.actions.ViewDependencyGraphAction.view"
+            name="View dependencies">
+      </view>
+   </extension>
 
 </plugin>

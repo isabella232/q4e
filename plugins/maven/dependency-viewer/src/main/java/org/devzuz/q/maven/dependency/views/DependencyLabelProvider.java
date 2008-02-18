@@ -21,7 +21,7 @@ import org.eclipse.zest.core.widgets.ZestStyles;
 /**
  * TODO Document
  * 
- * @author Abel Mui–o <amuino@gmail.com>
+ * @author Abel Muiï¿½o <amuino@gmail.com>
  */
 public class DependencyLabelProvider extends LabelProvider
     implements IEntityStyleProvider, IEntityConnectionStyleProvider
