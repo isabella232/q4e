@@ -41,18 +41,15 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public class MavenExceptionHandler
 {
 
-    private static final Set<Class<? extends Exception>> EXCEPTIONS_TO_EXPAND =
-        new HashSet<Class<? extends Exception>>();
+    private final Set<Class<? extends Exception>> EXCEPTIONS_TO_EXPAND = new HashSet<Class<? extends Exception>>();
 
     /**
      * Has to allow null values
      */
-    private static final Map<Class<? extends Throwable>, IMavenExceptionHandler> handlers =
+    private final Map<Class<? extends Throwable>, IMavenExceptionHandler> handlers =
         new HashMap<Class<? extends Throwable>, IMavenExceptionHandler>();
 
-    private static MavenExceptionHandler instance = new MavenExceptionHandler();
-
-    static
+    public MavenExceptionHandler()
     {
         EXCEPTIONS_TO_EXPAND.add( LifecycleExecutionException.class );
         EXCEPTIONS_TO_EXPAND.add( ArtifactMetadataRetrievalException.class );
@@ -61,14 +58,14 @@ public class MavenExceptionHandler
         EXCEPTIONS_TO_EXPAND.add( ExtensionScanningException.class );
     }
 
-    public static void handle( IProject project, Collection<Exception> exceptions )
+    public void handle( IProject project, Collection<Exception> exceptions )
     {
         List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>();
         for ( Exception e : exceptions )
         {
-            markerInfos.addAll( instance.doHandle( project, e ) );
+            markerInfos.addAll( doHandle( project, e ) );
         }
-        instance.markPom( project, markerInfos );
+        markPom( project, markerInfos );
     }
 
     /**
@@ -78,7 +75,7 @@ public class MavenExceptionHandler
      * @param project the project where pom.xml is contained.
      * @param msg the error message to display in the marker.
      */
-    public static void error( final IProject project, final String msg )
+    public void error( final IProject project, final String msg )
     {
         error( project, Collections.singletonList( msg ) );
     }
@@ -90,7 +87,7 @@ public class MavenExceptionHandler
      * @param project the project where pom.xml is contained.
      * @param msg the warning message to display in the marker.
      */
-    public static void warning( final IProject project, final String msg )
+    public void warning( final IProject project, final String msg )
     {
         warning( project, Collections.singletonList( msg ) );
     }
@@ -102,14 +99,14 @@ public class MavenExceptionHandler
      * @param project the project where pom.xml is contained.
      * @param msgs the error messages to display in the marker.
      */
-    public static void error( final IProject project, final List<String> msgs )
+    public void error( final IProject project, final List<String> msgs )
     {
         List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>( msgs.size() );
         for ( String msg : msgs )
         {
             markerInfos.add( new MarkerInfo( msg, IMarker.SEVERITY_ERROR ) );
         }
-        instance.markPom( project, markerInfos );
+        markPom( project, markerInfos );
     }
 
     /**
@@ -119,14 +116,14 @@ public class MavenExceptionHandler
      * @param project the project where pom.xml is contained.
      * @param msgs the warning messages to display in the marker.
      */
-    public static void warning( final IProject project, final List<String> msgs )
+    public void warning( final IProject project, final List<String> msgs )
     {
         List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>( msgs.size() );
         for ( String msg : msgs )
         {
             markerInfos.add( new MarkerInfo( msg, IMarker.SEVERITY_WARNING ) );
         }
-        instance.markPom( project, markerInfos );
+        markPom( project, markerInfos );
     }
 
     @SuppressWarnings( "unchecked" )
@@ -190,17 +187,17 @@ public class MavenExceptionHandler
         return handler;
     }
 
-    public static void handle( IProject project, Throwable e )
+    public void handle( IProject project, Throwable e )
     {
-        instance.doHandle( project, e );
+        doHandle( project, e );
     }
 
-    public List<MarkerInfo> doHandle( IProject project, Throwable e )
+    private List<MarkerInfo> doHandle( IProject project, Throwable e )
     {
         Throwable cause = getCause( e );
         MarkerInfo markerInfo;
 
-        IMavenExceptionHandler handler = instance.getHandler( cause.getClass() );
+        IMavenExceptionHandler handler = getHandler( cause.getClass() );
 
         if ( handler != null )
         {
@@ -263,7 +260,7 @@ public class MavenExceptionHandler
         }
     }
 
-    static Throwable getCause( Throwable e )
+    Throwable getCause( Throwable e )
     {
         Throwable cause = e;
 

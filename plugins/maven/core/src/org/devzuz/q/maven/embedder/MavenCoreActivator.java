@@ -11,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.devzuz.q.maven.embedder.exception.MavenExceptionHandler;
 import org.devzuz.q.maven.embedder.internal.EclipseMaven;
 import org.devzuz.q.maven.embedder.internal.TraceOption;
 import org.devzuz.q.maven.embedder.log.EclipseLogger;
@@ -26,7 +27,8 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class MavenCoreActivator implements BundleActivator
+public class MavenCoreActivator
+    implements BundleActivator
 {
 
     // The plug-in ID
@@ -56,6 +58,8 @@ public class MavenCoreActivator implements BundleActivator
 
     private MavenPreferenceManager preferenceManager;
 
+    private MavenExceptionHandler mavenExceptionHandler;
+
     private Logger logger;
 
     /**
@@ -66,7 +70,8 @@ public class MavenCoreActivator implements BundleActivator
         plugin = this;
     }
 
-    public void start( BundleContext context ) throws Exception
+    public void start( BundleContext context )
+        throws Exception
     {
         logger = new EclipseLogger( PLUGIN_ID, new Log( context.getBundle() ) );
 
@@ -81,9 +86,12 @@ public class MavenCoreActivator implements BundleActivator
 
         // Initialize the maven workspace projects manager
         projectManager = new MavenProjectManager( ResourcesPlugin.getWorkspace() );
+
+        mavenExceptionHandler = new MavenExceptionHandler();
     }
 
-    public void stop( BundleContext context ) throws Exception
+    public void stop( BundleContext context )
+        throws Exception
     {
         plugin = null;
         mavenInstance.stop();
@@ -114,6 +122,11 @@ public class MavenCoreActivator implements BundleActivator
         return preferenceManager;
     }
 
+    public MavenExceptionHandler getMavenExceptionHandler()
+    {
+        return mavenExceptionHandler;
+    }
+
     void setMavenInstance( EclipseMaven mavenInstance )
     {
         this.mavenInstance = mavenInstance;
@@ -125,15 +138,12 @@ public class MavenCoreActivator implements BundleActivator
     }
 
     /**
-     * Sends trace messages to stdout if the specified trace option is enabled.
+     * Sends trace messages to stdout if the specified trace option is enabled. This is intended only for developing and
+     * debugging. The use of variable number of parameters avoids the cost of building the message when the debug option
+     * is not enabled.
      * 
-     * This is intended only for developing and debugging. The use of variable number of parameters avoids the cost of
-     * building the message when the debug option is not enabled.
-     * 
-     * @param traceOption
-     *            the trace option enabling the message trace.
-     * @param messageParts
-     *            a variable number of objects with each part of the message to display.
+     * @param traceOption the trace option enabling the message trace.
+     * @param messageParts a variable number of objects with each part of the message to display.
      */
     public static void trace( TraceOption traceOption, Object... messageParts )
     {

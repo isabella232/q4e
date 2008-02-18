@@ -8,8 +8,8 @@
 package org.devzuz.q.maven.embedder.internal;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.embedder.exception.MavenExceptionHandler;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -46,7 +46,7 @@ public class EclipseMavenProjectAdapterFactory
             }
             catch ( CoreException e )
             {
-                MavenExceptionHandler.handle( project, e );
+                MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, e );
             }
         }
         return null;
