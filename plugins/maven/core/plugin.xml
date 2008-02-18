@@ -20,5 +20,15 @@
          </adapter>
       </factory>
    </extension>
-
+   <extension
+         id="org.devzuz.q.maven.core.pomproblemmarker"
+         name="pomproblemmarker"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.core.resources.problemmarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
 </plugin>

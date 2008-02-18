@@ -40,6 +40,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public class MavenExceptionHandler
 {
+    /**
+     * Old marker id for backwards compatibility
+     */
+    private static final String OLD_MARKER_ID = "org.devzuz.q.maven.jdt.core.pomproblemmarker";
 
     private final Set<Class<? extends Exception>> EXCEPTIONS_TO_EXPAND = new HashSet<Class<? extends Exception>>();
 
@@ -230,6 +234,8 @@ public class MavenExceptionHandler
                 throws CoreException
             {
                 pom.deleteMarkers( MavenCoreActivator.MARKER_ID, true, IResource.DEPTH_INFINITE );
+                /* delete old markers from previous versions */
+                pom.deleteMarkers( OLD_MARKER_ID, true, IResource.DEPTH_INFINITE );
 
                 for ( MarkerInfo markerInfo : markerInfos )
                 {
