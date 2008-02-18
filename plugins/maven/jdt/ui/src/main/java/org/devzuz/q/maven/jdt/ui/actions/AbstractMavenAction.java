@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.jdt.core.exception.MavenExceptionHandler;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -47,7 +47,7 @@ public class AbstractMavenAction
             }
             catch ( CoreException e )
             {
-                MavenExceptionHandler.handle( (IProject) obj, e );
+                MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( (IProject) obj, e );
             }
         }
         return null;
@@ -67,7 +67,7 @@ public class AbstractMavenAction
                 }
                 catch ( CoreException e )
                 {
-                    MavenExceptionHandler.handle( (IProject) obj, e );
+                    MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( (IProject) obj, e );
                 }
             }
         }
