@@ -35,6 +35,8 @@ public class MavenNatureHelper
 
     /**
      * Adds the Q4E and JDT nature to the project
+     * TODO add other natures depending on the project packaging
+     * eg. org.eclipse.pde.FeatureNature for eclipse-feature type
      * 
      * @param project
      * @throws CoreException
