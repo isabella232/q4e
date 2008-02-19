@@ -60,7 +60,8 @@ public class DependencyGraphProvider implements IGraphEntityContentProvider
         Set<Object> allElements = new HashSet<Object>();
         allElements.add( inputElement );
         IMavenProject project = (IMavenProject) inputElement;
-        Set<IMavenArtifact> artifacts = project.getArtifacts();
+        Set<IMavenArtifact> artifacts = project.getDependencyArtifacts();
+//        Set<IMavenArtifact> artifacts = project.getArtifacts();
         for ( IMavenArtifact artifact : artifacts )
         {
             appendArtifactAndChildren( artifact, allElements );
