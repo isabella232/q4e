@@ -29,7 +29,7 @@ public class UnrecognizedExceptionHandler
         {
             String s = ex.getMessage() != null ? ex.getMessage() : ex.getClass().getName();
             MarkerInfo markerInfo = new MarkerInfo( "Error: " + s );
-            MavenCoreActivator.getLogger().log( "Unexpected error on project " + project + ": " + s, cause );
+            MavenCoreActivator.getLogger().log( "Unexpected error on project " + project + ": " + s, ex );
             markers.add( markerInfo );
         }
     }
