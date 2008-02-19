@@ -8,6 +8,7 @@
 package org.devzuz.q.maven.embedder.exception.handler.internal;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.apache.maven.project.ProjectBuildingException;
@@ -27,12 +28,22 @@ public class ProjectBuildingExceptionHandler
         File pom = project.getFile( IMavenProject.POM_FILENAME ).getFullPath().toFile();
         File errorPom = ( (ProjectBuildingException) e ).getPomFile();
 
+        String path;
+        try
+        {
+            path = errorPom.getCanonicalPath();
+        }
+        catch ( IOException e1 )
+        {
+            path = errorPom.getAbsolutePath();
+        }
+
         /* If the problem didnt happen in this project pom add it to the errors */
         if ( ( errorPom != null ) && ( !errorPom.equals( pom ) ) )
         {
             for ( MarkerInfo marker : markers )
             {
-                marker.setMessage( "In pom " + errorPom.getAbsolutePath() + ": " + marker.getMessage() );
+                marker.setMessage( "In pom " + path + ": " + marker.getMessage() );
                 marker.setLineNumber( 1 );
                 marker.setCharStart( 0 );
                 marker.setCharEnd( 0 );
