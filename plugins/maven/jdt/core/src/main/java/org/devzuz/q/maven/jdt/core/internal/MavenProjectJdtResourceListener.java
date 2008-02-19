@@ -57,7 +57,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                     else
                     {
                         MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
-                                                     "Skipping because it is not managed by q4e: " + project );
+                                                     "Skipping because it is not managed by q4e: " , project );
                     }
                 }
                 if ( needsProjectRefresh )
@@ -81,7 +81,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
             else
             {
                 MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Skipping because it has no pom.xml: "
-                                + project );
+                                , project );
             }
 
             MavenManager.getMavenProjectManager().removeMavenProject( project );

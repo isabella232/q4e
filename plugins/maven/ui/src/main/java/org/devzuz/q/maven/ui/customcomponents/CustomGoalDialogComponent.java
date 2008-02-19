@@ -76,6 +76,6 @@ public class CustomGoalDialogComponent extends Composite
     
     public boolean isValid()
     {
-        return !customGoalText.getText().trim().equals( "" );
+        return customGoalText.getText().trim().length() != 0;
     }
 }

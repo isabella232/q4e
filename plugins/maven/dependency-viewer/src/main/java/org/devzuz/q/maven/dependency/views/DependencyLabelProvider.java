@@ -108,7 +108,7 @@ public class DependencyLabelProvider extends LabelProvider
         {
             IMavenArtifact a = (IMavenArtifact) entity;
             // XXX just for demonstration
-            if ( a.getScope().equals( "test" ) )
+            if ( "test".equals( a.getScope() ) )
             {
                 return TEST_DEPENDENCY_COLOR;
             }

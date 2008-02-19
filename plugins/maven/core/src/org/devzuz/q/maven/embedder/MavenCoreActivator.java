@@ -152,15 +152,15 @@ public class MavenCoreActivator
             return;
         }
         String globalTraceValue = Platform.getDebugOption( PLUGIN_GLOBAL_TRACE_OPTION );
-        if ( null == globalTraceValue || !globalTraceValue.equals( "true" ) )
+        if ( null == globalTraceValue || !"true".equals( globalTraceValue ) )
         {
             return;
         }
         String value = Platform.getDebugOption( traceOption.getValue() );
-        if ( null != value && value.equals( "true" ) )
+        if ( null != value && "true".equals( value ) )
         {
             String timingValue = Platform.getDebugOption( PLUGIN_GLOBAL_TRACE_OPTION + "/timing" );
-            if ( null != timingValue && timingValue.equals( "true" ) )
+            if ( null != timingValue && "true".equals( timingValue ) )
             {
                 if ( null == TIME_FORMAT )
                 {

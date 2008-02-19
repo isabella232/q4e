@@ -220,7 +220,7 @@ public class RepositoryIndexer
 
     private static boolean isPom( String path )
     {
-        return path.substring( path.length() - 4 ).equals( ".pom" );
+        return ".pom".equals( path.substring( path.length() - 4 ) );
     }
 
 }

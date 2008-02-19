@@ -139,7 +139,7 @@ public class MavenCustomGoalDialog extends AbstractResizableDialog
 
     private boolean didValidate()
     {
-        if ( customGoalText.getText().trim().equals( "" ) )
+        if ( customGoalText.getText().trim().length() == 0 )
         {
             return false;
         }

@@ -374,9 +374,9 @@ public class InstallArtifactDialog extends AbstractResizableDialog
         {
             if( installRemoteButton.getSelection() )
             {
-                if( remoteRepositoryId.getText().trim().equals( "" ) || //$NON-NLS-1$
-                    remoteRepositoryLayout.getText().trim().equals( "" ) || //$NON-NLS-1$
-                    remoteRepositoryUrl.getText().trim().equals( "" ) ) //$NON-NLS-1$
+                if( remoteRepositoryId.getText().trim().length() == 0 || //$NON-NLS-1$
+                    remoteRepositoryLayout.getText().trim().length() == 0 || //$NON-NLS-1$
+                    remoteRepositoryUrl.getText().trim().length() == 0 ) //$NON-NLS-1$
                 {
                     return false;
                 }

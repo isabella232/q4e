@@ -103,8 +103,8 @@ public class MavenClasspathContainer implements IClasspathContainer
         if ( mavenProject != null )
         {
             MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Refreshing classpath for maven project ",
-                                         mavenProject.getArtifactId() + " - Processing " + artifacts.size()
-                                                         + " artifacts" );
+                                         mavenProject.getArtifactId() , " - Processing " , artifacts.size() ,
+                                                          " artifacts" );
 
             this.project = mavenProject.getProject();
 
@@ -267,8 +267,8 @@ public class MavenClasspathContainer implements IClasspathContainer
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {
-            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in " + mavenProject.getArtifactId()
-                            + " as jar dependency - " + artifact.getFile().getAbsolutePath() );
+            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in " , mavenProject.getArtifactId()
+                            , " as jar dependency - " , artifact.getFile().getAbsolutePath() );
 
             IMavenArtifact clone = (IMavenArtifact) artifact.clone();
             clone.setType( SOURCES_TYPE );
@@ -318,7 +318,7 @@ public class MavenClasspathContainer implements IClasspathContainer
         {
             String classifier = artifact.getClassifier();
             if ( ( artifact.getType().equals( SOURCES_TYPE ) ) && ( classifier != null ) &&
-                ( classifier.equals( "test" ) ) )
+                ( "test".equals( classifier ) ) )
             {
                 artifactFile =
                     new File( artifactLocation.substring( 0, artifactLocation.length() -

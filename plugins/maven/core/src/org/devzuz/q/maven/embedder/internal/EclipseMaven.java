@@ -489,7 +489,7 @@ public class EclipseMaven implements IMaven
                 /* add global settings.xml */
                 String globalSettingsXmlFilename =
                     MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
-                if ( ( globalSettingsXmlFilename != null ) && !( globalSettingsXmlFilename.trim().equals( "" ) ) )
+                if ( ( globalSettingsXmlFilename != null ) && ( globalSettingsXmlFilename.trim().length() != 0 ) )
                 {
                     File globalSettingsFile = new File( globalSettingsXmlFilename.trim() );
                     if ( globalSettingsFile.exists() )
@@ -500,7 +500,7 @@ public class EclipseMaven implements IMaven
 
                 /* add the user settings.xml */
                 String userSettingsXmlFilename = MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename();
-                if ( userSettingsXmlFilename != null && !( userSettingsXmlFilename.trim().equals( "" ) ) )
+                if ( userSettingsXmlFilename != null && ( userSettingsXmlFilename.trim().length() != 0 ) )
                 {
                     File userSettingsFile = new File( userSettingsXmlFilename.trim() );
                     if ( userSettingsFile.exists() )
