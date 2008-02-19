@@ -101,7 +101,6 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
         }
         else
         {
-            MavenCoreActivator.getLogger().error( "ERROR : MavenExecutionResult.getMavenProject() is null" );
             if ( project != null )
             {
                 this.mavenProject = new EclipseMavenProject( project );
