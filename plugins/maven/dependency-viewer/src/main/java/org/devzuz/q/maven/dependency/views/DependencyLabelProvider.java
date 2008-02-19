@@ -9,11 +9,13 @@ package org.devzuz.q.maven.dependency.views;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.jface.viewers.IFontProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Font;
+import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.zest.core.viewers.EntityConnectionData;
 import org.eclipse.zest.core.viewers.IEntityConnectionStyleProvider;
 import org.eclipse.zest.core.viewers.IEntityStyleProvider;
 import org.eclipse.zest.core.widgets.ZestStyles;
@@ -24,7 +26,7 @@ import org.eclipse.zest.core.widgets.ZestStyles;
  * @author Abel Mui�o <amuino@gmail.com>
  */
 public class DependencyLabelProvider extends LabelProvider
-    implements IEntityStyleProvider, IEntityConnectionStyleProvider
+    implements IEntityStyleProvider, IEntityConnectionStyleProvider, IFontProvider
 {
     private static final Color TEST_DEPENDENCY_COLOR = new Color( Display.getCurrent(), 200, 200, 100 );
 
@@ -33,6 +35,16 @@ public class DependencyLabelProvider extends LabelProvider
     private static final Color DIRECT_DEPENDENCY_COLOR = new Color( Display.getCurrent(), 0xbb, 0xbb, 0xdd );
 
     private static final Color TRANSITIVE_DEPENDENCY_COLOR = new Color( Display.getCurrent(), 0xcc, 0xcc, 0xcc );
+
+    private static final Font NODE_FONT;
+
+    static
+    {
+        FontData systemFontData = Display.getCurrent().getSystemFont().getFontData()[0];
+        NODE_FONT =
+            new Font( Display.getCurrent(), new FontData( systemFontData.getName(), ( systemFontData.getHeight() - 1 ),
+                                                          systemFontData.getStyle() ) );
+    }
 
     /*
      * (non-Javadoc)
@@ -72,14 +84,16 @@ public class DependencyLabelProvider extends LabelProvider
         }
         else if ( element instanceof IMavenArtifact )
         {
-            return ( (IMavenArtifact) element ).getArtifactId();
+            IMavenArtifact artifact = ( (IMavenArtifact) element );
+            return artifact.getArtifactId() + "\n" + artifact.getVersion();
         }
         else
         {
             // an edge
-            EntityConnectionData connection = (EntityConnectionData) element;
-            IMavenArtifact destination = (IMavenArtifact) connection.dest;
-            return destination.getVersion();
+            // EntityConnectionData connection = (EntityConnectionData) element;
+            // IMavenArtifact destination = (IMavenArtifact) connection.dest;
+            // return destination.getVersion();
+            return null;
         }
     }
 
@@ -90,7 +104,7 @@ public class DependencyLabelProvider extends LabelProvider
      */
     public boolean fisheyeNode( Object entity )
     {
-        return false;
+        return true;
     }
 
     /*
@@ -237,5 +251,13 @@ public class DependencyLabelProvider extends LabelProvider
         {
             return 1;
         }
+    }
+
+    // ---------------------
+    // IFontProvider
+    //
+    public Font getFont( Object element )
+    {
+        return NODE_FONT;
     }
 }
