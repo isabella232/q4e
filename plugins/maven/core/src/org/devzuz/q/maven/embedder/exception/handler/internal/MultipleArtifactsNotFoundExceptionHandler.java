@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.embedder.exception.handler;
+package org.devzuz.q.maven.embedder.exception.handler.internal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
+import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandlerChain;
 import org.eclipse.core.resources.IProject;
 
 public class MultipleArtifactsNotFoundExceptionHandler

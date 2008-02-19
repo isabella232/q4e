@@ -5,24 +5,27 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.embedder.exception.handler;
+package org.devzuz.q.maven.embedder.exception.handler.internal;
 
 import java.util.List;
 
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
+import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandlerChain;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 
-public class ArtifactResolutionExceptionHandler
+public class XmlPullParserExceptionHandler
     extends DefaultMavenExceptionHandler
 {
 
     public void handle( IProject project, Throwable ex, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
-        ArtifactResolutionException e = (ArtifactResolutionException) ex;
-        markers.add( new MarkerInfo( "Error while resolving " +
-            getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() ) + " : " +
-            e.getMessage() ) );
+        XmlPullParserException e = (XmlPullParserException) ex;
+        MarkerInfo markerInfo =
+            new MarkerInfo( e.getMessage(), IMarker.SEVERITY_ERROR, e.getLineNumber(), e.getColumnNumber(),
+                            e.getColumnNumber() + 1 );
+        markers.add( markerInfo );
     }
 
 }

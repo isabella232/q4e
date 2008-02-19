@@ -5,16 +5,18 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.embedder.exception.handler;
+package org.devzuz.q.maven.embedder.exception.handler.internal;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
+import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandlerChain;
 import org.eclipse.core.resources.IProject;
 
-public class AbstractMavenExceptionHandler
+public class DefaultMavenExceptionHandler
     implements IMavenExceptionHandler
 {
 

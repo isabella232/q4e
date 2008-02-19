@@ -5,21 +5,22 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.embedder.exception.handler;
+package org.devzuz.q.maven.embedder.exception.handler.internal;
 
 import java.util.List;
 
-import org.apache.maven.artifact.InvalidArtifactRTException;
+import org.apache.maven.plugin.AbstractMojoExecutionException;
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
+import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandlerChain;
 import org.eclipse.core.resources.IProject;
 
-public class InvalidArtifactRTExceptionHandler
+public class AbstractMojoExecutionExceptionHandler
     extends DefaultMavenExceptionHandler
 {
 
     public void handle( IProject project, Throwable e, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
-        markers.add( new MarkerInfo( ( (InvalidArtifactRTException) e ).getBaseMessage() ) );
+        markers.add( new MarkerInfo( ( (AbstractMojoExecutionException) e ).getLongMessage() ) );
     }
 
 }

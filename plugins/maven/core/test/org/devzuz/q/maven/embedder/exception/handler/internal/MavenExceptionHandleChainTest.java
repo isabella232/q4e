@@ -18,16 +18,7 @@ import org.apache.maven.plugin.PluginConfigurationException;
 import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.reactor.MavenExecutionException;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.devzuz.q.maven.embedder.exception.handler.DefaultMavenExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handler.AbstractMojoExecutionExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handler.ArtifactNotFoundExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handler.ArtifactResolutionExceptionHandler;
 import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handler.InvalidArtifactRTExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handler.InvalidProjectModelExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handler.MultipleArtifactsNotFoundExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handler.UnrecognizedExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handler.XmlPullParserExceptionHandler;
 
 public class MavenExceptionHandleChainTest
     extends TestCase

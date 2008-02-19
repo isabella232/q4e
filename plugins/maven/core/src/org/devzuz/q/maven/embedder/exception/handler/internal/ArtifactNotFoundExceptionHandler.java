@@ -5,26 +5,24 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.embedder.exception.handler;
+package org.devzuz.q.maven.embedder.exception.handler.internal;
 
 import java.util.List;
 
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
-import org.eclipse.core.resources.IMarker;
+import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandlerChain;
 import org.eclipse.core.resources.IProject;
 
-public class XmlPullParserExceptionHandler
+public class ArtifactNotFoundExceptionHandler
     extends DefaultMavenExceptionHandler
 {
 
     public void handle( IProject project, Throwable ex, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
-        XmlPullParserException e = (XmlPullParserException) ex;
-        MarkerInfo markerInfo =
-            new MarkerInfo( e.getMessage(), IMarker.SEVERITY_ERROR, e.getLineNumber(), e.getColumnNumber(),
-                            e.getColumnNumber() + 1 );
-        markers.add( markerInfo );
+        ArtifactNotFoundException e = (ArtifactNotFoundException) ex;
+        markers.add( new MarkerInfo( "Artifact cannot be found - " +
+            getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() ) + " : " +
+            e.getMessage() ) );
     }
-
 }

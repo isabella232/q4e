@@ -5,32 +5,25 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.embedder.exception.handler;
+package org.devzuz.q.maven.embedder.exception.handler.internal;
 
 import java.util.List;
 
-import org.devzuz.q.maven.embedder.MavenCoreActivator;
+import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
+import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandlerChain;
 import org.eclipse.core.resources.IProject;
 
-public class UnrecognizedExceptionHandler
+public class ArtifactResolutionExceptionHandler
     extends DefaultMavenExceptionHandler
 {
 
     public void handle( IProject project, Throwable ex, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
-        Throwable cause = ex.getCause();
-        if ( cause != null )
-        {
-            chain.doHandle( project, markers );
-        }
-        else
-        {
-            String s = ex.getMessage() != null ? ex.getMessage() : ex.getClass().getName();
-            MarkerInfo markerInfo = new MarkerInfo( "Error: " + s );
-            MavenCoreActivator.getLogger().log( "Unexpected error on project " + project + ": " + s, cause );
-            markers.add( markerInfo );
-        }
+        ArtifactResolutionException e = (ArtifactResolutionException) ex;
+        markers.add( new MarkerInfo( "Error while resolving " +
+            getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() ) + " : " +
+            e.getMessage() ) );
     }
 
 }
