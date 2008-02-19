@@ -9,15 +9,9 @@ package org.devzuz.q.maven.embedder.exception;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
-import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.extension.ExtensionScanningException;
-import org.apache.maven.lifecycle.LifecycleExecutionException;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.exception.handler.internal.MavenExceptionHandlerChain;
@@ -42,16 +36,6 @@ public class MavenExceptionHandler
      * Old marker id for backwards compatibility
      */
     private static final String OLD_MARKER_ID = "org.devzuz.q.maven.jdt.core.pomproblemmarker";
-
-    private final Set<Class<? extends Exception>> EXCEPTIONS_TO_EXPAND = new HashSet<Class<? extends Exception>>();
-
-    public MavenExceptionHandler()
-    {
-        EXCEPTIONS_TO_EXPAND.add( LifecycleExecutionException.class );
-        EXCEPTIONS_TO_EXPAND.add( ArtifactMetadataRetrievalException.class );
-        EXCEPTIONS_TO_EXPAND.add( ArtifactResolutionException.class );
-        EXCEPTIONS_TO_EXPAND.add( ExtensionScanningException.class );
-    }
 
     public void handle( IProject project, Collection<Exception> exceptions )
     {
@@ -174,27 +158,5 @@ public class MavenExceptionHandler
         {
             MavenCoreActivator.getLogger().log( ce );
         }
-    }
-
-    Throwable getCause( Throwable e )
-    {
-        Throwable cause = e;
-
-        /* CoreException is special as we can not call getCause and we need to access the status for the cause */
-        if ( e instanceof CoreException )
-        {
-            cause = ( (CoreException) e ).getStatus().getException();
-            if ( cause == null )
-            {
-                return e;
-            }
-        }
-
-        while ( ( cause.getCause() != null ) && EXCEPTIONS_TO_EXPAND.contains( cause.getClass() ) )
-        {
-            cause = cause.getCause();
-        }
-
-        return cause;
     }
 }

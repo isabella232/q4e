@@ -127,11 +127,12 @@ public class MarkerInfo
     @Override
     public String toString()
     {
-        return new ToStringBuilder( this ).append( "severity", getSeverityString() ).append( "lineNumber",
-                                                                                             getLineNumber() ).append(
-                                                                                                                       "charStart",
-                                                                                                                       getCharStart() ).append(
-                                                                                                                                                "charEnd",
-                                                                                                                                                getCharEnd() ).toString();
+        return new ToStringBuilder( this ).append( "message", getMessage() ).append( "severity", getSeverityString() ).append(
+                                                                                                                               "lineNumber",
+                                                                                                                               getLineNumber() ).append(
+                                                                                                                                                         "charStart",
+                                                                                                                                                         getCharStart() ).append(
+                                                                                                                                                                                  "charEnd",
+                                                                                                                                                                                  getCharEnd() ).toString();
     }
 }

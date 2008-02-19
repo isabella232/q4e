@@ -14,9 +14,12 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.maven.artifact.InvalidArtifactRTException;
+import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
+import org.apache.maven.extension.ExtensionScanningException;
+import org.apache.maven.lifecycle.LifecycleExecutionException;
 import org.apache.maven.plugin.AbstractMojoExecutionException;
 import org.apache.maven.plugin.PluginConfigurationException;
 import org.apache.maven.project.InvalidProjectModelException;
@@ -27,6 +30,7 @@ import org.devzuz.q.maven.embedder.exception.MarkerInfo;
 import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandler;
 import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandlerChain;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 
 public class MavenExceptionHandlerChain
     implements IMavenExceptionHandlerChain
@@ -53,6 +57,13 @@ public class MavenExceptionHandlerChain
         handlers.put( ProjectBuildingException.class, new ProjectBuildingExceptionHandler() );
         handlers.put( XmlPullParserException.class, new XmlPullParserExceptionHandler() );
         handlers.put( Throwable.class, new UnrecognizedExceptionHandler() );
+
+        ChainExceptionHandler chainExceptionHandler = new ChainExceptionHandler();
+        handlers.put( LifecycleExecutionException.class, chainExceptionHandler );
+        handlers.put( ArtifactMetadataRetrievalException.class, chainExceptionHandler );
+        handlers.put( ArtifactResolutionException.class, chainExceptionHandler );
+        handlers.put( ExtensionScanningException.class, chainExceptionHandler );
+
     }
 
     public MavenExceptionHandlerChain( Throwable t )
@@ -64,11 +75,28 @@ public class MavenExceptionHandlerChain
     {
         if ( t != null )
         {
-            Throwable cause = t.getCause();
+            Throwable cause = getCause( t );
             t = cause;
             IMavenExceptionHandler handler = getHandler( t.getClass() );
-            handler.handle( project, t, null, this );
+            handler.handle( project, t, markers, this );
         }
+    }
+
+    private Throwable getCause( Throwable e )
+    {
+        Throwable cause = e.getCause();
+
+        /* CoreException is special as we can not call getCause and we need to access the status for the cause */
+        if ( e instanceof CoreException )
+        {
+            cause = ( (CoreException) e ).getStatus().getException();
+            if ( cause == null )
+            {
+                return e;
+            }
+        }
+
+        return cause;
     }
 
     @SuppressWarnings( "unchecked" )
