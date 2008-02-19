@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.runtime.CoreException;
@@ -56,8 +57,11 @@ public class MavenNatureHelper
         }
     }
 
-    protected void removeQ4ENature( IProject project ) throws CoreException
+    protected void removeQ4ENature( IProject project )
+        throws CoreException
     {
+        MavenCoreActivator.getDefault().getMavenExceptionHandler().deleteMarkers( project );
+
         IProjectDescription description = project.getDescription();
         HashSet<String> existingNatureIds = new HashSet<String>( Arrays.asList( description.getNatureIds() ) );
         existingNatureIds.remove( NATURE_ID );

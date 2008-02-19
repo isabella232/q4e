@@ -122,15 +122,13 @@ public class MavenExceptionHandler
     {
         final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
 
+        deleteMarkers( project );
+
         IWorkspaceRunnable r = new IWorkspaceRunnable()
         {
             public void run( IProgressMonitor monitor )
                 throws CoreException
             {
-                pom.deleteMarkers( MavenCoreActivator.MARKER_ID, true, IResource.DEPTH_INFINITE );
-                /* delete old markers from previous versions */
-                pom.deleteMarkers( OLD_MARKER_ID, true, IResource.DEPTH_INFINITE );
-
                 for ( MarkerInfo markerInfo : markerInfos )
                 {
                     try
@@ -147,6 +145,30 @@ public class MavenExceptionHandler
                         MavenCoreActivator.getLogger().log( ce );
                     }
                 }
+            }
+        };
+
+        try
+        {
+            pom.getWorkspace().run( r, null, IWorkspace.AVOID_UPDATE, null );
+        }
+        catch ( CoreException ce )
+        {
+            MavenCoreActivator.getLogger().log( ce );
+        }
+    }
+
+    public void deleteMarkers( final IProject project )
+    {
+        final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
+        IWorkspaceRunnable r = new IWorkspaceRunnable()
+        {
+            public void run( IProgressMonitor monitor )
+                throws CoreException
+            {
+                pom.deleteMarkers( MavenCoreActivator.MARKER_ID, true, IResource.DEPTH_INFINITE );
+                /* delete old markers from previous versions */
+                pom.deleteMarkers( OLD_MARKER_ID, true, IResource.DEPTH_INFINITE );
             }
         };
 
