@@ -162,7 +162,6 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         else if ( classpath.getEntryKind() == IClasspathEntry.CPE_LIBRARY )
         {
             String[] classpathMavenInfo = getMavenProjectInfo( classpath );
-
             return mavenProject.getGroupId().equals( classpathMavenInfo[0] ) &&
                 mavenProject.getArtifactId().equals( classpathMavenInfo[1] ) &&
                 mavenProject.getVersion().equals( classpathMavenInfo[2] );

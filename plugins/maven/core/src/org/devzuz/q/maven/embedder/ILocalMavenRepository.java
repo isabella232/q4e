@@ -30,10 +30,5 @@ public interface ILocalMavenRepository extends IMavenRepository
 
     public IPath getBaseDirectoryPath();
 
-    /**
-     * @deprecated Not used, to be removed 
-     */
-    @Deprecated
     public IPath getPath( IMavenArtifact artifact );
-
 }

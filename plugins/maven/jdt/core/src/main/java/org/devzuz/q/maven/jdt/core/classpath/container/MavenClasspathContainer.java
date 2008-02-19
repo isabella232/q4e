@@ -48,11 +48,21 @@ public class MavenClasspathContainer implements IClasspathContainer
     public static String MAVEN_CLASSPATH_CONTAINER = "org.devzuz.q.maven.jdt.core.mavenClasspathContainer"; //$NON-NLS-1$
 
     public static IPath MAVEN_CLASSPATH_CONTAINER_PATH = new Path( MAVEN_CLASSPATH_CONTAINER );
+    
+    public static String ATTRIBUTE_GROUP_ID = "groupId";
 
-    public static String SOURCES_CLASSIFIER = "sources";
+    public static String ATTRIBUTE_ARTIFACT_ID = "artifactId";
+    
+    public static String ATTRIBUTE_VERSION = "version";
+    
+    private static String SOURCES_CLASSIFIER = "sources";
 
     private static String SOURCES_TYPE = "java-source";
 
+    private static String DEFAULT_CLASSIFIER = null;
+
+    private static String JAR_TYPE = "jar";
+    
     private IClasspathEntry[] classpathEntries;
 
     private IProject project;
@@ -242,8 +252,6 @@ public class MavenClasspathContainer implements IClasspathContainer
     protected IClasspathEntry resolveArtifact( IMavenProject mavenProject, IMavenArtifact artifact,
                                                boolean downloadSources )
     {
-        IClasspathAttribute[] attributes = new IClasspathAttribute[0];
-
         /*
          * if dependency is a project in the workspace use a project dependency instead of the jar dependency
          */
@@ -260,22 +268,28 @@ public class MavenClasspathContainer implements IClasspathContainer
 
         if ( ( workspaceProject != null ) && ( workspaceProject.isOpen() ) )
         {
-            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in " + mavenProject.getArtifactId()
-                            + " as project dependency - " + workspaceProject.getFullPath() );
+            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in " , mavenProject.getArtifactId() ,
+                            " as project dependency - " , workspaceProject.getFullPath() );
 
             return JavaCore.newProjectEntry( workspaceProject.getFullPath(), export );
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {
-            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in " , mavenProject.getArtifactId()
-                            , " as jar dependency - " , artifact.getFile().getAbsolutePath() );
-
+            IClasspathAttribute[] attributes = new IClasspathAttribute[0];
+            
             IMavenArtifact clone = (IMavenArtifact) artifact.clone();
             clone.setType( SOURCES_TYPE );
             clone.setClassifier( SOURCES_CLASSIFIER );
-            Path sourcePath = getArtifactPath( mavenProject, clone, downloadSources );
-            return JavaCore.newLibraryEntry( new Path( artifact.getFile().getAbsolutePath() ), sourcePath, null,
-                                             new IAccessRule[0], attributes, export );
+            IPath sourcePath = getArtifactPath( mavenProject, clone, downloadSources );
+            
+            clone.setType( JAR_TYPE );
+            clone.setClassifier( DEFAULT_CLASSIFIER );
+            IPath jarPath = getArtifactPath( mavenProject, clone, downloadSources );
+            
+            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in " , mavenProject.getArtifactId()
+                                         , " as jar dependency - " , jarPath.toOSString() );
+            
+            return JavaCore.newLibraryEntry( jarPath , sourcePath , null, new IAccessRule[0] , attributes, export );
         }
         else
         {
@@ -296,7 +310,8 @@ public class MavenClasspathContainer implements IClasspathContainer
         buffer.append( "Maven classpath container  = " );
         for ( IClasspathEntry entry : classpathEntries )
         {
-            buffer.append( ":" + entry.getPath().toOSString() );
+            buffer.append( ":" );
+            buffer.append( entry.getPath().toOSString() );
         }
 
         return buffer.toString();
@@ -307,56 +322,40 @@ public class MavenClasspathContainer implements IClasspathContainer
         return project;
     }
 
-    private Path getArtifactPath( IMavenProject mavenProject, IMavenArtifact artifact, boolean materialize )
+    private IPath getArtifactPath( IMavenProject mavenProject, IMavenArtifact artifact, boolean materialize )
     {
-        // TODO in the future we want to do something like:
-        // IPath sourcePath = MavenManager.getMaven().getLocalRepository().getPath( sourcesArtifact );
+        IPath artifactPath = MavenManager.getMaven().getLocalRepository().getPath( artifact );
+        File artifactFile = new File( artifactPath.toOSString() );
 
-        File artifactFile;
-        String artifactLocation = artifact.getFile().getAbsolutePath();
-        if ( artifactLocation != null )
+        if ( !artifactFile.exists() )
         {
-            String classifier = artifact.getClassifier();
-            if ( ( artifact.getType().equals( SOURCES_TYPE ) ) && ( classifier != null ) &&
-                ( "test".equals( classifier ) ) )
+            if ( materialize )
             {
-                artifactFile =
-                    new File( artifactLocation.substring( 0, artifactLocation.length() -
-                        ( "-tests." + artifact.getType() ).length() ) +
-                        "-test-" + SOURCES_CLASSIFIER + "." + artifact.getType() );
-            }
-            else
-            {
-                artifactFile =
-                    new File( artifactLocation.substring( 0, artifactLocation.length() -
-                        ( "." + artifact.getType() ).length() ) +
-                        "-" + artifact.getClassifier() + "." + artifact.getType() );
-            }
-
-            if ( artifactFile.exists() )
-            {
-                return new Path( artifactFile.getAbsolutePath() );
-            }
-            else
-            {
-                if ( materialize )
+                try
                 {
-                    try
+                    // Materialize this artifact
+                    MavenManager.getMaven().resolveArtifact( artifact.getDependency(),
+                                                             mavenProject.getRemoteArtifactRepositories() );
+                }
+                catch ( CoreException e )
+                {
+                    /* Cannot download the artifact, if it is a java-source artifact, ignore it */
+                    if( SOURCES_TYPE.equals( artifact.getType() ) )
                     {
-                        // Materialize this artifact
-                        MavenManager.getMaven().resolveArtifact( artifact.getDependency(),
-                                                                 mavenProject.getRemoteArtifactRepositories() );
-                        return new Path( artifact.getFile().getAbsolutePath() );
-                    }
-                    catch ( CoreException e )
-                    {
-                        /* Cannot download the sources for artifact, ignoring */
                         return null;
                     }
                 }
             }
+            else
+            {
+                /* Cannot download the artifact, if it is a java-source artifact, ignore it */
+                if( SOURCES_TYPE.equals( artifact.getType()  ) )
+                {
+                    return null;
+                }
+            }
         }
 
-        return null;
+        return artifactPath;
     }
 }

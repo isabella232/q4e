@@ -13,6 +13,7 @@ import java.util.List;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.devzuz.q.maven.embedder.ILocalMavenRepository;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
@@ -48,7 +49,9 @@ public class LocalMavenRepository implements ILocalMavenRepository
 
     public IPath getPath( IMavenArtifact artifact )
     {
-        throw new UnsupportedOperationException();
+        File jarPath = new File( getBaseDirectory() , 
+                                 getArtifactRepository().pathOf( MavenManager.getMaven().createArtifact( artifact.getDependency() ) ) );
+        return new Path( jarPath.getAbsolutePath() );
     }
 
     public IMavenArtifact findArtifact( String groupId, String artifactId, String version, String classifier )
