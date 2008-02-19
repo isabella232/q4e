@@ -5,21 +5,22 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.embedder.exception.handlers;
+package org.devzuz.q.maven.embedder.exception.handler;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
+import org.eclipse.core.resources.IProject;
 
-public abstract class AbstractMavenExceptionHandler
+public class AbstractMavenExceptionHandler
     implements IMavenExceptionHandler
 {
 
-    public List<MarkerInfo> handle( Throwable e )
+    public void handle( IProject project, Throwable e, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
-        return newMarkerInfo( e.getMessage() );
+        markers.add( new MarkerInfo( e.getMessage() ) );
     }
 
     protected List<MarkerInfo> newMarkerInfo( String msg )

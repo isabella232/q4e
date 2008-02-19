@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.embedder.exception.handlers;
+package org.devzuz.q.maven.embedder.exception.handler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,13 +13,14 @@ import java.util.List;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
+import org.eclipse.core.resources.IProject;
 
 public class MultipleArtifactsNotFoundExceptionHandler
-    extends AbstractMavenExceptionHandler
+    extends DefaultMavenExceptionHandler
 {
 
     @SuppressWarnings( "unchecked" )
-    public List<MarkerInfo> handle( Throwable ex )
+    public void handle( IProject project, Throwable ex, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
         MultipleArtifactsNotFoundException e = (MultipleArtifactsNotFoundException) ex;
         List<Artifact> missingArtifacts = e.getMissingArtifacts();
@@ -31,7 +32,7 @@ public class MultipleArtifactsNotFoundExceptionHandler
             MarkerInfo markerInfo = new MarkerInfo( "Missing dependency: " + artifact.toString() );
             markerInfos.add( markerInfo );
         }
-        return markerInfos;
+        markers.addAll( markerInfos );
     }
 
 }

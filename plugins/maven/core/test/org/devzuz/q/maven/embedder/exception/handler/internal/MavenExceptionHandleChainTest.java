@@ -5,7 +5,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.embedder.exception;
+package org.devzuz.q.maven.embedder.exception.handler.internal;
 
 import junit.framework.TestCase;
 
@@ -18,32 +18,32 @@ import org.apache.maven.plugin.PluginConfigurationException;
 import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.reactor.MavenExecutionException;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.devzuz.q.maven.embedder.exception.handlers.AbstractMojoExecutionExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handlers.ArtifactNotFoundExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handlers.ArtifactResolutionExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handlers.IMavenExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handlers.InvalidArtifactRTExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handlers.InvalidProjectModelExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handlers.MavenExecutionExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handlers.MultipleArtifactsNotFoundExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handlers.PluginConfigurationExceptionHandler;
-import org.devzuz.q.maven.embedder.exception.handlers.XmlPullParserExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handler.DefaultMavenExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handler.AbstractMojoExecutionExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handler.ArtifactNotFoundExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handler.ArtifactResolutionExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handler.InvalidArtifactRTExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handler.InvalidProjectModelExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handler.MultipleArtifactsNotFoundExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handler.UnrecognizedExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handler.XmlPullParserExceptionHandler;
 
-public class MavenExceptionHandlerTest
+public class MavenExceptionHandleChainTest
     extends TestCase
 {
     public void test()
     {
-        MavenExceptionHandler exceptionHandler = new MavenExceptionHandler();
+        MavenExceptionHandlerChain exceptionHandler = new MavenExceptionHandlerChain( new Exception() );
 
         IMavenExceptionHandler handler;
         handler = exceptionHandler.getHandler( Exception.class );
-        assertNull( handler );
+        assertEquals( UnrecognizedExceptionHandler.class, handler.getClass() );
 
         handler = exceptionHandler.getHandler( Throwable.class );
-        assertNull( handler );
+        assertEquals( UnrecognizedExceptionHandler.class, handler.getClass() );
         handler = exceptionHandler.getHandler( RuntimeException.class );
-        assertNull( handler );
+        assertEquals( UnrecognizedExceptionHandler.class, handler.getClass() );
 
         handler = exceptionHandler.getHandler( ArtifactNotFoundException.class );
         assertEquals( ArtifactNotFoundExceptionHandler.class, handler.getClass() );
@@ -70,10 +70,10 @@ public class MavenExceptionHandlerTest
         assertEquals( XmlPullParserExceptionHandler.class, handler.getClass() );
 
         handler = exceptionHandler.getHandler( MavenExecutionException.class );
-        assertEquals( MavenExecutionExceptionHandler.class, handler.getClass() );
+        assertEquals( DefaultMavenExceptionHandler.class, handler.getClass() );
 
         handler = exceptionHandler.getHandler( PluginConfigurationException.class );
-        assertEquals( PluginConfigurationExceptionHandler.class, handler.getClass() );
+        assertEquals( DefaultMavenExceptionHandler.class, handler.getClass() );
     }
 
     @SuppressWarnings( "serial" )

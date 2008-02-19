@@ -5,23 +5,23 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.embedder.exception.handlers;
+package org.devzuz.q.maven.embedder.exception.handler;
 
 import java.util.List;
 
 import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.project.validation.ModelValidationResult;
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
+import org.eclipse.core.resources.IProject;
 
 public class InvalidProjectModelExceptionHandler
-    extends AbstractMavenExceptionHandler
+    extends DefaultMavenExceptionHandler
 {
 
     @SuppressWarnings( "unchecked" )
-    public List<MarkerInfo> handle( Throwable e )
+    public void handle( IProject project, Throwable e, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
         ModelValidationResult validationResult = ( (InvalidProjectModelException) e ).getValidationResult();
-        return newMarkerInfo( validationResult.getMessages() );
+        markers.addAll( newMarkerInfo( validationResult.getMessages() ));
     }
-
 }

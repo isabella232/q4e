@@ -5,18 +5,16 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.embedder.exception.handlers;
+package org.devzuz.q.maven.embedder.exception.handler;
 
 import java.util.List;
 
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
+import org.eclipse.core.resources.IProject;
 
-/**
- * Obtain a meaningful error message for an user from a exception
- * 
- * @author Carlos Sanchez <carlos@apache.org>
- */
-public interface IMavenExceptionHandler
+public interface IMavenExceptionHandlerChain
 {
-    List<MarkerInfo> handle( Throwable e );
+
+    public abstract void doHandle(IProject project, List<MarkerInfo> markers);
+
 }

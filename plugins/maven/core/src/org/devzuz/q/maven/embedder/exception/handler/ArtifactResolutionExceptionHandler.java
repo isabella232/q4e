@@ -5,23 +5,24 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.devzuz.q.maven.embedder.exception.handlers;
+package org.devzuz.q.maven.embedder.exception.handler;
 
 import java.util.List;
 
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
+import org.eclipse.core.resources.IProject;
 
 public class ArtifactResolutionExceptionHandler
-    extends AbstractMavenExceptionHandler
+    extends DefaultMavenExceptionHandler
 {
 
-    public List<MarkerInfo> handle( Throwable ex )
+    public void handle( IProject project, Throwable ex, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
         ArtifactResolutionException e = (ArtifactResolutionException) ex;
-        return newMarkerInfo( "Error while resolving " +
+        markers.add( new MarkerInfo( "Error while resolving " +
             getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() ) + " : " +
-            e.getMessage() );
+            e.getMessage() ) );
     }
 
 }

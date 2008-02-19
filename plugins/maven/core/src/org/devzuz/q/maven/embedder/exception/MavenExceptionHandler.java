@@ -9,20 +9,18 @@ package org.devzuz.q.maven.embedder.exception;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.extension.ExtensionScanningException;
 import org.apache.maven.lifecycle.LifecycleExecutionException;
-import org.apache.maven.project.ProjectBuildingException;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
-import org.devzuz.q.maven.embedder.exception.handlers.IMavenExceptionHandler;
+import org.devzuz.q.maven.embedder.exception.handler.internal.MavenExceptionHandlerChain;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
@@ -47,27 +45,20 @@ public class MavenExceptionHandler
 
     private final Set<Class<? extends Exception>> EXCEPTIONS_TO_EXPAND = new HashSet<Class<? extends Exception>>();
 
-    /**
-     * Has to allow null values
-     */
-    private final Map<Class<? extends Throwable>, IMavenExceptionHandler> handlers =
-        new HashMap<Class<? extends Throwable>, IMavenExceptionHandler>();
-
     public MavenExceptionHandler()
     {
         EXCEPTIONS_TO_EXPAND.add( LifecycleExecutionException.class );
         EXCEPTIONS_TO_EXPAND.add( ArtifactMetadataRetrievalException.class );
-        EXCEPTIONS_TO_EXPAND.add( ProjectBuildingException.class );
         EXCEPTIONS_TO_EXPAND.add( ArtifactResolutionException.class );
         EXCEPTIONS_TO_EXPAND.add( ExtensionScanningException.class );
     }
 
     public void handle( IProject project, Collection<Exception> exceptions )
     {
-        List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>();
+        List<MarkerInfo> markerInfos = new LinkedList<MarkerInfo>();
         for ( Exception e : exceptions )
         {
-            markerInfos.addAll( doHandle( project, e ) );
+            doHandle( project, e, markerInfos );
         }
         markPom( project, markerInfos );
     }
@@ -130,98 +121,17 @@ public class MavenExceptionHandler
         markPom( project, markerInfos );
     }
 
-    @SuppressWarnings( "unchecked" )
-    /**
-     * Find the handler for the provided exception
-     */
-    protected IMavenExceptionHandler getHandler( Class<? extends Throwable> exceptionClass )
-    {
-        IMavenExceptionHandler handler = handlers.get( exceptionClass );
-        if ( handlers.containsKey( exceptionClass ) )
-        {
-            return handler;
-        }
-
-        Class<? extends Throwable> classToHandle = exceptionClass;
-        Set<Class<? extends Throwable>> classesTested = new HashSet<Class<? extends Throwable>>();
-
-        while ( !handlers.containsKey( exceptionClass ) && ( classToHandle != null ) )
-        {
-            classesTested.add( classToHandle );
-
-            if ( classToHandle.equals( Exception.class ) )
-            {
-                handler = null;
-                break;
-            }
-
-            String handlerClassName =
-                IMavenExceptionHandler.class.getPackage().getName() + "." + classToHandle.getSimpleName() + "Handler";
-            try
-            {
-                Class<IMavenExceptionHandler> handlerClass =
-                    (Class<IMavenExceptionHandler>) this.getClass().getClassLoader().loadClass( handlerClassName );
-                handler = handlerClass.newInstance();
-
-                /*
-                 * we have found the handler. Put it in the cache for the exception and all the superclasses we needed
-                 * to lookup
-                 */
-                for ( Class<? extends Throwable> classTested : classesTested )
-                {
-                    handlers.put( classTested, handler );
-                }
-                break;
-            }
-            catch ( InstantiationException e )
-            {
-                throw new RuntimeException( e );
-            }
-            catch ( IllegalAccessException e )
-            {
-                throw new RuntimeException( e );
-            }
-            catch ( ClassNotFoundException e )
-            {
-                /* handler not found for this class try with its superclass */
-                classToHandle = (Class<? extends Exception>) classToHandle.getSuperclass();
-            }
-        }
-
-        return handler;
-    }
-
     public void handle( IProject project, Throwable e )
     {
-        doHandle( project, e );
+        LinkedList<MarkerInfo> markerInfos = new LinkedList<MarkerInfo>();
+        doHandle( project, e, markerInfos );
+        markPom( project, markerInfos );
     }
 
-    private List<MarkerInfo> doHandle( IProject project, Throwable e )
+    private void doHandle( IProject project, Throwable e, List<MarkerInfo> markers )
     {
-        Throwable cause = getCause( e );
-        MarkerInfo markerInfo;
-
-        IMavenExceptionHandler handler = getHandler( cause.getClass() );
-
-        if ( handler != null )
-        {
-            return handler.handle( cause );
-        }
-
-        Throwable deepCause = cause.getCause();
-        if ( deepCause != null )
-        {
-            // FIX for Issue 113: Unexpected exceptions can come from maven.
-            // Unwrap unknown exceptions until a known one is found, or fail.
-            return doHandle( project, deepCause );
-        }
-        else
-        {
-            String s = cause.getMessage() != null ? cause.getMessage() : cause.getClass().getName();
-            markerInfo = new MarkerInfo( "Error: " + s );
-            MavenCoreActivator.getLogger().log( "Unexpected error on project " + project + ": " + s, cause );
-            return Collections.singletonList( markerInfo );
-        }
+        MavenExceptionHandlerChain chain = new MavenExceptionHandlerChain( e );
+        chain.doHandle( project, markers );
     }
 
     private void markPom( final IProject project, final List<MarkerInfo> markerInfos )
