@@ -173,19 +173,18 @@ public class EclipseMavenArtifactResolver extends DefaultArtifactResolver
                 if ( Artifact.SCOPE_SYSTEM.equals( artifact.getScope() ) )
                 {
                     // system dependencies specify their path
-                    File providedFile = artifact.getFile();
-                    resolved = providedFile != null && providedFile.isFile() && providedFile.canRead();
+                    file = artifact.getFile();
+                    resolved = file != null && file.isFile() && file.canRead();
                 }
                 else
                 {
-                    // TODO: Confirm if this is correct
                     file = mavenProject.getPomFile();
                     resolved = file != null;
                 }
-                artifact.setFile( file );
-                artifact.setResolved( resolved );
                 if ( resolved )
                 {
+                    artifact.setFile( file );
+                    artifact.setResolved( true );
                     MavenCoreActivator.trace( TraceOption.ARTIFACT_RESOLVER, "Artifact resolved from workspace:  ",
                                               artifact );
                 }
