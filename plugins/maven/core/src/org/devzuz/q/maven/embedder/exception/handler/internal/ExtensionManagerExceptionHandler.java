@@ -9,22 +9,20 @@ package org.devzuz.q.maven.embedder.exception.handler.internal;
 
 import java.util.List;
 
-import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
 import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandlerChain;
 import org.eclipse.core.resources.IProject;
 
-public class ArtifactResolutionExceptionHandler
+public class ExtensionManagerExceptionHandler
     extends DefaultMavenExceptionHandler
 {
 
-    public void handle( IProject project, Throwable ex, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
+    public void handle( IProject project, Throwable e, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
-        ArtifactResolutionException e = (ArtifactResolutionException) ex;
-        // TODO in next embedder we'll be able to access the artifact in the exception
-        markers.add( new MarkerInfo( "Error while resolving " +
-            getArtifactId( e.getGroupId(), e.getArtifactId(), e.getVersion(), e.getType(), e.getClassifier() ) + " : " +
-            e.getMessage() ) );
+        chain.doHandle( project, markers );
+        for ( MarkerInfo markerInfo : markers )
+        {
+            markerInfo.setMessage( e.getMessage() + ": " + markerInfo.getMessage() );
+        }
     }
-
 }

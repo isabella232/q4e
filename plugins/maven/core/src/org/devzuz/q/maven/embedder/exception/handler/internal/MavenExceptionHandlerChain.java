@@ -18,6 +18,8 @@ import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
+import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
+import org.apache.maven.extension.ExtensionManagerException;
 import org.apache.maven.extension.ExtensionScanningException;
 import org.apache.maven.lifecycle.LifecycleExecutionException;
 import org.apache.maven.plugin.AbstractMojoExecutionException;
@@ -35,13 +37,11 @@ import org.eclipse.core.runtime.CoreException;
 public class MavenExceptionHandlerChain
     implements IMavenExceptionHandlerChain
 {
-    /**
-     * Has to allow null values
-     */
+
     private static final Map<Class<? extends Throwable>, IMavenExceptionHandler> handlers =
         new HashMap<Class<? extends Throwable>, IMavenExceptionHandler>();
 
-    private Throwable t;
+    private Throwable next;
 
     static
     {
@@ -56,29 +56,30 @@ public class MavenExceptionHandlerChain
         handlers.put( PluginConfigurationException.class, new DefaultMavenExceptionHandler() );
         handlers.put( ProjectBuildingException.class, new ProjectBuildingExceptionHandler() );
         handlers.put( XmlPullParserException.class, new XmlPullParserExceptionHandler() );
-        handlers.put( Throwable.class, new UnrecognizedExceptionHandler() );
+        handlers.put( OverConstrainedVersionException.class, new OverConstrainedVersionExceptionHandler() );
+        handlers.put( ExtensionManagerException.class, new ExtensionManagerExceptionHandler() );
 
         ChainExceptionHandler chainExceptionHandler = new ChainExceptionHandler();
         handlers.put( LifecycleExecutionException.class, chainExceptionHandler );
         handlers.put( ArtifactMetadataRetrievalException.class, chainExceptionHandler );
-        handlers.put( ArtifactResolutionException.class, chainExceptionHandler );
         handlers.put( ExtensionScanningException.class, chainExceptionHandler );
 
+        handlers.put( Throwable.class, new UnrecognizedExceptionHandler() );
     }
 
     public MavenExceptionHandlerChain( Throwable t )
     {
-        this.t = t;
+        this.next = t;
     }
 
     public void doHandle( IProject project, List<MarkerInfo> markers )
     {
-        if ( t != null )
+        if ( next != null )
         {
-            Throwable cause = getCause( t );
-            t = cause;
-            IMavenExceptionHandler handler = getHandler( t.getClass() );
-            handler.handle( project, t, markers, this );
+            Throwable current = next;
+            next = getCause( next );
+            IMavenExceptionHandler handler = getHandler( current.getClass() );
+            handler.handle( project, current, markers, this );
         }
     }
 

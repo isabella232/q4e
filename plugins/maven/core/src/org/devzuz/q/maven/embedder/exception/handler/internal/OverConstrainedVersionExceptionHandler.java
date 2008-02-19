@@ -13,24 +13,14 @@ import org.devzuz.q.maven.embedder.exception.MarkerInfo;
 import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandlerChain;
 import org.eclipse.core.resources.IProject;
 
-/**
- * Proceed with the chain if the exception has a nested cause
- * 
- * @author Carlos Sanchez <carlos@apache.org>
- */
-public class ChainExceptionHandler
-    extends DefaultMavenExceptionHandler
+public class OverConstrainedVersionExceptionHandler
+    extends ArtifactResolutionExceptionHandler
 {
 
     public void handle( IProject project, Throwable e, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
-        if ( e.getCause() != null )
-        {
-            chain.doHandle( project, markers );
-        }
-        else
-        {
-            super.handle( project, e, markers, chain );
-        }
+        // TODO in next embedder we'll be able to access the artifact in the exception, and its versionRange and
+        // available versions
+        super.handle( project, e, markers, chain );
     }
 }
