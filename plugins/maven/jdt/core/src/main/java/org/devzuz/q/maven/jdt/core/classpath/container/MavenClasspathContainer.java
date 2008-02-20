@@ -278,13 +278,11 @@ public class MavenClasspathContainer implements IClasspathContainer
             IClasspathAttribute[] attributes = new IClasspathAttribute[0];
             
             IMavenArtifact clone = (IMavenArtifact) artifact.clone();
+            IPath jarPath = getArtifactPath( mavenProject, clone, downloadSources );
+            
             clone.setType( SOURCES_TYPE );
             clone.setClassifier( SOURCES_CLASSIFIER );
             IPath sourcePath = getArtifactPath( mavenProject, clone, downloadSources );
-            
-            clone.setType( JAR_TYPE );
-            clone.setClassifier( DEFAULT_CLASSIFIER );
-            IPath jarPath = getArtifactPath( mavenProject, clone, downloadSources );
             
             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in " , mavenProject.getArtifactId()
                                          , " as jar dependency - " , jarPath.toOSString() );

@@ -54,7 +54,10 @@ public class EclipseMavenArtifact
         setFile( artifact.getFile() );
         setScope( artifact.getScope() );
         setType( artifact.getType() );
-        setClassifier( artifact.getArtifactHandler().getClassifier() );
+        String classifier = artifact.getClassifier();
+        if( classifier == null )
+            classifier = artifact.getArtifactHandler().getClassifier();
+        setClassifier( classifier );
         setAddedToClasspath( artifact.getArtifactHandler().isAddedToClasspath() );
     }
 

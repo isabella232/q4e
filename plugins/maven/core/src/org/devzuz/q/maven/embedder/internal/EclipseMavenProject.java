@@ -238,9 +238,9 @@ public class EclipseMavenProject implements IMavenProject
 
         for ( Artifact artifact : (Set<Artifact>) mavenRawProject.getArtifacts() )
         {
-                IMavenArtifact mavenArtifact = new EclipseMavenArtifact( artifact );
-                allArtifacts.add( mavenArtifact );
-                addThroughDependencyTrail( mavenRawProject, tempArtifactCache, mavenArtifact, artifact );
+            IMavenArtifact mavenArtifact = new EclipseMavenArtifact( artifact );
+            allArtifacts.add( mavenArtifact );
+            addThroughDependencyTrail( mavenRawProject, tempArtifactCache, mavenArtifact, artifact );
         }
         
         /* The tempArtifactCache contains, as a first element, this project with its direct dependencies as children */

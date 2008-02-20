@@ -10,6 +10,7 @@ package org.devzuz.q.maven.embedder.internal;
 import java.io.File;
 import java.util.List;
 
+import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.devzuz.q.maven.embedder.ILocalMavenRepository;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
@@ -49,9 +50,14 @@ public class LocalMavenRepository implements ILocalMavenRepository
 
     public IPath getPath( IMavenArtifact artifact )
     {
-        File jarPath = new File( getBaseDirectory() , 
-                                 getArtifactRepository().pathOf( MavenManager.getMaven().createArtifact( artifact.getDependency() ) ) );
-        return new Path( jarPath.getAbsolutePath() );
+        Artifact jarArtifact =
+            ( (EclipseMaven) MavenManager.getMaven() ).getEmbedder().createArtifactWithClassifier( artifact.getGroupId(),
+                                                                                                   artifact.getArtifactId(),
+                                                                                                   artifact.getVersion(),
+                                                                                                   artifact.getType(),
+                                                                                                   artifact.getClassifier() );
+        File jarFile = new File( getArtifactRepository().getBasedir(), getArtifactRepository().pathOf( jarArtifact ) );
+        return new Path( jarFile.getAbsolutePath() );
     }
 
     public IMavenArtifact findArtifact( String groupId, String artifactId, String version, String classifier )
