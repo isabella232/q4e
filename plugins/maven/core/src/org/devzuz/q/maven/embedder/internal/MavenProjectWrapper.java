@@ -185,6 +185,18 @@ public class MavenProjectWrapper extends MavenProject implements Cloneable
     }
 
     @Override
+    public Object clone()
+    // TODO this will be needed when we upgrade the embedder
+    // throws CloneNotSupportedException
+    {
+        MavenProjectWrapper clone = (MavenProjectWrapper) super.clone();
+        clone.delegate = (MavenProject) delegate.clone();
+        return clone;
+    }
+
+    // ------------------------- delegate methods from here on ------------------------- 
+    
+    @Override
     public void addAttachedArtifact( Artifact artifact )
     {
         delegate.addAttachedArtifact( artifact );
@@ -1045,13 +1057,4 @@ public class MavenProjectWrapper extends MavenProject implements Cloneable
         delegate.writeOriginalModel( writer );
     }
 
-    @Override
-    public Object clone()
-    // TODO this will be needed when we upgrade the embedder
-    // throws CloneNotSupportedException
-    {
-        MavenProjectWrapper clone = (MavenProjectWrapper) super.clone();
-        clone.delegate = (MavenProject) delegate.clone();
-        return clone;
-    }
 }
