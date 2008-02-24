@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.lifecycle.LifecycleExecutionException;
@@ -78,6 +80,12 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
         if ( artifactResolutionResult != null )
         {
             resolutionExceptions = ArtifactResolutionResultHelper.getExceptions( artifactResolutionResult );
+            // amuino: XXX This is a hack to have the missing artifacts as Exceptions, like it used to be before maven-artifact-3.0
+            // amuino: XXX We should probably refactor the code to be in sync with latest maven development.
+            List<Artifact> missingArtifacts = artifactResolutionResult.getMissingArtifacts();
+                for (Artifact a : missingArtifacts){
+                resolutionExceptions.add( new ArtifactResolutionException("Artifact not found " + a.toString(), a));
+            }
         }
 
         if ( executionExceptions == null )
