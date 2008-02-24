@@ -48,13 +48,13 @@ public class MavenClasspathContainer implements IClasspathContainer
     public static String MAVEN_CLASSPATH_CONTAINER = "org.devzuz.q.maven.jdt.core.mavenClasspathContainer"; //$NON-NLS-1$
 
     public static IPath MAVEN_CLASSPATH_CONTAINER_PATH = new Path( MAVEN_CLASSPATH_CONTAINER );
-    
+
     public static String ATTRIBUTE_GROUP_ID = "groupId";
 
     public static String ATTRIBUTE_ARTIFACT_ID = "artifactId";
-    
+
     public static String ATTRIBUTE_VERSION = "version";
-    
+
     private static String SOURCES_CLASSIFIER = "sources";
 
     private static String SOURCES_TYPE = "java-source";
@@ -62,7 +62,7 @@ public class MavenClasspathContainer implements IClasspathContainer
     private static String DEFAULT_CLASSIFIER = null;
 
     private static String JAR_TYPE = "jar";
-    
+
     private IClasspathEntry[] classpathEntries;
 
     private IProject project;
@@ -113,8 +113,7 @@ public class MavenClasspathContainer implements IClasspathContainer
         if ( mavenProject != null )
         {
             MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Refreshing classpath for maven project ",
-                                         mavenProject.getArtifactId() , " - Processing " , artifacts.size() ,
-                                                          " artifacts" );
+                                         mavenProject.getArtifactId(), " - Processing ", artifacts.size(), " artifacts" );
 
             this.project = mavenProject.getProject();
 
@@ -160,13 +159,12 @@ public class MavenClasspathContainer implements IClasspathContainer
         }
         catch ( CoreException e )
         {
-            /*
-             * If it is an exception from maven, try to see if it is due to missing dependencies. If it is, try to check
-             * if those missing dependencies are projects in the workspace, If it is, add it as a project dependency.
-             */
             if ( e.getStatus() instanceof MavenExecutionStatus )
             {
                 MavenExecutionStatus status = (MavenExecutionStatus) e.getStatus();
+                // Mark execution errors as erros in the pom
+                // amuino: XXX This assumes that resolution exceptions are thrown, which is not the case in
+                // maven-artifact-3.0
                 IMavenExecutionResult result = status.getMavenExecutionResult();
                 if ( result.hasErrors() )
                 {
@@ -268,15 +266,15 @@ public class MavenClasspathContainer implements IClasspathContainer
 
         if ( ( workspaceProject != null ) && ( workspaceProject.isOpen() ) )
         {
-            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in " , mavenProject.getArtifactId() ,
-                            " as project dependency - " , workspaceProject.getFullPath() );
+            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in ", mavenProject.getArtifactId(),
+                                         " as project dependency - ", workspaceProject.getFullPath() );
 
             return JavaCore.newProjectEntry( workspaceProject.getFullPath(), export );
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {
             IClasspathAttribute[] attributes = new IClasspathAttribute[0];
-            
+
             IMavenArtifact clone = (IMavenArtifact) artifact.clone();
             clone.setType( SOURCES_TYPE );
             clone.setClassifier( SOURCES_CLASSIFIER );
@@ -338,7 +336,7 @@ public class MavenClasspathContainer implements IClasspathContainer
                 catch ( CoreException e )
                 {
                     /* Cannot download the artifact, if it is a java-source artifact, ignore it */
-                    if( SOURCES_TYPE.equals( artifact.getType() ) )
+                    if ( SOURCES_TYPE.equals( artifact.getType() ) )
                     {
                         return null;
                     }
@@ -347,7 +345,7 @@ public class MavenClasspathContainer implements IClasspathContainer
             else
             {
                 /* Cannot download the artifact, if it is a java-source artifact, ignore it */
-                if( SOURCES_TYPE.equals( artifact.getType()  ) )
+                if ( SOURCES_TYPE.equals( artifact.getType() ) )
                 {
                     return null;
                 }
