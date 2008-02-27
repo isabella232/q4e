@@ -385,7 +385,7 @@ public class EclipseMaven implements IMaven
                     ( artifactResolutionResult != null )
                                     && ArtifactResolutionResultHelper.hasExceptions( artifactResolutionResult );
                 boolean hasMissingArtifacts =
-                    !artifactResolutionResult.getMissingArtifacts().isEmpty();
+                    null != artifactResolutionResult && !artifactResolutionResult.getMissingArtifacts().isEmpty();
 
                 if ( hasResolutionExceptions || hasMissingArtifacts || status.hasExceptions() )
                 {
