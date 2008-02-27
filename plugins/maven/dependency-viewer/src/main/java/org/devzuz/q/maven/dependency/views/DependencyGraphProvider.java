@@ -19,7 +19,8 @@ import org.eclipse.zest.core.viewers.IGraphEntityContentProvider;
  * 
  * @author Abel Muiño <amuino@gmail.com>
  */
-public class DependencyGraphProvider implements IGraphEntityContentProvider
+public class DependencyGraphProvider
+    implements IGraphEntityContentProvider
 {
 
     private IMavenProject project;
@@ -29,11 +30,6 @@ public class DependencyGraphProvider implements IGraphEntityContentProvider
         this.project = project;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.mylyn.zest.core.viewers.IGraphEntityContentProvider#getConnectedTo(java.lang.Object)
-     */
     public IMavenArtifact[] getConnectedTo( Object entity )
     {
         if ( entity instanceof IMavenProject )
@@ -50,18 +46,13 @@ public class DependencyGraphProvider implements IGraphEntityContentProvider
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.mylyn.zest.core.viewers.IGraphEntityContentProvider#getElements(java.lang.Object)
-     */
     public Object[] getElements( Object inputElement )
     {
         Set<Object> allElements = new HashSet<Object>();
         allElements.add( inputElement );
         IMavenProject project = (IMavenProject) inputElement;
         Set<IMavenArtifact> artifacts = project.getDependencyArtifacts();
-//        Set<IMavenArtifact> artifacts = project.getArtifacts();
+        // Set<IMavenArtifact> artifacts = project.getArtifacts();
         for ( IMavenArtifact artifact : artifacts )
         {
             appendArtifactAndChildren( artifact, allElements );
@@ -79,35 +70,16 @@ public class DependencyGraphProvider implements IGraphEntityContentProvider
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.mylyn.zest.core.viewers.IGraphEntityContentProvider#getWeight(java.lang.Object,
-     *      java.lang.Object)
-     */
     public double getWeight( Object entity1, Object entity2 )
     {
         return 0;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.jface.viewers.IContentProvider#dispose()
-     */
     public void dispose()
     {
-
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object,
-     *      java.lang.Object)
-     */
     public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
     {
-
     }
 }

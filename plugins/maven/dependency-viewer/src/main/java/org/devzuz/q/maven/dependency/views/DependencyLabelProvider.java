@@ -25,7 +25,8 @@ import org.eclipse.zest.core.widgets.ZestStyles;
  * 
  * @author Abel Mui�o <amuino@gmail.com>
  */
-public class DependencyLabelProvider extends LabelProvider
+public class DependencyLabelProvider
+    extends LabelProvider
     implements IEntityStyleProvider, IEntityConnectionStyleProvider, IFontProvider
 {
     private static final Color TEST_DEPENDENCY_COLOR = new Color( Display.getCurrent(), 200, 200, 100 );
@@ -46,11 +47,6 @@ public class DependencyLabelProvider extends LabelProvider
                                                           systemFontData.getStyle() ) );
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
-     */
     @Override
     public Image getImage( Object element )
     {
@@ -70,11 +66,6 @@ public class DependencyLabelProvider extends LabelProvider
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
-     */
     @Override
     public String getText( Object element )
     {
@@ -97,21 +88,11 @@ public class DependencyLabelProvider extends LabelProvider
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.zest.core.viewers.IEntityStyleProvider#fisheyeNode(java.lang.Object)
-     */
     public boolean fisheyeNode( Object entity )
     {
         return true;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.zest.core.viewers.IEntityStyleProvider#getBackgroundColour(java.lang.Object)
-     */
     public Color getBackgroundColour( Object entity )
     {
         if ( entity instanceof IMavenProject )
@@ -134,71 +115,36 @@ public class DependencyLabelProvider extends LabelProvider
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.zest.core.viewers.IEntityStyleProvider#getBorderColor(java.lang.Object)
-     */
     public Color getBorderColor( Object entity )
     {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.zest.core.viewers.IEntityStyleProvider#getBorderHighlightColor(java.lang.Object)
-     */
     public Color getBorderHighlightColor( Object entity )
     {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.zest.core.viewers.IEntityStyleProvider#getBorderWidth(java.lang.Object)
-     */
     public int getBorderWidth( Object entity )
     {
         return -1;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.zest.core.viewers.IEntityStyleProvider#getForegroundColour(java.lang.Object)
-     */
     public Color getForegroundColour( Object entity )
     {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.zest.core.viewers.IEntityStyleProvider#getNodeHighlightColor(java.lang.Object)
-     */
     public Color getNodeHighlightColor( Object entity )
     {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.zest.core.viewers.IEntityStyleProvider#getTooltip(java.lang.Object)
-     */
     public IFigure getTooltip( Object entity )
     {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.zest.core.viewers.IEntityConnectionStyleProvider#getColor(java.lang.Object, java.lang.Object)
-     */
     public Color getColor( Object src, Object dest )
     {
         if ( src instanceof IMavenProject )
@@ -212,34 +158,16 @@ public class DependencyLabelProvider extends LabelProvider
         }
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.zest.core.viewers.IEntityConnectionStyleProvider#getConnectionStyle(java.lang.Object,
-     *      java.lang.Object)
-     */
     public int getConnectionStyle( Object src, Object dest )
     {
         return ZestStyles.CONNECTIONS_SOLID;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.zest.core.viewers.IEntityConnectionStyleProvider#getHighlightColor(java.lang.Object,
-     *      java.lang.Object)
-     */
     public Color getHighlightColor( Object src, Object dest )
     {
         return null;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.eclipse.zest.core.viewers.IEntityConnectionStyleProvider#getLineWidth(java.lang.Object,
-     *      java.lang.Object)
-     */
     public int getLineWidth( Object src, Object dest )
     {
         if ( src instanceof IMavenProject )
