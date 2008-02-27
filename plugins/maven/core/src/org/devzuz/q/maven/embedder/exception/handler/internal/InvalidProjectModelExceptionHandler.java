@@ -23,6 +23,11 @@ public class InvalidProjectModelExceptionHandler
     public void handle( IProject project, Throwable e, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
         ModelValidationResult validationResult = ( (InvalidProjectModelException) e ).getValidationResult();
-        markers.addAll( newMarkerInfo( validationResult.getMessages() ));
+        if (validationResult != null) {
+            markers.addAll( newMarkerInfo( validationResult.getMessages() ));
+        } else {
+            // For example, pom without modelVersion
+            markers.addAll( newMarkerInfo( e.getMessage() ) );
+        }
     }
 }
