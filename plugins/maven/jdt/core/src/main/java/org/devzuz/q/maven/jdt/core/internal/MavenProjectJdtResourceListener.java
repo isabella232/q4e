@@ -118,7 +118,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                         {
                             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for ",
                                                          iproject );
-                            UpdateClasspathJob.scheduleNewUpdateClasspathJob( iproject );
+                            UpdateClasspathJob.scheduleNewUpdateClasspathJob( iproject, false );
                             break;
                         }
                     }

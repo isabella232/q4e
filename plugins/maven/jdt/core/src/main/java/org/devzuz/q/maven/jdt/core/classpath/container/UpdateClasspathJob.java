@@ -34,19 +34,23 @@ public class UpdateClasspathJob
     extends WorkspaceJob
     implements IMavenJob
 {
+	
     private static final Set<String> projectsAlreadyScheduled = new HashSet<String>();
 
     private IProject project;
+    
+    private boolean downloadSources;
 
     /**
      * Creates or updates the classpath container
      * 
      * @param project
      */
-    private UpdateClasspathJob( IProject project )
+    private UpdateClasspathJob( IProject project, boolean downloadSources )
     {
         super( "Updating classpath container: " + project.getName() );
         this.project = project;
+        this.downloadSources = downloadSources;
     }
 
     public IProject getProject()
@@ -67,7 +71,7 @@ public class UpdateClasspathJob
 
         try
         {
-            MavenClasspathContainer.newClasspath( project, monitor );
+            MavenClasspathContainer.newClasspath( project, monitor, downloadSources );
         }
         catch ( MavenInterruptedException e )
         {
@@ -88,13 +92,25 @@ public class UpdateClasspathJob
     }
 
     /**
+     * Calls {@link #scheduleNewUpdateClasspathJob(IProject, boolean)} with downloadSources = false
+     * 
+     * @param project
+     * @return
+     */
+    public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project )
+    {
+        return scheduleNewUpdateClasspathJob( project, false );
+    }
+
+    /**
      * Create and schedule a new {@link UpdateClasspathJob}. If there is another {@link UpdateClasspathJob} scheduled
      * or running no new job will be created.
      * 
      * @param project
+     * @param downloadSources whether the sources should be downloaded or not
      * @return the scheduled job or null if the project was not scheduled
      */
-    public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project )
+    public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project, boolean downloadSources )
     {
         if ( projectsAlreadyScheduled.contains( project.getName() ) )
         {
@@ -102,7 +118,7 @@ public class UpdateClasspathJob
         }
         else
         {
-            UpdateClasspathJob job = new UpdateClasspathJob( project );
+            UpdateClasspathJob job = new UpdateClasspathJob( project, downloadSources );
             /* prevent refreshing the classpath of several projects as uses too much cpu */
             job.setRule( project.getProject().getWorkspace().getRoot() );
             job.setPriority( Job.BUILD );

@@ -108,7 +108,7 @@ public class MavenClasspathContainer implements IClasspathContainer
      * 
      * @param mavenProject
      */
-    private void refreshClasspath( IMavenProject mavenProject, Set<IMavenArtifact> artifacts )
+    private void refreshClasspath( IMavenProject mavenProject, Set<IMavenArtifact> artifacts, boolean downloadSources )
     {
         if ( mavenProject != null )
         {
@@ -117,7 +117,7 @@ public class MavenClasspathContainer implements IClasspathContainer
 
             this.project = mavenProject.getProject();
 
-            List<IClasspathEntry> newClasspathEntries = resolveArtifacts( mavenProject, artifacts );
+            List<IClasspathEntry> newClasspathEntries = resolveArtifacts( mavenProject, artifacts, downloadSources );
 
             /* compare before setting to new value to avoid clean and rebuild */
             IClasspathEntry[] newEntries =
@@ -142,11 +142,24 @@ public class MavenClasspathContainer implements IClasspathContainer
     }
 
     /**
+     * Calls {@link #newClasspath(IProject, IProgressMonitor, boolean)} with downloadSources = false
+     * 
+     * @param project
+     * @param monitor
+     */
+    public static MavenClasspathContainer newClasspath( IProject project, IProgressMonitor monitor )
+    {
+        return newClasspath( project, monitor, false );
+    }
+
+    /**
      * Refreshes the classpath entries after loading the {@link IMavenProject} from the {@link IProject}
      * 
      * @param project
+     * @param monitor
+     * @param downloadSources whether to download the sources or not
      */
-    public static MavenClasspathContainer newClasspath( IProject project, IProgressMonitor monitor )
+    public static MavenClasspathContainer newClasspath( IProject project, IProgressMonitor monitor, boolean downloadSources )
     {
         MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "New classpath for project ", project.getName() );
 
@@ -155,7 +168,7 @@ public class MavenClasspathContainer implements IClasspathContainer
         try
         {
             IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, true );
-            container.refreshClasspath( mavenProject, mavenProject.getArtifacts() );
+            container.refreshClasspath( mavenProject, mavenProject.getArtifacts(), downloadSources );
         }
         catch ( CoreException e )
         {
@@ -222,10 +235,9 @@ public class MavenClasspathContainer implements IClasspathContainer
      * @return classpathEntries list of entries in the resulting classpath
      */
     @SuppressWarnings( "unchecked" )
-    private List<IClasspathEntry> resolveArtifacts( IMavenProject mavenProject, Set<IMavenArtifact> artifacts )
+    private List<IClasspathEntry> resolveArtifacts( IMavenProject mavenProject, Set<IMavenArtifact> artifacts, boolean downloadSources )
     {
         List classpathEntries = new ArrayList<IClasspathEntry>( artifacts.size() );
-        boolean downloadSources = MavenManager.getMavenPreferenceManager().isDownloadSources();
         for ( IMavenArtifact artifact : artifacts )
         {
             IClasspathEntry entry = resolveArtifact( mavenProject, artifact, downloadSources );

@@ -6,6 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.classpath.container;
 
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.IProject;
@@ -56,7 +57,7 @@ public class MavenClasspathContainerInitializer extends ClasspathContainerInitia
 
             if ( container == null )
             {
-                UpdateClasspathJob.scheduleNewUpdateClasspathJob( project );
+                UpdateClasspathJob.scheduleNewUpdateClasspathJob( project, MavenManager.getMavenPreferenceManager().isDownloadSources() );
             }
         }
     }
