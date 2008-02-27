@@ -241,11 +241,14 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             if ( member != null )
             {
                 handlePom( status, member );
-            }
-            if ( null == status.mavenProject )
-            {
-                // The pom.xml does not parse, don not continue
-                return null;
+                if ( null == status.mavenProject )
+                {
+                    // The pom.xml does not parse, do not continue
+                    return null;
+                }
+            } else if (null == lastGoodProject) {
+                // No previous build and the pom was not modified --> Current project is good
+                status.mavenProject = getMavenProject();
             }
 
             // If the change was to a file listed in <filters>, pom.xml parses and at least one resource has not been
