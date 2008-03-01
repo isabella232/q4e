@@ -130,6 +130,7 @@
       <artifactId>maven-embedder</artifactId>
       <version>2.1-SNAPSHOT</version>
       <exclusions>
+        <!-- we'll use eclipse bundles for these -->
         <exclusion>
           <groupId>junit</groupId>
           <artifactId>junit</artifactId>
@@ -155,6 +156,27 @@
           <artifactId>aspectjrt</artifactId>
         </exclusion>
       </exclusions>
+    </dependency>
+    <!-- Eclipse bundles dependencies -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>cli</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>lang</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.aspectj</groupId>
+      <artifactId>runtime</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.w3c</groupId>
+      <artifactId>tidy</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.jcraft</groupId>
+      <artifactId>jsch</artifactId>
     </dependency>
   </dependencies>
 

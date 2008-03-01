@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!-- ***************************************************************************
-	 * Copyright (c) 2007 DevZuz, Inc. (AKA Simula Labs, Inc.)
- 	 * All rights reserved. This program and the accompanying materials
- 	 * are made available under the terms of the Eclipse Public License v1.0
- 	 * which accompanies this distribution, and is available at
- 	 * http://www.eclipse.org/legal/epl-v10.html
- 	 ***************************************************************************-->
+  * Copyright (c) 2007 DevZuz, Inc. (AKA Simula Labs, Inc.)
+  * All rights reserved. This program and the accompanying materials
+  * are made available under the terms of the Eclipse Public License v1.0
+  * which accompanies this distribution, and is available at
+  * http://www.eclipse.org/legal/epl-v10.html
+  ***************************************************************************-->
 
-<project
-  xmlns="http://maven.apache.org/POM/4.0.0"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -18,17 +16,23 @@
     <artifactId>parent</artifactId>
     <version>1-SNAPSHOT</version>
   </parent>
-  <!--  <groupId>org.apache.maven</groupId> -->
-  <artifactId>maven</artifactId>
+  <groupId>org.apache.maven</groupId>
+  <artifactId>feature</artifactId>
   <version>${maven.embedder.version}</version>
   <packaging>eclipse-feature</packaging>
-  <name>Apache Maven Feature</name>
+  <name>Apache Maven</name>
+  <description>Eclipse Feature for Apache Maven</description>
 
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>embedder</artifactId>
-      <version>${maven.embedder.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.apache.maven</groupId>
+          <artifactId>maven-embedder</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 
@@ -44,13 +48,26 @@
   </pluginRepositories>
 
   <repositories>
-     <repository>
+    <repository>
       <id>apache.org</id>
       <url>http://people.apache.org/repo/m2-snapshot-repository</url>
       <releases>
         <enabled>false</enabled>
       </releases>
-     </repository>
-   </repositories>
-  
+    </repository>
+  </repositories>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>pde-maven-plugin</artifactId>
+        <configuration>
+          <!-- for building with Eclipse
+          <outputDirectory>${basedir}</outputDirectory>
+          -->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
