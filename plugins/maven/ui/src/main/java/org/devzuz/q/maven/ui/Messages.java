@@ -145,8 +145,14 @@ public class Messages extends NLS
     public static String MavenArchetypePreferencePage_nameExample;
 
     public static String MavenArchetypePreferencePage_type;
-
+    
     public static String MavenArchetypePreferencePage_errorNoName;
+
+    public static String MavenArchetypePreferencePage_archetypeVersionLabel;
+    
+    public static String MavenArchetypePreferencePage_archetypeVersion_1_0_latest_label;
+    
+    public static String MavenArchetypePreferencePage_archetypeVersion_2_0_latest_label;
 
     public static String MavenArchetypePreferenceEditor_LineSeparator;
 
