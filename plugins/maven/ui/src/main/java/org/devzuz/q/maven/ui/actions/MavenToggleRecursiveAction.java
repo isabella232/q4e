@@ -1,7 +1,7 @@
 package org.devzuz.q.maven.ui.actions;
 
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.embedder.MavenPreferenceManager;
+import org.devzuz.q.maven.embedder.preferences.MavenPreferenceManager;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IObjectActionDelegate;
