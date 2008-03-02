@@ -31,7 +31,7 @@
   </licenses>
 
   <properties>
-    <maven.embedder.version>2.1.0-629167</maven.embedder.version>
+    <maven.embedder.version>2.1.0-632695</maven.embedder.version>
     <felix.bundle.plugin.version>1.4.0</felix.bundle.plugin.version>
     <pde.plugin.version>1.0-alpha-2-SNAPSHOT</pde.plugin.version>
     <libdir>${basedir}/lib</libdir>
@@ -223,6 +223,11 @@
         <groupId>com.jcraft</groupId>
         <artifactId>jsch</artifactId>
         <version>0.1.31</version>
+      </dependency>
+      <dependency>
+        <groupId>org</groupId>
+        <artifactId>jdom</artifactId>
+        <version>1.0.0.v200801070541</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.shared.dependency</groupId>
