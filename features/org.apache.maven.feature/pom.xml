@@ -56,18 +56,4 @@
       </releases>
     </repository>
   </repositories>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>pde-maven-plugin</artifactId>
-        <configuration>
-          <!-- for building with Eclipse
-          <outputDirectory>${basedir}</outputDirectory>
-          -->
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>
