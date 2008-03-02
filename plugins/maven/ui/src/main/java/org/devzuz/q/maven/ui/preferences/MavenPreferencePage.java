@@ -7,7 +7,7 @@
 package org.devzuz.q.maven.ui.preferences;
 
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.embedder.MavenPreferenceManager;
+import org.devzuz.q.maven.embedder.preferences.MavenPreferenceManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
 import org.eclipse.core.runtime.CoreException;

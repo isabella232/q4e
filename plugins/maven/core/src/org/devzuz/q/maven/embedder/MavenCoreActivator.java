@@ -16,6 +16,7 @@ import org.devzuz.q.maven.embedder.internal.EclipseMaven;
 import org.devzuz.q.maven.embedder.internal.TraceOption;
 import org.devzuz.q.maven.embedder.log.EclipseLogger;
 import org.devzuz.q.maven.embedder.log.Logger;
+import org.devzuz.q.maven.embedder.preferences.MavenPreferenceManager;
 import org.eclipse.core.internal.runtime.Log;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Platform;

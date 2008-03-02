@@ -7,7 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.embedder.MavenPreferenceManager;
+import org.devzuz.q.maven.embedder.preferences.MavenPreferenceManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.archetype.provider.ArchetypeProviderFactory;
 import org.devzuz.q.maven.ui.archetype.provider.ArchetypeProviderNotAvailableException;

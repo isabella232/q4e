@@ -7,6 +7,8 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder;
 
+import org.devzuz.q.maven.embedder.preferences.MavenPreferenceManager;
+
 /**
  * Utility class for accessing the maven objects.
  * 
