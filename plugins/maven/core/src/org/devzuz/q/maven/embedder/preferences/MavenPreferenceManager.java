@@ -38,77 +38,11 @@ public class MavenPreferenceManager
 
     public static final String GLOBAL_SETTINGS_XML_FILENAME = MavenCoreActivator.PLUGIN_ID + ".globalSettingsXml";
 
-    /* default values for preferences */
-
-    private static final boolean DEFAULT_OFFLINE = false;
-
-    private static final boolean DEFAULT_DOWNLOAD_SOURCES = true;
-
-    private static final boolean DEFAULT_DOWNLOAD_JAVADOC = false;
-
-    private static final boolean DEFAULT_RECURSIVE_EXECUTION = false;
-
-    private static final int DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT = 30000;
-
-    private static final String DEFAULT_ARCHETYPE_PLUGIN_GROUPID = "org.apache.maven.plugins";
-
-    private static final String DEFAULT_ARCHETYPE_PLUGIN_ARTIFACTID = "maven-archetype-plugin";
-
-    private static final String DEFAULT_ARCHETYPE_PLUGIN_VERSION = "1.0-alpha-7";
-
     private IPreferenceStore preferenceStore;
 
     public MavenPreferenceManager( IPreferenceStore prefStore )
     {
         this.preferenceStore = prefStore;
-        if ( !preferenceStore.contains( DOWNLOAD_SOURCES ) )
-        {
-            setDownloadSources( DEFAULT_DOWNLOAD_SOURCES );
-        }
-        if ( !preferenceStore.contains( DOWNLOAD_JAVADOC ) )
-        {
-            setDownloadJavadoc( DEFAULT_DOWNLOAD_JAVADOC );
-        }
-        if ( !preferenceStore.contains( RECURSIVE_EXECUTION ) )
-        {
-            setRecursive( DEFAULT_RECURSIVE_EXECUTION );
-        }
-        if ( !preferenceStore.contains( USER_SETTINGS_XML_FILENAME ) )
-        {
-            File m2Dir =
-                new File( new File( System.getProperty( "user.home" ) ), IMaven.USER_CONFIGURATION_DIRECTORY_NAME );
-            File userSettings = new File( m2Dir, IMaven.SETTINGS_FILENAME );
-            if ( userSettings.exists() )
-            {
-                setUserSettingsXmlFilename( userSettings.getAbsolutePath() );
-            }
-            else
-            {
-                setUserSettingsXmlFilename( "" );
-            }
-        }
-        if ( !preferenceStore.contains( OFFLINE ) )
-        {
-            setOffline( DEFAULT_OFFLINE );
-        }
-
-        /* Archetypes */
-        if ( !preferenceStore.contains( ARCHETYPE_PAGE_CONN_TIMEOUT ) )
-        {
-            setArchetypeConnectionTimeout( DEFAULT_ARCHETYPE_PAGE_CONN_TIMEOUT );
-        }
-        if ( !preferenceStore.contains( ARCHETYPE_PLUGIN_GROUPID ) )
-        {
-            setArchetypePluginGroupId( DEFAULT_ARCHETYPE_PLUGIN_GROUPID );
-        }
-        if ( !preferenceStore.contains( ARCHETYPE_PLUGIN_ARTIFACTID ) )
-        {
-            setArchetypePluginArtifactId( DEFAULT_ARCHETYPE_PLUGIN_ARTIFACTID );
-        }
-        if ( !preferenceStore.contains( ARCHETYPE_PLUGIN_VERSION ) )
-        {
-            setArchetypePluginVersion( DEFAULT_ARCHETYPE_PLUGIN_VERSION );
-        }
     }
 
     public boolean isDownloadSources()
