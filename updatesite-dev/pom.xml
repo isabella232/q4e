@@ -23,6 +23,32 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${basedir}/plugins</directory>
+              <includes>
+                <include>*</include>
+              </includes>
+            </fileset>
+            <fileset>
+              <directory>${basedir}/features</directory>
+              <includes>
+                <include>*</include>
+              </includes>
+            </fileset>
+            <fileset>
+              <directory>${basedir}</directory>
+              <includes>
+                <include>site.xml</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
+      <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>pde-maven-plugin</artifactId>
         <executions>
@@ -79,4 +105,21 @@
       <type>eclipse-feature</type>
     </dependency>
   </dependencies>
+
+  <profiles>
+    <profile>
+      <id>eclipse-dev</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>pde-maven-plugin</artifactId>
+            <configuration>
+              <outputDirectory>${basedir}</outputDirectory>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>
