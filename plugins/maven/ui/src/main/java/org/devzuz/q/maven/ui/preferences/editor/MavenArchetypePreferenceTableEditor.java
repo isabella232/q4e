@@ -8,6 +8,7 @@
 package org.devzuz.q.maven.ui.preferences.editor;
 
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.devzuz.q.maven.ui.MavenUiActivator;
@@ -58,7 +59,7 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
 
     private List<IArchetypeProvider> archetypeProviders;
 
-    private IStructuredContentProvider archetypeProviderContentProvider;
+    private ArchetypeProviderContentProvider archetypeProviderContentProvider;
 
     public MavenArchetypePreferenceTableEditor( String name, String labelText, Composite parent )
     {
@@ -97,7 +98,7 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
     {
         if ( providerTable == null )
         {
-            providerTable = new Table( parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
+            providerTable = new Table( parent, SWT.BORDER | SWT.FULL_SELECTION | SWT.MULTI );
             providerTable.setFont( parent.getFont() );
 
             PreferencesTableListener tableListener = new PreferencesTableListener();
@@ -260,9 +261,7 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
                 IArchetypeProvider provider = wizard.getArchetypeProvider();
                 if ( !archetypeProviders.contains( provider ) )
                 {
-                    archetypeProviders.add( provider );
-                    // TODO: Should notify the content provider and add just this element
-                    providerTableViewer.setInput( archetypeProviders );
+                    archetypeProviderContentProvider.add( provider );
                 }
             }
         }
@@ -282,14 +281,20 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
             WizardDialog dialog = new WizardDialog( getPage().getShell(), wizard );
             if ( dialog.open() == Window.OK )
             {
-                // Refresh the list
-                // TODO: Should notify the content provider and update just this element
-                providerTableViewer.setInput( archetypeProviders );
+                archetypeProviderContentProvider.refresh( provider );
             }
         }
         else if ( e.getSource() == removePropertyButton )
         {
-            providerTable.remove( providerTable.getSelectionIndex() );
+            IStructuredSelection selection = (IStructuredSelection) providerTableViewer.getSelection();
+            if ( selection.size() > 0 )
+            {
+                Iterator<IArchetypeProvider> it = selection.iterator();
+                while ( it.hasNext() )
+                {
+                    archetypeProviderContentProvider.remove( it.next() );
+                }
+            }
             if ( providerTable.getItemCount() < 1 )
             {
                 disableEditRemoveButtons();
@@ -345,6 +350,23 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
             viewer.refresh();
         }
 
+        public void remove( IArchetypeProvider provider )
+        {
+            archetypeProviders.remove( provider );
+            providerTableViewer.remove( provider );
+        }
+
+        public void refresh( IArchetypeProvider provider )
+        {
+            providerTableViewer.refresh( provider );
+        }
+
+        public void add( IArchetypeProvider provider )
+        {
+            archetypeProviders.add( provider );
+            providerTableViewer.add( provider );
+        }
+
         public void dispose()
         {
             // Nothing to do
@@ -363,10 +385,24 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
         public void widgetSelected( SelectionEvent e )
         {
             TableItem[] items = providerTable.getSelection();
-            if ( ( items != null ) && ( items.length > 0 ) )
+            if ( items != null )
             {
-                editPropertyButton.setEnabled( true );
-                removePropertyButton.setEnabled( true );
+                if ( items.length > 0 )
+                {
+                    removePropertyButton.setEnabled( true );
+                }
+                else
+                {
+                    removePropertyButton.setEnabled( false );
+                }
+                if ( items.length == 1 )
+                {
+                    editPropertyButton.setEnabled( true );
+                }
+                else
+                {
+                    editPropertyButton.setEnabled( false );
+                }
             }
         }
     }
