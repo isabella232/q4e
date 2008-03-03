@@ -92,16 +92,27 @@ public class UpdateClasspathJob
     }
 
     /**
-     * Calls {@link #scheduleNewUpdateClasspathJob(IProject, boolean)} with downloadSources = false
+     * Calls {@link #scheduleNewUpdateClasspathJob(IProject, boolean, IJobChangeListener)} with downloadSources = false
+     * and classpathExecListener = null
      * 
      * @param project
      * @return
      */
     public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project )
     {
-        return scheduleNewUpdateClasspathJob( project, false );
+        return scheduleNewUpdateClasspathJob( project, false , null );
     }
 
+    /**
+     * Calls {@link #scheduleNewUpdateClasspathJob(IProject, boolean)} with classpathExecListener = null
+     * 
+     * @param project
+     * @return
+     */
+    public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project, boolean downloadSources )
+    {
+        return scheduleNewUpdateClasspathJob( project, downloadSources , null );
+    }
     /**
      * Create and schedule a new {@link UpdateClasspathJob}. If there is another {@link UpdateClasspathJob} scheduled
      * or running no new job will be created.
@@ -110,7 +121,8 @@ public class UpdateClasspathJob
      * @param downloadSources whether the sources should be downloaded or not
      * @return the scheduled job or null if the project was not scheduled
      */
-    public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project, boolean downloadSources )
+    public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project, boolean downloadSources , 
+                                                                    IJobChangeListener classpathUpdateListener )
     {
         if ( projectsAlreadyScheduled.contains( project.getName() ) )
         {
@@ -123,6 +135,8 @@ public class UpdateClasspathJob
             job.setRule( project.getProject().getWorkspace().getRoot() );
             job.setPriority( Job.BUILD );
             job.addJobChangeListener( new DuplicateJobListener() );
+            if( null != classpathUpdateListener )
+                job.addJobChangeListener( classpathUpdateListener );
             job.schedule();
             return job;
         }
