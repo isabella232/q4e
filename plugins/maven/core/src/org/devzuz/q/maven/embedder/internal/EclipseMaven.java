@@ -382,13 +382,15 @@ public class EclipseMaven implements IMaven
 
                 ArtifactResolutionResult artifactResolutionResult = status.getArtifactResolutionResult();
                 boolean hasResolutionExceptions =
-                    ( artifactResolutionResult != null )
-                                    && ArtifactResolutionResultHelper.hasExceptions( artifactResolutionResult );
+                    ( artifactResolutionResult != null ) && 
+                        ( ArtifactResolutionResultHelper.hasExceptions( artifactResolutionResult ) );
                 boolean hasMissingArtifacts =
-                    null != artifactResolutionResult && !artifactResolutionResult.getMissingArtifacts().isEmpty();
+                    ( null != artifactResolutionResult ) && 
+                        ( null != artifactResolutionResult.getMissingArtifacts() ) && 
+                            ( !artifactResolutionResult.getMissingArtifacts().isEmpty() );
 
                 if ( hasResolutionExceptions || hasMissingArtifacts || status.hasExceptions() )
-                {
+                { 
                     EclipseMavenExecutionResult eclipseMavenExecutionResult =
                         new EclipseMavenExecutionResult( status, mavenProject.getProject() );
                     throw new QCoreException( new MavenExecutionStatus( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID,
