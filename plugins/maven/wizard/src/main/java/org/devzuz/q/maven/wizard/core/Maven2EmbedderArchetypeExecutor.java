@@ -13,7 +13,7 @@ import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.embedder.MavenPreferenceManager;
+import org.devzuz.q.maven.embedder.preferences.MavenPreferenceManager;
 import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;

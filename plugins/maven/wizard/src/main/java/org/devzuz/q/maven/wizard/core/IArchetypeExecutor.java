@@ -8,7 +8,7 @@
 package org.devzuz.q.maven.wizard.core;
 
 import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
-import org.devzuz.q.maven.embedder.MavenPreferenceManager;
+import org.devzuz.q.maven.embedder.preferences.MavenPreferenceManager;
 import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
