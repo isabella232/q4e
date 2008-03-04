@@ -90,7 +90,7 @@
           </execution>
         </executions>
         <configuration>
-          <depth>3</depth>
+          <depth>2</depth>
           <ignoreMissingArtifacts>true</ignoreMissingArtifacts>
           <outputDirectory>${project.build.directory}/site/plugins</outputDirectory>
         </configuration>
