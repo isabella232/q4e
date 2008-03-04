@@ -44,6 +44,7 @@
           <instructions>
             <Eclipse-RegisterBuddy>org.apache.maven.embedder</Eclipse-RegisterBuddy>
             <Embed-Dependency>*;scope=compile|runtime;inline=true</Embed-Dependency>
+            <Include-Resource>LICENSE.txt,NOTICE.txt</Include-Resource>
           </instructions>
         </configuration>
       </plugin>

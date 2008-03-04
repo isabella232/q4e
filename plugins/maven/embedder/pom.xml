@@ -94,6 +94,7 @@
             </Embed-Dependency>
             <Embed-Transitive>true</Embed-Transitive>
             <Eclipse-BuddyPolicy>registered</Eclipse-BuddyPolicy>
+            <Include-Resource>LICENSE.txt,NOTICE.txt</Include-Resource>
           </instructions>
         </configuration>
       </plugin>
