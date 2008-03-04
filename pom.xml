@@ -36,7 +36,7 @@
   </prerequisites>
 
   <properties>
-    <maven.embedder.version>2.1.0.627670</maven.embedder.version>
+    <maven.embedder.version>2.1.0-632695</maven.embedder.version>
     <felix.bundle.plugin.version>1.4.1-SNAPSHOT</felix.bundle.plugin.version>
     <pde.plugin.version>1.0-SNAPSHOT</pde.plugin.version>
     <libdir>${basedir}/lib</libdir>
@@ -216,6 +216,11 @@
         <groupId>org.apache.commons</groupId>
         <artifactId>lang</artifactId>
         <version>2.1.0.v200709131643</version>
+      </dependency>
+      <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>collections</artifactId>
+        <version>3.2.0</version>
       </dependency>
       <dependency>
         <groupId>org.aspectj</groupId>
