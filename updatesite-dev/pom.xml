@@ -124,6 +124,13 @@
               <outputDirectory>${basedir}</outputDirectory>
             </configuration>
           </plugin>
+          <plugin>
+            <groupId>org.apache.felix</groupId>
+            <artifactId>maven-bundle-plugin</artifactId>
+            <configuration>
+              <outputDirectory>${basedir}/plugins</outputDirectory>
+            </configuration>
+          </plugin>
         </plugins>
       </build>
     </profile>
