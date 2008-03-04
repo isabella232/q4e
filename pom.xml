@@ -31,7 +31,7 @@
   </licenses>
 
   <prerequisites>
-    <!-- We need MNG-3396 and MNG-3410 -->
+    <!-- We need MNG-3396 and MNG-3410 from 2.0.9 -->
     <maven>2.0.9-SNAPSHOT</maven>
   </prerequisites>
 
@@ -93,11 +93,14 @@
     </pluginRepository>
   </pluginRepositories>
 
+  <!-- we can't build plugins and features in the same execution due to a bug
+       the features would be installed as .eclipse-feature instead of .jar
   <modules>
     <module>plugins</module>
     <module>features</module>
     <module>updatesite-dev</module>
   </modules>
+  -->
 
   <build>
     <extensions>
