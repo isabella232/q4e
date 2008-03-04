@@ -24,6 +24,7 @@
 
   <modules>
     <module>org.apache.maven.feature</module>
+    <module>thirdparty</module>
   </modules>
 
   <build>
