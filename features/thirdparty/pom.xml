@@ -41,11 +41,13 @@
       <groupId>org.apache.commons</groupId>
       <artifactId>collections</artifactId>
     </dependency>
+    <!--
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>feature</artifactId>
       <version>${maven.embedder.version}</version>
       <type>eclipse-feature</type>
     </dependency>
+    -->
   </dependencies>
 </project>
