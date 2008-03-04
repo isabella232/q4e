@@ -48,7 +48,7 @@
     <repository>
       <id>code.google.com</id>
       <name>Google Code Repository</name>
-      <url>dav:https://q4e.googlecode.com/svn/repository/releases</url>
+      <url>dav:https://q4e.googlecode.com/svn/repository/snapshots</url>
     </repository>
     <snapshotRepository>
       <id>code.google.com</id>
