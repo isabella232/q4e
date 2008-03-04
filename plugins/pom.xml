@@ -25,7 +25,7 @@
 
   <modules>
     <module>maven/embedder</module>
-    <module>maven/core</module>
+    <!-- <module>maven/core</module> -->
     <module>thirdparty/org.apache.maven.shared.dependency.tree</module>
   </modules>
 
@@ -147,6 +147,33 @@
               </execution>
             </executions>
           </plugin>
+          <!--
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-eclipse-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>eclipse</goal>
+                </goals>
+                <phase>generate-resources</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <additionalBuildcommands>
+                <buildcommand>org.eclipse.pde.ManifestBuilder</buildcommand>
+                <buildcommand>org.eclipse.pde.SchemaBuilder</buildcommand>
+              </additionalBuildcommands>
+              <additionalProjectnatures>
+                <projectnature>org.eclipse.pde.PluginNature</projectnature>
+              </additionalProjectnatures>
+              <classpathContainers>
+                <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+                <classpathContainer>org.eclipse.pde.core.requiredPlugins</classpathContainer>
+              </classpathContainers>
+            </configuration>
+          </plugin>
+          -->
         </plugins>
       </build>
     </profile>
