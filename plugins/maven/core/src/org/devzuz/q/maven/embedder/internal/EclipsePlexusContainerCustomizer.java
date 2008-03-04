@@ -18,20 +18,21 @@ import org.devzuz.q.maven.embedder.internal.resolver.EclipseMavenArtifactResolve
  * An implementation of a Plexus Container Customizer to allow the Embedder to switch into an Eclipse Environment
  * 
  * @author pdodds
- * 
  */
-public class EclipsePlexusContainerCustomizer implements ContainerCustomizer
+public class EclipsePlexusContainerCustomizer
+    implements ContainerCustomizer
 {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.maven.embedder.ContainerCustomizer#customize(org.codehaus.plexus.PlexusContainer)
-     */
     public void customize( PlexusContainer container )
     {
         // TODO: Enable after fixing issues with EclipseMavenArtifactResolver and maven-compiler-plugin
         ComponentDescriptor resolverDescriptor = container.getComponentDescriptor( ArtifactResolver.ROLE );
+        if ( resolverDescriptor == null )
+        {
+            throw new RuntimeException( "Component descriptor for " + ArtifactResolver.class.getName() +
+                " was not found. " + "Most likely the org.apache.maven.embedder bundle is not correctly packaged " +
+                "and the META-INF/plexus/components.xml files are corrupt." );
+        }
         resolverDescriptor.setImplementation( EclipseMavenArtifactResolver.class.getName() );
         ComponentDescriptor projectBuilderDescriptor = container.getComponentDescriptor( MavenProjectBuilder.ROLE );
         projectBuilderDescriptor.setImplementation( EclipseMavenProjectBuilder.class.getName() );
