@@ -19,7 +19,7 @@
   <artifactId>thirdparty</artifactId>
   <version>0.5.0.200803031115</version>
   <packaging>eclipse-feature</packaging>
-  <name>Q thirparty dependencies</name>
+  <name>Q4E thirparty dependencies</name>
   <description>Eclipse Feature for Q4E third party dependencies</description>
 
   <dependencies>
