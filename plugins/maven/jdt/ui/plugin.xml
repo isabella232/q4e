@@ -103,7 +103,8 @@
                      <count value="1"/>
                      <iterate>
                               <test property="org.eclipse.jdt.launching.hasProjectNature" args="org.eclipse.jdt.core.javanature"/>
-<!--
+                              <test property="org.eclipse.jdt.launching.hasProjectNature" args="org.devzuz.q.maven.jdt.core.mavenNature"/>
+<!--                            
                         <or>
                            <test property="org.eclipse.jdt.launching.hasMain"/>
                            <and>
