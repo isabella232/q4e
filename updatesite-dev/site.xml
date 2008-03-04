@@ -3,5 +3,5 @@
       Update site of the Q project
    </description>
    <feature url="features/org.apache.maven.feature_2.1.0.627670.jar" id="org.apache.maven.feature" version="2.1.0.627670"/>
-   <feature url="features/org.devzuz.q.feature.thirdparty_0.5.0.200803031115.jar" id="org.devzuz.q.feature.thirdparty" version="0.5.0.200803031115"/>
+   <feature url="features/org.devzuz.q.feature.thirdparty_0.5.0.200803040914.jar" id="org.devzuz.q.feature.thirdparty" version="0.5.0.200803040914"/>
 </site>
