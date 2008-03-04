@@ -107,7 +107,7 @@
     <dependency>
       <groupId>org.devzuz.q.feature</groupId>
       <artifactId>thirdparty</artifactId>
-      <version>0.5.0.200803031115</version>
+      <version>0.5.0.200803040914</version>
       <type>eclipse-feature</type>
     </dependency>
   </dependencies>
