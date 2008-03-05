@@ -12,32 +12,6 @@ public class Messages extends NLS
 {
     private static final String BUNDLE_NAME = "org.devzuz.q.maven.ui.messages"; //$NON-NLS-1$
 
-    public static String InstallArtifactDialog_10;
-
-    public static String InstallArtifactDialog_11;
-
-    public static String InstallArtifactDialog_12;
-
-    public static String InstallArtifactDialog_13;
-
-    public static String InstallArtifactDialog_14;
-
-    public static String InstallArtifactDialog_15;
-
-    public static String InstallArtifactDialog_16;
-
-    public static String InstallArtifactDialog_17;
-
-    public static String InstallArtifactDialog_18;
-
-    public static String InstallArtifactDialog_6;
-
-    public static String InstallArtifactDialog_7;
-
-    public static String InstallArtifactDialog_8;
-
-    public static String InstallArtifactDialog_9;
-
     public static String MavenEventView_FilterDialog_title;
 
     public static String MavenEventView_FilterDialog_debug;
