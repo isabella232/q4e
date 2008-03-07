@@ -1,12 +1,14 @@
 package org.devzuz.q.maven.wizard.importartifactwizard;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.wizard.MavenWizardActivator;
-import org.devzuz.q.maven.wizard.pages.Maven2ImportArtifactWizardPage;
+import org.devzuz.q.maven.wizard.pages.ImportArtifactAdvanceWizardPage;
+import org.devzuz.q.maven.wizard.pages.ImportArtifactWizardPage;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -18,13 +20,15 @@ import org.eclipse.ui.IWorkbench;
 
 public class Maven2ImportArtifactWizard extends Wizard implements IImportWizard
 {
-    private Maven2ImportArtifactWizardPage importArtifactWizardPage;
-    
+    private ImportArtifactWizardPage importArtifactWizardPage;
+    private ImportArtifactAdvanceWizardPage importArtifactAdvanceWizardPage;
     @Override
     public void addPages()
     {
-        importArtifactWizardPage = new Maven2ImportArtifactWizardPage();
+        importArtifactWizardPage = new ImportArtifactWizardPage();
+        importArtifactAdvanceWizardPage = new ImportArtifactAdvanceWizardPage();
         addPage( importArtifactWizardPage );
+        addPage( importArtifactAdvanceWizardPage );
     }
 
     @Override
@@ -32,8 +36,8 @@ public class Maven2ImportArtifactWizard extends Wizard implements IImportWizard
     {
         try
         {
-            String goal = importArtifactWizardPage.getGoal();
-            Map<String, String> propertyMap = importArtifactWizardPage.getGoalParameters();
+            String goal = getGoal();
+            Map<String, String> propertyMap = getGoalParameters();
 
             Properties properties = new Properties();
             properties.putAll( propertyMap );
@@ -59,5 +63,43 @@ public class Maven2ImportArtifactWizard extends Wizard implements IImportWizard
     public void init( IWorkbench workbench, IStructuredSelection selection )
     {
 
+    }
+    
+    private String getGoal()
+    {
+        if( importArtifactAdvanceWizardPage.isInstallLocally() )
+        {
+            return "install:install-file"; //$NON-NLS-1$
+        }
+        else
+        {
+            return "deploy:deploy-file"; //$NON-NLS-1$
+        }
+    }
+    
+    private Map<String , String> getGoalParameters()
+    {
+        Map<String , String> parameters = new HashMap<String , String>();
+        
+        parameters.put( "groupId", importArtifactWizardPage.getGroupId() ); //$NON-NLS-1$
+        parameters.put( "artifactId", importArtifactWizardPage.getArtifactId() ); //$NON-NLS-1$
+        parameters.put( "version", importArtifactWizardPage.getVersion() ); //$NON-NLS-1$
+        parameters.put( "packaging", importArtifactWizardPage.getPackaging() ); //$NON-NLS-1$
+        parameters.put( "generatePom" , importArtifactWizardPage.isGeneratePom() ? "true" : "false" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        parameters.put( "file" , importArtifactWizardPage.getFileToInstall() ); //$NON-NLS-1$
+        
+        if( !importArtifactWizardPage.getClassifier().equals( "" ) ) //$NON-NLS-1$
+        {
+            parameters.put( "classifier", importArtifactWizardPage.getClassifier() ); //$NON-NLS-1$
+        }
+        
+        if( importArtifactAdvanceWizardPage.isInstallRemotely() )
+        {
+            parameters.put( "repositoryId", importArtifactAdvanceWizardPage.getRepositoryId() ); //$NON-NLS-1$
+            parameters.put( "repositoryLayout" , importArtifactAdvanceWizardPage.getRepositoryLayout() ); //$NON-NLS-1$
+            parameters.put( "url" , importArtifactAdvanceWizardPage.getRepositoryUrl() ); //$NON-NLS-1$
+        }
+        
+        return parameters;
     }
 }

@@ -146,6 +146,24 @@ public class Messages
 
     public static String InstallArtifactDialog_9;
     
+    public static String ImportArtifactWizardPage_GroupIDRequired;
+    
+    public static String ImportArtifactWizardPage_ArtifactID_Required;
+    
+    public static String ImportArtifactWizardPage_VersionRequired;
+    
+    public static String ImportArtifactWizardPage_PackagingRequired;
+    
+    public static String ImportArtifactWizardPage_FilenameRequired;
+    
+    public static String ImportArtifactWizardPage_FileDoesntExist;
+    
+    public static String ImportArtifactAdvanceWizardPage_RepoIdRequired;
+    
+    public static String ImportArtifactAdvanceWizardPage_RepoLayoutRequired;
+    
+    public static String ImportArtifactAdvanceWizardPage_RepoURLRequired;
+    
     static
     {
         // initialize resource bundle
