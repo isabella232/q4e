@@ -6,16 +6,27 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.dependency.views;
 
+import org.devzuz.q.maven.dependency.DependencyViewerActivator;
+import org.devzuz.q.maven.dependency.Messages;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenManager;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.zest.core.viewers.GraphViewer;
+import org.eclipse.zest.core.widgets.Graph;
 import org.eclipse.zest.core.widgets.ZestStyles;
 import org.eclipse.zest.layouts.LayoutAlgorithm;
 import org.eclipse.zest.layouts.LayoutStyles;
@@ -35,6 +46,8 @@ public class DependencyGraphView extends ViewPart
     private GraphViewer viewer;
 
     private LayoutAlgorithm layoutAlgorithm;
+
+    private Action refreshDependencyViewAction;
 
     public void setDataProviders( IMavenProject project, DependencyGraphProvider graphProvider,
                                   DependencyLabelProvider labelProvider )
@@ -56,7 +69,6 @@ public class DependencyGraphView extends ViewPart
             new RadialLayoutAlgorithm( LayoutStyles.NO_LAYOUT_NODE_RESIZING | LayoutStyles.ENFORCE_BOUNDS );
         layoutAlgorithm.setEntityAspectRatio( 3f );
 
-        // viewer.setNodeStyle( ZestStyles.NODES_FISHEYE );
         viewer.setLayoutAlgorithm( layoutAlgorithm );
         viewer.addSelectionChangedListener( new ISelectionChangedListener()
         {
@@ -101,6 +113,9 @@ public class DependencyGraphView extends ViewPart
             }
 
         } );
+        makeActions();
+        addToolbars();
+        addTableMenuAndHandlers( viewer.getGraphControl() );
     }
 
     @Override
@@ -108,6 +123,77 @@ public class DependencyGraphView extends ViewPart
     {
         // TODO Auto-generated method stub
 
+    }
+
+    /**
+     * @author igo
+     * @author venz
+     * @param graph
+     */
+    private void addTableMenuAndHandlers( final Graph graph )
+    {
+        /* add F5 Refresh listener */
+        KeyListener refreshDependencyView = new KeyAdapter()
+        {
+            @Override
+            public void keyPressed( KeyEvent e )
+            {
+                if ( e.keyCode == SWT.F5 )
+                {
+                    handleRefreshDependencyView();
+                }
+            }
+        };
+
+        graph.addKeyListener( refreshDependencyView );
+    }
+
+    /**
+     * @author igo
+     */
+    private void addToolbars()
+    {
+        IActionBars bars = getViewSite().getActionBars();
+        IToolBarManager toolBarManager = bars.getToolBarManager();
+
+        toolBarManager.add( refreshDependencyViewAction );
+    }
+
+    /**
+     * @author igo
+     * @author garry
+     */
+    private void makeActions()
+    {
+        refreshDependencyViewAction = new Action( Messages.DependencyGraphView_Refresh )
+        {
+            @Override
+            public void run()
+            {
+                handleRefreshDependencyView();
+            }
+        };
+        refreshDependencyViewAction.setToolTipText( Messages.DependencyGraphView_Refresh );
+        refreshDependencyViewAction.setImageDescriptor( DependencyViewerImages.DESC_DEPENDENCYGRAPHVIEW_REFRESH );
+    }
+
+    /**
+     * @author igo
+     * @author venz
+     */
+    private void handleRefreshDependencyView()
+    {
+        try
+        {
+            IMavenProject currentInput = (IMavenProject) viewer.getInput();
+            viewer.setInput( MavenManager.getMavenProjectManager().getMavenProject( currentInput.getProject(), true ) );
+            viewer.refresh();
+        }
+        catch ( CoreException e )
+        {
+            // Unable to resolve project, the pom might not be parseable
+            DependencyViewerActivator.getLogger().log( "Error refreshing dependency view: ", e );
+        }
     }
 
 }
