@@ -12,13 +12,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IActionDelegate;
 
-public class MavenDisableManageDependenciesAction
-    extends AbstractMavenAction
-    implements IActionDelegate
+/**
+ * @deprecated {@link MavenManageDependenciesAction} allows to enable/disable dependency management
+ */
+@Deprecated
+public class MavenDisableManageDependenciesAction extends AbstractMavenAction implements IActionDelegate
 {
-
-    protected void runInternal( IAction action )
-        throws CoreException
+    @Override
+    protected void runInternal( IAction action ) throws CoreException
     {
         for ( IProject project : getProjects() )
         {
