@@ -19,9 +19,14 @@ import org.eclipse.core.runtime.CoreException;
 
 public class MavenProjectManager
 {
-    private Map<IProject, MavenProjectCachedInfo> mavenProjects;
+    private final Map<IProject, MavenProjectCachedInfo> mavenProjects;
 
-    public MavenProjectManager()
+    /**
+     * <b>Not intended to be used by client code</b>
+     * 
+     * @see MavenManager#getMavenProjectManager()
+     */
+    protected MavenProjectManager()
     {
         // TODO : Should this be a synchronized collection ?
         // mavenProjects = Collections.synchronizedMap( new HashMap< IProject , MavenProjectCachedInfo >() );
@@ -29,13 +34,16 @@ public class MavenProjectManager
     }
 
     /**
+     * <b>Not intended to be used by client code</b>
+     * 
      * This constructor initializes the cache with the current maven projects in the workspace. This maven projects are
      * not yet resolved and will be resolved when actually needed.
      * 
+     * @see MavenManager#getMavenProjectManager()
      * @param workspace
      * @throws CoreException
      */
-    public MavenProjectManager( IWorkspace workspace ) throws CoreException
+    protected MavenProjectManager( IWorkspace workspace ) throws CoreException
     {
         this();
         for ( IProject project : workspace.getRoot().getProjects() )
@@ -94,14 +102,15 @@ public class MavenProjectManager
         }
         catch ( CoreException e )
         {
-            MavenCoreActivator.getLogger().log( "Unable to persist important information to Project '" + 
-                                                project.getName() + "'", e );
+            MavenCoreActivator.getLogger().log(
+                                                "Unable to persist important information to Project '"
+                                                                + project.getName() + "'", e );
         }
-        
-        /* Create the cache object and add to cache*/
+
+        /* Create the cache object and add to cache */
         MavenProjectCachedInfo cachedProject =
             MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolvedTransitively );
-        
+
         addCachedInfo( project, cachedProject );
     }
 
@@ -338,11 +347,10 @@ public class MavenProjectManager
         @Override
         public String toString()
         {
-            return new ToStringBuilder(this).
-                append("mavenProject", mavenProject).
-                append("resolvedTransitively", resolvedTransitively).
-                append("modified", modified).
-                toString();
+            return new ToStringBuilder( this ).append( "mavenProject", mavenProject ).append( "resolvedTransitively",
+                                                                                              resolvedTransitively ).append(
+                                                                                                                             "modified",
+                                                                                                                             modified ).toString();
         }
     }
 }
