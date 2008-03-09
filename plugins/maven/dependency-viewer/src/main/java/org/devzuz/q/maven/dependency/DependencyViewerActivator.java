@@ -20,7 +20,7 @@ public class DependencyViewerActivator extends AbstractUIPlugin
 {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "org.devzuz.q.dependencyviewer";
+    public static final String PLUGIN_ID = "org.devzuz.q.maven.dependencyviewer";
 
     // The shared instance
     private static DependencyViewerActivator plugin;
