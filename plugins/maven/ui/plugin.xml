@@ -140,4 +140,24 @@
             ui-builder="org.devzuz.q.maven.ui.archetype.provider.impl.WikiArchetypeProviderUiBuilder">
       </provider-type>
    </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            icon="src/main/resources/ovr16/project.gif"
+            id="org.devzuz.q.maven.jdt.core.decorator"
+            label="Resource Decorator"
+            lightweight="true"
+            location="TOP_LEFT"
+            state="true">
+         <enablement>
+            <and>
+            	<objectState name="nature" value="org.devzuz.q.maven.jdt.core.mavenNature"/>
+				<objectClass
+                        name="org.eclipse.core.resources.IProject">
+                </objectClass>
+            </and>
+         </enablement>
+      </decorator>
+   </extension>   
 </plugin>
