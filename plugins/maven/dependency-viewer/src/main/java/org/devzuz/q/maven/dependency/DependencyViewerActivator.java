@@ -16,12 +16,11 @@ import org.osgi.framework.BundleContext;
 /**
  * The activator class controls the plug-in life cycle
  */
-public class DependencyViewerActivator
-    extends AbstractUIPlugin
+public class DependencyViewerActivator extends AbstractUIPlugin
 {
 
     // The plug-in ID
-    public static final String PLUGIN_ID = "org.devzuz.q.dependency.viewer";
+    public static final String PLUGIN_ID = "org.devzuz.q.dependencyviewer";
 
     // The shared instance
     private static DependencyViewerActivator plugin;
@@ -29,8 +28,7 @@ public class DependencyViewerActivator
     private Logger logger;
 
     @Override
-    public void start( BundleContext context )
-        throws Exception
+    public void start( BundleContext context ) throws Exception
     {
         super.start( context );
         plugin = this;
@@ -38,8 +36,7 @@ public class DependencyViewerActivator
     }
 
     @Override
-    public void stop( BundleContext context )
-        throws Exception
+    public void stop( BundleContext context ) throws Exception
     {
         plugin = null;
         super.stop( context );
