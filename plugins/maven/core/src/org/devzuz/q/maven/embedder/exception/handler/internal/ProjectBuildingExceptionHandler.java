@@ -13,6 +13,7 @@ import java.util.List;
 
 import org.apache.maven.project.ProjectBuildingException;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
 import org.devzuz.q.maven.embedder.exception.handler.IMavenExceptionHandlerChain;
 import org.eclipse.core.resources.IProject;
@@ -29,25 +30,33 @@ public class ProjectBuildingExceptionHandler
         File errorPom = ( (ProjectBuildingException) e ).getPomFile();
 
         String path;
-        try
+        if ( null != errorPom )
         {
-            path = errorPom.getCanonicalPath();
-        }
-        catch ( IOException e1 )
-        {
-            path = errorPom.getAbsolutePath();
-        }
-
-        /* If the problem didnt happen in this project pom add it to the errors */
-        if ( ( errorPom != null ) && ( !errorPom.equals( pom ) ) )
-        {
-            for ( MarkerInfo marker : markers )
+            try
             {
-                marker.setMessage( "In pom " + path + ": " + marker.getMessage() );
-                marker.setLineNumber( 1 );
-                marker.setCharStart( 0 );
-                marker.setCharEnd( 0 );
+                path = errorPom.getCanonicalPath();
             }
+            catch ( IOException e1 )
+            {
+                path = errorPom.getAbsolutePath();
+            }
+
+            /* If the problem didnt happen in this project pom add it to the errors */
+            if ( !errorPom.equals( pom ) )
+            {
+                for ( MarkerInfo marker : markers )
+                {
+                    marker.setMessage( "In pom " + path + ": " + marker.getMessage() );
+                    marker.setLineNumber( 1 );
+                    marker.setCharStart( 0 );
+                    marker.setCharEnd( 0 );
+                }
+            }
+        }
+        else
+        {
+            MavenCoreActivator.getLogger().log("Unable to handle ProjectBuildingExceptionHandler - '"
+                                                               + project.getName() + "'", e );
         }
     }
 }
