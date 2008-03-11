@@ -75,6 +75,8 @@ public class Messages
     public static String wizard_project_archetypeInfo_error_artifactId;
     
     public static String wizard_project_archetypeInfo_error_remote_url;
+    
+    public static String wizard_project_archetypeInfo_error_noSelection;
 
     public static String wizard_invalid_projectName;
 

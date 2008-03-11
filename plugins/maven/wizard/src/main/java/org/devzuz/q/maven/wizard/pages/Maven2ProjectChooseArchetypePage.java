@@ -13,14 +13,20 @@ import org.devzuz.q.maven.embedder.QCoreException;
 import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.devzuz.q.maven.ui.archetype.provider.ArchetypeLabelProvider;
 import org.devzuz.q.maven.ui.archetype.provider.ArchetypeRetrievalResult;
+import org.devzuz.q.maven.ui.archetype.provider.IArchetypeProvider;
 import org.devzuz.q.maven.ui.archetype.provider.MavenArchetypeProviderManager;
 import org.devzuz.q.maven.wizard.Messages;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -31,7 +37,8 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.FilteredList;
+import org.eclipse.ui.dialogs.FilteredTree;
+import org.eclipse.ui.dialogs.PatternFilter;
 
 /**
  * Implementation of a page for the New Maven Project wizard which allows the user to select an archetype from the list
@@ -41,10 +48,6 @@ import org.eclipse.ui.dialogs.FilteredList;
  */
 public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 {
-    private static final String DEFAULT_ARCHETYPE = "maven-archetype-quickstart";
-
-    private FilteredList archetypeList;
-
     private Label archetypeDescriptionLabel;
 
     private Button publishedArchetypesButton;
@@ -63,7 +66,7 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 
     private Text remoteRepositoryText;
 
-    private Text filterText;
+    private FilteredTree archetypeTree;
 
     /**
      * Creates the wizard's page.
@@ -73,7 +76,7 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
         super( Messages.wizard_project_chooseArchetype_name );
         setTitle( Messages.wizard_project_chooseArchetype_title );
         setDescription( Messages.wizard_project_chooseArchetype_desc );
-        setPageComplete( true );
+        setPageComplete( false );
     }
 
     public void createControl( Composite parent )
@@ -127,41 +130,29 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 
         Composite archetypeFilterGroup = new Composite( publishedArchetypesGroup, SWT.NULL );
         archetypeFilterGroup.setLayout( new GridLayout( 1, true ) );
-        filterText = new Text( archetypeFilterGroup, SWT.SEARCH );
-        archetypeList =
-            new FilteredList( archetypeFilterGroup, SWT.SINGLE, new ArchetypeLabelProvider(), true, false, true );
-        filterText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false ) );
-        GridData archetypeListGridData = new GridData( GridData.FILL, GridData.CENTER, true, true );
-        archetypeListGridData.minimumHeight = 150;
-        archetypeList.setLayoutData( archetypeListGridData );
-        filterText.addModifyListener( new ModifyListener()
+
+        PatternFilter patternFilter = new PatternFilter();
+        archetypeTree =
+            new FilteredTree( archetypeFilterGroup, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL, patternFilter );
+
+        GridData archetypeTreeGridData = new GridData( GridData.FILL, GridData.FILL, true, true );
+        archetypeTreeGridData.minimumHeight = 150;
+        archetypeTree.getViewer().getControl().setLayoutData( archetypeTreeGridData );
+
+        archetypeTree.getViewer().setSorter( new ViewerSorter() );
+
+        archetypeTree.getViewer().setContentProvider( new ArchetypeTreeContentProvider() );
+
+        archetypeTree.getViewer().setLabelProvider( new ArchetypeLabelProvider() );
+        
+        archetypeTree.getViewer().addSelectionChangedListener( new ISelectionChangedListener()
         {
-
-            public void modifyText( ModifyEvent e )
+            public void selectionChanged( SelectionChangedEvent event )
             {
-                String prefixFilter = filterText.getText();
-                if ( prefixFilter.length() > 0 && prefixFilter.charAt( 0 ) != '*' )
-                {
-                    prefixFilter = "*" + prefixFilter;
-                }
-                archetypeList.setFilter( prefixFilter );
-
+                validate();
             }
-
         } );
-        archetypeList.addSelectionListener( new SelectionListener()
-        {
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-                widgetEvent( e );
-            }
-
-            public void widgetSelected( SelectionEvent e )
-            {
-                widgetEvent( e );
-            }
-
-        } );
+        
         archetypeDescriptionLabel = new Label( publishedArchetypesGroup, SWT.WRAP );
 
         customArchetypesButton = new Button( container, SWT.RADIO );
@@ -197,9 +188,9 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
         remoteRepositoryText.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, false ) );
         remoteRepositoryText.addModifyListener( modifyingListener );
 
-        initialize();
-
         setControl( container );
+        
+        initialize();
     }
 
     @Override
@@ -232,7 +223,18 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
         }
         else
         {
-            return true;
+            if ( archetypeTree.getViewer().getSelection() instanceof IStructuredSelection )
+            {
+                Object selectedObject = ((IStructuredSelection) archetypeTree.getViewer().getSelection()).getFirstElement();
+                if ( selectedObject instanceof Archetype )
+                {
+                    archetypeDescriptionLabel.setText( ( (Archetype) selectedObject ).getDescription() );
+                    return true;
+                }
+            }
+            
+            archetypeDescriptionLabel.setText( Messages.wizard_project_archetypeInfo_error_noSelection );
+            setError( Messages.wizard_project_archetypeInfo_error_noSelection );
         }
 
         return false;
@@ -247,7 +249,13 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
     {
         if ( publishedArchetypesButton.getSelection() )
         {
-            return (Archetype) archetypeList.getSelection()[0];
+            IStructuredSelection selection = (IStructuredSelection) archetypeTree.getViewer().getSelection();
+            if ( selection.getFirstElement() instanceof Archetype )
+            {
+                return (Archetype) selection.getFirstElement();
+            }
+
+            return null;
         }
         else
         {
@@ -259,40 +267,74 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
     private void initialize()
     {
         ArchetypeRetrievalResult archetypes = MavenArchetypeProviderManager.getArchetypes();
-        
+
         if ( archetypes.getExceptions().size() > 0 )
         {
             MessageBox messageBox = new MessageBox( this.getShell(), SWT.ERROR_IO | SWT.OK );
             StringBuffer errorMessage = new StringBuffer();
-            for( QCoreException e : archetypes.getExceptions() )
+            for ( QCoreException e : archetypes.getExceptions() )
             {
                 errorMessage.append( e.getStatus().getMessage() );
             }
             messageBox.setMessage( errorMessage.toString() );
             messageBox.open();
         }
-        
-        archetypeList.setElements( archetypes.getArchetypes().toArray( new Archetype[0] ) );
 
-        // FIXME:
-        archetypeList.setSelection( new String[] { DEFAULT_ARCHETYPE } );
-
+        archetypeTree.getViewer().setInput( MavenArchetypeProviderManager.getArchetypeProviders() );
         publishedArchetypesButton.setSelection( true );
         setEnableChildren( publishedArchetypesGroup, true );
         setEnableChildren( customArchetypeGroup, false );
+        
+        validate();
     }
-
-    private void widgetEvent( SelectionEvent e )
+    
+    private class ArchetypeTreeContentProvider implements ITreeContentProvider
     {
-        if ( archetypeList.getSelection().length == 1 )
+        public Object[] getChildren( Object element )
         {
-            archetypeDescriptionLabel.setText( ( (Archetype) archetypeList.getSelection()[0] ).getDescription() );
-            setPageComplete( true );
+            if ( element instanceof IArchetypeProvider )
+            {
+                try
+                {
+                    return ( ( (IArchetypeProvider) element ).getArchetypes().toArray( new Archetype[0] ) );
+                }
+                catch ( QCoreException e )
+                {
+                    e.printStackTrace();
+                }
+            }
+            return null;
         }
-        else
+
+        public Object getParent( Object element )
         {
-            archetypeDescriptionLabel.setText( "No archetype selected" ); // TODO: Externalize message.
-            setPageComplete( false );
+            return null;
+        }
+
+        public boolean hasChildren( Object element )
+        {
+            if ( element instanceof IArchetypeProvider )
+            {
+                return getChildren( element ).length > 0;
+            }
+            return false;
+        }
+
+        public Object[] getElements( Object element )
+        {
+            if ( element instanceof IArchetypeProvider[] )
+            {
+                return (IArchetypeProvider[]) element;
+            }
+            return null;
+        }
+
+        public void dispose()
+        {
+        }
+
+        public void inputChanged( Viewer viewer, Object arg1, Object arg2 )
+        {
         }
     }
 

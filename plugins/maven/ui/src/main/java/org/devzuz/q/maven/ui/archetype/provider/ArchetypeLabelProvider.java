@@ -37,10 +37,19 @@ public class ArchetypeLabelProvider extends LabelProvider
     @Override
     public String getText( Object element )
     {
-        Archetype a = (Archetype) element;
-        return a.getArtifactId()
-                        + ( a.getVersion() != null && a.getVersion().length() > 0 ? " [" + a.getVersion() + "]"
-                                        : "[latest]" );
+        if ( element instanceof IArchetypeProvider )
+        {
+            return ( (IArchetypeProvider) element ).getName();
+        }
+        else if ( element instanceof Archetype )
+        {
+            Archetype a = (Archetype) element;
+            return a.getArtifactId()
+                            + ( a.getVersion() != null && a.getVersion().length() > 0 ? " [" + a.getVersion() + "]"
+                                            : "[latest]" );
+        }
+        
+        return null;
     }
 
     /*
