@@ -103,7 +103,7 @@
           </configuration>
           <executions>
             <execution>
-              <phase>process-resources</phase>
+              <phase>process-classes</phase>
               <goals>
                 <goal>manifest</goal>
               </goals>
