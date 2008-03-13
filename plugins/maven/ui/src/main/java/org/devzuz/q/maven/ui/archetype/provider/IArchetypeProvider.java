@@ -79,6 +79,9 @@ public interface IArchetypeProvider
     /**
      * Retrieves the archetypes known by this provider.
      * 
+     * <b>Note:</b> This operation can be expensive (for example, the archetype might need to access the database or a
+     * remote resource).
+     * 
      * @return all the archetypes known by this provider.
      * @throws QCoreException
      *             if an error is detected while recovering the collection of archetypes.
