@@ -31,7 +31,7 @@
          id="org.eclipse.draw2d"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="3.4.0.v20080115"
          unpack="false"/>
 
    <plugin
@@ -52,7 +52,7 @@
          id="org.devzuz.q.maven.dependencyviewer"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.6.0.qualifier"
          unpack="false"/>
 
 </feature>
