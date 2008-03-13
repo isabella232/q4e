@@ -246,7 +246,9 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
                     // The pom.xml does not parse, do not continue
                     return null;
                 }
-            } else if (null == lastGoodProject) {
+            }
+            else if ( null == lastGoodProject )
+            {
                 // No previous build and the pom was not modified --> Current project is good
                 status.mavenProject = getMavenProject();
             }
@@ -461,7 +463,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     {
         try
         {
-            return MavenManager.getMavenProjectManager().getMavenProject( getProject(), false );
+            // resolveTransitively = true to cache the project before the classpath update
+            return MavenManager.getMavenProjectManager().getMavenProject( getProject(), true );
         }
         catch ( CoreException e )
         {
