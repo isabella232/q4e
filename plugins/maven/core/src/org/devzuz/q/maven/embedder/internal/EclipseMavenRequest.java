@@ -30,13 +30,13 @@ import org.eclipse.core.runtime.jobs.Job;
 public class EclipseMavenRequest extends Job implements IMavenJob
 {
 
-    private EclipseMaven maven;
+    private final EclipseMaven maven;
 
-    private MavenExecutionRequest request;
+    private final MavenExecutionRequest request;
 
     private IMavenExecutionResult executionResult;
 
-    private IProject project;
+    private final IProject project;
 
     public EclipseMavenRequest( String name, EclipseMaven maven, MavenExecutionRequest request, IProject project )
     {
@@ -57,7 +57,7 @@ public class EclipseMavenRequest extends Job implements IMavenJob
         MavenMonitorHolder.setProgressMonitor( monitor );
 
         // TODO the number should be the number of projects in the reactor * maven phases to execute
-        monitor.beginTask( "Maven build", 100 );
+        monitor.beginTask( "Maven build", IProgressMonitor.UNKNOWN );
         monitor.setTaskName( "Maven " + request.getGoals() );
 
         // TODO add a listener to maven that will call monitor.worked() for each project or phase completed and poll

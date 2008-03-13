@@ -7,17 +7,16 @@
 package org.devzuz.q.maven.wizard.pages;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
-import org.devzuz.q.maven.jdt.ui.projectimport.ProjectScannerJob;
+import org.devzuz.q.maven.wizard.MavenWizardActivator;
 import org.devzuz.q.maven.wizard.Messages;
+import org.devzuz.q.maven.wizard.importwizard.ProjectScannerRunnable;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -35,7 +34,6 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
@@ -45,8 +43,6 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
     private Text directoryText;
 
     private CheckboxTableViewer pomList;
-
-    private ProjectScannerJob projectScannerJob;
 
     private Button importParentsButton;
 
@@ -63,7 +59,6 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
      */
     private void initialize()
     {
-        projectScannerJob.cancel();
         pomList.getTable().removeAll();
         setError( null );
     }
@@ -192,9 +187,6 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
             }
         } );
 
-        projectScannerJob = new ProjectScannerJob( "Project Scanner" );
-        projectScannerJob.addJobChangeListener( new ProjectScannerJobAdapter() );
-
         setControl( container );
     }
 
@@ -223,16 +215,30 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
 
     private void scheduleProjectScanningJob()
     {
+        ProjectScannerRunnable projectScannerJob = new ProjectScannerRunnable();
         projectScannerJob.setDirectory( Path.fromOSString( getProjectDirectory() ).toFile() );
         projectScannerJob.setImportParentsEnabled( importParentsButton.getSelection() );
-        projectScannerJob.schedule();
+        try
+        {
+            getWizard().getContainer().run( true, true, projectScannerJob );
+            updateProjects( projectScannerJob.getPomDescriptors() );
+        }
+        catch ( InterruptedException e )
+        {
+            // scanning cancelled
+
+        }
+        catch ( InvocationTargetException e )
+        {
+            // Wrapper for exceptions thrown during execution of the runnable
+            MavenWizardActivator.log( "Error scanning projects on " + getProjectDirectory(), e.getCause() );
+        }
         setMessage( Messages.wizard_importProject_scanning + " " + getProjectDirectory() );
     }
 
     @Override
     public void dispose()
     {
-        projectScannerJob.cancel();
         super.dispose();
     }
 
@@ -276,37 +282,24 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
         return false;
     }
 
-    private class ProjectScannerJobAdapter extends JobChangeAdapter
+    private void updateProjects( Collection<PomFileDescriptor> poms )
     {
-        @Override
-        public void done( IJobChangeEvent event )
+        final Collection<PomFileDescriptor> pomDescriptors = poms;
+        if ( pomList.getControl().isDisposed() )
         {
-            if ( event.getResult().getSeverity() == IStatus.OK )
-            {
-                final Collection<PomFileDescriptor> pomDescriptors = projectScannerJob.getPomDescriptors();
-                Display.getDefault().asyncExec( new Runnable()
-                {
-                    public void run()
-                    {
-                        if ( pomList.getControl().isDisposed() )
-                        {
-                            /* in case the user cancels after the scan is finished */
-                            return;
-                        }
-                        if ( pomDescriptors.size() == 0 )
-                        {
-                            setMessage( Messages.wizard_importProject_no_projects_found );
-                        }
-                        else
-                        {
-                            setMessage( Messages.wizard_importProject_finished_scanning );
-                            pomList.setInput( pomDescriptors );
-                            pomList.setAllChecked( true );
-                            validate();
-                        }
-                    }
-                } );
-            }
+            /* in case the user cancels after the scan is finished */
+            return;
+        }
+        if ( pomDescriptors.size() == 0 )
+        {
+            setMessage( Messages.wizard_importProject_no_projects_found );
+        }
+        else
+        {
+            setMessage( Messages.wizard_importProject_finished_scanning );
+            pomList.setInput( pomDescriptors );
+            pomList.setAllChecked( true );
+            validate();
         }
     }
 

@@ -20,6 +20,12 @@ public class Maven2ImportWizard extends Wizard implements IImportWizard
 {
     private Maven2ProjectImportPage projectImportPage;
 
+    public Maven2ImportWizard()
+    {
+        super();
+        setNeedsProgressMonitor( true );
+    }
+
     @Override
     public void addPages()
     {
