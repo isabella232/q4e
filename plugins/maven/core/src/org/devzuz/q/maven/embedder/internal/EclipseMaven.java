@@ -244,7 +244,7 @@ public class EclipseMaven implements IMaven
             jobAdapter.setMavenExecutionJob( eclipseMavenRequest );
         }
         eclipseMavenRequest.addJobChangeListener( new RefreshOutputFoldersListener() );
-
+        eclipseMavenRequest.setUser( true );
         eclipseMavenRequest.setRule( mavenProject.getProject() );
         eclipseMavenRequest.setPriority( Job.BUILD );
         eclipseMavenRequest.schedule();
@@ -268,7 +268,7 @@ public class EclipseMaven implements IMaven
         {
             jobAdapter.setMavenExecutionJob( eclipseMavenRequest );
         }
-
+        eclipseMavenRequest.setUser( true );
         eclipseMavenRequest.setRule( new MavenSchedulingRule() );
         eclipseMavenRequest.setPriority( Job.BUILD );
         eclipseMavenRequest.schedule();
