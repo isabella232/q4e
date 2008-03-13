@@ -8,6 +8,10 @@ package org.devzuz.q.maven.wizard.pages;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.devzuz.q.maven.embedder.QCoreException;
 import org.devzuz.q.maven.ui.archetype.provider.Archetype;
@@ -15,6 +19,7 @@ import org.devzuz.q.maven.ui.archetype.provider.ArchetypeLabelProvider;
 import org.devzuz.q.maven.ui.archetype.provider.ArchetypeRetrievalResult;
 import org.devzuz.q.maven.ui.archetype.provider.IArchetypeProvider;
 import org.devzuz.q.maven.ui.archetype.provider.MavenArchetypeProviderManager;
+import org.devzuz.q.maven.wizard.MavenWizardActivator;
 import org.devzuz.q.maven.wizard.Messages;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -144,7 +149,7 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
         archetypeTree.getViewer().setContentProvider( new ArchetypeTreeContentProvider() );
 
         archetypeTree.getViewer().setLabelProvider( new ArchetypeLabelProvider() );
-        
+
         archetypeTree.getViewer().addSelectionChangedListener( new ISelectionChangedListener()
         {
             public void selectionChanged( SelectionChangedEvent event )
@@ -152,7 +157,7 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
                 validate();
             }
         } );
-        
+
         archetypeDescriptionLabel = new Label( publishedArchetypesGroup, SWT.WRAP );
 
         customArchetypesButton = new Button( container, SWT.RADIO );
@@ -189,7 +194,7 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
         remoteRepositoryText.addModifyListener( modifyingListener );
 
         setControl( container );
-        
+
         initialize();
     }
 
@@ -225,14 +230,15 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
         {
             if ( archetypeTree.getViewer().getSelection() instanceof IStructuredSelection )
             {
-                Object selectedObject = ((IStructuredSelection) archetypeTree.getViewer().getSelection()).getFirstElement();
+                Object selectedObject =
+                    ( (IStructuredSelection) archetypeTree.getViewer().getSelection() ).getFirstElement();
                 if ( selectedObject instanceof Archetype )
                 {
                     archetypeDescriptionLabel.setText( ( (Archetype) selectedObject ).getDescription() );
                     return true;
                 }
             }
-            
+
             archetypeDescriptionLabel.setText( Messages.wizard_project_archetypeInfo_error_noSelection );
             setError( Messages.wizard_project_archetypeInfo_error_noSelection );
         }
@@ -284,24 +290,26 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
         publishedArchetypesButton.setSelection( true );
         setEnableChildren( publishedArchetypesGroup, true );
         setEnableChildren( customArchetypeGroup, false );
-        
+
         validate();
     }
-    
+
     private class ArchetypeTreeContentProvider implements ITreeContentProvider
     {
+        /**
+         * Accessing the list of archetypes can be costly (remote resources, db lookups...). This is a cache of found
+         * archetypes in each provider.
+         */
+        private final Map<IArchetypeProvider, Collection<Archetype>> cache =
+            new HashMap<IArchetypeProvider, Collection<Archetype>>();
+
         public Object[] getChildren( Object element )
         {
             if ( element instanceof IArchetypeProvider )
             {
-                try
-                {
-                    return ( ( (IArchetypeProvider) element ).getArchetypes().toArray( new Archetype[0] ) );
-                }
-                catch ( QCoreException e )
-                {
-                    e.printStackTrace();
-                }
+                IArchetypeProvider archetypeProvider = ( (IArchetypeProvider) element );
+                Collection<Archetype> archetypes = getArchetypesFrom( archetypeProvider );
+                return getArchetypesFrom( archetypeProvider ).toArray( new Archetype[archetypes.size()] );
             }
             return null;
         }
@@ -315,7 +323,8 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
         {
             if ( element instanceof IArchetypeProvider )
             {
-                return getChildren( element ).length > 0;
+                IArchetypeProvider provider = (IArchetypeProvider) element;
+                return !getArchetypesFrom( provider ).isEmpty();
             }
             return false;
         }
@@ -335,6 +344,32 @@ public class Maven2ProjectChooseArchetypePage extends Maven2ValidatingWizardPage
 
         public void inputChanged( Viewer viewer, Object arg1, Object arg2 )
         {
+        }
+
+        /**
+         * Get the list of archetypes known by the given provider. The cache is consulted first to avoid a potentially
+         * expensive call to the archetype provider.
+         * 
+         * @param provider
+         * @return the collection of archetypes known by the given provider.
+         */
+        private Collection<Archetype> getArchetypesFrom( IArchetypeProvider provider )
+        {
+            Collection<Archetype> result = cache.get( provider );
+            if ( null == result )
+            {
+                try
+                {
+                    result = provider.getArchetypes();
+                    cache.put( provider, result );
+                }
+                catch ( QCoreException e )
+                {
+                    MavenWizardActivator.log( "Error accessing archetypes from " + provider.getName(), e );
+                    result = Collections.emptyList();
+                }
+            }
+            return result;
         }
     }
 
