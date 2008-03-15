@@ -92,6 +92,31 @@ public class RefreshOutputFoldersListener extends JobChangeAdapter
                 }
             }
             refreshPaths( filterNestedPaths( paths ), workspaceRoot );
+            markDerivedTargetFolder( mavenProject );
+        }
+    }
+
+    private void markDerivedTargetFolder( MavenProject mavenProject )
+    {
+        String targetFolder = mavenProject.getModel().getBuild().getDirectory();
+        IContainer[] targetFolderContainers =
+            ResourcesPlugin.getWorkspace().getRoot().findContainersForLocation( new Path( targetFolder ) );
+        for ( IContainer container : targetFolderContainers )
+        {
+            try
+            {
+                if ( container.exists() && !container.isDerived() )
+                {
+                    container.setDerived( true );
+                }
+            }
+            catch ( CoreException e )
+            {
+                // From IResource:
+                // This resource does not exist.
+                // or Resource changes are disallowed during certain types of resource change
+                MavenCoreActivator.getLogger().log( "Unable to mark " + container + " as derived", e );
+            }
         }
     }
 
