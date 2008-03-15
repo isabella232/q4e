@@ -43,7 +43,7 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
 {
     private Collection<PomFileDescriptor> pomDescriptors;
 
-    private List<IProject> importedProjects = new LinkedList<IProject>();
+    private final List<IProject> importedProjects = new LinkedList<IProject>();
 
     public ImportProjectJob( PomFileDescriptor pomDescriptor )
     {
@@ -102,9 +102,9 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
         monitor.beginTask( "Importing projects...", pomDescriptors.size() );
         for ( PomFileDescriptor pomDescriptor : pomDescriptors )
         {
-            SubProgressMonitor subProgressMonitor = new SubProgressMonitor( monitor, 1 );
-            subProgressMonitor.beginTask( "Importing Maven project", 100 );
-            subProgressMonitor.setTaskName( "Importing Maven project: " + getProjectName( pomDescriptor ) );
+            SubProgressMonitor subProgressMonitor =
+                new SubProgressMonitor( monitor, 1, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK );
+            subProgressMonitor.beginTask( getProjectName( pomDescriptor ), 100 );
 
             if ( monitor.isCanceled() )
             {
