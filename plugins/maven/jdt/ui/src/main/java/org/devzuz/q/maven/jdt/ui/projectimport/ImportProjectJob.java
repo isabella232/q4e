@@ -45,11 +45,6 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
 
     private final List<IProject> importedProjects = new LinkedList<IProject>();
 
-    public ImportProjectJob( PomFileDescriptor pomDescriptor )
-    {
-        this( Collections.singleton( pomDescriptor ) );
-    }
-
     public ImportProjectJob( Collection<PomFileDescriptor> pomDescriptors )
     {
         super( "Importing " + pomDescriptors.size() + " Maven 2 projects" );
