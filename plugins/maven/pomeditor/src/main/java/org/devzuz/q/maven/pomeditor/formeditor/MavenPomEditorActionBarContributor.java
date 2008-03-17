@@ -4,7 +4,7 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.jdt.ui.pomeditor;
+package org.devzuz.q.maven.pomeditor.formeditor;
 
 import org.eclipse.ui.part.EditorActionBarContributor;
 

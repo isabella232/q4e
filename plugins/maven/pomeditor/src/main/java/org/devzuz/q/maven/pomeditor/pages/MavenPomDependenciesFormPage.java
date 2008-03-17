@@ -4,9 +4,9 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.jdt.ui.pomeditor;
+package org.devzuz.q.maven.pomeditor.pages;
 
-import org.devzuz.q.maven.jdt.ui.Messages;
+import org.devzuz.q.maven.pomeditor.Messages;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Model;
 import java.util.List;

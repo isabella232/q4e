@@ -4,29 +4,28 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  **************************************************************************************************/
-package org.devzuz.q.maven.jdt.ui.pomeditor;
+package org.devzuz.q.maven.pomeditor.formeditor;
 
-import org.devzuz.q.maven.jdt.ui.pomeditor.pomreader.MavenPomSearcher;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.forms.editor.FormEditor;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import org.apache.maven.model.Model;
+import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomBasicFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomPropertiesModuleFormPage;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.forms.editor.FormEditor;
+
 
 public class MavenPomFormEditor extends FormEditor
-{
-    private String strProjectSelected; 
-    
-    private IPath pomIPath;
-    
+{   
     private Model pomModel;
     
     public MavenPomFormEditor()
@@ -38,7 +37,6 @@ public class MavenPomFormEditor extends FormEditor
     {
         try
         {
-    
         	if(initializeAddPagesOK())
         	{
                 addPage( new MavenPomBasicFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomBasicFormPage;",
@@ -48,7 +46,6 @@ public class MavenPomFormEditor extends FormEditor
                 addPage( new MavenPomPropertiesModuleFormPage( this , "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage;",
                         "Properties/Module" ) ); 
         	}
-   
         }
         catch ( PartInitException pie )
         {
@@ -58,16 +55,11 @@ public class MavenPomFormEditor extends FormEditor
     
     private boolean initializeAddPagesOK()
     {
-        setSelectedLocationOfPOMs();
-        
-        startPOMSearch();
-        
-        if(getPOMFilePath() != null)
+        if( getPomFile() != null)
         {
-        	File pom = new File( getPOMFilePath());
         	try 
         	{
-				this.pomModel = new MavenXpp3Reader().read( new FileReader( pom) );
+				this.pomModel = new MavenXpp3Reader().read( new FileReader( getPomFile() ) );
 			} 
         	catch (FileNotFoundException e)
         	{
@@ -84,7 +76,7 @@ public class MavenPomFormEditor extends FormEditor
         }
         else 
         {
-        	return false;
+            return false;
         }
         
         return true;
@@ -108,26 +100,14 @@ public class MavenPomFormEditor extends FormEditor
         return false;
     }
     
-    private void setSelectedLocationOfPOMs()
+    private File getPomFile()
     {
-        IEditorInput  iei = this.getEditorInput();      
-        strProjectSelected = iei.toString().substring( iei.toString().indexOf( "(" )+1,iei.toString().indexOf( ")" )).trim();
+        IEditorInput input= getEditorInput();
+        if( input instanceof IFileEditorInput )
+        {
+             return (( IFileEditorInput ) input).getFile().getLocation().toFile();
+        }
+        
+        return null;
     }
-    
-    public String getSelectedLocationOfPOM()
-    {
-        return strProjectSelected;
-    }
-    
-    public void startPOMSearch()
-    {
-        MavenPomSearcher mps = new MavenPomSearcher(getSelectedLocationOfPOM());
-        this.pomIPath = mps.getProjectPOMFilePath();
-    }
-    
-    public String getPOMFilePath()
-    {
-        return pomIPath.toOSString();
-    }
-    
 }
