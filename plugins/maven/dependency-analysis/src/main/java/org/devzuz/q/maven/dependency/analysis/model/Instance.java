@@ -7,24 +7,18 @@
 package org.devzuz.q.maven.dependency.analysis.model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.maven.shared.dependency.tree.DependencyNode;
-
 /**
- * Wrapper containing an Instance of an artifact in the dependency tree
+ * Wrapper containing an Instance of an artifact in the dependency tree. Represents the intersection of two separate
+ * trees, the raw dependency heirarchy (homogeneous n-level tree of Instances) and the classification of heirarchy
+ * (heterogeneous 3-level tree of Instances, Versions and Artifacts).
  * 
  * @author jake pezaro
  */
 public class Instance
+    implements Selectable
 {
-
-    public static final int SELECTED_NONE = 0;
-
-    public static final int SELECTED_PRINCIPLE = 1;
-
-    public static final int SELECTED_SECONDARY = 2;
 
     public static final int STATE_INCLUDED = 0;
 
@@ -34,11 +28,7 @@ public class Instance
 
     public static final int STATE_OMITTED_FOR_CYCLE = 3;
 
-    private String groupId;
-
-    private String artifactId;
-
-    private String version;
+    private Version version;
 
     private String scope;
 
@@ -46,45 +36,45 @@ public class Instance
 
     private String nodeString;
 
+    /**
+     * the parent in the Dependency heirarchy
+     */
     private Instance parent;
 
     private List<Instance> children;
 
-    private int selected;
+    private SelectionManager selectionManager;
 
-    public Instance( Instance parent, DependencyNode node, VersionListManager versions, DuplicatesListManager duplicates )
+    public Instance( Version version, String scope, int state, String nodeString, Instance parent,
+                     SelectionManager selectionManager )
     {
-        groupId = node.getArtifact().getGroupId();
-        artifactId = node.getArtifact().getArtifactId();
-        version = node.getArtifact().getVersion();
-        scope = node.getArtifact().getScope();
-        state = node.getState();
-        nodeString = node.toNodeString();
+        this.version = version;
+        this.scope = scope;
+        this.state = state;
+        this.nodeString = nodeString;
         this.parent = parent;
+        this.selectionManager = selectionManager;
         children = new ArrayList<Instance>();
-        selected = SELECTED_NONE;
-        Version version = versions.add( this );
-        duplicates.add( version );
-        for ( Iterator iterator = node.getChildren().iterator(); iterator.hasNext(); )
-        {
-            DependencyNode child = (DependencyNode) iterator.next();
-            children.add( new Instance( this, child, versions, duplicates ) );
-        }
+    }
+
+    void addChild( Instance child )
+    {
+        children.add( child );
     }
 
     public String getGroupId()
     {
-        return groupId;
+        return version.getGroupId();
     }
 
     public String getArtifactId()
     {
-        return artifactId;
+        return version.getArtifactId();
     }
 
     public String getVersion()
     {
-        return version;
+        return version.getVersion();
     }
 
     public String getScope()
@@ -102,9 +92,14 @@ public class Instance
         return nodeString;
     }
 
-    public Instance getParent()
+    public Instance getDependencyParent()
     {
         return parent;
+    }
+
+    public Version getClassificationParent()
+    {
+        return version;
     }
 
     public List<Instance> getChildren()
@@ -112,26 +107,14 @@ public class Instance
         return children;
     }
 
-    public int getSelected()
+    public SelectionType isSelected()
     {
-        return selected;
+        return selectionManager.isSelectionType( this );
     }
 
-    public void select( int selected )
+    public void select()
     {
-        this.selected = selected;
-        if ( parent != null )
-        {
-            // propagate the selection state upwards
-            if ( selected == SELECTED_SECONDARY || selected == SELECTED_PRINCIPLE )
-            {
-                parent.select( SELECTED_SECONDARY );
-            }
-            if ( selected == SELECTED_NONE )
-            {
-                parent.select( SELECTED_NONE );
-            }
-        }
+        selectionManager.select( this );
     }
 
 }

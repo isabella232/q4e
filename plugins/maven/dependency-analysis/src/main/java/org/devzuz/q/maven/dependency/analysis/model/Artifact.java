@@ -15,20 +15,29 @@ import java.util.List;
  * 
  * @author jake pezaro
  */
-public class Duplicate
+public class Artifact
+    implements Selectable
 {
 
-    private String identifier;
+    private String groupId;
+
+    private String artifactId;
 
     private List<Version> versions;
 
-    private boolean selected;
+    SelectionManager selectionManager;
 
-    public Duplicate( Version map )
+    public Artifact( String groupId, String artifactId, SelectionManager selectionManager )
     {
-        this.identifier = map.getGroupId() + ":" + map.getArtifactId();
+        this.groupId = groupId;
+        this.artifactId = artifactId;
+        this.selectionManager = selectionManager;
         versions = new ArrayList<Version>();
-        versions.add( map );
+    }
+
+    static String key( String groupId, String artifactId )
+    {
+        return groupId + ":" + artifactId;
     }
 
     public void addVersion( Version map )
@@ -42,21 +51,27 @@ public class Duplicate
 
     public String getIdentifier()
     {
-        return identifier;
+        return key( groupId, artifactId );
     }
 
-    void select( boolean state )
+    public String getGroupId()
     {
-        selected = state;
-        for ( Version version : versions )
-        {
-            version.select( state );
-        }
+        return groupId;
     }
 
-    public boolean isSelected()
+    public String getArtifactId()
     {
-        return selected;
+        return artifactId;
+    }
+
+    public SelectionType isSelected()
+    {
+        return selectionManager.isSelectionType( this );
+    }
+
+    public void select()
+    {
+        selectionManager.select( this );
     }
 
     public boolean isDuplicate()
@@ -64,7 +79,12 @@ public class Duplicate
         return versions.size() > 1;
     }
 
-    public String getVersions()
+    public List<Version> getVersions()
+    {
+        return versions;
+    }
+
+    public String getVersionsAsString()
     {
         StringBuffer versionList = new StringBuffer();
         for ( Iterator iter = versions.iterator(); iter.hasNext(); )

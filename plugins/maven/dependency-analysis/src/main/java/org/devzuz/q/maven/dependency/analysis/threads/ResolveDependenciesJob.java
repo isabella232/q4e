@@ -8,9 +8,8 @@ import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator;
-import org.devzuz.q.maven.dependency.analysis.model.DuplicatesListManager;
-import org.devzuz.q.maven.dependency.analysis.model.Instance;
-import org.devzuz.q.maven.dependency.analysis.model.VersionListManager;
+import org.devzuz.q.maven.dependency.analysis.model.ModelManager;
+import org.devzuz.q.maven.dependency.analysis.model.SelectionManager;
 import org.devzuz.q.maven.dependency.analysis.views.AnalyserGui;
 import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.embedder.IMavenJob;
@@ -83,13 +82,11 @@ public class ResolveDependenciesJob
 
             // create the gui
 
-            VersionListManager versions = new VersionListManager();
-            DuplicatesListManager duplicates = new DuplicatesListManager();
-            Instance rootInstance = new Instance( null, mavenDependencyRoot, versions, duplicates );
+            SelectionManager selections = new SelectionManager();
+            ModelManager model = new ModelManager( mavenDependencyRoot, selections );
 
             DependencyFilteringCompleteThread complete =
-                new DependencyFilteringCompleteThread( project.getBaseDirectory().getName(), versions, duplicates,
-                                                       rootInstance );
+                new DependencyFilteringCompleteThread( model, selections, project.getBaseDirectory().getName() );
 
             display.asyncExec( complete );
 
@@ -107,19 +104,15 @@ public class ResolveDependenciesJob
     {
         private String projectName;
 
-        private VersionListManager versions;
+        private SelectionManager selections;
 
-        private DuplicatesListManager duplicates;
+        private ModelManager model;
 
-        private Instance rootInstance;
-
-        public DependencyFilteringCompleteThread( String projectName, VersionListManager versions,
-                                                  DuplicatesListManager duplicates, Instance rootInstance )
+        public DependencyFilteringCompleteThread( ModelManager model, SelectionManager selections, String projectName )
         {
             this.projectName = projectName;
-            this.versions = versions;
-            this.duplicates = duplicates;
-            this.rootInstance = rootInstance;
+            this.model = model;
+            this.selections = selections;
         }
 
         public void run()
@@ -129,7 +122,7 @@ public class ResolveDependenciesJob
                 AnalyserGui gui =
                     (AnalyserGui) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(
                                                                                                                  AnalyserGui.VIEW_ID );
-                gui.setModelInputs( rootInstance, versions, duplicates, projectName );
+                gui.setModelInputs( model, selections, projectName );
             }
             catch ( PartInitException e )
             {

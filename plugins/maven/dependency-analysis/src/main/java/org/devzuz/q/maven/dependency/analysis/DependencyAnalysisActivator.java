@@ -15,7 +15,10 @@ import org.devzuz.q.maven.embedder.log.Logger;
 import org.eclipse.core.internal.runtime.Log;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.ImageData;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -27,6 +30,13 @@ import org.osgi.framework.BundleContext;
 public class DependencyAnalysisActivator
     extends AbstractUIPlugin
 {
+
+    // init colour resources
+    public static Color SELECTIONCOLOUR_TERTIARY = new Color( Display.getCurrent(), 255, 255, 180 );
+
+    public static Color SELECTIONCOLOUR_SECONDARY = Display.getCurrent().getSystemColor( SWT.COLOR_YELLOW );
+
+    public static Color SELECTIONCOLOUR_PRIMARY = new Color( Display.getCurrent(), 255, 190, 0 );
 
     // The plug-in ID
     public static final String PLUGIN_ID = "org.devzuz.q.dependency.analysis";

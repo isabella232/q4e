@@ -6,14 +6,13 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.dependency.analysis.views;
 
+import org.devzuz.q.maven.dependency.analysis.model.SelectionManager;
 import org.devzuz.q.maven.dependency.analysis.model.Version;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * Label provider for the Versions table
@@ -73,12 +72,8 @@ public class VersionsListLabelProvider
 
     public Color getBackground( Object element )
     {
-        Version version = (Version) element;
-        if ( version.isSelected() )
-        {
-            return Display.getCurrent().getSystemColor( SWT.COLOR_YELLOW );
-        }
-        return null; // Display.getCurrent().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
+        Version node = (Version) element;
+        return SelectionManager.getColour( node );
     }
 
     public Color getForeground( Object element )

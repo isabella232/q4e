@@ -28,7 +28,7 @@ public class InstanceTreeContentProvider
     public Object getParent( Object element )
     {
         Instance node = (Instance) element;
-        return node.getParent();
+        return node.getDependencyParent();
     }
 
     public boolean hasChildren( Object element )

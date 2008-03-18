@@ -9,5 +9,5 @@ package org.devzuz.q.maven.dependency.analysis.views;
 
 enum Column
 {
-    GROUPID, ARTIFACTID, VERSION, INSTANCES;
+    GROUPID, ARTIFACTID, VERSION, INSTANCES, VERSIONS;
 }

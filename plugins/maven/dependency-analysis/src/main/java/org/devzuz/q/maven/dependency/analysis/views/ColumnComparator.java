@@ -6,33 +6,32 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.dependency.analysis.views;
 
-import org.devzuz.q.maven.dependency.analysis.model.Version;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 
 /**
- * Comparator for the Versions table. Allows column sort order to be changed at runtime
+ * Comparator for the tables. Allows column sort order to be changed at runtime
  * 
  * @author jake pezaro
  */
-public class VersionListComparator
+public abstract class ColumnComparator
     extends ViewerComparator
 {
 
-    private Column column;
+    protected Column column;
 
     private boolean direction;
 
-    public VersionListComparator()
+    public ColumnComparator( Column defaultSortColumn, boolean defaultDirection )
     {
         super();
-        column = Column.GROUPID;
-        direction = true;
+        column = defaultSortColumn;
+        direction = defaultDirection;
     }
 
     public void selectColumn( Column column )
     {
-        if ( this.column.equals(column) )
+        if ( this.column.equals( column ) )
         {
             direction = !direction;
         }
@@ -63,23 +62,9 @@ public class VersionListComparator
         return compare;
     }
 
-    private Comparable getComparable( Object o )
-    {
-        Version version = (Version) o;
-        switch ( column )
-        {
-            case GROUPID:
-                return version.getGroupId();
-            case ARTIFACTID:
-                return version.getArtifactId();
-            case VERSION:
-                return version.getVersion();
-            case INSTANCES:
-                return new Integer( version.getInstances().size() );
-            default:
-                // never can happen
-                throw new RuntimeException( "Unrecognised column " + column );
-        }
-    }
+    /**
+     * combine the provided data object with the selected column and return a Comparable object
+     */
+    protected abstract Comparable getComparable( Object o );
 
 }

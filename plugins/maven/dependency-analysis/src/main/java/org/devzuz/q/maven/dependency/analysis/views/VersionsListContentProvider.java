@@ -6,7 +6,11 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.dependency.analysis.views;
 
-import org.devzuz.q.maven.dependency.analysis.model.VersionListManager;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.devzuz.q.maven.dependency.analysis.model.Version;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -33,12 +37,17 @@ public class VersionsListContentProvider
 
     public Object[] getElements( Object inputElement )
     {
-        if ( inputElement instanceof VersionListManager )
+        if ( inputElement instanceof Map )
         {
-            VersionListManager versionsList = (VersionListManager) inputElement;
-            return versionsList.getOrdered().toArray();
+            List<Version> versionsList = new ArrayList<Version>();
+
+            Map<String, Version> versions = (Map<String, Version>) inputElement;
+            for ( String key : versions.keySet() )
+            {
+                versionsList.add( versions.get( key ) );
+            }
+            return versionsList.toArray();
         }
         return null;
     }
-
 }

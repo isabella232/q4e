@@ -8,9 +8,9 @@ package org.devzuz.q.maven.dependency.analysis.views;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
-import org.devzuz.q.maven.dependency.analysis.model.Duplicate;
-import org.devzuz.q.maven.dependency.analysis.model.DuplicatesListManager;
+import org.devzuz.q.maven.dependency.analysis.model.Artifact;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
@@ -19,7 +19,7 @@ import org.eclipse.jface.viewers.Viewer;
  * 
  * @author jake pezaro
  */
-public class DuplicatesListContentProvider
+public class ArtifactListContentProvider
     implements IStructuredContentProvider
 {
 
@@ -37,16 +37,18 @@ public class DuplicatesListContentProvider
 
     public Object[] getElements( Object inputElement )
     {
-        DuplicatesListManager duplicatesList = (DuplicatesListManager) inputElement;
-        List<Duplicate> duplicates = new ArrayList<Duplicate>();
-        for ( Duplicate duplicate : duplicatesList.getDuplicates() )
+        if ( inputElement instanceof Map )
         {
-            if ( duplicate.isDuplicate() )
+            List<Artifact> artifactList = new ArrayList<Artifact>();
+
+            Map<String, Artifact> artifact = (Map<String, Artifact>) inputElement;
+            for ( String key : artifact.keySet() )
             {
-                duplicates.add( duplicate );
+                artifactList.add( artifact.get( key ) );
             }
+            return artifactList.toArray();
         }
-        return duplicates.toArray();
+        return null;
     }
 
 }

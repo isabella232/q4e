@@ -6,21 +6,20 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.dependency.analysis.views;
 
-import org.devzuz.q.maven.dependency.analysis.model.Duplicate;
+import org.devzuz.q.maven.dependency.analysis.model.Artifact;
+import org.devzuz.q.maven.dependency.analysis.model.SelectionManager;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * Label provider for the Duplicates table
  * 
  * @author jake pezaro
  */
-public class DuplicatesListLabelProvider
+public class ArtifactListLabelProvider
     implements ITableLabelProvider, IColorProvider
 {
 
@@ -31,13 +30,15 @@ public class DuplicatesListLabelProvider
 
     public String getColumnText( Object element, int columnIndex )
     {
-        Duplicate duplicate = (Duplicate) element;
+        Artifact artifact = (Artifact) element;
         switch ( columnIndex )
         {
             case 0:
-                return duplicate.getIdentifier();
+                return artifact.getGroupId();
             case 1:
-                return duplicate.getVersions();
+                return artifact.getArtifactId();
+            case 2:
+                return String.valueOf( artifact.getVersions().size() );
             default:
                 throw new RuntimeException( "Unrecognised column index " + columnIndex );
         }
@@ -69,12 +70,8 @@ public class DuplicatesListLabelProvider
 
     public Color getBackground( Object element )
     {
-        Duplicate duplicate = (Duplicate) element;
-        if ( duplicate.isSelected() )
-        {
-            return Display.getCurrent().getSystemColor( SWT.COLOR_YELLOW );
-        }
-        return null; // Display.getCurrent().getSystemColor(SWT.COLOR_LIST_BACKGROUND);
+        Artifact node = (Artifact) element;
+        return SelectionManager.getColour( node );
     }
 
     public Color getForeground( Object element )

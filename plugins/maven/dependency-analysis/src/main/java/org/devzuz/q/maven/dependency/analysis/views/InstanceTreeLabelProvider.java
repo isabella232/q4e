@@ -8,13 +8,12 @@ package org.devzuz.q.maven.dependency.analysis.views;
 
 import org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator;
 import org.devzuz.q.maven.dependency.analysis.model.Instance;
+import org.devzuz.q.maven.dependency.analysis.model.SelectionManager;
 import org.eclipse.jface.viewers.IColorProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * Label provider for the Instances Tree
@@ -24,13 +23,6 @@ import org.eclipse.swt.widgets.Display;
 public class InstanceTreeLabelProvider
     implements ILabelProvider, IColorProvider
 {
-
-    private Color LIGHT_YELLOW;
-
-    public InstanceTreeLabelProvider()
-    {
-        LIGHT_YELLOW = new Color( Display.getCurrent(), 255, 255, 180 );
-    }
 
     public Image getImage( Object element )
     {
@@ -75,15 +67,7 @@ public class InstanceTreeLabelProvider
     public Color getBackground( Object element )
     {
         Instance node = (Instance) element;
-        if ( node.getSelected() == Instance.SELECTED_PRINCIPLE )
-        {
-            return Display.getCurrent().getSystemColor( SWT.COLOR_YELLOW );
-        }
-        if ( node.getSelected() == Instance.SELECTED_SECONDARY )
-        {
-            return LIGHT_YELLOW;
-        }
-        return null;
+        return SelectionManager.getColour( node );
     }
 
     public Color getForeground( Object element )

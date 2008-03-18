@@ -15,25 +15,29 @@ import java.util.List;
  * @author jake pezaro
  */
 public class Version
+    implements Selectable
 {
 
-    private String groupId;
-
-    private String artifactId;
+    private Artifact artifact;
 
     private String version;
 
     private List<Instance> instances;
 
-    private boolean selected;
+    private SelectionManager selectionManager;
 
-    public Version( Instance initialArtifact )
+    public Version( Artifact artifact, String versionString, SelectionManager selectionManager )
     {
+        this.artifact = artifact;
+        this.version = versionString;
+        this.selectionManager = selectionManager;
         instances = new ArrayList<Instance>();
-        groupId = initialArtifact.getGroupId();
-        artifactId = initialArtifact.getArtifactId();
-        version = initialArtifact.getVersion();
-        selected = false;
+
+    }
+
+    static String key( Artifact artifact, String versionString )
+    {
+        return artifact.getIdentifier() + ":" + versionString;
     }
 
     public void addInstance( Instance artifactInstance )
@@ -41,17 +45,22 @@ public class Version
         instances.add( artifactInstance );
     }
 
+    public Artifact getClassificationParent()
+    {
+        return artifact;
+    }
+
     public String getArtifactId()
     {
-        return artifactId;
+        return artifact.getArtifactId();
     }
 
     public String getGroupId()
     {
-        return groupId;
+        return artifact.getGroupId();
     }
 
-    public List getInstances()
+    public List<Instance> getInstances()
     {
         return instances;
     }
@@ -61,18 +70,14 @@ public class Version
         return version;
     }
 
-    void select( boolean state )
+    public SelectionType isSelected()
     {
-        selected = state;
-        for ( Instance dependencyNode : instances )
-        {
-            dependencyNode.select( state ? Instance.SELECTED_PRINCIPLE : Instance.SELECTED_NONE );
-        }
+        return selectionManager.isSelectionType( this );
     }
 
-    public boolean isSelected()
+    public void select()
     {
-        return selected;
+        selectionManager.select( this );
     }
 
 }
