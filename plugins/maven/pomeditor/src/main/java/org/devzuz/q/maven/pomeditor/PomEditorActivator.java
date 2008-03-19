@@ -7,6 +7,7 @@
  *******************************************************************************/
 package org.devzuz.q.maven.pomeditor;
 
+import org.devzuz.q.maven.embedder.log.Logger;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -20,6 +21,8 @@ public class PomEditorActivator extends AbstractUIPlugin {
 
 	// The shared instance
 	private static PomEditorActivator plugin;
+	
+	private Logger logger;
 	
 	/**
 	 * The constructor
@@ -53,5 +56,10 @@ public class PomEditorActivator extends AbstractUIPlugin {
 	public static PomEditorActivator getDefault() {
 		return plugin;
 	}
+	
+	public static Logger getLogger()
+    {
+        return getDefault().logger;
+    }
 
 }

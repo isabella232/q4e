@@ -65,6 +65,14 @@ public class Messages
     public static String MavenPomEditor_MavenPomEditor_URL;
 
     public static String MavenPomEditor_MavenPomEditor_InceptionYear;
+    
+    public static String MavenPomEditor_MavenDependencyLookupDialog_Label;
+    
+    public static String MavenPomEditor_MavenCustomComponent_GroupIdLabel;
+    
+    public static String MavenPomEditor_MavenCustomComponent_ArtifactIdLabel;
+    
+    public static String MavenPomEditor_MavenCustomComponent_VersionLabel;
 
     static
     {

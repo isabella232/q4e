@@ -53,6 +53,27 @@ public class MavenUtils
             }
         }
     }
+ 
+    public static void rewritePom( File pom, Model model ) throws IOException, XmlPullParserException
+    {
+        IMaven maven = MavenManager.getMaven();
+
+        if ( maven instanceof EclipseMaven )
+        {
+            FileWriter writer = null;
+            try
+            {
+                MavenEmbedder mavenEmbedder = ( (EclipseMaven) maven ).getEmbedder();
+
+                writer = new FileWriter( pom );
+                mavenEmbedder.writeModel( writer, model );
+            }
+            finally
+            {
+                writer.close();
+            }
+        }
+    }
 
     /**
      * @param pom the POM file

@@ -178,10 +178,10 @@ public class AddEditDependencyDialog
 
     private void synchronizeDataSourceWithGUI()
     {
-        groupIdText.setText( getGroupId() );
-        artifactIdText.setText( getArtifactId() );
-        versionText.setText( getVersion() );
-        scopeText.setText( getScope() );
+        groupIdText.setText( blankIfNull( getGroupId() ) );
+        artifactIdText.setText( blankIfNull( getArtifactId() ) );
+        versionText.setText( blankIfNull( getVersion() ) );
+        scopeText.setText( blankIfNull( getScope() ) );
     }
 
     public void validate()
@@ -253,6 +253,11 @@ public class AddEditDependencyDialog
     public void setScope( String scope )
     {
         this.scope = scope;
+    }
+    
+    private String blankIfNull( String str )
+    {
+        return str != null ? str : "";
     }
 
     @Override
