@@ -12,7 +12,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.devzuz.q.maven.embedder.IMavenJob;
+import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenInterruptedException;
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
@@ -200,7 +202,17 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
 
         /* Add maven nature to project */
         MavenNatureHelper.addNature( project );
-
+        /* Allow postprocessors to customize the project */
+        IImportProjectPostprocessor[] postprocessors =
+            ImportProjectPostprocessorManager.getInstance().getPostprocessors();
+        if ( postprocessors.length > 0 )
+        {
+            IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, false );
+            for ( IImportProjectPostprocessor p : postprocessors )
+            {
+                p.process( mavenProject, monitor );
+            }
+        }
         return project;
     }
 }
