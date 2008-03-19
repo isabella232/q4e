@@ -129,17 +129,6 @@ public class MavenClasspathContainer implements IClasspathContainer
     }
 
     /**
-     * Calls {@link #newClasspath(IProject, IProgressMonitor, boolean)} with downloadSources = false
-     * 
-     * @param project
-     * @param monitor
-     */
-    public static MavenClasspathContainer newClasspath( IProject project, IProgressMonitor monitor )
-    {
-        return newClasspath( project, monitor, false );
-    }
-
-    /**
      * Refreshes the classpath entries after loading the {@link IMavenProject} from the {@link IProject}
      * 
      * @param project
