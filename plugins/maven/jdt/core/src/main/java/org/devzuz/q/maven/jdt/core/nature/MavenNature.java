@@ -13,9 +13,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.jar.Attributes;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
@@ -31,6 +33,8 @@ import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenClasspathHelper;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
+import org.devzuz.q.maven.jdt.core.classpath.container.IMavenClasspathAttributeProvider;
+import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathAttributeProviderManager;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.ICommand;
@@ -44,6 +48,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jdt.core.IAccessRule;
+import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
@@ -78,10 +84,6 @@ public class MavenNature implements IProjectNature
 
     private IProject project;
 
-    /**
-     * TODO add other builders depending on the project packaging
-     * eg. org.eclipse.pde.FeatureBuilder for eclipse-feature type
-     */
     private void addBuilder() throws CoreException
     {
         IProjectDescription desc = getProject().getDescription();
@@ -173,7 +175,7 @@ public class MavenNature implements IProjectNature
         this.project = project;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private void addClasspath( IProject project )
     {
         IFile pom = project.getFile( IMavenProject.POM_FILENAME );
@@ -250,7 +252,7 @@ public class MavenNature implements IProjectNature
         classpathEntriesList.addAll( getSourceFoldersClasspath( project, javaProject, mavenProject ) );
 
         // (x) Add the maven classpath container
-        classpathEntriesList.add( getMavenClasspathContainer() );
+        classpathEntriesList.add( getMavenClasspathContainer( mavenProject ) );
 
         // (x) Add the JRE container to the classpath
         classpathEntriesList.add( getJREClasspathContainer( javaProject, mavenProject ) );
@@ -263,7 +265,7 @@ public class MavenNature implements IProjectNature
             IClasspathEntry[] oldClasspath = javaProject.getRawClasspath();
             for ( IClasspathEntry classpathEntry : oldClasspath )
             {
-                if (classpathEntry.getEntryKind() == IClasspathEntry.CPE_CONTAINER )
+                if ( classpathEntry.getEntryKind() == IClasspathEntry.CPE_CONTAINER )
                 {
                     classpathEntriesList.add( classpathEntry );
                 }
@@ -417,9 +419,26 @@ public class MavenNature implements IProjectNature
         return getRelativePath( basedirPath, fullPath );
     }
 
-    private IClasspathEntry getMavenClasspathContainer()
+    /**
+     * Returns the classpath entry representing the maven classpath container.
+     * 
+     * This classpath entry might have extra classpath attributes contributed by other plug-ins.
+     * 
+     * @param mavenProject
+     *            the maven project whose classpath is being configured.
+     * @return the classpath entry representing the maven classpath container.
+     */
+    private IClasspathEntry getMavenClasspathContainer( IMavenProject mavenProject )
     {
-        return JavaCore.newContainerEntry( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH );
+        Set<IClasspathAttribute> attrSet = new HashSet<IClasspathAttribute>( 20 );
+        for ( IMavenClasspathAttributeProvider attrProvider : MavenClasspathAttributeProviderManager.getInstance().getAttributeProviders() )
+        {
+            attrSet.addAll( attrProvider.getExtraAttributesForContainer( mavenProject ) );
+        }
+        IClasspathEntry containerEntry =
+            JavaCore.newContainerEntry( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH, new IAccessRule[0],
+                                        attrSet.toArray( new IClasspathAttribute[attrSet.size()] ), false );
+        return containerEntry;
     }
 
     private IClasspathEntry getJREClasspathContainer( IJavaProject javaProject, IMavenProject mavenProject )
