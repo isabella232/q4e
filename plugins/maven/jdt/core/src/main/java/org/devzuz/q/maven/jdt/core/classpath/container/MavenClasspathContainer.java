@@ -9,6 +9,7 @@ package org.devzuz.q.maven.jdt.core.classpath.container;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -44,23 +45,37 @@ import org.eclipse.jdt.core.JavaModelException;
 public class MavenClasspathContainer implements IClasspathContainer
 {
 
-    public static String MAVEN_CLASSPATH_CONTAINER = "org.devzuz.q.maven.jdt.core.mavenClasspathContainer"; //$NON-NLS-1$
+    public static final String MAVEN_CLASSPATH_CONTAINER = "org.devzuz.q.maven.jdt.core.mavenClasspathContainer"; //$NON-NLS-1$
 
-    public static IPath MAVEN_CLASSPATH_CONTAINER_PATH = new Path( MAVEN_CLASSPATH_CONTAINER );
+    public static final IPath MAVEN_CLASSPATH_CONTAINER_PATH = new Path( MAVEN_CLASSPATH_CONTAINER );
 
-    public static String ATTRIBUTE_GROUP_ID = "groupId";
+    /** Name of the attribute holding the group id for the maven artifact added as a classpath entry. */
+    public static final String ATTRIBUTE_GROUP_ID = "org.devzuz.q.maven.jdt.core.classpath.container.groupId";
 
-    public static String ATTRIBUTE_ARTIFACT_ID = "artifactId";
+    /** Name of the attribute holding the artifact id for the maven artifact added as a classpath entry. */
+    public static final String ATTRIBUTE_ARTIFACT_ID = "org.devzuz.q.maven.jdt.core.classpath.container.artifactId";
 
-    public static String ATTRIBUTE_VERSION = "version";
+    /** Name of the attribute holding the version for the maven artifact added as a classpath entry. */
+    public static final String ATTRIBUTE_VERSION = "org.devzuz.q.maven.jdt.core.classpath.container.version";
 
-    private static String SOURCES_CLASSIFIER = "sources";
+    /** Name of the attribute holding the scope for the maven artifact added as a classpath entry. */
+    public static final String ATTRIBUTE_SCOPE = "org.devzuz.q.maven.jdt.core.classpath.container.scope";
 
-    private static String SOURCES_TYPE = "java-source";
+    /** Name of the attribute holding the type for the maven artifact added as a classpath entry. */
+    public static final String ATTRIBUTE_TYPE = "org.devzuz.q.maven.jdt.core.classpath.containertype";
 
+    /** Name of the attribute holding the classifier for the maven artifact added as a classpath entry. */
+    public static final String ATTRIBUTE_CLASSIFIER = "org.devzuz.q.maven.jdt.core.classpath.container.classifier";
+
+    private static final String SOURCES_CLASSIFIER = "sources";
+
+    private static final String SOURCES_TYPE = "java-source";
+
+    /** FIXME: Unused. */
+    private static final String JAR_TYPE = "jar";
+
+    /** FIXME: Unused. */
     private static String DEFAULT_CLASSIFIER = null;
-
-    private static String JAR_TYPE = "jar";
 
     private IClasspathEntry[] classpathEntries;
 
@@ -259,20 +274,20 @@ public class MavenClasspathContainer implements IClasspathContainer
         {
             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in ", mavenProject.getArtifactId(),
                                          " as project dependency - ", workspaceProject.getFullPath() );
+            IClasspathAttribute[] attributes = getExtraAttributes( mavenProject, artifact, true );
 
-            return JavaCore.newProjectEntry( workspaceProject.getFullPath(), export );
+            return JavaCore.newProjectEntry( workspaceProject.getFullPath(), new IAccessRule[0], true, attributes,
+                                             export );
         }
         else if ( ( artifact.getFile() != null ) && artifact.isAddedToClasspath() )
         {
-            IClasspathAttribute[] attributes = new IClasspathAttribute[0];
-
             IMavenArtifact clone = (IMavenArtifact) artifact.clone();
             clone.setType( SOURCES_TYPE );
             clone.setClassifier( SOURCES_CLASSIFIER );
             IPath sourcePath = getArtifactPath( mavenProject, clone, downloadSources );
 
             IPath jarPath = new Path( artifact.getFile().getAbsolutePath() );
-
+            IClasspathAttribute[] attributes = getExtraAttributes( mavenProject, artifact, false );
             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in ", mavenProject.getArtifactId(),
                                          " as jar dependency - ", jarPath.toOSString() );
 
@@ -285,8 +300,51 @@ public class MavenClasspathContainer implements IClasspathContainer
                                          artifact.getType(), " on project ", mavenProject,
                                          " does not require being added to the classpath." );
         }
-
         return null;
+
+    }
+
+    /**
+     * Gets the classpath attributes that need to be added to the classpath entry representing the resolved artifact.
+     * 
+     * @param mavenProject
+     *            the project whose classpath is being updated
+     * @param artifact
+     *            the resolved artifact
+     * @param isInWorkspace
+     *            <code>true</code> if the project has been resolved from the workspace, <code>false</code> if it
+     *            was resolved from the repository.
+     * @return a not-null array containing the attributes that need to be applied to the classpath entry representing
+     *         the resolved artifact.
+     */
+    private IClasspathAttribute[] getExtraAttributes( IMavenProject mavenProject, IMavenArtifact artifact,
+                                                      boolean isInWorkspace )
+    {
+        Set<IClasspathAttribute> attributeSet = new HashSet<IClasspathAttribute>( 20 );
+        attributeSet.add( JavaCore.newClasspathAttribute( ATTRIBUTE_GROUP_ID, artifact.getGroupId() ) );
+        attributeSet.add( JavaCore.newClasspathAttribute( ATTRIBUTE_ARTIFACT_ID, artifact.getArtifactId() ) );
+        attributeSet.add( JavaCore.newClasspathAttribute( ATTRIBUTE_VERSION, artifact.getVersion() ) );
+        String scope = artifact.getScope();
+        if ( scope != null )
+        {
+            attributeSet.add( JavaCore.newClasspathAttribute( ATTRIBUTE_SCOPE, scope ) );
+        }
+        String type = artifact.getType();
+        if ( type != null )
+        {
+            attributeSet.add( JavaCore.newClasspathAttribute( ATTRIBUTE_TYPE, type ) );
+        }
+        String classifier = artifact.getClassifier();
+        if ( classifier != null )
+        {
+            attributeSet.add( JavaCore.newClasspathAttribute( ATTRIBUTE_CLASSIFIER, classifier ) );
+        }
+        for ( IMavenClasspathAttributeProvider attrProvider : MavenClasspathAttributeProviderManager.getInstance().getAttributeProviders() )
+        {
+            attributeSet.addAll( attrProvider.getExtraAttributesForArtifact( mavenProject, artifact, isInWorkspace ) );
+        }
+        IClasspathAttribute[] attributes = attributeSet.toArray( new IClasspathAttribute[attributeSet.size()] );
+        return attributes;
     }
 
     @Override
