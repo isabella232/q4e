@@ -10,13 +10,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.devzuz.q.maven.dependency.analysis.extension.IArtifact;
+
 /**
  * A wrapper holding a collection of Versions with the same group id and artifact id
  * 
  * @author jake pezaro
  */
 public class Artifact
-    implements Selectable
+    implements Selectable, IArtifact
 {
 
     private String groupId;

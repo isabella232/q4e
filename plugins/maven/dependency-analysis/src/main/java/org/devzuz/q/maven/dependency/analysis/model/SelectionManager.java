@@ -26,7 +26,7 @@ public class SelectionManager
 
     private SelectionSet secondary;
 
-    private SelectionSet tertiary;
+    private List<Instance> tertiary;
 
     public SelectionManager()
     {
@@ -37,15 +37,25 @@ public class SelectionManager
     {
         primary = new SelectionSet();
         secondary = new SelectionSet();
-        tertiary = new SelectionSet();
+        tertiary = new ArrayList<Instance>();
+    }
+
+    public SelectionSet getPrimary()
+    {
+        return primary;
+    }
+
+    public SelectionSet getSecondary()
+    {
+        return secondary;
     }
 
     public void select( Instance selected )
     {
-        primary.instances.add( selected );
+        primary.getInstances().add( selected );
         createTertiarySelections( selected );
-        secondary.versions.add( selected.getClassificationParent() );
-        secondary.artifacts.add( selected.getClassificationParent().getClassificationParent() );
+        secondary.getVersions().add( selected.getClassificationParent() );
+        secondary.getArtifacts().add( selected.getClassificationParent().getClassificationParent() );
     }
 
     private void createTertiarySelections( Instance instance )
@@ -53,31 +63,31 @@ public class SelectionManager
         Instance dependencyParent = instance.getDependencyParent();
         if ( dependencyParent != null )
         {
-            tertiary.instances.add( dependencyParent );
+            tertiary.add( dependencyParent );
             createTertiarySelections( dependencyParent );
         }
     }
 
     public void select( Version selected )
     {
-        primary.versions.add( selected );
+        primary.getVersions().add( selected );
         for ( Instance instance : selected.getInstances() )
         {
-            secondary.instances.add( instance );
+            secondary.getInstances().add( instance );
             createTertiarySelections( instance );
         }
-        secondary.artifacts.add( selected.getClassificationParent() );
+        secondary.getArtifacts().add( selected.getClassificationParent() );
     }
 
     public void select( Artifact selected )
     {
-        primary.artifacts.add( selected );
+        primary.getArtifacts().add( selected );
         for ( Version version : selected.getVersions() )
         {
-            secondary.versions.add( version );
+            secondary.getVersions().add( version );
             for ( Instance instance : version.getInstances() )
             {
-                secondary.instances.add( instance );
+                secondary.getInstances().add( instance );
                 createTertiarySelections( instance );
             }
         }
@@ -85,15 +95,15 @@ public class SelectionManager
 
     public SelectionType isSelectionType( Instance selected )
     {
-        if ( primary.instances.contains( selected ) )
+        if ( primary.getInstances().contains( selected ) )
         {
             return SelectionType.PRIMARY;
         }
-        if ( secondary.instances.contains( selected ) )
+        if ( secondary.getInstances().contains( selected ) )
         {
             return SelectionType.SECONDARY;
         }
-        if ( tertiary.instances.contains( selected ) )
+        if ( tertiary.contains( selected ) )
         {
             return SelectionType.TERTIARY;
         }
@@ -102,11 +112,11 @@ public class SelectionManager
 
     public SelectionType isSelectionType( Version selected )
     {
-        if ( primary.versions.contains( selected ) )
+        if ( primary.getVersions().contains( selected ) )
         {
             return SelectionType.PRIMARY;
         }
-        if ( secondary.versions.contains( selected ) )
+        if ( secondary.getVersions().contains( selected ) )
         {
             return SelectionType.SECONDARY;
         }
@@ -115,32 +125,15 @@ public class SelectionManager
 
     public SelectionType isSelectionType( Artifact selected )
     {
-        if ( primary.artifacts.contains( selected ) )
+        if ( primary.getArtifacts().contains( selected ) )
         {
             return SelectionType.PRIMARY;
         }
-        if ( secondary.artifacts.contains( selected ) )
+        if ( secondary.getArtifacts().contains( selected ) )
         {
             return SelectionType.SECONDARY;
         }
         return SelectionType.NONE;
-    }
-
-    private class SelectionSet
-    {
-        private List<Instance> instances;
-
-        private List<Version> versions;
-
-        private List<Artifact> artifacts;
-
-        public SelectionSet()
-        {
-            instances = new ArrayList<Instance>();
-            versions = new ArrayList<Version>();
-            artifacts = new ArrayList<Artifact>();
-        }
-
     }
 
     public static Color getColour( Selectable selectable )

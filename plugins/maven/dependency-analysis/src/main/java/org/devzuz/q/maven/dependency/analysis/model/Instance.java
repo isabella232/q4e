@@ -9,6 +9,8 @@ package org.devzuz.q.maven.dependency.analysis.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.devzuz.q.maven.dependency.analysis.extension.IInstance;
+
 /**
  * Wrapper containing an Instance of an artifact in the dependency tree. Represents the intersection of two separate
  * trees, the raw dependency heirarchy (homogeneous n-level tree of Instances) and the classification of heirarchy
@@ -17,16 +19,8 @@ import java.util.List;
  * @author jake pezaro
  */
 public class Instance
-    implements Selectable
+    implements Selectable, IInstance
 {
-
-    public static final int STATE_INCLUDED = 0;
-
-    public static final int STATE_OMITTED_FOR_DUPLICATE = 1;
-
-    public static final int STATE_OMITTED_FOR_CONFLICT = 2;
-
-    public static final int STATE_OMITTED_FOR_CYCLE = 3;
 
     private Version version;
 

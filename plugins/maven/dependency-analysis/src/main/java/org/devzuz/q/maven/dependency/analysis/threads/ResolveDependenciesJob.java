@@ -86,7 +86,7 @@ public class ResolveDependenciesJob
             ModelManager model = new ModelManager( mavenDependencyRoot, selections );
 
             DependencyFilteringCompleteThread complete =
-                new DependencyFilteringCompleteThread( model, selections, project.getBaseDirectory().getName() );
+                new DependencyFilteringCompleteThread( model, selections, project );
 
             display.asyncExec( complete );
 
@@ -102,17 +102,17 @@ public class ResolveDependenciesJob
     private class DependencyFilteringCompleteThread
         implements Runnable
     {
-        private String projectName;
+        private IMavenProject project;
 
         private SelectionManager selections;
 
         private ModelManager model;
 
-        public DependencyFilteringCompleteThread( ModelManager model, SelectionManager selections, String projectName )
+        public DependencyFilteringCompleteThread( ModelManager model, SelectionManager selections, IMavenProject project )
         {
-            this.projectName = projectName;
             this.model = model;
             this.selections = selections;
+            this.project = project;
         }
 
         public void run()
@@ -122,7 +122,7 @@ public class ResolveDependenciesJob
                 AnalyserGui gui =
                     (AnalyserGui) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(
                                                                                                                  AnalyserGui.VIEW_ID );
-                gui.setModelInputs( model, selections, projectName );
+                gui.setModelInputs( model, selections, project );
             }
             catch ( PartInitException e )
             {

@@ -44,13 +44,13 @@ public class InstanceTreeContentProvider
 
     public void dispose()
     {
-        // TODO Auto-generated method stub
+        // not required
 
     }
 
     public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
     {
-        // TODO Auto-generated method stub
+        // not required
 
     }
 

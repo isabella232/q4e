@@ -9,13 +9,15 @@ package org.devzuz.q.maven.dependency.analysis.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.devzuz.q.maven.dependency.analysis.extension.IVersion;
+
 /**
  * A wrapper holding a collection of Instances with the same group id, artifact id and version
  * 
  * @author jake pezaro
  */
 public class Version
-    implements Selectable
+    implements Selectable, IVersion
 {
 
     private Artifact artifact;

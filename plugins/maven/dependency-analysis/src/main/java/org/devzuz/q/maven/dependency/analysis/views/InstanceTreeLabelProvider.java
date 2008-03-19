@@ -42,25 +42,24 @@ public class InstanceTreeLabelProvider
 
     public void addListener( ILabelProviderListener listener )
     {
-        // TODO Auto-generated method stub
+        // not required
 
     }
 
     public void dispose()
     {
-        // TODO Auto-generated method stub
+        // not required
 
     }
 
     public boolean isLabelProperty( Object element, String property )
     {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public void removeListener( ILabelProviderListener listener )
     {
-        // TODO Auto-generated method stub
+        // not required
 
     }
 

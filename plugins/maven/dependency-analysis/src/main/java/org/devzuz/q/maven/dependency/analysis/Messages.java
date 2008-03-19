@@ -20,6 +20,8 @@ public class Messages
 
     public static String AnalyseDependencyAction_Error_Title;
 
+    public static String SelectionExtension_Error_Implementation;
+
     static
     {
         // initialize resource bundle

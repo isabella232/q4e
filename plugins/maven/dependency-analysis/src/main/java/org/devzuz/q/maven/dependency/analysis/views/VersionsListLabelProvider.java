@@ -48,25 +48,24 @@ public class VersionsListLabelProvider
 
     public void addListener( ILabelProviderListener listener )
     {
-        // TODO Auto-generated method stub
+        // not required
 
     }
 
     public void dispose()
     {
-        // TODO Auto-generated method stub
+        // not required
 
     }
 
     public boolean isLabelProperty( Object element, String property )
     {
-        // TODO Auto-generated method stub
         return false;
     }
 
     public void removeListener( ILabelProviderListener listener )
     {
-        // TODO Auto-generated method stub
+        // not required
 
     }
 
@@ -78,7 +77,7 @@ public class VersionsListLabelProvider
 
     public Color getForeground( Object element )
     {
-        return null; // Display.getCurrent().getSystemColor(SWT.COLOR_LIST_FOREGROUND);
+        return null;
     }
 
 }
