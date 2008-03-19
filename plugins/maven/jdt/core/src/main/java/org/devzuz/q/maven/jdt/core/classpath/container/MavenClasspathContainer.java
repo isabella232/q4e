@@ -26,7 +26,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IAccessRule;
 import org.eclipse.jdt.core.IClasspathAttribute;
@@ -130,18 +129,6 @@ public class MavenClasspathContainer implements IClasspathContainer
     }
 
     /**
-     * Refreshes the classpath entries after loading the {@link IMavenProject} from the {@link IProject}
-     * 
-     * @param project
-     * @deprecated use {@link #newClasspath(IProject, IProgressMonitor)}
-     */
-    @Deprecated
-    public static MavenClasspathContainer newClasspath( IProject project )
-    {
-        return newClasspath( project, new NullProgressMonitor() );
-    }
-
-    /**
      * Calls {@link #newClasspath(IProject, IProgressMonitor, boolean)} with downloadSources = false
      * 
      * @param project
@@ -157,9 +144,11 @@ public class MavenClasspathContainer implements IClasspathContainer
      * 
      * @param project
      * @param monitor
-     * @param downloadSources whether to download the sources or not
+     * @param downloadSources
+     *            whether to download the sources or not
      */
-    public static MavenClasspathContainer newClasspath( IProject project, IProgressMonitor monitor, boolean downloadSources )
+    public static MavenClasspathContainer newClasspath( IProject project, IProgressMonitor monitor,
+                                                        boolean downloadSources )
     {
         MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "New classpath for project ", project.getName() );
 
@@ -235,7 +224,8 @@ public class MavenClasspathContainer implements IClasspathContainer
      * @return classpathEntries list of entries in the resulting classpath
      */
     @SuppressWarnings( "unchecked" )
-    private List<IClasspathEntry> resolveArtifacts( IMavenProject mavenProject, Set<IMavenArtifact> artifacts, boolean downloadSources )
+    private List<IClasspathEntry> resolveArtifacts( IMavenProject mavenProject, Set<IMavenArtifact> artifacts,
+                                                    boolean downloadSources )
     {
         List classpathEntries = new ArrayList<IClasspathEntry>( artifacts.size() );
         for ( IMavenArtifact artifact : artifacts )
