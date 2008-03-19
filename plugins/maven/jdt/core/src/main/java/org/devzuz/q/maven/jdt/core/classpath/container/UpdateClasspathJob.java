@@ -30,16 +30,14 @@ import org.eclipse.core.runtime.jobs.Job;
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  * @version $Id$
  */
-public class UpdateClasspathJob
-    extends WorkspaceJob
-    implements IMavenJob
+public class UpdateClasspathJob extends WorkspaceJob implements IMavenJob
 {
-	
+
     private static final Set<String> projectsAlreadyScheduled = new HashSet<String>();
 
-    private IProject project;
-    
-    private boolean downloadSources;
+    private final IProject project;
+
+    private final boolean downloadSources;
 
     /**
      * Creates or updates the classpath container
@@ -92,18 +90,6 @@ public class UpdateClasspathJob
     }
 
     /**
-     * Calls {@link #scheduleNewUpdateClasspathJob(IProject, boolean, IJobChangeListener)} with downloadSources = false
-     * and classpathExecListener = null
-     * 
-     * @param project
-     * @return
-     */
-    public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project )
-    {
-        return scheduleNewUpdateClasspathJob( project, false , null );
-    }
-
-    /**
      * Calls {@link #scheduleNewUpdateClasspathJob(IProject, boolean)} with classpathExecListener = null
      * 
      * @param project
@@ -111,17 +97,19 @@ public class UpdateClasspathJob
      */
     public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project, boolean downloadSources )
     {
-        return scheduleNewUpdateClasspathJob( project, downloadSources , null );
+        return scheduleNewUpdateClasspathJob( project, downloadSources, null );
     }
+
     /**
      * Create and schedule a new {@link UpdateClasspathJob}. If there is another {@link UpdateClasspathJob} scheduled
      * or running no new job will be created.
      * 
      * @param project
-     * @param downloadSources whether the sources should be downloaded or not
+     * @param downloadSources
+     *            whether the sources should be downloaded or not
      * @return the scheduled job or null if the project was not scheduled
      */
-    public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project, boolean downloadSources , 
+    public static UpdateClasspathJob scheduleNewUpdateClasspathJob( IProject project, boolean downloadSources,
                                                                     IJobChangeListener classpathUpdateListener )
     {
         if ( projectsAlreadyScheduled.contains( project.getName() ) )
@@ -135,15 +123,14 @@ public class UpdateClasspathJob
             job.setRule( project.getProject().getWorkspace().getRoot() );
             job.setPriority( Job.BUILD );
             job.addJobChangeListener( new DuplicateJobListener() );
-            if( null != classpathUpdateListener )
+            if ( null != classpathUpdateListener )
                 job.addJobChangeListener( classpathUpdateListener );
             job.schedule();
             return job;
         }
     }
 
-    static class DuplicateJobListener
-        implements IJobChangeListener
+    static class DuplicateJobListener implements IJobChangeListener
     {
 
         public void done( IJobChangeEvent event )
