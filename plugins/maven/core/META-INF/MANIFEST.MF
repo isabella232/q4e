@@ -17,9 +17,12 @@ Export-Package: org.devzuz.q.maven.embedder;uses:="junit.framework",
  org.devzuz.q.maven.embedder.exception.handler,
  org.devzuz.q.maven.embedder.log;uses:="org.eclipse.core.runtime",
  org.devzuz.q.maven.embedder.nature;uses:="org.eclipse.core.resources",
+ org.devzuz.q.maven.embedder.pom,
  org.devzuz.q.maven.embedder.preferences,
  org.devzuz.q.maven.embedder.test;uses:="org.devzuz.q.maven.embedder.internal,org.apache.maven.artifact,org.devzuz.q.maven.embedder"
 Bundle-Vendor: DevZuz
 Import-Package: org.eclipse.jface.preference,
  org.eclipse.ui.preferences
 Eclipse-RegisterBuddy: org.apache.maven.embedder
+Bundle-ClassPath: lib/dom4j-1.6.1.jar,
+ .
