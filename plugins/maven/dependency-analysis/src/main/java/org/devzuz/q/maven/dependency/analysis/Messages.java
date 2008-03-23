@@ -22,6 +22,20 @@ public class Messages
 
     public static String SelectionExtension_Error_Implementation;
 
+    public static String ExcludeAll_Error_Title;
+
+    public static String ExcludeAll_Error_Message;
+
+    public static String ExcludeAll_Confirm_Title;
+
+    public static String ExcludeAll_Confirm_Message;
+
+    public static String ExcludeAll_Confirm_Excluded_Artifact;
+
+    public static String ExcludeAll_Confirm_Excluded_Dependency;
+
+    public static String ExcludeAll_Error_Cant_Exclude_Root;
+
     static
     {
         // initialize resource bundle

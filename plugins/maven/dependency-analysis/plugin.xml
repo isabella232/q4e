@@ -45,5 +45,15 @@
             name="Analyse Dependencies">
       </view>
    </extension>
+   <extension
+         point="org.devzuz.q.dependency.analysis.selection"> <selection-action
+            implementation="org.devzuz.q.maven.dependency.analysis.actions.ExcludeAllAction"
+            menu-label="Exclude All"
+            name="Exclude All">
+         <show-in-view
+               view-name="ARTIFACTS">
+         </show-in-view>
+      </selection-action>
+   </extension>
 
 </plugin>

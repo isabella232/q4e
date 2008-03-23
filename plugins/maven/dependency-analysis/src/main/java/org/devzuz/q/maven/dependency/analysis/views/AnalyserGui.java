@@ -74,7 +74,9 @@ public class AnalyserGui
         versionsTable.setInput( model.getVersions() );
         artifactsTable.setInput( model.getArtifacts() );
         refreshAll();
-        createEmptyContextMenu( "ArtifactsMenu", artifactsTable );
+        createContextMenu( SelectionExtension.Menu.INSTANCES, instanceTree );
+        createContextMenu( SelectionExtension.Menu.VERSIONS, versionsTable );
+        createContextMenu( SelectionExtension.Menu.ARTIFACTS, artifactsTable );
     }
 
     @Override
@@ -289,7 +291,6 @@ public class AnalyserGui
     public void setFocus()
     {
         // not required
-
     }
 
     /**
@@ -299,7 +300,7 @@ public class AnalyserGui
      * @param menuId
      * @param viewer - the viewer for which the menu should be created
      */
-    private void createEmptyContextMenu( String menuId, Viewer viewer )
+    private void createContextMenu( final SelectionExtension.Menu menu, Viewer viewer )
     {
         // Create menu manager.
         MenuManager menuMgr = new MenuManager();
@@ -308,7 +309,7 @@ public class AnalyserGui
         {
             public void menuAboutToShow( IMenuManager mgr )
             {
-                addISelectedVersionsActionExtensions( mgr );
+                addISelectedVersionsActionExtensions( menu, mgr );
                 mgr.add( new Separator() );
                 mgr.add( new GroupMarker( IWorkbenchActionConstants.MB_ADDITIONS ) );
             }
@@ -319,7 +320,7 @@ public class AnalyserGui
         viewer.getControl().setMenu( versionsMenu );
 
         // Register menu for extension.
-        getSite().registerContextMenu( menuId, menuMgr, viewer );
+        getSite().registerContextMenu( menu.name(), menuMgr, viewer );
     }
 
     /**
@@ -329,7 +330,7 @@ public class AnalyserGui
      * 
      * @param mgr
      */
-    private void addISelectedVersionsActionExtensions( IMenuManager mgr )
+    private void addISelectedVersionsActionExtensions( SelectionExtension.Menu menu, IMenuManager mgr )
     {
         IExtensionRegistry registry = Platform.getExtensionRegistry();
         IExtensionPoint extensionPoint = registry.getExtensionPoint( SelectionExtension.EXTENSION_POINT );
@@ -337,13 +338,33 @@ public class AnalyserGui
         for ( int m = 0; m < members.length; m++ )
         {
             IConfigurationElement member = members[m];
-            String functionName = member.getAttribute( SelectionExtension.ATTR_MENU_LABEL );
-            ISelectionAction proxy = new SelectionActionProxy( member );
-            SelectionMenuAction action =
-                new SelectionMenuAction( proxy, functionName, project, selections.getPrimary(),
-                                         selections.getSecondary() );
-            mgr.add( action );
+            IConfigurationElement[] showInViews = member.getChildren( SelectionExtension.ATTR_SHOW_IN_VIEW );
+            if ( isActiveForView( menu, showInViews ) )
+            {
+                String functionName = member.getAttribute( SelectionExtension.ATTR_MENU_LABEL );
+                ISelectionAction proxy = new SelectionActionProxy( member );
+                SelectionMenuAction action =
+                    new SelectionMenuAction( proxy, functionName, project, selections.getPrimary(),
+                                             selections.getSecondary() );
+                mgr.add( action );
+            }
+
         }
     }
 
+    /**
+     * checks the extension config to see if the menu is enabled for the specified view
+     */
+    private boolean isActiveForView( SelectionExtension.Menu menu, IConfigurationElement[] showInViews )
+    {
+        for ( IConfigurationElement showInView : showInViews )
+        {
+            String viewName = showInView.getAttribute( SelectionExtension.ATTR_VIEW_NAME );
+            if ( menu.name().equals( viewName ) )
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }

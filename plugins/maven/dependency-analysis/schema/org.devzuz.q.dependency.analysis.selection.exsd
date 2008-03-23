@@ -13,7 +13,7 @@
    <element name="extension">
       <complexType>
          <sequence minOccurs="0" maxOccurs="unbounded">
-            <element ref="SelectionAction"/>
+            <element ref="selection-action"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -25,8 +25,11 @@
       </complexType>
    </element>
 
-   <element name="SelectionAction">
+   <element name="selection-action">
       <complexType>
+         <sequence minOccurs="1" maxOccurs="3">
+            <element ref="show-in-view"/>
+         </sequence>
          <attribute name="menu-label" type="string" use="required">
             <annotation>
                <documentation>
@@ -53,6 +56,33 @@
                   
                </documentation>
             </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="show-in-view">
+      <annotation>
+         <documentation>
+            determines which views the extension is activated in
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="view-name" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+            <simpleType>
+               <restriction base="string">
+                  <enumeration value="INSTANCES">
+                  </enumeration>
+                  <enumeration value="VERSIONS">
+                  </enumeration>
+                  <enumeration value="ARTIFACTS">
+                  </enumeration>
+               </restriction>
+            </simpleType>
          </attribute>
       </complexType>
    </element>
