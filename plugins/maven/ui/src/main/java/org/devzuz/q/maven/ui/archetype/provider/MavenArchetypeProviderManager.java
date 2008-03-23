@@ -24,11 +24,8 @@ public class MavenArchetypeProviderManager
 
     public static synchronized IArchetypeProvider[] getArchetypeProviders()
     {
-        if ( listProviders == null )
-        {
-            MavenUIPreferenceManagerAdapter uiPreferences = MavenUIPreferenceManagerAdapter.getInstance();
-            listProviders = uiPreferences.getConfiguredArchetypeProviders().toArray( new IArchetypeProvider[0] );
-        }
+        MavenUIPreferenceManagerAdapter uiPreferences = MavenUIPreferenceManagerAdapter.getInstance();
+        listProviders = uiPreferences.getConfiguredArchetypeProviders().toArray( new IArchetypeProvider[0] );
         return listProviders;
     }
 
@@ -54,26 +51,27 @@ public class MavenArchetypeProviderManager
                 }
                 catch ( QCoreException e )
                 {
-                    MavenUiActivator.getLogger().log( "Could not retrieve archetypes from " + p.getName() + " ("
+                    MavenUiActivator.getLogger().log(
+                                                      "Could not retrieve archetypes from " + p.getName() + " ("
                                                                       + p.getType() + "):", e );
                     exceptions.add( e );
                 }
             }
-            
-            if( archetypes.size() > 0 )
+
+            if ( archetypes.size() > 0 )
             {
-                return new ArchetypeRetrievalResult( archetypes , exceptions );
+                return new ArchetypeRetrievalResult( archetypes, exceptions );
             }
             else
             {
-                return new ArchetypeRetrievalResult( DEFAULT_ARCHETYPES , exceptions );
+                return new ArchetypeRetrievalResult( DEFAULT_ARCHETYPES, exceptions );
             }
         }
         else
         {
             // There are no archetype providers, return the default list of archetypes
             Collection<QCoreException> emptyExceptions = Collections.emptyList();
-            return new ArchetypeRetrievalResult( DEFAULT_ARCHETYPES , emptyExceptions );
+            return new ArchetypeRetrievalResult( DEFAULT_ARCHETYPES, emptyExceptions );
         }
     }
 
@@ -85,7 +83,7 @@ public class MavenArchetypeProviderManager
     private static Collection<Archetype> getDefaultArchetypes()
     {
         List<Archetype> arch = new LinkedList<Archetype>();
-        
+
         arch.add( new Archetype( "maven-archetype-j2ee-simple", "org.apache.maven.archetypes", "",
                                  "http://www.ibiblio.org/maven2", "A simple J2EE Java application" ) );
         arch.add( new Archetype( "maven-archetype-marmalade-mojo", "org.apache.maven.archetypes", "",
