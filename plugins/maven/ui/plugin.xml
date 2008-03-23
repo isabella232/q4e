@@ -35,23 +35,28 @@
              adaptable="true"
              id="org.devzuz.q.maven.ui.project.menu"
              objectClass="org.eclipse.core.resources.IProject">
-<!--
-          <filter
-               name="projectNature"
-               value="org.eclipse.jdt.core.javanature">
-          </filter>
--->
+
           <menu
                 id="org.devzuz.q.maven.ui.project.submenu"
                 label="%mavenMenuTitle"
                 path="additions">
-             <groupMarker
+             <groupMarker 
                    name="contents">
+                   
              </groupMarker>
              <separator
                    name="additions">
              </separator>
           </menu>
+       </objectContribution>
+       <objectContribution
+               adaptable="true"
+             id="org.devzuz.q.maven.ui.project.menumaven"
+             objectClass="org.eclipse.core.resources.IProject">
+              <filter
+               name="projectNature"
+               value="org.devzuz.q.maven.jdt.core.mavenNature">
+          </filter>
            <action
                  class="org.devzuz.q.maven.ui.actions.MavenPackageAction"
                  enablesFor="1"
@@ -159,5 +164,6 @@
             </and>
          </enablement>
       </decorator>
-   </extension>   
+   </extension>
+
 </plugin>

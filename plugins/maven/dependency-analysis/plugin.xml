@@ -16,7 +16,10 @@
              adaptable="true"
              id="org.devzuz.q.maven.ui.project.menu"
              objectClass="org.eclipse.core.resources.IProject">
-          
+          <filter
+                name="projectNature"
+                value="org.devzuz.q.maven.jdt.core.mavenNature">
+           </filter>
            <action
                 class="org.devzuz.q.maven.dependency.analysis.actions.AnalyseDependencyAction"
                 enablesFor="1"
