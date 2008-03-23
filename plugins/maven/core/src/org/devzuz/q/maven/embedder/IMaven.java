@@ -38,8 +38,7 @@ public interface IMaven
      * @param projectSpec
      * @return
      */
-    public IMavenProject getMavenProject( IFile projectSpec, boolean resolveTransitively )
-        throws CoreException;
+    public IMavenProject getMavenProject( IFile projectSpec, boolean resolveTransitively ) throws CoreException;
 
     /**
      * Returns an instance of IMavenProject for the given project specification
@@ -47,8 +46,7 @@ public interface IMaven
      * @param projectSpec
      * @return
      */
-    public IMavenProject getMavenProject( File projectSpec, boolean resolveTransitively )
-        throws CoreException;
+    public IMavenProject getMavenProject( File projectSpec, boolean resolveTransitively ) throws CoreException;
 
     /**
      * Returns an instance of IMavenProject for the given project
@@ -56,8 +54,7 @@ public interface IMaven
      * @param project
      * @return
      */
-    public IMavenProject getMavenProject( IProject project, boolean resolveTransitively )
-        throws CoreException;
+    public IMavenProject getMavenProject( IProject project, boolean resolveTransitively ) throws CoreException;
 
     /**
      * Returns an instance of IMavenProject for the given artifact in the remote repositories
@@ -74,15 +71,18 @@ public interface IMaven
      * Allows you to execute a given goal without an existing project. For example, "archetype:create" can be executed
      * without an existing maven project.
      * 
-     * @param baseDirectory The location of the execution of the goal
-     * @param goal goal name
-     * @param properties properties of this goal
+     * @param baseDirectory
+     *            The location of the execution of the goal
+     * @param goal
+     *            goal name
+     * @param properties
+     *            properties of this goal
      * @throws CoreException
-     * @throws MavenInterruptedException if the build is canceled
+     * @throws MavenInterruptedException
+     *             if the build is canceled
      */
     public IMavenExecutionResult executeGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter,
-                                              IProgressMonitor monitor )
-        throws CoreException;
+                                              IProgressMonitor monitor ) throws CoreException;
 
     /**
      * Allows you to execute a given goal name against a MavenProject. This is equivalent to
@@ -90,9 +90,11 @@ public interface IMaven
      * properties argument.
      * 
      * @param mavenProject
-     * @param goal goal name
+     * @param goal
+     *            goal name
      * @throws CoreException
-     * @throws MavenInterruptedException if the build is canceled
+     * @throws MavenInterruptedException
+     *             if the build is canceled
      */
     public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal, IProgressMonitor monitor )
         throws CoreException;
@@ -101,10 +103,13 @@ public interface IMaven
      * Allows you to execute a given goal name against a MavenProject.
      * 
      * @param mavenProject
-     * @param goal goal name
-     * @param properties properties of this goal
+     * @param goal
+     *            goal name
+     * @param properties
+     *            properties of this goal
      * @throws CoreException
-     * @throws MavenInterruptedException if the build is canceled
+     * @throws MavenInterruptedException
+     *             if the build is canceled
      */
     public IMavenExecutionResult executeGoal( IMavenProject mavenProject, String goal,
                                               MavenExecutionParameter parameter, IProgressMonitor monitor )
@@ -116,9 +121,11 @@ public interface IMaven
      * properties argument.
      * 
      * @param mavenProject
-     * @param goals list of goals to execute
+     * @param goals
+     *            list of goals to execute
      * @throws CoreException
-     * @throws MavenInterruptedException if the build is canceled
+     * @throws MavenInterruptedException
+     *             if the build is canceled
      */
     public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals, IProgressMonitor monitor )
         throws CoreException;
@@ -127,10 +134,13 @@ public interface IMaven
      * Allows you to execute several goals against a MavenProject.
      * 
      * @param mavenProject
-     * @param goals list of goals to execute
-     * @param properties properties of this goal. Might be <code>null</code> when no properties are used.
+     * @param goals
+     *            list of goals to execute
+     * @param properties
+     *            properties of this goal. Might be <code>null</code> when no properties are used.
      * @throws CoreException
-     * @throws MavenInterruptedException if the build is canceled
+     * @throws MavenInterruptedException
+     *             if the build is canceled
      */
     public IMavenExecutionResult executeGoals( IMavenProject mavenProject, List<String> goals,
                                                MavenExecutionParameter parameter, IProgressMonitor monitor )
@@ -140,9 +150,12 @@ public interface IMaven
      * Allows you to schedule the execution of a given goal without an existing project. For example, "archetype:create"
      * can be executed without an existing maven project.
      * 
-     * @param baseDirectory The location of the execution of the goal
-     * @param goal goal name
-     * @param properties properties of this goal
+     * @param baseDirectory
+     *            The location of the execution of the goal
+     * @param goal
+     *            goal name
+     * @param properties
+     *            properties of this goal
      * @throws CoreException
      */
     public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter )
@@ -152,22 +165,26 @@ public interface IMaven
      * Allows you to schedule the execution of a given goal without an existing project. For example, "archetype:create"
      * can be executed without an existing maven project.
      * 
-     * @param baseDirectory The location of the execution of the goal
-     * @param goal goal name
-     * @param properties properties of this goal
-     * @param jobAdapter listener to the thread that executes the maven goal
+     * @param baseDirectory
+     *            The location of the execution of the goal
+     * @param goal
+     *            goal name
+     * @param properties
+     *            properties of this goal
+     * @param jobAdapter
+     *            listener to the thread that executes the maven goal. Might be {@link NullPointerException}.
      * @throws CoreException
      */
     public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter,
-                              MavenExecutionJobAdapter jobAdapter )
-        throws CoreException;
+                              MavenExecutionJobAdapter jobAdapter ) throws CoreException;
 
     /**
      * Allows you to schedule the execution of a given goal name against a MavenProject. This is equivalent to
      * {@link #scheduleGoal(IMavenProject, String, Properties )}, using <code>null</code> as the properties argument.
      * 
      * @param mavenProject
-     * @param goal goal name
+     * @param goal
+     *            goal name
      * @throws CoreException
      */
     // public void scheduleGoal( IMavenProject mavenProject, String goal ) throws CoreException;
@@ -177,8 +194,10 @@ public interface IMaven
      * using <code>null</code> as the jobAdapter argument.
      * 
      * @param mavenProject
-     * @param goal goal name
-     * @param properties properties of this goal
+     * @param goal
+     *            goal name
+     * @param properties
+     *            properties of this goal
      * @throws CoreException
      */
     public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter )
@@ -190,25 +209,27 @@ public interface IMaven
      * element as the second argument.
      * 
      * @param mavenProject
-     * @param goal goal name
-     * @param properties properties of this goal
-     * @param jobAdapter listener to the thread that executes the maven goal
+     * @param goal
+     *            goal name
+     * @param properties
+     *            properties of this goal
+     * @param jobAdapter
+     *            listener to the thread that executes the maven goal. Might be null.
      * @throws CoreException
      */
     public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter,
-                              MavenExecutionJobAdapter jobAdapter )
-        throws CoreException;
+                              MavenExecutionJobAdapter jobAdapter ) throws CoreException;
 
     /**
      * Allows you to schedule the execution of several goals against a MavenProject. This is equivalent to
      * {@link #scheduleGoals(IMavenProject, List, Properties)}, using <code>null</code> as the properties argument.
      * 
      * @param mavenProject
-     * @param goals list of goals to execute
+     * @param goals
+     *            list of goals to execute
      * @throws CoreException
      */
-    public void scheduleGoals( IMavenProject mavenProject, List<String> goals )
-        throws CoreException;
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException;
 
     /**
      * Allows you to schedule the execution of several goals against a MavenProject. This is equivalent to
@@ -216,8 +237,10 @@ public interface IMaven
      * the jobAdapter argument.
      * 
      * @param mavenProject
-     * @param goals list of goals to execute
-     * @param properties properties of this goal. Might be <code>null</code> when no properties are used.
+     * @param goals
+     *            list of goals to execute
+     * @param properties
+     *            properties of this goal. Might be <code>null</code> when no properties are used.
      * @throws CoreException
      */
     public void scheduleGoals( IMavenProject mavenProject, List<String> goals, MavenExecutionParameter parameter )
@@ -227,14 +250,16 @@ public interface IMaven
      * Allows you to schedule the execution of several goals against a MavenProject.
      * 
      * @param mavenProject
-     * @param goals list of goals to execute
-     * @param properties properties of this goal. Might be <code>null</code> when no properties are used.
-     * @param jobAdapter listener to the thread that executes the maven goal
+     * @param goals
+     *            list of goals to execute
+     * @param properties
+     *            properties of this goal. Might be <code>null</code> when no properties are used.
+     * @param jobAdapter
+     *            listener to the thread that executes the maven goal
      * @throws CoreException
      */
     public void scheduleGoals( IMavenProject mavenProject, List<String> goals, MavenExecutionParameter parameters,
-                               MavenExecutionJobAdapter jobAdapter )
-        throws CoreException;
+                               MavenExecutionJobAdapter jobAdapter ) throws CoreException;
 
     /**
      * Same as calling {@link #scheduleGoal(IMavenProject, String)} with (mavenProject, "install")
@@ -242,8 +267,7 @@ public interface IMaven
      * @param mavenProject
      * @throws CoreException
      */
-    public void install( IMavenProject mavenProject, MavenExecutionParameter parameters )
-        throws CoreException;
+    public void install( IMavenProject mavenProject, MavenExecutionParameter parameters ) throws CoreException;
 
     /**
      * Same as calling {@link #scheduleGoal(IMavenProject, String)} with (mavenProject, "deploy")
@@ -251,8 +275,7 @@ public interface IMaven
      * @param mavenProject
      * @throws CoreException
      */
-    public void deploy( IMavenProject mavenProject, MavenExecutionParameter parameters )
-        throws CoreException;
+    public void deploy( IMavenProject mavenProject, MavenExecutionParameter parameters ) throws CoreException;
 
     /**
      * @param listener
@@ -300,7 +323,8 @@ public interface IMaven
     /**
      * Create a Maven artifact from the dependency information
      * 
-     * @param dependency bean with all info needed to create the artifact
+     * @param dependency
+     *            bean with all info needed to create the artifact
      * @return
      */
     public Artifact createArtifact( Dependency dependency );
@@ -325,15 +349,16 @@ public interface IMaven
      * 
      * @deprecated use {@link #resolveArtifact(IMavenArtifact)}
      * @param artifact
-     * @param type this value will override the type in the artifact object
-     * @param classifier this value will override the classifier in the artifact object
+     * @param type
+     *            this value will override the type in the artifact object
+     * @param classifier
+     *            this value will override the classifier in the artifact object
      * @param remoteRepositories
      * @throws CoreException
      */
     @Deprecated
     public void resolveArtifact( IMavenArtifact artifact, String type, String classifier,
-                                 List<ArtifactRepository> remoteRepositories )
-        throws CoreException;
+                                 List<ArtifactRepository> remoteRepositories ) throws CoreException;
 
     /**
      * Resolve an artifact from remote repositories. It will download to the local repository.
@@ -358,8 +383,7 @@ public interface IMaven
      * 
      * @throws CoreException
      */
-    public void refresh()
-        throws CoreException;
+    public void refresh() throws CoreException;
 
     /**
      * Get the Maven super project with all the default values
@@ -367,8 +391,7 @@ public interface IMaven
      * @return the Maven super project
      * @throws CoreException
      */
-    public IMavenProject getMavenSuperProject()
-        throws CoreException;
+    public IMavenProject getMavenSuperProject() throws CoreException;
 
     /**
      * Get an utility class to retrieve widely used Maven components
