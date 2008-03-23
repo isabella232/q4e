@@ -14,6 +14,7 @@ import org.devzuz.q.maven.embedder.MavenExecutionJobAdapter;
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.preferences.MavenPreferenceManager;
+import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -24,40 +25,58 @@ public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
                                   String version, String packageName, IMavenWizardContext wizardContext,
                                   MavenExecutionJobAdapter jobAdapter ) throws CoreException
     {
+        MavenPreferenceManager preferenceManager = MavenCoreActivator.getDefault().getMavenPreferenceManager();
+        String ver = preferenceManager.getArchetypePluginVersion();
+        boolean isVersion20 = ver.startsWith( "2.0" );
+
         Properties archetypeProperties = new Properties( wizardContext.getArchetypeCreationProperties() );
 
         archetypeProperties.setProperty( "groupId", groupId );
         archetypeProperties.setProperty( "artifactId", artifactId );
         archetypeProperties.setProperty( "version", version );
-        archetypeProperties.setProperty( "packageName", packageName );
         archetypeProperties.setProperty( "archetypeArtifactId", archetype.getArtifactId() );
         archetypeProperties.setProperty( "archetypeGroupId", archetype.getGroupId() );
         archetypeProperties.setProperty( "basedir", baseDir.makeAbsolute().toOSString() );
 
+        if ( isVersion20 )
+        {
+            archetypeProperties.setProperty( "package", packageName );
+        }
+        else
+        {
+            archetypeProperties.setProperty( "packageName", packageName );
+        }
+
         if ( archetype.getVersion().length() > 0 )
+        {
             archetypeProperties.setProperty( "archetypeVersion", archetype.getVersion() );
+        }
 
         if ( archetype.getRemoteRepositories().length() > 0 )
+        {
             archetypeProperties.setProperty( "remoteRepositories", archetype.getRemoteRepositories() );
+            if ( ver.equals( Messages.MavenArchetypePreferencePage_archetypeVersion_2_0_latest_label ) )
+                archetypeProperties.setProperty( "archetypeRepository", archetype.getRemoteRepositories() );
+        }
 
         if ( jobAdapter == null )
         {
             MavenManager.getMaven().scheduleGoal(
                                                   baseDir,
-                                                  getArchetypePluginCreationId(),
+                                                  getArchetypePluginCreationId( isVersion20 ),
                                                   MavenExecutionParameter.newDefaultMavenExecutionParameter( archetypeProperties ) );
         }
         else
         {
             MavenManager.getMaven().scheduleGoal(
                                                   baseDir,
-                                                  getArchetypePluginCreationId(),
+                                                  getArchetypePluginCreationId( isVersion20 ),
                                                   MavenExecutionParameter.newDefaultMavenExecutionParameter( archetypeProperties ),
                                                   jobAdapter );
         }
     }
 
-    private String getArchetypePluginCreationId()
+    private String getArchetypePluginCreationId( boolean isVersion20 )
     {
         StringBuilder sb = new StringBuilder();
         MavenPreferenceManager preferenceManager = MavenCoreActivator.getDefault().getMavenPreferenceManager();
@@ -65,8 +84,16 @@ public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
         sb.append( ":" );
         sb.append( preferenceManager.getArchetypePluginArtifactId() );
         sb.append( ":" );
-        sb.append( preferenceManager.getArchetypePluginVersion() );
-        sb.append( ":create" );
+        String ver = preferenceManager.getArchetypePluginVersion();
+        sb.append( ver );
+        if ( isVersion20 )
+        {
+            sb.append( ":generate" );
+        }
+        else
+        {
+            sb.append( ":create" );
+        }
         return sb.toString();
     }
 }
