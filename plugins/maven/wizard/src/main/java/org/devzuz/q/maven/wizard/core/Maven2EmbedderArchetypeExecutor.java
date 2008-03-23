@@ -19,6 +19,12 @@ import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
+/**
+ * Runs the archetype creation goals.
+ * 
+ * @author amuino
+ */
+// TODO: This class processes both 1.0 and 2.0 archetype goals. Should be split since there are many differences.
 public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
 {
     public void executeArchetype( Archetype archetype, IPath baseDir, String groupId, String artifactId,
