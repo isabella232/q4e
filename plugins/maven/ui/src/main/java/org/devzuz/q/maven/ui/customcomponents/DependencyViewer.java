@@ -26,18 +26,17 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-public class DependencyViewer
-    extends Composite
+public class DependencyViewer extends Composite
 {
     private Collection<Dependency> artifacts;
 
-    private Button addPropertyButton;
+    private final Button addPropertyButton;
 
-    private Button removePropertyButton;
+    private final Button removePropertyButton;
 
-    private Button editPropertyButton;
+    private final Button editPropertyButton;
 
-    private Table artifactsTable;
+    private final Table artifactsTable;
 
     public DependencyViewer( final Composite parent, int styles )
     {
@@ -46,11 +45,13 @@ public class DependencyViewer
 
         SelectionAdapter buttonListener = new SelectionAdapter()
         {
+            @Override
             public void widgetDefaultSelected( SelectionEvent e )
             {
                 buttonSelected( e );
             }
 
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 buttonSelected( e );
@@ -59,11 +60,13 @@ public class DependencyViewer
 
         SelectionAdapter tableListener = new SelectionAdapter()
         {
+            @Override
             public void widgetDefaultSelected( SelectionEvent e )
             {
                 widgetSelected( e );
             }
 
+            @Override
             public void widgetSelected( SelectionEvent e )
             {
                 editPropertyButton.setEnabled( true );
@@ -130,12 +133,8 @@ public class DependencyViewer
         for ( Dependency artifact : artifacts )
         {
             TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
-            item.setText( new String[] {
-                artifact.getGroupId(),
-                artifact.getArtifactId(),
-                artifact.getVersion(),
-                artifact.getScope(),
-                artifact.getType() } );
+            item.setText( new String[] { artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
+                artifact.getScope(), artifact.getType() } );
         }
 
         artifactsTable.deselectAll();
@@ -182,14 +181,16 @@ public class DependencyViewer
             AddEditDependencyDialog dialog = AddEditDependencyDialog.getAddEditDependencyDialog();
 
             TableItem items[] = artifactsTable.getSelection();
+            int selectedIndex = artifactsTable.getSelectionIndex();
             if ( items.length > 0 )
             {
                 if ( dialog.openWithItem( items[0] ) == Window.OK )
                 {
-                    if ( shouldModify( items[0], dialog.getGroupId(), dialog.getArtifactId(), dialog.getVersion(),
+                    TableItem editedItem = artifactsTable.getItem( selectedIndex );
+                    if ( shouldModify( editedItem, dialog.getGroupId(), dialog.getArtifactId(), dialog.getVersion(),
                                        dialog.getScope() ) )
                     {
-                        replaceArtifactInList( items[0], dialog.getGroupId(), dialog.getArtifactId(),
+                        replaceArtifactInList( editedItem, dialog.getGroupId(), dialog.getArtifactId(),
                                                nullIfBlank( dialog.getVersion() ), nullIfBlank( dialog.getScope() ) );
                         refreshArtifactsTable();
                     }
@@ -274,7 +275,7 @@ public class DependencyViewer
     private static boolean itemEqualsArtifact( TableItem item, Dependency artifact )
     {
         if ( item.getText( 0 ).equals( artifact.getGroupId() ) && item.getText( 1 ).equals( artifact.getArtifactId() )
-            && item.getText( 2 ).equals( artifact.getVersion() ) )
+                        && item.getText( 2 ).equals( artifact.getVersion() ) )
         {
             return true;
         }
