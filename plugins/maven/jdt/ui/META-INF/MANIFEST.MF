@@ -11,7 +11,9 @@ Require-Bundle: org.devzuz.q.maven.jdt.core;bundle-version="[0.6.0,0.7.0)";visib
  org.eclipse.ui.forms;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.eclipse.jface.text;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.eclipse.ui;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
- org.eclipse.ui.editors;bundle-version="[3.3.0,4.0.0)";visibility:=reexport
+ org.eclipse.ui.editors;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
+ org.eclipse.core.resources,
+ org.eclipse.core.runtime
 Eclipse-LazyStart: true
 Bundle-Vendor: DevZuz
 Export-Package: org.devzuz.q.maven.jdt.ui,

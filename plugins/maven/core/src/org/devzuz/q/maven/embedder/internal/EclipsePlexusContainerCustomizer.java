@@ -9,6 +9,7 @@ package org.devzuz.q.maven.embedder.internal;
 
 import org.apache.maven.artifact.resolver.ArtifactResolver;
 import org.apache.maven.embedder.ContainerCustomizer;
+import org.apache.maven.lifecycle.plan.BuildPlanner;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.ComponentDescriptor;
@@ -35,6 +36,8 @@ public class EclipsePlexusContainerCustomizer implements ContainerCustomizer
         resolverDescriptor.setImplementation( EclipseMavenArtifactResolver.class.getName() );
         ComponentDescriptor projectBuilderDescriptor = container.getComponentDescriptor( MavenProjectBuilder.ROLE );
         projectBuilderDescriptor.setImplementation( EclipseMavenProjectBuilder.class.getName() );
+        ComponentDescriptor buildPlannerDescriptor = container.getComponentDescriptor( BuildPlanner.class.getName() );
+        buildPlannerDescriptor.setImplementation( EclipseMavenBuildPlanner.class.getName() );
     }
 
 }

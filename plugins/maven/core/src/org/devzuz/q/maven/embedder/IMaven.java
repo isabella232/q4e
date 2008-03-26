@@ -399,4 +399,13 @@ public interface IMaven
      * @return the component helper
      */
     public MavenComponentHelper getMavenComponentHelper();
+
+    /**
+     * Gets a list of the goals which would be invoked if a particular phase were run.
+     * 
+     * @param phase
+     * @return
+     */
+    public List<String> getGoalsForPhase( IMavenProject project, String phase ) throws CoreException;
+
 }

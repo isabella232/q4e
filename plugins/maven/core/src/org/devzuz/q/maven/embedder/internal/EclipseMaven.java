@@ -8,10 +8,12 @@
 package org.devzuz.q.maven.embedder.internal;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.Stack;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.InvalidArtifactRTException;
@@ -27,10 +29,13 @@ import org.apache.maven.embedder.ConfigurationValidationResult;
 import org.apache.maven.embedder.DefaultConfiguration;
 import org.apache.maven.embedder.MavenEmbedder;
 import org.apache.maven.embedder.MavenEmbedderException;
-import org.apache.maven.execution.DefaultMavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.extension.ExtensionScanningException;
+import org.apache.maven.lifecycle.MojoBindingUtils;
+import org.apache.maven.lifecycle.NoSuchPhaseException;
+import org.apache.maven.lifecycle.model.MojoBinding;
+import org.apache.maven.lifecycle.plan.BuildPlan;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
@@ -286,11 +291,12 @@ public class EclipseMaven implements IMaven
             parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter();
         }
 
-        DefaultMavenExecutionRequest request = new DefaultMavenExecutionRequest();
+        EclipseMavenExecutionRequest request = new EclipseMavenExecutionRequest();
 
         request.setOffline( parameter.isOffline() ); // false
         request.setUseReactor( parameter.isUseReactor() ); // false
         request.setRecursive( parameter.isRecursive() ); // false
+        request.setSkippedGoals( parameter.getFilteredGoals() ); // empty
 
         if ( parameter.getLoggingLevel() == LOGGING_DEBUG )
         {
@@ -369,7 +375,7 @@ public class EclipseMaven implements IMaven
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private IMavenProject getMavenProject( EclipseMavenProject mavenProject, boolean resolveTransitively )
         throws CoreException
     {
@@ -378,19 +384,20 @@ public class EclipseMaven implements IMaven
             if ( resolveTransitively )
             {
                 MavenExecutionResult status =
-                    getMavenEmbedder().readProjectWithDependencies( generateRequest( mavenProject, Collections.EMPTY_LIST, null ) );
+                    getMavenEmbedder().readProjectWithDependencies(
+                                                                    generateRequest( mavenProject,
+                                                                                     Collections.EMPTY_LIST, null ) );
 
                 ArtifactResolutionResult artifactResolutionResult = status.getArtifactResolutionResult();
                 boolean hasResolutionExceptions =
-                    ( artifactResolutionResult != null ) && 
-                        ( ArtifactResolutionResultHelper.hasExceptions( artifactResolutionResult ) );
+                    ( artifactResolutionResult != null )
+                                    && ( ArtifactResolutionResultHelper.hasExceptions( artifactResolutionResult ) );
                 boolean hasMissingArtifacts =
-                    ( null != artifactResolutionResult ) && 
-                        ( null != artifactResolutionResult.getMissingArtifacts() ) && 
-                            ( !artifactResolutionResult.getMissingArtifacts().isEmpty() );
+                    ( null != artifactResolutionResult ) && ( null != artifactResolutionResult.getMissingArtifacts() )
+                                    && ( !artifactResolutionResult.getMissingArtifacts().isEmpty() );
 
                 if ( hasResolutionExceptions || hasMissingArtifacts || status.hasExceptions() )
-                { 
+                {
                     EclipseMavenExecutionResult eclipseMavenExecutionResult =
                         new EclipseMavenExecutionResult( status, mavenProject.getProject() );
                     throw new QCoreException( new MavenExecutionStatus( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID,
@@ -597,7 +604,7 @@ public class EclipseMaven implements IMaven
         return eventPropagator;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public List<ArtifactVersion> getArtifactVersions( Artifact artifact, List<ArtifactRepository> remoteRepositories )
         throws CoreException
     {
@@ -634,7 +641,7 @@ public class EclipseMaven implements IMaven
                 artifactMetadataSource =
                     (ArtifactMetadataSource) getMavenEmbedder().getPlexusContainer().lookup(
                                                                                              ArtifactMetadataSource.ROLE );
-                
+
             }
             catch ( ComponentLookupException e )
             {
@@ -810,5 +817,35 @@ public class EclipseMaven implements IMaven
     public MavenComponentHelper getMavenComponentHelper()
     {
         return new MavenComponentHelper( getMavenEmbedder() );
+    }
+
+    public List<String> getGoalsForPhase( IMavenProject project, String phase ) throws CoreException
+    {
+        try
+        {
+            BuildPlan buildPlan =
+                this.mavenEmbedder.getBuildPlan( Collections.singletonList( phase ), project.getRawMavenProject() );
+            List<MojoBinding> mojoBindings = buildPlan.renderExecutionPlan( new Stack() );
+            List<String> goals = new ArrayList<String>( mojoBindings.size() );
+            for ( MojoBinding mojoBinding : mojoBindings )
+            {
+                String origin = mojoBinding.getOrigin();
+                if ( !MojoBinding.INTERNAL_ORIGIN.equals( origin ) )
+                {
+                    goals.add( MojoBindingUtils.createMojoBindingKey( mojoBinding, true ) );
+                }
+            }
+            return goals;
+        }
+        catch ( NoSuchPhaseException e )
+        {
+            throw new IllegalArgumentException( "The phase " + phase + " does not exist." );
+        }
+        catch ( MavenEmbedderException e )
+        {
+            throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID, START_ERROR_CODE,
+                                                  "Error fetching goals", e ) );
+        }
+
     }
 }

@@ -117,5 +117,17 @@
          <adapter type="org.eclipse.debug.ui.actions.ILaunchable"/>
       </factory>
    </extension> 
+   
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="org.devzuz.q.maven.jdt.ui.properties.MavenProjectPropertyPage"
+            id="org.devzuz.q.maven.jdt.ui.properties.mavenProjectPropertyPage"
+            name="Maven JDT"
+            objectClass="org.eclipse.core.resources.IProject"
+            adaptable="true">
+            <filter name="nature" value="org.devzuz.q.maven.jdt.core.mavenNature"/>
+      </page>
+   </extension> 
 
 </plugin>

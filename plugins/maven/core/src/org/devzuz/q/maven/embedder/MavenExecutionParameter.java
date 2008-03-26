@@ -7,7 +7,10 @@
  */
 package org.devzuz.q.maven.embedder;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import org.codehaus.plexus.logging.Logger;
 
@@ -15,19 +18,21 @@ public class MavenExecutionParameter
 {
     private Properties executionProperties;
     
-    private boolean    useReactor = false;
+    private boolean      useReactor = false;
     
-    private boolean    recursive = false;
+    private boolean      recursive = false;
     
-    private boolean    showErrors = false;
+    private boolean      showErrors = false;
     
-    private boolean    offline = false;
+    private boolean      offline = false;
     
-    private boolean    updateSnapshots = false;
+    private boolean      updateSnapshots = false;
     
-    private boolean    noSnapshotUpdates = false;
+    private boolean      noSnapshotUpdates = false;
     
-    private int        loggingLevel = Logger.LEVEL_INFO;
+    private Set<String>  filteredGoals = Collections.emptySet();
+    
+    private int          loggingLevel = Logger.LEVEL_INFO;
     
     public static MavenExecutionParameter newDefaultMavenExecutionParameter()
     {
@@ -117,6 +122,16 @@ public class MavenExecutionParameter
     public void setLoggingLevel( int loggingLevel )
     {
         this.loggingLevel = loggingLevel;
+    }
+
+    public Set<String> getFilteredGoals()
+    {
+        return filteredGoals;
+    }
+
+    public void setFilteredGoals( Set<String> filteredGoals )
+    {
+        this.filteredGoals = filteredGoals;
     }
     
     

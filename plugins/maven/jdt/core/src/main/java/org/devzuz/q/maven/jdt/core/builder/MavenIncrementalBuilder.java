@@ -22,6 +22,7 @@ import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
+import org.devzuz.q.maven.jdt.core.properties.MavenPropertyManager;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -42,14 +43,16 @@ import org.eclipse.core.runtime.Path;
  * 
  * @author <a href="mailto:carlos@apache.org">Carlos Sanchez</a>
  */
-public class MavenIncrementalBuilder extends IncrementalProjectBuilder
+public class MavenIncrementalBuilder
+    extends IncrementalProjectBuilder
 {
     /**
      * TODO Document
      * 
      * @author amuino
      */
-    private final class DeltaVisitor implements IResourceDeltaVisitor
+    private final class DeltaVisitor
+        implements IResourceDeltaVisitor
     {
         private final String goal;
 
@@ -80,7 +83,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             this.excludes = mavenResource.getExcludes();
         }
 
-        public boolean visit( IResourceDelta delta ) throws CoreException
+        public boolean visit( IResourceDelta delta )
+            throws CoreException
         {
             if ( delta.getResource().getType() == IResource.FILE )
             {
@@ -120,12 +124,11 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
         /**
          * Handles deleting the file in the output folder.
          * 
-         * @param delta
-         *            the delta describing the delete.
-         * @throws CoreException
-         *             if an error occurs deleting the resource in the output folder.
+         * @param delta the delta describing the delete.
+         * @throws CoreException if an error occurs deleting the resource in the output folder.
          */
-        private void processFileDelete( IResourceDelta delta ) throws CoreException
+        private void processFileDelete( IResourceDelta delta )
+            throws CoreException
         {
             IPath resourcePath = delta.getResource().getProjectRelativePath();
             IPath resourceRoot = new Path( mavenResource.getDirectory() );
@@ -166,10 +169,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
         /**
          * Checks if the given path matches any of the specified patterns.
          * 
-         * @param resourcePath
-         *            the path to check.
-         * @param patterns
-         *            the path patterns (ant style).
+         * @param resourcePath the path to check.
+         * @param patterns the path patterns (ant style).
          * @return <code>true</code> if the path is matched by at least one of the patterns.
          */
         private boolean matchesAnyPattern( String resourcePath, List<String> patterns )
@@ -187,9 +188,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     }
 
     /**
-     * Helper class to manage the data passed to different methods of the builder.
-     * 
-     * This class acts as a register and intentionally has no accessor methods.
+     * Helper class to manage the data passed to different methods of the builder. This class acts as a register and
+     * intentionally has no accessor methods.
      * 
      * @author amuino
      */
@@ -210,12 +210,12 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     /**
      * 
      */
-    private static final String TEST_RESOURCES_GOAL = "resources:testResources";
+    public static final String TEST_RESOURCES_GOAL = "process-test-resources";
 
     /**
      * 
      */
-    private static final String RESOURCES_GOAL = "resources:resources";
+    public static final String RESOURCES_GOAL = "process-resources";
 
     public static final String MAVEN_INCREMENTAL_BUILDER_ID =
         MavenJdtCoreActivator.PLUGIN_ID + ".mavenIncrementalBuilder"; //$NON-NLS-1$
@@ -225,7 +225,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     private IMavenProject lastGoodProject = null;
 
     @Override
-    protected IProject[] build( int kind, Map args, IProgressMonitor monitor ) throws CoreException
+    protected IProject[] build( int kind, Map args, IProgressMonitor monitor )
+        throws CoreException
     {
         BuildStatus status = new BuildStatus();
         status.monitor = monitor;
@@ -291,7 +292,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
      * @return
      * @throws CoreException
      */
-    private void handlePom( BuildStatus status, IResourceDelta member ) throws CoreException
+    private void handlePom( BuildStatus status, IResourceDelta member )
+        throws CoreException
     {
         // Process change event
         onPomChange( status );
@@ -325,12 +327,11 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     /**
      * Checks for changes in the <filters> section of the pom and refreshes the affected resources when needed.
      * 
-     * @param status
-     *            the current build status.
-     * @throws CoreException
-     *             if there is an error refreshing the resources.
+     * @param status the current build status.
+     * @throws CoreException if there is an error refreshing the resources.
      */
-    private void handleFilterFiles( BuildStatus status ) throws CoreException
+    private void handleFilterFiles( BuildStatus status )
+        throws CoreException
     {
         List<String> filters = status.mavenProject.getFilters();
         if ( filters != null )
@@ -357,13 +358,10 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     /**
      * Refreshes the resources with the given goal if the change detected in the pom requires it.
      * 
-     * @param status
-     *            the current build status.
-     * @param oldProject
-     *            the maven project before the change to the pom.
+     * @param status the current build status.
+     * @param oldProject the maven project before the change to the pom.
      * @return <code>true</code> if the resources have been refreshed as a result of the changes to the pom.
-     * @throws CoreException
-     *             if an error occurs while refreshing resources.
+     * @throws CoreException if an error occurs while refreshing resources.
      */
     private boolean handleResourceConfig( IMavenProject mavenProject, List<Resource> oldResources,
                                           List<Resource> newResources, String goal, IProgressMonitor monitor )
@@ -397,10 +395,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     /**
      * Utility method to compare two lists of resources, since {@link Resource} does not implement equals.
      * 
-     * @param l1
-     *            a non-null list of resources.
-     * @param l2
-     *            another non-null list of resources.
+     * @param l1 a non-null list of resources.
+     * @param l2 another non-null list of resources.
      * @return
      */
     private boolean resourcesModified( List<Resource> l1, List<Resource> l2 )
@@ -425,11 +421,11 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
                 Resource r2 = it2.next();
                 stillEquals =
                     r1.getDirectory().equals( r2.getDirectory() )
-                                    && r1.getExcludes().equals( r2.getExcludes() )
-                                    && r1.getIncludes().equals( r2.getIncludes() )
-                                    && r1.getModelEncoding().equals( r2.getModelEncoding() )
-                                    && r1.isFiltering() == r2.isFiltering()
-                                    && ( ( r1.getTargetPath() == null && r2.getTargetPath() == null ) || r1.equals( r2.getTargetPath() ) );
+                        && r1.getExcludes().equals( r2.getExcludes() )
+                        && r1.getIncludes().equals( r2.getIncludes() )
+                        && r1.getModelEncoding().equals( r2.getModelEncoding() )
+                        && r1.isFiltering() == r2.isFiltering()
+                        && ( ( r1.getTargetPath() == null && r2.getTargetPath() == null ) || r1.equals( r2.getTargetPath() ) );
             }
             return !stillEquals;
         }
@@ -438,8 +434,7 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     /**
      * Checks if any of the resources in the list is being filtered.
      * 
-     * @param resources
-     *            the resources to check.
+     * @param resources the resources to check.
      * @return <code>true</code> if any of the passed resources is filtering, <code>false</code> otherwise.
      */
     private boolean isAnyResourceFiltered( List<Resource> resources )
@@ -477,12 +472,11 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     /**
      * Handles updates to the generated resources and test resources when needed.
      * 
-     * @param status
-     *            the status of the in-progress build.
-     * @throws CoreException
-     *             if there is a problem updating the resources.
+     * @param status the status of the in-progress build.
+     * @throws CoreException if there is a problem updating the resources.
      */
-    private void handleAllResources( BuildStatus status ) throws CoreException
+    private void handleAllResources( BuildStatus status )
+        throws CoreException
     {
         List<Resource> resources = status.mavenProject.getResources();
         List<Resource> testResources = status.mavenProject.getTestResources();
@@ -493,14 +487,10 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     /**
      * Utility method for factoring checking and refreshing of resources and testResources.
      * 
-     * @param mavenProject
-     *            the project being modified.
-     * @param delta
-     *            the changes being processed.
-     * @param resources
-     *            the list of resources declared in the pom. Can be either resources or testResources.
-     * @throws CoreException
-     *             if there is a problem updating the resources.
+     * @param mavenProject the project being modified.
+     * @param delta the changes being processed.
+     * @param resources the list of resources declared in the pom. Can be either resources or testResources.
+     * @throws CoreException if there is a problem updating the resources.
      */
     private void doHandleResources( BuildStatus status, List<Resource> resources, final String goal )
         throws CoreException
@@ -564,12 +554,11 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     /**
      * Updates resources as required by the current build status.
      * 
-     * @param status
-     *            the current build status
-     * @throws CoreException
-     *             if there is a problem running maven to update the resources.
+     * @param status the current build status
+     * @throws CoreException if there is a problem running maven to update the resources.
      */
-    private void onResourcesChange( BuildStatus status ) throws CoreException
+    private void onResourcesChange( BuildStatus status )
+        throws CoreException
     {
         onResourcesChange( status, true );
     }
@@ -577,15 +566,13 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     /**
      * Updates resources as required by the current build status.
      * 
-     * @param status
-     *            the current build status
-     * @param force
-     *            set to <code>true</code> to process any resource not yet refreshed. Use <code>false</code> to only
-     *            update resources which are filtered.
-     * @throws CoreException
-     *             if there is a problem running maven to update the resources.
+     * @param status the current build status
+     * @param force set to <code>true</code> to process any resource not yet refreshed. Use <code>false</code> to
+     *            only update resources which are filtered.
+     * @throws CoreException if there is a problem running maven to update the resources.
      */
-    private void onResourcesChange( BuildStatus status, boolean force ) throws CoreException
+    private void onResourcesChange( BuildStatus status, boolean force )
+        throws CoreException
     {
         if ( !status.resourcesRefreshed && ( force || isAnyResourceFiltered( status.mavenProject.getResources() ) ) )
         {
@@ -593,7 +580,7 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             status.resourcesRefreshed = true;
         }
         if ( !status.testResourcesRefreshed
-                        && ( force || isAnyResourceFiltered( status.mavenProject.getTestResources() ) ) )
+            && ( force || isAnyResourceFiltered( status.mavenProject.getTestResources() ) ) )
         {
             onResourcesChange( status.mavenProject, TEST_RESOURCES_GOAL, status.monitor );
             status.resourcesRefreshed = true;
@@ -603,25 +590,31 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     /**
      * Runs the given refresh resources goal on a maven project.
      * 
-     * @param mavenProject
-     *            the maven project where the goal is to be executed.
-     * @param goal
-     *            the goal to execute.
-     * @param monitor
-     *            the progress monitor used for progress reporting and job cancellation.
-     * @throws CoreException
-     *             if there is a problem executing the goal.
+     * @param mavenProject the maven project where the goal is to be executed.
+     * @param goal the goal to execute.
+     * @param monitor the progress monitor used for progress reporting and job cancellation.
+     * @throws CoreException if there is a problem executing the goal.
      * @see #RESOURCES_GOAL
      * @see #TEST_RESOURCES_GOAL
      */
-    private void onResourcesChange( IMavenProject mavenProject, String goal, IProgressMonitor monitor )
+    private void onResourcesChange( IMavenProject mavenProject, String phase, IProgressMonitor monitor )
         throws CoreException
     {
         MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "Processing resources on ", getProject(),
-                                     " : ", goal );
+                                     " : ", phase );
+        
         MavenExecutionParameter params = MavenExecutionParameter.newDefaultMavenExecutionParameter();
         params.setRecursive( false );
-        MavenManager.getMaven().executeGoal( mavenProject, goal, params, monitor );
+        if ( RESOURCES_GOAL.equals( phase ) )
+        {
+            params.setFilteredGoals( MavenPropertyManager.getInstance().getResourceExcludedGoals( mavenProject.getProject() ) );
+        }
+        else if ( TEST_RESOURCES_GOAL.equals( phase ) )
+        {
+            params.setFilteredGoals( MavenPropertyManager.getInstance().getTestResourceExcludedGoals( mavenProject.getProject() ) );
+        }
+        MavenManager.getMaven().executeGoal( mavenProject, phase, params, monitor );
+
     }
 
     private void onPomChange( BuildStatus status )
@@ -634,7 +627,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
         {
             new IWorkspaceRunnable()
             {
-                public void run( IProgressMonitor monitor ) throws CoreException
+                public void run( IProgressMonitor monitor )
+                    throws CoreException
                 {
                     pom.deleteMarkers( MavenJdtCoreActivator.MARKER_ID, false, IResource.DEPTH_ZERO );
                 }
