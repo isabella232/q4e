@@ -18,6 +18,7 @@ import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBasicFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomPropertiesModuleFormPage;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -33,6 +34,14 @@ import org.eclipse.ui.forms.editor.FormEditor;
 
 public class MavenPomFormEditor extends FormEditor
 {
+    public static final String BASIC_INFO_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomBasicFormPage";
+    
+    public static final String DEPENDENCIES_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage";
+    
+    public static final String LICENSES_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomLicensesFormPage";
+    
+    public static final String MODULES_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage";
+    
     private Model pomModel;
 
     private MavenPomBasicFormPage basicFormPage;
@@ -41,6 +50,8 @@ public class MavenPomFormEditor extends FormEditor
 
     private MavenPomPropertiesModuleFormPage modulePropertiesFormPage;
 
+    private MavenPomLicensesFormPage mavenPomLicensesFormPage;
+    
     public MavenPomFormEditor()
     {
     }
@@ -52,24 +63,23 @@ public class MavenPomFormEditor extends FormEditor
         {
             if ( initializeAddPagesOK() )
             {
-                basicFormPage =
-                    new MavenPomBasicFormPage( this, "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomBasicFormPage;",
-                                               "Project Information", this.pomModel );
+                basicFormPage = 
+                    new MavenPomBasicFormPage( this, BASIC_INFO_FORM_PAGE , "Project Information", this.pomModel );
                 addPage( basicFormPage );
 
-                dependenciesFormPage =
-                    new MavenPomDependenciesFormPage(
-                                                      this,
-                                                      "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage;",
-                                                      "Dependencies", this.pomModel );
+                dependenciesFormPage = 
+                    new MavenPomDependenciesFormPage( this, DEPENDENCIES_FORM_PAGE, "Dependencies", this.pomModel );
                 addPage( dependenciesFormPage );
 
-                modulePropertiesFormPage =
-                    new MavenPomPropertiesModuleFormPage(
-                                                          this,
-                                                          "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage;",
-                                                          "Properties/Module", this.pomModel );
+                mavenPomLicensesFormPage = 
+                    new MavenPomLicensesFormPage( this , LICENSES_FORM_PAGE , "License", this.pomModel );
+                addPage( mavenPomLicensesFormPage );
+                
+                modulePropertiesFormPage = 
+                    new MavenPomPropertiesModuleFormPage( this, MODULES_FORM_PAGE, "Properties/Module", this.pomModel );
                 addPage( modulePropertiesFormPage );
+                
+                
             }
         }
         catch ( PartInitException pie )
@@ -111,9 +121,13 @@ public class MavenPomFormEditor extends FormEditor
     @Override
     public void doSave( IProgressMonitor monitor )
     {
+        monitor.beginTask( "Writing to POM file.", 3 );
         savePomFile();
+        monitor.worked( 1 );
         setPagesClean();
+        monitor.worked( 1 );
         editorDirtyStateChanged();
+        monitor.worked( 1 );
         monitor.done();
     }
 
@@ -163,6 +177,7 @@ public class MavenPomFormEditor extends FormEditor
         basicFormPage.setPageModified( false );
         dependenciesFormPage.setPageModified( false );
         modulePropertiesFormPage.setPageModified( false );
+        mavenPomLicensesFormPage.setPageModified(false);
         // clean other pages
     }
 

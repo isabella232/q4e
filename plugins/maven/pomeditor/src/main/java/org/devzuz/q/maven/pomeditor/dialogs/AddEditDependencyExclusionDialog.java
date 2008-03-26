@@ -20,17 +20,9 @@ import org.eclipse.ui.PlatformUI;
 
 public class AddEditDependencyExclusionDialog extends AbstractResizableDialog 
 {
-	private static AddEditDependencyExclusionDialog addMavenPomExclusionsDialog = null;
-	
-	public static synchronized AddEditDependencyExclusionDialog getAddEditDependencyExclusionDialog()
+	public static AddEditDependencyExclusionDialog newAddEditDependencyExclusionDialog()
 	{
-		if ( addMavenPomExclusionsDialog == null )
-		{
-			addMavenPomExclusionsDialog = new AddEditDependencyExclusionDialog
-				(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());	
-		}
-		
-		return addMavenPomExclusionsDialog;
+		return new AddEditDependencyExclusionDialog( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell() );
 	}
 
 	private Exclusion addedExclusion;
@@ -58,6 +50,7 @@ public class AddEditDependencyExclusionDialog extends AbstractResizableDialog
                 validate();
             }
         };
+        
         //SelectionAdapter buttonListener = new SelectionAdapter()
         //{
         //   public void widgetDefaultSelected( SelectionEvent e )
@@ -70,6 +63,7 @@ public class AddEditDependencyExclusionDialog extends AbstractResizableDialog
         //        buttonSelected( e );
         //    }
         //};
+        
         container.setLayout( new GridLayout( 2 , false ) );
         
         Label groupIdlabel = new Label( container, SWT.NULL );

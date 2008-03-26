@@ -110,7 +110,7 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         propertiesControls.setClient( createPropertiesControls( propertiesControls, toolkit ) );
 
         Section moduleControls =
-            toolkit.createSection( form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED |
+            toolkit.createSection( form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED | 
                                    Section.DESCRIPTION );
         moduleControls.setDescription( "Aggregate the build of a set of projects by adding them as modules." );
         moduleControls.setText( Messages.MavenPomEditor_MavenPomEditor_Modules );
@@ -415,7 +415,7 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
 
         public void widgetSelected( SelectionEvent e )
         {
-            AddMavenPomModuleDialog addDialog = AddMavenPomModuleDialog.getAddMavenPomModuleDialog();
+            AddMavenPomModuleDialog addDialog = AddMavenPomModuleDialog.newAddMavenPomModuleDialog();
 
             if ( addDialog.open() == Window.OK )
             {

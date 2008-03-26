@@ -74,6 +74,24 @@ public class Messages
     
     public static String MavenPomEditor_MavenCustomComponent_VersionLabel;
 
+    public static String MavenPomEditor_MavenPomEditor_Distribution;
+
+    public static String MavenPomEditor_MavenPomEditor_Comment;
+
+    public static String MavenPomEditor_MavenPomEditor_SaveButton;
+
+    public static String MavenPomEditor_MavenPomEditor_ClearButton;
+    
+    public static String MavenPomEditor_MavenPomEditor_DuplicateLicense;
+    
+    public static String MavenAddEditLicenseDialog_Name;
+
+    public static String MavenAddEditLicenseDialog_Distribution;
+
+    public static String MavenAddEditLicenseDialog_URL;
+
+    public static String MavenAddEditLicenseDialog_Comment;
+    
     static
     {
         // initialize resource bundle

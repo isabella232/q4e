@@ -23,17 +23,10 @@ public class AddMavenPomModuleDialog extends AbstractResizableDialog {
 	
 	private String moduleName;
 	
-	private static AddMavenPomModuleDialog addMavenPomModuleDialog = null;
-
-	public static synchronized AddMavenPomModuleDialog getAddMavenPomModuleDialog()
+	public static AddMavenPomModuleDialog newAddMavenPomModuleDialog()
 	{
-		if ( addMavenPomModuleDialog == null )
-		{
-			addMavenPomModuleDialog = new AddMavenPomModuleDialog
-				(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
-		}
-		
-		return addMavenPomModuleDialog;
+		return new AddMavenPomModuleDialog
+                    (PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
 		
 	}
 	

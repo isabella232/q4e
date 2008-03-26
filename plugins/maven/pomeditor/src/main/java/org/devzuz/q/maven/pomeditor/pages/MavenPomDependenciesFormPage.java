@@ -435,7 +435,7 @@ public class MavenPomDependenciesFormPage extends FormPage
 		public void widgetSelected (SelectionEvent e)
 		{			
 		    AddEditDependencyExclusionDialog addDialog = 
-		        AddEditDependencyExclusionDialog.getAddEditDependencyExclusionDialog();
+		        AddEditDependencyExclusionDialog.newAddEditDependencyExclusionDialog();
 			
 			if ( addDialog.open() == Window.OK )
 			{

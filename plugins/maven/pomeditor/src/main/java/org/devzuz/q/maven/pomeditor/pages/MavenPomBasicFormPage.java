@@ -6,9 +6,10 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.pomeditor.pages;
 
-import org.devzuz.q.maven.pomeditor.Messages;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
+import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.formeditor.MavenPomFormEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
@@ -218,16 +219,13 @@ public class MavenPomBasicFormPage extends FormPage
         parent.setLayout( new RowLayout( SWT.VERTICAL ) );
         
         Hyperlink dependenciesLink = toolKit.createHyperlink( parent, "Add/Modify/Remove Dependencies", SWT.WRAP );
-        
         dependenciesLink.addHyperlinkListener( new HyperlinkAdapter()
         {
             public void linkActivated( HyperlinkEvent e )
             {
-                System.out.println( "Link activated!" );
-                editor.setActivePage("org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage;");
+                editor.setActivePage( MavenPomFormEditor.DEPENDENCIES_FORM_PAGE );
             }
         } );
-        
         dependenciesLink.setText( "Add/Modify/Remove Dependencies" );
         
         
@@ -236,11 +234,20 @@ public class MavenPomBasicFormPage extends FormPage
         {
             public void linkActivated( HyperlinkEvent e )
             {
-                System.out.println( "Link activated!" );
+                editor.setActivePage( MavenPomFormEditor.LICENSES_FORM_PAGE );
             }
         } );
-        
         licensesLink.setText( "Manage Licenses" );
+        
+        Hyperlink modulesPropertiesLink = toolKit.createHyperlink( parent, "Manage Modules/Properties", SWT.WRAP );
+        modulesPropertiesLink.addHyperlinkListener( new HyperlinkAdapter()
+        {
+            public void linkActivated( HyperlinkEvent e )
+            {
+                editor.setActivePage( MavenPomFormEditor.MODULES_FORM_PAGE );
+            }
+        } );
+        modulesPropertiesLink.setText( "Manage Modules/Properties" );
         
         Hyperlink developersLink = toolKit.createHyperlink( parent, "Manage Developers Information", SWT.WRAP );
         developersLink.addHyperlinkListener( new HyperlinkAdapter()
@@ -250,7 +257,6 @@ public class MavenPomBasicFormPage extends FormPage
                 System.out.println( "Link activated!" );
             }
         } );
-        
         developersLink.setText( "Manage Developers Information" );
         
         Hyperlink contributorsLink = toolKit.createHyperlink( parent, "Manage Contributors Information", SWT.WRAP );
@@ -261,7 +267,6 @@ public class MavenPomBasicFormPage extends FormPage
                 System.out.println( "Link activated!" );
             }
         } );
-        
         contributorsLink.setText( "Manage Contributors Information" );
         
         return parent;
@@ -378,32 +383,32 @@ public class MavenPomBasicFormPage extends FormPage
     private void setPOMEditorProjectInfomation()
     {
         //sets data to be used in createBasicCoordinateControls
-        this.setGroupID(pomModel.getGroupId());
-        this.setArtifactID(pomModel.getArtifactId());
-        this.setVersion(pomModel.getVersion());
-        this.setPackaging(pomModel.getPackaging());
-        this.setClassifier("");
+        setGroupID(pomModel.getGroupId());
+        setArtifactID(pomModel.getArtifactId());
+        setVersion(pomModel.getVersion());
+        setPackaging(pomModel.getPackaging());
+        setClassifier("");
         
         //sets data to be used in createMoreProjectInfoControls
-        this.setName(checkStringIfNull(pomModel.getName()));        
-        this.setDescription(checkStringIfNull(pomModel.getDescription()));
-        this.setUrl(checkStringIfNull(pomModel.getUrl()));
-        this.setInceptionYear(checkStringIfNull(pomModel.getInceptionYear()));    
+        setName(blankIfNull(pomModel.getName()));        
+        setDescription(blankIfNull(pomModel.getDescription()));
+        setUrl(blankIfNull(pomModel.getUrl()));
+        setInceptionYear(blankIfNull(pomModel.getInceptionYear()));    
         
         //sets data to be used in createParentProjectControls
         if ( pomModel.getParent() != null )
         {
-            this.setParentPOMgroupID(checkStringIfNull(pomModel.getParent().getGroupId()));
-            this.setParentPOMArtifactID(checkStringIfNull(pomModel.getParent().getArtifactId()));
-            this.setParentPOMVersion(checkStringIfNull(pomModel.getParent().getVersion()));
-            this.setParentPOMRelPath(checkStringIfNull(pomModel.getParent().getRelativePath()));
+            setParentPOMgroupID(blankIfNull(pomModel.getParent().getGroupId()));
+            setParentPOMArtifactID(blankIfNull(pomModel.getParent().getArtifactId()));
+            setParentPOMVersion(blankIfNull(pomModel.getParent().getVersion()));
+            setParentPOMRelPath(blankIfNull(pomModel.getParent().getRelativePath()));
         }
         else
         {
-            this.setParentPOMgroupID("");
-            this.setParentPOMArtifactID("");
-            this.setParentPOMVersion("");
-            this.setParentPOMRelPath("");
+            setParentPOMgroupID("");
+            setParentPOMArtifactID("");
+            setParentPOMVersion("");
+            setParentPOMRelPath("");
         }
     }
     
@@ -421,10 +426,10 @@ public class MavenPomBasicFormPage extends FormPage
     	
     	if ( pomModel.getParent() == null ) 
     	{
-    		if ( ( checkStringIfNull( getParentPOMgroupID() ) != "" ) ||
-    			 ( checkStringIfNull( this.getParentPOMArtifactID() ) != "" ) ||
-    			 ( checkStringIfNull( this.getParentPOMVersion() ) != "" ) ||
-    			 ( checkStringIfNull( this.getParentPOMRelPath() ) != "" ) )
+    		if ( ( blankIfNull( getParentPOMgroupID() ) != "" ) ||
+    			 ( blankIfNull( this.getParentPOMArtifactID() ) != "" ) ||
+    			 ( blankIfNull( this.getParentPOMVersion() ) != "" ) ||
+    			 ( blankIfNull( this.getParentPOMRelPath() ) != "" ) )
     		{
     			Parent parent = new Parent();
     			pomModel.setParent(parent);
@@ -469,9 +474,9 @@ public class MavenPomBasicFormPage extends FormPage
     	
     }
     
-    private String checkStringIfNull(String strTemp)
+    private String blankIfNull(String strTemp)
     {
-    	if(null != strTemp )
+    	if( null != strTemp )
     	{
     		return strTemp;
     	}
