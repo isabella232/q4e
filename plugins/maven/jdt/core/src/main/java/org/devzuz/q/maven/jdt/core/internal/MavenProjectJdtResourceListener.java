@@ -20,7 +20,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -60,7 +59,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                     else
                     {
                         MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
-                                                     "Skipping because it has no q4e nature: " , project );
+                                                     "Skipping because it has no q4e nature: ", project );
                     }
                 }
                 if ( needsProjectRefresh )
@@ -83,8 +82,8 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
             }
             else
             {
-                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Skipping because it has no q4e nature: "
-                                , project );
+                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
+                                             "Skipping because it has no q4e nature: ", project );
             }
 
             MavenManager.getMavenProjectManager().removeMavenProject( project );
@@ -115,24 +114,24 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                 {
                     // Determine if iproject is dependent on iresProject
                     IMavenProject iMavenProject = mavenProjectManager.getMavenProject( iproject, true );
-                    for( IMavenArtifact artifact : iMavenProject.getArtifacts() )
+                    for ( IMavenArtifact artifact : iMavenProject.getArtifacts() )
                     {
-                        if( artifact.getGroupId().equals( mavenProject.getGroupId() ) && 
-                            artifact.getArtifactId().equals( mavenProject.getArtifactId() ) &&
-                            artifact.getVersion().equals( mavenProject.getVersion() ) )
+                        if ( artifact.getGroupId().equals( mavenProject.getGroupId() )
+                                        && artifact.getArtifactId().equals( mavenProject.getArtifactId() )
+                                        && artifact.getVersion().equals( mavenProject.getVersion() ) )
                         {
                             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for ",
                                                          iproject );
                             mavenProjectManager.setMavenProjectModified( iproject );
                             // ClasspathUpdateJobListener clears any error marker before the job executes.
-                            UpdateClasspathJob.scheduleNewUpdateClasspathJob( iproject, false , 
+                            UpdateClasspathJob.scheduleNewUpdateClasspathJob( iproject, false,
                                                                               new ClasspathUpdateJobListener( iproject ) );
                             break;
                         }
                     }
-                    
+
                 }
-                catch( CoreException e )
+                catch ( CoreException e )
                 {
                     MavenJdtCoreActivator.getLogger().log( "Exception in q4e resource listener: " + iproject, e );
                 }
@@ -144,7 +143,8 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
      * Checks if the project is a maven project managed by q4e. This is used to check if maven classpaths need to be
      * recalculated when the project is opened/closed/deleted.
      * 
-     * @param project the project.
+     * @param project
+     *            the project.
      * @return <code>true</code> if the project is managed by q4e.
      */
     private boolean isMavenManagedProject( IProject project )
@@ -159,16 +159,17 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
             return false;
         }
     }
-    
+
     private static class ClasspathUpdateJobListener extends JobChangeAdapter
     {
-        private IProject project;
-        
+        private final IProject project;
+
         public ClasspathUpdateJobListener( IProject project )
         {
             this.project = project;
         }
-        
+
+        @Override
         public void aboutToRun( IJobChangeEvent arg0 )
         {
             final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
@@ -179,7 +180,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                 {
                     public void run( IProgressMonitor monitor ) throws CoreException
                     {
-                        pom.deleteMarkers( MavenJdtCoreActivator.MARKER_ID, false, IResource.DEPTH_ZERO );
+                        pom.deleteMarkers( MavenCoreActivator.MARKER_ID, false, IResource.DEPTH_ZERO );
                     }
                 }.run( new NullProgressMonitor() );
             }
