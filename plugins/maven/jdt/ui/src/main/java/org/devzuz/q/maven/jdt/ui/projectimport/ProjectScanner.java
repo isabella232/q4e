@@ -36,7 +36,7 @@ import org.eclipse.core.runtime.SubProgressMonitor;
  */
 public class ProjectScanner
 {
-    private boolean importParentProjects;
+    private final boolean importParentProjects;
 
     /**
      * Creates a new project scanner.
@@ -108,14 +108,14 @@ public class ProjectScanner
                 MavenManager.getMaven().executeGoal( mavenProject, "validate", parameter, monitor );
             sortedProjects = result.getSortedProjects();
 
-            MavenJdtUiActivator.trace( TraceOption.PROJECT_SCANNING, "Scanned ", sortedProjects.size(),
-                                       " Maven 2 Projects by using the reactor" );
-
             if ( sortedProjects == null )
             {
                 /* the project doesn't build so we can't get the list of sorted projects */
                 return null;
             }
+
+            MavenJdtUiActivator.trace( TraceOption.PROJECT_SCANNING, "Scanned ", sortedProjects.size(),
+                                       " Maven 2 Projects by using the reactor" );
         }
         catch ( CoreException e )
         {
