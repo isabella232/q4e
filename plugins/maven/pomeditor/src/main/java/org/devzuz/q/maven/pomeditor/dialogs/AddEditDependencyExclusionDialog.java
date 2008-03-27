@@ -110,7 +110,6 @@ public class AddEditDependencyExclusionDialog extends AbstractResizableDialog
         {
             getButton( IDialogConstants.OK_ID ).setEnabled( false );
         }
-		
 	}
 	
 	// commented out until we find a way to select the exclusion from a list

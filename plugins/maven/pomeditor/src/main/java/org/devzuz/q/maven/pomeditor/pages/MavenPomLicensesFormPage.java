@@ -136,13 +136,13 @@ public class MavenPomLicensesFormPage extends FormPage
 
         newPropertyButton =
             toolKit.createButton( container2, Messages.MavenPomEditor_MavenPomEditor_AddButton, SWT.PUSH | SWT.CENTER );
-
+        newPropertyButton.addSelectionListener( buttonListener );
+        
         removePropertyButton =
             toolKit.createButton( container2, Messages.MavenPomEditor_MavenPomEditor_RemoveButton, SWT.PUSH |
                             SWT.CENTER );
         removePropertyButton.setEnabled( false );
         removePropertyButton.addSelectionListener( buttonListener );
-        newPropertyButton.addSelectionListener( buttonListener );
         
         populateLicenseDatatable();
 
@@ -218,7 +218,6 @@ public class MavenPomLicensesFormPage extends FormPage
         this.urlText.setText( convertNullToWhiteSpace( license.getUrl() ) );
         this.commentsText.setText( convertNullToWhiteSpace( license.getComments() ) );
         this.distributionText.setText( convertNullToWhiteSpace( license.getDistribution() ) );
-
     }
 
     private void createTextDisplay( final Text text, GridData controlData )
@@ -403,7 +402,6 @@ public class MavenPomLicensesFormPage extends FormPage
             }
             else if ( widget.equals( newPropertyButton ) )
             {
-
                 license = new License();
                 AddEditLicenseDialog addDialog = AddEditLicenseDialog.newAddEditLicenseDialog();
 
@@ -422,11 +420,8 @@ public class MavenPomLicensesFormPage extends FormPage
                     clear();
                     populateLicenseDatatable();
                 }
-
             }
-
         }
-
     }
 
     private class TextListener implements KeyListener

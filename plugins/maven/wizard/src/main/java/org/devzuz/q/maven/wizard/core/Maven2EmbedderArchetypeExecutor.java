@@ -65,8 +65,7 @@ public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
                 archetypeProperties.setProperty( "archetypeRepository", archetype.getRemoteRepositories() );
         }
 
-        MavenManager.getMaven().scheduleGoal(
-                                              baseDir,
+        MavenManager.getMaven().scheduleGoal( baseDir,
                                               getArchetypePluginCreationId( isVersion20 ),
                                               MavenExecutionParameter.newDefaultMavenExecutionParameter( archetypeProperties ),
                                               jobAdapter );
