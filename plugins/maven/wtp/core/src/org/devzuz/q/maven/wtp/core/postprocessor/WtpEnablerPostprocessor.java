@@ -7,6 +7,7 @@
  */
 package org.devzuz.q.maven.wtp.core.postprocessor;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -36,6 +37,9 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
  */
 public class WtpEnablerPostprocessor implements IImportProjectPostprocessor, IMavenClasspathAttributeProvider
 {
+
+    private static final Set<String> DEPLOYABLE_SCOPES =
+        new HashSet<String>( Arrays.asList( new String[] { Artifact.SCOPE_COMPILE, Artifact.SCOPE_RUNTIME } ) );
 
     //
     // IImportProjectPostprocessor interface
@@ -160,6 +164,6 @@ public class WtpEnablerPostprocessor implements IImportProjectPostprocessor, IMa
      */
     private boolean isDeployable( IMavenArtifact artifact )
     {
-        return null == artifact.getScope() || Artifact.SCOPE_COMPILE.equals( artifact.getScope() );
+        return null == artifact.getScope() || DEPLOYABLE_SCOPES.contains( artifact.getScope() );
     }
 }
