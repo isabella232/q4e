@@ -2,8 +2,16 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         point="org.eclipse.ui.startup">
-      <startup></startup>
+         point="org.devzuz.q.maven.jdt.core.classpathAttributeProvider">
+      <classpathAttributeProvider
+            class="org.devzuz.q.maven.wtp.core.postprocessor.WtpEnablerPostprocessor">
+      </classpathAttributeProvider>
+   </extension>
+   <extension
+         point="org.devzuz.q.maven.jdt.ui.projectPostprocessors">
+      <postprocessor
+            class="org.devzuz.q.maven.wtp.core.postprocessor.WtpEnablerPostprocessor">
+      </postprocessor>
    </extension>
 
 </plugin>

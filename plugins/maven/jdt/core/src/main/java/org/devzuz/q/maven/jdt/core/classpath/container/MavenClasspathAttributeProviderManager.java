@@ -10,6 +10,12 @@ package org.devzuz.q.maven.jdt.core.classpath.container;
 import java.util.Collection;
 import java.util.HashSet;
 
+import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
+
 /**
  * Singleton manager for holding references to the classpath attribute providers that contribute attributes to the
  * classpath container and resolved artifacts.
@@ -19,8 +25,12 @@ import java.util.HashSet;
 public class MavenClasspathAttributeProviderManager
 {
 
-    private final Collection<IMavenClasspathAttributeProvider> providers =
-        new HashSet<IMavenClasspathAttributeProvider>( 20 );
+    private final Collection<IMavenClasspathAttributeProvider> providers;
+
+    private static final String CLASSPATH_ATTRIBUTE_PROVIDER_EXTENSION_POINT_ID =
+        "org.devzuz.q.maven.jdt.core.classpathAttributeProvider";
+
+    private static final String CLASS_ATTRIBUTE = "class";
 
     private final static MavenClasspathAttributeProviderManager instance = new MavenClasspathAttributeProviderManager();
 
@@ -29,7 +39,34 @@ public class MavenClasspathAttributeProviderManager
      */
     private MavenClasspathAttributeProviderManager()
     {
-        // No-op
+        providers = initializeProviders();
+    }
+
+    private Collection<IMavenClasspathAttributeProvider> initializeProviders()
+    {
+        IExtensionRegistry registry = Platform.getExtensionRegistry();
+        IConfigurationElement[] extensions =
+            registry.getConfigurationElementsFor( CLASSPATH_ATTRIBUTE_PROVIDER_EXTENSION_POINT_ID );
+        Collection<IMavenClasspathAttributeProvider> result =
+            new HashSet<IMavenClasspathAttributeProvider>( extensions.length );
+        for ( IConfigurationElement extension : extensions )
+        {
+            try
+            {
+                // TODO: abstract this to avoid activation of all the plug-ins contributing postprocessors
+                IMavenClasspathAttributeProvider postprocessor =
+                    (IMavenClasspathAttributeProvider) extension.createExecutableExtension( CLASS_ATTRIBUTE );
+                result.add( postprocessor );
+            }
+            catch ( CoreException e )
+            {
+                MavenJdtCoreActivator.getLogger().log(
+                                                       "Could not create classpath attribute provider: "
+                                                                       + extension.getAttribute( CLASS_ATTRIBUTE ), e );
+            }
+
+        }
+        return result;
     }
 
     /**
@@ -40,11 +77,6 @@ public class MavenClasspathAttributeProviderManager
     public final static MavenClasspathAttributeProviderManager getInstance()
     {
         return instance;
-    }
-
-    public synchronized void registerAttributeProvider( IMavenClasspathAttributeProvider provider )
-    {
-        providers.add( provider );
     }
 
     /**
