@@ -31,6 +31,8 @@ import org.eclipse.zest.core.widgets.ZestStyles;
 import org.eclipse.zest.layouts.LayoutAlgorithm;
 import org.eclipse.zest.layouts.LayoutStyles;
 import org.eclipse.zest.layouts.algorithms.RadialLayoutAlgorithm;
+import org.eclipse.zest.layouts.dataStructures.DisplayIndependentRectangle;
+import org.eclipse.zest.layouts.dataStructures.InternalNode;
 import org.eclipse.zest.layouts.progress.ProgressEvent;
 import org.eclipse.zest.layouts.progress.ProgressListener;
 
@@ -66,7 +68,19 @@ public class DependencyGraphView extends ViewPart
         viewer = new GraphViewer( parent, SWT.NONE );
         viewer.setConnectionStyle( ZestStyles.CONNECTIONS_DOT | ZestStyles.CONNECTIONS_DIRECTED );
         layoutAlgorithm =
-            new RadialLayoutAlgorithm( LayoutStyles.NO_LAYOUT_NODE_RESIZING | LayoutStyles.ENFORCE_BOUNDS );
+            new RadialLayoutAlgorithm( LayoutStyles.NO_LAYOUT_NODE_RESIZING | LayoutStyles.ENFORCE_BOUNDS ) 
+            {
+                /**
+                 * @author mhua Workaround for pulsating denpendency graph.
+                 */
+                @Override
+                protected DisplayIndependentRectangle getLayoutBounds( InternalNode[] entitiesToLayout,
+                                                                       boolean includeNodeSize )
+                {
+                    // Remove node Size as part of the computation to acquire the entire graph's bounds.
+                    return super.getLayoutBounds( entitiesToLayout, false );
+                }
+            };
         layoutAlgorithm.setEntityAspectRatio( 3f );
 
         viewer.setLayoutAlgorithm( layoutAlgorithm );
