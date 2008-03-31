@@ -18,6 +18,7 @@ import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBasicFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomDevelopersFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomPropertiesModuleFormPage;
 import org.eclipse.core.resources.IFile;
@@ -42,6 +43,8 @@ public class MavenPomFormEditor extends FormEditor
     
     public static final String MODULES_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage";
     
+    public static final String DEVELOPERS_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDevelopersFormPage";
+    
     private Model pomModel;
 
     private MavenPomBasicFormPage basicFormPage;
@@ -51,6 +54,8 @@ public class MavenPomFormEditor extends FormEditor
     private MavenPomPropertiesModuleFormPage modulePropertiesFormPage;
 
     private MavenPomLicensesFormPage mavenPomLicensesFormPage;
+    
+    private MavenPomDevelopersFormPage mavenPomDevelopersFormPage;
     
     public MavenPomFormEditor()
     {
@@ -74,12 +79,14 @@ public class MavenPomFormEditor extends FormEditor
                 mavenPomLicensesFormPage = 
                     new MavenPomLicensesFormPage( this , LICENSES_FORM_PAGE , "License", this.pomModel );
                 addPage( mavenPomLicensesFormPage );
+
+                mavenPomDevelopersFormPage = 
+                    new MavenPomDevelopersFormPage( this , DEVELOPERS_FORM_PAGE , "Developer", this.pomModel );
+                addPage( mavenPomDevelopersFormPage );
                 
                 modulePropertiesFormPage = 
                     new MavenPomPropertiesModuleFormPage( this, MODULES_FORM_PAGE, "Properties/Module", this.pomModel );
                 addPage( modulePropertiesFormPage );
-                
-                
             }
         }
         catch ( PartInitException pie )
@@ -178,6 +185,7 @@ public class MavenPomFormEditor extends FormEditor
         dependenciesFormPage.setPageModified( false );
         modulePropertiesFormPage.setPageModified( false );
         mavenPomLicensesFormPage.setPageModified(false);
+        mavenPomDevelopersFormPage.setPageModified(false);
         // clean other pages
     }
 

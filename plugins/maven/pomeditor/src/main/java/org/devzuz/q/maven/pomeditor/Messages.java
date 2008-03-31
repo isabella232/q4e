@@ -92,6 +92,40 @@ public class Messages
 
     public static String MavenAddEditLicenseDialog_Comment;
     
+    public static String MavenPomEditor_MavenPomEditor_Identity;
+	
+	public static String MavenPomEditor_MavenPomEditor_Email;
+	
+	public static String MavenPomEditor_MavenPomEditor_Organization;
+	
+	public static String MavenPomEditor_MavenPomEditor_OrganizationUrl;
+	
+	public static String MavenPomEditor_MavenPomEditor_Roles;
+	
+	public static String MavenPomEditor_MavenPomEditor_Timezone;
+	
+	public static String MavenAddEditDeveloperDialog_identityLabel;
+    
+    public static String MavenAddEditDeveloperDialog_nameLabel;
+    
+    public static String MavenAddEditDeveloperDialog_emailLabel;
+    
+    public static String MavenAddEditDeveloperDialog_urlLabel;
+    
+    public static String MavenAddEditDeveloperDialog_organizationLabel;
+    
+    public static String MavenAddEditDeveloperDialog_organizationUrlLabel;
+    
+    public static String MavenAddEditDeveloperDialog_rolesLabel;
+    
+    public static String MavenAddEditDeveloperDialog_timezoneLabel;
+    
+    public static String MavenAddEditDeveloperDialog_propertiesLabel;
+    
+    public static String MavenAddEditDeveloperPropertiesDialog_keyLabel;
+    
+    public static String MavenAddEditDeveloperPropertiesDialog_valueLabel;
+    
     static
     {
         // initialize resource bundle

@@ -254,7 +254,7 @@ public class MavenPomBasicFormPage extends FormPage
         {
             public void linkActivated( HyperlinkEvent e )
             {
-                System.out.println( "Link activated!" );
+                editor.setActivePage( MavenPomFormEditor.DEVELOPERS_FORM_PAGE );
             }
         } );
         developersLink.setText( "Manage Developers Information" );
