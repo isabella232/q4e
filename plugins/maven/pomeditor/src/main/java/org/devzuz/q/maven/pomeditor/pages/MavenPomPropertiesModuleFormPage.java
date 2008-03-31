@@ -134,11 +134,11 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         PropertiesTableListener tableListener = new PropertiesTableListener();
         propertiesTable.addSelectionListener( tableListener );
 
-        TableColumn keyColumn = new TableColumn( propertiesTable, SWT.CENTER, 0 );
+        TableColumn keyColumn = new TableColumn( propertiesTable, SWT.BEGINNING, 0 );
         keyColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Key );
         keyColumn.setWidth( 150 );
 
-        TableColumn valueColumn = new TableColumn( propertiesTable, SWT.LEFT, 1 );
+        TableColumn valueColumn = new TableColumn( propertiesTable, SWT.BEGINNING, 1 );
         valueColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Value );
         valueColumn.setWidth( 220 );
 
@@ -184,7 +184,7 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         modulesTable.setHeaderVisible( true );
         ModulesTableListener tableListener = new ModulesTableListener();
         modulesTable.addSelectionListener( tableListener );
-
+        
         editor = new TableEditor( modulesTable );
         // The editor must have the same size as the cell and must
         // not be any smaller than 50 pixels.

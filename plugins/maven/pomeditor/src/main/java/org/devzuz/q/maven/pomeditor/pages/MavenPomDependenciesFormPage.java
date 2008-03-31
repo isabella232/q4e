@@ -145,7 +145,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         PropertiesTableListener tableListener = new PropertiesTableListener();
         propertiesTable.addSelectionListener( tableListener );
         
-        TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0);
+        TableColumn column = new TableColumn( propertiesTable, SWT.BEGINNING, 0);
         column.setWidth( 220 );
         column.setText( "Dependencies" );
 
@@ -304,9 +304,9 @@ public class MavenPomDependenciesFormPage extends FormPage
         ExclusionsTableListener tableListener = new ExclusionsTableListener();
         dependencyExclusionTable.addSelectionListener( tableListener );
         
-        /*TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0 );
-        column.setText( Messages.MavenPomEditor_MavenPomEditor_Key );
-        column.setWidth( 100 ); */
+        TableColumn column = new TableColumn( dependencyExclusionTable, SWT.BEGINNING, 0 );
+        column.setText( "Excluded Dependencies" );
+        column.setWidth( 100 );
 
         Composite container2 = toolKit.createComposite( container );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );

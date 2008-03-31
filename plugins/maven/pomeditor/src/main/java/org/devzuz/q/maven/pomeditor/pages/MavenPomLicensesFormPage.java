@@ -124,7 +124,7 @@ public class MavenPomLicensesFormPage extends FormPage
         PropertiesTableListener tableListener = new PropertiesTableListener();
         propertiesTable.addSelectionListener( tableListener );
 
-        TableColumn column = new TableColumn( propertiesTable, SWT.CENTER, 0 );
+        TableColumn column = new TableColumn( propertiesTable, SWT.BEGINNING, 0 );
         column.setWidth( 220 );
         column.setText( "License" );
         Composite container2 = toolKit.createComposite( container );
