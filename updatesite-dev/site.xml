@@ -24,13 +24,13 @@
    <feature url="features/org.devzuz.q.feature.wtp_0.6.0.200803191655.jar" id="org.devzuz.q.feature.wtp" version="0.6.0.200803191655">
       <category name="Optional"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature_0.6.0.qualifier.jar" id="org.devzuz.q.feature" version="0.6.0.qualifier">
+   <feature url="features/org.devzuz.q.feature_0.6.0.200803292249.jar" id="org.devzuz.q.feature" version="0.6.0.200803292249">
       <category name="Community"/>
    </feature>
    <feature url="features/org.devzuz.q.dependencyviewer.feature_0.6.0.200803292249.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.6.0.200803292249">
       <category name="Optional"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature.wtp_0.6.0.qualifier.jar" id="org.devzuz.q.feature.wtp" version="0.6.0.qualifier">
+   <feature url="features/org.devzuz.q.feature.wtp_0.6.0.200803292249.jar" id="org.devzuz.q.feature.wtp" version="0.6.0.200803292249">
       <category name="Optional"/>
    </feature>
    <category-def name="Community" label="Community"/>
