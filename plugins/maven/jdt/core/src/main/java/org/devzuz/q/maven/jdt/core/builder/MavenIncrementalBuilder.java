@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.apache.maven.model.Resource;
 import org.apache.tools.ant.types.selectors.SelectorUtils;
+import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
@@ -576,14 +577,19 @@ public class MavenIncrementalBuilder
     {
         if ( !status.resourcesRefreshed && ( force || isAnyResourceFiltered( status.mavenProject.getResources() ) ) )
         {
-            onResourcesChange( status.mavenProject, RESOURCES_GOAL, status.monitor );
-            status.resourcesRefreshed = true;
+            if ( onResourcesChange( status.mavenProject, RESOURCES_GOAL, status.monitor ) )
+            {
+                status.resourcesRefreshed = true;
+            }
         }
-        if ( !status.testResourcesRefreshed
+        /* only refresh test resources if there was no error refreshing main resources */
+        if ( status.resourcesRefreshed && !status.testResourcesRefreshed
             && ( force || isAnyResourceFiltered( status.mavenProject.getTestResources() ) ) )
         {
-            onResourcesChange( status.mavenProject, TEST_RESOURCES_GOAL, status.monitor );
-            status.resourcesRefreshed = true;
+            if ( onResourcesChange( status.mavenProject, TEST_RESOURCES_GOAL, status.monitor ) )
+            {
+                status.testResourcesRefreshed = true;
+            }
         }
     }
 
@@ -594,10 +600,11 @@ public class MavenIncrementalBuilder
      * @param goal the goal to execute.
      * @param monitor the progress monitor used for progress reporting and job cancellation.
      * @throws CoreException if there is a problem executing the goal.
+     * @return whether if the opartion was sucessful or not
      * @see #RESOURCES_GOAL
      * @see #TEST_RESOURCES_GOAL
      */
-    private void onResourcesChange( IMavenProject mavenProject, String phase, IProgressMonitor monitor )
+    private boolean onResourcesChange( IMavenProject mavenProject, String phase, IProgressMonitor monitor )
         throws CoreException
     {
         MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "Processing resources on ", getProject(),
@@ -613,8 +620,15 @@ public class MavenIncrementalBuilder
         {
             params.setFilteredGoals( MavenPropertyManager.getInstance().getTestResourceExcludedGoals( mavenProject.getProject() ) );
         }
-        MavenManager.getMaven().executeGoal( mavenProject, phase, params, monitor );
 
+        IMavenExecutionResult result = MavenManager.getMaven().executeGoal( mavenProject, phase, params, monitor );
+        if ( result.hasErrors() )
+        {
+            MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( result.getMavenProject().getProject(), result.getExceptions() );
+            return false;
+        }
+
+        return true;
     }
 
     private void onPomChange( BuildStatus status )
