@@ -20,7 +20,9 @@ public class AbstractMojoExecutionExceptionHandler
 
     public void handle( IProject project, Throwable e, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
-        markers.add( new MarkerInfo( ( (AbstractMojoExecutionException) e ).getLongMessage() ) );
+        AbstractMojoExecutionException ex = (AbstractMojoExecutionException) e;
+        String msg = ex.getLongMessage() != null ? ex.getLongMessage() : ex.getMessage();
+        markers.add( new MarkerInfo( msg ) );
     }
 
 }
