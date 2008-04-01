@@ -458,7 +458,7 @@ public class MavenPomDevelopersFormPage extends FormPage
         {
             AddEditDeveloperPropertiesDialog addDialog =
                 AddEditDeveloperPropertiesDialog.newAddEditDeveloperPropertiesDialog();
-            if ( addDialog.open() == Window.OK )
+            if ( addDialog.openWithEntry( "", "" ) == Window.OK )
             {
                 if ( !keyAlreadyExist( addDialog.getKey() ) )
                 {
