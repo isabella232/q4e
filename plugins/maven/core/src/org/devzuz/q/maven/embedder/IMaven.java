@@ -68,8 +68,14 @@ public interface IMaven
         throws CoreException;
 
     /**
+     * <p>
      * Allows you to execute a given goal without an existing project. For example, "archetype:create" can be executed
      * without an existing maven project.
+     * </p>
+     * 
+     * <p>
+     * <b>Make sure you check {@link IMavenExecutionResult#hasErrors()} in the result for errors during execution.</b>
+     * </p>
      * 
      * @param baseDirectory
      *            The location of the execution of the goal
@@ -85,9 +91,15 @@ public interface IMaven
                                               IProgressMonitor monitor ) throws CoreException;
 
     /**
+     * <p>
      * Allows you to execute a given goal name against a MavenProject. This is equivalent to
      * {@link #executeGoal(IMavenProject, String, Properties, IProgressMonitor )}, using <code>null</code> as the
      * properties argument.
+     * </p>
+     * 
+     * <p>
+     * <b>Make sure you check {@link IMavenExecutionResult#hasErrors()} in the result for errors during execution.</b>
+     * </p>
      * 
      * @param mavenProject
      * @param goal
@@ -100,7 +112,13 @@ public interface IMaven
         throws CoreException;
 
     /**
+     * <p>
      * Allows you to execute a given goal name against a MavenProject.
+     * </p>
+     * 
+     * <p>
+     * <b>Make sure you check {@link IMavenExecutionResult#hasErrors()} in the result for errors during execution.</b>
+     * </p>
      * 
      * @param mavenProject
      * @param goal
@@ -116,9 +134,15 @@ public interface IMaven
         throws CoreException;
 
     /**
+     * <p>
      * Allows you to execute several goals against a MavenProject. This is equivalent to
      * {@link #executeGoals(IMavenProject, List, Properties, IProgressMonitor)}, using <code>null</code> as the
      * properties argument.
+     * </p>
+     * 
+     * <p>
+     * <b>Make sure you check {@link IMavenExecutionResult#hasErrors()} in the result for errors during execution.</b>
+     * </p>
      * 
      * @param mavenProject
      * @param goals
@@ -131,7 +155,13 @@ public interface IMaven
         throws CoreException;
 
     /**
+     * <p>
      * Allows you to execute several goals against a MavenProject.
+     * </p>
+     * 
+     * <p>
+     * <b>Make sure you check {@link IMavenExecutionResult#hasErrors()} in the result for errors during execution.</b>
+     * </p>
      * 
      * @param mavenProject
      * @param goals
