@@ -37,6 +37,8 @@ public class MavenPreferenceInitializer extends AbstractPreferenceInitializer
     private static final String DEFAULT_ARCHETYPE_PLUGIN_ARTIFACTID = "maven-archetype-plugin";
 
     private static final String DEFAULT_ARCHETYPE_PLUGIN_VERSION = "1.0-alpha-7";
+
+    public static final int DEFAULT_EVENTS_VIEW_SIZE = 10000;
     
     /* (non-Javadoc)
      * @see org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer#initializeDefaultPreferences()
@@ -56,6 +58,7 @@ public class MavenPreferenceInitializer extends AbstractPreferenceInitializer
         node.putBoolean(MavenPreferenceManager.RECURSIVE_EXECUTION, DEFAULT_RECURSIVE_EXECUTION);
         node.put(MavenPreferenceManager.USER_SETTINGS_XML_FILENAME, getDefaultUserSettings());
         node.put(MavenPreferenceManager.GLOBAL_SETTINGS_XML_FILENAME, "");
+        node.putInt(MavenPreferenceManager.EVENTS_VIEW_SIZE, DEFAULT_EVENTS_VIEW_SIZE);
     }
 
     /**

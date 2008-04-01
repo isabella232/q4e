@@ -38,6 +38,8 @@ public class MavenPreferenceManager
 
     public static final String GLOBAL_SETTINGS_XML_FILENAME = MavenCoreActivator.PLUGIN_ID + ".globalSettingsXml";
 
+    public static final String EVENTS_VIEW_SIZE = MavenCoreActivator.PLUGIN_ID + ".eventsViewSize";
+
     private IPreferenceStore preferenceStore;
 
     public MavenPreferenceManager( IPreferenceStore prefStore )
@@ -168,5 +170,15 @@ public class MavenPreferenceManager
     public void setArchetypePluginVersion( String version )
     {
         preferenceStore.setValue( ARCHETYPE_PLUGIN_VERSION, version );
+    }
+
+    public int getEventsViewSize()
+    {
+        return preferenceStore.getInt( EVENTS_VIEW_SIZE );
+    }
+
+    public void setEventsViewSize( int size )
+    {
+        preferenceStore.setValue( EVENTS_VIEW_SIZE, size );
     }
 }
