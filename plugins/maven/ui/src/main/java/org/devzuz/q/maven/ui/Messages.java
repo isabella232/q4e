@@ -56,6 +56,8 @@ public class Messages extends NLS
     
     public static String MavenPreference_UserSettingsXml;
 
+    public static String MavenPreference_EventsViewSize;
+
     public static String MavenEventView_Column_Description;
 
     public static String MavenEventView_UnknownEventType;

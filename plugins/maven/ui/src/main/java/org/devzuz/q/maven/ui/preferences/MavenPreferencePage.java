@@ -54,6 +54,9 @@ public class MavenPreferencePage
 //TODO enable when it's actually used
 //        addField( new BooleanFieldEditor( MavenPreferenceManager.DOWNLOAD_JAVADOC,
 //                                          Messages.MavenPreference_DownloadJavaDocs, getFieldEditorParent() ) );
+        addField( new IntegerFieldEditor( MavenPreferenceManager.EVENTS_VIEW_SIZE,
+                Messages.MavenPreference_EventsViewSize, getFieldEditorParent() ) );
+
     }
 
     public void init( IWorkbench workbench )

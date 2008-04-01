@@ -12,6 +12,7 @@ import org.apache.commons.collections.Buffer;
 import org.apache.commons.collections.buffer.CircularFifoBuffer;
 import org.devzuz.q.maven.embedder.IMavenEvent;
 import org.devzuz.q.maven.embedder.IMavenListener;
+import org.devzuz.q.maven.embedder.MavenManager;
 
 /**
  * The maven event store keeps a reference to a limited number of maven events.
@@ -19,20 +20,17 @@ import org.devzuz.q.maven.embedder.IMavenListener;
  * The store is used as the data model for the Maven Event View.
  * 
  * @author carlossg
- * @author Abel Mui–o <amuino@gmail.com>
+ * @author Abel Muiï¿½o <amuino@gmail.com>
  */
 public class MavenEventStore extends Observable implements IMavenListener
 {
-
-    /* TODO allow user customization */
-    private static final int BUFFER_SIZE = 10000;
 
     /**
      * Store for events reported by maven.
      * 
      * Since only one maven execution is allowed, no need to use a synchronized implementation.
      */
-    private Buffer events = new CircularFifoBuffer( BUFFER_SIZE );
+    private Buffer events = new CircularFifoBuffer( MavenManager.getMavenPreferenceManager().getEventsViewSize() );
 
     @SuppressWarnings( "unchecked" )
     public void handleEvent( IMavenEvent event )
