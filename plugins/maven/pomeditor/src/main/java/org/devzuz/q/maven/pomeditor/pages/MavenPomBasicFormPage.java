@@ -173,7 +173,7 @@ public class MavenPomBasicFormPage extends FormPage
         
         groupIdText = toolKit.createText( parent, "" ); 
         this.createTextDisplay( groupIdText, controlData );
-        groupIdText.setText( getGroupID() );
+        groupIdText.setText( getGroupID() == null? "" : getGroupID() );
         groupIdText.addKeyListener( textFieldListener );
    
         Label artifactIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_ArtifactId, SWT.NONE ); 
@@ -189,7 +189,7 @@ public class MavenPomBasicFormPage extends FormPage
 
         versionText = toolKit.createText( parent, "" ); 
         this.createTextDisplay( versionText, controlData );
-        versionText.setText( getVersion());
+        versionText.setText( getVersion() == null ? "" : getVersion());
         versionText.addKeyListener( textFieldListener );
 
         Label packagingLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Packaging, SWT.NONE ); 
