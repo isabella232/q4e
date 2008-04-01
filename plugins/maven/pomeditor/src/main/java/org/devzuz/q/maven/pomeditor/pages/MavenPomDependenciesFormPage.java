@@ -19,8 +19,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -49,7 +47,7 @@ public class MavenPomDependenciesFormPage extends FormPage
     
     private Model pomModel;
     
-    private Table propertiesTable;
+    private Table dependenciesTable;
     
     private Table dependencyExclusionTable;
     
@@ -61,25 +59,9 @@ public class MavenPomDependenciesFormPage extends FormPage
     
     private Button removeExclusionButton;
     
-    private List<Dependency> dependenciesList; 
+    private List<Dependency> dependencyList; 
     
-    private List<Exclusion> exclusionsList;
-    
-    private String groupID;
-    
-    private String artifactID;
-    
-    private String version;
-    
-    private String type;
-    
-    private String scope;
-    
-    private String systemPath;
-    
-    private Boolean optional;
-    
-    private boolean isPageModified = false;
+    private Dependency currentlySelectedDependency = null;
     
     // Elements for createDependencyInfoControls(..)
     
@@ -95,9 +77,11 @@ public class MavenPomDependenciesFormPage extends FormPage
     
     private Text systemPathText;
     
+    private Label systemPathLabel;
+    
     private Button optionalRadioButton ;
     
-    private int selectedIndex;
+    private boolean isPageModified;
     
     public MavenPomDependenciesFormPage( String id, String title )
     {
@@ -111,6 +95,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         this.pomModel = model;
     }
 
+    @SuppressWarnings( "unchecked" )
     @Override
     protected void createFormContent( IManagedForm managedForm )
     {
@@ -130,6 +115,9 @@ public class MavenPomDependenciesFormPage extends FormPage
         Composite container = toolkit.createComposite( form.getBody() );
         container.setLayoutData( layoutData );
         createDependencyDetailControls( container , toolkit );
+        
+        dependencyList = pomModel.getDependencies();
+        syncDependencyListToDependencyTable();
     }
     
     private Control createDependencyTableControls( Composite parent , FormToolkit toolKit )
@@ -138,16 +126,24 @@ public class MavenPomDependenciesFormPage extends FormPage
         
         container.setLayout( new GridLayout( 2, false ) );
         
-        propertiesTable = toolKit.createTable( container , SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
-        propertiesTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
-        propertiesTable.setLinesVisible( true );
-        propertiesTable.setHeaderVisible( true );
-        PropertiesTableListener tableListener = new PropertiesTableListener();
-        propertiesTable.addSelectionListener( tableListener );
+        dependenciesTable = toolKit.createTable( container , SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
+        dependenciesTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
+        dependenciesTable.setLinesVisible( true );
+        dependenciesTable.setHeaderVisible( true );
+        DependenciesTableListener tableListener = new DependenciesTableListener();
+        dependenciesTable.addSelectionListener( tableListener );
         
-        TableColumn column = new TableColumn( propertiesTable, SWT.BEGINNING, 0);
-        column.setWidth( 220 );
-        column.setText( "Dependencies" );
+        TableColumn column = new TableColumn( dependenciesTable, SWT.BEGINNING, 0);
+        column.setWidth( 200 );
+        column.setText( "GroupId" );
+        
+        TableColumn column2 = new TableColumn( dependenciesTable, SWT.BEGINNING, 1);
+        column2.setWidth( 90 );
+        column2.setText( "ArtifactId" );
+        
+        TableColumn column3 = new TableColumn( dependenciesTable, SWT.BEGINNING, 2);
+        column3.setWidth( 50 );
+        column3.setText( "Version" );
 
         Composite container2 = toolKit.createComposite( container );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -166,15 +162,11 @@ public class MavenPomDependenciesFormPage extends FormPage
         
         toolKit.paintBordersFor( parent );
         
-        generateDependencyTableData();
-       
         return container;
     }
     
      private Control createDependencyDetailControls( Composite container , FormToolkit toolKit )
     {
-        //Composite container = toolKit.createComposite( parent );
-        
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
         
         Section dependencyInfo = toolKit.createSection( container , Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
@@ -201,9 +193,9 @@ public class MavenPomDependenciesFormPage extends FormPage
             public void keyReleased( KeyEvent e )
             {
             	if ( ( e.stateMask != SWT.CTRL ) &&
-            		 (e.keyCode != SWT.CTRL ) )
+            		 ( e.keyCode != SWT.CTRL ) )
             	{
-            		updateDependencyList();
+            		syncDependencyInfoControlToDependency();
             	}
             	else 
             	{
@@ -221,7 +213,7 @@ public class MavenPomDependenciesFormPage extends FormPage
 
 			public void widgetSelected(SelectionEvent e) 
 			{
-				updateDependencyList();
+				syncDependencyInfoControlToDependency();
 			}
         };
         
@@ -234,48 +226,33 @@ public class MavenPomDependenciesFormPage extends FormPage
         GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
         controlData.horizontalIndent = 10;
         
-        Label groupIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_GroupId , SWT.NONE ); 
-        groupIdLabel.setLayoutData( labelData );
+        groupIdText =
+            createControl( toolKit, Messages.MavenPomEditor_MavenPomEditor_GroupId, true, parent,
+                           keyListener, labelData, controlData );
+        artifactIdText =
+            createControl( toolKit, Messages.MavenPomEditor_MavenPomEditor_ArtifactId, true, parent,
+                           keyListener, labelData, controlData );
+
+        versionText =
+            createControl( toolKit, Messages.MavenPomEditor_MavenPomEditor_Version, true, parent,
+                           keyListener, labelData, controlData );
+
+        typeText =
+            createControl( toolKit, Messages.MavenPomEditor_MavenPomEditor_Type, true, parent, keyListener,
+                           labelData, controlData );
+
+        scopeText =
+            createControl( toolKit, Messages.MavenPomEditor_MavenPomEditor_Scope, true, parent, keyListener,
+                           labelData, controlData );
         
-        groupIdText = toolKit.createText( parent, "" ); 
-        this.createTextDisplay( groupIdText, controlData );
-        groupIdText.addKeyListener( keyListener);
-        
-        Label artifactIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_ArtifactId, SWT.NONE ); 
-        artifactIdLabel.setLayoutData( labelData );
-        
-        artifactIdText = toolKit.createText( parent, "" ); 
-        this.createTextDisplay( artifactIdText, controlData );
-        artifactIdText.addKeyListener( keyListener );
-        
-        Label versionLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Version, SWT.NONE ); 
-        versionLabel.setLayoutData( labelData );
-        
-        versionText = toolKit.createText( parent, "" ); 
-        this.createTextDisplay( versionText, controlData );
-        versionText.addKeyListener( keyListener );
-        
-        Label typeLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Type, SWT.NONE ); 
-        typeLabel.setLayoutData( labelData );
-        
-        typeText = toolKit.createText( parent, "" ); 
-        this.createTextDisplay( typeText, controlData );
-        typeText.addKeyListener( keyListener );
-        
-        Label scopeLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Scope, SWT.NONE ); 
-        scopeLabel.setLayoutData( labelData );
-        
-        scopeText = toolKit.createText( parent, "" ); 
-        this.createTextDisplay( scopeText, controlData );
-        scopeText.addKeyListener( keyListener );
-        
-        Label systemPathLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_SystemPath, SWT.NONE ); 
+        systemPathLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_SystemPath , SWT.NONE ); 
         systemPathLabel.setLayoutData( labelData );
         systemPathLabel.setEnabled( false );
         
-        systemPathText = toolKit.createText( parent, ""); 
-        this.createTextDisplay( systemPathText, controlData );
-        systemPathText.addKeyListener( keyListener );
+        systemPathText = toolKit.createText( parent, "" ); 
+        systemPathText.setLayoutData( controlData );
+        systemPathText.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        systemPathText.addKeyListener( keyListener);
         systemPathText.setEnabled( false );
         
         Label optionalLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Optional, SWT.NONE ); 
@@ -283,12 +260,28 @@ public class MavenPomDependenciesFormPage extends FormPage
         
         optionalRadioButton = toolKit.createButton( parent , "", SWT.CHECK);
         optionalRadioButton.setLayoutData( controlData );
-        optionalRadioButton.setEnabled( false );
         optionalRadioButton.addSelectionListener(selectionListener);
         
         toolKit.paintBordersFor(parent);
                
         return parent;
+    }
+
+    private Text createControl( FormToolkit toolKit, String label , boolean enabled, 
+                                Composite parent, KeyListener keyListener, GridData labelData, 
+                                GridData controlData )
+    {
+        Label controlLabel = toolKit.createLabel( parent, label , SWT.NONE ); 
+        controlLabel.setLayoutData( labelData );
+        controlLabel.setEnabled( enabled );
+        
+        Text text = toolKit.createText( parent, "" ); 
+        text.setLayoutData( controlData );
+        text.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
+        text.addKeyListener( keyListener);
+        text.setEnabled( enabled );
+        
+        return text;
     }
     
     private Control createDependencyExclusionControls( Composite form , FormToolkit toolKit )
@@ -305,8 +298,12 @@ public class MavenPomDependenciesFormPage extends FormPage
         dependencyExclusionTable.addSelectionListener( tableListener );
         
         TableColumn column = new TableColumn( dependencyExclusionTable, SWT.BEGINNING, 0 );
-        column.setText( "Excluded Dependencies" );
-        column.setWidth( 100 );
+        column.setText( "Group Id" );
+        column.setWidth( 180 );
+        
+        TableColumn column2 = new TableColumn( dependencyExclusionTable, SWT.BEGINNING, 1 );
+        column2.setText( "Artifact Id" );
+        column2.setWidth( 70 );
 
         Composite container2 = toolKit.createComposite( container );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -329,7 +326,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         return container;
     }
     
-    private class PropertiesTableListener extends SelectionAdapter
+    private class DependenciesTableListener extends SelectionAdapter
     {
         public void widgetDefaultSelected( SelectionEvent e )
         {
@@ -338,19 +335,22 @@ public class MavenPomDependenciesFormPage extends FormPage
 
         public void widgetSelected( SelectionEvent e )
         {
-            TableItem[] items = propertiesTable.getSelection();
-            
+            TableItem[] items = dependenciesTable.getSelection();
             if ( ( items != null ) && ( items.length > 0 ) )
             {
                 addPropertyButton.setEnabled( true );
                 removePropertyButton.setEnabled( true );
-             
-               if(propertiesTable.getSelectionIndex() >= 0)
-               {                  
-                   addExclusionButton.setEnabled( true );
-                   selectedIndex = propertiesTable.getSelectionIndex();
-                   updateDataForInfoControls();                   
-               }
+                int selectedIndex = dependenciesTable.getSelectionIndex();
+                if ( selectedIndex >= 0 )
+                {
+                    addExclusionButton.setEnabled( true );
+                    currentlySelectedDependency = dependencyList.get( selectedIndex );
+                    if ( currentlySelectedDependency != null )
+                    {
+                        System.out.println("trace 1");
+                        syncDependencyToDetailViews( currentlySelectedDependency );
+                    }
+                }
             }
         }
     }
@@ -387,8 +387,10 @@ public class MavenPomDependenciesFormPage extends FormPage
 
 	        if ( addDialog.open() == Window.OK )
 	        {
+	            // TODO : This validation is incorrect, need to correct this
 	        	if ( !artifactAlreadyExist( addDialog.getGroupId(), addDialog.getArtifactId() ) )
 	        	{
+	        	    // TODO : this is extremely limited, need to improve this
 	        		Dependency dependency = new Dependency();
                     dependency.setGroupId( addDialog.getGroupId() );
                     dependency.setArtifactId( addDialog.getArtifactId() );
@@ -396,9 +398,11 @@ public class MavenPomDependenciesFormPage extends FormPage
                     dependency.setScope( nullIfBlank( addDialog.getScope() ) );
                     dependency.setType( "jar" );                    
                     
-	        		dependenciesList.add(dependency);
+	        		dependencyList.add(dependency);
 	        		
-	        		updateDependencyTableData();
+	        		syncDependencyListToDependencyTable();
+	        		
+	        		pageModified();
 	        	}
 	        }
 		}
@@ -410,18 +414,20 @@ public class MavenPomDependenciesFormPage extends FormPage
 		{
 			widgetSelected(e);
 		}
+    	
 		public void widgetSelected (SelectionEvent e)
 		{						
-	        for(int x =0 ; x < dependenciesList.size(); x++)
-	        {            
-	            if(x == propertiesTable.getSelectionIndex())
-	            {
-	                Dependency dependency = (Dependency)dependenciesList.get(x);	                
-	                dependenciesList.remove(dependency);	                
-	            }
+	        int selectedDependencyIndex = dependenciesTable.getSelectionIndex();
+	        if( selectedDependencyIndex >= 0 )
+	        {
+	            Dependency dependency = (Dependency) dependencyList.get( selectedDependencyIndex );
+	            dependencyList.remove( dependency );
 	        }
 	        
-	        updateDependencyTableData();
+	        syncDependencyListToDependencyTable();
+	        
+	        pageModified();
+	        
 	        clearDataforDependencyInfoControls();
 		}
     } 
@@ -439,17 +445,11 @@ public class MavenPomDependenciesFormPage extends FormPage
 			
 			if ( addDialog.open() == Window.OK )
 			{
-				for ( int i = 0; i < dependenciesList.size(); i++ )
-				{
-					if ( i == propertiesTable.getSelectionIndex() )
-					{
-						dependenciesList.get(i).addExclusion
-							(addDialog.getAddedExclusion());
-					}
-				}
+    			currentlySelectedDependency.addExclusion( addDialog.getAddedExclusion() );
 			}
 			
-			updateDataForInfoControls();
+			syncDependencyToDetailViews( currentlySelectedDependency );
+			
 			pageModified();
 		}
     }
@@ -464,49 +464,45 @@ public class MavenPomDependenciesFormPage extends FormPage
     	
     	public void widgetSelected( SelectionEvent e )
     	{
-    		for(int i = 0 ; i < dependenciesList.size(); i++)
-	        { 
-	            if(i == propertiesTable.getSelectionIndex())
-	            {
-	            	exclusionsList = dependenciesList.get(i).getExclusions();
-	            	if ( exclusionsList != null )
-	            	{
-	            		for ( int x = 0; x < exclusionsList.size(); x++ )
-	            		{
-	            			if ( x == dependencyExclusionTable.getSelectionIndex() )
-	            			{
-	            				Exclusion exclusion = (Exclusion) exclusionsList.get(x);
-	            				dependenciesList.get(i).removeExclusion(exclusion);
-	            			}
-	            		}
-	            	}	            	
-	            }
-	        }
-    		
-    		updateExclusionsTableData();
+    	    int selectedExclusionIndex = dependencyExclusionTable.getSelectionIndex();
+    	    if( selectedExclusionIndex >= 0 )
+    	    {
+    	        List<Exclusion> exclusions = currentlySelectedDependency.getExclusions();
+                if ( exclusions != null )
+                {
+                    Exclusion exclusion = (Exclusion) exclusions.get( selectedExclusionIndex );
+                    if ( exclusion != null )
+                    {
+                        currentlySelectedDependency.removeExclusion( exclusion );
+                        
+                        syncDependencyToDetailViews( currentlySelectedDependency );
+                        
+                        pageModified();
+                    }
+                }
+            }
     	}
     }
-
-	private void updateDependencyTableData() 
+    
+	private void syncDependencyListToDependencyTable() 
 	{
-		propertiesTable.removeAll();
+		dependenciesTable.removeAll();
 		dependencyExclusionTable.removeAll();
 		
-		for ( int i = 0; i < dependenciesList.size(); i++ )
+		for ( int i = 0; i < dependencyList.size(); i++ )
 		{
-			Dependency dependecies = (Dependency)dependenciesList.get(i);
-            TableItem item = new TableItem( propertiesTable, SWT.BEGINNING);
-            item.setText(new String [] { getDependency(dependecies)});
+			Dependency dependency = (Dependency) dependencyList.get(i);
+            
+			TableItem item = new TableItem( dependenciesTable, SWT.BEGINNING);
+            item.setText(new String [] { dependency.getGroupId(), 
+                                         dependency.getArtifactId(),
+                                         dependency.getVersion() });
 		}
-		
-		pomModel.setDependencies(dependenciesList);
-		
-		pageModified();
 	}
 
-	private boolean artifactAlreadyExist(String groupId, String artifactId) 
+	private boolean artifactAlreadyExist(String groupId, String artifactId ) 
 	{
-		for ( Iterator<Dependency> it = dependenciesList.iterator(); it.hasNext(); )
+		for ( Iterator<Dependency> it = dependencyList.iterator(); it.hasNext(); )
         {
             Dependency artifact = it.next();
             if ( artifact.getGroupId().equals( groupId ) && artifact.getArtifactId().equals( artifactId ) )
@@ -517,294 +513,115 @@ public class MavenPomDependenciesFormPage extends FormPage
 
         return false;
 	}
-	
-	@SuppressWarnings( "unchecked" )
-	private void updateExclusionsTableData() 
-	{
-		dependencyExclusionTable.removeAll();
-		
-		for ( int i = 0; i < dependenciesList.size(); i++ )
-		{			
-			exclusionsList = dependenciesList.get(i).getExclusions();
-			setDataforDependencyExclusions();
-		}
-		
-		pomModel.setDependencies(dependenciesList);
-		
-		pageModified();
-		
-	}
 
 	protected void pageModified()
 	{
-		isPageModified = true;
-		this.getEditor().editorDirtyStateChanged();
-		
+	    isPageModified = true;
+		getEditor().editorDirtyStateChanged();
 	}
 	
-	private void updateDependencyList()
+	private void syncDependencyInfoControlToDependency()
 	{				
-		Dependency dependency = new Dependency();
-				
-		dependency.setGroupId(groupIdText.getText().trim());
-		dependency.setArtifactId(artifactIdText.getText().trim());
-		dependency.setVersion( nullIfBlank( versionText.getText().trim() ) );
-		dependency.setScope( nullIfBlank( scopeText.getText().trim() ) );
-		dependency.setType( jarIfBlank( typeText.getText().trim() ) );
-		dependency.setSystemPath( nullIfBlank( systemPathText.getText().trim() ) );
-		dependency.setOptional(optionalRadioButton.getSelection());
-				
-		dependenciesList.remove(selectedIndex);
-		dependenciesList.add(selectedIndex, dependency);
+		currentlySelectedDependency.setGroupId( groupIdText.getText().trim());
+		currentlySelectedDependency.setArtifactId( artifactIdText.getText().trim());
+		currentlySelectedDependency.setVersion( nullIfBlank( versionText.getText().trim() ) );
 		
-		updateDependencyTableData();
+		// System Path is only available if scope is system
+		String scope = scopeText.getText().trim();
+		if( scope.equals( "system" ) )
+		{
+		    systemPathLabel.setEnabled( true );
+		    systemPathText.setEnabled( true );
+		}
+		else
+		{
+		    systemPathLabel.setEnabled( false );
+		    systemPathText.setEnabled( false );
+		}
+		currentlySelectedDependency.setScope( nullIfBlank( scope ) );
 		
-	}
-
-	private String jarIfBlank(String str) 
-	{
-		return ( str == null || str.equals( "" ) ) ? "jar" : str;
-	}
-
-	private String nullIfBlank(String str) 
-	{
-		return ( str == null || str.equals( "" ) ) ? null : str;
+		currentlySelectedDependency.setType( jarIfBlank( typeText.getText().trim() ) );
+		currentlySelectedDependency.setSystemPath( nullIfBlank( systemPathText.getText().trim() ) );
+		currentlySelectedDependency.setOptional( optionalRadioButton.getSelection() );
+		
+		syncDependencyListToDependencyTable();
 	}
 
 	@SuppressWarnings( "unchecked" )
-	private void updateDataForInfoControls()
-    {
-       
-    	dependenciesList = pomModel.getDependencies();
-		
-        for(int x =0 ; x < dependenciesList.size(); x++)
-        {            
-            if(x == propertiesTable.getSelectionIndex())
-            {
-                Dependency dependencies = (Dependency)dependenciesList.get(x);
-                exclusionsList = dependencies.getExclusions();
-                setDataforDependencyInfoControls(dependencies);
-                setDataforDependencyExclusions();                
-            }
-        }
+	private void syncDependencyToDetailViews( Dependency dependency )
+	{
+	    groupIdText.setText( blankIfNull( dependency.getGroupId() ) );
+        artifactIdText.setText( blankIfNull( dependency.getArtifactId() ) );
+        versionText.setText( blankIfNull( dependency.getVersion() ) );
+        typeText.setText( blankIfNull( dependency.getType() ) );
+        scopeText.setText( blankIfNull( dependency.getScope() ) );
+        optionalRadioButton.setSelection( dependency.isOptional() );
         
-        groupIdText.setText( getGroupID() );
-        artifactIdText.setText( getArtifactID() );
-        versionText.setText( getVersion() );
-        typeText.setText( getType() );
-        scopeText.setText( getScope() );
-        
-        optionalRadioButton.setEnabled( true );
-        optionalRadioButton.setSelection(getOptional());
-        
-        if(getOptional())
+        // System Path is only available if scope is system
+        if( dependency.getScope() != null && dependency.getScope().equals( "system" ) )
         {
-            //optionalRadioButton.setEnabled( getOptional() );
+            systemPathLabel.setEnabled( true );
             systemPathText.setEnabled( true );
-            systemPathText.setText( getSystemPath() );
+            systemPathText.setText( blankIfNull( dependency.getSystemPath() ) );
         }
         else
         {
-        	systemPathText.setText( getSystemPath() );
-            //optionalRadioButton.setEnabled( false );            
+            systemPathLabel.setEnabled( false );
+            systemPathText.setEnabled( false );
+            systemPathText.setText( "" );
         }
         
+        syncExclusionsToExclusionsView( dependency.getExclusions() );
+	}
+    
+    private void syncExclusionsToExclusionsView( List<Exclusion> exclusions )
+    {
+        dependencyExclusionTable.removeAll();
+        if ( exclusions != null )
+        {
+            for ( Exclusion exclusion : exclusions )
+            {
+                TableItem tableItem = new TableItem( dependencyExclusionTable, SWT.BEGINNING );
+                tableItem.setText( new String[] { exclusion.getGroupId(), exclusion.getArtifactId() } );
+            }
+        }
     }
     
-    private void setDataforDependencyExclusions() 
+    private String jarIfBlank(String str) 
     {
-    	dependencyExclusionTable.removeAll();
-    	
-		for ( int i = 0; i < exclusionsList.size(); i++ )
-		{
-			try
-			{
-				Exclusion dependencyExclusion = (Exclusion)exclusionsList.get(i);
-							
-				TableItem tableItem = new TableItem( dependencyExclusionTable, SWT.BEGINNING);
-				tableItem.setText(new String[] { getDependencyExclusion(dependencyExclusion) });
-			}
-			catch ( Exception e)
-			{
-				System.out.println(e.getMessage());
-			}
-		}
-		
-	}
+        return ( str == null || str.equals( "" ) ) ? "jar" : str;
+    }
 
-	private String getDependencyExclusion(Exclusion dependencyExclusion) 
-	{
-		StringBuilder strExclusion = new StringBuilder();
-		strExclusion.append(dependencyExclusion.getArtifactId());
-		
-		return strExclusion.toString();
-	}
-
-	private void createTextDisplay(final Text text, GridData controlData)
+    private String nullIfBlank(String str) 
     {
-        if(text != null)
-        {
-            ModifyListener modifyingListener = new ModifyListener()
-            {
-                public void modifyText( ModifyEvent e )
-                {                    
-                    //System.out.println("modify" + text.getText());
-                }
-            };
-            
-            text.setLayoutData( controlData );
-            text.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-            text.addModifyListener( modifyingListener );     
-            
-        }
-    }    
+        return ( str == null || str.equals( "" ) ) ? null : str;
+    }
     
-    private void setDataforDependencyInfoControls(Dependency dependency)
+    private String blankIfNull( String str )
     {
-        this.setGroupID( checkStringIfNull( dependency.getGroupId()) );
-        this.setArtifactID( checkStringIfNull( dependency.getArtifactId()) );
-        this.setVersion( checkStringIfNull( dependency.getVersion()) );
-        this.setType( checkStringIfNull( dependency.getType()) );
-        this.setScope( checkStringIfNull( dependency.getScope()) );
-        this.setSystemPath( checkStringIfNull( dependency.getSystemPath()) );
-        this.setOptional( dependency.isOptional() );
+        return str == null ? "" : str;    
+    }
+    
+    public boolean isDirty()
+    {
+        return isPageModified;
+    }
+    
+    public void setPageModified( boolean isPageModified )
+    {
+        this.isPageModified = isPageModified;
     }
     
     private void clearDataforDependencyInfoControls()
     {
-    	this.groupIdText.setText("");
-    	this.artifactIdText.setText("");
-    	this.versionText.setText("");
-    	this.typeText.setText("");
-    	this.scopeText.setText("");
-    	this.systemPathText.setText("");
-    	this.setOptional(false);     	
+    	groupIdText.setText("");
+    	artifactIdText.setText("");
+    	versionText.setText("");
+    	typeText.setText("");
+    	scopeText.setText("");
+    	systemPathLabel.setEnabled( false );
+    	systemPathText.setEnabled( false );
+    	systemPathText.setText("");
+    	optionalRadioButton.setSelection( false );     	
     }
-    
-    private String checkStringIfNull(String strTemp)
-    {
-        if(null != strTemp )
-        {
-            return strTemp;
-        }
-        else
-        {
-            return "";
-        }
-    }
-    
-    @SuppressWarnings( "unchecked" )
-    private void generateDependencyTableData()
-    {
-    	dependenciesList = pomModel.getDependencies();
-        
-    	propertiesTable.removeAll();
-    	
-        for(int x =0 ; x < dependenciesList.size(); x++)
-        {                 
-            Dependency dependecies = (Dependency)dependenciesList.get(x);
-            TableItem item = new TableItem( propertiesTable, SWT.BEGINNING);
-            item.setText(new String [] { getDependency(dependecies)});
-        }   
-    }
-    
-    private String getDependency(Dependency dependency)
-    {
-        StringBuilder strDependency = new StringBuilder();
-        strDependency.append(dependency.getArtifactId());
-        strDependency.append("-");
-        strDependency.append(dependency.getVersion());
-        strDependency.append(".");
-        strDependency.append(dependency.getType());
-        
-        return strDependency.toString();        
-    }
-    
-    public boolean isDirty()
-	{
-		return isPageModified;
-	}
-
-    public String getGroupID()
-    {
-        return groupID;
-    }
-
-    private void setGroupID( String groupID )
-    {
-        this.groupID = groupID;
-    }
-
-    public String getArtifactID()
-    {
-        return artifactID;
-    }
-
-    private void setArtifactID( String artifactID )
-    {
-        this.artifactID = artifactID;
-    }
-
-    public String getVersion()
-    {
-        return version;
-    }
-
-    private void setVersion( String version )
-    {
-        this.version = version;
-    }
-
-    public String getType()
-    {
-        return type;
-    }
-
-    private void setType( String type )
-    {
-        this.type = type;
-    }
-
-    public String getScope()
-    {
-        return scope;
-    }
-
-    private void setScope( String scope )
-    {
-        this.scope = scope;
-    }
-
-    public String getSystemPath()
-    {
-        return systemPath;
-    }
-
-    private void setSystemPath( String systemPath )
-    {
-        this.systemPath = systemPath;
-    }
-
-    public Boolean getOptional()
-    {
-        return optional;
-    }
-
-    private void setOptional( Boolean optional )
-    {
-        this.optional = optional;
-    }
-
-	public List<Dependency> getDependenciesList() {
-		return dependenciesList;
-	}
-
-	public void setDependenciesList(List<Dependency> dependenciesList) {
-		this.dependenciesList = dependenciesList;
-	}
-
-	public void setPageModified(boolean isPageModified) {
-		this.isPageModified = isPageModified;
-	}
-
 }
