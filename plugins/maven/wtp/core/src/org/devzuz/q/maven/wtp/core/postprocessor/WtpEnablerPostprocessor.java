@@ -17,6 +17,8 @@ import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.core.classpath.container.IMavenClasspathAttributeProvider;
 import org.devzuz.q.maven.jdt.ui.projectimport.IImportProjectPostprocessor;
+import org.devzuz.q.maven.wtp.core.MavenWtpActivator;
+import org.devzuz.q.maven.wtp.core.internal.TraceOption;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jdt.core.IClasspathAttribute;
@@ -50,16 +52,17 @@ public class WtpEnablerPostprocessor implements IImportProjectPostprocessor, IMa
         if ( !isWarProject( mavenProject ) )
         {
             // not applicable, stop here.
+            MavenWtpActivator.trace( TraceOption.POSTPROCESSOR, "WTP postprocessor not applicable to ", mavenProject );
             return;
         }
         try
         {
+            MavenWtpActivator.trace( TraceOption.POSTPROCESSOR, "Adding WTP facets to ", mavenProject );
             addProjectFacets( mavenProject, monitor );
         }
         catch ( CoreException e )
         {
-            // XXX log or handle
-            e.printStackTrace();
+            MavenWtpActivator.getLogger().log( "Error adding WTP facets to " + mavenProject, e );
         }
     }
 
@@ -68,7 +71,7 @@ public class WtpEnablerPostprocessor implements IImportProjectPostprocessor, IMa
     //
 
     /**
-     * Sets the non-dependency attribute on artifacts that should not be inclided in WEB-INF/lib on the generated war.
+     * Sets the non-dependency attribute on artifacts that should not be included in WEB-INF/lib on the generated war.
      */
     public Set<IClasspathAttribute> getExtraAttributesForArtifact( IMavenProject mavenProject, IMavenArtifact artifact,
                                                                    boolean isInWorkspace )
@@ -78,12 +81,16 @@ public class WtpEnablerPostprocessor implements IImportProjectPostprocessor, IMa
 
             try
             {
+                MavenWtpActivator.trace( TraceOption.CP_ATTRIBUTE_PROVIDER, "Adding non-dependency attribute to ",
+                                         artifact, " for maven project ", mavenProject );
                 return Collections.singleton( UpdateClasspathAttributeUtil.createNonDependencyAttribute() );
             }
             catch ( CoreException e )
             {
                 // Could not create the non-dependency attribute... weird!
-                e.printStackTrace();
+                MavenWtpActivator.getLogger().log(
+                                                   "Could not add the non-dependency attribute to " + artifact
+                                                                   + " for maven project " + mavenProject, e );
             }
         }
         return Collections.emptySet();
@@ -98,13 +105,22 @@ public class WtpEnablerPostprocessor implements IImportProjectPostprocessor, IMa
         {
             try
             {
+                MavenWtpActivator.trace( TraceOption.CP_ATTRIBUTE_PROVIDER,
+                                         "Adding WTP classpath container attributes to project ", mavenProject );
                 return Collections.singleton( UpdateClasspathAttributeUtil.createDependencyAttribute( true ) );
             }
             catch ( CoreException e )
             {
-                // Could not create the dependency attribute... weird!
-                e.printStackTrace();
+                MavenWtpActivator.getLogger().log(
+                                                   "Error adding dependency attribute "
+                                                                   + "to maven classpath container on project: "
+                                                                   + mavenProject, e );
             }
+        }
+        else
+        {
+            MavenWtpActivator.trace( TraceOption.CP_ATTRIBUTE_PROVIDER,
+                                     "WTP classpath container attributes are not applicable to project ", mavenProject );
         }
         return Collections.emptySet();
     }
