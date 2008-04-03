@@ -101,7 +101,7 @@ public class MavenPomBasicFormPage extends FormPage
         this.pomModel = model;
         this.editor = editor;
         
-        setPOMEditorProjectInfomation();
+        setPOMEditorProjectInformation();
         
     }
     
@@ -380,7 +380,7 @@ public class MavenPomBasicFormPage extends FormPage
         }
     }
     
-    private void setPOMEditorProjectInfomation()
+    private void setPOMEditorProjectInformation()
     {
         //sets data to be used in createBasicCoordinateControls
         setGroupID(pomModel.getGroupId());
@@ -631,6 +631,5 @@ public class MavenPomBasicFormPage extends FormPage
 	{
 		this.isPageModified = isPageModified;
 		
-	}
-    
+	}   
 }

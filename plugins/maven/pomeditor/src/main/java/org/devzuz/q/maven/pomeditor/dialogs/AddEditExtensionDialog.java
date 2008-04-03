@@ -35,6 +35,12 @@ public class AddEditExtensionDialog extends AbstractResizableDialog
     
     private ArtifactComponent artifact;
     
+    private String groupId = "";
+    
+    private String artifactId = "";
+    
+    private String version = "";
+    
     @Override
     protected Preferences getDialogPreferences()
     {
@@ -55,15 +61,32 @@ public class AddEditExtensionDialog extends AbstractResizableDialog
         };
         
         artifact = new ArtifactComponent( container , SWT.None );
+        syncData();
         artifact.addModifyListener( artifactListener );
         
         return container;
+    }
+
+    public int openWithItem( String groupId, String artifactId, String version )
+    {
+        this.groupId = groupId;
+        this.artifactId = artifactId;
+        this.version = version;
+        if( artifact != null )
+        {
+            syncData();
+        }
+        
+        return open();
     }
     
     protected void validate() 
     {
         if ( didValidate() )
         {
+            groupId = artifact.getGroupId();
+            artifactId = artifact.getArtifactId();
+            version = artifact.getVersion();
             getButton( IDialogConstants.OK_ID ).setEnabled( true );
         }
         else
@@ -74,9 +97,9 @@ public class AddEditExtensionDialog extends AbstractResizableDialog
     
     private boolean didValidate()
     {   
-        if( getGroupId().length() > 0 &&
-            getArtifactId().length() > 0 &&
-            getVersion().length() > 0 )
+        if( artifact.getGroupId().length() > 0 &&
+            artifact.getArtifactId().length() > 0 &&
+            artifact.getVersion().length() > 0 )
         {
             return true;
         }
@@ -86,17 +109,17 @@ public class AddEditExtensionDialog extends AbstractResizableDialog
     
     public String getGroupId()
     {
-        return artifact.getGroupId();
+        return groupId;
     }
     
     public String getArtifactId()
     {
-        return artifact.getArtifactId();
+        return artifactId;
     }
     
     public String getVersion()
     {
-        return artifact.getVersion();
+        return version;
     }
 
     @Override
@@ -105,5 +128,12 @@ public class AddEditExtensionDialog extends AbstractResizableDialog
         Control bar = super.createButtonBar( parent );
         validate();
         return bar; 
+    }
+    
+    private void syncData()
+    {
+        artifact.setGroupId( groupId );
+        artifact.setArtifactId( artifactId );
+        artifact.setVersion( version );
     }
 }

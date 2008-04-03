@@ -73,6 +73,28 @@ public class Messages
     public static String MavenPomEditor_MavenCustomComponent_ArtifactIdLabel;
     
     public static String MavenPomEditor_MavenCustomComponent_VersionLabel;
+    
+    public static String MavenPomEditor_MavenPomEditor_Build;
+    
+    public static String MavenPomEditor_MavenPomEditor_FinalName;
+    
+    public static String MavenPomEditor_MavenPomEditor_Directory;
+    
+    public static String MavenPomEditor_MavenPomEditor_OutputDirectory;
+    
+    public static String MavenPomEditor_MavenPomEditor_TestOutputDirectory;
+    
+    public static String MavenPomEditor_MavenPomEditor_SourceDirectory;
+    
+    public static String MavenPomEditor_MavenPomEditor_ScriptSourceDirectory;
+    
+    public static String MavenPomEditor_MavenPomEditor_TestSourceDirectory;
+    
+    public static String MavenPomEditor_MavenPomEditor_Extension;
+    
+    public static String MavenPomEditor_MavenPomEditor_Resource;
+    
+    public static String MavenPomEditor_MavenPomEditor_TestResource;
 
     public static String MavenPomEditor_MavenPomEditor_Distribution;
 

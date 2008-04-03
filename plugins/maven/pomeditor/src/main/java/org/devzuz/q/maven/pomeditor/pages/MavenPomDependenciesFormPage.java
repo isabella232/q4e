@@ -347,7 +347,6 @@ public class MavenPomDependenciesFormPage extends FormPage
                     currentlySelectedDependency = dependencyList.get( selectedIndex );
                     if ( currentlySelectedDependency != null )
                     {
-                        System.out.println("trace 1");
                         syncDependencyToDetailViews( currentlySelectedDependency );
                     }
                 }

@@ -228,7 +228,7 @@ public class MavenPomLicensesFormPage extends FormPage
             {
                 public void modifyText( ModifyEvent e )
                 {
-                    // System.out.println("modify" + text.getText());
+                    
                 }
             };
 

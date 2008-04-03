@@ -17,6 +17,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBasicFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDevelopersFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesFormPage;
@@ -45,6 +46,8 @@ public class MavenPomFormEditor extends FormEditor
     
     public static final String DEVELOPERS_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDevelopersFormPage";
     
+    public static final String BUILD_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildFormPage";
+    
     private Model pomModel;
 
     private MavenPomBasicFormPage basicFormPage;
@@ -56,6 +59,8 @@ public class MavenPomFormEditor extends FormEditor
     private MavenPomLicensesFormPage mavenPomLicensesFormPage;
     
     private MavenPomDevelopersFormPage mavenPomDevelopersFormPage;
+    
+    private MavenPomBuildFormPage buildFormPage;
     
     public MavenPomFormEditor()
     {
@@ -87,6 +92,10 @@ public class MavenPomFormEditor extends FormEditor
                 modulePropertiesFormPage = 
                     new MavenPomPropertiesModuleFormPage( this, MODULES_FORM_PAGE, "Properties/Module", this.pomModel );
                 addPage( modulePropertiesFormPage );
+                
+                buildFormPage = 
+                    new MavenPomBuildFormPage( this, BUILD_FORM_PAGE, "Build Management", this.pomModel );             
+                addPage( buildFormPage );
             }
         }
         catch ( PartInitException pie )
@@ -157,7 +166,7 @@ public class MavenPomFormEditor extends FormEditor
             File pomFile = getPomFile();
 
             MavenUtils.rewritePom( pomFile , pomModel );
-
+            
             IPath location = Path.fromOSString( pomFile.getAbsolutePath() );
             IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( location );
             
@@ -186,6 +195,7 @@ public class MavenPomFormEditor extends FormEditor
         modulePropertiesFormPage.setPageModified( false );
         mavenPomLicensesFormPage.setPageModified(false);
         mavenPomDevelopersFormPage.setPageModified(false);
+        buildFormPage.setPageModified( false );
         // clean other pages
     }
 
