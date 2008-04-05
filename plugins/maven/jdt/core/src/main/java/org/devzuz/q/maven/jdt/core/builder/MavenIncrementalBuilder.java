@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 
 /**
  * Maven builder that will update the classpath container when pom changes
@@ -72,6 +73,7 @@ public class MavenIncrementalBuilder
          * @param mavenProject
          * @param mavenResource
          */
+        @SuppressWarnings("unchecked")
         public DeltaVisitor( String goal, IMavenProject mavenProject, Resource mavenResource )
         {
             this.goal = goal;
@@ -225,6 +227,7 @@ public class MavenIncrementalBuilder
 
     private IMavenProject lastGoodProject = null;
 
+    @SuppressWarnings("unchecked")
     @Override
     protected IProject[] build( int kind, Map args, IProgressMonitor monitor )
         throws CoreException
@@ -233,6 +236,14 @@ public class MavenIncrementalBuilder
         status.monitor = monitor;
         // The project as cached before the change.
         status.mavenProject = lastGoodProject;
+
+        
+        IProject project = getProject();
+        if ( !project.isOpen() || !project.getFile( IMavenProject.POM_FILENAME ).exists() )
+        {
+            /* the project was closed or pom was deleted */
+            return null;
+        }
 
         if ( ( kind == INCREMENTAL_BUILD ) || ( kind == AUTO_BUILD ) )
         {
@@ -622,10 +633,18 @@ public class MavenIncrementalBuilder
         }
 
         IMavenExecutionResult result = MavenManager.getMaven().executeGoal( mavenProject, phase, params, monitor );
+        IProject project = result.getMavenProject().getProject();
         if ( result.hasErrors() )
         {
-            MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( result.getMavenProject().getProject(), result.getExceptions() );
+            /* build in error, add problem markers */
+            MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, result.getExceptions() );
             return false;
+        }
+        else
+        {
+            /* build successful, delete problem markers */
+            final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
+            pom.deleteMarkers( MavenCoreActivator.MARKER_ID, false, IResource.DEPTH_ZERO );
         }
 
         return true;
@@ -644,7 +663,7 @@ public class MavenIncrementalBuilder
                 public void run( IProgressMonitor monitor )
                     throws CoreException
                 {
-                    pom.deleteMarkers( MavenJdtCoreActivator.MARKER_ID, false, IResource.DEPTH_ZERO );
+                    pom.deleteMarkers( MavenCoreActivator.MARKER_ID, false, IResource.DEPTH_ZERO );
                 }
             }.run( status.monitor );
         }
