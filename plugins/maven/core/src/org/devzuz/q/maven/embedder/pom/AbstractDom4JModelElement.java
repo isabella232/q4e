@@ -131,7 +131,8 @@ public abstract class AbstractDom4JModelElement
     }
 
     /**
-     * Set the value of the indicated text element. If the element does not exist it is created
+     * Set the value of the indicated text element. If the element does not exist it is created. If the supplied value
+     * is null then the element is deleted
      * 
      * @param name - eg groupId
      * @param value - eg the value of the groupId element
@@ -143,7 +144,10 @@ public abstract class AbstractDom4JModelElement
         {
             element.detach();
         }
-        this.element.addElement( name ).addText( value );
+        if ( value != null )
+        {
+            this.element.addElement( name ).addText( value );
+        }
     }
 
     protected abstract String getName();
