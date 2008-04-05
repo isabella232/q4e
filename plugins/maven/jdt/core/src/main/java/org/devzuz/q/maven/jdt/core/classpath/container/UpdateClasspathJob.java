@@ -10,10 +10,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.devzuz.q.maven.embedder.IMavenJob;
+import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.MavenMonitorHolder;
+import org.devzuz.q.maven.embedder.test.EclipseMavenForTesting;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -61,9 +64,9 @@ public class UpdateClasspathJob extends WorkspaceJob implements IMavenJob
     {
         MavenMonitorHolder.setProgressMonitor( monitor );
 
-        if ( !project.isOpen() )
+        if ( !project.isOpen() || !project.getFile( IMavenProject.POM_FILENAME ).exists() )
         {
-            /* the project was closed while the job was waiting */
+            /* the project was closed while the job was waiting or pom was deleted */
             return Status.CANCEL_STATUS;
         }
 
