@@ -19,7 +19,8 @@ Export-Package: org.devzuz.q.maven.embedder;uses:="junit.framework",
  org.devzuz.q.maven.embedder.nature;uses:="org.eclipse.core.resources",
  org.devzuz.q.maven.embedder.pom,
  org.devzuz.q.maven.embedder.preferences,
- org.devzuz.q.maven.embedder.test;uses:="org.devzuz.q.maven.embedder.internal,org.apache.maven.artifact,org.devzuz.q.maven.embedder"
+ org.devzuz.q.maven.embedder.test;uses:="org.devzuz.q.maven.embedder.internal,org.apache.maven.artifact,org.devzuz.q.maven.embedder",
+ org.devzuz.q.maven.project.properties
 Bundle-Vendor: DevZuz
 Import-Package: org.eclipse.jface.preference,
  org.eclipse.ui.preferences
