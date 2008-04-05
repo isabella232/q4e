@@ -150,15 +150,11 @@ public class Messages extends NLS
 
     public static String MavenProjectView_MavenChildProject;
 
-    public static String MavenProfileView_ActiveProfiles;
-    
-    public static String MavenProfileView_MavenPomProfile;
-    
-    public static String MavenProfileView_MavenProjectProfile;
-    
-    public static String MavenProfileView_MavenGlobalSettingsXmlProfile;
-    
-    public static String MavenProfileView_MavenUserSettingsXmlProfile;
+    public static String MavenProfileView_ActiveProfile;
+
+    public static String MavenProfileView_ProfileName;
+
+    public static String MavenProfileView_ProfileLocation;
     
     static
     {

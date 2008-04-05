@@ -7,19 +7,20 @@
 package org.devzuz.q.maven.ui.views;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
 
+import org.apache.maven.embedder.MavenEmbedder;
 import org.apache.maven.model.Model;
+import org.apache.maven.model.Profile;
 import org.apache.maven.settings.Settings;
-import org.apache.maven.settings.io.xpp3.SettingsXpp3Reader;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.apache.maven.settings.SettingsConfigurationException;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.nature.MavenNatureHelper;
+import org.devzuz.q.maven.project.properties.MavenProjectPropertiesManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
 import org.eclipse.core.resources.IProject;
@@ -27,15 +28,21 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -45,25 +52,158 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.ViewPart;
 
+/**
+ * A view that shows tables that contains the profiles of the active maven project in the page and the profiles in
+ * global and user settings.xml set in maven preference page.
+ * 
+ * The table gets updated if any of the following condition is satisfied: 1. selection of project in the workspace was
+ * changed 2. pom.xml of the project was changed 3. global or user settings.xml was changed
+ * 
+ * @author aramirez
+ */
 public class MavenProfileView extends ViewPart
 {
-    private Table mavenProfileTable;
+    public static final int PROFILE_NAME_COLUMN = 0;
+
+    public static final int LOCATION_COLUMN = 1;
+
+    public static final int EDIT_MODE = 3;
+
+    public static final int VIEW_MODE = 4;
+
+    private final int mode = VIEW_MODE;
+
+    private long pomFileLmod;
+
+    private long globalSettingsXmlLmod;
+
+    private long userSettingsXmlLmod;
+
+    private String pomLocation;
+
+    private String globalSettingsLocation;
+
+    private String userSettingsLocation;
+
+    private CheckboxTableViewer mavenProfileTableViewer;
+
+    private List<ProfileModel> profiles;
+
+    private ISelectionListener listener;
 
     private IProject currentProject;
 
     private IProject selectedProject;
 
-    private Settings projectDescriptor;
+    private Button editButton;
+
+    private Button saveButton;
+
+    private Model pomModel;
 
     private Settings globalSettings;
 
     private Settings userSettings;
 
-    private Model currentProjectModel;
+    /**
+     * Initializes this view with the given view site. It also adds a SelectionListener that listens when the user
+     * selects any object in the page.
+     * 
+     * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite)
+     */
+    @Override
+    public void init( IViewSite site ) throws PartInitException
+    {
+        profiles = new ArrayList<ProfileModel>();
+        globalSettingsXmlLmod =
+            new File( MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename() ).lastModified();
+        userSettingsXmlLmod =
+            new File( MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename() ).lastModified();
+        super.init( site );
+        getSite().getWorkbenchWindow().getSelectionService().addSelectionListener( getSelectionListener() );
 
-    private ISelectionListener listener;
+    }
 
-    private final List list = new ArrayList();
+    /**
+     * When this view is about to be disposed, this method removes the SelectionListener in the page.
+     * 
+     * @see org.eclipse.ui.part.WorkbenchPart#dispose()
+     */
+    @Override
+    public void dispose()
+    {
+        getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener( getSelectionListener() );
+        profiles = null;
+        super.dispose();
+    }
+
+    /**
+     * 
+     * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
+     */
+    @Override
+    public void setFocus()
+    {
+
+    }
+
+    /**
+     * Creates the controls for this view.
+     * 
+     * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
+     */
+    @Override
+    public void createPartControl( Composite parent )
+    {
+        Composite composite = new Composite( parent, SWT.NONE );
+        composite.setLayout( new GridLayout( 1, false ) );
+
+        Composite topComposite = new Composite( composite, SWT.NONE );
+        topComposite.setLayout( new GridLayout( 2, false ) );
+
+        mavenProfileTableViewer =
+            CheckboxTableViewer.newCheckList( composite, SWT.FULL_SELECTION | SWT.H_SCROLL | SWT.V_SCROLL );
+
+        mavenProfileTableViewer.setContentProvider( new ProfileContentProvider() );
+        mavenProfileTableViewer.setLabelProvider( new ProfileLabelProvider() );
+
+        Table table = mavenProfileTableViewer.getTable();
+        table.setLayoutData( new GridData( GridData.FILL_BOTH ) );
+        table.addListener( SWT.Selection, new Listener()
+        {
+            public void handleEvent( Event event )
+            {
+                if ( event.detail == SWT.CHECK )
+                {
+                    TableItem item = (TableItem) event.item;
+                    ProfileModel profile = profiles.get( event.index );
+                    profile.setActive( item.getChecked() );
+                    MavenProjectPropertiesManager propertyManager = MavenProjectPropertiesManager.getInstance();
+                    if ( profile.isActive() )
+                    {
+                        propertyManager.activateProfile( currentProject, profile.getName() );
+                    }
+                    else
+                    {
+                        propertyManager.deactivateProfile( currentProject, profile.getName() );
+                    }
+                }
+            }
+        } );
+
+        TableColumn nameColumn = new TableColumn( table, SWT.NONE );
+        nameColumn.setText( Messages.MavenProfileView_ProfileName );
+        nameColumn.setWidth( 100 );
+
+        TableColumn locationColumn = new TableColumn( table, SWT.NONE );
+        locationColumn.setText( Messages.MavenProfileView_ProfileLocation );
+        locationColumn.setWidth( 300 );
+
+        table.setHeaderVisible( true );
+        table.setLinesVisible( true );
+
+        changeTableContents( profiles );
+    }
 
     /**
      * Returns one instance of selection listener. The listener gets notified and selectionChanged method will be called
@@ -101,27 +241,7 @@ public class MavenProfileView extends ViewPart
                             {
                                 if ( MavenNatureHelper.getInstance().hasQ4ENature( selectedProject ) )
                                 {
-                                    // If the user selected another project then parse the profile.xml of that project
-                                    if ( currentProject == null || !currentProject.equals( selectedProject ) )
-                                    {
-                                        currentProject = selectedProject;
-
-                                        projectDescriptor = getSettingsModelFromFile( currentProject, "profile.xml" );
-                                    }
-
-                                    currentProjectModel =
-                                        MavenManager.getMavenProjectManager().getMavenProject( currentProject, false ).getModel();
-                                    globalSettings =
-                                        getSettingsModelFromFile( MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename() );
-                                    userSettings =
-                                        getSettingsModelFromFile( MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename() );
-
-                                    list.clear();
-                                    list.add( currentProjectModel );
-                                    list.add( projectDescriptor );
-                                    list.add( globalSettings );
-                                    list.add( userSettings );
-                                    refreshTable();
+                                    updateTable();
                                 }
                                 else
                                 {
@@ -137,6 +257,7 @@ public class MavenProfileView extends ViewPart
 
                 }
 
+                @SuppressWarnings( "unchecked" )
                 private <T> T adaptAs( Class<T> clazz, Object object )
                 {
                     if ( object == null )
@@ -163,293 +284,469 @@ public class MavenProfileView extends ViewPart
     }
 
     /**
-     * Initializes this view with the given view site. It also adds a SelectionListener that listens when the user
-     * selects any object in the page.
-     * 
-     * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite)
+     * Update the table of this view for any changes of the pom.xml and settings.xml file
      */
-    @Override
-    public void init( IViewSite site ) throws PartInitException
+    public void updateTable()
     {
-        super.init( site );
-        getSite().getWorkbenchWindow().getSelectionService().addSelectionListener( getSelectionListener() );
+        boolean profilesChanged = false;
+
+        if ( pomProfileNeedsUpdate() )
+        {
+            updatePomModel();
+            profilesChanged = true;
+        }
+
+        if ( globalSettingsXmlProfilesNeedsUpdate() )
+        {
+            updateGlobalSettings();
+            profilesChanged = true;
+        }
+
+        if ( userSettingsXmlProfilesNeedsUpdate() )
+        {
+            updateUserSettings();
+            profilesChanged = true;
+        }
+
+        if ( profilesChanged )
+        {
+            profiles.clear();
+
+            List<ProfileModel> list = new ArrayList<ProfileModel>();
+
+            if ( pomModel != null )
+            {
+                list.addAll( getProfileFromPomModel( pomModel, pomLocation ) );
+            }
+
+            if ( globalSettings != null )
+            {
+                list.addAll( getProfileFromSettings(
+                                                     globalSettings,
+                                                     MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename() ) );
+            }
+
+            if ( globalSettingsLocation != null && !globalSettingsLocation.equals( userSettingsLocation ) )
+            {
+                if ( userSettings != null )
+                {
+                    list.addAll( getProfileFromSettings(
+                                                         userSettings,
+                                                         MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename() ) );
+                }
+            }
+            // Merge previous user choices over the given configuration
+            Set<String> eclipseActivated =
+                MavenProjectPropertiesManager.getInstance().getActiveProfiles( currentProject );
+            Set<String> eclipseDeactivated =
+                MavenProjectPropertiesManager.getInstance().getInactiveProfiles( currentProject );
+            ListIterator<ProfileModel> it = list.listIterator();
+            while ( it.hasNext() )
+            {
+                ProfileModel current = it.next();
+                if ( eclipseDeactivated.contains( current.getName() ) )
+                {
+                    current.setActive( false );
+                }
+                else if ( eclipseActivated.contains( current.getName() ) )
+                {
+                    current.setActive( true );
+                }
+            }
+            profiles.addAll( list );
+            changeTableContents( profiles );
+        }
     }
 
     /**
-     * When this view is about to be disposed, this method removes the SelectionListener in the page.
-     * 
-     * @see org.eclipse.ui.part.WorkbenchPart#dispose()
-     */
-    @Override
-    public void dispose()
-    {
-        getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener( getSelectionListener() );
-        super.dispose();
-    }
-
-    /**
-     * 
-     * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
-     */
-    @Override
-    public void setFocus()
-    {
-
-    }
-
-    /**
-     * Creates the controls for this view.
-     * 
-     * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
-     */
-    @Override
-    public void createPartControl( Composite parent )
-    {
-        Composite composite = new Composite( parent, SWT.NONE );
-        composite.setLayout( new GridLayout( 1, false ) );
-        composite.setLayoutData( new GridData( GridData.FILL_BOTH | GridData.GRAB_VERTICAL | GridData.GRAB_HORIZONTAL ) );
-
-        Composite descriptionComposite = new Composite( composite, SWT.NONE );
-        descriptionComposite.setLayout( new GridLayout( 2, false ) );
-        Label blanklabel = new Label( descriptionComposite, SWT.NONE );
-        blanklabel.setText( "                      " );
-        blanklabel.setBackground( new Color( getSite().getShell().getDisplay(), 0, 200, 0 ) );
-
-        Label label = new Label( descriptionComposite, SWT.LEFT );
-        label.setText( Messages.MavenProfileView_ActiveProfiles );
-
-        mavenProfileTable = new Table( composite, SWT.BORDER | SWT.MULTI );
-        mavenProfileTable.setLayoutData( new GridData( GridData.FILL_BOTH | GridData.GRAB_VERTICAL
-                        | GridData.GRAB_HORIZONTAL ) );
-        mavenProfileTable.setHeaderVisible( true );
-        mavenProfileTable.setLinesVisible( true );
-
-        createColumns( mavenProfileTable );
-    }
-
-    /**
-     * Fills the given table with four columns each having 300px width.
-     * 
-     * @param parentTable
-     */
-    private void createColumns( Table parentTable )
-    {
-        TableColumn pomProfileColumn = new TableColumn( parentTable, SWT.NONE, 0 );
-        pomProfileColumn.setText( Messages.MavenProfileView_MavenPomProfile );
-        pomProfileColumn.setWidth( 300 );
-
-        TableColumn projectProfileColumn = new TableColumn( parentTable, SWT.NONE, 1 );
-        projectProfileColumn.setText( Messages.MavenProfileView_MavenProjectProfile );
-        projectProfileColumn.setWidth( 300 );
-
-        TableColumn globalSettingsXmlProfileColumn = new TableColumn( parentTable, SWT.NONE, 2 );
-        globalSettingsXmlProfileColumn.setText( Messages.MavenProfileView_MavenGlobalSettingsXmlProfile );
-        globalSettingsXmlProfileColumn.setWidth( 300 );
-
-        TableColumn userSettingsXmlProfileColumn = new TableColumn( parentTable, SWT.NONE, 3 );
-        userSettingsXmlProfileColumn.setText( Messages.MavenProfileView_MavenUserSettingsXmlProfile );
-        userSettingsXmlProfileColumn.setWidth( 300 );
-    }
-
-    /**
-     * Refreshes the table of this view
-     * 
-     */
-    public void refreshTable()
-    {
-        clearTable();
-        addProfileToTable( list );
-    }
-
-    /**
-     * Removes all the contents of the table of this view.
-     * 
+     * Remove all contents of the table of this view
      */
     public void clearTable()
     {
-        mavenProfileTable.removeAll();
+        changeTableContents( null );
     }
 
     /**
-     * Returns the Settings model of the file in the workspace project. If the file cannot be resolve to Settings model,
-     * a new instance of Settings will be returned.
+     * Check if we need to update the pom profile in the table
      * 
-     * @param project
-     * @param ifileName
-     * @return
+     * @return true if selection of project in workspace changed or if pom.xml of the current project was changed,
+     *         otherwise false.
      */
-    public Settings getSettingsModelFromFile( IProject project, String ifileName )
+    public boolean pomProfileNeedsUpdate()
     {
-        Settings model = null;
+        boolean needsUpdate = false;
 
-        if ( project != null && project.getFile( ifileName ).exists() )
+        if ( currentProject == null || !currentProject.equals( selectedProject )
+                        || new File( pomLocation ).lastModified() != pomFileLmod )
         {
-            URI uriPath = project.getFile( ifileName ).getLocationURI();
-            model = getSettingsModelFromFile( uriPath.getPath() );
+            needsUpdate = true;
         }
 
-        return model;
+        return needsUpdate;
     }
 
     /**
-     * Returns the Settings model of the given file location. If the file cannot be resolve to Settings model, a new
-     * instance of Settings will be returned.
+     * Check if we need to update the user settings profile in the table
      * 
-     * @param project
-     * @param ifileName
-     * @return settings model of the file. New instance if the file cannot be resolved or does not exist.
+     * @return true if user settings was changed, otherwise false.
      */
-    public Settings getSettingsModelFromFile( String fileFullPathLocation )
+    public boolean userSettingsXmlProfilesNeedsUpdate()
     {
-        Settings model = null;
+        boolean needsUpdate = false;
 
-        File file = new File( fileFullPathLocation );
+        String userSettingsXmlLocation = MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename();
 
+        if ( userSettings == null || new File( userSettingsXmlLocation ).lastModified() != userSettingsXmlLmod )
+        {
+            needsUpdate = true;
+        }
+
+        return needsUpdate;
+    }
+
+    /**
+     * Check if we need to update the global settings profile in the table
+     * 
+     * @return true if global settings was changed, otherwise false.
+     */
+    public boolean globalSettingsXmlProfilesNeedsUpdate()
+    {
+        boolean needsUpdate = false;
+
+        String globalSettingsXmlLocation = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
+
+        if ( globalSettings == null || new File( globalSettingsXmlLocation ).lastModified() != globalSettingsXmlLmod )
+        {
+            needsUpdate = true;
+        }
+
+        return needsUpdate;
+    }
+
+    /**
+     * Update the maven project model. This method is usually called after if pomProfileNeedsUpdate() would return true.
+     * 
+     */
+    protected void updatePomModel()
+    {
+        currentProject = selectedProject;
+        try
+        {
+            pomLocation = MavenManager.getMaven().getMavenProject( selectedProject, false ).getPomFile().getPath();
+            pomModel = MavenManager.getMaven().getMavenProject( selectedProject, false ).getModel();
+            pomFileLmod = new File( pomLocation ).lastModified();
+        }
+        catch ( CoreException e )
+        {
+            MavenUiActivator.getLogger().log( e );
+        }
+    }
+
+    /**
+     * Update the user settings. This method is usually called after if userSettingsXmlProfilesNeedsUpdate() would
+     * return true.
+     * 
+     */
+    protected void updateUserSettings()
+    {
+        File file = new File( MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename() );
         if ( file.exists() )
         {
-            try
+            userSettingsXmlLmod = file.lastModified();
+            userSettings = getSettingsModelFromFile( file );
+            userSettingsLocation = MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename();
+        }
+    }
+
+    /**
+     * Update the global settings. This method is usually called after if globalSettingsXmlProfilesNeedsUpdate() would
+     * return true.
+     * 
+     */
+    protected void updateGlobalSettings()
+    {
+        File file = new File( MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename() );
+        if ( file.exists() )
+        {
+            globalSettingsXmlLmod = file.lastModified();
+            globalSettings = getSettingsModelFromFile( file );
+            globalSettingsLocation = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
+        }
+    }
+
+    /**
+     * Resolve the list of model profiles to list of ProfileModel profiles.
+     * 
+     * @param mavenProjectModel
+     * @param path
+     * @return list that contains ProfileModel
+     */
+    @SuppressWarnings( "unchecked" )
+    private List<ProfileModel> getProfileFromPomModel( Model mavenProjectModel, String path )
+    {
+        List<ProfileModel> list = new ArrayList<ProfileModel>();
+
+        if ( mavenProjectModel != null )
+        {
+            List<Profile> profiles = mavenProjectModel.getProfiles();
+
+            for ( int i = 0; i < profiles.size(); i++ )
             {
-                model = new SettingsXpp3Reader().read( new FileReader( file ) );
+                ProfileModel profileModel = new ProfileModel();
+
+                Profile profile = profiles.get( i );
+                profileModel.setName( profile.getId() );
+                profileModel.setLocation( path );
+                profileModel.setActive( profile.getActivation() != null && profile.getActivation().isActiveByDefault() );
+                profileModel.setIndex( i );
+                list.add( profileModel );
             }
-            catch ( FileNotFoundException e )
+        }
+        else
+        {
+            throw new NullPointerException( "Model should not be null" );
+        }
+
+        return list;
+    }
+
+    /**
+     * Resolve the list of settings profiles to list of ProfileModel profiles.
+     * 
+     * @param settings
+     * @param path
+     * @return
+     */
+    @SuppressWarnings( "unchecked" )
+    private List<ProfileModel> getProfileFromSettings( Settings settings, String path )
+    {
+        List<ProfileModel> list = new ArrayList<ProfileModel>();
+
+        if ( settings != null )
+        {
+            List<org.apache.maven.settings.Profile> profiles = settings.getProfiles();
+            List<org.apache.maven.settings.Profile> activeProfiles = settings.getActiveProfiles();
+
+            for ( int i = 0; i < profiles.size(); i++ )
             {
-                MavenUiActivator.getLogger().log( e );
+                ProfileModel profileModel = new ProfileModel();
+
+                org.apache.maven.settings.Profile profile = profiles.get( i );
+                profileModel.setName( profile.getId() );
+                profileModel.setLocation( path );
+                profileModel.setActive( activeProfiles.contains( profile.getId() ) );
+                profileModel.setIndex( i );
+                list.add( profileModel );
             }
-            catch ( IOException e )
-            {
-                MavenUiActivator.getLogger().log( e );
-            }
-            catch ( XmlPullParserException e )
-            {
-                MavenUiActivator.getLogger().log( e );
-            }
+        }
+        else
+        {
+            throw new NullPointerException( "Settings should not be null" );
+        }
+
+        return list;
+    }
+
+    /**
+     * returns the current mode of this view.
+     * 
+     * @return
+     */
+    public int getMode()
+    {
+        return mode;
+    }
+
+    /**
+     * Returns org.apache.maven.settings.Settings of the file.
+     * 
+     * @return org.apache.maven.settings.Settings of settings.xml
+     */
+    public Settings getSettingsModelFromFile( File file )
+    {
+        Settings model = null;
+
+        try
+        {
+            model = MavenEmbedder.readSettings( file );
+        }
+        catch ( IOException e )
+        {
+            MavenUiActivator.getLogger().log( e );
+        }
+        catch ( SettingsConfigurationException e )
+        {
+            MavenUiActivator.getLogger().log( e );
         }
 
         return model;
     }
 
     /**
-     * Returns the maximum integer in an array of integer
+     * Updates the application with the selected team
      * 
-     * @param t
-     * @return
+     * @param team
+     *            the team
      */
-    public final static int max( int[] t )
+    private void changeTableContents( List<ProfileModel> profileModels )
     {
-        int maximum = t[0]; // start with the first value
-        for ( int i = 1; i < t.length; i++ )
+        mavenProfileTableViewer.setInput( profileModels );
+
+        if ( profileModels != null )
         {
-            if ( t[i] > maximum )
+            for ( int i = 0; i < profileModels.size(); i++ )
             {
-                maximum = t[i]; // new maximum
+                ProfileModel profile = profileModels.get( i );
+                mavenProfileTableViewer.setChecked( profile, profile.isActive() );
             }
         }
-        return maximum;
+    }
+
+    private final class ProfileModel
+    {
+        private boolean active;
+
+        private String name;
+
+        private String location;
+
+        private int index;
+
+        public boolean isActive()
+        {
+            return active;
+        }
+
+        public void setActive( boolean active )
+        {
+            this.active = active;
+        }
+
+        public String getName()
+        {
+            return name;
+        }
+
+        public void setName( String name )
+        {
+            this.name = name;
+        }
+
+        public String getLocation()
+        {
+            return location;
+        }
+
+        public void setLocation( String location )
+        {
+            this.location = location;
+        }
+
+        public int getIndex()
+        {
+            return index;
+        }
+
+        public void setIndex( int index )
+        {
+            this.index = index;
+        }
     }
 
     /**
-     * Adds the profiles of Model or Settings to the table of this view. The profiles of the first item in the list will
-     * be added to the first column, profiles on second item will be added to next column. If list contains more items
-     * than the column, the remaining items will be ignored.
-     * 
-     * @param list
-     *            of org.apache.maven.model.Model or org.apache.maven.settings.Settings
-     * @throws IllegalArgumentException
-     *             if list contains neither org.apache.maven.model.Model or org.apache.maven.settings.Settings
+     * This class provides the labels for MavenProfileTable
      */
-    public void addProfileToTable( List list ) throws IllegalArgumentException
+
+    private final class ProfileLabelProvider implements ITableLabelProvider
     {
-        Display display = getViewSite().getShell().getDisplay();
-        int rowSize = getMaxSize( list );
-        TableItem[] items = initTableItems( rowSize );
-
-        for ( int i = 0; i < mavenProfileTable.getColumnCount(); i++ )
+        public Image getColumnImage( Object element, int columnIndex )
         {
-            if ( list.get( i ) == null )
+            return null;
+        }
+
+        public String getColumnText( Object element, int columnIndex )
+        {
+            ProfileModel profile = (ProfileModel) element;
+            String text = "";
+            switch ( columnIndex )
             {
-                continue;
+                case PROFILE_NAME_COLUMN:
+                    text = profile.getName();
+                    break;
+                case LOCATION_COLUMN:
+                    text = profile.getLocation();
+                    break;
             }
-            else if ( list.get( i ) instanceof org.apache.maven.model.Model )
-            {
-                List profiles = ( (org.apache.maven.model.Model) list.get( i ) ).getProfiles();
+            return text;
+        }
 
-                for ( int j = 0; j < profiles.size(); j++ )
-                {
-                    TableItem item = items[j];
+        /**
+         * Listeners are used.
+         */
+        public void addListener( ILabelProviderListener listener )
+        {
+            // No-op
+        }
 
-                    org.apache.maven.model.Profile profile = (org.apache.maven.model.Profile) profiles.get( j );
-                    item.setText( i, profile.getId() );
+        public void dispose()
+        {
+            // nothing to dispose
+        }
 
-                    if ( profile.getActivation().isActiveByDefault() )
-                    {
-                        item.setBackground( i, new Color( display, 0, 200, 0 ) );
-                    }
-                }
-            }
-            else if ( list.get( i ) instanceof org.apache.maven.settings.Settings )
-            {
-                Settings settingsXml = (org.apache.maven.settings.Settings) list.get( i );
-                List profiles = settingsXml.getProfiles();
+        public boolean isLabelProperty( Object element, String property )
+        {
+            // getName and getLocation are used to display the label text.
+            // return "name".equals( property ) || "location".equals( property );
+            return true;
+        }
 
-                for ( int j = 0; j < profiles.size(); j++ )
-                {
-                    TableItem item = items[j];
-
-                    org.apache.maven.settings.Profile profile = (org.apache.maven.settings.Profile) profiles.get( j );
-                    item.setText( i, profile.getId() );
-
-                    if ( settingsXml.getActiveProfiles().contains( profile.getId() )
-                                    || profile.getActivation().isActiveByDefault() )
-                    {
-                        item.setBackground( i, new Color( display, 0, 200, 0 ) );
-                    }
-                }
-            }
-            else
-            {
-                throw new IllegalArgumentException(
-                                                    "List should contain org.apache.maven.model.Model or org.apache.maven.settings.Settings only" );
-            }
+        /**
+         * Listeners are not called nor registered.
+         */
+        public void removeListener( ILabelProviderListener listener )
+        {
+            // No-op
         }
     }
 
-    public int getMaxSize( List list ) throws IllegalArgumentException
+    /**
+     * This class provides the content for maven profile table
+     */
+    public class ProfileContentProvider implements IStructuredContentProvider
     {
-        int sizes[] = new int[list.size()];
 
-        for ( int i = 0; i < list.size(); i++ )
+        /**
+         * Gets the elements for the table
+         * 
+         * @param input
+         *            the input model, which is a list of profiles.
+         * @return Object[]
+         */
+        @SuppressWarnings( "unchecked" )
+        public Object[] getElements( Object input )
         {
-            if ( list.get( i ) == null )
-            {
-                continue;
-            }
-            else if ( list.get( i ) instanceof Model )
-            {
-                sizes[i] = ( (Model) list.get( i ) ).getProfiles().size();
-            }
-            else if ( list.get( i ) instanceof Settings )
-            {
-                sizes[i] = ( (Settings) list.get( i ) ).getProfiles().size();
-            }
-            else
-            {
-                throw new IllegalArgumentException(
-                                                    "List should contain org.apache.maven.model.Model or org.apache.maven.settings.Settings only" );
-            }
+            return ( profiles ).toArray();
         }
 
-        return max( sizes );
-    }
-
-    private TableItem[] initTableItems( int size )
-    {
-        TableItem[] items = new TableItem[size];
-
-        for ( int i = 0; i < size; i++ )
+        public void dispose()
         {
-            items[i] = new TableItem( mavenProfileTable, SWT.NONE );
+            // Nothing to dispose
         }
 
-        return items;
+        /**
+         * Called when the input changes
+         * 
+         * @param arg0
+         *            the parent viewer
+         * @param arg1
+         *            the old input
+         * @param arg2
+         *            the new input
+         */
+        public void inputChanged( Viewer viewer, Object arg1, Object arg2 )
+        {
+
+        }
+
     }
 }
