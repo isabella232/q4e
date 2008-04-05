@@ -36,6 +36,16 @@ public class Messages
 
     public static String ExcludeAll_Error_Cant_Exclude_Root;
 
+    public static String ForceVersion_Title;
+
+    public static String ForceVersion_Default_Marker;
+
+    public static String ForceVersion_Free_Text_Version;
+
+    public static String ForceVersion_Error_Title;
+
+    public static String ForceVersion_Error_Message;
+
     static
     {
         // initialize resource bundle
