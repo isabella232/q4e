@@ -128,7 +128,6 @@ public class MavenProjectPropertiesManager
         {
             project.setPersistentProperty( new QualifiedName( MavenCoreActivator.PLUGIN_ID, property.name() ),
                                            toString( values ) );
-            System.out.println( "SET " + property + " = " + values );
         }
         catch ( Exception e )
         {
@@ -158,7 +157,6 @@ public class MavenProjectPropertiesManager
                 initializePreferencesForProject( project );
                 return getProperty( project, property );
             }
-            System.out.println( "GET " + property + " = [" + propVal + "]" );
             return fromString( propVal );
         }
         catch ( Exception e )
