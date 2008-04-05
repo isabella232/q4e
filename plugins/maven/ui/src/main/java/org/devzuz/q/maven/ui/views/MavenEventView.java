@@ -13,6 +13,7 @@ import java.util.Observer;
 
 import org.devzuz.q.maven.embedder.IMavenEvent;
 import org.devzuz.q.maven.embedder.IMavenEventEnd;
+import org.devzuz.q.maven.embedder.IMavenEventError;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.Severity;
 import org.devzuz.q.maven.ui.Messages;
@@ -287,33 +288,43 @@ public class MavenEventView extends ViewPart implements Observer
         /* Maven generates too many events to handle them one by one. We update the view in batches. */
         long now = System.currentTimeMillis();
 
-        if ( now - lastUpdateTime > MAX_MS_BETWEEN_UPDATES || lastEvent instanceof IMavenEventEnd )
+        /*
+         * update if the event happened after a minimum amount of time or the event is build ended or an error during
+         * build (end event is not triggered when in error)
+         */
+        if ( ( now - lastUpdateTime > MAX_MS_BETWEEN_UPDATES ) || ( lastEvent instanceof IMavenEventEnd ) ||
+            ( lastEvent instanceof IMavenEventError ) )
         {
             lastUpdateTime = now;
-            eventTableViewer.getControl().getDisplay().syncExec( new Runnable()
+            updateView();
+        }
+    }
+
+    private void updateView()
+    {
+        eventTableViewer.getControl().getDisplay().syncExec( new Runnable()
+        {
+            public void run()
             {
-                public void run()
+                // Check if the control is still available
+                if ( eventTableViewer.getControl().isDisposed() )
                 {
-                    // Check if the control is still available
-                    if ( eventTableViewer.getControl().isDisposed() )
+                    return;
+                }
+                eventTableViewer.refresh();
+                // If scrolling is enabled, scroll it
+                if ( !controlScrollingAction.isChecked() )
+                {
+                    Table table = eventTableViewer.getTable();
+                    if ( ( table != null )
+                                    && ( table.getItemCount() * table.getItemHeight() > table.getClientArea().height ) )
                     {
-                        return;
-                    }
-                    eventTableViewer.refresh();
-                    // If scrolling is enabled, scroll it
-                    if ( !controlScrollingAction.isChecked() )
-                    {
-                        Table table = eventTableViewer.getTable();
-                        if ( ( table != null )
-                                        && ( table.getItemCount() * table.getItemHeight() > table.getClientArea().height ) )
-                        {
-                            // The idea here is to select the last element to induce a scroll to the bottom
-                            table.showItem( table.getItem( table.getItemCount() - 1 ) );
-                        }
+                        // The idea here is to select the last element to induce a scroll to the bottom
+                        table.showItem( table.getItem( table.getItemCount() - 1 ) );
                     }
                 }
-            } );
-        }
+            }
+        } );
     }
 
     private void handleFilter()
