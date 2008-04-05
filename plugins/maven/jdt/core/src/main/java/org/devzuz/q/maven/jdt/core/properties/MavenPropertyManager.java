@@ -32,6 +32,7 @@ public class MavenPropertyManager
 
     private static final String[] DEFAULT_RESOURCES_EXCLUDES = {};
 
+    // TODO: Maybe these should be extensible? other plug-ins might want to exclude other expensive tasks
     private static final String[] DEFAULT_TEST_RESOURCES_EXCLUDES =
         { "org.apache.maven.plugins:maven-resources-plugin:resources:default",
             "org.apache.maven.plugins:maven-compiler-plugin:compile:default" };
@@ -52,8 +53,7 @@ public class MavenPropertyManager
      * 
      * @param project
      */
-    public void initializePreferencesForProject( IProject project )
-        throws CoreException
+    public void initializePreferencesForProject( IProject project ) throws CoreException
     {
         String resourceExcluded =
             project.getPersistentProperty( new QualifiedName( MavenJdtCoreActivator.PLUGIN_ID, RESOURCE_EXCLUDED ) );
@@ -78,8 +78,7 @@ public class MavenPropertyManager
      * @return
      * @throws CoreException
      */
-    public Set<String> getTestResourceExcludedGoals( IProject project )
-        throws CoreException
+    public Set<String> getTestResourceExcludedGoals( IProject project ) throws CoreException
     {
         return getProperty( project, TEST_RESOURCE_EXCLUDED );
     }
@@ -91,8 +90,7 @@ public class MavenPropertyManager
      * @param excludedGoals
      * @throws CoreException
      */
-    public void setTestResourceExcludedGoals( IProject project, Set<String> excludedGoals )
-        throws CoreException
+    public void setTestResourceExcludedGoals( IProject project, Set<String> excludedGoals ) throws CoreException
     {
         setProperty( project, TEST_RESOURCE_EXCLUDED, excludedGoals );
     }
@@ -105,8 +103,7 @@ public class MavenPropertyManager
      * @throws CoreException
      */
 
-    public Set<String> getResourceExcludedGoals( IProject project )
-        throws CoreException
+    public Set<String> getResourceExcludedGoals( IProject project ) throws CoreException
     {
         return getProperty( project, RESOURCE_EXCLUDED );
     }
@@ -118,21 +115,18 @@ public class MavenPropertyManager
      * @param excludedGoals
      * @throws CoreException
      */
-    public void setResourceExcludedGoals( IProject project, Set<String> excludedGoals )
-        throws CoreException
+    public void setResourceExcludedGoals( IProject project, Set<String> excludedGoals ) throws CoreException
     {
         setProperty( project, RESOURCE_EXCLUDED, excludedGoals );
     }
 
-    private void setProperty( IProject project, String propName, Set<String> props )
-        throws CoreException
+    private void setProperty( IProject project, String propName, Set<String> props ) throws CoreException
     {
         project.setPersistentProperty( new QualifiedName( MavenJdtCoreActivator.PLUGIN_ID, propName ), toString( props ) );
 
     }
 
-    private Set<String> getProperty( IProject project, String propName )
-        throws CoreException
+    private Set<String> getProperty( IProject project, String propName ) throws CoreException
     {
         String propVal = project.getPersistentProperty( new QualifiedName( MavenJdtCoreActivator.PLUGIN_ID, propName ) );
         if ( null == propVal )
