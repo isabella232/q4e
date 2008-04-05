@@ -26,6 +26,10 @@ public class Messages
     
     public static String MavenLaunchShortcut_SelectLaunchConfigLabel;
 
+    public static String MavenProjectPropertyPage_ExecuteOnResource;
+
+    public static String MavenProjectPropertyPage_ExecuteOnTestResource;
+
     static
     {
         // initialize resource bundle

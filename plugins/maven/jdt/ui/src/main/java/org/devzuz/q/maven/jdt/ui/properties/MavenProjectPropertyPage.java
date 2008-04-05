@@ -17,6 +17,7 @@ import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
 import org.devzuz.q.maven.jdt.core.properties.MavenPropertyManager;
+import org.devzuz.q.maven.jdt.ui.Messages;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -54,11 +55,13 @@ public class MavenProjectPropertyPage extends PropertyPage
             composite.setLayout( rowLayout );
             Set<String> excludedResourceGoals =
                 MavenPropertyManager.getInstance().getResourceExcludedGoals( getProject() );
-            buildGoalTableRow( composite, "Execute on resource build", newExcludedResourceGoals, excludedResourceGoals,
+            buildGoalTableRow( composite, Messages.MavenProjectPropertyPage_ExecuteOnResource,
+                               newExcludedResourceGoals, excludedResourceGoals, //$NON-NLS-1$
                                MavenIncrementalBuilder.RESOURCES_GOAL );
             Set<String> excludedTestResourceGoals =
                 MavenPropertyManager.getInstance().getTestResourceExcludedGoals( getProject() );
-            buildGoalTableRow( composite, "Execute on test resource build", newExcludedTestResourceGoals,
+            buildGoalTableRow( composite, Messages.MavenProjectPropertyPage_ExecuteOnTestResource,
+                               newExcludedTestResourceGoals, //$NON-NLS-1$
                                excludedTestResourceGoals, MavenIncrementalBuilder.TEST_RESOURCES_GOAL );
 
             return composite;
