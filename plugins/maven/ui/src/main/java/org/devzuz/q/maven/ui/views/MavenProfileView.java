@@ -18,6 +18,7 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.Profile;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.SettingsConfigurationException;
+import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.nature.MavenNatureHelper;
 import org.devzuz.q.maven.project.properties.MavenProjectPropertiesManager;
@@ -60,8 +61,7 @@ import org.eclipse.ui.part.ViewPart;
  * 
  * @author aramirez
  */
-public class MavenProfileView
-    extends ViewPart
+public class MavenProfileView extends ViewPart
 {
     public static final int PROFILE_NAME_COLUMN = 0;
 
@@ -112,8 +112,7 @@ public class MavenProfileView
      * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite)
      */
     @Override
-    public void init( IViewSite site )
-        throws PartInitException
+    public void init( IViewSite site ) throws PartInitException
     {
         profiles = new ArrayList<ProfileModel>();
         globalSettingsXmlLmod =
@@ -375,8 +374,8 @@ public class MavenProfileView
     {
         boolean needsUpdate = false;
 
-        if ( currentProject == null || !currentProject.equals( selectedProject ) ||
-            new File( pomLocation ).lastModified() != pomFileLmod )
+        if ( currentProject == null || !currentProject.equals( selectedProject )
+                        || new File( pomLocation ).lastModified() != pomFileLmod )
         {
             needsUpdate = true;
         }
@@ -393,9 +392,9 @@ public class MavenProfileView
     {
         boolean needsUpdate = false;
 
-        String userSettingsXmlLocation = MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename();
-
-        if ( userSettings == null || new File( userSettingsXmlLocation ).lastModified() != userSettingsXmlLmod )
+        File userSettingsXmlLocation = new File( MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename() );
+        if ( userSettingsXmlLocation.exists()
+                        && ( userSettings == null || userSettingsXmlLocation.lastModified() != userSettingsXmlLmod ) )
         {
             needsUpdate = true;
         }
@@ -412,9 +411,12 @@ public class MavenProfileView
     {
         boolean needsUpdate = false;
 
-        String globalSettingsXmlLocation = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
+        File globalSettingsXmlLocation =
+            new File( MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename() );
+        File file = new File( MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename() );
 
-        if ( globalSettings == null || new File( globalSettingsXmlLocation ).lastModified() != globalSettingsXmlLmod )
+        if ( globalSettingsXmlLocation.exists()
+                        && ( globalSettings == null || globalSettingsXmlLocation.lastModified() != globalSettingsXmlLmod ) )
         {
             needsUpdate = true;
         }
@@ -430,8 +432,9 @@ public class MavenProfileView
         currentProject = selectedProject;
         try
         {
-            pomLocation = MavenManager.getMaven().getMavenProject( selectedProject, false ).getPomFile().getPath();
-            pomModel = MavenManager.getMaven().getMavenProject( selectedProject, false ).getModel();
+            IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( selectedProject, false );
+            pomLocation = mavenProject.getPomFile().getPath();
+            pomModel = mavenProject.getModel();
             pomFileLmod = new File( pomLocation ).lastModified();
         }
         catch ( CoreException e )
@@ -581,23 +584,28 @@ public class MavenProfileView
     /**
      * Updates the application with the selected team
      * 
-     * @param team the team
+     * @param team
+     *            the team
      */
     private void changeTableContents( List<ProfileModel> profileModels )
     {
         mavenProfileTableViewer.setInput( profileModels );
-
+        mavenProfileTableViewer.refresh( true );
         if ( profileModels != null )
         {
             for ( int i = 0; i < profileModels.size(); i++ )
             {
                 ProfileModel profile = profileModels.get( i );
-                mavenProfileTableViewer.setChecked( profile, profile.isActive() );
+                TableItem item = mavenProfileTableViewer.getTable().getItem( i );
+                // XXX amuino: Hack to workaround caching...
+                item.setChecked( false );
+                item.setChecked( true );
+                item.setChecked( profile.isActive() );
             }
         }
     }
 
-    private final class ProfileModel
+    private static final class ProfileModel
     {
         private boolean active;
 
@@ -652,8 +660,7 @@ public class MavenProfileView
      * This class provides the labels for MavenProfileTable
      */
 
-    private final class ProfileLabelProvider
-        implements ITableLabelProvider
+    private final class ProfileLabelProvider implements ITableLabelProvider
     {
         public Image getColumnImage( Object element, int columnIndex )
         {
@@ -691,8 +698,6 @@ public class MavenProfileView
 
         public boolean isLabelProperty( Object element, String property )
         {
-            // getName and getLocation are used to display the label text.
-            // return "name".equals( property ) || "location".equals( property );
             return true;
         }
 
@@ -708,14 +713,14 @@ public class MavenProfileView
     /**
      * This class provides the content for maven profile table
      */
-    public class ProfileContentProvider
-        implements IStructuredContentProvider
+    public class ProfileContentProvider implements IStructuredContentProvider
     {
 
         /**
          * Gets the elements for the table
          * 
-         * @param input the input model, which is a list of profiles.
+         * @param input
+         *            the input model, which is a list of profiles.
          * @return Object[]
          */
         @SuppressWarnings( "unchecked" )
@@ -729,16 +734,8 @@ public class MavenProfileView
             // Nothing to dispose
         }
 
-        /**
-         * Called when the input changes
-         * 
-         * @param arg0 the parent viewer
-         * @param arg1 the old input
-         * @param arg2 the new input
-         */
-        public void inputChanged( Viewer viewer, Object arg1, Object arg2 )
+        public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
         {
-
         }
 
     }
