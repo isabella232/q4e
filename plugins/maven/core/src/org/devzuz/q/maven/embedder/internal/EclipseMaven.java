@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 import java.util.Stack;
 
 import org.apache.maven.artifact.Artifact;
@@ -56,6 +57,7 @@ import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.QCoreException;
+import org.devzuz.q.maven.project.properties.MavenProjectPropertiesManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -70,9 +72,9 @@ import org.eclipse.core.runtime.jobs.Job;
  * Default implementation of IMaven for Eclipse
  * 
  * @author pdodds
- * 
  */
-public class EclipseMaven implements IMaven
+public class EclipseMaven
+    implements IMaven
 {
     private static final String GOAL_DEPLOY = "deploy";
 
@@ -98,7 +100,8 @@ public class EclipseMaven implements IMaven
 
     private int state = STOPPED;
 
-    public void deploy( IMavenProject mavenProject, MavenExecutionParameter parameters ) throws CoreException
+    public void deploy( IMavenProject mavenProject, MavenExecutionParameter parameters )
+        throws CoreException
     {
         scheduleGoal( mavenProject, GOAL_DEPLOY, parameters );
     }
@@ -109,7 +112,8 @@ public class EclipseMaven implements IMaven
     }
 
     public IMavenExecutionResult executeGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter,
-                                              IProgressMonitor monitor ) throws CoreException
+                                              IProgressMonitor monitor )
+        throws CoreException
     {
         MavenExecutionRequest request = generateRequest( baseDirectory, goal, parameter );
         EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
@@ -188,7 +192,8 @@ public class EclipseMaven implements IMaven
     }
 
     public void scheduleGoal( IPath baseDirectory, String goal, MavenExecutionParameter parameter,
-                              MavenExecutionJobAdapter jobAdapter ) throws CoreException
+                              MavenExecutionJobAdapter jobAdapter )
+        throws CoreException
     {
         scheduleRequest( baseDirectory, generateRequest( baseDirectory, goal, parameter ), jobAdapter );
     }
@@ -205,12 +210,14 @@ public class EclipseMaven implements IMaven
     }
 
     public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter,
-                              MavenExecutionJobAdapter jobAdapter ) throws CoreException
+                              MavenExecutionJobAdapter jobAdapter )
+        throws CoreException
     {
         scheduleGoals( mavenProject, Collections.singletonList( goal ), parameter, jobAdapter );
     }
 
-    public void scheduleGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException
+    public void scheduleGoals( IMavenProject mavenProject, List<String> goals )
+        throws CoreException
     {
         scheduleGoals( mavenProject, goals, null );
     }
@@ -222,21 +229,19 @@ public class EclipseMaven implements IMaven
     }
 
     public void scheduleGoals( IMavenProject mavenProject, List<String> goals, MavenExecutionParameter parameter,
-                               MavenExecutionJobAdapter jobAdapter ) throws CoreException
+                               MavenExecutionJobAdapter jobAdapter )
+        throws CoreException
     {
         MavenExecutionRequest request = generateRequest( mavenProject, goals, parameter );
         scheduleRequest( mavenProject, request, jobAdapter );
     }
 
     /**
-     * Schedules a new maven execution for the given project.
+     * Schedules a new maven execution for the given project. This method makes sure that two executions are not run
+     * simultaneously on the same project.
      * 
-     * This method makes sure that two executions are not run simultaneously on the same project.
-     * 
-     * @param request
-     *            the description of the execution to be performed.
-     * @param mavenProject
-     *            the maven project on which this execution is being run.
+     * @param request the description of the execution to be performed.
+     * @param mavenProject the maven project on which this execution is being run.
      */
     public void scheduleRequest( IMavenProject mavenProject, MavenExecutionRequest request,
                                  MavenExecutionJobAdapter jobAdapter )
@@ -256,14 +261,11 @@ public class EclipseMaven implements IMaven
     }
 
     /**
-     * Schedules a new maven execution without an existing project.
+     * Schedules a new maven execution without an existing project. This method makes sure that two executions are not
+     * run simultaneously on the same folder or on a subfolder.
      * 
-     * This method makes sure that two executions are not run simultaneously on the same folder or on a subfolder.
-     * 
-     * @param path
-     *            path where maven is being invoked.
-     * @param request
-     *            the description of the execution to be performed.
+     * @param path path where maven is being invoked.
+     * @param request the description of the execution to be performed.
      */
     public void scheduleRequest( IPath path, MavenExecutionRequest request, MavenExecutionJobAdapter jobAdapter )
     {
@@ -297,6 +299,8 @@ public class EclipseMaven implements IMaven
         request.setUseReactor( parameter.isUseReactor() ); // false
         request.setRecursive( parameter.isRecursive() ); // false
         request.setSkippedGoals( parameter.getFilteredGoals() ); // empty
+        request.addActiveProfiles( parameter.getActiveProfiles() );
+        request.addInactiveProfiles( parameter.getInActiveProfiles() );
 
         if ( parameter.getLoggingLevel() == LOGGING_DEBUG )
         {
@@ -330,6 +334,25 @@ public class EclipseMaven implements IMaven
     private MavenExecutionRequest generateRequest( IMavenProject mavenProject, List<String> goals,
                                                    MavenExecutionParameter parameter )
     {
+        if ( parameter == null )
+        {
+            parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter();
+        }
+        else
+        {
+            parameter.clearProfiles();
+        }
+
+        Set<String> activeProfiles =
+            MavenProjectPropertiesManager.getInstance().getActiveProfiles( mavenProject.getProject() );
+
+        Set<String> inActiveProfiles =
+            MavenProjectPropertiesManager.getInstance().getInactiveProfiles( mavenProject.getProject() );
+
+        parameter.addActiveProfiles( activeProfiles );
+
+        parameter.addInActiveProfiles( inActiveProfiles );
+
         MavenExecutionRequest request = generateRequest( parameter, goals );
 
         request.setBaseDirectory( mavenProject.getBaseDirectory() );
@@ -344,7 +367,8 @@ public class EclipseMaven implements IMaven
         return request;
     }
 
-    public IMavenProject getMavenProject( IProject project, boolean resolveTransitively ) throws CoreException
+    public IMavenProject getMavenProject( IProject project, boolean resolveTransitively )
+        throws CoreException
     {
         EclipseMavenProject mavenProject = new EclipseMavenProject( project );
         return getMavenProject( mavenProject, resolveTransitively );
@@ -356,13 +380,15 @@ public class EclipseMaven implements IMaven
         return getMavenProject( new File( projectSpecification.getLocation().toOSString() ), resolveTransitively );
     }
 
-    public IMavenProject getMavenProject( File projectSpecification, boolean resolveTransitively ) throws CoreException
+    public IMavenProject getMavenProject( File projectSpecification, boolean resolveTransitively )
+        throws CoreException
     {
         EclipseMavenProject mavenProject = new EclipseMavenProject( projectSpecification );
         return getMavenProject( mavenProject, resolveTransitively );
     }
 
-    public IMavenProject getMavenSuperProject() throws CoreException
+    public IMavenProject getMavenSuperProject()
+        throws CoreException
     {
         try
         {
@@ -390,11 +416,12 @@ public class EclipseMaven implements IMaven
 
                 ArtifactResolutionResult artifactResolutionResult = status.getArtifactResolutionResult();
                 boolean hasResolutionExceptions =
-                    ( artifactResolutionResult != null )
-                                    && ( ArtifactResolutionResultHelper.hasExceptions( artifactResolutionResult ) );
+                    ( artifactResolutionResult != null ) &&
+                        ( ArtifactResolutionResultHelper.hasExceptions( artifactResolutionResult ) );
                 boolean hasMissingArtifacts =
-                    ( null != artifactResolutionResult ) && ( null != artifactResolutionResult.getMissingArtifacts() )
-                                    && ( !artifactResolutionResult.getMissingArtifacts().isEmpty() );
+                    ( null != artifactResolutionResult ) &&
+                        ( null != artifactResolutionResult.getMissingArtifacts() ) &&
+                        ( !artifactResolutionResult.getMissingArtifacts().isEmpty() );
 
                 if ( hasResolutionExceptions || hasMissingArtifacts || status.hasExceptions() )
                 {
@@ -458,7 +485,8 @@ public class EclipseMaven implements IMaven
         }
     }
 
-    private MavenProjectBuilder getMavenProjectBuilder() throws QCoreException
+    private MavenProjectBuilder getMavenProjectBuilder()
+        throws QCoreException
     {
         try
         {
@@ -481,12 +509,14 @@ public class EclipseMaven implements IMaven
         return state;
     }
 
-    public void install( IMavenProject mavenProject, MavenExecutionParameter parameters ) throws CoreException
+    public void install( IMavenProject mavenProject, MavenExecutionParameter parameters )
+        throws CoreException
     {
         scheduleGoal( mavenProject, GOAL_INSTALL, parameters );
     }
 
-    public boolean start() throws CoreException
+    public boolean start()
+        throws CoreException
     {
         if ( state == STOPPED )
         {
@@ -553,7 +583,8 @@ public class EclipseMaven implements IMaven
         return false;
     }
 
-    public boolean stop() throws CoreException
+    public boolean stop()
+        throws CoreException
     {
         if ( ( getMavenEmbedder() != null ) && ( state == STARTED ) )
         {
@@ -632,7 +663,8 @@ public class EclipseMaven implements IMaven
         }
     }
 
-    private ArtifactMetadataSource getArtifactMetadataSource() throws QCoreException
+    private ArtifactMetadataSource getArtifactMetadataSource()
+        throws QCoreException
     {
         if ( artifactMetadataSource == null )
         {
@@ -687,7 +719,8 @@ public class EclipseMaven implements IMaven
 
     @Deprecated
     public void resolveArtifact( IMavenArtifact artifact, String type, String classifier,
-                                 List<ArtifactRepository> remoteRepositories ) throws CoreException
+                                 List<ArtifactRepository> remoteRepositories )
+        throws CoreException
     {
         Dependency dependency = new Dependency();
 
@@ -742,7 +775,8 @@ public class EclipseMaven implements IMaven
      * 
      * @author Abel Mui�o <amuino@gmail.com>
      */
-    static class MavenSchedulingRule implements ISchedulingRule
+    static class MavenSchedulingRule
+        implements ISchedulingRule
     {
 
         private IProject project = null;
@@ -750,8 +784,7 @@ public class EclipseMaven implements IMaven
         /**
          * Creates an scheduling rule for the given maven project.
          * 
-         * @param mavenProject
-         *            the maven project to control access to.
+         * @param mavenProject the maven project to control access to.
          */
         public MavenSchedulingRule( IMavenProject mavenProject )
         {
@@ -760,7 +793,6 @@ public class EclipseMaven implements IMaven
 
         /**
          * Creates an scheduling rule for maven executions outside of the workspace.
-         * 
          */
         public MavenSchedulingRule()
         {
@@ -794,7 +826,8 @@ public class EclipseMaven implements IMaven
 
     }
 
-    public void refresh() throws CoreException
+    public void refresh()
+        throws CoreException
     {
         synchronized ( this )
         {
@@ -819,7 +852,8 @@ public class EclipseMaven implements IMaven
         return new MavenComponentHelper( getMavenEmbedder() );
     }
 
-    public List<String> getGoalsForPhase( IMavenProject project, String phase ) throws CoreException
+    public List<String> getGoalsForPhase( IMavenProject project, String phase )
+        throws CoreException
     {
         try
         {
