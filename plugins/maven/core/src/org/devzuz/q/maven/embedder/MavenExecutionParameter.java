@@ -10,6 +10,7 @@ package org.devzuz.q.maven.embedder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
@@ -36,9 +37,9 @@ public class MavenExecutionParameter
 
     private int loggingLevel = Logger.LEVEL_INFO;
 
-    private List<String> activeProfiles;
+    private List<String> activeProfiles = new LinkedList<String>();
 
-    private List<String> inActiveProfiles;
+    private List<String> inActiveProfiles = new LinkedList<String>();;
 
     public static MavenExecutionParameter newDefaultMavenExecutionParameter()
     {
