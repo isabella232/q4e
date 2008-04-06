@@ -54,14 +54,14 @@ import org.eclipse.ui.part.ViewPart;
 
 /**
  * A view that shows tables that contains the profiles of the active maven project in the page and the profiles in
- * global and user settings.xml set in maven preference page.
- * 
- * The table gets updated if any of the following condition is satisfied: 1. selection of project in the workspace was
- * changed 2. pom.xml of the project was changed 3. global or user settings.xml was changed
+ * global and user settings.xml set in maven preference page. The table gets updated if any of the following condition
+ * is satisfied: 1. selection of project in the workspace was changed 2. pom.xml of the project was changed 3. global or
+ * user settings.xml was changed
  * 
  * @author aramirez
  */
-public class MavenProfileView extends ViewPart
+public class MavenProfileView
+    extends ViewPart
 {
     public static final int PROFILE_NAME_COLUMN = 0;
 
@@ -112,7 +112,8 @@ public class MavenProfileView extends ViewPart
      * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite)
      */
     @Override
-    public void init( IViewSite site ) throws PartInitException
+    public void init( IViewSite site )
+        throws PartInitException
     {
         profiles = new ArrayList<ProfileModel>();
         globalSettingsXmlLmod =
@@ -138,7 +139,6 @@ public class MavenProfileView extends ViewPart
     }
 
     /**
-     * 
      * @see org.eclipse.ui.part.WorkbenchPart#setFocus()
      */
     @Override
@@ -176,7 +176,7 @@ public class MavenProfileView extends ViewPart
                 if ( event.detail == SWT.CHECK )
                 {
                     TableItem item = (TableItem) event.item;
-                    ProfileModel profile = profiles.get( event.index );
+                    ProfileModel profile = (ProfileModel) item.getData();
                     profile.setActive( item.getChecked() );
                     MavenProjectPropertiesManager propertyManager = MavenProjectPropertiesManager.getInstance();
                     if ( profile.isActive() )
@@ -209,10 +209,9 @@ public class MavenProfileView extends ViewPart
      * Returns one instance of selection listener. The listener gets notified and selectionChanged method will be called
      * when the user clicks any object of the workbench. The selectionChanged method will first check if the selection
      * is an IStructuredSelection. If yes then it'll try to get the IProject. If the IProject has Q4ENature then
-     * profiles in pom.xml, settings.xml and profile.xml will be displayed in the table.
-     * 
-     * FIXME: IAdaptable is more general. object instanceof IProject would return false when you click on the root
-     * project that's why IAdaptable is the last resort that i could think of.
+     * profiles in pom.xml, settings.xml and profile.xml will be displayed in the table. FIXME: IAdaptable is more
+     * general. object instanceof IProject would return false when you click on the root project that's why IAdaptable
+     * is the last resort that i could think of.
      * 
      * @return listener
      */
@@ -376,8 +375,8 @@ public class MavenProfileView extends ViewPart
     {
         boolean needsUpdate = false;
 
-        if ( currentProject == null || !currentProject.equals( selectedProject )
-                        || new File( pomLocation ).lastModified() != pomFileLmod )
+        if ( currentProject == null || !currentProject.equals( selectedProject ) ||
+            new File( pomLocation ).lastModified() != pomFileLmod )
         {
             needsUpdate = true;
         }
@@ -425,7 +424,6 @@ public class MavenProfileView extends ViewPart
 
     /**
      * Update the maven project model. This method is usually called after if pomProfileNeedsUpdate() would return true.
-     * 
      */
     protected void updatePomModel()
     {
@@ -445,7 +443,6 @@ public class MavenProfileView extends ViewPart
     /**
      * Update the user settings. This method is usually called after if userSettingsXmlProfilesNeedsUpdate() would
      * return true.
-     * 
      */
     protected void updateUserSettings()
     {
@@ -461,7 +458,6 @@ public class MavenProfileView extends ViewPart
     /**
      * Update the global settings. This method is usually called after if globalSettingsXmlProfilesNeedsUpdate() would
      * return true.
-     * 
      */
     protected void updateGlobalSettings()
     {
@@ -585,8 +581,7 @@ public class MavenProfileView extends ViewPart
     /**
      * Updates the application with the selected team
      * 
-     * @param team
-     *            the team
+     * @param team the team
      */
     private void changeTableContents( List<ProfileModel> profileModels )
     {
@@ -657,7 +652,8 @@ public class MavenProfileView extends ViewPart
      * This class provides the labels for MavenProfileTable
      */
 
-    private final class ProfileLabelProvider implements ITableLabelProvider
+    private final class ProfileLabelProvider
+        implements ITableLabelProvider
     {
         public Image getColumnImage( Object element, int columnIndex )
         {
@@ -712,14 +708,14 @@ public class MavenProfileView extends ViewPart
     /**
      * This class provides the content for maven profile table
      */
-    public class ProfileContentProvider implements IStructuredContentProvider
+    public class ProfileContentProvider
+        implements IStructuredContentProvider
     {
 
         /**
          * Gets the elements for the table
          * 
-         * @param input
-         *            the input model, which is a list of profiles.
+         * @param input the input model, which is a list of profiles.
          * @return Object[]
          */
         @SuppressWarnings( "unchecked" )
@@ -736,12 +732,9 @@ public class MavenProfileView extends ViewPart
         /**
          * Called when the input changes
          * 
-         * @param arg0
-         *            the parent viewer
-         * @param arg1
-         *            the old input
-         * @param arg2
-         *            the new input
+         * @param arg0 the parent viewer
+         * @param arg1 the old input
+         * @param arg2 the new input
          */
         public void inputChanged( Viewer viewer, Object arg1, Object arg2 )
         {
