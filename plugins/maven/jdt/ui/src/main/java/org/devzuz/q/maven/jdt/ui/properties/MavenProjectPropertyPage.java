@@ -10,8 +10,11 @@ package org.devzuz.q.maven.jdt.ui.properties;
 
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.maven.lifecycle.MojoBindingUtils;
+import org.apache.maven.lifecycle.model.MojoBinding;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenManager;
@@ -105,8 +108,13 @@ public class MavenProjectPropertyPage extends PropertyPage
         resourceGoalsCheckTableViewer.getTable().setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
         managedSet.clear();
         managedSet.addAll( existingExcludes );
-        Set<String> allResourceGoals =
-            new LinkedHashSet<String>( MavenManager.getMaven().getGoalsForPhase( getMavenProject(), phase ) );
+        List<MojoBinding> allBindings = MavenManager.getMaven().getGoalsForPhase( getMavenProject(), phase, true );
+        Set<String> allResourceGoals = new LinkedHashSet<String>();
+        for ( MojoBinding mojoBinding : allBindings )
+        {
+            allResourceGoals.add( MojoBindingUtils.createMojoBindingKey( mojoBinding, true ) );
+        }
+        
         for ( String goal : allResourceGoals )
         {
             resourceGoalsCheckTableViewer.add( goal );

@@ -14,6 +14,7 @@ import java.util.Properties;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
+import org.apache.maven.lifecycle.model.MojoBinding;
 import org.apache.maven.model.Dependency;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -433,9 +434,13 @@ public interface IMaven
     /**
      * Gets a list of the goals which would be invoked if a particular phase were run.
      * 
-     * @param phase
+     * @param project - The project to return the goal list for
+     * @param phase - The phase to return to goal list for
+     * @param filterMavenGeneratedGoals - Maven will add internal goals to handle things 
+     *                                    like forked lifecycles.  Do you want these internal
+     *                                    goals in the returned list?
      * @return
      */
-    public List<String> getGoalsForPhase( IMavenProject project, String phase ) throws CoreException;
+    public List<MojoBinding> getGoalsForPhase( IMavenProject project, String phase, boolean filterMavenGeneratedGoals ) throws CoreException;
 
 }

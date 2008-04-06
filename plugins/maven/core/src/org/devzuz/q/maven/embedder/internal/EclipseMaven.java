@@ -852,7 +852,7 @@ public class EclipseMaven
         return new MavenComponentHelper( getMavenEmbedder() );
     }
 
-    public List<String> getGoalsForPhase( IMavenProject project, String phase )
+    public List<MojoBinding> getGoalsForPhase( IMavenProject project, String phase, boolean filterMavenGeneratedGoals )
         throws CoreException
     {
         try
@@ -860,14 +860,23 @@ public class EclipseMaven
             BuildPlan buildPlan =
                 this.mavenEmbedder.getBuildPlan( Collections.singletonList( phase ), project.getRawMavenProject() );
             List<MojoBinding> mojoBindings = buildPlan.renderExecutionPlan( new Stack() );
-            List<String> goals = new ArrayList<String>( mojoBindings.size() );
-            for ( MojoBinding mojoBinding : mojoBindings )
+            List<MojoBinding> goals = new ArrayList<MojoBinding>( mojoBindings.size() );
+            
+            if( filterMavenGeneratedGoals )
             {
-                String origin = mojoBinding.getOrigin();
-                if ( !MojoBinding.INTERNAL_ORIGIN.equals( origin ) )
+                
+                for ( MojoBinding mojoBinding : mojoBindings )
                 {
-                    goals.add( MojoBindingUtils.createMojoBindingKey( mojoBinding, true ) );
+                    String origin = mojoBinding.getOrigin();
+                    if ( !MojoBinding.INTERNAL_ORIGIN.equals( origin ) )
+                    {
+                        goals.add( mojoBinding );
+                    }
                 }
+            }
+            else
+            {
+                goals.addAll( mojoBindings );
             }
             return goals;
         }
