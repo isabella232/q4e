@@ -6,6 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.core.builder;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
@@ -26,6 +27,7 @@ import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.devzuz.q.maven.jdt.core.properties.MavenPropertyManager;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
@@ -38,7 +40,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Status;
 
 /**
  * Maven builder that will update the classpath container when pom changes
@@ -219,6 +220,12 @@ public class MavenIncrementalBuilder
      * 
      */
     public static final String RESOURCES_GOAL = "process-resources";
+    
+    /**
+     * The name of a marker resource we put in the eclipse managed target
+     * directories to tell if a clean build has occurred.
+     */
+    public static final String MARKER_RESOURCE = ".mavenResources";
 
     public static final String MAVEN_INCREMENTAL_BUILDER_ID =
         MavenJdtCoreActivator.PLUGIN_ID + ".mavenIncrementalBuilder"; //$NON-NLS-1$
@@ -278,6 +285,25 @@ public class MavenIncrementalBuilder
             if ( !status.resourcesRefreshed || !status.testResourcesRefreshed )
             {
                 handleAllResources( status );
+            }
+            
+            //Eclipse might have blown away our output directories...here we test if our sentinel files
+            //exist, and if not invoke the resource goals no matter what since the output directory is
+            //obviously in an invalid state.
+            if ( !status.resourcesRefreshed )
+            {
+                if ( !doesSentinelFileExist( status.mavenProject, status.mavenProject.getBuildOutputDirectory() ) )
+                {
+                    onResourcesChange( status.mavenProject, RESOURCES_GOAL, monitor);
+                }
+            }
+            
+            if ( !status.testResourcesRefreshed )
+            {
+                if ( !doesSentinelFileExist( status.mavenProject, status.mavenProject.getBuildTestOutputDirectory() ) )
+                {
+                    onResourcesChange( status.mavenProject, TEST_RESOURCES_GOAL, monitor);
+                }
             }
         }
         else
@@ -625,10 +651,12 @@ public class MavenIncrementalBuilder
         params.setRecursive( false );
         if ( RESOURCES_GOAL.equals( phase ) )
         {
+            createSentinelFile( mavenProject, mavenProject.getBuildOutputDirectory() );
             params.setFilteredGoals( MavenPropertyManager.getInstance().getResourceExcludedGoals( mavenProject.getProject() ) );
         }
         else if ( TEST_RESOURCES_GOAL.equals( phase ) )
         {
+            createSentinelFile( mavenProject, mavenProject.getBuildTestOutputDirectory() );
             params.setFilteredGoals( MavenPropertyManager.getInstance().getTestResourceExcludedGoals( mavenProject.getProject() ) );
         }
 
@@ -650,6 +678,47 @@ public class MavenIncrementalBuilder
         return true;
     }
 
+    /**
+     * Creates a marker file that we can test if Eclipse deleted at the specified path.
+     * 
+     * @param path
+     */
+    private void createSentinelFile( IMavenProject project, String path ) 
+        throws CoreException
+    {
+        IFile markerFile = getMarkerFile( project, path );
+        if( !markerFile.exists() )
+        {
+            markerFile.create( new ByteArrayInputStream( "".getBytes() ), true, new NullProgressMonitor( ) );
+        }
+    }
+    
+    /**
+     * Tests whether our sentinel file exists.
+     * 
+     * @param project
+     * @param path
+     * @return
+     */
+    private boolean doesSentinelFileExist( IMavenProject project, String path )
+    {
+        return getMarkerFile( project, path ).exists();
+    }
+    
+    private IFile getMarkerFile( IMavenProject project, String pathStr )
+    {
+        IPath path = new Path( pathStr );
+        if( path.isAbsolute() ) 
+        {
+            IPath projectPath = project.getProject().getLocation();
+            path = path.removeFirstSegments( projectPath.segmentCount() );
+            path.setDevice( null );
+        }
+        IFolder outputFolder = project.getProject().getFolder( path );
+        IFile markerFile = outputFolder.getFile( MARKER_RESOURCE );
+        return markerFile;
+    }
+    
     private void onPomChange( BuildStatus status )
     {
         IProject project = getProject();
