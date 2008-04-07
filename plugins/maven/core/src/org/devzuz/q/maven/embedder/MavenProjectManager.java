@@ -7,8 +7,8 @@
  */
 package org.devzuz.q.maven.embedder;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.maven.artifact.Artifact;
@@ -28,9 +28,9 @@ public class MavenProjectManager
      */
     protected MavenProjectManager()
     {
-        // TODO : Should this be a synchronized collection ?
-        // mavenProjects = Collections.synchronizedMap( new HashMap< IProject , MavenProjectCachedInfo >() );
-        mavenProjects = new HashMap<IProject, MavenProjectCachedInfo>();
+        // FIX for 371: Make the map concurrent
+        // Default to 20 projects, 0.75 load factor (default), 1 expected writer, many readers
+        mavenProjects = new ConcurrentHashMap<IProject, MavenProjectCachedInfo>( 20, 0.75f, 1 );
     }
 
     /**
