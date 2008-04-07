@@ -22,6 +22,13 @@ public class MavenProjectManager
     private final Map<IProject, MavenProjectCachedInfo> mavenProjects;
 
     /**
+     * 
+     * @author amuino
+     */
+    // FIX for 371: Since ConcurrentHashMap does not allow null values, we define this special value
+    private final MavenProjectCachedInfo NULL_CACHED_INFO = new MavenProjectCachedInfo( null, false, true );
+
+    /**
      * <b>Not intended to be used by client code</b>
      * 
      * @see MavenManager#getMavenProjectManager()
@@ -67,7 +74,7 @@ public class MavenProjectManager
      */
     public void addMavenProject( IProject project )
     {
-        addCachedInfo( project, null );
+        addCachedInfo( project, NULL_CACHED_INFO );
     }
 
     /**
@@ -253,7 +260,7 @@ public class MavenProjectManager
                 String _groupId = "", _artifactId = "", _version = "";
 
                 MavenProjectCachedInfo info = entry.getValue();
-                if ( info != null )
+                if ( info != null && info != NULL_CACHED_INFO )
                 {
                     // This entry has a cached IMavenProject
                     IMavenProject mavenProject = info.getMavenProject();
