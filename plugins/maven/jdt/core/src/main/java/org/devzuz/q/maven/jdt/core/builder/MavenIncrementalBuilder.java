@@ -689,7 +689,7 @@ public class MavenIncrementalBuilder
         IFile markerFile = getMarkerFile( project, path );
         if( !markerFile.exists() )
         {
-            markerFile.create( new ByteArrayInputStream( "".getBytes() ), true, new NullProgressMonitor( ) );
+            markerFile.create( new ByteArrayInputStream( "".getBytes() ), IResource.DERIVED | IResource.FORCE, new NullProgressMonitor( ) );
         }
     }
     
