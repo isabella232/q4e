@@ -22,12 +22,6 @@ public interface Logger
 
     void log( Throwable t );
 
-    /**
-     * @deprecated use {@link #error(String)}
-     * @param msg
-     */
-    void log( String msg );
-
     void log( String msg, Throwable t );
 
     void error( String msg );
