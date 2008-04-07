@@ -33,6 +33,15 @@
    <feature url="features/org.devzuz.q.feature.wtp_0.6.0.200803292249.jar" id="org.devzuz.q.feature.wtp" version="0.6.0.200803292249">
       <category name="Optional"/>
    </feature>
+   <feature url="features/org.devzuz.q.feature_0.6.0.200804080021.jar" id="org.devzuz.q.feature" version="0.6.0.200804080021">
+      <category name="Community"/>
+   </feature>
+   <feature url="features/org.devzuz.q.dependencyviewer.feature_0.6.0.200804080020.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.6.0.200804080020">
+      <category name="Optional"/>
+   </feature>
+   <feature url="features/org.devzuz.q.feature.wtp_0.6.0.200804080021.jar" id="org.devzuz.q.feature.wtp" version="0.6.0.200804080021">
+      <category name="Optional"/>
+   </feature>
    <category-def name="Community" label="Community"/>
    <category-def name="Enabling Features" label="Enabling Features"/>
    <category-def name="Optional" label="Optional">
