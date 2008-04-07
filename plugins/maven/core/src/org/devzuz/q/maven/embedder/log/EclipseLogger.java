@@ -18,9 +18,9 @@ import org.eclipse.core.runtime.Status;
 public class EclipseLogger implements Logger
 {
 
-    private String pluginId;
+    private final String pluginId;
 
-    private ILog log;
+    private final ILog log;
 
     public EclipseLogger( String pluginId, ILog log )
     {
@@ -51,11 +51,6 @@ public class EclipseLogger implements Logger
     public void log( Throwable t )
     {
         log( t.getMessage(), t );
-    }
-
-    public void log( String msg )
-    {
-        error( msg );
     }
 
     public void log( String msg, Throwable t )
