@@ -68,7 +68,7 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
 
     private Properties propertiesList;
 
-    private List modulesList;
+    private List<String> modulesList;
 
     public MavenPomPropertiesModuleFormPage( String id, String title )
     {
@@ -244,6 +244,7 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
 
     }
 
+    @SuppressWarnings ( "unchecked" )
     private void generateModuleData()
     {
         modulesList = pomModel.getModules();

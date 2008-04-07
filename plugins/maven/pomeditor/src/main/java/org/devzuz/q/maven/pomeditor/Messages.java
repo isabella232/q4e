@@ -148,6 +148,14 @@ public class Messages
     
     public static String MavenAddEditDeveloperPropertiesDialog_valueLabel;
     
+    public static String MavenPomEditor_MavenPomEditor_Resource_TargetPath;
+    
+    public static String MavenPomEditor_MavenPomEditor_Resource_Filtering;
+    
+    public static String MavenPomEditor_MavenPomEditor_Resource_Includes;
+    
+    public static String MavenPomEditor_MavenPomEditor_Resource_Excludes;
+    
     static
     {
         // initialize resource bundle

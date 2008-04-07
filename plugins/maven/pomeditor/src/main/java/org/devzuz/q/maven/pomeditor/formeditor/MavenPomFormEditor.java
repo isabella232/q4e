@@ -18,6 +18,7 @@ import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBasicFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildResourcesPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDevelopersFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesFormPage;
@@ -48,6 +49,8 @@ public class MavenPomFormEditor extends FormEditor
     
     public static final String BUILD_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildFormPage";
     
+    public static final String BUILD_RESOURCES_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildResourcesPage";
+    
     private Model pomModel;
 
     private MavenPomBasicFormPage basicFormPage;
@@ -61,6 +64,8 @@ public class MavenPomFormEditor extends FormEditor
     private MavenPomDevelopersFormPage mavenPomDevelopersFormPage;
     
     private MavenPomBuildFormPage buildFormPage;
+    
+    private MavenPomBuildResourcesPage buildResourcesPage;
     
     public MavenPomFormEditor()
     {
@@ -96,6 +101,10 @@ public class MavenPomFormEditor extends FormEditor
                 buildFormPage = 
                     new MavenPomBuildFormPage( this, BUILD_FORM_PAGE, "Build Management", this.pomModel );             
                 addPage( buildFormPage );
+                
+                buildResourcesPage =
+                    new MavenPomBuildResourcesPage( this, BUILD_RESOURCES_FORM_PAGE, "Build Resources", this.pomModel );
+                addPage( buildResourcesPage );
             }
         }
         catch ( PartInitException pie )
@@ -196,6 +205,7 @@ public class MavenPomFormEditor extends FormEditor
         mavenPomLicensesFormPage.setPageModified(false);
         mavenPomDevelopersFormPage.setPageModified(false);
         buildFormPage.setPageModified( false );
+        buildResourcesPage.setPageModified( false );
         // clean other pages
     }
 

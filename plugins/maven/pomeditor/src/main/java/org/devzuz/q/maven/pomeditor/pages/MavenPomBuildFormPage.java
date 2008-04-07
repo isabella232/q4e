@@ -258,34 +258,6 @@ public class MavenPomBuildFormPage extends FormPage
         return text;
 	}
 	
-	private class ExtensionsTableListener extends SelectionAdapter
-	{
-		public void widgetDefaultSelected( SelectionEvent e )
-	    {
-			widgetSelected( e );
-	    }
-
-	    public void widgetSelected( SelectionEvent e )
-	    {
-	    	TableItem[] items = extensionsTable.getSelection();
-	        	
-	        if ( ( items != null ) &&
-	             ( items.length > 0 ) )
-	        {
-	        	addExtensionButton.setEnabled( true );
-	        	editExtensionButton.setEnabled( true );
-	        	removeExtensionButton.setEnabled( true );
-	        	
-	        	if ( extensionsTable.getSelectionIndex() >= 0 )
-	        	{
-	        		int selectedIndex = extensionsTable.getSelectionIndex();
-	        		selectedExtension = extensionList.get( selectedIndex );
-	        	}
-	        }
-	    }
-	}	
-	
-	
 	private class TextFieldListener implements ModifyListener
 	{
 		public void modifyText(ModifyEvent e) 
@@ -342,7 +314,10 @@ public class MavenPomBuildFormPage extends FormPage
         boolean buildIsNull = ( build.getFinalName() == null && build.getDirectory() == null && 
                                 build.getOutputDirectory() == null && build.getTestOutputDirectory() == null && 
                                 build.getSourceDirectory() == null && build.getScriptSourceDirectory() == null && 
-                                build.getTestSourceDirectory() == null && build.getExtensions().size() <= 0 );
+                                build.getTestSourceDirectory() == null && build.getExtensions().size() <= 0 && 
+                                build.getResources().size() <= 0 && build.getTestResources().size() <= 0 &&
+                                build.getPlugins().size() <= 0 && build.getPluginManagement() == null &&
+                                build.getDefaultGoal() == null && build.getFilters().size() <= 0 );
         if( buildIsNull )
         {
             pomModel.setBuild( null );
@@ -350,6 +325,33 @@ public class MavenPomBuildFormPage extends FormPage
         }
         
         return buildIsNull;
+    }
+	
+	private class ExtensionsTableListener extends SelectionAdapter
+    {
+        public void widgetDefaultSelected( SelectionEvent e )
+        {
+            widgetSelected( e );
+        }
+
+        public void widgetSelected( SelectionEvent e )
+        {
+            TableItem[] items = extensionsTable.getSelection();
+                
+            if ( ( items != null ) &&
+                 ( items.length > 0 ) )
+            {
+                addExtensionButton.setEnabled( true );
+                editExtensionButton.setEnabled( true );
+                removeExtensionButton.setEnabled( true );
+                
+                if ( extensionsTable.getSelectionIndex() >= 0 )
+                {
+                    int selectedIndex = extensionsTable.getSelectionIndex();
+                    selectedExtension = extensionList.get( selectedIndex );
+                }
+            }
+        }
     }
 	
 	private class AddExtensionButtonListener extends SelectionAdapter
