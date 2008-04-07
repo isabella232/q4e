@@ -35,7 +35,7 @@
             id="org.devzuz.q.maven.wizard.importwizard.Maven2ImportArtifactWizard"
             name="%maven2ImportArtifactWizard">
          <description>
-            A Wizard for importing Maven 2 Artifacts into the local repository
+            A Wizard for importing Maven 2 Artifacts into the local or remote repository
          </description>
       </wizard>
       <category
