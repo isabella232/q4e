@@ -20,6 +20,7 @@ import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionParameter;
+import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
@@ -244,84 +245,90 @@ public class MavenIncrementalBuilder
         // The project as cached before the change.
         status.mavenProject = lastGoodProject;
 
-        
-        IProject project = getProject();
-        if ( !project.isOpen() || !project.getFile( IMavenProject.POM_FILENAME ).exists() )
+        try {
+            IProject project = getProject();
+            if ( !project.isOpen() || !project.getFile( IMavenProject.POM_FILENAME ).exists() )
+            {
+                /* the project was closed or pom was deleted */
+                return null;
+            }
+    
+            if ( ( kind == INCREMENTAL_BUILD ) || ( kind == AUTO_BUILD ) )
+            {
+                status.delta = getDelta( getProject() );
+    
+                // Check if the project's POM was updated.
+                IResourceDelta member = status.delta.findMember( POM_PATH );
+                if ( member != null )
+                {
+                    handlePom( status, member );
+                    if ( null == status.mavenProject )
+                    {
+                        // The pom.xml does not parse, do not continue
+                        return null;
+                    }
+                }
+                else if ( null == lastGoodProject )
+                {
+                    // No previous build and the pom was not modified --> Current project is good
+                    status.mavenProject = getMavenProject();
+                }
+    
+                // If the change was to a file listed in <filters>, pom.xml parses and at least one resource has not been
+                // synced we need to re-process the resources.
+                if ( !status.resourcesRefreshed || !status.testResourcesRefreshed )
+                {
+                    handleFilterFiles( status );
+                }
+    
+                // If the change was to a resource file, pom.xml parses and at least on resource has not been synced we
+                // need to process the resources.
+                if ( !status.resourcesRefreshed || !status.testResourcesRefreshed )
+                {
+                    handleAllResources( status );
+                }
+                
+                //Eclipse might have blown away our output directories...here we test if our sentinel files
+                //exist, and if not invoke the resource goals no matter what since the output directory is
+                //obviously in an invalid state.
+                if ( !status.resourcesRefreshed )
+                {
+                    if ( !doesSentinelFileExist( status.mavenProject, status.mavenProject.getBuildOutputDirectory() ) )
+                    {
+                        onResourcesChange( status.mavenProject, RESOURCES_GOAL, monitor);
+                    }
+                }
+                
+                if ( !status.testResourcesRefreshed )
+                {
+                    if ( !doesSentinelFileExist( status.mavenProject, status.mavenProject.getBuildTestOutputDirectory() ) )
+                    {
+                        onResourcesChange( status.mavenProject, TEST_RESOURCES_GOAL, monitor);
+                    }
+                }
+            }
+            else
+            {
+                // full build
+                onPomChange( status );
+                // get the maven project after refreshing the pom so it is updated
+                status.mavenProject = getMavenProject();
+                if ( status.mavenProject != null )
+                {
+                    onResourcesChange( status );
+                }
+            }
+            if ( status.mavenProject != null )
+            {
+                lastGoodProject = status.mavenProject;
+            }
+            return null;
+        }
+        catch ( MavenInterruptedException e )
         {
-            /* the project was closed or pom was deleted */
             return null;
         }
 
-        if ( ( kind == INCREMENTAL_BUILD ) || ( kind == AUTO_BUILD ) )
-        {
-            status.delta = getDelta( getProject() );
-
-            // Check if the project's POM was updated.
-            IResourceDelta member = status.delta.findMember( POM_PATH );
-            if ( member != null )
-            {
-                handlePom( status, member );
-                if ( null == status.mavenProject )
-                {
-                    // The pom.xml does not parse, do not continue
-                    return null;
-                }
-            }
-            else if ( null == lastGoodProject )
-            {
-                // No previous build and the pom was not modified --> Current project is good
-                status.mavenProject = getMavenProject();
-            }
-
-            // If the change was to a file listed in <filters>, pom.xml parses and at least one resource has not been
-            // synced we need to re-process the resources.
-            if ( !status.resourcesRefreshed || !status.testResourcesRefreshed )
-            {
-                handleFilterFiles( status );
-            }
-
-            // If the change was to a resource file, pom.xml parses and at least on resource has not been synced we
-            // need to process the resources.
-            if ( !status.resourcesRefreshed || !status.testResourcesRefreshed )
-            {
-                handleAllResources( status );
-            }
-            
-            //Eclipse might have blown away our output directories...here we test if our sentinel files
-            //exist, and if not invoke the resource goals no matter what since the output directory is
-            //obviously in an invalid state.
-            if ( !status.resourcesRefreshed )
-            {
-                if ( !doesSentinelFileExist( status.mavenProject, status.mavenProject.getBuildOutputDirectory() ) )
-                {
-                    onResourcesChange( status.mavenProject, RESOURCES_GOAL, monitor);
-                }
-            }
-            
-            if ( !status.testResourcesRefreshed )
-            {
-                if ( !doesSentinelFileExist( status.mavenProject, status.mavenProject.getBuildTestOutputDirectory() ) )
-                {
-                    onResourcesChange( status.mavenProject, TEST_RESOURCES_GOAL, monitor);
-                }
-            }
-        }
-        else
-        {
-            // full build
-            onPomChange( status );
-            // get the maven project after refreshing the pom so it is updated
-            status.mavenProject = getMavenProject();
-            if ( status.mavenProject != null )
-            {
-                onResourcesChange( status );
-            }
-        }
-        if ( status.mavenProject != null )
-        {
-            lastGoodProject = status.mavenProject;
-        }
-        return null;
     }
 
     /**
@@ -718,7 +725,7 @@ public class MavenIncrementalBuilder
         IFile markerFile = outputFolder.getFile( MARKER_RESOURCE );
         return markerFile;
     }
-    
+
     private void onPomChange( BuildStatus status )
     {
         IProject project = getProject();
