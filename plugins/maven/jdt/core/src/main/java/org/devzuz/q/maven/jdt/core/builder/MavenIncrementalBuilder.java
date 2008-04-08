@@ -693,17 +693,20 @@ public class MavenIncrementalBuilder
      * 
      * @param path
      */
-    private void createSentinelFile( IMavenProject project, String path )
+    private void createSentinelFile( IMavenProject mavenProject, String pathStr ) 
         throws CoreException
     {
-        IFile markerFile = getMarkerFile( project, path );
-        if ( !markerFile.exists() )
+        IPath path = getProjectRelativePath( mavenProject, pathStr );
+        if( mavenProject.getProject().exists( path ) )
         {
-            markerFile.create( new ByteArrayInputStream( "".getBytes() ), IResource.DERIVED | IResource.FORCE,
-                               new NullProgressMonitor() );
+            IFile markerFile = getMarkerFile( mavenProject, path );
+            if( !markerFile.exists() )
+            {
+                markerFile.create( new ByteArrayInputStream( "".getBytes() ), IResource.DERIVED | IResource.FORCE, new NullProgressMonitor( ) );
+            }
         }
     }
-
+    
     /**
      * Tests whether our sentinel file exists.
      * 
@@ -711,23 +714,42 @@ public class MavenIncrementalBuilder
      * @param path
      * @return
      */
-    private boolean doesSentinelFileExist( IMavenProject project, String path )
+    private boolean doesSentinelFileExist( IMavenProject mavenProject, String pathStr )
     {
-        return getMarkerFile( project, path ).exists();
+        IPath path = getProjectRelativePath( mavenProject, pathStr );
+        if( mavenProject.getProject().exists( path ) )
+        {
+            return getMarkerFile( mavenProject, path ).exists();
+        }
+        else
+        {
+            return true;
+        }
     }
-
-    private IFile getMarkerFile( IMavenProject project, String pathStr )
+    
+    private IFile getMarkerFile( IMavenProject mavenProject, IPath path )
+    {
+        
+        IFolder outputFolder = mavenProject.getProject().getFolder( path );
+        IFile markerFile = outputFolder.getFile( MARKER_RESOURCE );
+        return markerFile;
+    }
+    
+    /**
+     * Given an absolute or relative path returns an IPath relative to the project
+     * @param pathStr
+     * @return
+     */
+    private IPath getProjectRelativePath( IMavenProject mavenProject, String pathStr )
     {
         IPath path = new Path( pathStr );
-        if ( path.isAbsolute() )
+        if( path.isAbsolute() ) 
         {
-            IPath projectPath = project.getProject().getLocation();
+            IPath projectPath = mavenProject.getProject().getLocation();
             path = path.removeFirstSegments( projectPath.segmentCount() );
             path.setDevice( null );
         }
-        IFolder outputFolder = project.getProject().getFolder( path );
-        IFile markerFile = outputFolder.getFile( MARKER_RESOURCE );
-        return markerFile;
+        return path;
     }
 
     private void onPomChange( BuildStatus status )
