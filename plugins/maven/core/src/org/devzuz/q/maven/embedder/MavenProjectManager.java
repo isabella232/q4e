@@ -12,6 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 import org.apache.maven.artifact.Artifact;
+import org.devzuz.q.maven.embedder.internal.TraceOption;
 import org.devzuz.q.maven.embedder.nature.MavenNatureHelper;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
@@ -164,23 +165,41 @@ public class MavenProjectManager
 
         // If we haven't cached the project yet or if the maven project's pom was modified or
         // if we have cached the project but it's not resolved transitively and resolveTransitively is true
-        if ( ( cachedProject == null ) || ( cachedProject.isModified() )
-                        || ( ( cachedProject.resolvedTransitively == false ) && ( resolveTransitively == true ) ) )
+        if ( cachedProject == null )
         {
-            /* get maven project from maven embedder */
-            IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, resolveTransitively );
-
-            /* Add information we want to be persisted with the IProject */
-            setPersistentProperties( project, mavenProject );
-
-            /* Create cache object */
-            cachedProject = MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolveTransitively );
-
-            /* Add to cache */
-            addCachedInfo( project, cachedProject );
+            MavenCoreActivator.trace( TraceOption.PROJECT_CACHE, "Project not in cache: ", project );
+            cachedProject = refreshProjectInCache( project, resolveTransitively );
+        }
+        else if ( cachedProject.isModified() )
+        {
+            MavenCoreActivator.trace( TraceOption.PROJECT_CACHE, "Cached project was modified: ", project );
+            cachedProject = refreshProjectInCache( project, resolveTransitively );
+        }
+        else if ( ( cachedProject.resolvedTransitively == false ) && ( resolveTransitively == true ) )
+        {
+            MavenCoreActivator.trace( TraceOption.PROJECT_CACHE,
+                                      "Project cached without transitive dependencies needs them now: ", project );
+            cachedProject = refreshProjectInCache( project, resolveTransitively );
         }
 
         return cachedProject.getMavenProject();
+    }
+
+    private MavenProjectCachedInfo refreshProjectInCache( IProject project, boolean resolveTransitively ) throws CoreException
+    {
+        /* get maven project from maven embedder */
+        IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, resolveTransitively );
+
+        /* Add information we want to be persisted with the IProject */
+        setPersistentProperties( project, mavenProject );
+
+        /* Create cache object */
+        MavenProjectCachedInfo cachedProject = MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolveTransitively );
+
+        /* Add to cache */
+        addCachedInfo( project, cachedProject );
+
+        return cachedProject;
     }
 
     private void setPersistentProperties( IProject project, IMavenProject mavenProject ) throws CoreException
