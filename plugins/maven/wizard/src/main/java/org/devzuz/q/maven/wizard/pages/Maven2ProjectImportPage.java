@@ -282,10 +282,9 @@ public class Maven2ProjectImportPage extends Maven2ValidatingWizardPage
         return false;
     }
 
-    private void updateProjects( Collection<PomFileDescriptor> poms )
+    private void updateProjects( Collection<PomFileDescriptor> pomDescriptors )
     {
-        final Collection<PomFileDescriptor> pomDescriptors = poms;
-        if ( pomList.getControl().isDisposed() )
+        if ( ( pomDescriptors == null ) || pomList.getControl().isDisposed() )
         {
             /* in case the user cancels after the scan is finished */
             return;
