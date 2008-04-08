@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
  */
 public class MavenProjectJdtResourceListener implements IResourceChangeListener
 {
-    private static final Path POM_PATH = new Path( "/" + IMavenProject.POM_FILENAME );
 
     // TODO: Needs refactoring to reduce complexity. Maybe use the IResourceDeltaVisitor
     public void resourceChanged( IResourceChangeEvent event )
@@ -122,7 +121,6 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                         {
                             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for ",
                                                          iproject );
-                            mavenProjectManager.setMavenProjectModified( iproject );
                             // ClasspathUpdateJobListener clears any error marker before the job executes.
                             UpdateClasspathJob.scheduleNewUpdateClasspathJob( iproject, false,
                                                                               new ClasspathUpdateJobListener( iproject ) );
@@ -170,9 +168,17 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         }
 
         @Override
-        public void aboutToRun( IJobChangeEvent arg0 )
+        public void aboutToRun( IJobChangeEvent event )
         {
             final IFile pom = project.getFile( IMavenProject.POM_FILENAME );
+
+            /* if project or pom were closed/deleted while this job was scheduled then do nothing */
+            if ( !project.isOpen() || !pom.exists() )
+            {
+                return;
+            }
+
+            MavenManager.getMavenProjectManager().setMavenProjectModified( project );
 
             try
             {
