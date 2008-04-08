@@ -75,7 +75,7 @@ public class MavenIncrementalBuilder
          * @param mavenProject
          * @param mavenResource
          */
-        @SuppressWarnings("unchecked")
+        @SuppressWarnings( "unchecked" )
         public DeltaVisitor( String goal, IMavenProject mavenProject, Resource mavenResource )
         {
             this.goal = goal;
@@ -221,10 +221,10 @@ public class MavenIncrementalBuilder
      * 
      */
     public static final String RESOURCES_GOAL = "process-resources";
-    
+
     /**
-     * The name of a marker resource we put in the eclipse managed target
-     * directories to tell if a clean build has occurred.
+     * The name of a marker resource we put in the eclipse managed target directories to tell if a clean build has
+     * occurred.
      */
     public static final String MARKER_RESOURCE = ".mavenResources";
 
@@ -235,7 +235,7 @@ public class MavenIncrementalBuilder
 
     private IMavenProject lastGoodProject = null;
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     @Override
     protected IProject[] build( int kind, Map args, IProgressMonitor monitor )
         throws CoreException
@@ -245,18 +245,19 @@ public class MavenIncrementalBuilder
         // The project as cached before the change.
         status.mavenProject = lastGoodProject;
 
-        try {
+        try
+        {
             IProject project = getProject();
             if ( !project.isOpen() || !project.getFile( IMavenProject.POM_FILENAME ).exists() )
             {
                 /* the project was closed or pom was deleted */
                 return null;
             }
-    
+
             if ( ( kind == INCREMENTAL_BUILD ) || ( kind == AUTO_BUILD ) )
             {
                 status.delta = getDelta( getProject() );
-    
+
                 // Check if the project's POM was updated.
                 IResourceDelta member = status.delta.findMember( POM_PATH );
                 if ( member != null )
@@ -273,37 +274,37 @@ public class MavenIncrementalBuilder
                     // No previous build and the pom was not modified --> Current project is good
                     status.mavenProject = getMavenProject();
                 }
-    
-                // If the change was to a file listed in <filters>, pom.xml parses and at least one resource has not been
-                // synced we need to re-process the resources.
+
+                // If the change was to a file listed in <filters>, pom.xml parses and at least one resource has not
+                // been synced we need to re-process the resources.
                 if ( !status.resourcesRefreshed || !status.testResourcesRefreshed )
                 {
                     handleFilterFiles( status );
                 }
-    
+
                 // If the change was to a resource file, pom.xml parses and at least on resource has not been synced we
                 // need to process the resources.
                 if ( !status.resourcesRefreshed || !status.testResourcesRefreshed )
                 {
                     handleAllResources( status );
                 }
-                
-                //Eclipse might have blown away our output directories...here we test if our sentinel files
-                //exist, and if not invoke the resource goals no matter what since the output directory is
-                //obviously in an invalid state.
+
+                // Eclipse might have blown away our output directories...here we test if our sentinel files
+                // exist, and if not invoke the resource goals no matter what since the output directory is
+                // obviously in an invalid state.
                 if ( !status.resourcesRefreshed )
                 {
                     if ( !doesSentinelFileExist( status.mavenProject, status.mavenProject.getBuildOutputDirectory() ) )
                     {
-                        onResourcesChange( status.mavenProject, RESOURCES_GOAL, monitor);
+                        onResourcesChange( status.mavenProject, RESOURCES_GOAL, monitor );
                     }
                 }
-                
+
                 if ( !status.testResourcesRefreshed )
                 {
                     if ( !doesSentinelFileExist( status.mavenProject, status.mavenProject.getBuildTestOutputDirectory() ) )
                     {
-                        onResourcesChange( status.mavenProject, TEST_RESOURCES_GOAL, monitor);
+                        onResourcesChange( status.mavenProject, TEST_RESOURCES_GOAL, monitor );
                     }
                 }
             }
@@ -465,12 +466,12 @@ public class MavenIncrementalBuilder
                 Resource r1 = it1.next();
                 Resource r2 = it2.next();
                 stillEquals =
-                    r1.getDirectory().equals( r2.getDirectory() )
-                        && r1.getExcludes().equals( r2.getExcludes() )
-                        && r1.getIncludes().equals( r2.getIncludes() )
-                        && r1.getModelEncoding().equals( r2.getModelEncoding() )
-                        && r1.isFiltering() == r2.isFiltering()
-                        && ( ( r1.getTargetPath() == null && r2.getTargetPath() == null ) || r1.equals( r2.getTargetPath() ) );
+                    r1.getDirectory().equals( r2.getDirectory() ) &&
+                        r1.getExcludes().equals( r2.getExcludes() ) &&
+                        r1.getIncludes().equals( r2.getIncludes() ) &&
+                        r1.getModelEncoding().equals( r2.getModelEncoding() ) &&
+                        r1.isFiltering() == r2.isFiltering() &&
+                        ( ( r1.getTargetPath() == null && r2.getTargetPath() == null ) || r1.equals( r2.getTargetPath() ) );
             }
             return !stillEquals;
         }
@@ -627,8 +628,8 @@ public class MavenIncrementalBuilder
             }
         }
         /* only refresh test resources if there was no error refreshing main resources */
-        if ( status.resourcesRefreshed && !status.testResourcesRefreshed
-            && ( force || isAnyResourceFiltered( status.mavenProject.getTestResources() ) ) )
+        if ( status.resourcesRefreshed && !status.testResourcesRefreshed &&
+            ( force || isAnyResourceFiltered( status.mavenProject.getTestResources() ) ) )
         {
             if ( onResourcesChange( status.mavenProject, TEST_RESOURCES_GOAL, status.monitor ) )
             {
@@ -653,18 +654,20 @@ public class MavenIncrementalBuilder
     {
         MavenJdtCoreActivator.trace( TraceOption.MAVEN_INCREMENTAL_BUILDER, "Processing resources on ", getProject(),
                                      " : ", phase );
-        
+
         MavenExecutionParameter params = MavenExecutionParameter.newDefaultMavenExecutionParameter();
         params.setRecursive( false );
         if ( RESOURCES_GOAL.equals( phase ) )
         {
             createSentinelFile( mavenProject, mavenProject.getBuildOutputDirectory() );
-            params.setFilteredGoals( MavenPropertyManager.getInstance().getResourceExcludedGoals( mavenProject.getProject() ) );
+            params.setFilteredGoals( MavenPropertyManager.getInstance().getResourceExcludedGoals(
+                                                                                                  mavenProject.getProject() ) );
         }
         else if ( TEST_RESOURCES_GOAL.equals( phase ) )
         {
             createSentinelFile( mavenProject, mavenProject.getBuildTestOutputDirectory() );
-            params.setFilteredGoals( MavenPropertyManager.getInstance().getTestResourceExcludedGoals( mavenProject.getProject() ) );
+            params.setFilteredGoals( MavenPropertyManager.getInstance().getTestResourceExcludedGoals(
+                                                                                                      mavenProject.getProject() ) );
         }
 
         IMavenExecutionResult result = MavenManager.getMaven().executeGoal( mavenProject, phase, params, monitor );
@@ -690,16 +693,17 @@ public class MavenIncrementalBuilder
      * 
      * @param path
      */
-    private void createSentinelFile( IMavenProject project, String path ) 
+    private void createSentinelFile( IMavenProject project, String path )
         throws CoreException
     {
         IFile markerFile = getMarkerFile( project, path );
-        if( !markerFile.exists() )
+        if ( !markerFile.exists() )
         {
-            markerFile.create( new ByteArrayInputStream( "".getBytes() ), IResource.DERIVED | IResource.FORCE, new NullProgressMonitor( ) );
+            markerFile.create( new ByteArrayInputStream( "".getBytes() ), IResource.DERIVED | IResource.FORCE,
+                               new NullProgressMonitor() );
         }
     }
-    
+
     /**
      * Tests whether our sentinel file exists.
      * 
@@ -711,11 +715,11 @@ public class MavenIncrementalBuilder
     {
         return getMarkerFile( project, path ).exists();
     }
-    
+
     private IFile getMarkerFile( IMavenProject project, String pathStr )
     {
         IPath path = new Path( pathStr );
-        if( path.isAbsolute() ) 
+        if ( path.isAbsolute() )
         {
             IPath projectPath = project.getProject().getLocation();
             path = path.removeFirstSegments( projectPath.segmentCount() );
