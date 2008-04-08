@@ -30,18 +30,31 @@ public class MavenEventStore extends Observable implements IMavenListener
      * 
      * Since only one maven execution is allowed, no need to use a synchronized implementation.
      */
-    private Buffer events = new CircularFifoBuffer( MavenManager.getMavenPreferenceManager().getEventsViewSize() );
+    private Buffer events = new CircularFifoBuffer( getEventsViewSize() );
+
+    /**
+     * Size of the events buffer
+     */
+    protected int getEventsViewSize()
+    {
+        return MavenManager.getMavenPreferenceManager().getEventsViewSize();
+    }
+
+    protected Buffer getEventsBuffer()
+    {
+        return events;
+    }
 
     @SuppressWarnings( "unchecked" )
     public void handleEvent( IMavenEvent event )
     {
-        events.add( event );
+        getEventsBuffer().add( event );
         this.notifyListeners( event );
     }
 
     public void dispose()
     {
-        events.clear();
+        getEventsBuffer().clear();
         // Why notify on dispose?
         // this.notifyListeners();
     }
@@ -57,7 +70,7 @@ public class MavenEventStore extends Observable implements IMavenListener
     @SuppressWarnings( "unchecked" )
     public IMavenEvent[] getEvents()
     {
-        return (IMavenEvent[]) events.toArray( new IMavenEvent[events.size()] );
+        return (IMavenEvent[]) getEventsBuffer().toArray( new IMavenEvent[getEventsBuffer().size()] );
     }
 
     /**
