@@ -10,6 +10,11 @@ package org.devzuz.q.maven.embedder;
 /**
  * Exception thrown when a Maven execution job is interrupted.
  */
-public class MavenInterruptedException extends RuntimeException
+public class MavenInterruptedException
+    extends RuntimeException
 {
+    public MavenInterruptedException()
+    {
+        super( "Maven execution has been interrupted" );
+    }
 }
