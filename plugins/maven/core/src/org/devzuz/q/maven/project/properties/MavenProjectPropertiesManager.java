@@ -153,6 +153,12 @@ public class MavenProjectPropertiesManager
      */
     private Set<String> getProperty( IProject project, Property property )
     {
+        if ( project == null )
+        {
+            // running a maven goal without a project
+            // TODO: Should get the default set of profiles (when Issue 367 implemented)
+            return Collections.emptySet();
+        }
         try
         {
             String propVal =
