@@ -275,6 +275,12 @@ public class MavenIncrementalBuilder
                     status.mavenProject = getMavenProject();
                 }
 
+                if ( status.mavenProject == null )
+                {
+                    /* project doesn't build */
+                    return null;
+                }
+
                 // If the change was to a file listed in <filters>, pom.xml parses and at least one resource has not
                 // been synced we need to re-process the resources.
                 if ( !status.resourcesRefreshed || !status.testResourcesRefreshed )
