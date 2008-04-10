@@ -19,6 +19,7 @@ import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBasicFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildResourcesPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildTestResourcesPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDevelopersFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesFormPage;
@@ -51,6 +52,8 @@ public class MavenPomFormEditor extends FormEditor
     
     public static final String BUILD_RESOURCES_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildResourcesPage";
     
+    public static final String BUILD_TEST_RESOURCES_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildTestResourcesPage";
+    
     private Model pomModel;
 
     private MavenPomBasicFormPage basicFormPage;
@@ -66,6 +69,8 @@ public class MavenPomFormEditor extends FormEditor
     private MavenPomBuildFormPage buildFormPage;
     
     private MavenPomBuildResourcesPage buildResourcesPage;
+    
+    private MavenPomBuildTestResourcesPage buildTestResourcesPage;
     
     public MavenPomFormEditor()
     {
@@ -105,6 +110,10 @@ public class MavenPomFormEditor extends FormEditor
                 buildResourcesPage =
                     new MavenPomBuildResourcesPage( this, BUILD_RESOURCES_FORM_PAGE, "Build Resources", this.pomModel );
                 addPage( buildResourcesPage );
+                
+                buildTestResourcesPage =
+                    new MavenPomBuildTestResourcesPage( this, BUILD_TEST_RESOURCES_FORM_PAGE, "Build Test Resources", this.pomModel);
+                addPage( buildTestResourcesPage );
             }
         }
         catch ( PartInitException pie )
@@ -206,6 +215,7 @@ public class MavenPomFormEditor extends FormEditor
         mavenPomDevelopersFormPage.setPageModified(false);
         buildFormPage.setPageModified( false );
         buildResourcesPage.setPageModified( false );
+        buildTestResourcesPage.setPageModified( false );
         // clean other pages
     }
 
