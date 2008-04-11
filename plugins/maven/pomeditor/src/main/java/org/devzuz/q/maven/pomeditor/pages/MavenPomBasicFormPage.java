@@ -229,15 +229,15 @@ public class MavenPomBasicFormPage extends FormPage
         dependenciesLink.setText( "Add/Modify/Remove Dependencies" );
         
         
-        Hyperlink licensesLink = toolKit.createHyperlink( parent, "Manage Licenses", SWT.WRAP );
+        Hyperlink licensesLink = toolKit.createHyperlink( parent, "Manage Licenses/SCM/Organization", SWT.WRAP );
         licensesLink.addHyperlinkListener( new HyperlinkAdapter()
         {
             public void linkActivated( HyperlinkEvent e )
             {
-                editor.setActivePage( MavenPomFormEditor.LICENSES_FORM_PAGE );
+                editor.setActivePage( MavenPomFormEditor.LICENSES_SCM_ORG_FORM_PAGE );
             }
         } );
-        licensesLink.setText( "Manage Licenses" );
+        licensesLink.setText( "Manage Licenses/SCM/Organization" );
         
         Hyperlink modulesPropertiesLink = toolKit.createHyperlink( parent, "Manage Modules/Properties", SWT.WRAP );
         modulesPropertiesLink.addHyperlinkListener( new HyperlinkAdapter()

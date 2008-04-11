@@ -156,6 +156,12 @@ public class Messages
     
     public static String MavenPomEditor_MavenPomEditor_Resource_Excludes;
     
+    public static String MavenPomEditor_MavenPomEditor_Connection;
+    
+    public static String MavenPomEditor_MavenPomEditor_DeveloperConnection;
+    
+    public static String MavenPomEditor_MavenPomEditor_Tag;
+    
     static
     {
         // initialize resource bundle

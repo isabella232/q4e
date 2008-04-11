@@ -70,8 +70,7 @@ public class AddEditLicenseDialog extends AbstractResizableDialog
 
         nameText = new Text( container, SWT.BORDER | SWT.SINGLE );
         nameText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
-        nameText.addModifyListener( modifyingListener );
-
+        
         // Version Label, Text and Lookup Button
         Label label3 = new Label( container, SWT.NULL );
         label3.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
@@ -79,8 +78,7 @@ public class AddEditLicenseDialog extends AbstractResizableDialog
 
         urlText = new Text( container, SWT.BORDER | SWT.SINGLE );
         urlText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
-        urlText.addModifyListener( modifyingListener );
-
+        
         // Artifact ID Label, Text and Lookup Button
         Label label2 = new Label( container, SWT.NULL );
         label2.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
@@ -88,8 +86,7 @@ public class AddEditLicenseDialog extends AbstractResizableDialog
 
         distributionText = new Text( container, SWT.BORDER | SWT.SINGLE );
         distributionText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
-        distributionText.addModifyListener( modifyingListener );
-
+        
         // Scope Label, Text and Lookup Button
         Label label4 = new Label( container, SWT.NULL );
         label4.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
@@ -99,15 +96,40 @@ public class AddEditLicenseDialog extends AbstractResizableDialog
         GridData grid = new GridData( GridData.FILL_HORIZONTAL );
         grid.heightHint = 40;
         commentText.setLayoutData( grid );
+        
+        syncModelToControls();
+        
+        urlText.addModifyListener( modifyingListener );
+        nameText.addModifyListener( modifyingListener );
         commentText.addModifyListener( modifyingListener );
-
+        distributionText.addModifyListener( modifyingListener );
+        
         return container;
     }
-
-    protected void createButtonsForButtonBar( Composite parent )
+    
+    @Override
+    protected Control createButtonBar( Composite parent )
     {
-        super.createButtonsForButtonBar( parent );
-        // synchronizeDataSourceWithGUI();
+        Control bar = super.createButtonBar( parent );
+        validate();
+        return bar; 
+    }
+    
+    public int openWithLicense( String name , String distribution , String url , String comment )
+    {
+        this.name = name;
+        this.distribution = distribution;
+        this.url = url;
+        this.comment = comment;
+        return open();
+    }
+    
+    private void syncModelToControls()
+    {
+        nameText.setText( blankIfNull( name ) );
+        distributionText.setText( blankIfNull( distribution ) );
+        urlText.setText( blankIfNull( url ) );
+        commentText.setText( blankIfNull( comment ) );
     }
 
     public void onWindowActivate()
@@ -189,7 +211,11 @@ public class AddEditLicenseDialog extends AbstractResizableDialog
     private boolean isNotNullOrWhiteSpace( String str )
     {
         return ( str == null || str.trim().length() == 0 );
-
+    }
+    
+    private String blankIfNull( String str )
+    {
+        return str == null ? "" : str;
     }
 
     @Override

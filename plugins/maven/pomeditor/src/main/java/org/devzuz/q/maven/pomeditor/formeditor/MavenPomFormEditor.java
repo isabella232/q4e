@@ -22,7 +22,7 @@ import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildResourcesPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildTestResourcesPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDevelopersFormPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesScmOrgFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomPropertiesModuleFormPage;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -42,7 +42,7 @@ public class MavenPomFormEditor extends FormEditor
     
     public static final String DEPENDENCIES_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage";
     
-    public static final String LICENSES_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomLicensesFormPage";
+    public static final String LICENSES_SCM_ORG_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomLicensesScmOrgFormPage";
     
     public static final String MODULES_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage";
     
@@ -62,7 +62,7 @@ public class MavenPomFormEditor extends FormEditor
 
     private MavenPomPropertiesModuleFormPage modulePropertiesFormPage;
 
-    private MavenPomLicensesFormPage mavenPomLicensesFormPage;
+    private MavenPomLicensesScmOrgFormPage mavenPomLicensesScmOrgFormPage;
     
     private MavenPomDevelopersFormPage mavenPomDevelopersFormPage;
     
@@ -91,9 +91,9 @@ public class MavenPomFormEditor extends FormEditor
                     new MavenPomDependenciesFormPage( this, DEPENDENCIES_FORM_PAGE, "Dependencies", this.pomModel );
                 addPage( dependenciesFormPage );
 
-                mavenPomLicensesFormPage = 
-                    new MavenPomLicensesFormPage( this , LICENSES_FORM_PAGE , "License", this.pomModel );
-                addPage( mavenPomLicensesFormPage );
+                mavenPomLicensesScmOrgFormPage = 
+                    new MavenPomLicensesScmOrgFormPage( this , LICENSES_SCM_ORG_FORM_PAGE , "Licenses/SCM/Organization", this.pomModel );
+                addPage( mavenPomLicensesScmOrgFormPage );
 
                 mavenPomDevelopersFormPage = 
                     new MavenPomDevelopersFormPage( this , DEVELOPERS_FORM_PAGE , "Developer", this.pomModel );
@@ -211,7 +211,7 @@ public class MavenPomFormEditor extends FormEditor
         basicFormPage.setPageModified( false );
         dependenciesFormPage.setPageModified( false );
         modulePropertiesFormPage.setPageModified( false );
-        mavenPomLicensesFormPage.setPageModified(false);
+        mavenPomLicensesScmOrgFormPage.setPageModified(false);
         mavenPomDevelopersFormPage.setPageModified(false);
         buildFormPage.setPageModified( false );
         buildResourcesPage.setPageModified( false );
