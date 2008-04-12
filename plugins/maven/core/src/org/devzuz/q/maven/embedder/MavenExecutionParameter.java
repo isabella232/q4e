@@ -43,15 +43,19 @@ public class MavenExecutionParameter
 
     public static MavenExecutionParameter newDefaultMavenExecutionParameter()
     {
-        MavenExecutionParameter parameter = new MavenExecutionParameter();
-        parameter.setOffline( MavenManager.getMavenPreferenceManager().isOffline() );
-        parameter.setRecursive( MavenManager.getMavenPreferenceManager().isRecursive() );
-        return parameter;
+        return newDefaultMavenExecutionParameter( null );
     }
 
     public static MavenExecutionParameter newDefaultMavenExecutionParameter( Properties properties )
     {
-        return new MavenExecutionParameter( properties );
+        MavenExecutionParameter parameter = new MavenExecutionParameter();
+        parameter.setOffline( MavenManager.getMavenPreferenceManager().isOffline() );
+        parameter.setRecursive( MavenManager.getMavenPreferenceManager().isRecursive() );
+        if ( properties != null )
+        {
+            parameter.setExecutionProperties( properties );
+        }
+        return parameter;
     }
 
     private MavenExecutionParameter()
