@@ -2,7 +2,7 @@
 <feature
       id="org.devzuz.q.feature"
       label="%featureName"
-      version="0.7.0.qualifier"
+      version="0.6.0.qualifier"
       provider-name="%providerName">
 
    <description>
@@ -43,42 +43,42 @@
          id="org.devzuz.q.maven.jdt.ui"
          download-size="0"
          install-size="0"
-         version="0.7.0.qualifier"
+         version="0.6.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.jdt.core"
          download-size="0"
          install-size="0"
-         version="0.7.0.qualifier"
+         version="0.6.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.ui"
          download-size="0"
          install-size="0"
-         version="0.7.0.qualifier"
+         version="0.6.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.wizard"
          download-size="0"
          install-size="0"
-         version="0.7.0.qualifier"
+         version="0.6.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.core"
          download-size="0"
          install-size="0"
-         version="0.7.0.qualifier"
+         version="0.6.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.dependency.analysis"
          download-size="0"
          install-size="0"
-         version="0.7.0.qualifier"
+         version="0.6.0.qualifier"
          unpack="false"/>
 
    <plugin
