@@ -29,7 +29,16 @@
    <feature url="features/org.devzuz.q.feature_0.5.0.200803032108.jar" id="org.devzuz.q.feature" version="0.5.0.200803032108">
       <category name="Community"/>
    </feature>
-   
+   <!-- New in 0.6.0 -->
+   <feature url="features/org.devzuz.q.feature_0.6.0.200804131445.jar" id="org.devzuz.q.feature" version="0.6.0.200804131445">
+      <category name="Community"/>
+   </feature>
+   <feature url="features/org.devzuz.q.dependencyviewer.feature_0.6.0.200804131446.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.6.0.200804131446">
+      <category name="Optional"/>
+   </feature>
+   <feature url="features/org.devzuz.q.feature.wtp_0.6.0.200804131446.jar" id="org.devzuz.q.feature.wtp" version="0.6.0.200804131446">
+      <category name="Optional"/>
+   </feature>
    
    <category-def name="Community" label="Community"/>
    <category-def name="Enabling Features" label="Enabling Features"/>
