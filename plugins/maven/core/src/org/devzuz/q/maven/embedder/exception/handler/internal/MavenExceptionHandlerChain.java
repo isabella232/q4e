@@ -22,8 +22,10 @@ import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
 import org.apache.maven.extension.ExtensionManagerException;
 import org.apache.maven.extension.ExtensionScanningException;
 import org.apache.maven.lifecycle.LifecycleExecutionException;
+import org.apache.maven.lifecycle.LifecycleSpecificationException;
 import org.apache.maven.plugin.AbstractMojoExecutionException;
 import org.apache.maven.plugin.PluginConfigurationException;
+import org.apache.maven.plugin.PluginManagerException;
 import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.reactor.MavenExecutionException;
@@ -63,6 +65,8 @@ public class MavenExceptionHandlerChain
         handlers.put( LifecycleExecutionException.class, chainExceptionHandler );
         handlers.put( ArtifactMetadataRetrievalException.class, chainExceptionHandler );
         handlers.put( ExtensionScanningException.class, chainExceptionHandler );
+        handlers.put( PluginManagerException.class, chainExceptionHandler );
+        handlers.put( LifecycleSpecificationException.class, chainExceptionHandler );
 
         handlers.put( Throwable.class, new UnrecognizedExceptionHandler() );
     }
