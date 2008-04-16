@@ -5,6 +5,7 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.preferences.MavenPreferenceManager;
@@ -27,6 +28,8 @@ import org.eclipse.ui.XMLMemento;
 public class MavenUIPreferenceManagerAdapter
 {
     private static MavenUIPreferenceManagerAdapter instance;
+
+    private final String profileNode = "profile";
 
     /**
      * Obtains the single instance of this class.
@@ -171,5 +174,15 @@ public class MavenUIPreferenceManagerAdapter
         {
             MavenUiActivator.getLogger().log( "Could not save the list of archetype providers.", e );
         }
+    }
+
+    public void setConfiguredProfiles( Set<String> profiles )
+    {
+        MavenManager.getMavenPreferenceManager().setDefaultProfiles( profiles );
+    }
+
+    public Set<String> getConfiguredProfiles()
+    {
+        return MavenManager.getMavenPreferenceManager().getDefaultProfiles();
     }
 }
