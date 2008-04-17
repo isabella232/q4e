@@ -16,6 +16,7 @@ import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -84,10 +85,18 @@ public class EclipseMavenRequest extends Job implements IMavenJob
         }
         finally
         {
-            // maven.removeEventListener(listener);
-            // listener.dispose();
-
             monitor.done();
+            // Issue 338: Some goals keep state between maven executions.
+            try
+            {
+                maven.refresh();
+            }
+            catch ( CoreException e )
+            {
+                MavenCoreActivator.getLogger().log(
+                                                    "Could not refresh the embedder after goals: " + request.getGoals()
+                                                                    + " on pom " + request.getPomFile(), e );
+            }
         }
     }
 
