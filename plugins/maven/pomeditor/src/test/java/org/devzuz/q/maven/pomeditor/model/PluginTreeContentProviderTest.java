@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 
+import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginExecution;
@@ -22,6 +23,7 @@ public class PluginTreeContentProviderTest
     Model pomModel;
     PluginTreeContentProvider provider;
     List<Plugin> plugins = null;
+    Build build;
     
     @SuppressWarnings ("unchecked")
     @Before
@@ -32,11 +34,13 @@ public class PluginTreeContentProviderTest
             //this.pomModel = new MavenXpp3Reader().read( new FileReader( "../resources/pom.xml" ) );
             URL url = getClass().getResource("pom.xml");
             this.pomModel = new MavenXpp3Reader().read( new FileReader( url.getFile() ) );
-            plugins = pomModel.getBuild().getPlugins();
+            
+            build = pomModel.getBuild();
+            plugins = build.getPlugins();
             
             assertTrue( plugins != null );
             
-            provider = new PluginTreeContentProvider( plugins );
+            provider = new PluginTreeContentProvider( build );
         }
         catch ( FileNotFoundException e )
         {
@@ -57,6 +61,9 @@ public class PluginTreeContentProviderTest
     @Test
     public void testSamplePom()
     {
+        Object[] root = provider.getChildren( build );
+        assertTrue( root.length == 1 );
+        
         Object[] childrenPlugins = provider.getChildren( plugins );
         assertTrue( childrenPlugins.length == 2 );
         

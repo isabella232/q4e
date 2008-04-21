@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Exclusion;
 import org.apache.maven.model.Plugin;
@@ -20,12 +21,14 @@ import org.eclipse.jface.viewers.Viewer;
 public class PluginTreeContentProvider implements ITreeContentProvider
 {
     private List<Plugin> plugins;
+    
+    private Build build;
 
     private Map<Object, Object> childParentMap;
 
-    public PluginTreeContentProvider( List<Plugin> plugins )
+    public PluginTreeContentProvider( Build build )
     {
-        setPlugins( plugins );
+        setBuild( build );
     }
     /*
     @SuppressWarnings( "unchecked" )
@@ -141,25 +144,9 @@ public class PluginTreeContentProvider implements ITreeContentProvider
 
     }
 
-    public List<Plugin> getPlugins()
-    {
-        return plugins;
-    }
-
     @SuppressWarnings( "unchecked" )
-    public void setPlugins( List<Plugin> plugins )
+    private void setPlugins( List<Plugin> plugins )
     {
-        this.plugins = plugins;
-        
-        if( childParentMap == null )
-        {
-            childParentMap = new HashMap<Object, Object>();
-        }
-        else
-        {
-            childParentMap.clear();
-        }
-        
         for ( Plugin plugin : plugins )
         {
             childParentMap.put( plugin, plugins );
@@ -227,5 +214,29 @@ public class PluginTreeContentProvider implements ITreeContentProvider
                 }
             }
         }
+    }
+    
+    public Build getBuild()
+    {
+        return build;
+    }
+    
+    @SuppressWarnings( "unchecked" )
+    public void setBuild( Build build )
+    {
+        this.build = build;
+        this.plugins = build.getPlugins();
+        
+        if( childParentMap == null )
+        {
+            childParentMap = new HashMap<Object, Object>();
+        }
+        else
+        {
+            childParentMap.clear();
+        }
+        
+        childParentMap.put( plugins , build );
+        setPlugins( plugins );
     }
 }
