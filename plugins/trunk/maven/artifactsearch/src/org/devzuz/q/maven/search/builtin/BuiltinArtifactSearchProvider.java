@@ -28,14 +28,12 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
  * Searches the local repository using Q4E's builtin support.
  * 
  * @author staticsnow@gmail.com
- *
+ * 
  */
-public class BuiltinArtifactSearchProvider
-    implements IArtifactSearchProvider
+public class BuiltinArtifactSearchProvider implements IArtifactSearchProvider
 {
     private boolean indexReady = false;
 
-    @Override
     public void beginInit()
     {
         // Start the indexer if no index has been created yet
@@ -44,6 +42,7 @@ public class BuiltinArtifactSearchProvider
             Job job = RepositoryIndexerManager.getRepositoryIndexerJob();
             job.addJobChangeListener( new JobChangeAdapter()
             {
+                @Override
                 public void done( IJobChangeEvent event )
                 {
                     indexReady = true;
@@ -61,17 +60,16 @@ public class BuiltinArtifactSearchProvider
         }
     }
 
-    @Override
     public List<IArtifactInfo> find( ISearchCriteria searchCriteria )
     {
         String query = "";
         if ( searchCriteria.getSearchTypes() == ISearchCriteria.TYPE_ARTIFACT_ID
-            && searchCriteria.getSearch().length() > 0 )
+                        && searchCriteria.getSearch().length() > 0 )
         {
             query += RepositoryIndexer.ARTIFACT_ID + ":\"" + searchCriteria.getSearch() + "\"";
         }
         else if ( searchCriteria.getSearchTypes() == ISearchCriteria.TYPE_GROUP_ID
-            && searchCriteria.getSearch().length() > 0 )
+                        && searchCriteria.getSearch().length() > 0 )
         {
             query += RepositoryIndexer.GROUP_ID + ":\"" + searchCriteria.getSearch() + "\"";
         }
@@ -121,7 +119,6 @@ public class BuiltinArtifactSearchProvider
 
     }
 
-    @Override
     public List<IArtifactInfo> findAll()
     {
         try
@@ -144,7 +141,6 @@ public class BuiltinArtifactSearchProvider
 
     }
 
-    @Override
     public boolean isInitComplete()
     {
         return indexReady;
