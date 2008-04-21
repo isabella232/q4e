@@ -7,10 +7,10 @@
  */
 package org.devzuz.q.maven.embedder;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.devzuz.q.maven.embedder.exception.MarkerInfo;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
 public class MavenExecutionStatus extends Status
@@ -29,26 +29,37 @@ public class MavenExecutionStatus extends Status
             return;
         }
 
-        List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>(exceptions.size());
-        MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( executionResult.getMavenProject().getProject(), exceptions, markerInfos );
+        Exception e = exceptions.get( 0 );
+        if ( exceptions.size() == 1 )
+        {
 
-        if ( markerInfos.size() == 1 )
-        {
-            setMessage( markerInfos.get( 0 ).getMessage() );
-            setException( exceptions.get( 0 ) );
-        }
-        else
-        {
-            StringBuilder sb = new StringBuilder();
-            sb.append( "Several errors found:" );
-            sb.append( "\n" );
-            for ( MarkerInfo markerInfo : markerInfos )
+            if ( e instanceof CoreException )
             {
-                sb.append( markerInfo.getMessage() );
-                sb.append( "\n" );
+                IStatus innerStatus = ( (CoreException) e ).getStatus();
+                setSeverity( innerStatus.getSeverity() );
+                setPlugin( innerStatus.getPlugin() );
+                setMessage( innerStatus.getMessage() );
+                setException( innerStatus.getException() );
             }
-            setException( exceptions.get( 0 ) );
-            setMessage( sb.toString() );
+            else
+            {
+                //TODO we need to unwrap exceptions to provide a meaningful message. Should reuse the ExceptionHandler
+                setException( e );
+            }
+        }
+        else if ( exceptions.size() > 1 )
+        {
+            setMessage( message + ": several errors found." );
+            // Use the first exception wrapped
+
+            if ( e instanceof CoreException )
+            {
+                setException( ( (CoreException) e ).getStatus().getException() );
+            }
+            else
+            {
+                setException( e );
+            }
         }
     }
 

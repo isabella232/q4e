@@ -13,7 +13,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.apache.maven.artifact.Artifact;
-import org.apache.maven.model.Build;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.jdt.core.classpath.container.IMavenClasspathAttributeProvider;
@@ -21,9 +20,7 @@ import org.devzuz.q.maven.jdt.ui.projectimport.IImportProjectPostprocessor;
 import org.devzuz.q.maven.wtp.core.MavenWtpActivator;
 import org.devzuz.q.maven.wtp.core.internal.TraceOption;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jst.j2ee.classpathdep.UpdateClasspathAttributeUtil;
 import org.eclipse.jst.j2ee.web.project.facet.IWebFacetInstallDataModelProperties;
@@ -140,15 +137,13 @@ public class WtpEnablerPostprocessor implements IImportProjectPostprocessor, IMa
         IProjectFacetVersion javaFacetVersion = javaFacet.getVersion( "5.0" );
         IProjectFacetVersion webFacetVersion = webFacet.getVersion( "2.4" );
         Set<Action> facetActions = new HashSet<Action>( 2 );
-        Build buildModel = mavenProject.getModel().getBuild();
         for ( IActionDefinition def : javaFacetVersion.getActionDefinitions( Action.Type.INSTALL ) )
         {
             IDataModel model =
                 (IDataModel) def.createConfigObject( javaFacetVersion, mavenProject.getProject().getName() );
-            model.setStringProperty( "IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME",
-                                     makeRelative( mavenProject, buildModel.getSourceDirectory() ) );
+            model.setStringProperty( "IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME", "src/main/java" );
             model.setStringProperty( "IJavaFacetInstallDataModelProperties.DEFAULT_OUTPUT_FOLDER_NAME",
-                                     makeRelative( mavenProject, buildModel.getOutputDirectory() ) );
+                                     "target/classes" );
             facetActions.add( new Action( Action.Type.INSTALL, javaFacetVersion, null ) );
         }
         for ( IActionDefinition def : webFacetVersion.getActionDefinitions( Action.Type.INSTALL ) )
@@ -161,33 +156,6 @@ public class WtpEnablerPostprocessor implements IImportProjectPostprocessor, IMa
             facetActions.add( new Action( Action.Type.INSTALL, webFacetVersion, model ) );
         }
         facetedProject.modify( facetActions, monitor );
-    }
-
-    /**
-     * Strips the leading path segments from an absolute path and returns the string representation of the project
-     * relative path.
-     * 
-     * @param mavenProject
-     *            the maven project to which the path must be made relative
-     * @param absolutePath
-     *            the absolute path
-     * @return the path relative to the given project
-     */
-    // XXX amuino: Making absolute maven paths relative to the project is repeated all over q4e
-    private String makeRelative( IMavenProject mavenProject, String absolutePath )
-    {
-        IPath path = new Path( absolutePath );
-        IPath projectPath = mavenProject.getProject().getLocation();
-        if ( projectPath.isPrefixOf( path ) )
-        {
-            IPath relative = path.removeFirstSegments( projectPath.segmentCount() );
-            return relative.makeAbsolute().toOSString();
-        }
-        else
-        {
-            throw new IllegalArgumentException( "Unsupported usage of maven path " + path
-                            + " outside the maven project " + projectPath );
-        }
     }
 
     /**

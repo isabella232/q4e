@@ -143,12 +143,6 @@
             name="%MavenArchetypePreferencePage"
             category="org.devzuz.q.maven.ui.preferences.MavenPreferencePage">
       </page>
-      <page
-            class="org.devzuz.q.maven.ui.preferences.MavenProfilePreferencePage"
-            id="org.devzuz.q.maven.ui.preferences.MavenProfilePreferencePage"
-            name="%MavenProfilePreferencePage"
-            category="org.devzuz.q.maven.ui.preferences.MavenPreferencePage">
-      </page>
    </extension>
    <extension
          point="org.devzuz.q.maven.ui.archetypeProvider">

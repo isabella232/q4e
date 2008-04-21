@@ -156,8 +156,6 @@ public class Messages extends NLS
 
     public static String MavenProfileView_ProfileLocation;
     
-    public static String MavenProfilePreferencePage_Description;
-    
     static
     {
         // initialize resource bundle

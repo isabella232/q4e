@@ -11,7 +11,6 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
-import org.devzuz.q.maven.embedder.MavenManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
@@ -25,6 +24,7 @@ import org.eclipse.core.runtime.QualifiedName;
 public class MavenProjectPropertiesManager
 {
     // TODO: Merge the MavenPropertyManager from maven.jdt.core
+
     private static enum Property
     {
         ActiveProfiles, InactiveProfiles
@@ -156,15 +156,8 @@ public class MavenProjectPropertiesManager
         if ( project == null )
         {
             // running a maven goal without a project
-            if ( property.equals( Property.ActiveProfiles ) )
-            {
-                // TODO: Should get the default set of profiles (when Issue 367 implemented)
-                return MavenManager.getMavenPreferenceManager().getDefaultProfiles();
-            }
-            else
-            {
-                return Collections.emptySet();
-            }
+            // TODO: Should get the default set of profiles (when Issue 367 implemented)
+            return Collections.emptySet();
         }
         try
         {
@@ -173,13 +166,7 @@ public class MavenProjectPropertiesManager
             if ( null == propVal )
             {
                 initializePreferencesForProject( project );
-                Set<String> propValue = getProperty( project, property );
-                // add default set of profiles
-                if ( property.equals( Property.ActiveProfiles ) )
-                {
-                    propValue.addAll( MavenManager.getMavenPreferenceManager().getDefaultProfiles() );
-                }
-                return propValue;
+                return getProperty( project, property );
             }
             return fromString( propVal );
         }

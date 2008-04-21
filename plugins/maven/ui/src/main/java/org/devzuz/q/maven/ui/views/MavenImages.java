@@ -1,14 +1,24 @@
-/*
- * Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.) and others. All rights reserved. This program and the
- * accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this
- * distribution, and is available at http://www.eclipse.org/legal/epl-v10.html
- */
+/***************************************************************************************************
+ * Copyright (c) 2007 DevZuz, Inc. (AKA Simula Labs, Inc.) All rights reserved. This program and the
+ * accompanying materials are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ **************************************************************************************************/
 package org.devzuz.q.maven.ui.views;
+
+/***********************************************************************************************************************
+ * Copyright (c) 2000, 2004 IBM Corporation and others. All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Common Public License v1.0 which accompanies this distribution, and is
+ * available at http://www.eclipse.org/legal/cpl-v10.html
+ * 
+ * Contributors: IBM Corporation - initial API and implementation
+ **********************************************************************************************************************/
 
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.graphics.Image;
+
 
 public class MavenImages
 {
@@ -35,7 +45,7 @@ public class MavenImages
     public static final ImageDescriptor DESC_SCROLLLOCK = create( PATH_LCL, "lock_co.gif" ); //$NON-NLS-1$
 
     public static final ImageDescriptor DESC_SCROLLLOCK_DISABLED = create( PATH_LCL_DISABLED, "lock_co.gif" ); //$NON-NLS-1$
-
+    
     public static final ImageDescriptor DESC_REFRESHMLIFECYCLEVIEW = create( ICONS_PATH, "Maven_M(16)-TP.gif" ); //$NON-NLS-1$
 
     private static ImageDescriptor create( String prefix, String name )

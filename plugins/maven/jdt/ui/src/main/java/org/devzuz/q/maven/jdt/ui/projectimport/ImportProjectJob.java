@@ -41,9 +41,7 @@ import org.eclipse.core.runtime.SubProgressMonitor;
  * 
  * @author amuino
  */
-public class ImportProjectJob
-    extends WorkspaceJob
-    implements IMavenJob
+public class ImportProjectJob extends WorkspaceJob implements IMavenJob
 {
     private Collection<PomFileDescriptor> pomDescriptors;
 
@@ -59,7 +57,8 @@ public class ImportProjectJob
      * Utility method to set a single project to be imported. Equivalent to invoking
      * {@link #setMavenProjects(Collection)} with a collection of a single element.
      * 
-     * @param pomDescriptor the project to import.
+     * @param pomDescriptor
+     *            the project to import.
      */
     public void setMavenProjects( PomFileDescriptor pomDescriptor )
     {
@@ -69,7 +68,8 @@ public class ImportProjectJob
     /**
      * Sets the projects to be imported.
      * 
-     * @param pomDescriptor the collection of projects to be imported.
+     * @param pomDescriptor
+     *            the collection of projects to be imported.
      */
     public void setMavenProjects( Collection<PomFileDescriptor> pomDescriptor )
     {
@@ -94,34 +94,44 @@ public class ImportProjectJob
         MavenJdtUiActivator.trace( TraceOption.PROJECT_IMPORT, "Starting ", pomDescriptors );
         MavenMonitorHolder.setProgressMonitor( monitor );
 
-        try
+        int errorCount = 0;
+        // TODO set a better number
+        monitor.beginTask( "Importing projects...", pomDescriptors.size() );
+        for ( PomFileDescriptor pomDescriptor : pomDescriptors )
         {
-            // TODO set a better number
-            monitor.beginTask( "Importing projects...", pomDescriptors.size() );
-            for ( PomFileDescriptor pomDescriptor : pomDescriptors )
+            SubProgressMonitor subProgressMonitor =
+                new SubProgressMonitor( monitor, 1, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK );
+            subProgressMonitor.beginTask( getProjectName( pomDescriptor ), 100 );
+
+            if ( monitor.isCanceled() )
             {
-                createProject( pomDescriptor, monitor );
+                throw new OperationCanceledException();
             }
 
-            /* postprocess imported projects */
-            monitor.beginTask( "Configuring Maven...", importedProjects.size() );
-            for ( IProject project : importedProjects )
+            try
             {
-                openProject( project, monitor );
+                IProject project =
+                    createMavenProject( pomDescriptor, new SubProgressMonitor( subProgressMonitor, 100 ) );
+                importedProjects.add( project );
             }
+            catch ( MavenInterruptedException e )
+            {
+                return Status.CANCEL_STATUS;
+            }
+            catch ( CoreException e )
+            {
+                String s = "Unable to import project from " + pomDescriptor.getBaseDirectory();
+                MavenJdtUiActivator.getLogger().log( s, e );
+                errorCount++;
+            }
+            subProgressMonitor.done();
         }
-        catch ( MavenInterruptedException e )
-        {
-            return Status.CANCEL_STATUS;
-        }
-
         IStatus status;
-        int errorCount = ( pomDescriptors.size() - importedProjects.size() );
         if ( errorCount > 0 )
         {
             status =
-                new Status( IStatus.ERROR, MavenJdtUiActivator.PLUGIN_ID, errorCount +
-                    " projects failed to import. See the error log for details." );
+                new Status( IStatus.ERROR, MavenJdtUiActivator.PLUGIN_ID, errorCount
+                                + " projects failed to import. See the error log for details." );
         }
         else
         {
@@ -134,7 +144,8 @@ public class ImportProjectJob
     /**
      * Get the eclipse project name from the maven project
      * 
-     * @param pomDescriptor the contents of the pom.
+     * @param pomDescriptor
+     *            the contents of the pom.
      * @return the name of the project, calculated from the information in the pom.
      */
     protected String getProjectName( final PomFileDescriptor pomDescriptor )
@@ -146,30 +157,6 @@ public class ImportProjectJob
         // able to specify a project location if it is on the workspace root .
         // (the location should be set to ("") if it is on the workspace root)
         return pomDescriptor.getBaseDirectory().getName();
-    }
-
-    private void createProject( PomFileDescriptor pomDescriptor, IProgressMonitor monitor )
-    {
-        if ( monitor.isCanceled() )
-        {
-            throw new OperationCanceledException();
-        }
-
-        SubProgressMonitor subProgressMonitor =
-            new SubProgressMonitor( monitor, 1, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK );
-        subProgressMonitor.beginTask( getProjectName( pomDescriptor ), 100 );
-
-        try
-        {
-            IProject project = createMavenProject( pomDescriptor, new SubProgressMonitor( subProgressMonitor, 100 ) );
-            importedProjects.add( project );
-        }
-        catch ( CoreException e )
-        {
-            String s = "Unable to import project from " + pomDescriptor.getBaseDirectory();
-            MavenJdtUiActivator.getLogger().log( s, e );
-        }
-        subProgressMonitor.done();
     }
 
     private IProject createMavenProject( final PomFileDescriptor pomDescriptor, IProgressMonitor monitor )
@@ -208,60 +195,24 @@ public class ImportProjectJob
 
         project.create( description, monitor );
 
-        return project;
-    }
-
-    private void openProject( IProject project, IProgressMonitor monitor )
-    {
-        if ( monitor.isCanceled() )
+        if ( !project.isOpen() )
         {
-            throw new OperationCanceledException();
+            project.open( monitor );
         }
 
-        SubProgressMonitor subProgressMonitor =
-            new SubProgressMonitor( monitor, 1, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK );
-        subProgressMonitor.beginTask( project.getName(), 100 );
-
-        IMavenProject mavenProject = null;
-        try
-        {
-            if ( !project.isOpen() )
-            {
-                project.open( monitor );
-            }
-
-            /* Add maven nature to project */
-            MavenNatureHelper.addNature( project );
-
-            mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, false );
-        }
-        catch ( CoreException e )
-        {
-            String s = "Error enabling Maven nature for project " + project.getName();
-            MavenJdtUiActivator.getLogger().log( s, e );
-        }
-
+        /* Add maven nature to project */
+        MavenNatureHelper.addNature( project );
         /* Allow postprocessors to customize the project */
         IImportProjectPostprocessor[] postprocessors =
             ImportProjectPostprocessorManager.getInstance().getPostprocessors();
-        if ( ( mavenProject != null ) && ( postprocessors.length > 0 ) )
+        if ( postprocessors.length > 0 )
         {
+            IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, false );
             for ( IImportProjectPostprocessor p : postprocessors )
             {
                 p.process( mavenProject, monitor );
             }
         }
-
-            // TODO this is needed for now to avoid out of memory errors
-//            try
-//            {
-//                MavenManager.getMaven().refresh();
-//            }
-//            catch ( CoreException e )
-//            {
-//                // ignore
-//            }
-
-        subProgressMonitor.done();
+        return project;
     }
 }

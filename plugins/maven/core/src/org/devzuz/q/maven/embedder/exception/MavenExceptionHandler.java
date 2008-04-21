@@ -37,14 +37,6 @@ public class MavenExceptionHandler
      */
     private static final String OLD_MARKER_ID = "org.devzuz.q.maven.jdt.core.pomproblemmarker";
 
-    public void handle( IProject project, Collection<Exception> exceptions, List<MarkerInfo> markerInfos )
-    {
-        for ( Exception e : exceptions )
-        {
-            doHandle( project, e, markerInfos );
-        }
-    }
-
     public void handle( IProject project, Collection<Exception> exceptions )
     {
         List<MarkerInfo> markerInfos = new LinkedList<MarkerInfo>();

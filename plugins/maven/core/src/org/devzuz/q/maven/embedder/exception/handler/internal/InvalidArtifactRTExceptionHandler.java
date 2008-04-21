@@ -20,8 +20,7 @@ public class InvalidArtifactRTExceptionHandler
 
     public void handle( IProject project, Throwable e, List<MarkerInfo> markers, IMavenExceptionHandlerChain chain )
     {
-        InvalidArtifactRTException ex = (InvalidArtifactRTException) e;
-        markers.add( new MarkerInfo( ex.getArtifactKey() + " : " + ex.getBaseMessage() ) );
+        markers.add( new MarkerInfo( ( (InvalidArtifactRTException) e ).getBaseMessage() ) );
     }
 
 }

@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: The q4e POM Editor Plug-in
 Bundle-SymbolicName: org.devzuz.q.maven.pomeditor;singleton:=true
-Bundle-Version: 0.7.0.qualifier
+Bundle-Version: 1.0.0
 Bundle-Activator: org.devzuz.q.maven.pomeditor.PomEditorActivator
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,

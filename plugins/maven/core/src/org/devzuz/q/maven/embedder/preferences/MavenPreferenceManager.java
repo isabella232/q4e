@@ -7,15 +7,9 @@
  */
 package org.devzuz.q.maven.embedder.preferences;
 
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.Collections;
-import java.util.Set;
+import java.io.File;
 
+import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.eclipse.jface.preference.IPreferenceStore;
 
@@ -46,8 +40,6 @@ public class MavenPreferenceManager
 
     public static final String EVENTS_VIEW_SIZE = MavenCoreActivator.PLUGIN_ID + ".eventsViewSize";
 
-    public static final String PROFILES_KEY = MavenCoreActivator.PLUGIN_ID + ".profilesKey";
-
     private IPreferenceStore preferenceStore;
 
     public MavenPreferenceManager( IPreferenceStore prefStore )
@@ -63,7 +55,6 @@ public class MavenPreferenceManager
     /**
      * @deprecated use {@link #isDownloadSources()}
      */
-    @Deprecated
     public boolean downloadSources()
     {
         return isDownloadSources();
@@ -139,72 +130,6 @@ public class MavenPreferenceManager
         preferenceStore.setValue( OFFLINE, offline );
     }
 
-    /**
-     * Gets set list of profile names enabled by default
-     * 
-     * @return
-     */
-    public Set<String> getDefaultProfiles()
-    {
-        String rawValue = preferenceStore.getString( PROFILES_KEY );
-        // We can NOT use mementos since this needs to be accessed outside the ui
-        if ( null == rawValue || "".equals( rawValue ) )
-        {
-            return Collections.emptySet();
-        }
-        InputStream is;
-        try
-        {
-            is = new ByteArrayInputStream( rawValue.getBytes( "UTF-8" ) );
-        }
-        catch ( UnsupportedEncodingException e1 )
-        {
-            // Use default encoding
-            is = new ByteArrayInputStream( rawValue.getBytes() );
-        }
-        XMLDecoder d = new XMLDecoder( is );
-        try
-        {
-            Set<String> result = (Set<String>) d.readObject();
-            d.close();
-            return result;
-        }
-        catch ( ArrayIndexOutOfBoundsException e )
-        {
-            // Nothing saved
-            return Collections.emptySet();
-        }
-    }
-
-    /**
-     * Sets the set of profile nemes enabled by default
-     * 
-     * @param profilesSourceList
-     */
-    public void setDefaultProfiles( Set<String> profilesSourceList )
-    {
-        if ( null == profilesSourceList )
-        {
-            preferenceStore.setValue( PROFILES_KEY, null );
-        }
-        // We can NOT use mementos since this needs to be accessed outside the ui
-        ByteArrayOutputStream os = new ByteArrayOutputStream( 256 );
-        XMLEncoder e = new XMLEncoder( os );
-        e.writeObject( profilesSourceList );
-        e.close();
-        String rawValue;
-        try
-        {
-            rawValue = os.toString( "UTF-8" );
-        }
-        catch ( UnsupportedEncodingException e1 )
-        {
-            // Use default encoding
-            rawValue = os.toString();
-        }
-        preferenceStore.setValue( PROFILES_KEY, rawValue );
-    }
-
     /* ******************************* Archetypes ******************************* */
 
     public String getArchetypeSourceList()
@@ -247,8 +172,6 @@ public class MavenPreferenceManager
         preferenceStore.setValue( ARCHETYPE_PLUGIN_VERSION, version );
     }
 
-    /* ******************************* Events ******************************* */
-
     public int getEventsViewSize()
     {
         return preferenceStore.getInt( EVENTS_VIEW_SIZE );
@@ -258,5 +181,4 @@ public class MavenPreferenceManager
     {
         preferenceStore.setValue( EVENTS_VIEW_SIZE, size );
     }
-
 }
