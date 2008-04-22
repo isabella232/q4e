@@ -8,11 +8,6 @@ package org.devzuz.q.pomxmleditor;
 
 import java.util.Arrays;
 
-import org.devzuz.q.pomxmleditor.contentassist.ArtifactIdContentProposer;
-import org.devzuz.q.pomxmleditor.contentassist.GroupIdContentProposer;
-import org.devzuz.q.pomxmleditor.contentassist.POMContentAssistProcessor;
-import org.devzuz.q.pomxmleditor.contentassist.PropertyContentProposer;
-import org.devzuz.q.pomxmleditor.contentassist.VersionContentProposer;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.wst.sse.core.text.IStructuredPartitions;
