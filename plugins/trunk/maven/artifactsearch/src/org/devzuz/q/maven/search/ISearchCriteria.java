@@ -16,6 +16,7 @@ public interface ISearchCriteria
 {
     public final static int TYPE_ARTIFACT_ID = 1;
     public final static int TYPE_GROUP_ID = 2;
+    public final static int TYPE_VERSION = 4;
     
     /**
      * Gets a free text search string to search the repository with.

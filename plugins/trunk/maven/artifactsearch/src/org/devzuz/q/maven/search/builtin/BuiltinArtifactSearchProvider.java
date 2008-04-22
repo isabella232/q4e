@@ -73,6 +73,11 @@ public class BuiltinArtifactSearchProvider implements IArtifactSearchProvider
         {
             query += RepositoryIndexer.GROUP_ID + ":\"" + searchCriteria.getSearch() + "\"";
         }
+        else if ( searchCriteria.getSearchTypes() == ISearchCriteria.TYPE_VERSION
+                        && searchCriteria.getSearch().length() > 0 )
+        {
+            query += RepositoryIndexer.VERSION + ":\"" + searchCriteria.getSearch() + "\"";
+        }
         else
         {
             query += searchCriteria.getSearch();
