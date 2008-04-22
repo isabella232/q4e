@@ -99,6 +99,7 @@ public abstract class ArtifactSearchUtils
                     }
                 }
             }
+            initDone = true;
             ArtifactSearchUtils.searchProviders = searchProviders;
         }
         

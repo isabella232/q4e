@@ -12,6 +12,11 @@ public class ArtifactInfo implements IArtifactInfo
     private String artifactId;
     private String version;
     
+    public ArtifactInfo()
+    {
+        
+    }
+    
     public ArtifactInfo( String groupId, String artifactId, String version )
     {
         super();
