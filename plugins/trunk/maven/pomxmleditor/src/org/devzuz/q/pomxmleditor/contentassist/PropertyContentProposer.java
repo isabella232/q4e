@@ -34,18 +34,18 @@ import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
 import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentRegion;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
-import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentAssistProcessor;
 
 /**
  * Provides autocompletion for properties in POM files.  Triggered by use of ${.
  * @author Mike Poindexter
  *
  */
-public class POMPropertyContentAssistProcessor
-    extends XMLContentAssistProcessor
+public class PropertyContentProposer
+    implements IElementContentProposer
 {
+    
     @Override
-    protected void addTagInsertionProposals( ContentAssistRequest contentAssistRequest, int childPosition )
+    public void propose( ContentAssistRequest contentAssistRequest )
     {
         String context = ContentAssistUtils.computeContextString( contentAssistRequest );
         int propStart = context.indexOf( "${" );
@@ -84,8 +84,7 @@ public class POMPropertyContentAssistProcessor
             }
 
         }
-        super.addTagInsertionProposals( contentAssistRequest, childPosition );
-
+        
     }
     
     /**

@@ -6,9 +6,13 @@
  **************************************************************************************************/
 package org.devzuz.q.pomxmleditor;
 
-import org.devzuz.q.pomxmleditor.contentassist.ArtifactIdContentAssistProcessor;
-import org.devzuz.q.pomxmleditor.contentassist.GroupIdContentAssistProcessor;
-import org.devzuz.q.pomxmleditor.contentassist.POMPropertyContentAssistProcessor;
+import java.util.Arrays;
+
+import org.devzuz.q.pomxmleditor.contentassist.ArtifactIdContentProposer;
+import org.devzuz.q.pomxmleditor.contentassist.GroupIdContentProposer;
+import org.devzuz.q.pomxmleditor.contentassist.POMContentAssistProcessor;
+import org.devzuz.q.pomxmleditor.contentassist.PropertyContentProposer;
+import org.devzuz.q.pomxmleditor.contentassist.VersionContentProposer;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
 import org.eclipse.jface.text.source.ISourceViewer;
 import org.eclipse.wst.sse.core.text.IStructuredPartitions;
@@ -26,7 +30,7 @@ public class PomStructuredTextViewerConfiguration
 
         if ( partitionType == IStructuredPartitions.DEFAULT_PARTITION || partitionType == IXMLPartitions.XML_DEFAULT )
         {
-            processors = new IContentAssistProcessor[] { new POMPropertyContentAssistProcessor(), new GroupIdContentAssistProcessor(), new ArtifactIdContentAssistProcessor() };
+            processors = new IContentAssistProcessor[] { new POMContentAssistProcessor( Arrays.asList( new PropertyContentProposer(), new GroupIdContentProposer(), new ArtifactIdContentProposer(), new VersionContentProposer() ) ) };
         }
         else
         {

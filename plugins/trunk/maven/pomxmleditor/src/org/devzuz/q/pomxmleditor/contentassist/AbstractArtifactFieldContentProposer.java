@@ -17,7 +17,6 @@ import org.devzuz.q.maven.search.IArtifactInfo;
 import org.devzuz.q.maven.search.SearchCriteria;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
-import org.eclipse.wst.xml.ui.internal.contentassist.XMLContentAssistProcessor;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -29,13 +28,12 @@ import org.w3c.dom.NodeList;
  * @author staticsnow@gmail.com
  *
  */
-public abstract class AbstractArtifactFieldContentAssistProcessor
-    extends XMLContentAssistProcessor
+public abstract class AbstractArtifactFieldContentProposer
+    implements IElementContentProposer
 {
 
-
     @Override
-    protected void addTagInsertionProposals( ContentAssistRequest contentAssistRequest, int childPosition )
+    public void propose( ContentAssistRequest contentAssistRequest )
     {
         Node node = contentAssistRequest.getNode();
         if( node instanceof Element )
@@ -59,6 +57,7 @@ public abstract class AbstractArtifactFieldContentAssistProcessor
                 }
             }
         }
+        
     }
     
     protected abstract String getNodeName();
