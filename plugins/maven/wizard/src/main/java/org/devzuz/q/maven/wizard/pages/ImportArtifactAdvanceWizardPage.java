@@ -138,19 +138,20 @@ public class ImportArtifactAdvanceWizardPage extends Maven2ValidatingWizardPage
             if ( remoteRepositoryId.getText().trim().length() <= 0 )
             {
                 setError( Messages.ImportArtifactAdvanceWizardPage_RepoIdRequired );
+                return false;
             }
             
             if ( remoteRepositoryLayout.getText().trim().length() <= 0 )
             {
                 setError( Messages.ImportArtifactAdvanceWizardPage_RepoLayoutRequired );
+                return false;
             }
             
             if ( remoteRepositoryUrl.getText().trim().length() <= 0 )
             {
                 setError( Messages.ImportArtifactAdvanceWizardPage_RepoURLRequired );
+                return false;
             }
-            
-            return false;
         }
         
         return true;
