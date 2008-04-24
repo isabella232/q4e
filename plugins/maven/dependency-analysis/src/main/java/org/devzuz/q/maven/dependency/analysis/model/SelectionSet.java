@@ -6,10 +6,7 @@ package org.devzuz.q.maven.dependency.analysis.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.devzuz.q.maven.dependency.analysis.extension.ISelectionSet;
-
-
-public class SelectionSet implements ISelectionSet
+public class SelectionSet
 {
     private List<Instance> instances;
 
