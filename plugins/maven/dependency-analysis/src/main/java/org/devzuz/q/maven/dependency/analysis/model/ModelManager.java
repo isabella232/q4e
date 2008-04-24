@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.maven.shared.dependency.tree.DependencyNode;
+import org.devzuz.q.maven.embedder.IMavenProject;
 
 /**
  * creates model and controls access to it
@@ -43,18 +44,20 @@ public class ModelManager
         artifacts = new HashMap<String, Artifact>();
     }
 
-    public ModelManager( DependencyNode node, SelectionManager selectionManager )
+    public ModelManager( DependencyNode node, SelectionManager selectionManager, IMavenProject project )
     {
         this();
-        instanceRoot = createInstance( node, null, selectionManager );
+        instanceRoot = createInstance( node, null, selectionManager, project );
 
     }
 
-    private Instance createInstance( DependencyNode node, Instance dependencyParent, SelectionManager selectionManager )
+    private Instance createInstance( DependencyNode node, Instance dependencyParent, SelectionManager selectionManager,
+                                     IMavenProject project )
     {
         // create classification heirarchy
         Artifact artifact =
-            retreiveArtifact( node.getArtifact().getGroupId(), node.getArtifact().getArtifactId(), selectionManager );
+            retreiveArtifact( node.getArtifact().getGroupId(), node.getArtifact().getArtifactId(), selectionManager,
+                              project );
 
         Version version = retreiveVersion( artifact, node.getArtifact().getVersion(), selectionManager );
 
@@ -70,7 +73,7 @@ public class ModelManager
         for ( Iterator iterator = node.getChildren().iterator(); iterator.hasNext(); )
         {
             DependencyNode childNode = (DependencyNode) iterator.next();
-            Instance childInstance = createInstance( childNode, instance, selectionManager );
+            Instance childInstance = createInstance( childNode, instance, selectionManager, project );
             instance.addChild( childInstance );
 
         }
@@ -79,14 +82,15 @@ public class ModelManager
 
     }
 
-    private Artifact retreiveArtifact( String groupId, String artifactId, SelectionManager selectionManager )
+    private Artifact retreiveArtifact( String groupId, String artifactId, SelectionManager selectionManager,
+                                       IMavenProject project )
     {
         String artifactKey = Artifact.key( groupId, artifactId );
 
         Artifact artifact = artifacts.get( artifactKey );
         if ( artifact == null )
         {
-            artifact = new Artifact( groupId, artifactId, selectionManager );
+            artifact = new Artifact( groupId, artifactId, selectionManager, project );
             artifacts.put( artifactKey, artifact );
         }
         return artifact;

@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.devzuz.q.maven.dependency.analysis.extension.IInstance;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.Platform;
 
 /**
  * Wrapper containing an Instance of an artifact in the dependency tree. Represents the intersection of two separate
@@ -19,7 +21,7 @@ import org.devzuz.q.maven.dependency.analysis.extension.IInstance;
  * @author jake pezaro
  */
 public class Instance
-    implements Selectable, IInstance
+    implements Selectable, IInstance, IAdaptable
 {
 
     private Version version;
@@ -109,6 +111,11 @@ public class Instance
     public void select()
     {
         selectionManager.select( this );
+    }
+
+    public Object getAdapter( Class adapter )
+    {
+        return Platform.getAdapterManager().getAdapter( this, adapter );
     }
 
 }

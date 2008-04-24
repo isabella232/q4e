@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.devzuz.q.maven.dependency.analysis.extension.IArtifact;
+import org.devzuz.q.maven.embedder.IMavenProject;
 
 /**
  * A wrapper holding a collection of Versions with the same group id and artifact id
@@ -21,6 +22,8 @@ public class Artifact
     implements Selectable, IArtifact
 {
 
+    private IMavenProject project;
+
     private String groupId;
 
     private String artifactId;
@@ -29,11 +32,12 @@ public class Artifact
 
     SelectionManager selectionManager;
 
-    public Artifact( String groupId, String artifactId, SelectionManager selectionManager )
+    public Artifact( String groupId, String artifactId, SelectionManager selectionManager, IMavenProject project )
     {
         this.groupId = groupId;
         this.artifactId = artifactId;
         this.selectionManager = selectionManager;
+        this.project = project;
         versions = new ArrayList<Version>();
     }
 
@@ -84,6 +88,11 @@ public class Artifact
     public List<Version> getVersions()
     {
         return versions;
+    }
+
+    public IMavenProject getProject()
+    {
+        return project;
     }
 
     public String getVersionsAsString()

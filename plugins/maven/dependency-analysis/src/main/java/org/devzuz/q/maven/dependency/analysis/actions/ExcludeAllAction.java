@@ -10,6 +10,7 @@ package org.devzuz.q.maven.dependency.analysis.actions;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,8 +18,6 @@ import org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator;
 import org.devzuz.q.maven.dependency.analysis.Messages;
 import org.devzuz.q.maven.dependency.analysis.extension.IArtifact;
 import org.devzuz.q.maven.dependency.analysis.extension.IInstance;
-import org.devzuz.q.maven.dependency.analysis.extension.ISelectionAction;
-import org.devzuz.q.maven.dependency.analysis.extension.ISelectionSet;
 import org.devzuz.q.maven.dependency.analysis.extension.IVersion;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.pom.Dependency;
@@ -28,6 +27,7 @@ import org.devzuz.q.maven.embedder.pom.ModelRoot;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.osgi.util.NLS;
@@ -35,41 +35,57 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 public class ExcludeAllAction
-    implements ISelectionAction
+    extends StructuredSelectionAction
 {
 
     public static final String PLUGIN_ID = DependencyAnalysisActivator.PLUGIN_ID + ".excludeAll";
 
-    public void execute( IMavenProject project, ISelectionSet primary, ISelectionSet secondary )
-        throws CoreException
+    public void run( IAction action )
     {
         try
         {
             List<ExclusionSet> exclusionSets = new ArrayList<ExclusionSet>();
 
-            for ( IArtifact artifact : primary.getArtifacts() )
+            IMavenProject project = null;
+
+            for ( Iterator iterator = getSelection().iterator(); iterator.hasNext(); )
             {
-                if ( key( artifact ).equals( key( project ) ) )
+                Object selected = iterator.next();
+                if ( selected instanceof IArtifact )
                 {
-                    handleError( NLS.bind( Messages.ExcludeAll_Error_Cant_Exclude_Root, key( artifact ) ), null );
-                    return;
-                }
+                    IArtifact artifact = (IArtifact) selected;
+                    project = artifact.getProject();
 
-                ExclusionSet exclusionSet = new ExclusionSet();
-                exclusionSets.add( exclusionSet );
-                exclusionSet.excluded = artifact;
-
-                for ( IVersion version : artifact.getVersions() )
-                {
-                    for ( IInstance instance : version.getInstances() )
+                    if ( key( artifact ).equals( key( project ) ) )
                     {
-                        IInstance topLevelDependency = getTopLevelDependency( instance );
-                        if ( topLevelDependency != null && !exclusionSet.fromInstances.contains( topLevelDependency ) )
+                        handleError( NLS.bind( Messages.ExcludeAll_Error_Cant_Exclude_Root, key( artifact ) ), null );
+                        return;
+                    }
+
+                    ExclusionSet exclusionSet = new ExclusionSet();
+                    exclusionSets.add( exclusionSet );
+                    exclusionSet.excluded = artifact;
+
+                    for ( IVersion version : artifact.getVersions() )
+                    {
+                        for ( IInstance instance : version.getInstances() )
                         {
-                            exclusionSet.fromInstances.add( topLevelDependency );
+                            IInstance topLevelDependency = getTopLevelDependency( instance );
+                            if ( topLevelDependency != null &&
+                                !exclusionSet.fromInstances.contains( topLevelDependency ) )
+                            {
+                                exclusionSet.fromInstances.add( topLevelDependency );
+                            }
                         }
                     }
                 }
+
+            }
+
+            if ( project == null )
+            {
+                handleError( "Maven project cannot be null", null );
+                return;
             }
 
             StringBuffer message = new StringBuffer();

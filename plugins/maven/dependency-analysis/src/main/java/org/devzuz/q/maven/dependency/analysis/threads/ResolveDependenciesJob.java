@@ -83,10 +83,9 @@ public class ResolveDependenciesJob
             // create the gui
 
             SelectionManager selections = new SelectionManager();
-            ModelManager model = new ModelManager( mavenDependencyRoot, selections );
+            ModelManager model = new ModelManager( mavenDependencyRoot, selections, project );
 
-            DependencyFilteringCompleteThread complete =
-                new DependencyFilteringCompleteThread( model, selections, project );
+            DependencyFilteringCompleteThread complete = new DependencyFilteringCompleteThread( model, selections );
 
             display.asyncExec( complete );
 
@@ -102,17 +101,14 @@ public class ResolveDependenciesJob
     private class DependencyFilteringCompleteThread
         implements Runnable
     {
-        private IMavenProject project;
-
         private SelectionManager selections;
 
         private ModelManager model;
 
-        public DependencyFilteringCompleteThread( ModelManager model, SelectionManager selections, IMavenProject project )
+        public DependencyFilteringCompleteThread( ModelManager model, SelectionManager selections )
         {
             this.model = model;
             this.selections = selections;
-            this.project = project;
         }
 
         public void run()
@@ -122,7 +118,7 @@ public class ResolveDependenciesJob
                 AnalyserGui gui =
                     (AnalyserGui) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView(
                                                                                                                  AnalyserGui.VIEW_ID );
-                gui.setModelInputs( model, selections, project );
+                gui.setModelInputs( model, selections );
             }
             catch ( PartInitException e )
             {

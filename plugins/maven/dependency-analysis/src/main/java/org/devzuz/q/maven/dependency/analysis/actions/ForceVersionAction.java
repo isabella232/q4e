@@ -9,13 +9,12 @@ package org.devzuz.q.maven.dependency.analysis.actions;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator;
 import org.devzuz.q.maven.dependency.analysis.Messages;
 import org.devzuz.q.maven.dependency.analysis.extension.IArtifact;
-import org.devzuz.q.maven.dependency.analysis.extension.ISelectionAction;
-import org.devzuz.q.maven.dependency.analysis.extension.ISelectionSet;
 import org.devzuz.q.maven.dependency.analysis.views.SelectVersionDialog;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.pom.Dependency;
@@ -25,40 +24,63 @@ import org.devzuz.q.maven.embedder.pom.ModelRoot;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
 public class ForceVersionAction
-    implements ISelectionAction
+    extends StructuredSelectionAction
 {
 
     public static final String PLUGIN_ID = DependencyAnalysisActivator.PLUGIN_ID + ".forceVersion";
 
-    public void execute( IMavenProject project, ISelectionSet primary, ISelectionSet secondary )
-        throws CoreException
+    public void run( IAction action )
     {
-        Dom4JModel root = new Dom4JModel( project.getPomFile() );
-        ModelRoot model = root.getModel();
-        Map<String, Dependency> dependencyManagementMap =
-            createDependencyMap( model.getDependencyManagement().getDependencies() );
-        Map<String, Dependency> dependencyMap = createDependencyMap( model.getDependencies() );
+
+        IMavenProject project = null;
+        Dom4JModel root = null;
+        ModelRoot model = null;
+        Map<String, Dependency> dependencyManagementMap = null;
+        Map<String, Dependency> dependencyMap = null;
         boolean changesMade = false;
 
-        for ( IArtifact artifact : primary.getArtifacts() )
+        for ( Iterator iterator = getSelection().iterator(); iterator.hasNext(); )
         {
-            SelectVersionDialog dialog = new SelectVersionDialog( new Shell( Display.getCurrent() ), artifact );
-            if ( SelectVersionDialog.OK == dialog.open() )
+            Object selected = iterator.next();
+            if ( selected instanceof IArtifact )
             {
-                if ( dialog.versionHasChanged() )
+                IArtifact artifact = (IArtifact) selected;
+                if ( project == null )
                 {
-                    changesMade = true;
-                    String selectedVersion = dialog.getSelectedVersion();
-                    createDependencyManagementEntry( dependencyManagementMap, dependencyMap, model, artifact,
-                                                     selectedVersion );
+                    project = artifact.getProject();
+                    root = new Dom4JModel( project.getPomFile() );
+                    model = root.getModel();
+                    dependencyManagementMap = createDependencyMap( model.getDependencyManagement().getDependencies() );
+                    dependencyMap = createDependencyMap( model.getDependencies() );
+
                 }
+                if ( project == null || root == null || model == null )
+                {
+                    handleError( "Error initialising project", null );
+                    return;
+                }
+                SelectVersionDialog dialog = new SelectVersionDialog( new Shell( Display.getCurrent() ), artifact );
+                if ( SelectVersionDialog.OK == dialog.open() )
+                {
+                    if ( dialog.versionHasChanged() )
+                    {
+                        changesMade = true;
+                        String selectedVersion = dialog.getSelectedVersion();
+                        createDependencyManagementEntry( dependencyManagementMap, dependencyMap, model, artifact,
+                                                         selectedVersion );
+                    }
+                }
+
             }
+
         }
+
         if ( changesMade )
         {
             try
@@ -67,6 +89,10 @@ public class ForceVersionAction
                 project.getProject().refreshLocal( IResource.DEPTH_ONE, null );
             }
             catch ( IOException e )
+            {
+                handleError( e );
+            }
+            catch ( CoreException e )
             {
                 handleError( e );
             }

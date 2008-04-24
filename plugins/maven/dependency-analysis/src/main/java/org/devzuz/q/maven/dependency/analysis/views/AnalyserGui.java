@@ -9,26 +9,16 @@ package org.devzuz.q.maven.dependency.analysis.views;
 
 import java.util.Iterator;
 
-import org.devzuz.q.maven.dependency.analysis.extension.ISelectionAction;
-import org.devzuz.q.maven.dependency.analysis.extension.SelectionActionProxy;
-import org.devzuz.q.maven.dependency.analysis.extension.SelectionExtension;
-import org.devzuz.q.maven.dependency.analysis.extension.SelectionMenuAction;
 import org.devzuz.q.maven.dependency.analysis.model.Artifact;
 import org.devzuz.q.maven.dependency.analysis.model.Instance;
 import org.devzuz.q.maven.dependency.analysis.model.ModelManager;
 import org.devzuz.q.maven.dependency.analysis.model.Selectable;
 import org.devzuz.q.maven.dependency.analysis.model.SelectionManager;
 import org.devzuz.q.maven.dependency.analysis.model.Version;
-import org.devzuz.q.maven.embedder.IMavenProject;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -64,19 +54,16 @@ public class AnalyserGui
 
     private SelectionManager selections;
 
-    private IMavenProject project;
-
-    public void setModelInputs( ModelManager model, SelectionManager selections, IMavenProject project )
+    public void setModelInputs( ModelManager model, SelectionManager selections )
     {
         this.selections = selections;
-        this.project = project;
         instanceTree.setInput( model.getInstanceRoot() );
         versionsTable.setInput( model.getVersions() );
         artifactsTable.setInput( model.getArtifacts() );
         refreshAll();
-        createContextMenu( SelectionExtension.Menu.INSTANCES, instanceTree );
-        createContextMenu( SelectionExtension.Menu.VERSIONS, versionsTable );
-        createContextMenu( SelectionExtension.Menu.ARTIFACTS, artifactsTable );
+        createContextMenu( instanceTree );
+        createContextMenu( versionsTable );
+        createContextMenu( artifactsTable );
     }
 
     @Override
@@ -295,12 +282,12 @@ public class AnalyserGui
 
     /**
      * creates the shell context menu listener for the provided viewer. the context listener then creates the menu
-     * contents (including extensions) if and when it is called.
+     * contents if and when it is called.
      * 
      * @param menuId
      * @param viewer - the viewer for which the menu should be created
      */
-    private void createContextMenu( final SelectionExtension.Menu menu, Viewer viewer )
+    private void createContextMenu( Viewer viewer )
     {
         // Create menu manager.
         MenuManager menuMgr = new MenuManager();
@@ -309,8 +296,6 @@ public class AnalyserGui
         {
             public void menuAboutToShow( IMenuManager mgr )
             {
-                addISelectedVersionsActionExtensions( menu, mgr );
-                mgr.add( new Separator() );
                 mgr.add( new GroupMarker( IWorkbenchActionConstants.MB_ADDITIONS ) );
             }
         } );
@@ -320,51 +305,6 @@ public class AnalyserGui
         viewer.getControl().setMenu( versionsMenu );
 
         // Register menu for extension.
-        getSite().registerContextMenu( menu.name(), menuMgr, viewer );
-    }
-
-    /**
-     * looks up the plugin registry for plugins which use the extension point
-     * org.devzuz.q.maven.dependency.analysis.SelectedVersionsAction and creates a proxy + menu action for each
-     * extension.
-     * 
-     * @param mgr
-     */
-    private void addISelectedVersionsActionExtensions( SelectionExtension.Menu menu, IMenuManager mgr )
-    {
-        IExtensionRegistry registry = Platform.getExtensionRegistry();
-        IExtensionPoint extensionPoint = registry.getExtensionPoint( SelectionExtension.EXTENSION_POINT );
-        IConfigurationElement[] members = extensionPoint.getConfigurationElements();
-        for ( int m = 0; m < members.length; m++ )
-        {
-            IConfigurationElement member = members[m];
-            IConfigurationElement[] showInViews = member.getChildren( SelectionExtension.ATTR_SHOW_IN_VIEW );
-            if ( isActiveForView( menu, showInViews ) )
-            {
-                String functionName = member.getAttribute( SelectionExtension.ATTR_MENU_LABEL );
-                ISelectionAction proxy = new SelectionActionProxy( member );
-                SelectionMenuAction action =
-                    new SelectionMenuAction( proxy, functionName, project, selections.getPrimary(),
-                                             selections.getSecondary() );
-                mgr.add( action );
-            }
-
-        }
-    }
-
-    /**
-     * checks the extension config to see if the menu is enabled for the specified view
-     */
-    private boolean isActiveForView( SelectionExtension.Menu menu, IConfigurationElement[] showInViews )
-    {
-        for ( IConfigurationElement showInView : showInViews )
-        {
-            String viewName = showInView.getAttribute( SelectionExtension.ATTR_VIEW_NAME );
-            if ( menu.name().equals( viewName ) )
-            {
-                return true;
-            }
-        }
-        return false;
+        getSite().registerContextMenu( menuMgr, viewer );
     }
 }
