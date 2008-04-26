@@ -22,72 +22,79 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 /**
- * Base class for content assist processors that provide assistance for
- * artifact fields.
+ * Base class for content assist processors that provide assistance for artifact fields.
  * 
  * @author staticsnow@gmail.com
- *
+ * 
  */
-public abstract class AbstractArtifactFieldContentProposer
-    implements IElementContentProposer
+public abstract class AbstractArtifactFieldContentProposer implements IElementContentProposer
 {
 
-    @Override
     public void propose( ContentAssistRequest contentAssistRequest )
     {
         Node node = contentAssistRequest.getNode();
-        if( node instanceof Element )
+        if ( node instanceof Element )
         {
-            if( getNodeName().equals( node.getLocalName() ) )
+            if ( getNodeName().equals( node.getLocalName() ) )
             {
                 String context = ContentAssistUtils.computeContextString( contentAssistRequest );
-                
-                List<IArtifactInfo> artifacts = ArtifactSearchUtils.findArtifacts( new SearchCriteria( getArtifactIdValue( node ), getGroupIdValue( node ), context, getSearchType() ) );
+
+                List<IArtifactInfo> artifacts =
+                    ArtifactSearchUtils.findArtifacts( new SearchCriteria( getArtifactIdValue( node ),
+                                                                           getGroupIdValue( node ), context,
+                                                                           getSearchType() ) );
                 Collections.sort( artifacts, getComparator() );
-                
-                Set<String> proposed = new HashSet<String>(); 
+
+                Set<String> proposed = new HashSet<String>();
                 for ( IArtifactInfo artifactInfo : artifacts )
                 {
                     String proposal = extractValue( artifactInfo );
-                    if( !proposed.contains( proposal ) )
+                    if ( !proposed.contains( proposal ) )
                     {
-                        contentAssistRequest.addProposal( new CompletionProposal( proposal, contentAssistRequest.getReplacementBeginPosition() - context.length(), context.length(), proposal.length() ) );
+                        contentAssistRequest.addProposal( new CompletionProposal(
+                                                                                  proposal,
+                                                                                  contentAssistRequest.getReplacementBeginPosition()
+                                                                                                  - context.length(),
+                                                                                  context.length(), proposal.length() ) );
                         proposed.add( proposal );
-                    }   
+                    }
                 }
             }
         }
-        
+
     }
-    
+
     protected abstract String getNodeName();
+
     protected abstract int getSearchType();
+
     protected abstract String extractValue( IArtifactInfo ai );
+
     protected abstract Comparator<IArtifactInfo> getComparator();
-    
-    protected String getArtifactIdValue( Node node ) 
+
+    protected String getArtifactIdValue( Node node )
     {
         String artifactValue = null;
         Node artifactIdNode = findSiblingWithName( node, "artifactId" );
-        if( artifactIdNode != null )
+        if ( artifactIdNode != null )
         {
             artifactValue = getNodeText( artifactIdNode );
-            if( artifactValue != null && artifactValue.trim().length() == 0 )
+            if ( artifactValue != null && artifactValue.trim().length() == 0 )
             {
                 artifactValue = null;
             }
         }
         return artifactValue;
     }
-    
+
     protected String getGroupIdValue( Node node )
     {
         String groupValue = null;
         Node groupIdNode = findSiblingWithName( node, "groupId" );
-        if( groupIdNode != null )
+        if ( groupIdNode != null )
         {
             groupValue = getNodeText( groupIdNode );
-            if( groupValue != null && groupValue.trim().length() == 0 )
+            if ( groupValue != null && groupValue.trim().length() == 0 )
             {
                 groupValue = null;
             }
@@ -99,7 +106,7 @@ public abstract class AbstractArtifactFieldContentProposer
     {
         Node parent = node.getParentNode();
         Node sibling = parent.getFirstChild();
-        while( sibling != null && !name.equals( sibling.getLocalName() ) )
+        while ( sibling != null && !name.equals( sibling.getLocalName() ) )
         {
             sibling = sibling.getNextSibling();
         }
@@ -110,11 +117,11 @@ public abstract class AbstractArtifactFieldContentProposer
     {
         String text = "";
         NodeList children = node.getChildNodes();
-        for( int i = 0; i < children.getLength(); i++ )
+        for ( int i = 0; i < children.getLength(); i++ )
         {
             Node child = children.item( i );
             String childText = child.getNodeValue();
-            if( childText != null )
+            if ( childText != null )
             {
                 text += childText;
             }

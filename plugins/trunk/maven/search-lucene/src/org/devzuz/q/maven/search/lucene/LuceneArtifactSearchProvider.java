@@ -14,33 +14,29 @@ import org.devzuz.q.maven.search.ISearchCriteria;
 
 /**
  * A search provider implementation that searches a raw lucene index.
+ * 
  * @author Mike Poindexter
- *
+ * 
  */
-public class LuceneArtifactSearchProvider
-    implements IArtifactSearchProvider
+public class LuceneArtifactSearchProvider implements IArtifactSearchProvider
 {
 
-    @Override
     public void beginInit()
     {
         LuceneUtils.init();
 
     }
 
-    @Override
     public List<IArtifactInfo> find( ISearchCriteria searchCriteria )
     {
         return LuceneUtils.search( searchCriteria );
     }
 
-    @Override
     public List<IArtifactInfo> findAll()
     {
         return LuceneUtils.searchAll();
     }
 
-    @Override
     public boolean isInitComplete()
     {
         return true;

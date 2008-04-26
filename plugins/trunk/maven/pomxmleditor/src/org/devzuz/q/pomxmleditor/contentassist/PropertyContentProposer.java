@@ -36,59 +36,63 @@ import org.eclipse.wst.sse.core.internal.provisional.text.IStructuredDocumentReg
 import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 
 /**
- * Provides autocompletion for properties in POM files.  Triggered by use of ${.
+ * Provides autocompletion for properties in POM files. Triggered by use of ${.
+ * 
  * @author Mike Poindexter
- *
+ * 
  */
-public class PropertyContentProposer
-    implements IElementContentProposer
+public class PropertyContentProposer implements IElementContentProposer
 {
-    
-    @Override
+
     public void propose( ContentAssistRequest contentAssistRequest )
     {
         String context = ContentAssistUtils.computeContextString( contentAssistRequest );
         int propStart = context.indexOf( "${" );
-        if( propStart > -1 )
+        if ( propStart > -1 )
         {
-            String propCtx = context.substring( propStart + 2 ); 
+            String propCtx = context.substring( propStart + 2 );
             LinkedList<String> propKeys = new LinkedList<String>();
             Properties projectProperties = getProjectProperties( contentAssistRequest );
-            if( projectProperties != null ) 
+            if ( projectProperties != null )
             {
                 for ( Object key : projectProperties.keySet() )
                 {
                     String keyTxt = "" + key;
-                    if( keyTxt.startsWith( propCtx ) )
+                    if ( keyTxt.startsWith( propCtx ) )
                     {
                         propKeys.add( keyTxt );
                     }
                 }
             }
-            
-            
-            for( String propName : getProjectReflectiveProperties() )
+
+            for ( String propName : getProjectReflectiveProperties() )
             {
-                if( propName.startsWith( propCtx ) )
+                if ( propName.startsWith( propCtx ) )
                 {
                     propKeys.add( propName );
                 }
             }
-            
+
             Collections.sort( propKeys );
-            
-            for( String proposal : new LinkedHashSet<String>( propKeys ) )
+
+            for ( String proposal : new LinkedHashSet<String>( propKeys ) )
             {
-                
-                contentAssistRequest.getProposals().add( new CompletionProposal( proposal, contentAssistRequest.getReplacementBeginPosition() - propCtx.length(), propCtx.length(), proposal.length() ) );
+
+                contentAssistRequest.getProposals().add(
+                                                         new CompletionProposal(
+                                                                                 proposal,
+                                                                                 contentAssistRequest.getReplacementBeginPosition()
+                                                                                                 - propCtx.length(),
+                                                                                 propCtx.length(), proposal.length() ) );
             }
 
         }
-        
+
     }
-    
+
     /**
      * Gets the properties defined in a project.
+     * 
      * @param request
      * @return
      */
@@ -96,38 +100,40 @@ public class PropertyContentProposer
     {
         IMavenProject mavenProject = getMavenProject( request );
         Properties props = null;
-        if( mavenProject != null ) 
+        if ( mavenProject != null )
         {
             props = mavenProject.getRawMavenProject().getProperties();
         }
         return props;
     }
-    
+
     /**
      * Get the maven project a request belongs to
+     * 
      * @param request
      * @return
      */
-    private IMavenProject getMavenProject( ContentAssistRequest request ) 
+    private IMavenProject getMavenProject( ContentAssistRequest request )
     {
         IMavenProject mavenProject = null;
         try
         {
             IProject project = getProject( request );
-            if( project != null)
+            if ( project != null )
             {
                 mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, true );
             }
         }
         catch ( CoreException e )
         {
-            Activator.getLogger().error( "Get maven project: " +e.getMessage() );
+            Activator.getLogger().error( "Get maven project: " + e.getMessage() );
         }
         return mavenProject;
     }
 
     /**
      * Gets the project a request belongs to.
+     * 
      * @param request
      * @return
      */
@@ -179,42 +185,47 @@ public class PropertyContentProposer
         }
         return project;
     }
-    
+
     private static volatile Set<String> cachedProjectReflectiveProperties;
+
     /**
      * Gets the properties available by reflecting on the maven Project object.
+     * 
      * @return
      */
-    private Set<String> getProjectReflectiveProperties() 
+    private Set<String> getProjectReflectiveProperties()
     {
         try
         {
-            if( cachedProjectReflectiveProperties != null )
+            if ( cachedProjectReflectiveProperties != null )
             {
                 return cachedProjectReflectiveProperties;
             }
-            
-            cachedProjectReflectiveProperties = new LinkedHashSet<String>( getClassProperties( "project.", MavenProject.class, null ) );
+
+            cachedProjectReflectiveProperties =
+                new LinkedHashSet<String>( getClassProperties( "project.", MavenProject.class, null ) );
             return cachedProjectReflectiveProperties;
         }
         catch ( IntrospectionException e )
         {
-            Activator.getLogger().error( "Cannot compute project object properties: " +e.getMessage() );
+            Activator.getLogger().error( "Cannot compute project object properties: " + e.getMessage() );
             return Collections.emptySet();
         }
     }
-    
-    private Collection<String> getClassProperties( String prefix, Class propClass, Class ignoredClass ) throws IntrospectionException
+
+    private Collection<String> getClassProperties( String prefix, Class propClass, Class ignoredClass )
+        throws IntrospectionException
     {
         List<String> props = new ArrayList<String>();
         BeanInfo beanInfo = java.beans.Introspector.getBeanInfo( propClass );
-        for( PropertyDescriptor pd : beanInfo.getPropertyDescriptors() )
+        for ( PropertyDescriptor pd : beanInfo.getPropertyDescriptors() )
         {
-            if( pd.getWriteMethod() != null && pd.getReadMethod() != null && !Object.class.equals( pd.getReadMethod().getDeclaringClass() ) )
+            if ( pd.getWriteMethod() != null && pd.getReadMethod() != null
+                            && !Object.class.equals( pd.getReadMethod().getDeclaringClass() ) )
             {
                 String thisPropName = prefix + pd.getName();
                 props.add( thisPropName );
-                if( ignoredClass == null || !ignoredClass.equals( pd.getPropertyType() ) ) 
+                if ( ignoredClass == null || !ignoredClass.equals( pd.getPropertyType() ) )
                 {
                     props.addAll( getClassProperties( thisPropName + ".", pd.getPropertyType(), propClass ) );
                 }
