@@ -15,11 +15,14 @@
          <sequence>
             <element name="searchProvider">
                <complexType>
-                  <attribute name="class" type="string">
+                  <attribute name="class" type="string" use="required">
                      <annotation>
                         <documentation>
                            Specifies an IArtifactSearchProvider that should be registered.
                         </documentation>
+                        <appInfo>
+                           <meta.attribute kind="java" basedOn=":org.devzuz.q.maven.search.IArtifactSearchProvider"/>
+                        </appInfo>
                      </annotation>
                   </attribute>
                </complexType>
