@@ -27,20 +27,27 @@ public class MavenManageDependenciesAction extends AbstractMavenAction implement
         if ( getProjects().size() == 1 )
         {
             IProject project = getProjects().iterator().next();
-            try
+            if ( project.isOpen() )
             {
-                if ( MavenNatureHelper.hasMavenNature( project ) )
+                try
                 {
-                    action.setChecked( true );
+                    if ( MavenNatureHelper.hasMavenNature( project ) )
+                    {
+                        action.setChecked( true );
+                    }
+                    else
+                    {
+                        action.setChecked( false );
+                    }
                 }
-                else
+                catch ( CoreException e )
                 {
-                    action.setChecked( false );
+                    MavenJdtUiActivator.getLogger().log( "Unable to check nature on project: " + project, e );
                 }
             }
-            catch ( CoreException e )
+            else
             {
-                MavenJdtUiActivator.getLogger().log( "Unable to check nature on project: " + project, e );
+                action.setChecked( false );
             }
         }
     }
@@ -50,17 +57,19 @@ public class MavenManageDependenciesAction extends AbstractMavenAction implement
     {
         for ( IProject project : getProjects() )
         {
-            if ( MavenNatureHelper.hasMavenNature( project ) )
+            if ( project.isOpen() )
             {
-                MavenNatureHelper.removeNature( project );
-                action.setChecked( false );
-            }
-            else
-            {
-                MavenNatureHelper.addNature( project );
-                action.setChecked( true );
+                if ( MavenNatureHelper.hasMavenNature( project ) )
+                {
+                    MavenNatureHelper.removeNature( project );
+                    action.setChecked( false );
+                }
+                else
+                {
+                    MavenNatureHelper.addNature( project );
+                    action.setChecked( true );
+                }
             }
         }
-
     }
 }
