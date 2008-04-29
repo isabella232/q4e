@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.preferences.MavenUIPreferenceManagerAdapter;
+import org.devzuz.q.maven.ui.views.MavenProfileView;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.preference.FieldEditor;
@@ -28,8 +29,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.PlatformUI;
 
-public class MavenProfileFieldEditor extends FieldEditor
+public class MavenProfileFieldEditor
+    extends FieldEditor
 {
     private Table profileTable;
 
@@ -208,6 +211,16 @@ public class MavenProfileFieldEditor extends FieldEditor
     {
         MavenUIPreferenceManagerAdapter manager = MavenUIPreferenceManagerAdapter.getInstance();
         manager.setConfiguredProfiles( new HashSet<String>( profiles ) );
+
+        String profileViewId = "org.devzuz.q.maven.ui.views.MavenProfileView";
+        MavenProfileView profileView =
+            (MavenProfileView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(
+                                                                                                              profileViewId );
+        if ( profileView != null )
+        {
+            profileView.setDefaultProfile( new HashSet<String>( profiles ) );
+            profileView.updateTable( true );
+        }
     }
 
     @Override
@@ -216,7 +229,8 @@ public class MavenProfileFieldEditor extends FieldEditor
         return 2;
     }
 
-    private final class ProfileContentProvider implements IStructuredContentProvider
+    private final class ProfileContentProvider
+        implements IStructuredContentProvider
     {
         public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
         {
@@ -252,7 +266,8 @@ public class MavenProfileFieldEditor extends FieldEditor
         }
     }
 
-    private final class ProfileLabelProvider implements ITableLabelProvider
+    private final class ProfileLabelProvider
+        implements ITableLabelProvider
     {
         public String getColumnText( Object element, int columnIndex )
         {

@@ -9,6 +9,7 @@ package org.devzuz.q.maven.ui.views;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -24,23 +25,21 @@ import org.devzuz.q.maven.embedder.nature.MavenNatureHelper;
 import org.devzuz.q.maven.project.properties.MavenProjectPropertiesManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
+import org.devzuz.q.maven.ui.internal.util.MavenUiUtil;
+import org.devzuz.q.maven.ui.preferences.MavenUIPreferenceManagerAdapter;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.Platform;
+import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -48,9 +47,12 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 /**
@@ -66,12 +68,6 @@ public class MavenProfileView extends ViewPart
     public static final int PROFILE_NAME_COLUMN = 0;
 
     public static final int LOCATION_COLUMN = 1;
-
-    public static final int EDIT_MODE = 3;
-
-    public static final int VIEW_MODE = 4;
-
-    private final int mode = VIEW_MODE;
 
     private long pomFileLmod;
 
@@ -89,15 +85,13 @@ public class MavenProfileView extends ViewPart
 
     private List<ProfileModel> profiles;
 
+    private List<ProfileModel> defaultProfiles;
+
     private ISelectionListener listener;
 
     private IProject currentProject;
 
     private IProject selectedProject;
-
-    private Button editButton;
-
-    private Button saveButton;
 
     private Model pomModel;
 
@@ -115,6 +109,7 @@ public class MavenProfileView extends ViewPart
     public void init( IViewSite site ) throws PartInitException
     {
         profiles = new ArrayList<ProfileModel>();
+        defaultProfiles = new ArrayList<ProfileModel>();
         globalSettingsXmlLmod =
             new File( MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename() ).lastModified();
         userSettingsXmlLmod =
@@ -178,13 +173,21 @@ public class MavenProfileView extends ViewPart
                     ProfileModel profile = (ProfileModel) item.getData();
                     profile.setActive( item.getChecked() );
                     MavenProjectPropertiesManager propertyManager = MavenProjectPropertiesManager.getInstance();
-                    if ( profile.isActive() )
+
+                    if ( profile.isAlwaysActive() )
                     {
-                        propertyManager.activateProfile( currentProject, profile.getName() );
+                        item.setChecked( true );
                     }
                     else
                     {
-                        propertyManager.deactivateProfile( currentProject, profile.getName() );
+                        if ( profile.isActive() )
+                        {
+                            propertyManager.activateProfile( currentProject, profile.getName() );
+                        }
+                        else
+                        {
+                            propertyManager.deactivateProfile( currentProject, profile.getName() );
+                        }
                     }
                 }
             }
@@ -201,7 +204,76 @@ public class MavenProfileView extends ViewPart
         table.setHeaderVisible( true );
         table.setLinesVisible( true );
 
-        changeTableContents( profiles );
+        initializeProfileTable();
+    }
+
+    private void initializeProfileTable()
+    {
+        setDefaultProfile( MavenUIPreferenceManagerAdapter.getInstance().getConfiguredProfiles() );
+        selectedProject = findSelectedProjectInPackageExplorer();
+        if ( selectedProject != null )
+        {
+            try
+            {
+                if ( !MavenNatureHelper.getInstance().hasQ4ENature( selectedProject ) )
+                {
+                    selectedProject = null;
+                }
+            }
+            catch ( CoreException e )
+            {
+                MavenUiActivator.getLogger().log( e );
+            }
+        }
+
+        updateTable( true );
+    }
+
+    public void setDefaultProfile( Set<String> defaultProfileSet )
+    {
+        defaultProfiles.clear();
+
+        for ( Iterator<String> it = defaultProfileSet.iterator(); it.hasNext(); )
+        {
+            String profileName = it.next();
+            ProfileModel profileModel = new ProfileModel();
+            profileModel.setAlwaysActive( true );
+            profileModel.setName( profileName );
+            profileModel.setLocation( "Default" );
+
+            defaultProfiles.add( profileModel );
+        }
+    }
+
+    public List<ProfileModel> getDefaultProfile()
+    {
+        return defaultProfiles;
+    }
+
+    /**
+     * Returns the selected Project in Package Explorer
+     * 
+     * @return selected project
+     */
+    public IProject findSelectedProjectInPackageExplorer()
+    {
+        IProject project = null;
+
+        IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
+        if ( page != null )
+        {
+            // XXX (amuino): Not sure if we should depend on JDT from this plug-in
+            IViewPart part = page.findView( JavaUI.ID_PACKAGES );
+
+            if ( part != null )
+            {
+                ISelection selection = part.getSite().getSelectionProvider().getSelection();
+                project = MavenUiUtil.getProjectInSelection( selection );
+            }
+        }
+
+        return project;
     }
 
     /**
@@ -222,57 +294,26 @@ public class MavenProfileView extends ViewPart
             {
                 public void selectionChanged( IWorkbenchPart sourcepart, ISelection selection )
                 {
-                    if ( selection instanceof IStructuredSelection )
+                    selectedProject = MavenUiUtil.getProjectInSelection( selection );
+
+                    if ( selectedProject != null )
                     {
-                        IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-                        Object object = structuredSelection.getFirstElement();
-
-                        IResource asResource = adaptAs( IResource.class, object );
-                        if ( null != asResource )
+                        try
                         {
-                            selectedProject = asResource.getProject();
-                        }
-
-                        if ( selectedProject != null )
-                        {
-                            try
+                            if ( MavenNatureHelper.getInstance().hasQ4ENature( selectedProject ) )
                             {
-                                if ( MavenNatureHelper.getInstance().hasQ4ENature( selectedProject ) )
-                                {
-                                    updateTable();
-                                }
-                                else
-                                {
-                                    clearTable();
-                                }
+                                updateTable( false );
                             }
-                            catch ( CoreException e )
+                            else
                             {
-                                MavenUiActivator.getLogger().log( e );
+                                currentProject = null;
+                                clearTable();
                             }
                         }
-                    }
-
-                }
-
-                @SuppressWarnings( "unchecked" )
-                private <T> T adaptAs( Class<T> clazz, Object object )
-                {
-                    if ( object == null )
-                    {
-                        return null;
-                    }
-                    if ( clazz.isAssignableFrom( object.getClass() ) )
-                    {
-                        return (T) object;
-                    }
-                    if ( object instanceof IAdaptable )
-                    {
-                        return (T) ( (IAdaptable) object ).getAdapter( clazz );
-                    }
-                    else
-                    {
-                        return (T) Platform.getAdapterManager().getAdapter( object, clazz );
+                        catch ( CoreException e )
+                        {
+                            MavenUiActivator.getLogger().log( e );
+                        }
                     }
                 }
             };
@@ -284,26 +325,36 @@ public class MavenProfileView extends ViewPart
     /**
      * Update the table of this view for any changes of the pom.xml and settings.xml file
      */
-    public void updateTable()
+    public void updateTable( boolean forceUpdate )
     {
         boolean profilesChanged = false;
 
-        if ( pomProfileNeedsUpdate() )
+        if ( forceUpdate )
         {
             updatePomModel();
-            profilesChanged = true;
-        }
-
-        if ( globalSettingsXmlProfilesNeedsUpdate() )
-        {
             updateGlobalSettings();
-            profilesChanged = true;
-        }
-
-        if ( userSettingsXmlProfilesNeedsUpdate() )
-        {
             updateUserSettings();
             profilesChanged = true;
+        }
+        else
+        {
+            if ( pomProfileNeedsUpdate() )
+            {
+                updatePomModel();
+                profilesChanged = true;
+            }
+
+            if ( globalSettingsXmlProfilesNeedsUpdate() )
+            {
+                updateGlobalSettings();
+                profilesChanged = true;
+            }
+
+            if ( userSettingsXmlProfilesNeedsUpdate() )
+            {
+                updateUserSettings();
+                profilesChanged = true;
+            }
         }
 
         if ( profilesChanged )
@@ -311,6 +362,8 @@ public class MavenProfileView extends ViewPart
             profiles.clear();
 
             List<ProfileModel> list = new ArrayList<ProfileModel>();
+
+            list.addAll( getDefaultProfile() );
 
             if ( pomModel != null )
             {
@@ -352,6 +405,7 @@ public class MavenProfileView extends ViewPart
                 }
             }
             profiles.addAll( list );
+
             changeTableContents( profiles );
         }
     }
@@ -374,10 +428,17 @@ public class MavenProfileView extends ViewPart
     {
         boolean needsUpdate = false;
 
-        if ( currentProject == null || !currentProject.equals( selectedProject )
-                        || new File( pomLocation ).lastModified() != pomFileLmod )
+        if ( currentProject == null || !currentProject.equals( selectedProject ) )
         {
             needsUpdate = true;
+        }
+        else
+        {
+            File file = new File( pomLocation );
+            if ( file.exists() )
+            {
+                needsUpdate = file.lastModified() != pomFileLmod;
+            }
         }
 
         return needsUpdate;
@@ -413,7 +474,6 @@ public class MavenProfileView extends ViewPart
 
         File globalSettingsXmlLocation =
             new File( MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename() );
-        File file = new File( MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename() );
 
         if ( globalSettingsXmlLocation.exists()
                         && ( globalSettings == null || globalSettingsXmlLocation.lastModified() != globalSettingsXmlLmod ) )
@@ -432,10 +492,13 @@ public class MavenProfileView extends ViewPart
         currentProject = selectedProject;
         try
         {
-            IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( selectedProject, false );
-            pomLocation = mavenProject.getPomFile().getPath();
-            pomModel = mavenProject.getModel();
-            pomFileLmod = new File( pomLocation ).lastModified();
+            if ( currentProject != null )
+            {
+                IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( currentProject, false );
+                pomLocation = mavenProject.getPomFile().getPath();
+                pomModel = mavenProject.getModel();
+                pomFileLmod = new File( pomLocation ).lastModified();
+            }
         }
         catch ( CoreException e )
         {
@@ -497,7 +560,6 @@ public class MavenProfileView extends ViewPart
                 profileModel.setName( profile.getId() );
                 profileModel.setLocation( path );
                 profileModel.setActive( profile.getActivation() != null && profile.getActivation().isActiveByDefault() );
-                profileModel.setIndex( i );
                 list.add( profileModel );
             }
         }
@@ -533,8 +595,24 @@ public class MavenProfileView extends ViewPart
                 org.apache.maven.settings.Profile profile = profiles.get( i );
                 profileModel.setName( profile.getId() );
                 profileModel.setLocation( path );
-                profileModel.setActive( activeProfiles.contains( profile.getId() ) );
-                profileModel.setIndex( i );
+                if ( activeProfiles.contains( profile.getId() ) )
+                {
+                    profileModel.setAlwaysActive( true );
+                }
+                else
+                {
+                    // I think It's rare for users to set activation in their settings.xml. Please remove this if you
+                    // think it's unnecessary
+                    org.apache.maven.settings.Activation activation = profile.getActivation();
+                    if ( activation != null )
+                    {
+                        profileModel.setActive( activation.isActiveByDefault() );
+                    }
+                    else
+                    {
+                        profileModel.setActive( false );
+                    }
+                }
                 list.add( profileModel );
             }
         }
@@ -544,16 +622,6 @@ public class MavenProfileView extends ViewPart
         }
 
         return list;
-    }
-
-    /**
-     * returns the current mode of this view.
-     * 
-     * @return
-     */
-    public int getMode()
-    {
-        return mode;
     }
 
     /**
@@ -582,42 +650,55 @@ public class MavenProfileView extends ViewPart
     }
 
     /**
-     * Updates the application with the selected team
+     * Updates the application with the selected profile
      * 
-     * @param team
-     *            the team
+     * @param profilemodel
+     *            profiles
      */
-    private void changeTableContents( List<ProfileModel> profileModels )
+    private void changeTableContents( final List<ProfileModel> profileModels )
     {
-        mavenProfileTableViewer.setInput( profileModels );
-        mavenProfileTableViewer.refresh( true );
-        if ( profileModels != null )
+        PlatformUI.getWorkbench().getDisplay().asyncExec( new Runnable()
         {
-            for ( int i = 0; i < profileModels.size(); i++ )
+            public void run()
             {
-                ProfileModel profile = profileModels.get( i );
-                TableItem item = mavenProfileTableViewer.getTable().getItem( i );
-                // XXX amuino: Hack to workaround caching...
-                item.setChecked( false );
-                item.setChecked( true );
-                item.setChecked( profile.isActive() );
+                mavenProfileTableViewer.setInput( profileModels );
+                mavenProfileTableViewer.refresh( true );
+                if ( profileModels != null )
+                {
+                    for ( int i = 0; i < profileModels.size(); i++ )
+                    {
+                        ProfileModel profile = profileModels.get( i );
+                        TableItem item = mavenProfileTableViewer.getTable().getItem( i );
+                        // XXX amuino: Hack to workaround caching...
+                        // item.setChecked( false );
+                        // item.setChecked( true );
+                        item.setChecked( profile.isActive() );
+                    }
+                }
             }
-        }
+        } );
     }
 
-    private static final class ProfileModel
+    private final class ProfileModel
     {
         private boolean active;
+
+        private boolean alwaysActive;
 
         private String name;
 
         private String location;
 
-        private int index;
-
         public boolean isActive()
         {
-            return active;
+            if ( alwaysActive )
+            {
+                return alwaysActive;
+            }
+            else
+            {
+                return active;
+            }
         }
 
         public void setActive( boolean active )
@@ -645,14 +726,14 @@ public class MavenProfileView extends ViewPart
             this.location = location;
         }
 
-        public int getIndex()
+        public boolean isAlwaysActive()
         {
-            return index;
+            return alwaysActive;
         }
 
-        public void setIndex( int index )
+        public void setAlwaysActive( boolean alwaysActive )
         {
-            this.index = index;
+            this.alwaysActive = alwaysActive;
         }
     }
 
