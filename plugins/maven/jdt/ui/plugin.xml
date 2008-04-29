@@ -16,17 +16,42 @@
    
    <extension
          point="org.eclipse.ui.popupMenus">
-         <objectContribution
+        
+        <objectContribution
             adaptable="true"
             objectClass="org.eclipse.core.resources.IProject"
             id="org.devzuz.q.maven.jdt.ui.project.menu">
-        
-         <action
+            <visibility>
+              <not>
+              <objectState
+                name="projectNature"
+                value="org.devzuz.q.maven.jdt.core.mavenNature"/>
+              </not>  
+            </visibility>
+              <action
                class="org.devzuz.q.maven.jdt.ui.actions.MavenManageDependenciesAction"
                id="org.devzuz.q.maven.jdt.ui.actions.MavenManageDependenciesAction"
                label="%mavenManageDependenciesAction"
                menubarPath="org.devzuz.q.maven.ui.project.submenu/contents"
-               style="toggle"/>     
+               state="false"
+               style="toggle"/>
+        </objectContribution>
+        <objectContribution
+            adaptable="true"
+            objectClass="org.eclipse.core.resources.IProject"
+            id="org.devzuz.q.maven.jdt.ui.project.menu">
+            <visibility>
+              <objectState
+                name="projectNature"
+                value="org.devzuz.q.maven.jdt.core.mavenNature"/>
+            </visibility>
+              <action
+               class="org.devzuz.q.maven.jdt.ui.actions.MavenManageDependenciesAction"
+               id="org.devzuz.q.maven.jdt.ui.actions.MavenManageDependenciesAction"
+               label="%mavenManageDependenciesAction"
+               menubarPath="org.devzuz.q.maven.ui.project.submenu/contents"
+               state="true"
+               style="toggle"/>
       	</objectContribution>
         <objectContribution
              adaptable="true"

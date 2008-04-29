@@ -48,16 +48,17 @@ public class MavenManageDependenciesAction extends AbstractMavenAction implement
     @Override
     protected void runInternal( IAction action ) throws CoreException
     {
-
         for ( IProject project : getProjects() )
         {
-            if ( action.isChecked() )
+            if ( MavenNatureHelper.hasMavenNature( project ) )
             {
-                MavenNatureHelper.addNature( project );
+                MavenNatureHelper.removeNature( project );
+                action.setChecked( false );
             }
             else
             {
-                MavenNatureHelper.removeNature( project );
+                MavenNatureHelper.addNature( project );
+                action.setChecked( true );
             }
         }
 
