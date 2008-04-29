@@ -1,25 +1,31 @@
 package org.devzuz.q.maven.ui.propertytester;
 
+import org.devzuz.q.maven.ui.internal.util.MavenUiUtil;
 import org.eclipse.core.expressions.PropertyTester;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.IAdaptable;
 
-public class MavenProjectPropertyTester
-    extends PropertyTester
+/**
+ * This class adds support for testing properties specific to the q4e plug-in.
+ * 
+ * Supported properties are:
+ * <ul>
+ * <li>hasPOM (true/false): checks if the project has a pom.xml file on the root.</li>
+ * </ul>
+ */
+public class MavenProjectPropertyTester extends PropertyTester
 {
 
     public boolean test( Object receiver, String property, Object[] args, Object expectedValue )
     {
-        IAdaptable adaptable = (IAdaptable) receiver;
-        if ( adaptable instanceof IAdaptable )
+        if ( "hasPOM".equals( property ) )
         {
-            IProject project = (IProject) adaptable.getAdapter( IProject.class );
+            IProject project = MavenUiUtil.adaptAs( IProject.class, receiver );
+            boolean expected = ( (Boolean) expectedValue ).booleanValue();
             if ( project != null )
             {
-                return project.getFile( "pom.xml" ).exists();
+                return project.getFile( "pom.xml" ).exists() == expected;
             }
         }
-
         return false;
     }
 }
