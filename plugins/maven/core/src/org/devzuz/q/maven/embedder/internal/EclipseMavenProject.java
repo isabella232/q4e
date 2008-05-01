@@ -35,12 +35,6 @@ import org.eclipse.core.resources.IProject;
 public class EclipseMavenProject implements IMavenProject
 {
     /**
-     * @deprecated use {@link IMavenProject#POM_FILENAME}
-     */
-    @Deprecated
-    public static final String POM_XML = POM_FILENAME;
-
-    /**
      * Checks if the given eclipse project has a <code>pom.xml</code> descriptor. Usually you should refer to
      * {@link MavenNatureHelper#hasQ4ENature(IProject)}
      * 
@@ -61,7 +55,7 @@ public class EclipseMavenProject implements IMavenProject
     private File baseDirectory;
 
     /* Contains all the artifacts including the transitive dependencies */
-    private Set<IMavenArtifact> allArtifacts = new HashSet<IMavenArtifact>();
+    private final Set<IMavenArtifact> allArtifacts = new HashSet<IMavenArtifact>();
 
     /* Contains all the direct dependencies */
     private Set<IMavenArtifact> dependencyArtifacts = new HashSet<IMavenArtifact>();
@@ -81,7 +75,7 @@ public class EclipseMavenProject implements IMavenProject
     private List<String> compileSourceRoots;
 
     private List<String> testCompileSourceRoots;
-    
+
     private List<String> filters;
 
     private List<Resource> resources;
@@ -161,7 +155,7 @@ public class EclipseMavenProject implements IMavenProject
         // TODO: Needs to do something
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public Object getAdapter( Class adapter )
     {
         // TODO Auto-generated method stub
@@ -208,7 +202,7 @@ public class EclipseMavenProject implements IMavenProject
         return null;
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public void refreshProject( MavenProject mavenRawProject )
     {
         mavenProject = mavenRawProject;
@@ -229,7 +223,7 @@ public class EclipseMavenProject implements IMavenProject
         filters = mavenRawProject.getFilters();
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     public void refreshDependencies( MavenProject mavenRawProject )
     {
         // TODO use the dependency graph tool
@@ -242,7 +236,7 @@ public class EclipseMavenProject implements IMavenProject
             allArtifacts.add( mavenArtifact );
             addThroughDependencyTrail( mavenRawProject, tempArtifactCache, mavenArtifact, artifact );
         }
-        
+
         /* The tempArtifactCache contains, as a first element, this project with its direct dependencies as children */
         for ( IMavenArtifact artifact : tempArtifactCache )
         {
@@ -255,7 +249,7 @@ public class EclipseMavenProject implements IMavenProject
         }
     }
 
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings( "unchecked" )
     private void addThroughDependencyTrail( MavenProject mavenRawProject, Set<IMavenArtifact> artifactCache,
                                             IMavenArtifact mavenArtifact, Artifact defaultArtifact )
     {
@@ -341,9 +335,9 @@ public class EclipseMavenProject implements IMavenProject
         return dependencyArtifacts;
     }
 
-/*
- * public void setArtifacts( Set<IMavenArtifact> artifacts ) { this.artifacts = artifacts; }
- */
+    /*
+     * public void setArtifacts( Set<IMavenArtifact> artifacts ) { this.artifacts = artifacts; }
+     */
     public String getBuildOutputDirectory()
     {
         return buildOutputDirectory;
@@ -363,8 +357,8 @@ public class EclipseMavenProject implements IMavenProject
     {
         return compileSourceRoots;
     }
-    
-    public List<String> getFilters() 
+
+    public List<String> getFilters()
     {
         return filters;
     }
@@ -404,18 +398,12 @@ public class EclipseMavenProject implements IMavenProject
     {
         return this.getGroupId() + ":" + this.getArtifactId() + ":" + this.getVersion();
     }
-    
+
     /* Please don't delete. This is useful for debugging the dependency tree */
     /*
-    public void printRecursive( IMavenArtifact artifact , int num )
-    {
-        for( int i=0; i < num; i++)
-            System.out.print( "--" );
-        System.out.println( "[" + artifact.getGroupId()+","+artifact.getArtifactId()+","+artifact.getVersion()+","+artifact.getType()+","+artifact.getClassifier() );
-        for( IMavenArtifact childArtifact : artifact.getChildren() )
-        {
-            printRecursive( childArtifact , num + 1 );
-        }
-    }
-    */
+     * public void printRecursive( IMavenArtifact artifact , int num ) { for( int i=0; i < num; i++) System.out.print(
+     * "--" ); System.out.println( "[" +
+     * artifact.getGroupId()+","+artifact.getArtifactId()+","+artifact.getVersion()+","+artifact.getType()+","+artifact.getClassifier() );
+     * for( IMavenArtifact childArtifact : artifact.getChildren() ) { printRecursive( childArtifact , num + 1 ); } }
+     */
 }
