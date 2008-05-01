@@ -44,4 +44,11 @@ public interface IArtifactSearchProvider
      * @return
      */
     public List<IArtifactInfo> find(ISearchCriteria searchCriteria);
+    
+    public String getLabel();
+    
+    public void setLabel( String label );
+    
+    public String getId();
+    public void setId( String id );
 }

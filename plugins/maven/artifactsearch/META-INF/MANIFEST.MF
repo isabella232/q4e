@@ -3,9 +3,11 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Q4E Artifact Search Plug-in
 Bundle-SymbolicName: org.devzuz.q.maven.search;singleton:=true
 Bundle-Version: 0.7.0.qualifier
-Bundle-Activator: org.devzuz.q.maven.search.Activator
+Bundle-Activator: org.devzuz.q.maven.search.ArtifactSearchPlugin
 Bundle-Vendor: DevZuz
 Require-Bundle: org.eclipse.core.runtime,
- org.devzuz.q.maven.ui
-Export-Package: org.devzuz.q.maven.search
+ org.devzuz.q.maven.ui,
+ org.eclipse.search
 Eclipse-LazyStart: true
+Export-Package: org.devzuz.q.maven.search,
+ org.devzuz.q.maven.search.preferences

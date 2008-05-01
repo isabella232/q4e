@@ -6,15 +6,24 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.search;
 
+import java.util.HashSet;
+
 import org.devzuz.q.maven.embedder.log.EclipseLogger;
 import org.devzuz.q.maven.embedder.log.Logger;
+import org.devzuz.q.maven.search.preferences.ArtifactSearchPreferencesManager;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator
+public class ArtifactSearchPlugin
     extends Plugin
 {
 
@@ -24,14 +33,22 @@ public class Activator
     public static final String SEARCH_PROVIDER_EXTENSION_ID = PLUGIN_ID + ".searchProvider";
 
     // The shared instance
-    private static Activator plugin;
-    
+    private static ArtifactSearchPlugin plugin;
+
     private Logger logger = new EclipseLogger( PLUGIN_ID, this.getLog() );
+
+    private ArtifactSearchService searchService;
+
+    private ArtifactSearchPreferencesManager searchPreferencesManager;
+
+    private ScopedPreferenceStore prefs;
+
+    private String bundleName;
 
     /**
      * The constructor
      */
-    public Activator()
+    public ArtifactSearchPlugin()
     {
     }
 
@@ -45,7 +62,22 @@ public class Activator
     {
         super.start( context );
         plugin = this;
-        ArtifactSearchUtils.init();
+        bundleName = context.getBundle().getSymbolicName();
+        prefs = new ScopedPreferenceStore( new InstanceScope(), bundleName );
+        searchPreferencesManager = new ArtifactSearchPreferencesManager( prefs );
+        searchService =
+            new ArtifactSearchService( new HashSet<String>( searchPreferencesManager.getEnabledSearchProviderIds() ) );
+        
+        new Job( "Initialize artifact search" )
+        {
+            @Override
+            protected IStatus run( IProgressMonitor monitor )
+            {
+                getSearchService().initializeProviders();
+                return new Status( IStatus.OK, PLUGIN_ID, "Completed" );
+            }
+        }.schedule();
+
     }
 
     /*
@@ -57,6 +89,7 @@ public class Activator
         throws Exception
     {
         plugin = null;
+        prefs.save();
         super.stop( context );
     }
 
@@ -65,14 +98,28 @@ public class Activator
      * 
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static ArtifactSearchPlugin getDefault()
     {
         return plugin;
     }
-    
+
     public static Logger getLogger()
     {
         return getDefault().logger;
     }
 
+    public static ArtifactSearchPreferencesManager getSearchPreferencesManager()
+    {
+        return getDefault().searchPreferencesManager;
+    }
+
+    public static String getBundleName()
+    {
+        return getDefault().bundleName;
+    }
+
+    public static ArtifactSearchService getSearchService()
+    {
+        return getDefault().searchService;
+    }
 }

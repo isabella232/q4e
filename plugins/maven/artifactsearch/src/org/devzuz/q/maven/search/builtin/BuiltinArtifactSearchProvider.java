@@ -11,10 +11,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.devzuz.q.maven.search.Activator;
+import org.devzuz.q.maven.search.AbstractArtifactSearchProvider;
 import org.devzuz.q.maven.search.ArtifactInfo;
+import org.devzuz.q.maven.search.ArtifactSearchPlugin;
 import org.devzuz.q.maven.search.IArtifactInfo;
-import org.devzuz.q.maven.search.IArtifactSearchProvider;
 import org.devzuz.q.maven.search.ISearchCriteria;
 import org.devzuz.q.maven.ui.core.Dependency;
 import org.devzuz.q.maven.ui.core.RepositoryIndexer;
@@ -30,7 +30,8 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
  * @author staticsnow@gmail.com
  * 
  */
-public class BuiltinArtifactSearchProvider implements IArtifactSearchProvider
+public class BuiltinArtifactSearchProvider 
+    extends AbstractArtifactSearchProvider
 {
     private boolean indexReady = false;
 
@@ -66,21 +67,21 @@ public class BuiltinArtifactSearchProvider implements IArtifactSearchProvider
         if ( searchCriteria.getSearchTypes() == ISearchCriteria.TYPE_ARTIFACT_ID
                         && searchCriteria.getSearch().length() > 0 )
         {
-            query += RepositoryIndexer.ARTIFACT_ID + ":\"" + searchCriteria.getSearch() + "\"";
+            query += RepositoryIndexer.ARTIFACT_ID + ":" + searchCriteria.getSearch() + "*";
         }
         else if ( searchCriteria.getSearchTypes() == ISearchCriteria.TYPE_GROUP_ID
                         && searchCriteria.getSearch().length() > 0 )
         {
-            query += RepositoryIndexer.GROUP_ID + ":\"" + searchCriteria.getSearch() + "\"";
+            query += RepositoryIndexer.GROUP_ID + ":" + searchCriteria.getSearch() + "*";
         }
         else if ( searchCriteria.getSearchTypes() == ISearchCriteria.TYPE_VERSION
                         && searchCriteria.getSearch().length() > 0 )
         {
-            query += RepositoryIndexer.VERSION + ":\"" + searchCriteria.getSearch() + "\"";
+            query += RepositoryIndexer.VERSION + ":" + searchCriteria.getSearch() + "*";
         }
         else
         {
-            query += searchCriteria.getSearch();
+            query += searchCriteria.getSearch() + "*";
         }
         if ( searchCriteria.getArtifactId() != null )
         {
@@ -103,12 +104,7 @@ public class BuiltinArtifactSearchProvider implements IArtifactSearchProvider
             List<IArtifactInfo> artifacts = new LinkedList<IArtifactInfo>();
             Set<Dependency> hits =
                 new RepositoryIndexer().search( RepositoryIndexerManager.INDEX_DIR, query, new NullProgressMonitor() );
-            if ( hits.isEmpty() )
-            {
-                hits =
-                    new RepositoryIndexer().search( RepositoryIndexerManager.INDEX_DIR, searchCriteria.getSearch(),
-                                                    new NullProgressMonitor() );
-            }
+           
             for ( Dependency dependency : hits )
             {
                 artifacts.add( new ArtifactInfo( dependency.getGroupId(), dependency.getArtifactId(),
@@ -118,7 +114,7 @@ public class BuiltinArtifactSearchProvider implements IArtifactSearchProvider
         }
         catch ( Exception e )
         {
-            Activator.getLogger().error( "Cannot perform search: " + e.getMessage() );
+            ArtifactSearchPlugin.getLogger().error( "Cannot perform search: " + e.getMessage() );
             return Collections.emptyList();
         }
 
@@ -140,7 +136,7 @@ public class BuiltinArtifactSearchProvider implements IArtifactSearchProvider
         }
         catch ( Exception e )
         {
-            Activator.getLogger().error( "Cannot perform search: " + e.getMessage() );
+            ArtifactSearchPlugin.getLogger().error( "Cannot perform search: " + e.getMessage() );
             return Collections.emptyList();
         }
 
@@ -150,5 +146,4 @@ public class BuiltinArtifactSearchProvider implements IArtifactSearchProvider
     {
         return indexReady;
     }
-
 }

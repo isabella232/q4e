@@ -6,6 +6,12 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.search;
 
+/**
+ * Information about an artifact found via search.
+ * 
+ * @author Mike Poindexter
+ *
+ */
 public class ArtifactInfo implements IArtifactInfo
 {
     private String groupId;
