@@ -22,7 +22,7 @@ public class VersionContentProposer extends AbstractArtifactFieldContentProposer
     @Override
     protected int getSearchType()
     {
-        return ISearchCriteria.TYPE_ARTIFACT_ID | ISearchCriteria.TYPE_GROUP_ID;
+        return ISearchCriteria.TYPE_VERSION;
     }
 
     @Override

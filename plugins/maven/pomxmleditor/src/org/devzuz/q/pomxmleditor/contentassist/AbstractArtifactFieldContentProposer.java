@@ -12,7 +12,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.devzuz.q.maven.search.ArtifactSearchUtils;
+import org.devzuz.q.maven.search.ArtifactSearchPlugin;
 import org.devzuz.q.maven.search.IArtifactInfo;
 import org.devzuz.q.maven.search.SearchCriteria;
 import org.eclipse.jface.text.contentassist.CompletionProposal;
@@ -38,11 +38,11 @@ public abstract class AbstractArtifactFieldContentProposer implements IElementCo
             if ( getNodeName().equals( node.getLocalName() ) )
             {
                 String context = ContentAssistUtils.computeContextString( contentAssistRequest );
-
                 List<IArtifactInfo> artifacts =
-                    ArtifactSearchUtils.findArtifacts( new SearchCriteria( getArtifactIdValue( node ),
+                    ArtifactSearchPlugin.getSearchService().findArtifacts( new SearchCriteria( getArtifactIdValue( node ),
                                                                            getGroupIdValue( node ), context,
                                                                            getSearchType() ) );
+
                 Collections.sort( artifacts, getComparator() );
 
                 Set<String> proposed = new HashSet<String>();

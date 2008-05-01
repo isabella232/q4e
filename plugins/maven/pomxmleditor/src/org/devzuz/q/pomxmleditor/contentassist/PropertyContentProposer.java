@@ -21,7 +21,7 @@ import java.util.Set;
 import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
-import org.devzuz.q.maven.search.Activator;
+import org.devzuz.q.maven.search.ArtifactSearchPlugin;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -126,7 +126,7 @@ public class PropertyContentProposer implements IElementContentProposer
         }
         catch ( CoreException e )
         {
-            Activator.getLogger().error( "Get maven project: " + e.getMessage() );
+            ArtifactSearchPlugin.getLogger().error( "Get maven project: " + e.getMessage() );
         }
         return mavenProject;
     }
@@ -208,7 +208,7 @@ public class PropertyContentProposer implements IElementContentProposer
         }
         catch ( IntrospectionException e )
         {
-            Activator.getLogger().error( "Cannot compute project object properties: " + e.getMessage() );
+            ArtifactSearchPlugin.getLogger().error( "Cannot compute project object properties: " + e.getMessage() );
             return Collections.emptySet();
         }
     }
