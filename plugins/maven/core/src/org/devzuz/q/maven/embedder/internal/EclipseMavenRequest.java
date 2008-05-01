@@ -11,11 +11,11 @@ import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenJob;
+import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenMonitorHolder;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -37,14 +37,14 @@ public class EclipseMavenRequest extends Job implements IMavenJob
 
     private IMavenExecutionResult executionResult;
 
-    private final IProject project;
+    private final IMavenProject mavenProject;
 
-    public EclipseMavenRequest( String name, EclipseMaven maven, MavenExecutionRequest request, IProject project )
+    public EclipseMavenRequest( String name, EclipseMaven maven, MavenExecutionRequest request, IMavenProject project )
     {
         super( name );
         this.maven = maven;
         this.request = request;
-        this.project = project;
+        this.mavenProject = project;
     }
 
     public EclipseMavenRequest( String name, EclipseMaven maven, MavenExecutionRequest request )
@@ -70,7 +70,7 @@ public class EclipseMavenRequest extends Job implements IMavenJob
         try
         {
             MavenExecutionResult status = this.maven.executeRequest( this.request );
-            executionResult = new EclipseMavenExecutionResult( status, project );
+            executionResult = new EclipseMavenExecutionResult( status, mavenProject.getProject() );
             RefreshOutputFoldersListener.INSTANCE.refreshOutputFolders( executionResult );
             if ( ( status.getExceptions() != null ) && ( status.getExceptions().size() > 0 ) )
             {

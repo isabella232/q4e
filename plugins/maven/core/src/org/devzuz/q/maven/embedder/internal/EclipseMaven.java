@@ -153,7 +153,7 @@ public class EclipseMaven implements IMaven
         try
         {
             MavenExecutionRequest request = generateRequest( mavenProject, goals, parameter );
-            eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request, mavenProject.getProject() );
+            eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request, mavenProject );
             status = eclipseMavenRequest.run( monitor );
         }
         catch ( RuntimeException e )
@@ -240,8 +240,7 @@ public class EclipseMaven implements IMaven
     public void scheduleRequest( IMavenProject mavenProject, MavenExecutionRequest request,
                                  MavenExecutionJobAdapter jobAdapter )
     {
-        EclipseMavenRequest eclipseMavenRequest =
-            new EclipseMavenRequest( "MavenRequest", this, request, mavenProject.getProject() );
+        EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request, mavenProject );
 
         if ( jobAdapter != null )
         {
