@@ -7,10 +7,19 @@
  *******************************************************************************/
 package org.devzuz.q.maven.embedder.internal;
 
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
+import org.apache.maven.lifecycle.MojoBindingUtils;
+import org.apache.maven.lifecycle.model.MojoBinding;
+import org.devzuz.q.maven.embedder.EventType;
+import org.devzuz.q.maven.embedder.IMavenEvent;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenJob;
+import org.devzuz.q.maven.embedder.IMavenListener;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
@@ -53,16 +62,55 @@ public class EclipseMavenRequest extends Job implements IMavenJob
     }
 
     @Override
-    protected IStatus run( IProgressMonitor monitor )
+    protected IStatus run( final IProgressMonitor monitor )
     {
         MavenMonitorHolder.setProgressMonitor( monitor );
 
-        // TODO the number should be the number of projects in the reactor * maven phases to execute
-        monitor.beginTask( "Maven build", IProgressMonitor.UNKNOWN );
+        int totalWork = IProgressMonitor.UNKNOWN;
+        if ( null != mavenProject )
+        {
+            try
+            {
+                List<MojoBinding> mojos = maven.getGoalsForPhase( mavenProject, request.getGoals(), true );
+                Set<String> skippedGoals = ( (EclipseMavenExecutionRequest) request ).getSkippedGoals();
+                for ( ListIterator<MojoBinding> it = mojos.listIterator(); it.hasNext(); )
+                {
+                    MojoBinding mojo = it.next();
+                    String mojoStr = MojoBindingUtils.createMojoBindingKey( mojo, true );
+                    if ( skippedGoals.contains( mojoStr ) )
+                    {
+                        it.remove();
+                    }
+                }
+                totalWork = mojos.size() * 2; // every mojo triggers 2 events: start and end
+            }
+            catch ( CoreException e )
+            {
+                MavenCoreActivator.getLogger().log( "Could not get the list of mojos to be executed", e );
+            }
+        }
+        monitor.beginTask( "Maven build", totalWork );
         monitor.setTaskName( "Maven " + request.getGoals() );
 
-        // TODO add a listener to maven that will call monitor.worked() for each project or phase completed and poll
-        // monitor.isCancelled
+        IMavenListener mojoProgressListener = new IMavenListener()
+        {
+            public void handleEvent( IMavenEvent event )
+            {
+                EventType type = event.getType();
+                if ( EventType.mojoExecution == type )
+                {
+                    monitor.subTask( event.toString() );
+                    monitor.worked( 1 );
+                }
+            }
+
+            public void dispose()
+            {
+                // No-op
+            }
+
+        };
+        maven.addEventListener( mojoProgressListener );
 
         // FileMavenListener listener = new FileMavenListener();
         // maven.addEventListener(listener);
@@ -85,6 +133,7 @@ public class EclipseMavenRequest extends Job implements IMavenJob
         }
         finally
         {
+            maven.removeEventListener( mojoProgressListener );
             monitor.done();
             // Issue 338: Some goals keep state between maven executions.
             try

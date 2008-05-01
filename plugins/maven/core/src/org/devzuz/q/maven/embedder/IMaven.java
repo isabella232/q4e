@@ -432,15 +432,32 @@ public interface IMaven
     public MavenComponentHelper getMavenComponentHelper();
 
     /**
-     * Gets a list of the goals which would be invoked if a particular phase were run.
+     * Gets a list of the mojos which would be invoked if a particular phase were run.
      * 
-     * @param project - The project to return the goal list for
-     * @param phase - The phase to return to goal list for
-     * @param filterMavenGeneratedGoals - Maven will add internal goals to handle things 
-     *                                    like forked lifecycles.  Do you want these internal
-     *                                    goals in the returned list?
+     * @param project -
+     *            The project to return the goal list for
+     * @param phase -
+     *            The phase to return to goal list for
+     * @param filterMavenGeneratedGoals -
+     *            Maven will add internal goals to handle things like forked lifecycles. Do you want these internal
+     *            goals in the returned list?
      * @return
      */
-    public List<MojoBinding> getGoalsForPhase( IMavenProject project, String phase, boolean filterMavenGeneratedGoals ) throws CoreException;
+    public List<MojoBinding> getGoalsForPhase( IMavenProject project, String phase, boolean filterMavenGeneratedGoals )
+        throws CoreException;
 
+    /**
+     * Gets a list of the mojos which would be invoked if a particular list of goals were run.
+     * 
+     * @param project -
+     *            The project to return the goal list for
+     * @param phase -
+     *            The phase to return to goal list for
+     * @param filterMavenGeneratedGoals -
+     *            Maven will add internal goals to handle things like forked lifecycles. Do you want these internal
+     *            goals in the returned list?
+     * @return
+     */
+    public List<MojoBinding> getGoalsForPhase( IMavenProject project, List<String> phases,
+                                               boolean filterMavenGeneratedGoals ) throws CoreException;
 }

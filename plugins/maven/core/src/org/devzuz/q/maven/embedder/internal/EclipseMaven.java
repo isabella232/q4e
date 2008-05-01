@@ -843,10 +843,15 @@ public class EclipseMaven implements IMaven
     public List<MojoBinding> getGoalsForPhase( IMavenProject project, String phase, boolean filterMavenGeneratedGoals )
         throws CoreException
     {
+        return getGoalsForPhase( project, Collections.singletonList( phase ), filterMavenGeneratedGoals );
+    }
+
+    public List<MojoBinding> getGoalsForPhase( IMavenProject project, List<String> phases,
+                                               boolean filterMavenGeneratedGoals ) throws CoreException
+    {
         try
         {
-            BuildPlan buildPlan =
-                this.mavenEmbedder.getBuildPlan( Collections.singletonList( phase ), project.getRawMavenProject() );
+            BuildPlan buildPlan = this.mavenEmbedder.getBuildPlan( phases, project.getRawMavenProject() );
             List<MojoBinding> mojoBindings = buildPlan.renderExecutionPlan( new Stack() );
             List<MojoBinding> goals = new ArrayList<MojoBinding>( mojoBindings.size() );
 
@@ -870,7 +875,7 @@ public class EclipseMaven implements IMaven
         }
         catch ( NoSuchPhaseException e )
         {
-            throw new IllegalArgumentException( "The phase " + phase + " does not exist." );
+            throw new IllegalArgumentException( "The phase " + e.getPhase() + " does not exist." );
         }
         catch ( MavenEmbedderException e )
         {
