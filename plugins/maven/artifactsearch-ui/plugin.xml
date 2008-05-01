@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.search.preferences.SearchPreferencePage"
+            class="org.devzuz.q.maven.search.ui.preferences.ArtifactSearchPreferencePage"
+            id="org.devzuz.q.maven.search.ui.preferences.ArtifactSearchPreferencePage"
+            name="Artifact Search">
+      </page>
+   </extension>
+</plugin>

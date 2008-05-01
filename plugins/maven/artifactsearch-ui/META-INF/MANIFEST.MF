@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Artifact Search Ui Plug-in
+Bundle-SymbolicName: org.devzuz.q.maven.search.ui;singleton:=true
+Bundle-Version: 0.7.0.qualifier
+Bundle-Activator: org.devzuz.q.maven.search.ui.SearchUIActivator
+Bundle-Vendor: DevZuz
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.devzuz.q.maven.search
+Eclipse-LazyStart: true
