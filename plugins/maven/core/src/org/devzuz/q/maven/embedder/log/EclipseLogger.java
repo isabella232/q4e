@@ -63,6 +63,17 @@ public class EclipseLogger implements Logger
         log( msg, null );
     }
 
+    public void warn( String msg, Throwable t )
+    {
+        log( new Status( IStatus.WARNING, getPluginId(), msg, t ) );
+    }
+
+    public void warn( String msg )
+    {
+        log( new Status( IStatus.WARNING, getPluginId(), msg ) );
+
+    }
+
     public void info( String msg )
     {
         log( new Status( IStatus.INFO, getPluginId(), msg ) );

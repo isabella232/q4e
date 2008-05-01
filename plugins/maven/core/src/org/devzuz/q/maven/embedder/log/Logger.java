@@ -26,5 +26,9 @@ public interface Logger
 
     void error( String msg );
 
+    void warn( String msg );
+
+    void warn( String msg, Throwable t );
+
     void info( String msg );
 }
