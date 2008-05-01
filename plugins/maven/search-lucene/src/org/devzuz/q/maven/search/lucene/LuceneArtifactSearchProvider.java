@@ -8,33 +8,33 @@ package org.devzuz.q.maven.search.lucene;
 
 import java.util.List;
 
+import org.devzuz.q.maven.search.AbstractArtifactSearchProvider;
 import org.devzuz.q.maven.search.IArtifactInfo;
-import org.devzuz.q.maven.search.IArtifactSearchProvider;
 import org.devzuz.q.maven.search.ISearchCriteria;
 
 /**
  * A search provider implementation that searches a raw lucene index.
  * 
  * @author Mike Poindexter
- * 
  */
-public class LuceneArtifactSearchProvider implements IArtifactSearchProvider
+public class LuceneArtifactSearchProvider
+    extends AbstractArtifactSearchProvider
 {
 
     public void beginInit()
     {
-        LuceneUtils.init();
+        LuceneSearchPlugin.getLuceneService().fetchIndexes();
 
     }
 
     public List<IArtifactInfo> find( ISearchCriteria searchCriteria )
     {
-        return LuceneUtils.search( searchCriteria );
+        return LuceneSearchPlugin.getLuceneService().search( searchCriteria );
     }
 
     public List<IArtifactInfo> findAll()
     {
-        return LuceneUtils.searchAll();
+        return LuceneSearchPlugin.getLuceneService().searchAll();
     }
 
     public boolean isInitComplete()

@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="org.devzuz.q.maven.search.lucene" name="Lucene search configuration" schema="schema/org.devzuz.q.maven.search.lucene.exsd"/>
 	<extension
 		point="org.devzuz.q.maven.search.searchProvider">
 		<searchProvider 
-			class="org.devzuz.q.maven.search.lucene.LuceneArtifactSearchProvider"/>
+			class="org.devzuz.q.maven.search.lucene.LuceneArtifactSearchProvider"
+			label="Lucene Index Search"/>
 	</extension>
+
  <extension
-       point="org.devzuz.q.maven.search.lucene">
-    <index
-          cache="central.zip"
-          remote="http://repo1.maven.org/maven2/.index/nexus-maven-repository-index.zip"
-          groupIdField="g"
-          artifactIdField="a"
-          versionField="v"
-          compositeValueField="u"
-          compositeValueDelimiter="|"
-          compositeValueGroupIndex="0"
-          compositeValueArtifactIndex="1"
-          compositeValueVersionIndex="2">
-    </index>
+       point="org.eclipse.ui.preferencePages">
+    <page
+          category="org.devzuz.q.maven.search.ui.preferences.ArtifactSearchPreferencePage"
+          class="org.devzuz.q.maven.search.lucene.preferences.LuceneArtifactSearchPreferencePage"
+          id="org.devzuz.q.maven.search.lucene.preferences.LuceneArtifactSearchPreferencePage"
+          name="Lucene Artifact Search Preferences">
+    </page>
+ </extension>
+ <extension
+       point="org.eclipse.core.runtime.preferences">
+    <initializer
+          class="org.devzuz.q.maven.search.lucene.preferences.PreferenceInitializer">
+    </initializer>
+ </extension>
+ <extension
+       point="org.eclipse.core.runtime.preferences">
  </extension>
 </plugin>

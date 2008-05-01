@@ -7,7 +7,8 @@
 package org.devzuz.q.maven.search.lucene;
 
 import java.io.File;
-import java.io.IOException;
+import java.text.MessageFormat;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +20,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.devzuz.q.maven.search.ArtifactInfo;
@@ -33,63 +35,64 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
  * Handles downloading and searching a single index.
  * 
  * @author Mike Poindexter
- *
  */
-public class Indexer
+public class IndexManager
 {
     public static File INDEX_CACHE_DIR;
     static
     {
         INDEX_CACHE_DIR = new File( System.getProperty( "user.home" ) + File.separatorChar + ".m2indexcache" );
     }
-    private String local;
-    private String remote;
-    private String cache;
-    private String groupIdField;
-    private String artifactIdField;
-    private String versionIdField;
-    private String compositeValueField;
-    private String compositeValueDelimiter;
-    private String compositeValueGroupIndex;
-    private String compositeValueArtifactIndex;
-    private String compositeValueVersionIndex;
-    
+
+    private String remote = "";
+
+    private String groupIdField = "";
+
+    private String artifactIdField = "";
+
+    private String versionIdField = "";
+
+    private boolean useCompositeValueField = false;
+
+    private String compositeValueField = "";
+
+    private String compositeValueTemplate = "";
+
     private volatile boolean ready;
-    
-    public void scheduleFetchJob() {
-        if( cache != null && remote != null)
-        {
-            if( !INDEX_CACHE_DIR.exists() )
-            {
-                INDEX_CACHE_DIR.mkdir();
-            }
-            File cacheFile = new File( INDEX_CACHE_DIR, cache );
-            Job job = new FetchLuceneIndexJob( remote, cacheFile );
-            job.addJobChangeListener( new JobChangeAdapter(){
-                @Override
-                public void done( IJobChangeEvent event )
-                {
-                    if( event.getResult().getCode() == IStatus.OK )
-                    {
-                        ready = true;
-                    }
-                    
-                }
-            });
-            job.setPriority( Job.LONG );
-            job.schedule();
-        }
-        else
-        {
-            ready = true;
-        }
-    }
-    
-    public List<IArtifactInfo> search( )
+
+    public void scheduleFetchJob()
     {
-        if( !ready )
+
+        if ( !INDEX_CACHE_DIR.exists() )
+        {
+            INDEX_CACHE_DIR.mkdir();
+        }
+        File cacheFile = new File( INDEX_CACHE_DIR, getCacheFile() );
+        Job job = new FetchLuceneIndexJob( this.remote, cacheFile );
+        job.addJobChangeListener( new JobChangeAdapter()
+        {
+            @Override
+            public void done( IJobChangeEvent event )
+            {
+                if ( event.getResult().getCode() == IStatus.OK )
+                {
+                    IndexManager.this.ready = true;
+                }
+
+            }
+        } );
+        job.setPriority( Job.LONG );
+        job.schedule();
+
+    }
+
+    public List<IArtifactInfo> search()
+    {
+        if ( !this.ready )
+        {
             return Collections.emptyList();
-        
+        }
+
         try
         {
             IndexReader reader = IndexReader.open( getIndex() );
@@ -101,42 +104,46 @@ public class Indexer
             }
             return ret;
         }
-        catch ( IOException e )
+        catch ( Exception e )
         {
+            LuceneSearchPlugin.getLogger().log( "Cannot search index", e );
             return Collections.emptyList();
         }
     }
-    
+
     public List<IArtifactInfo> search( ISearchCriteria criteria )
     {
-        if( !ready )
+        if ( !this.ready )
+        {
             return Collections.emptyList();
-        
+        }
+
         try
         {
             BooleanQuery query = new BooleanQuery();
-            if( criteria.getArtifactId() != null )
+            BooleanQuery.setMaxClauseCount( Integer.MAX_VALUE );
+            if ( criteria.getArtifactId() != null )
             {
                 query.add( new TermQuery( new Term( getArtifactIdField(), criteria.getArtifactId() ) ), Occur.MUST );
             }
-            if( criteria.getGroupId() != null )
+            if ( criteria.getGroupId() != null )
             {
                 query.add( new TermQuery( new Term( getGroupIdField(), criteria.getGroupId() ) ), Occur.MUST );
             }
-            
-            if( criteria.getSearch() != null )
+
+            if ( criteria.getSearch() != null )
             {
-                if( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_ARTIFACT_ID ) > 0)
+                if ( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_ARTIFACT_ID ) > 0 )
                 {
-                    query.add( new TermQuery( new Term( getArtifactIdField(), criteria.getSearch() ) ), Occur.SHOULD );
+                    query.add( new PrefixQuery( new Term( getArtifactIdField(), criteria.getSearch() ) ), Occur.SHOULD );
                 }
-                if( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_GROUP_ID ) > 0)
+                if ( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_GROUP_ID ) > 0 )
                 {
-                    query.add( new TermQuery( new Term( getGroupIdField(), criteria.getSearch() ) ), Occur.SHOULD );
+                    query.add( new PrefixQuery( new Term( getGroupIdField(), criteria.getSearch() ) ), Occur.SHOULD );
                 }
-                if( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_VERSION ) > 0)
+                if ( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_VERSION ) > 0 )
                 {
-                    query.add( new TermQuery( new Term( getVersionIdField(), criteria.getSearch() ) ), Occur.SHOULD );
+                    query.add( new PrefixQuery( new Term( getVersionIdField(), criteria.getSearch() ) ), Occur.SHOULD );
                 }
             }
 
@@ -144,7 +151,7 @@ public class Indexer
             IndexSearcher searcher = new IndexSearcher( reader );
 
             Hits hits = searcher.search( query );
-            if ( hits == null || hits.length() <= 0 )
+            if ( ( hits == null ) || ( hits.length() <= 0 ) )
             {
                 return Collections.emptyList();
             }
@@ -162,116 +169,111 @@ public class Indexer
                 return ret;
             }
         }
-        catch ( IOException e )
+        catch ( Exception e )
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            LuceneSearchPlugin.getLogger().log( "Cannot search index", e );
             return Collections.emptyList();
         }
     }
-    
+
     private IArtifactInfo toArtifact( Document doc )
+        throws ParseException
     {
         ArtifactInfo hit = new ArtifactInfo();
-        
-        if( null == compositeValueField )
+
+        if ( !this.useCompositeValueField )
         {
             Field groupIdfield = doc.getField( getGroupIdField() );
             Field artifactIdfield = doc.getField( getArtifactIdField() );
             Field versionfield = doc.getField( getVersionIdField() );
-            
+
             if ( groupIdfield != null )
+            {
                 hit.setGroupId( groupIdfield.stringValue() );
-    
+            }
+
             if ( artifactIdfield != null )
+            {
                 hit.setArtifactId( artifactIdfield.stringValue() );
-    
+            }
+
             if ( versionfield != null )
+            {
                 hit.setVersion( versionfield.stringValue() );
+            }
         }
         else
         {
-            Field composite = doc.getField( compositeValueField );
+            Field composite = doc.getField( this.compositeValueField );
             String delimited = composite.stringValue();
-            String[] components = delimited.replace( compositeValueDelimiter, "__!!__" ).split( "__!!__" );
-            int groupIdx = Integer.parseInt( compositeValueGroupIndex );
-            int artifactIdx = Integer.parseInt( compositeValueArtifactIndex );
-            int versionIdx = Integer.parseInt( compositeValueVersionIndex );
-            if( groupIdx < components.length )
-            {
-                hit.setGroupId( components[groupIdx] );
-            }
-            if( artifactIdx < components.length )
-            {
-                hit.setArtifactId( components[artifactIdx] );
-            }
-            if( versionIdx < components.length )
-            {
-                hit.setVersion( components[versionIdx] );
-            }
+
+            MessageFormat format = new MessageFormat( this.compositeValueTemplate );
+            Object[] components = format.parse( delimited );
+            hit.setGroupId( components[0].toString() );
+            hit.setArtifactId( components[1].toString() );
+            hit.setVersion( components[2].toString() );
+
         }
-        
+
         return hit;
     }
-    
+
     private File getIndex()
     {
-        if( remote != null && cache != null )
-        {
-            int lastDot = cache.lastIndexOf( '.' );
-            File index = new File( INDEX_CACHE_DIR, cache.substring( 0, lastDot ) );
-            return index;
-        }
-        else
-        {
-            return new File( local );
-        }
+        String cacheFile = getCacheFile();
+        File index = new File( INDEX_CACHE_DIR, cacheFile.substring( 0, cacheFile.length() - 4 ) );
+        return index;
     }
-    
-    public String getLocal()
+
+    private String getCacheFile()
     {
-        return local;
+        char[] chars = this.remote.toCharArray();
+        for ( int i = 0; i < chars.length; i++ )
+        {
+            char c = chars[i];
+            if ( !Character.isLetterOrDigit( c ) )
+            {
+                chars[i] = '_';
+            }
+        }
+        return new String( chars ) + ".zip";
     }
-    public void setLocal( String local )
-    {
-        this.local = local;
-    }
+
     public String getRemote()
     {
-        return remote;
+        return this.remote;
     }
+
     public void setRemote( String remote )
     {
         this.remote = remote;
     }
-    public String getCache()
-    {
-        return cache;
-    }
-    public void setCache( String cache )
-    {
-        this.cache = cache;
-    }
+
     public String getGroupIdField()
     {
-        return groupIdField;
+        return this.groupIdField;
     }
+
     public void setGroupIdField( String groupIdField )
     {
         this.groupIdField = groupIdField;
     }
+
     public String getArtifactIdField()
     {
-        return artifactIdField;
+        return this.artifactIdField;
     }
+
     public void setArtifactIdField( String artifactIdField )
     {
         this.artifactIdField = artifactIdField;
     }
+
     public String getVersionIdField()
     {
-        return versionIdField;
+        return this.versionIdField;
     }
+
     public void setVersionIdField( String versionIdField )
     {
         this.versionIdField = versionIdField;
@@ -279,7 +281,7 @@ public class Indexer
 
     public String getCompositeValueField()
     {
-        return compositeValueField;
+        return this.compositeValueField;
     }
 
     public void setCompositeValueField( String compositeValueField )
@@ -287,43 +289,23 @@ public class Indexer
         this.compositeValueField = compositeValueField;
     }
 
-    public String getCompositeValueDelimiter()
+    public boolean isUseCompositeValueField()
     {
-        return compositeValueDelimiter;
+        return this.useCompositeValueField;
     }
 
-    public void setCompositeValueDelimiter( String compositeValueDelimiter )
+    public void setUseCompositeValueField( boolean useCompositeValueField )
     {
-        this.compositeValueDelimiter = compositeValueDelimiter;
+        this.useCompositeValueField = useCompositeValueField;
     }
 
-    public String getCompositeValueGroupIndex()
+    public String getCompositeValueTemplate()
     {
-        return compositeValueGroupIndex;
+        return this.compositeValueTemplate;
     }
 
-    public void setCompositeValueGroupIndex( String compositeValueGroupIndex )
+    public void setCompositeValueTemplate( String compositeValueTemplate )
     {
-        this.compositeValueGroupIndex = compositeValueGroupIndex;
-    }
-
-    public String getCompositeValueArtifactIndex()
-    {
-        return compositeValueArtifactIndex;
-    }
-
-    public void setCompositeValueArtifactIndex( String compositeValueArtifactIndex )
-    {
-        this.compositeValueArtifactIndex = compositeValueArtifactIndex;
-    }
-
-    public String getCompositeValueVersionIndex()
-    {
-        return compositeValueVersionIndex;
-    }
-
-    public void setCompositeValueVersionIndex( String compositeValueVersionIndex )
-    {
-        this.compositeValueVersionIndex = compositeValueVersionIndex;
+        this.compositeValueTemplate = compositeValueTemplate;
     }
 }
