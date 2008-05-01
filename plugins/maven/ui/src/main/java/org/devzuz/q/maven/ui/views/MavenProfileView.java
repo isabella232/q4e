@@ -28,6 +28,12 @@ import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.internal.util.MavenUiUtil;
 import org.devzuz.q.maven.ui.preferences.MavenUIPreferenceManagerAdapter;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jdt.ui.JavaUI;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -100,6 +106,62 @@ public class MavenProfileView extends ViewPart
     private Settings userSettings;
 
     /**
+     * Visitor that scans the change information and triggers an update on the view if the pom.xml resource on the
+     * {@link #currentProject} has changed.
+     */
+    private final IResourceDeltaVisitor workspaceDeltaVisitor = new IResourceDeltaVisitor()
+    {
+        public boolean visit( IResourceDelta delta ) throws CoreException
+        {
+            IResource res = delta.getResource();
+            System.out.println( "ResourceListener: " + res );
+            if ( res.equals( res.getWorkspace().getRoot() ) )
+            {
+                // Workspace modification, keep visiting to reach the children
+                return true;
+            }
+            if ( res.equals( res.getProject() ) )
+            {
+                // If a project was changed, continue only if it is the selected one
+                return res.equals( currentProject );
+            }
+            // A file in a project
+            if ( res.getName().equals( IMavenProject.POM_FILENAME ) )
+            {
+                // pom.xml changed on the current project
+                System.out.println( "Updating Profile View" );
+                updateTable( false );
+            }
+            // Anything else
+            return false;
+        }
+    };
+
+    /**
+     * Listener that will update the view when the currently displayed pom.xml file changes.
+     */
+    private final IResourceChangeListener pomChangeListener = new IResourceChangeListener()
+    {
+        public void resourceChanged( IResourceChangeEvent event )
+        {
+            if ( event.getType() == IResourceChangeEvent.POST_CHANGE )
+            {
+                IResourceDelta delta = event.getDelta();
+                try
+                {
+                    delta.accept( workspaceDeltaVisitor );
+                }
+                catch ( CoreException e )
+                {
+                    // visit throws no exceptions, so we should never get here.
+                    MavenUiActivator.getLogger().log( "Unexpected exception", e );
+                }
+            }
+
+        }
+    };
+
+    /**
      * Initializes this view with the given view site. It also adds a SelectionListener that listens when the user
      * selects any object in the page.
      * 
@@ -115,8 +177,9 @@ public class MavenProfileView extends ViewPart
         userSettingsXmlLmod =
             new File( MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename() ).lastModified();
         super.init( site );
+        // Start monitoring changes when the view is open
         getSite().getWorkbenchWindow().getSelectionService().addSelectionListener( getSelectionListener() );
-
+        ResourcesPlugin.getWorkspace().addResourceChangeListener( pomChangeListener, IResourceChangeEvent.POST_CHANGE );
     }
 
     /**
@@ -127,7 +190,9 @@ public class MavenProfileView extends ViewPart
     @Override
     public void dispose()
     {
+        // Remove change and selection listeners
         getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener( getSelectionListener() );
+        ResourcesPlugin.getWorkspace().removeResourceChangeListener( pomChangeListener );
         profiles = null;
         super.dispose();
     }
@@ -489,7 +554,11 @@ public class MavenProfileView extends ViewPart
      */
     protected void updatePomModel()
     {
-        currentProject = selectedProject;
+        if ( selectedProject != null )
+        {
+            currentProject = selectedProject;
+        }
+
         try
         {
             if ( currentProject != null )
@@ -552,11 +621,10 @@ public class MavenProfileView extends ViewPart
         {
             List<Profile> profiles = mavenProjectModel.getProfiles();
 
-            for ( int i = 0; i < profiles.size(); i++ )
+            for ( Profile profile : profiles )
             {
                 ProfileModel profileModel = new ProfileModel();
 
-                Profile profile = profiles.get( i );
                 profileModel.setName( profile.getId() );
                 profileModel.setLocation( path );
                 profileModel.setActive( profile.getActivation() != null && profile.getActivation().isActiveByDefault() );
@@ -670,8 +738,8 @@ public class MavenProfileView extends ViewPart
                         ProfileModel profile = profileModels.get( i );
                         TableItem item = mavenProfileTableViewer.getTable().getItem( i );
                         // XXX amuino: Hack to workaround caching...
-                        // item.setChecked( false );
-                        // item.setChecked( true );
+                        item.setChecked( false );
+                        item.setChecked( true );
                         item.setChecked( profile.isActive() );
                     }
                 }

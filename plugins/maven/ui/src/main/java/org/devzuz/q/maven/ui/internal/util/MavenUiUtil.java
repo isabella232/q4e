@@ -6,6 +6,9 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * Utility Class for Maven UI
@@ -78,5 +81,32 @@ public class MavenUiUtil
         }
         // nothing worked, try the platform adapted manager
         return (T) Platform.getAdapterManager().getAdapter( object, clazz );
+    }
+
+    public static IWorkbenchPage getActivePageInWorkbench()
+    {
+        IWorkbenchWindow activeWindow = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+        IWorkbenchPage activePage = null;
+
+        if ( activeWindow == null )
+        {
+            IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();
+            for ( IWorkbenchWindow window : windows )
+            {
+                IWorkbenchPage page = window.getActivePage();
+                if ( page != null )
+                {
+                    activeWindow = window;
+                    activePage = page;
+                    break;
+                }
+            }
+        }
+        else
+        {
+            activePage = activeWindow.getActivePage();
+        }
+
+        return activePage;
     }
 }
