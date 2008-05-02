@@ -39,7 +39,10 @@
    <feature url="features/org.devzuz.q.feature.wtp_0.6.0.200804131446.jar" id="org.devzuz.q.feature.wtp" version="0.6.0.200804131446">
       <category name="Optional"/>
    </feature>
-   
+   <!-- New in 0.6.1 (maintenance release) -->
+   <feature url="features/org.devzuz.q.feature_0.6.1.200804212151.jar" id="org.devzuz.q.feature" version="0.6.1.200804212151">
+      <category name="Community"/>
+   </feature>
    <category-def name="Community" label="Community"/>
    <category-def name="Enabling Features" label="Enabling Features"/>
       <category-def name="Optional" label="Optional">
