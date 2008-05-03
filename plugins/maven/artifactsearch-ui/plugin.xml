@@ -10,4 +10,24 @@
             name="Artifact Search">
       </page>
    </extension>
+   <extension
+         point="org.eclipse.search.searchPages">
+      <page
+            canSearchEnclosingProjects="false"
+            class="org.devzuz.q.maven.search.ui.ArtifactSearchPage"
+            enabled="true"
+            id="org.devzuz.q.maven.search.ui.artifactSearchPage"
+            label="Artifact Search Page "
+            showScopeSection="false">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.search.searchResultViewPages">
+      <viewPage
+            class="org.devzuz.q.maven.search.ui.ArtifactSearchResultPage"
+            id="org.devzuz.q.maven.search.ui.artifactSearchResultPage"
+            label="Artifact Search Results"
+            searchResultClass="org.devzuz.q.maven.search.ui.ArtifactSearchResult">
+      </viewPage>
+   </extension>
 </plugin>

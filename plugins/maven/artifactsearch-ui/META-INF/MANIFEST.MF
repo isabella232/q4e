@@ -7,5 +7,6 @@ Bundle-Activator: org.devzuz.q.maven.search.ui.SearchUIActivator
 Bundle-Vendor: DevZuz
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.devzuz.q.maven.search
+ org.devzuz.q.maven.search,
+ org.eclipse.search
 Eclipse-LazyStart: true
