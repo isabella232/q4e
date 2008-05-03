@@ -37,6 +37,7 @@
       <import plugin="org.eclipse.swt" version="3.3.0" match="compatible"/>
       <import feature="org.apache.commons.collections.feature" version="3.2.0.200801311913" match="compatible"/>
       <import feature="org.apache.maven.feature" version="2.1.0.627670" match="perfect"/>
+      <import plugin="org.eclipse.search"/>
    </requires>
 
    <plugin
@@ -93,6 +94,27 @@
          download-size="0"
          install-size="0"
          version="2.1.0.v200709131643"
+         unpack="false"/>
+
+   <plugin
+         id="org.devzuz.q.maven.search"
+         download-size="0"
+         install-size="0"
+         version="0.7.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.devzuz.q.maven.search.lucene"
+         download-size="0"
+         install-size="0"
+         version="0.7.0.qualifier"
+         unpack="false"/>
+
+   <plugin
+         id="org.devzuz.q.maven.search.ui"
+         download-size="0"
+         install-size="0"
+         version="0.7.0.qualifier"
          unpack="false"/>
 
 </feature>
