@@ -345,9 +345,7 @@ public class MavenProfileView extends ViewPart
      * Returns one instance of selection listener. The listener gets notified and selectionChanged method will be called
      * when the user clicks any object of the workbench. The selectionChanged method will first check if the selection
      * is an IStructuredSelection. If yes then it'll try to get the IProject. If the IProject has Q4ENature then
-     * profiles in pom.xml, settings.xml and profile.xml will be displayed in the table. FIXME: IAdaptable is more
-     * general. object instanceof IProject would return false when you click on the root project that's why IAdaptable
-     * is the last resort that i could think of.
+     * profiles in pom.xml, settings.xml and profile.xml will be displayed in the table.
      * 
      * @return listener
      */
