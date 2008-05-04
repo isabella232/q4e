@@ -24,6 +24,7 @@ import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.MavenProjectManager;
 import org.devzuz.q.maven.embedder.internal.TraceOption;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 
 /**
@@ -40,7 +41,7 @@ public class EclipseMavenArtifactResolver extends DefaultArtifactResolver
      * 
      * TODO: This should be a globally accessible class on its own and modifiable through the UI.
      */
-    private Map<String, Artifact> resolvedArtifacts = new HashMap<String, Artifact>( 128 );
+    private final Map<String, Artifact> resolvedArtifacts = new HashMap<String, Artifact>( 128 );
 
     @Override
     public void resolve( final Artifact artifact, final List remoteRepositories,
@@ -178,7 +179,15 @@ public class EclipseMavenArtifactResolver extends DefaultArtifactResolver
                 }
                 else
                 {
-                    file = mavenProject.getPomFile();
+                    IFile generatedArtifactFile = MavenManager.getMaven().getGeneratedArtifactFile( mavenProject );
+                    if ( packagingIsUpToDate( mavenProject, generatedArtifactFile ) )
+                    {
+                        file = generatedArtifactFile.getLocation().toFile();
+                    }
+                    else
+                    {
+                        file = mavenProject.getPomFile();
+                    }
                     resolved = file != null;
                 }
                 if ( resolved )
@@ -192,8 +201,23 @@ public class EclipseMavenArtifactResolver extends DefaultArtifactResolver
         }
         catch ( CoreException e )
         {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            MavenCoreActivator.getLogger().log( "Error resolving " + artifact + " from the workspace", e );
         }
+    }
+
+    /**
+     * Checks if the packaged version of the project is up-to-date (i.e. no changes to the project have been made after
+     * packaging.
+     * 
+     * @param mavenProject
+     *            the dependency project.
+     * @param packageFile
+     *            the file containing the packaged project.
+     * @return <code>true</code> if the package is newer than any changes to the project, <code>false</code>
+     *         otherwise.
+     */
+    private boolean packagingIsUpToDate( IMavenProject mavenProject, IFile packageFile )
+    {
+        return packageFile != null && mavenProject.getLastBuildStamp() < packageFile.getLocalTimeStamp();
     }
 }
