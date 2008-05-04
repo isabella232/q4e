@@ -26,6 +26,7 @@ import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -170,6 +171,16 @@ public class EclipseMavenRequest extends Job implements IMavenJob
                     IFile file = maven.getGeneratedArtifactFile( dependencyProject );
                     try
                     {
+                        IProject eclipseProject = dependencyProject.getProject();
+                        // If the project was no timestamp info, set to "now" (this will happen on an upgrade or
+                        // import).
+                        if ( null == eclipseProject.getPersistentProperty( IMavenProject.CHANGE_TIMESTAMP ) )
+                        {
+                            // Make the buildtime 1 second in the past, since some OS don't keep milliseconds on the
+                            // file dates
+                            eclipseProject.setPersistentProperty( IMavenProject.CHANGE_TIMESTAMP,
+                                                                  String.valueOf( System.currentTimeMillis() - 1000 ) );
+                        }
                         file.setLocalTimeStamp( System.currentTimeMillis() );
                     }
                     catch ( CoreException e )
