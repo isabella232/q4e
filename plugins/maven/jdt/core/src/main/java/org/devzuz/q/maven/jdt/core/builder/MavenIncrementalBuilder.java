@@ -36,6 +36,7 @@ import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.resources.IncrementalProjectBuilder;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -287,7 +288,7 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
                     handleFilterFiles( status );
                 }
 
-                // If the change was to a resource file, pom.xml parses and at least on resource has not been synced we
+                // If the change was to a resource file, pom.xml parses and at least one resource has not been synced we
                 // need to process the resources.
                 if ( !status.resourcesRefreshed || !status.testResourcesRefreshed )
                 {
@@ -301,7 +302,7 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
                 {
                     if ( !doesSentinelFileExist( status.mavenProject, status.mavenProject.getBuildOutputDirectory() ) )
                     {
-                        onResourcesChange( status.mavenProject, RESOURCES_GOAL, monitor );
+                        status.resourcesRefreshed |= onResourcesChange( status.mavenProject, RESOURCES_GOAL, monitor );
                     }
                 }
 
@@ -309,7 +310,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
                 {
                     if ( !doesSentinelFileExist( status.mavenProject, status.mavenProject.getBuildTestOutputDirectory() ) )
                     {
-                        onResourcesChange( status.mavenProject, TEST_RESOURCES_GOAL, monitor );
+                        status.testResourcesRefreshed |=
+                            onResourcesChange( status.mavenProject, TEST_RESOURCES_GOAL, monitor );
                     }
                 }
             }
@@ -327,6 +329,25 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             if ( status.mavenProject != null )
             {
                 lastGoodProject = status.mavenProject;
+                // Determine if something was changed in the source or resource folders to update the project's
+                // modification timestamp
+                boolean sourcesModified = status.resourcesRefreshed | status.testResourcesRefreshed;
+                if ( !sourcesModified )
+                {
+                    IContainer[] containers =
+                        ResourcesPlugin.getWorkspace().getRoot().findContainersForLocation(
+                                                                                            new Path(
+                                                                                                      status.mavenProject.getModel().getBuild().getSourceDirectory() ) );
+                    for ( int i = 0; i < containers.length && sourcesModified == false; i++ )
+                    {
+                        sourcesModified = status.delta.findMember( containers[0].getProjectRelativePath() ) != null;
+                    }
+                }
+                if ( sourcesModified )
+                {
+                    project.setPersistentProperty( IMavenProject.CHANGE_TIMESTAMP,
+                                                   String.valueOf( System.currentTimeMillis() ) );
+                }
             }
             return null;
         }
@@ -334,7 +355,6 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
         {
             return null;
         }
-
     }
 
     /**
@@ -538,8 +558,8 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
     {
         List<Resource> resources = status.mavenProject.getResources();
         List<Resource> testResources = status.mavenProject.getTestResources();
-        doHandleResources( status, resources, RESOURCES_GOAL );
-        doHandleResources( status, testResources, TEST_RESOURCES_GOAL );
+        status.resourcesRefreshed |= status.resourcesRefreshed = doHandleResources( status, resources, RESOURCES_GOAL );
+        status.testResourcesRefreshed |= doHandleResources( status, testResources, TEST_RESOURCES_GOAL );
     }
 
     /**
@@ -554,7 +574,7 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
      * @throws CoreException
      *             if there is a problem updating the resources.
      */
-    private void doHandleResources( BuildStatus status, List<Resource> resources, final String goal )
+    private boolean doHandleResources( BuildStatus status, List<Resource> resources, final String goal )
         throws CoreException
     {
         Map<Resource, IPath> resourcePathMap = getPathForResources( status.mavenProject, resources );
@@ -570,10 +590,11 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
                 deltaMember.accept( deltaVisitor );
                 if ( deltaVisitor.isMatched() )
                 {
-                    onResourcesChange( status.mavenProject, goal, status.monitor );
+                    return onResourcesChange( status.mavenProject, goal, status.monitor );
                 }
             }
         }
+        return false;
     }
 
     /**

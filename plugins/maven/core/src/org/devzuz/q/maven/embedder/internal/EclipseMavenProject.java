@@ -20,9 +20,13 @@ import org.apache.maven.model.Resource;
 import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenCoreActivator;
+import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.embedder.MavenProjectManager;
 import org.devzuz.q.maven.embedder.nature.MavenNatureHelper;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.CoreException;
 
 /**
  * Provides a set of methods that allow you to interact with a MavenProject, both handling the extraction of metadata as
@@ -330,9 +334,52 @@ public class EclipseMavenProject implements IMavenProject
         return allArtifacts;
     }
 
+    public Set<IMavenProject> getAllDependentProjects()
+    {
+        return filterWorkspaceArtifacts( getArtifacts() );
+    }
+
     public Set<IMavenArtifact> getDependencyArtifacts()
     {
         return dependencyArtifacts;
+    }
+
+    public Set<IMavenProject> getDependencyProjects()
+    {
+        return filterWorkspaceArtifacts( getDependencyArtifacts() );
+    }
+
+    /**
+     * Returns the set of maven projects that are available on the workspace from the given set of artifacts.
+     * 
+     * @param artifacts
+     *            the artifacts to look up in the workspace.
+     * @return the subset of projects in the workspace for the given artifacts.
+     */
+    protected Set<IMavenProject> filterWorkspaceArtifacts( Set<IMavenArtifact> artifacts )
+    {
+        MavenProjectManager projectManager = MavenManager.getMavenProjectManager();
+        Set<IMavenProject> result = new HashSet<IMavenProject>();
+        for ( IMavenArtifact artifact : artifacts )
+        {
+            IProject project =
+                projectManager.getWorkspaceProject( artifact.getGroupId(), artifact.getArtifactId(),
+                                                    artifact.getVersion() );
+            if ( null != project )
+            {
+                try
+                {
+                    IMavenProject mavenProject = projectManager.getMavenProject( project, false );
+                    result.add( mavenProject );
+                }
+                catch ( CoreException e )
+                {
+                    // Log exception and try next
+                    MavenCoreActivator.getLogger().log( "Unable to get maven project for " + project, e );
+                }
+            }
+        }
+        return result;
     }
 
     /*
@@ -391,6 +438,40 @@ public class EclipseMavenProject implements IMavenProject
     public Model getModel()
     {
         return mavenProject.getModel();
+    }
+
+    public long getLastBuildStamp()
+    {
+        if ( project != null )
+        {
+            try
+            {
+                String property = project.getPersistentProperty( CHANGE_TIMESTAMP );
+                if ( property != null && property.length() > 0 )
+                {
+                    return Long.parseLong( property );
+                }
+                else
+                {
+                    // No property value
+                    return Long.MAX_VALUE;
+                }
+            }
+            catch ( CoreException e )
+            {
+                MavenCoreActivator.getLogger().warn(
+                                                     "Could not read timestamp for project " + project
+                                                                     + ". Returned Long.MAX_VALUE.", e );
+                return Long.MAX_VALUE;
+            }
+        }
+        else
+        {
+            MavenCoreActivator.getLogger().info(
+                                                 "Requested last build date for a non-project. Returned Long.MAX_VALUE." );
+            return Long.MAX_VALUE;
+        }
+
     }
 
     @Override

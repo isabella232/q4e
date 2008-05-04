@@ -18,6 +18,7 @@ import java.util.Stack;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.InvalidArtifactRTException;
+import org.apache.maven.artifact.handler.ArtifactHandler;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.repository.ArtifactRepository;
@@ -41,7 +42,11 @@ import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.reactor.MavenExecutionException;
+import org.codehaus.plexus.PlexusContainer;
+import org.codehaus.plexus.component.repository.ComponentDescriptor;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
+import org.codehaus.plexus.configuration.PlexusConfiguration;
+import org.codehaus.plexus.configuration.PlexusConfigurationException;
 import org.devzuz.q.maven.embedder.ILocalMavenRepository;
 import org.devzuz.q.maven.embedder.IMaven;
 import org.devzuz.q.maven.embedder.IMavenArtifact;
@@ -57,12 +62,15 @@ import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.QCoreException;
 import org.devzuz.q.maven.project.properties.MavenProjectPropertiesManager;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.Job;
@@ -248,7 +256,7 @@ public class EclipseMaven implements IMaven
         }
         eclipseMavenRequest.addJobChangeListener( new RefreshOutputFoldersListener() );
         eclipseMavenRequest.setUser( true );
-        eclipseMavenRequest.setRule( mavenProject.getProject() );
+        eclipseMavenRequest.setRule( mavenProject.getProject().getWorkspace().getRoot() );
         eclipseMavenRequest.setPriority( Job.BUILD );
         eclipseMavenRequest.schedule();
     }
@@ -883,5 +891,55 @@ public class EclipseMaven implements IMaven
                                                   "Error fetching goals", e ) );
         }
 
+    }
+
+    public IFile getGeneratedArtifactFile( IMavenProject project )
+    {
+        String packaging = project.getPackaging();
+        String outputDirectory = project.getModel().getBuild().getDirectory();
+        String fileName = project.getModel().getBuild().getFinalName();
+        // Derives the file extension using the information on
+        // http://propellors.net/maven/book/repository.html#tips_and_tricks
+        String fileExtension = packaging; // by default
+        PlexusContainer plexus = mavenEmbedder.getPlexusContainer();
+        ComponentDescriptor descriptor = plexus.getComponentDescriptor( ArtifactHandler.ROLE, packaging );
+        if ( descriptor != null )
+        {
+            PlexusConfiguration child = descriptor.getConfiguration().getChild( "extension" );
+            if ( child != null )
+            {
+                try
+                {
+                    if ( child.getValue() != null )
+                    {
+                        // Use configuration to override default
+                        fileExtension = child.getValue();
+                    }
+                }
+                catch ( PlexusConfigurationException e )
+                {
+                    MavenCoreActivator.getLogger().log(
+                                                        "Unexpected error reading plexus component configuration: "
+                                                                        + child, e );
+                }
+            }
+        }
+        IPath outputPath = new Path( outputDirectory );
+        // Make paths relative
+        IContainer[] containers = ResourcesPlugin.getWorkspace().getRoot().findContainersForLocation( outputPath );
+        // The resource might be contained in several containers (i.e. linked folders, symbolic links?) but all point to
+        // the same file
+        if ( containers.length > 0 )
+        {
+            return containers[0].getFile( new Path( fileName + '.' + fileExtension ) );
+        }
+        else
+        {
+            IFile defaultFile = project.getProject().getFile( "target/" + fileName + "." + fileExtension );
+            MavenCoreActivator.getLogger().info(
+                                                 "Could not find container matching output folder, returning the default location:  "
+                                                                 + defaultFile );
+            return defaultFile;
+        }
     }
 }

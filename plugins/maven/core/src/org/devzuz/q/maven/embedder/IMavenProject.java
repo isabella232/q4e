@@ -22,12 +22,19 @@ import org.eclipse.core.runtime.QualifiedName;
 
 public interface IMavenProject extends IAdaptable
 {
-    public static final QualifiedName GROUP_ID = new QualifiedName( MavenCoreActivator.PLUGIN_ID , ".groupId" );
-    
-    public static final QualifiedName ARTIFACT_ID = new QualifiedName( MavenCoreActivator.PLUGIN_ID , ".artifactId" );
-    
-    public static final QualifiedName VERSION = new QualifiedName( MavenCoreActivator.PLUGIN_ID , ".version" );
-    
+    public static final QualifiedName GROUP_ID = new QualifiedName( MavenCoreActivator.PLUGIN_ID, ".groupId" );
+
+    public static final QualifiedName ARTIFACT_ID = new QualifiedName( MavenCoreActivator.PLUGIN_ID, ".artifactId" );
+
+    public static final QualifiedName VERSION = new QualifiedName( MavenCoreActivator.PLUGIN_ID, ".version" );
+
+    /**
+     * This property holds the timestamp for the last modification that affected a maven build: pom, sources, resources,
+     * test-resources, filter files...
+     */
+    public static final QualifiedName CHANGE_TIMESTAMP =
+        new QualifiedName( MavenCoreActivator.PLUGIN_ID, ".changeTimeStamp" );
+
     public String POM_FILENAME = "pom.xml";
 
     public abstract void executeGoals( String goals );
@@ -39,7 +46,7 @@ public interface IMavenProject extends IAdaptable
     public abstract String getGroupId();
 
     public abstract IProject getProject();
-    
+
     public abstract String getPackaging();
 
     public abstract String getVersion();
@@ -58,7 +65,15 @@ public interface IMavenProject extends IAdaptable
      * 
      */
     public abstract Set<IMavenArtifact> getArtifacts();
-    
+
+    /**
+     * Returns the projects in the workspace that are also dependencies of this project, including transitive
+     * dependencies.
+     * 
+     * @return the dependencies of this project in the workspace, including transitive ones.
+     */
+    public abstract Set<IMavenProject> getAllDependentProjects();
+
     /**
      * 
      * Expose all direct dependencies not including transitive dependencies
@@ -68,6 +83,14 @@ public interface IMavenProject extends IAdaptable
      */
     public abstract Set<IMavenArtifact> getDependencyArtifacts();
 
+    /**
+     * Returns the projects in the workspace that are also dependencies of this project, <b>not</b> including
+     * transitive dependencies.
+     * 
+     * @return the dependencies of this project in the workspace, <b>not</b> including transitive ones.
+     */
+    public abstract Set<IMavenProject> getDependencyProjects();
+
     public abstract String getBuildOutputDirectory();
 
     public abstract String getBuildTestOutputDirectory();
@@ -75,7 +98,7 @@ public interface IMavenProject extends IAdaptable
     public abstract List<String> getCompileSourceRoots();
 
     public abstract List<String> getTestCompileSourceRoots();
-    
+
     public abstract List<String> getFilters();
 
     public abstract List<Resource> getResources();
@@ -95,4 +118,13 @@ public interface IMavenProject extends IAdaptable
      * 
      */
     public abstract MavenProject getRawMavenProject();
+
+    /**
+     * Returns the timestamp for the instant the last build finished.
+     * 
+     * If no previous build is known, or the time can't be determined, then {@link Long#MAX_VALUE} is returned.
+     * 
+     * @return the timestamp for the end of the last build, or {@link Long#MAX_VALUE} if the time can't be determined.
+     */
+    public abstract long getLastBuildStamp();
 }
