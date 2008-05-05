@@ -26,6 +26,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jdt.core.IClasspathAttribute;
 import org.eclipse.jem.util.emf.workbench.ProjectUtilities;
 import org.eclipse.jst.j2ee.classpathdep.UpdateClasspathAttributeUtil;
@@ -253,8 +254,7 @@ public class WtpEnablerPostprocessor implements IImportProjectPostprocessor, IMa
             Build buildModel = mavenProject.getModel().getBuild();
             for ( IActionDefinition def : javaFacetVersion.getActionDefinitions( Action.Type.INSTALL ) )
             {
-                IDataModel model =
-                    (IDataModel) def.createConfigObject( javaFacetVersion, mavenProject.getProject().getName() );
+                IDataModel model = getActionDataModel( def, javaFacetVersion, mavenProject );
                 model.setStringProperty( "IJavaFacetInstallDataModelProperties.SOURCE_FOLDER_NAME",
                                          makeRelative( mavenProject, buildModel.getSourceDirectory() ) );
                 model.setStringProperty( "IJavaFacetInstallDataModelProperties.DEFAULT_OUTPUT_FOLDER_NAME",
@@ -276,8 +276,7 @@ public class WtpEnablerPostprocessor implements IImportProjectPostprocessor, IMa
             IProjectFacetVersion webFacetVersion = webFacet.getVersion( "2.4" );
             for ( IActionDefinition def : webFacetVersion.getActionDefinitions( Action.Type.INSTALL ) )
             {
-                IDataModel model =
-                    (IDataModel) def.createConfigObject( webFacetVersion, mavenProject.getProject().getName() );
+                IDataModel model = getActionDataModel( def, webFacetVersion, mavenProject );
                 model.setStringProperty( IWebFacetInstallDataModelProperties.SOURCE_FOLDER, "src/main/java" );
                 model.setStringProperty( IWebFacetInstallDataModelProperties.CONFIG_FOLDER, "src/main/webapp" );
                 model.setStringProperty( IWebFacetInstallDataModelProperties.CONTEXT_ROOT, mavenProject.getArtifactId() );
@@ -297,12 +296,41 @@ public class WtpEnablerPostprocessor implements IImportProjectPostprocessor, IMa
             IProjectFacetVersion utilityFacetVersion = utilityFacet.getDefaultVersion();
             for ( IActionDefinition def : utilityFacetVersion.getActionDefinitions( Action.Type.INSTALL ) )
             {
-                IDataModel model =
-                    (IDataModel) def.createConfigObject( utilityFacetVersion, mavenProject.getProject().getName() );
+                IDataModel model = getActionDataModel( def, utilityFacetVersion, mavenProject );
                 facetActions.add( new Action( Action.Type.INSTALL, utilityFacetVersion, model ) );
             }
         }
         return facetActions;
+    }
+
+    /**
+     * Creates the IDataModel object for configuring a facet action. This method handles the minor diferences between
+     * WTP 2.x and 3.x.
+     * 
+     * @param def
+     *            the action definition
+     * @param javaFacetVersion
+     *            the facet version
+     * @param mavenProject
+     *            the project where the action will be applied
+     * @return the data model for configuring the action
+     * @throws CoreException
+     *             if the data model can't be created.
+     */
+    private IDataModel getActionDataModel( IActionDefinition def, IProjectFacetVersion javaFacetVersion,
+                                           IMavenProject mavenProject ) throws CoreException
+    {
+        Object configObject = def.createConfigObject( javaFacetVersion, mavenProject.getProject().getName() );
+        if ( configObject instanceof IDataModel )
+        {
+            // This works in WTP 2.0
+            return (IDataModel) configObject;
+        }
+        else
+        {
+            // This is the compatibility layer for WTP 3.0
+            return (IDataModel) Platform.getAdapterManager().loadAdapter( configObject, IDataModel.class.getName() );
+        }
     }
 
     /**
