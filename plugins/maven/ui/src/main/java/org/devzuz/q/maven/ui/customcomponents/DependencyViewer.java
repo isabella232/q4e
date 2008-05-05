@@ -6,8 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.ui.customcomponents;
 
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.List;
 
 import org.apache.maven.model.Dependency;
 import org.devzuz.q.maven.ui.Messages;
@@ -28,7 +27,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class DependencyViewer extends Composite
 {
-    private Collection<Dependency> artifacts;
+    private List<Dependency> artifacts;
 
     private final Button addPropertyButton;
 
@@ -104,6 +103,18 @@ public class DependencyViewer extends Composite
         column = new TableColumn( artifactsTable, SWT.CENTER, 4 );
         column.setText( Messages.MavenCustomComponent_TypeLabel );
         column.setWidth( 25 );
+        
+        column = new TableColumn( artifactsTable, SWT.CENTER, 5 );
+        column.setText( Messages.MavenCustomComponent_ClassifierLabel );
+        column.setWidth( 25 );
+        
+        column = new TableColumn( artifactsTable, SWT.CENTER, 6 );
+        column.setText( Messages.MavenCustomComponent_SystemPath );
+        column.setWidth( 25 );
+        
+        column = new TableColumn( artifactsTable, SWT.CENTER, 7 );
+        column.setText( Messages.MavenCustomComponent_Optional );
+        column.setWidth( 25 );
 
         Composite container2 = new Composite( container, SWT.NULL );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -134,7 +145,8 @@ public class DependencyViewer extends Composite
         {
             TableItem item = new TableItem( artifactsTable, SWT.BEGINNING );
             item.setText( new String[] { artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(),
-                artifact.getScope(), artifact.getType() } );
+                artifact.getScope(), artifact.getType() , artifact.getClassifier() , artifact.getSystemPath() ,
+                String.valueOf( artifact.isOptional() ) } );
         }
 
         artifactsTable.deselectAll();
@@ -150,29 +162,22 @@ public class DependencyViewer extends Composite
         {
             AddEditDependencyDialog dialog = AddEditDependencyDialog.getAddEditDependencyDialog();
 
-            if ( dialog.openWithItem( null ) == Window.OK )
+            if ( dialog.openWithDependency( null ) == Window.OK )
             {
-                if ( !artifactAlreadyExist( dialog.getGroupId(), dialog.getArtifactId() ) )
+                Dependency dependency = dialog.getDependency();
+                if ( !dependencyAlreadyExist( dependency ) )
                 {
-                    Dependency dependency = new Dependency();
-                    dependency.setGroupId( dialog.getGroupId() );
-                    dependency.setArtifactId( dialog.getArtifactId() );
-                    dependency.setVersion( nullIfBlank( dialog.getVersion() ) );
-                    dependency.setScope( nullIfBlank( dialog.getScope() ) );
-                    dependency.setType( "jar" );
-
                     artifacts.add( dependency );
+                    refreshArtifactsTable();
                 }
-
-                refreshArtifactsTable();
             }
         }
         else if ( e.getSource() == removePropertyButton )
         {
-            TableItem items[] = artifactsTable.getSelection();
-            if ( items.length > 0 )
+            int selection = artifactsTable.getSelectionIndex();
+            if( selection != -1 )
             {
-                removeArtifactFromList( items[0] );
+                artifacts.remove( selection );
                 refreshArtifactsTable();
             }
         }
@@ -180,20 +185,12 @@ public class DependencyViewer extends Composite
         {
             AddEditDependencyDialog dialog = AddEditDependencyDialog.getAddEditDependencyDialog();
 
-            TableItem items[] = artifactsTable.getSelection();
             int selectedIndex = artifactsTable.getSelectionIndex();
-            if ( items.length > 0 )
+            if ( selectedIndex != -1 )
             {
-                if ( dialog.openWithItem( items[0] ) == Window.OK )
+                if ( dialog.openWithDependency( artifacts.get( selectedIndex ) ) == Window.OK )
                 {
-                    TableItem editedItem = artifactsTable.getItem( selectedIndex );
-                    if ( shouldModify( editedItem, dialog.getGroupId(), dialog.getArtifactId(), dialog.getVersion(),
-                                       dialog.getScope() ) )
-                    {
-                        replaceArtifactInList( editedItem, dialog.getGroupId(), dialog.getArtifactId(),
-                                               nullIfBlank( dialog.getVersion() ), nullIfBlank( dialog.getScope() ) );
-                        refreshArtifactsTable();
-                    }
+                    artifacts.set( selectedIndex , dialog.getDependency() );
                 }
             }
         }
@@ -203,88 +200,26 @@ public class DependencyViewer extends Composite
         }
     }
 
-    public Collection<Dependency> getDependencies()
+    public List<Dependency> getDependencies()
     {
         return artifacts;
     }
 
-    public void setDependencies( Collection<Dependency> artifacts )
+    public void setDependencies( List<Dependency> artifacts )
     {
         this.artifacts = artifacts;
     }
 
-    private void replaceArtifactInList( TableItem item, String groupId, String artifactId, String version, String scope )
+    private boolean dependencyAlreadyExist( Dependency dependency )
     {
-        for ( Iterator<Dependency> it = artifacts.iterator(); it.hasNext(); )
+        for( Dependency artifact : artifacts )
         {
-            Dependency artifact = it.next();
-            if ( itemEqualsArtifact( item, artifact ) )
-            {
-                artifact.setGroupId( groupId );
-                artifact.setArtifactId( artifactId );
-                artifact.setVersion( version );
-                artifact.setScope( scope );
-                break;
-            }
-        }
-    }
-
-    private void removeArtifactFromList( TableItem item )
-    {
-        for ( Iterator<Dependency> it = artifacts.iterator(); it.hasNext(); )
-        {
-            Dependency artifact = it.next();
-            if ( itemEqualsArtifact( item, artifact ) )
-            {
-                it.remove();
-                break;
-            }
-        }
-    }
-
-    private boolean shouldModify( TableItem item, String groupId, String artifactId, String version, String scope )
-    {
-        if ( item.getText( 0 ).equals( groupId ) && item.getText( 1 ).equals( artifactId ) )
-        {
-            if ( !( item.getText( 2 ).equals( version ) && item.getText( 3 ).equals( scope ) ) )
-                return true;
-        }
-        else
-        {
-            if ( !artifactAlreadyExist( groupId, artifactId ) )
-                return true;
-        }
-
-        return false;
-    }
-
-    private boolean artifactAlreadyExist( String groupId, String artifactId )
-    {
-        for ( Iterator<Dependency> it = artifacts.iterator(); it.hasNext(); )
-        {
-            Dependency artifact = it.next();
-            if ( artifact.getGroupId().equals( groupId ) && artifact.getArtifactId().equals( artifactId ) )
+            if( dependency.equals( artifact ) )
             {
                 return true;
             }
         }
 
         return false;
-    }
-
-    private static boolean itemEqualsArtifact( TableItem item, Dependency artifact )
-    {
-        if ( item.getText( 0 ).equals( artifact.getGroupId() ) && item.getText( 1 ).equals( artifact.getArtifactId() )
-                        && item.getText( 2 ).equals( artifact.getVersion() ) )
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    private static String nullIfBlank( String str )
-    {
-        return ( str == null || str.equals( "" ) ) ? null : str;
     }
 }

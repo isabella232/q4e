@@ -6,6 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.ui.dialogs;
 
+import org.apache.maven.model.Dependency;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
 import org.eclipse.core.runtime.Preferences;
@@ -23,7 +24,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 
@@ -50,6 +50,14 @@ public class AddEditDependencyDialog
     private String version;
 
     private String scope;
+    
+    private String type;
+    
+    private String classifier;
+    
+    private String systemPath;
+    
+    private boolean optional;
 
     private Text groupIdText;
 
@@ -58,6 +66,14 @@ public class AddEditDependencyDialog
     private Text versionText;
 
     private Text scopeText;
+    
+    private Text typeText;
+    
+    private Text classifierText;
+    
+    private Text systemPathText;
+    
+    private Button optionalChkBox;
 
     public AddEditDependencyDialog( Shell shell )
     {
@@ -71,9 +87,35 @@ public class AddEditDependencyDialog
             public void modifyText( ModifyEvent e )
             {
                 validate();
+
+                if ( e.getSource().equals( scopeText ) )
+                {
+                    if ( scopeText.getText().trim().equalsIgnoreCase( "system" ) )
+                    {
+                        systemPathText.setEnabled( true );
+                    }
+                    else
+                    {
+                        systemPathText.setText( "" );
+                        systemPathText.setEnabled( false );
+                    }
+                }
             }
         };
 
+        SelectionAdapter optionalButtonListener = new SelectionAdapter()
+        {
+            public void widgetDefaultSelected( SelectionEvent e )
+            {
+                validate();
+            }
+
+            public void widgetSelected( SelectionEvent e )
+            {
+                validate();
+            }
+        };
+        
         SelectionAdapter buttonListener = new SelectionAdapter()
         {
             public void widgetDefaultSelected( SelectionEvent e )
@@ -128,7 +170,44 @@ public class AddEditDependencyDialog
         scopeText = new Text( container, SWT.BORDER | SWT.SINGLE );
         scopeText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
         scopeText.addModifyListener( modifyingListener );
+        
+        // Type Label, Text
+        Label label5 = new Label( container, SWT.NULL );
+        label5.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
+        label5.setText( Messages.MavenAddEditDependencyDialog_typeLabel );
 
+        typeText = new Text( container, SWT.BORDER | SWT.SINGLE );
+        typeText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
+        typeText.addModifyListener( modifyingListener );
+        
+        // Classifier Label, Text
+        Label label6 = new Label( container, SWT.NULL );
+        label6.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
+        label6.setText( Messages.MavenAddEditDependencyDialog_classifierLabel );
+
+        classifierText = new Text( container, SWT.BORDER | SWT.SINGLE );
+        classifierText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
+        classifierText.addModifyListener( modifyingListener );
+        
+        // Systempath Label, Text
+        Label label7 = new Label( container, SWT.NULL );
+        label7.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
+        label7.setText( Messages.MavenAddEditDependencyDialog_systemPathLabel );
+
+        systemPathText = new Text( container, SWT.BORDER | SWT.SINGLE );
+        systemPathText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
+        systemPathText.addModifyListener( modifyingListener );
+        systemPathText.setEnabled( false );
+        
+        // Systempath Label, Text
+        Label label8 = new Label( container, SWT.NULL );
+        label8.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
+        label8.setText( Messages.MavenAddEditDependencyDialog_optionalLabel );
+
+        optionalChkBox = new Button( container, SWT.CHECK );
+        optionalChkBox.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
+        optionalChkBox.addSelectionListener( optionalButtonListener );
+        
         return container;
     }
 
@@ -143,14 +222,18 @@ public class AddEditDependencyDialog
         validate();
     }
 
-    public int openWithItem( TableItem item )
+    public int openWithDependency( Dependency dependency )
     {
-        if ( item != null )
+        if ( dependency != null )
         {
-            setGroupId( item.getText( 0 ) );
-            setArtifactId( item.getText( 1 ) );
-            setVersion( item.getText( 2 ) );
-            setScope( item.getText( 3 ) );
+            setGroupId( dependency.getGroupId() );
+            setArtifactId( dependency.getArtifactId() );
+            setVersion( dependency.getVersion() );
+            setScope( dependency.getScope() );
+            setType( dependency.getType() );
+            setClassifier( dependency.getClassifier() );
+            setSystemPath( dependency.getSystemPath() );
+            setOptional( dependency.isOptional() );
         }
         else
         {
@@ -158,6 +241,10 @@ public class AddEditDependencyDialog
             setArtifactId( "" );
             setVersion( "" );
             setScope( "" );
+            setType( "" );
+            setClassifier( "" );
+            setSystemPath( "" );
+            setOptional( false );
         }
 
         return open();
@@ -182,6 +269,19 @@ public class AddEditDependencyDialog
         artifactIdText.setText( blankIfNull( getArtifactId() ) );
         versionText.setText( blankIfNull( getVersion() ) );
         scopeText.setText( blankIfNull( getScope() ) );
+        typeText.setText( blankIfNull( getType() ) );
+        classifierText.setText( blankIfNull( getClassifier() ) );
+        
+        if( scope != null && scope.equalsIgnoreCase( "system" ) )
+        {
+            systemPathText.setText( blankIfNull( getSystemPath() ) );
+        }
+        else
+        {
+            systemPathText.setText( "" );
+        }
+        
+        optionalChkBox.setSelection( isOptional() );
     }
 
     public void validate()
@@ -202,7 +302,19 @@ public class AddEditDependencyDialog
         artifactId = artifactIdText.getText().trim();
         version = versionText.getText().trim();
         scope = scopeText.getText().trim();
-
+        type = typeText.getText().trim();
+        classifier = classifierText.getText().trim();
+        optional = optionalChkBox.getSelection();
+        
+        if( scope != null && scope.equalsIgnoreCase( "system" ) )
+        {
+            systemPath = systemPathText.getText().trim();
+        }
+        else
+        {
+            systemPath = "";
+        }
+        
         super.okPressed();
     }
 
@@ -254,10 +366,76 @@ public class AddEditDependencyDialog
     {
         this.scope = scope;
     }
+
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType( String type )
+    {
+        this.type = type;
+    }
+
+    public String getClassifier()
+    {
+        return classifier;
+    }
+
+    public void setClassifier( String classifier )
+    {
+        this.classifier = classifier;
+    }
+
+    public String getSystemPath()
+    {
+        return systemPath;
+    }
+
+    public void setSystemPath( String systemPath )
+    {
+        this.systemPath = systemPath;
+    }
+
+    public boolean isOptional()
+    {
+        return optional;
+    }
+
+    public void setOptional( boolean optional )
+    {
+        this.optional = optional;
+    }
+    
+    public Dependency getDependency()
+    {
+        Dependency dependency = new Dependency();
+        
+        dependency.setGroupId( getGroupId() );
+        dependency.setArtifactId( getArtifactId() );
+        dependency.setVersion( nullIfBlank( getVersion() ) );
+        dependency.setType( nullIfBlank( getType() ) );
+        dependency.setClassifier( nullIfBlank( getClassifier() ) );
+        dependency.setOptional( isOptional() );
+        
+        String scope = nullIfBlank( getScope() );
+        dependency.setScope( scope );
+        if( scope != null && ( scope.compareToIgnoreCase( "system" ) == 0 ) )
+        {
+            dependency.setSystemPath( nullIfBlank( getSystemPath() ) );
+        }
+        
+        return dependency;
+    }
     
     private String blankIfNull( String str )
     {
         return str != null ? str : "";
+    }
+    
+    private static String nullIfBlank( String str )
+    {
+        return ( str == null || str.equals( "" ) ) ? null : str;
     }
 
     @Override

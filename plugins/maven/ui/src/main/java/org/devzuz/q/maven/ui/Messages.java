@@ -101,6 +101,12 @@ public class Messages extends NLS
     public static String MavenCustomComponent_ScopeLabel;
 
     public static String MavenCustomComponent_TypeLabel;
+    
+    public static String MavenCustomComponent_ClassifierLabel;
+    
+    public static String MavenCustomComponent_SystemPath;
+    
+    public static String MavenCustomComponent_Optional;
 
     public static String MavenCustomComponent_SearchLabel;
 
@@ -111,6 +117,14 @@ public class Messages extends NLS
     public static String MavenAddEditDependencyDialog_versionLabel;
 
     public static String MavenAddEditDependencyDialog_scopeLabel;
+    
+    public static String MavenAddEditDependencyDialog_typeLabel;
+    
+    public static String MavenAddEditDependencyDialog_classifierLabel;
+    
+    public static String MavenAddEditDependencyDialog_systemPathLabel;
+    
+    public static String MavenAddEditDependencyDialog_optionalLabel;
 
     public static String MavenDependencyLookupDialog_Label;
 
