@@ -20,7 +20,6 @@ import org.apache.maven.lifecycle.LifecycleExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
-import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.eclipse.core.resources.IProject;
 
 /**
@@ -47,7 +46,29 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
      */
     public EclipseMavenExecutionResult( MavenExecutionResult result )
     {
-        this( result, null );
+        init( result, null );
+    }
+
+    /**
+     * Utility constructor that extracts the IProject from the IMavenProject and passes it to
+     * {@link #init(MavenExecutionResult, IProject)}. The code is guarded against <code>null</code> maven projects,
+     * in which case a <code>null</code> project is passed on.
+     * 
+     * @param result
+     *            the maven execution result.
+     * @param mavenProject
+     *            the, possibly <code>null</code>, maven project that has been used to generate the result.
+     */
+    public EclipseMavenExecutionResult( MavenExecutionResult result, IMavenProject mavenProject )
+    {
+        if ( null == mavenProject )
+        {
+            init( result, null );
+        }
+        else
+        {
+            init( result, mavenProject.getProject() );
+        }
     }
 
     /**
@@ -62,8 +83,22 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
      *            the project in the workspace where maven was executed. Might be <code>null</code> when creating the
      *            result for an execution outside the workspace.
      */
-    @SuppressWarnings( "unchecked" )
     public EclipseMavenExecutionResult( MavenExecutionResult result, IProject project )
+    {
+        init( result, project );
+    }
+
+    /**
+     * Initializes this object.
+     * 
+     * @param result
+     *            the maven result.
+     * @param project
+     *            the project in the workspace where maven was executed. Might be <code>null</code> when creating the
+     *            result for an execution outside the workspace.
+     */
+    @SuppressWarnings( "unchecked" )
+    private void init( MavenExecutionResult result, IProject project )
     {
         this.result = result;
 
@@ -80,11 +115,13 @@ public class EclipseMavenExecutionResult implements IMavenExecutionResult
         if ( artifactResolutionResult != null )
         {
             resolutionExceptions = ArtifactResolutionResultHelper.getExceptions( artifactResolutionResult );
-            // amuino: XXX This is a hack to have the missing artifacts as Exceptions, like it used to be before maven-artifact-3.0
+            // amuino: XXX This is a hack to have the missing artifacts as Exceptions, like it used to be before
+            // maven-artifact-3.0
             // amuino: XXX We should probably refactor the code to be in sync with latest maven development.
             List<Artifact> missingArtifacts = artifactResolutionResult.getMissingArtifacts();
-                for (Artifact a : missingArtifacts){
-                resolutionExceptions.add( new ArtifactResolutionException("Artifact not found " + a.toString(), a));
+            for ( Artifact a : missingArtifacts )
+            {
+                resolutionExceptions.add( new ArtifactResolutionException( "Artifact not found " + a.toString(), a ) );
             }
         }
 

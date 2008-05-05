@@ -79,10 +79,13 @@ public class EclipseMavenRequest extends Job implements IMavenJob
         if ( mavenProject != null )
         {
             totalWork += mavenProject.getDependencyProjects().size() * 10;
+            monitor.beginTask( mavenProject.toString() + ": " + request.getGoals(), totalWork );
         }
-        monitor.beginTask( "Maven build", totalWork );
+        else
+        {
+            monitor.beginTask( request.getBaseDirectory() + ": " + request.getGoals(), totalWork );
+        }
         packageWorkspaceDependenciesFor( mojos, monitor );
-        monitor.setTaskName( "Maven " + request.getGoals() );
 
         IMavenListener mojoProgressListener = new IMavenListener()
         {
@@ -110,7 +113,7 @@ public class EclipseMavenRequest extends Job implements IMavenJob
         try
         {
             MavenExecutionResult status = this.maven.executeRequest( this.request );
-            executionResult = new EclipseMavenExecutionResult( status, mavenProject.getProject() );
+            executionResult = new EclipseMavenExecutionResult( status, mavenProject );
             RefreshOutputFoldersListener.INSTANCE.refreshOutputFolders( executionResult );
             if ( ( status.getExceptions() != null ) && ( status.getExceptions().size() > 0 ) )
             {
