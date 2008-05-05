@@ -330,8 +330,10 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
             {
                 lastGoodProject = status.mavenProject;
                 // Determine if something was changed in the source or resource folders to update the project's
-                // modification timestamp
-                boolean sourcesModified = status.resourcesRefreshed | status.testResourcesRefreshed;
+                // modification timestamp.
+                // As a special case, if a full build has been performed (delta == null), always repackage
+                boolean sourcesModified =
+                    status.resourcesRefreshed || status.testResourcesRefreshed || null == status.delta;
                 if ( !sourcesModified )
                 {
                     IContainer[] containers =
