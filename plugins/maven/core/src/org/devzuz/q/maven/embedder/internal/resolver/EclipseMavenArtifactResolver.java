@@ -180,7 +180,8 @@ public class EclipseMavenArtifactResolver extends DefaultArtifactResolver
                 else
                 {
                     IFile generatedArtifactFile = MavenManager.getMaven().getGeneratedArtifactFile( mavenProject );
-                    if ( packagingIsUpToDate( mavenProject, generatedArtifactFile ) )
+                    if ( !"pom".equals( artifact.getType() )
+                                    && packagingIsUpToDate( mavenProject, generatedArtifactFile ) )
                     {
                         file = generatedArtifactFile.getLocation().toFile();
                     }
