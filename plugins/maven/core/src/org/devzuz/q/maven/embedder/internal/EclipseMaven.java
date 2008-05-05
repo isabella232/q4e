@@ -161,7 +161,9 @@ public class EclipseMaven implements IMaven
         try
         {
             MavenExecutionRequest request = generateRequest( mavenProject, goals, parameter );
-            eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request, mavenProject );
+            eclipseMavenRequest =
+                new EclipseMavenRequest( "Starting maven run on " + mavenProject.toString(), this, request,
+                                         mavenProject );
             status = eclipseMavenRequest.run( monitor );
         }
         catch ( RuntimeException e )
@@ -248,7 +250,8 @@ public class EclipseMaven implements IMaven
     public void scheduleRequest( IMavenProject mavenProject, MavenExecutionRequest request,
                                  MavenExecutionJobAdapter jobAdapter )
     {
-        EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request, mavenProject );
+        EclipseMavenRequest eclipseMavenRequest =
+            new EclipseMavenRequest( "Starting maven run on " + mavenProject.toString(), this, request, mavenProject );
 
         if ( jobAdapter != null )
         {
@@ -272,7 +275,8 @@ public class EclipseMaven implements IMaven
      */
     public void scheduleRequest( IPath path, MavenExecutionRequest request, MavenExecutionJobAdapter jobAdapter )
     {
-        EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
+        EclipseMavenRequest eclipseMavenRequest =
+            new EclipseMavenRequest( "Starting maven run on " + path.toOSString(), this, request );
 
         if ( jobAdapter != null )
         {
