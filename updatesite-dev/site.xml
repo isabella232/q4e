@@ -51,16 +51,16 @@
    <feature url="features/org.eclipse.xsd.edit_2.3.0.v200802051830.jar" id="org.eclipse.xsd.edit" version="2.3.0.v200802051830">
       <category name="Enabling Features"/>
    </feature>
-   <feature url="features/org.devzuz.q.dependencyviewer.feature_0.7.0.200805052233.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.7.0.200805052233">
+   <feature url="features/org.devzuz.q.dependencyviewer.feature_0.7.0.200805060733.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.7.0.200805060733">
       <category name="Optional"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature.wtp_0.7.0.200805052232.jar" id="org.devzuz.q.feature.wtp" version="0.7.0.200805052232">
+   <feature url="features/org.devzuz.q.feature.wtp_0.7.0.200805060732.jar" id="org.devzuz.q.feature.wtp" version="0.7.0.200805060732">
       <category name="Optional"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature_0.7.0.200805052231.jar" id="org.devzuz.q.feature" version="0.7.0.200805052231">
+   <feature url="features/org.devzuz.q.feature_0.7.0.200805060730.jar" id="org.devzuz.q.feature" version="0.7.0.200805060730">
       <category name="Community"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature.pomxmleditor_0.7.0.200805052306.jar" id="org.devzuz.q.feature.pomxmleditor" version="0.7.0.200805052306">
+   <feature url="features/org.devzuz.q.feature.pomxmleditor_0.7.0.200805060731.jar" id="org.devzuz.q.feature.pomxmleditor" version="0.7.0.200805060731">
       <category name="Optional"/>
    </feature>
    <category-def name="Community" label="Community"/>
