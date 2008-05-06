@@ -9,13 +9,58 @@
    <feature url="features/org.apache.maven.feature_2.1.0.627670.jar" id="org.apache.maven.feature" version="2.1.0.627670">
       <category name="Enabling Features"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature_0.7.0.200804152029.jar" id="org.devzuz.q.feature" version="0.7.0.200804152029">
-      <category name="Community"/>
+   <feature url="features/org.eclipse.emf.common_2.3.1.v200802051830.jar" id="org.eclipse.emf.common" version="2.3.1.v200802051830">
+      <category name="Enabling Features"/>
    </feature>
-   <feature url="features/org.devzuz.q.dependencyviewer.feature_0.7.0.200804152029.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.7.0.200804152029">
+   <feature url="features/org.eclipse.emf.common.ui_2.3.1.v200802051830.jar" id="org.eclipse.emf.common.ui" version="2.3.1.v200802051830">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.ecore_2.3.2.v200802051830.jar" id="org.eclipse.emf.ecore" version="2.3.2.v200802051830">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.ecore.edit_2.3.1.v200802051830.jar" id="org.eclipse.emf.ecore.edit" version="2.3.1.v200802051830">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.edit_2.3.2.v200802051830.jar" id="org.eclipse.emf.edit" version="2.3.2.v200802051830">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.eclipse.emf.edit.ui_2.3.1.v200802051830.jar" id="org.eclipse.emf.edit.ui" version="2.3.1.v200802051830">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.eclipse.gef_3.3.2.v20080129.jar" id="org.eclipse.gef" version="3.3.2.v20080129">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.eclipse.wst.common_core.feature_2.0.2.v200802150100-7C78EKOE_EkMNlO6f7cjpz0.jar" id="org.eclipse.wst.common_core.feature" version="2.0.2.v200802150100-7C78EKOE_EkMNlO6f7cjpz0">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.eclipse.wst.common_ui.feature_2.0.2.v200802150100-7C5EH3E9RvTVnirrspVz0bmP7g8d.jar" id="org.eclipse.wst.common_ui.feature" version="2.0.2.v200802150100-7C5EH3E9RvTVnirrspVz0bmP7g8d">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.eclipse.wst.xml_core.feature_2.0.2.v200802150100-787BE_4CYQCD-DaQMIfPd.jar" id="org.eclipse.wst.xml_core.feature" version="2.0.2.v200802150100-787BE_4CYQCD-DaQMIfPd">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.eclipse.wst.xml_ui.feature_2.0.2.v200802150100-7A1ECMCnbcl1bVs9uNm_Zkieb7Qe.jar" id="org.eclipse.wst.xml_ui.feature" version="2.0.2.v200802150100-7A1ECMCnbcl1bVs9uNm_Zkieb7Qe">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.eclipse.wst.xml_userdoc.feature_2.0.2.v200802150100-4-EGk_kE77Y7QI7EEEQ.jar" id="org.eclipse.wst.xml_userdoc.feature" version="2.0.2.v200802150100-4-EGk_kE77Y7QI7EEEQ">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.eclipse.xsd_2.3.2.v200802051830.jar" id="org.eclipse.xsd" version="2.3.2.v200802051830">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.eclipse.xsd.edit_2.3.0.v200802051830.jar" id="org.eclipse.xsd.edit" version="2.3.0.v200802051830">
+      <category name="Enabling Features"/>
+   </feature>
+   <feature url="features/org.devzuz.q.dependencyviewer.feature_0.7.0.200805052233.jar" id="org.devzuz.q.dependencyviewer.feature" version="0.7.0.200805052233">
       <category name="Optional"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature.wtp_0.7.0.200804152029.jar" id="org.devzuz.q.feature.wtp" version="0.7.0.200804152029">
+   <feature url="features/org.devzuz.q.feature.wtp_0.7.0.200805052232.jar" id="org.devzuz.q.feature.wtp" version="0.7.0.200805052232">
+      <category name="Optional"/>
+   </feature>
+   <feature url="features/org.devzuz.q.feature_0.7.0.200805052231.jar" id="org.devzuz.q.feature" version="0.7.0.200805052231">
+      <category name="Community"/>
+   </feature>
+   <feature url="features/org.devzuz.q.feature.pomxmleditor_0.7.0.200805052306.jar" id="org.devzuz.q.feature.pomxmleditor" version="0.7.0.200805052306">
       <category name="Optional"/>
    </feature>
    <category-def name="Community" label="Community"/>
