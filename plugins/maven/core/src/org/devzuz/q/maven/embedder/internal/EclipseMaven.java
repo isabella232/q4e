@@ -170,7 +170,12 @@ public class EclipseMaven implements IMaven
         {
             // These are thrown, for example, by Modello
             // TODO: Should these exception be included in the IMavenExecutionResult?
-            throw new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID, e.getMessage(), e ) );
+            throw new QCoreException(
+                                      new Status(
+                                                  IStatus.ERROR,
+                                                  MavenCoreActivator.PLUGIN_ID,
+                                                  "Error running maven goals: " + goals + " on project " + mavenProject,
+                                                  e ) );
         }
 
         if ( status.getSeverity() == IStatus.CANCEL )
