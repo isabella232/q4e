@@ -185,7 +185,8 @@ public class MavenProjectManager
         return cachedProject.getMavenProject();
     }
 
-    private MavenProjectCachedInfo refreshProjectInCache( IProject project, boolean resolveTransitively ) throws CoreException
+    private MavenProjectCachedInfo refreshProjectInCache( IProject project, boolean resolveTransitively )
+        throws CoreException
     {
         /* get maven project from maven embedder */
         IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, resolveTransitively );
@@ -194,7 +195,8 @@ public class MavenProjectManager
         setPersistentProperties( project, mavenProject );
 
         /* Create cache object */
-        MavenProjectCachedInfo cachedProject = MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolveTransitively );
+        MavenProjectCachedInfo cachedProject =
+            MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolveTransitively );
 
         /* Add to cache */
         addCachedInfo( project, cachedProject );
@@ -210,13 +212,13 @@ public class MavenProjectManager
     }
 
     /**
-     * Retrieves the IMavenProject for the given IProject from the cache or the maven embedder following a set of rules.
+     * Retrieves the IMavenProject for the given Artifact from the cache or the maven embedder following a set of rules.
      * 
      * @param artifact
      *            the maven artifact to look for.
      * @param resolveTransitively
      *            <code>true</code> if the artifact must be resolved transitively.
-     * @return The maven project
+     * @return The maven project, or <code>null</code> if not found on the workspace.
      * @throws CoreException
      */
     public IMavenProject getMavenProject( Artifact artifact, boolean resolveTransitively ) throws CoreException
@@ -224,9 +226,27 @@ public class MavenProjectManager
         String groupId = artifact.getGroupId();
         String artifactId = artifact.getArtifactId();
         String version = artifact.getVersion();
-        String baseVersion = artifact.getBaseVersion();
-        boolean isSnapshot = artifact.isSnapshot();
+        return getMavenProject( groupId, artifactId, version, resolveTransitively );
+    }
 
+    /**
+     * Retrieves the IMavenProject for the artifact with the given groupId, artifactId and version from the cache or the
+     * maven embedder following a set of rules.
+     * 
+     * @param groupId
+     *            the project's group Id
+     * @param artifactId
+     *            the project's artifact Id
+     * @param version
+     *            the project's version
+     * @param resolveTransitively
+     *            <code>true</code> if the artifact must be resolved transitively.
+     * @return The maven project, or <code>null</code> if not found on the workspace.
+     * @throws CoreException
+     */
+    public IMavenProject getMavenProject( String groupId, String artifactId, String version, boolean resolveTransitively )
+        throws CoreException
+    {
         Map.Entry<IProject, MavenProjectCachedInfo> entry = getEntry( groupId, artifactId, version );
         if ( entry != null )
         {
