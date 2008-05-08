@@ -20,15 +20,6 @@
 			target="org.devzuz.q.pomxmleditor.pomFile" />
 	</extension>
 
-	<extension point="org.eclipse.wst.sse.core.modelHandler">
-		<modelHandler
-			id="org.eclipse.wst.sse.core.handler.pomFile"
-			default="false"
-			associatedContentTypeId="org.devzuz.q.pomxmleditor.pomFile"
-			class="org.devzuz.q.pomxmleditor.PomModelHandler">
-		</modelHandler>
-	</extension>
-
 
 	<extension point="org.eclipse.wst.xml.core.catalogContributions">
 		<catalogContribution>
