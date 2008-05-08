@@ -9,6 +9,7 @@ package org.devzuz.q.maven.jdt.core.classpath.container;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.apache.maven.artifact.Artifact;
 import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenInterruptedException;
@@ -77,6 +78,55 @@ public class UpdateClasspathJob extends WorkspaceJob implements IMavenJob
         catch ( MavenInterruptedException e )
         {
             return Status.CANCEL_STATUS;
+        }
+        
+        //Update the classpaths of any projects that depend on this project (even transitively).
+        try
+        {
+            IMavenProject thisMavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, true );
+            Artifact thisArtifact = MavenManager.getMavenProjectManager().getMavenProject( project, false ).getRawMavenProject().getArtifact();
+            IProject[] workspaceProjects = MavenManager.getMavenProjectManager().getWorkspaceProjects();
+            
+            for ( IProject workspaceProject : workspaceProjects )
+            {
+                IMavenProject workspaceMavenProject = MavenManager.getMavenProjectManager().getMavenProject( workspaceProject, true );
+                
+                //Check if the project extends this one.
+                Artifact parent = workspaceMavenProject.getRawMavenProject().getParentArtifact();
+                if( thisArtifact.equals( parent ) )
+                {
+                    MavenManager.getMavenProjectManager().setMavenProjectModified( workspaceProject );
+                    try
+                    {
+                        MavenClasspathContainer.newClasspath( workspaceProject, monitor, downloadSources );
+                    }
+                    catch ( MavenInterruptedException e )
+                    {
+                        return Status.CANCEL_STATUS;
+                    }
+                }
+                else 
+                {
+                    //Or it depends on this one.
+                    Set<IMavenProject> dependentProjects = workspaceMavenProject.getAllDependentProjects();
+                    if( dependentProjects.contains( thisMavenProject ) )
+                    {
+                        MavenManager.getMavenProjectManager().setMavenProjectModified( workspaceProject );
+                        try
+                        {
+                            MavenClasspathContainer.newClasspath( workspaceProject, monitor, downloadSources );
+                        }
+                        catch ( MavenInterruptedException e )
+                        {
+                            return Status.CANCEL_STATUS;
+                        }
+                    }
+                }
+            }
+        }
+        catch ( CoreException e )
+        {
+            //Probably a bad artifact - ignore.
         }
 
         // TODO this is needed for now to avoid out of memory errors
