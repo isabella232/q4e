@@ -83,7 +83,7 @@ import org.eclipse.core.runtime.jobs.Job;
 public class EclipseMaven implements IMaven
 {
     private static final String GOAL_DEPLOY = "deploy";
-
+    
     private static final String GOAL_INSTALL = "install";
 
     private static final int LOGGING_DEBUG = MavenExecutionRequest.LOGGING_LEVEL_DEBUG;
@@ -397,6 +397,15 @@ public class EclipseMaven implements IMaven
         EclipseMavenProject mavenProject = new EclipseMavenProject( projectSpecification );
         return getMavenProject( mavenProject, resolveTransitively );
     }
+    
+    public void updateSnapshotDependenciesForProject( IProject project )
+        throws CoreException
+    {
+        EclipseMavenProject mavenProject = new EclipseMavenProject( project );
+        getMavenProject( mavenProject, true, true );
+        MavenManager.getMavenProjectManager().setMavenProjectModified( project );
+        
+    }
 
     public IMavenProject getMavenSuperProject() throws CoreException
     {
@@ -410,19 +419,26 @@ public class EclipseMaven implements IMaven
             throw new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID, e.getMessage(), e ) );
         }
     }
+    
+    private IMavenProject getMavenProject( EclipseMavenProject mavenProject, boolean resolveTransitively )
+        throws CoreException
+    {
+        return getMavenProject( mavenProject, resolveTransitively, false );
+    }
 
     @SuppressWarnings( "unchecked" )
-    private IMavenProject getMavenProject( EclipseMavenProject mavenProject, boolean resolveTransitively )
+    private IMavenProject getMavenProject( EclipseMavenProject mavenProject, boolean resolveTransitively, boolean updateSnapshots )
         throws CoreException
     {
         try
         {
             if ( resolveTransitively )
             {
+                MavenExecutionRequest request = generateRequest( mavenProject,
+                                                                 Collections.EMPTY_LIST, null );
+                request.setUpdateSnapshots( updateSnapshots );
                 MavenExecutionResult status =
-                    getMavenEmbedder().readProjectWithDependencies(
-                                                                    generateRequest( mavenProject,
-                                                                                     Collections.EMPTY_LIST, null ) );
+                    getMavenEmbedder().readProjectWithDependencies( request );
 
                 ArtifactResolutionResult artifactResolutionResult = status.getArtifactResolutionResult();
                 boolean hasResolutionExceptions =

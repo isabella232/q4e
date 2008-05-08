@@ -67,6 +67,14 @@ public interface IMaven
      */
     public IMavenProject getMavenProject( Artifact artifact, List<ArtifactRepository> remoteArtifactRepositories )
         throws CoreException;
+    
+    /**
+     * Triggers a refetch of all snapshot dependencies for a given project.
+     * 
+     * @param project
+     */
+    public void updateSnapshotDependenciesForProject( IProject project )
+        throws CoreException;
 
     /**
      * <p>
