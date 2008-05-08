@@ -7,12 +7,17 @@
 package org.devzuz.q.maven.search.lucene;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.StringReader;
 import java.text.MessageFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.lucene.analysis.Token;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.index.IndexReader;
@@ -20,6 +25,7 @@ import org.apache.lucene.index.Term;
 import org.apache.lucene.search.BooleanQuery;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
+import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.PrefixQuery;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.BooleanClause.Occur;
@@ -118,55 +124,65 @@ public class IndexManager
             return Collections.emptyList();
         }
 
+        
         try
         {
-            BooleanQuery query = new BooleanQuery();
-            BooleanQuery.setMaxClauseCount( Integer.MAX_VALUE );
-            if ( criteria.getArtifactId() != null )
-            {
-                query.add( new TermQuery( new Term( getArtifactIdField(), criteria.getArtifactId() ) ), Occur.MUST );
-            }
-            if ( criteria.getGroupId() != null )
-            {
-                query.add( new TermQuery( new Term( getGroupIdField(), criteria.getGroupId() ) ), Occur.MUST );
-            }
-
-            if ( criteria.getSearch() != null )
-            {
-                if ( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_ARTIFACT_ID ) > 0 )
-                {
-                    query.add( new PrefixQuery( new Term( getArtifactIdField(), criteria.getSearch() ) ), Occur.SHOULD );
-                }
-                if ( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_GROUP_ID ) > 0 )
-                {
-                    query.add( new PrefixQuery( new Term( getGroupIdField(), criteria.getSearch() ) ), Occur.SHOULD );
-                }
-                if ( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_VERSION ) > 0 )
-                {
-                    query.add( new PrefixQuery( new Term( getVersionIdField(), criteria.getSearch() ) ), Occur.SHOULD );
-                }
-            }
-
             IndexReader reader = IndexReader.open( getIndex() );
-            IndexSearcher searcher = new IndexSearcher( reader );
-
-            Hits hits = searcher.search( query );
-            if ( ( hits == null ) || ( hits.length() <= 0 ) )
+            try
             {
-                return Collections.emptyList();
-            }
-            else
-            {
-
-                List<IArtifactInfo> ret = new ArrayList<IArtifactInfo>( hits.length() );
-
-                for ( int i = 0; i < hits.length(); i++ )
+                BooleanQuery query = new BooleanQuery();
+                BooleanQuery.setMaxClauseCount( Integer.MAX_VALUE );
+                
+                if ( criteria.getArtifactId() != null )
                 {
-                    Document doc = hits.doc( i );
-                    ret.add( toArtifact( doc ) );
+                    query.add( createPhraseQuery( getArtifactIdField(), criteria.getArtifactId() ), Occur.MUST );
                 }
-
-                return ret;
+                if ( criteria.getGroupId() != null )
+                {
+                    query.add( createPhraseQuery( getGroupIdField(), criteria.getGroupId() ), Occur.MUST );
+                }
+    
+                if ( criteria.getSearch() != null && criteria.getSearch().length() > 0)
+                {
+                    if ( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_ARTIFACT_ID ) > 0 )
+                    {
+                        query.add( new PrefixQuery( new Term( getArtifactIdField(), criteria.getSearch() ) ), Occur.SHOULD );
+                    }
+                    if ( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_GROUP_ID ) > 0 )
+                    {
+                        query.add( new PrefixQuery( new Term( getGroupIdField(), criteria.getSearch() ) ), Occur.SHOULD );
+                    }
+                    if ( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_VERSION ) > 0 )
+                    {
+                        query.add( new PrefixQuery( new Term( getVersionIdField(), criteria.getSearch() ) ), Occur.SHOULD );
+                    }
+                }
+    
+                
+                IndexSearcher searcher = new IndexSearcher( reader );
+    
+                Hits hits = searcher.search( query );
+                if ( ( hits == null ) || ( hits.length() <= 0 ) )
+                {
+                    return Collections.emptyList();
+                }
+                else
+                {
+    
+                    List<IArtifactInfo> ret = new ArrayList<IArtifactInfo>( hits.length() );
+    
+                    for ( int i = 0; i < hits.length(); i++ )
+                    {
+                        Document doc = hits.doc( i );
+                        ret.add( toArtifact( doc ) );
+                    }
+    
+                    return ret;
+                }
+            } 
+            finally
+            {
+                reader.close();
             }
         }
         catch ( Exception e )
@@ -174,6 +190,20 @@ public class IndexManager
             LuceneSearchPlugin.getLogger().log( "Cannot search index", e );
             return Collections.emptyList();
         }
+    }
+    
+    private PhraseQuery createPhraseQuery( String field, String text ) throws IOException
+    {
+        StandardAnalyzer analyser = new StandardAnalyzer();
+        TokenStream tokens = analyser.reusableTokenStream( field, new StringReader( text ) );
+        Token currentToken = null;
+        PhraseQuery phrase = new PhraseQuery();
+        while( ( currentToken = tokens.next() ) != null)
+        {
+            phrase.add( new Term( field, currentToken.termText() ) );
+        }
+        tokens.close();
+        return phrase;
     }
 
     private IArtifactInfo toArtifact( Document doc )
