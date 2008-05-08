@@ -73,6 +73,12 @@
                 label="%mavenUpdateSources"
                 menubarPath="org.devzuz.q.maven.ui.project.submenu/contents">
           </action>
+          <action
+                class="org.devzuz.q.maven.jdt.ui.actions.UpdateSnapshotsAction"
+                id="org.devzuz.q.maven.jdt.ui.actions.UpdateSnapshots"
+                label="%mavenUpdateSnapshots"
+                menubarPath="org.devzuz.q.maven.ui.project.submenu/contents">
+          </action>
        </objectContribution>
 
    </extension>
