@@ -71,9 +71,19 @@ public class EclipseMavenRequest extends Job implements IMavenJob
         this.mavenProject = project;
     }
 
+    public EclipseMavenRequest( EclipseMaven maven, MavenExecutionRequest request, IMavenProject project )
+    {
+        this( "Maven " + project.getProject().getLocation(), maven, request, project );
+    }
+
     public EclipseMavenRequest( String name, EclipseMaven maven, MavenExecutionRequest request )
     {
         this( name, maven, request, null );
+    }
+
+    public EclipseMavenRequest( EclipseMaven maven, MavenExecutionRequest request )
+    {
+        this( "Maven " + request.getBaseDirectory(), maven, request, null );
     }
 
     @Override

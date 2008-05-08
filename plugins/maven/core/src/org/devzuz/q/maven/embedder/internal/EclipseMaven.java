@@ -120,7 +120,7 @@ public class EclipseMaven implements IMaven
                                               IProgressMonitor monitor ) throws CoreException
     {
         MavenExecutionRequest request = generateRequest( baseDirectory, goal, parameter );
-        EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( "MavenRequest", this, request );
+        EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( this, request );
         IStatus status = eclipseMavenRequest.run( monitor );
 
         if ( status.getSeverity() == IStatus.CANCEL )
@@ -161,9 +161,7 @@ public class EclipseMaven implements IMaven
         try
         {
             MavenExecutionRequest request = generateRequest( mavenProject, goals, parameter );
-            eclipseMavenRequest =
-                new EclipseMavenRequest( "Starting maven run on " + mavenProject.toString(), this, request,
-                                         mavenProject );
+            eclipseMavenRequest = new EclipseMavenRequest( this, request, mavenProject );
             status = eclipseMavenRequest.run( monitor );
         }
         catch ( RuntimeException e )
@@ -256,7 +254,7 @@ public class EclipseMaven implements IMaven
                                  MavenExecutionJobAdapter jobAdapter )
     {
         EclipseMavenRequest eclipseMavenRequest =
-            new EclipseMavenRequest( "Starting maven run on " + mavenProject.toString(), this, request, mavenProject );
+            new EclipseMavenRequest( this, request, mavenProject );
 
         if ( jobAdapter != null )
         {
@@ -280,8 +278,7 @@ public class EclipseMaven implements IMaven
      */
     public void scheduleRequest( IPath path, MavenExecutionRequest request, MavenExecutionJobAdapter jobAdapter )
     {
-        EclipseMavenRequest eclipseMavenRequest =
-            new EclipseMavenRequest( "Starting maven run on " + path.toOSString(), this, request );
+        EclipseMavenRequest eclipseMavenRequest = new EclipseMavenRequest( this, request );
 
         if ( jobAdapter != null )
         {
@@ -900,7 +897,7 @@ public class EclipseMaven implements IMaven
                                                   "Error fetching goals", e ) );
         }
 
-    }
+        }
 
     public IFile getGeneratedArtifactFile( IMavenProject project )
     {
