@@ -49,7 +49,7 @@ quality and characteristics of the applications being built.</P>
 <P>The IAM project has
 already gone through several months of development under the codename
 <A HREF="http://code.google.com/p/q4e/">Q4E</A>
-, right now at version 0.2.3, creating a community of users and
+, right now at version 0.6.1, creating a community of users and
 contributors that are really interested in seeing the project become
 a Eclipse Foundation project as that seems to be the natural place
 for it.</P>
@@ -84,52 +84,60 @@ any other project, and the Buckminster integration that will live at
 the Buckminster project.</P>
 <P>Wizards for new project creation and
 import of existing Apache Maven projects are provided for a rich user
-experience.</P>
+experience as well as integration with other Eclipse projects like WTP
+or AspectJ. Supporting a wide range of eclipse plug-ins will serve as an
+exemplary solution for tool builders and prove the validity of the design.</P>
 
 <p>As Apache Maven, IAM will be cross platform and vendor neutral providing extension points for other projects to reuse and extend it.</p>
 
 <H2>Organization</H2>
+<h3>Mentors</h3>
+<p>The following people have agreed to mentor the project</p>
+<ul>
+        <LI>Ed Merks, IBM</LI>
+        <LI>Thomas Watson, IBM</LI>
+        <LI>Brett Porter, Exist Global</LI>
+</ul>
+
 <h3>Initial committers</h3>
 <P>The initial committers will focus on
 evolving the current IAM implementation by delivering support for
-Java development.&nbsp; Our agile development process will follow
-eclipse.org's standards for openness and transparency.&nbsp; Our goal
+Java development. Our agile development process will follow
+eclipse.org's standards for openness and transparency Our goal
 is to provide the infrastructure and APIs needed to integrate task
 and degree-of-interest centric UIs to any Eclipse plug-ins whose
-users experience information overload.&nbsp;As such we will actively
-encourage contributions to Project_Name.&nbsp; We also plan to help
+users experience information overload. As such we will actively
+encourage contributions to Eclipse IAM. We also plan to help
 improve the Eclipse platform by submitting patches and extension
 point suggestions. The initial committers are:</P>
 <UL>
-        <LI>Carlos Sanchez, DevZuz: Project
-        Lead</LI>
-        <LI>Brian Flaherty, DevZuz: Project
-        Manager</LI>
-        <LI>Philip Dodds, DevZuz</LI>
-        <LI>Brett Porter, DevZuz</LI>
-        <LI>Abel Mui&ntilde;o, Pragsis
-        Technologies</LI>
-        <LI>Erle Mantos, Exist</LI>
-        <LI>Genesis Deiparine, Exist 
-        </LI>
-        <LI>Glen Gonzales, Exist</LI>
-        <LI>Maria Odea Ching, Exist</LI>
+        <LI>Carlos Sanchez, Exist Global: Project Lead</LI>
+        <LI>Abel Mui&ntilde;o, Berggi</LI>
+        <LI>Erle Mantos, Exist Global</LI>
+        <LI>Jake Pezaro</LI>
+        <LI>Michael Poindexter, Qumu</LI>
+        <LI>Philip Dodds, Exist Global</LI>
+        <LI>Brett Porter, Exist Global</LI>
+        <LI>Allan Ramirez, Exist Global</LI>
 </UL>
 <h3>Interested parties</h3>
 <P>The following projects have expressed
 interest using the tools, contributing ideas, guidance and
 discussion. Key contacts listed.</LI>
 <UL>
-        <LI>Equinox (IBM): Jeff McAffer,
-        Pascal Rapicault</LI>
+        <LI>Equinox (IBM): Jeff McAffer, Pascal Rapicault</LI>
         <LI>IONA: Oisin Hurley</LI>
-        <LI>Apache Cocoon: Grzegorz
-        Kossakowski</LI>
+        <LI>Apache Cocoon: Grzegorz Kossakowski</LI>
+        <LI>Apache Archiva: Joakim Erdfelt</LI>
+        <LI>University of A Coruña, Spain: Fernando Bellas</LI>
+        <LI>CALGB: Robert Dale</LI>
+        <LI>Scala: Josh Suereth, David Bernard</LI>
+        <LI>Qumu, Inc.</LI>
 </UL>
 <H3>Developer community</h3>
 <P>We expect to extend the initial set of
 committers by actively supporting a developer community. The initial
-community outside of DevZuz includes Abel Mui&ntilde;o, which is
+community outside of Exist Global includes Abel Mui&ntilde;o, which is
 planning to extend IAM and use it as a foundation for its Appfuse
 Eclipse plugin (Candy for Appfuse).</P>
 <P>We are also contributing the Apache
@@ -151,9 +159,13 @@ eclipse.org mechanisms of supporting an open project and the
 community. 
 </P>
 <H2>Tentative Plan</H2>
-<P>2007-12 M1: first release as a Eclipse Foundation
-project <BR>2008-03 M2: user interface improvements<BR>2008-06 M3:
-integration with PDE<BR>2008-09: first release</P>
+<P>
+2008-06 M1: first release as a Eclipse Foundation project<BR/>
+2008-08 M2: repository search functionality<BR/>
+2008-10 M3: integration with PDE<BR>
+2008-12: first release
+</P>
+
 
       </div>
   </div>
