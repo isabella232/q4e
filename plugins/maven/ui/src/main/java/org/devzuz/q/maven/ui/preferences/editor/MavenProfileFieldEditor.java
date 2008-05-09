@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.preferences.MavenUIPreferenceManagerAdapter;
-import org.devzuz.q.maven.ui.views.MavenProfileView;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.preference.FieldEditor;
@@ -29,7 +28,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.PlatformUI;
 
 public class MavenProfileFieldEditor
     extends FieldEditor
@@ -209,18 +207,7 @@ public class MavenProfileFieldEditor
     @Override
     protected void doStore()
     {
-        MavenUIPreferenceManagerAdapter manager = MavenUIPreferenceManagerAdapter.getInstance();
-        manager.setConfiguredProfiles( new HashSet<String>( profiles ) );
-
-        String profileViewId = "org.devzuz.q.maven.ui.views.MavenProfileView";
-        MavenProfileView profileView =
-            (MavenProfileView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(
-                                                                                                              profileViewId );
-        if ( profileView != null )
-        {
-            profileView.setDefaultProfile( new HashSet<String>( profiles ) );
-            profileView.updateTable( true );
-        }
+        MavenUIPreferenceManagerAdapter.getInstance().setConfiguredProfiles( new HashSet<String>( profiles ) );
     }
 
     @Override

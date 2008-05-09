@@ -7,6 +7,8 @@
 package org.devzuz.q.maven.ui.views;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,17 +18,21 @@ import java.util.Set;
 
 import org.apache.maven.embedder.MavenEmbedder;
 import org.apache.maven.model.Model;
-import org.apache.maven.model.Profile;
+import org.apache.maven.profiles.ProfilesRoot;
+import org.apache.maven.profiles.io.xpp3.ProfilesXpp3Reader;
 import org.apache.maven.settings.Settings;
 import org.apache.maven.settings.SettingsConfigurationException;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.nature.MavenNatureHelper;
+import org.devzuz.q.maven.embedder.preferences.MavenPreferenceManager;
 import org.devzuz.q.maven.project.properties.MavenProjectPropertiesManager;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.internal.util.MavenUiUtil;
 import org.devzuz.q.maven.ui.preferences.MavenUIPreferenceManagerAdapter;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -35,7 +41,10 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jdt.ui.JavaUI;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -69,7 +78,8 @@ import org.eclipse.ui.part.ViewPart;
  * 
  * @author aramirez
  */
-public class MavenProfileView extends ViewPart
+public class MavenProfileView
+    extends ViewPart
 {
     public static final int PROFILE_NAME_COLUMN = 0;
 
@@ -77,15 +87,23 @@ public class MavenProfileView extends ViewPart
 
     private long pomFileLmod;
 
+    private long profileRootLmod;
+
     private long globalSettingsXmlLmod;
 
     private long userSettingsXmlLmod;
 
-    private String pomLocation;
+    private String pomLocation = "";
 
-    private String globalSettingsLocation;
+    private String profileRootLocation = "";
 
-    private String userSettingsLocation;
+    private String previousGlobalSettingsXmlValue = "";
+
+    private String previousUserSettingsXmlValue = "";
+
+    private String PROFILES_XML_FILE = "profiles.xml";
+
+    private String basedir = "";
 
     private CheckboxTableViewer mavenProfileTableViewer;
 
@@ -101,9 +119,32 @@ public class MavenProfileView extends ViewPart
 
     private Model pomModel;
 
+    private ProfilesRoot profileRoot;
+
     private Settings globalSettings;
 
     private Settings userSettings;
+
+    /**
+     * Listener that would update the profile view if the default profiles changed or if the location of user
+     * settings.xml or global settings.xml has changed
+     */
+    private final IPropertyChangeListener preferenceStoreChangeListener = new IPropertyChangeListener()
+    {
+        public void propertyChange( PropertyChangeEvent event )
+        {
+            if ( event.getProperty().equals( MavenPreferenceManager.USER_SETTINGS_XML_FILENAME )
+                || event.getProperty().equals( MavenPreferenceManager.GLOBAL_SETTINGS_XML_FILENAME ) )
+            {
+                updateTable( true );
+            }
+            else if ( event.getProperty().equals( MavenPreferenceManager.PROFILES_KEY ) )
+            {
+                setDefaultProfile( MavenUIPreferenceManagerAdapter.getInstance().getConfiguredProfiles() );
+                updateTable( true );
+            }
+        }
+    };
 
     /**
      * Visitor that scans the change information and triggers an update on the view if the pom.xml resource on the
@@ -111,7 +152,8 @@ public class MavenProfileView extends ViewPart
      */
     private final IResourceDeltaVisitor workspaceDeltaVisitor = new IResourceDeltaVisitor()
     {
-        public boolean visit( IResourceDelta delta ) throws CoreException
+        public boolean visit( IResourceDelta delta )
+            throws CoreException
         {
             IResource res = delta.getResource();
             System.out.println( "ResourceListener: " + res );
@@ -126,7 +168,7 @@ public class MavenProfileView extends ViewPart
                 return res.equals( currentProject );
             }
             // A file in a project
-            if ( res.getName().equals( IMavenProject.POM_FILENAME ) )
+            if ( res.getName().equals( IMavenProject.POM_FILENAME ) || res.getName().equals( PROFILES_XML_FILE ) )
             {
                 // pom.xml changed on the current project
                 System.out.println( "Updating Profile View" );
@@ -168,7 +210,8 @@ public class MavenProfileView extends ViewPart
      * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite)
      */
     @Override
-    public void init( IViewSite site ) throws PartInitException
+    public void init( IViewSite site )
+        throws PartInitException
     {
         profiles = new ArrayList<ProfileModel>();
         defaultProfiles = new ArrayList<ProfileModel>();
@@ -180,6 +223,8 @@ public class MavenProfileView extends ViewPart
         // Start monitoring changes when the view is open
         getSite().getWorkbenchWindow().getSelectionService().addSelectionListener( getSelectionListener() );
         ResourcesPlugin.getWorkspace().addResourceChangeListener( pomChangeListener, IResourceChangeEvent.POST_CHANGE );
+        MavenManager.getMavenPreferenceManager().getPreferenceStore().addPropertyChangeListener(
+                                                                                                 preferenceStoreChangeListener );
     }
 
     /**
@@ -193,6 +238,8 @@ public class MavenProfileView extends ViewPart
         // Remove change and selection listeners
         getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener( getSelectionListener() );
         ResourcesPlugin.getWorkspace().removeResourceChangeListener( pomChangeListener );
+        MavenManager.getMavenPreferenceManager().getPreferenceStore().removePropertyChangeListener(
+                                                                                                preferenceStoreChangeListener );
         profiles = null;
         super.dispose();
     }
@@ -401,10 +448,26 @@ public class MavenProfileView extends ViewPart
         }
         else
         {
-            if ( pomProfileNeedsUpdate() )
+            if ( projectSelectedChanged() )
             {
+                updateProjectSelected();
                 updatePomModel();
+                updateProfilesRoot();
                 profilesChanged = true;
+            }
+            else
+            {
+                if ( pomProfileNeedsUpdate() )
+                {
+                    updatePomModel();
+                    profilesChanged = true;
+                }
+
+                if ( projectProfileRootNeedsUpdate() )
+                {
+                    updateProfilesRoot();
+                    profilesChanged = true;
+                }
             }
 
             if ( globalSettingsXmlProfilesNeedsUpdate() )
@@ -433,6 +496,11 @@ public class MavenProfileView extends ViewPart
                 list.addAll( getProfileFromPomModel( pomModel, pomLocation ) );
             }
 
+            if ( profileRoot != null )
+            {
+                list.addAll( getProfileFromProfileRoot( getProfilesRoot() ) );
+            }
+
             if ( globalSettings != null )
             {
                 list.addAll( getProfileFromSettings(
@@ -440,6 +508,8 @@ public class MavenProfileView extends ViewPart
                                                      MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename() ) );
             }
 
+            String globalSettingsLocation = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
+            String userSettingsLocation = MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename();
             if ( globalSettingsLocation != null && !globalSettingsLocation.equals( userSettingsLocation ) )
             {
                 if ( userSettings != null )
@@ -481,6 +551,27 @@ public class MavenProfileView extends ViewPart
         changeTableContents( null );
     }
 
+    public boolean projectSelectedChanged()
+    {
+        if ( currentProject == null || !currentProject.equals( selectedProject ) )
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    private void updateProjectSelected()
+    {
+        if ( selectedProject != null )
+        {
+            currentProject = selectedProject;
+            basedir = currentProject.getLocation().toOSString();
+        }
+    }
+
     /**
      * Check if we need to update the pom profile in the table
      * 
@@ -491,17 +582,37 @@ public class MavenProfileView extends ViewPart
     {
         boolean needsUpdate = false;
 
-        if ( currentProject == null || !currentProject.equals( selectedProject ) )
+        File file = new File( pomLocation );
+        if ( file.exists() )
         {
-            needsUpdate = true;
+            needsUpdate = file.lastModified() != pomFileLmod;
+        }
+
+        return needsUpdate;
+    }
+
+    /**
+     * Check if we need to update the profile.xml profiles in the table
+     * 
+     * @return true if selection of project in workspace changed or if profile.xml of the current project was changed,
+     *         otherwise false.
+     */
+    public boolean projectProfileRootNeedsUpdate()
+    {
+        boolean needsUpdate = false;
+
+        if ( profileRoot != null )
+        {
+            File file = new File( profileRootLocation );
+
+            if ( file.exists() )
+            {
+                needsUpdate = file.lastModified() != profileRootLmod;
+            }
         }
         else
         {
-            File file = new File( pomLocation );
-            if ( file.exists() )
-            {
-                needsUpdate = file.lastModified() != pomFileLmod;
-            }
+            needsUpdate = true;
         }
 
         return needsUpdate;
@@ -516,13 +627,20 @@ public class MavenProfileView extends ViewPart
     {
         boolean needsUpdate = false;
 
-        File userSettingsXmlLocation = new File( MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename() );
-        if ( userSettingsXmlLocation.exists()
-                        && ( userSettings == null || userSettingsXmlLocation.lastModified() != userSettingsXmlLmod ) )
+        String newUserSettingsXmlValue = MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename();
+        if ( !previousUserSettingsXmlValue.equals( newUserSettingsXmlValue ) )
         {
+            previousUserSettingsXmlValue = newUserSettingsXmlValue;
             needsUpdate = true;
         }
-
+        else
+        {
+            File file = new File( newUserSettingsXmlValue );
+            if ( file.exists() && ( userSettings == null || file.lastModified() != userSettingsXmlLmod ) )
+            {
+                needsUpdate = true;
+            }
+        }
         return needsUpdate;
     }
 
@@ -535,15 +653,20 @@ public class MavenProfileView extends ViewPart
     {
         boolean needsUpdate = false;
 
-        File globalSettingsXmlLocation =
-            new File( MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename() );
-
-        if ( globalSettingsXmlLocation.exists()
-                        && ( globalSettings == null || globalSettingsXmlLocation.lastModified() != globalSettingsXmlLmod ) )
+        String newGlobalSettingsXmlValue = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
+        if ( !previousGlobalSettingsXmlValue.equals( newGlobalSettingsXmlValue ) )
         {
+            previousGlobalSettingsXmlValue = newGlobalSettingsXmlValue;
             needsUpdate = true;
         }
-
+        else
+        {
+            File file = new File( newGlobalSettingsXmlValue );
+            if ( file.exists() && ( globalSettings == null || file.lastModified() != globalSettingsXmlLmod ) )
+            {
+                needsUpdate = true;
+            }
+        }
         return needsUpdate;
     }
 
@@ -552,11 +675,6 @@ public class MavenProfileView extends ViewPart
      */
     protected void updatePomModel()
     {
-        if ( selectedProject != null )
-        {
-            currentProject = selectedProject;
-        }
-
         try
         {
             if ( currentProject != null )
@@ -574,6 +692,25 @@ public class MavenProfileView extends ViewPart
     }
 
     /**
+     * Update the maven project model. This method is usually called after if pomProfileNeedsUpdate() would return true.
+     */
+    protected void updateProfilesRoot()
+    {
+        if ( currentProject != null )
+        {
+            IFile profileXml = currentProject.getFile( new Path( basedir, File.separator + PROFILES_XML_FILE ) );
+            if ( profileXml.exists() )
+            {
+                String profileXmlPath = profileXml.getLocation().toOSString();
+                File file = new File( profileXmlPath );
+                profileRootLocation = profileXmlPath;
+                profileRootLmod = file.lastModified();
+                profileRoot = getProfilesRoot();
+            }
+        }
+    }
+
+    /**
      * Update the user settings. This method is usually called after if userSettingsXmlProfilesNeedsUpdate() would
      * return true.
      */
@@ -584,7 +721,6 @@ public class MavenProfileView extends ViewPart
         {
             userSettingsXmlLmod = file.lastModified();
             userSettings = getSettingsModelFromFile( file );
-            userSettingsLocation = MavenManager.getMavenPreferenceManager().getUserSettingsXmlFilename();
         }
     }
 
@@ -599,7 +735,6 @@ public class MavenProfileView extends ViewPart
         {
             globalSettingsXmlLmod = file.lastModified();
             globalSettings = getSettingsModelFromFile( file );
-            globalSettingsLocation = MavenManager.getMavenPreferenceManager().getGlobalSettingsXmlFilename();
         }
     }
 
@@ -617,9 +752,9 @@ public class MavenProfileView extends ViewPart
 
         if ( mavenProjectModel != null )
         {
-            List<Profile> profiles = mavenProjectModel.getProfiles();
+            List<org.apache.maven.model.Profile> profiles = mavenProjectModel.getProfiles();
 
-            for ( Profile profile : profiles )
+            for ( org.apache.maven.model.Profile profile : profiles )
             {
                 ProfileModel profileModel = new ProfileModel();
 
@@ -628,10 +763,6 @@ public class MavenProfileView extends ViewPart
                 profileModel.setActive( profile.getActivation() != null && profile.getActivation().isActiveByDefault() );
                 list.add( profileModel );
             }
-        }
-        else
-        {
-            throw new NullPointerException( "Model should not be null" );
         }
 
         return list;
@@ -682,9 +813,34 @@ public class MavenProfileView extends ViewPart
                 list.add( profileModel );
             }
         }
-        else
+
+        return list;
+    }
+
+    /**
+     * Resolve the list of model profiles to list of ProfileModel profiles.
+     * 
+     * @param profilesRoot
+     * @return list that contains ProfileModel
+     */
+    @SuppressWarnings( "unchecked" )
+    private List<ProfileModel> getProfileFromProfileRoot( ProfilesRoot profilesRoot )
+    {
+        List<ProfileModel> list = new ArrayList<ProfileModel>();
+
+        if ( profilesRoot != null )
         {
-            throw new NullPointerException( "Settings should not be null" );
+            List<org.apache.maven.profiles.Profile> profiles = profilesRoot.getProfiles();
+
+            for ( org.apache.maven.profiles.Profile profile : profiles )
+            {
+                ProfileModel profileModel = new ProfileModel();
+
+                profileModel.setName( profile.getId() );
+                profileModel.setLocation( profileRootLocation );
+                profileModel.setActive( profile.getActivation() != null && profile.getActivation().isActiveByDefault() );
+                list.add( profileModel );
+            }
         }
 
         return list;
@@ -716,10 +872,59 @@ public class MavenProfileView extends ViewPart
     }
 
     /**
+     * Get the profile in the project descriptor (basedir/profiles.xml) of the project.
+     * 
+     * @return ProfilesRoot
+     */
+    public ProfilesRoot getProfilesRoot()
+    {
+        File profilesXml = new File( basedir, PROFILES_XML_FILE );
+
+        ProfilesRoot profilesRoot = null;
+
+        if ( profilesXml.exists() )
+        {
+            ProfilesXpp3Reader reader = new ProfilesXpp3Reader();
+            FileReader fileReader = null;
+            try
+            {
+                fileReader = new FileReader( profilesXml );
+                profilesRoot = reader.read( fileReader );
+            }
+            catch ( FileNotFoundException e )
+            {
+                MavenUiActivator.getLogger().log( e );
+            }
+            catch ( XmlPullParserException e )
+            {
+                MavenUiActivator.getLogger().log( e );
+            }
+            catch ( IOException e )
+            {
+                MavenUiActivator.getLogger().log( e );
+            }
+            finally
+            {
+                if ( fileReader != null )
+                {
+                    try
+                    {
+                        fileReader.close();
+                    }
+                    catch ( IOException e )
+                    {
+                        MavenUiActivator.getLogger().log( e );
+                    }
+                }
+            }
+        }
+        return profilesRoot;
+    }
+
+    /**
      * Updates the application with the selected profile
      * 
-     * @param profilemodel
-     *            profiles
+     * @param profilemodel profiles
      */
     private void changeTableContents( final List<ProfileModel> profileModels )
     {
@@ -807,7 +1012,8 @@ public class MavenProfileView extends ViewPart
      * This class provides the labels for MavenProfileTable
      */
 
-    private final class ProfileLabelProvider implements ITableLabelProvider
+    private final class ProfileLabelProvider
+        implements ITableLabelProvider
     {
         public Image getColumnImage( Object element, int columnIndex )
         {
@@ -860,14 +1066,14 @@ public class MavenProfileView extends ViewPart
     /**
      * This class provides the content for maven profile table
      */
-    public class ProfileContentProvider implements IStructuredContentProvider
+    public class ProfileContentProvider
+        implements IStructuredContentProvider
     {
 
         /**
          * Gets the elements for the table
          * 
-         * @param input
-         *            the input model, which is a list of profiles.
+         * @param input the input model, which is a list of profiles.
          * @return Object[]
          */
         @SuppressWarnings( "unchecked" )
