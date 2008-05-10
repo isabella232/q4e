@@ -53,10 +53,10 @@ import org.eclipse.core.runtime.CoreException;
  * 
  * @author amuino
  */
-@SuppressWarnings("unchecked")
+@SuppressWarnings( "unchecked" )
 public class MavenProjectWrapper extends MavenProject implements Cloneable
 {
-    private MavenProject delegate;
+    private final MavenProject delegate;
 
     /**
      * Creates a wrapper over the given project.
@@ -189,13 +189,11 @@ public class MavenProjectWrapper extends MavenProject implements Cloneable
     // TODO this will be needed when we upgrade the embedder
     // throws CloneNotSupportedException
     {
-        MavenProjectWrapper clone = (MavenProjectWrapper) super.clone();
-        clone.delegate = (MavenProject) delegate.clone();
-        return clone;
+        return new MavenProjectWrapper( (MavenProject) delegate.clone() );
     }
 
-    // ------------------------- delegate methods from here on ------------------------- 
-    
+    // ------------------------- delegate methods from here on -------------------------
+
     @Override
     public void addAttachedArtifact( Artifact artifact )
     {
