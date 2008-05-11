@@ -150,11 +150,12 @@ public class ArtifactSearchResultPage
                 public void searchResultChanged( SearchResultEvent e )
                 {
                     artifacts = (ArtifactSearchResult) e.getSearchResult();
-                    resultsListViewer.setContentProvider( new ArtifactSearchResultContentProvider() );
+                    
                     Display.getDefault().asyncExec( new Runnable()
                     {
                         public void run()
                         {
+                            resultsListViewer.setContentProvider( new ArtifactSearchResultContentProvider() );
                             resultsListViewer.setInput( artifacts );
                         }
                     } );
