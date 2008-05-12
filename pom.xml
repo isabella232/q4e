@@ -32,12 +32,12 @@
 
   <prerequisites>
     <!-- We need MNG-3396 and MNG-3410 from 2.0.9 -->
-    <maven>2.0.9-SNAPSHOT</maven>
+    <maven>2.0.9</maven>
   </prerequisites>
 
   <properties>
-    <maven.embedder.version>2.1.0-632695</maven.embedder.version>
-    <felix.bundle.plugin.version>1.4.1-SNAPSHOT</felix.bundle.plugin.version>
+    <maven.embedder.version>2.1.0-655675</maven.embedder.version>
+    <felix.bundle.plugin.version>1.4.1</felix.bundle.plugin.version>
     <pde.plugin.version>1.0-SNAPSHOT</pde.plugin.version>
     <libdir>${basedir}/lib</libdir>
     <srcdir>${basedir}/sources</srcdir>
