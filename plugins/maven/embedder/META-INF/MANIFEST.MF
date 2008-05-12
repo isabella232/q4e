@@ -587,14 +587,14 @@ Private-Package: edu.emory.mathcs.backport.java.util,edu.emory.mathcs.
  hell,org.codehaus.plexus.util.dag,org.codehaus.plexus.util.interpolat
  ion,org.codehaus.plexus.util.introspection,org.codehaus.plexus.util.i
  o,org.codehaus.plexus.util.reflection
-Ignore-Package: org.codehaus.plexus.util.reflection,com.sun.jdmk.comm,
- javax.swing.text,org.codehaus.plexus.util.cli,javax.swing.border,java
- x.naming,org.codehaus.plexus.util.introspection,javax.swing.tree,java
- x.jms,org.codehaus.plexus.util.io,javax.mail.internet,javax.xml.parse
- rs,javax.management,org.codehaus.plexus.util,org.codehaus.plexus.util
- .dag,org.codehaus.plexus.util.cli.shell,junit.framework,javax.swing,j
- avax.swing.table,javax.swing.event,javax.mail,org.codehaus.plexus.uti
- l.interpolation,sun.misc
+Ignore-Package: com.sun.jdmk.comm,org.codehaus.plexus.util.reflection,
+ org.codehaus.plexus.util.cli,javax.swing.text,javax.swing.tree,javax.
+ jms,org.codehaus.plexus.util.io,org.objectweb.asm,javax.mail.internet
+ ,javax.management,org.codehaus.plexus.util,org.codehaus.plexus.util.d
+ ag,junit.framework,javax.swing,javax.swing.event,org.codehaus.plexus.
+ util.interpolation,sun.misc,org.codehaus.plexus.util.introspection,ja
+ vax.naming,javax.swing.border,javax.xml.parsers,org.codehaus.plexus.u
+ til.cli.shell,javax.swing.table,org.objectweb.asm.commons,javax.mail
 Bundle-ClassPath: .,lib/backport-util-concurrent-3.0.jar,lib/wagon-ssh
  -external-1.0-beta-2.jar,lib/maven-artifact-3.0-SNAPSHOT.jar,lib/mave
  n-plugin-api-2.1-SNAPSHOT.jar,lib/doxia-sink-api-1.0-alpha-9.jar,lib/
@@ -619,7 +619,7 @@ Bundle-Vendor: The Apache Software Foundation
 Build-Jdk: 1.6.0_06
 Bundle-Version: 2.1.0.655675
 Eclipse-BuddyPolicy: registered
-Bnd-LastModified: 1210633813562
+Bnd-LastModified: 1210634468906
 Embed-Transitive: true
 Bundle-ManifestVersion: 2
 Bundle-Description: Maven Embedder for the Q project
@@ -630,7 +630,7 @@ Bundle-DocURL: http://www.apache.org/
 Import-Package: com.jcraft.jsch,org.apache.commons.cli;version="[1.0.0
  ,2.0.0)",org.aspectj.internal.lang.annotation,org.aspectj.lang,org.as
  pectj.lang.annotation,org.aspectj.lang.reflect,org.aspectj.runtime.in
- ternal,org.aspectj.runtime.reflect,org.objectweb.asm,org.objectweb.as
- m.commons,org.w3c.dom,org.w3c.tidy,org.xml.sax,org.xml.sax.helpers
+ ternal,org.aspectj.runtime.reflect,org.w3c.dom,org.w3c.tidy,org.xml.s
+ ax,org.xml.sax.helpers
 Bundle-SymbolicName: org.apache.maven.embedder
 

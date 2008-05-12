@@ -89,6 +89,7 @@
                 !sun.misc.*,
                 !com.sun.*,
                 !javax.*,
+                !org.objectweb.asm.*,
                 org.apache.commons.cli;version="[1.0.0,2.0.0)",
                 *
             </Import-Package>
