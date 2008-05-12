@@ -36,10 +36,11 @@ public class EclipseMavenBuildPlanner
     extends DefaultBuildPlanner
 {
     @Override
-    public BuildPlan constructBuildPlan( List goals, MavenProject project, MavenSession session )
+    public BuildPlan constructBuildPlan( List goals, MavenProject project, MavenSession session,
+                                         boolean allowUnbindableMojos )
         throws LifecycleLoaderException, LifecycleSpecificationException, LifecyclePlannerException
     {
-        BuildPlan plan = super.constructBuildPlan( goals, project, session );
+        BuildPlan plan = super.constructBuildPlan( goals, project, session, allowUnbindableMojos );
         MavenExecutionRequest request = session.getRequest();
         if ( request instanceof EclipseMavenExecutionRequest )
         {
