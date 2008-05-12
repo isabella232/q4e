@@ -134,7 +134,7 @@ public class MavenProjectPropertiesManager
             project.setPersistentProperty( new QualifiedName( MavenCoreActivator.PLUGIN_ID, property.name() ),
                                            toString( values ) );
         }
-        catch ( Exception e )
+        catch ( CoreException e )
         {
             MavenCoreActivator.getLogger().log(
                                                 "Unable to write property " + property.name() + " with value " + values
@@ -183,7 +183,7 @@ public class MavenProjectPropertiesManager
             }
             return fromString( propVal );
         }
-        catch ( Exception e )
+        catch ( CoreException e )
         {
             MavenCoreActivator.getLogger().log(
                                                 "Unable to read property " + property.name() + " for project "
