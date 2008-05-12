@@ -12,7 +12,7 @@ import org.apache.maven.monitor.event.MavenEvents;
 public enum EventType
 {
 
-    phaseExecution, mojoExecution, projectExecution, reactorExecution;
+    phaseExecution, mojoExecution, projectExecution, reactorExecution, mavenExecution;
 
     public static EventType parseEvent( String mavenEventType )
     {
@@ -31,6 +31,10 @@ public enum EventType
         if ( MavenEvents.REACTOR_EXECUTION.equals( mavenEventType ) )
         {
             return reactorExecution;
+        }
+        if ( MavenEvents.MAVEN_EXECUTION.equals( mavenEventType ) )
+        {
+            return mavenExecution;
         }
         throw new IllegalArgumentException( mavenEventType + " is not a valid event type" );
     }

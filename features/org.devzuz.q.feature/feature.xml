@@ -35,8 +35,8 @@
       <import plugin="org.eclipse.core.databinding" version="1.0.0" match="compatible"/>
       <import plugin="org.eclipse.jface.databinding" version="1.1.0" match="compatible"/>
       <import plugin="org.eclipse.swt" version="3.3.0" match="compatible"/>
-      <import feature="org.apache.commons.collections.feature" version="3.2.0.200801311913" match="compatible"/>
-      <import feature="org.apache.maven.feature" version="2.1.0.627670" match="perfect"/>
+      <import feature="org.apache.maven.feature" version="2.1.0.632695" match="perfect"/>
+      <import feature="org.devzuz.q.feature.thirdparty" version="0.5.0.200803040914" match="compatible"/>
       <import plugin="org.eclipse.search"/>
    </requires>
 
@@ -80,20 +80,6 @@
          download-size="0"
          install-size="0"
          version="0.7.0.qualifier"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.maven.shared.dependency.tree"
-         download-size="41"
-         install-size="41"
-         version="1.1.0.v200802050958"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.commons.lang"
-         download-size="0"
-         install-size="0"
-         version="2.1.0.v200709131643"
          unpack="false"/>
 
    <plugin

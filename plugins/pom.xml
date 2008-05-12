@@ -25,7 +25,8 @@
 
   <modules>
     <module>maven/embedder</module>
-    <module>maven/core</module>
+    <!-- <module>maven/core</module> -->
+    <module>thirdparty/org.apache.maven.shared.dependency.tree</module>
   </modules>
 
   <build>
@@ -72,6 +73,10 @@
           </filesets>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+      </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
@@ -92,16 +97,13 @@
           <configuration>
             <manifestLocation>${manifestdir}</manifestLocation>
             <instructions>
-              <Embed-Dependency>*;scope=compile|runtime;inline=false</Embed-Dependency>
+              <Embed-Dependency>*;scope=compile|runtime;inline=true</Embed-Dependency>
               <Embed-Transitive>false</Embed-Transitive>
-              <Embed-StripGroup>true</Embed-StripGroup>
-              <Embed-Directory>lib</Embed-Directory>
-              <Include-Resource>LICENSE.txt,NOTICE.txt</Include-Resource>
             </instructions>
           </configuration>
           <executions>
             <execution>
-              <phase>process-resources</phase>
+              <phase>process-classes</phase>
               <goals>
                 <goal>manifest</goal>
               </goals>
@@ -112,4 +114,68 @@
     </pluginManagement>
   </build>
 
+  <profiles>
+    <profile>
+      <id>eclipse-dev</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>copy-dependencies</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>${libdir}</outputDirectory>
+                </configuration>
+              </execution>
+              <execution>
+                <id>copy-src-dependencies</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+                <configuration>
+                  <classifier>sources</classifier>
+                  <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
+                  <outputDirectory>${srcdir}</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <!--
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-eclipse-plugin</artifactId>
+            <executions>
+              <execution>
+                <goals>
+                  <goal>eclipse</goal>
+                </goals>
+                <phase>generate-resources</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <additionalBuildcommands>
+                <buildcommand>org.eclipse.pde.ManifestBuilder</buildcommand>
+                <buildcommand>org.eclipse.pde.SchemaBuilder</buildcommand>
+              </additionalBuildcommands>
+              <additionalProjectnatures>
+                <projectnature>org.eclipse.pde.PluginNature</projectnature>
+              </additionalProjectnatures>
+              <classpathContainers>
+                <classpathContainer>org.eclipse.jdt.launching.JRE_CONTAINER</classpathContainer>
+                <classpathContainer>org.eclipse.pde.core.requiredPlugins</classpathContainer>
+              </classpathContainers>
+            </configuration>
+          </plugin>
+          -->
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 </project>

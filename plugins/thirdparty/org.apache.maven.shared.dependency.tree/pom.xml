@@ -14,14 +14,13 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.devzuz.q</groupId>
-    <artifactId>q</artifactId>
+    <groupId>org.devzuz.q.plugins</groupId>
+    <artifactId>parent</artifactId>
     <version>1-SNAPSHOT</version>
   </parent>
   <groupId>org.apache.maven.shared.dependency</groupId>
   <artifactId>tree</artifactId>
-<!-- added the v to work around https://issues.apache.org/jira/browse/FELIX-477 -->
-  <version>1.1.0-v200802050958</version>
+  <version>1.1.0-v200803012119</version>
   <packaging>bundle</packaging>
   <name>Maven Dependency Tree</name>
 
@@ -39,73 +38,12 @@
 -->
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-clean-plugin</artifactId>
-          <configuration>
-          <filesets>
-            <fileset>
-              <directory>${libdir}</directory>
-              <includes>
-                <include>*.jar</include>
-              </includes>
-            </fileset>
-            <fileset>
-              <directory>${srcdir}</directory>
-              <includes>
-                <include>*.jar</include>
-              </includes>
-            </fileset>
-            <fileset>
-              <directory>${manifestdir}</directory>
-              <includes>
-                <include>MANIFEST.MF</include>
-              </includes>
-            </fileset>
-          </filesets>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <configuration>
-          <excludeTransitive>true</excludeTransitive>
-        </configuration>
-        <executions>
-          <execution>
-            <id>copy-dependencies</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${libdir}</outputDirectory>
-            </configuration>
-          </execution>
-          <execution>
-            <id>copy-src-dependencies</id>
-            <phase>package</phase>
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <configuration>
-              <classifier>sources</classifier>
-              <failOnMissingClassifierArtifact>false</failOnMissingClassifierArtifact>
-              <outputDirectory>${srcdir}</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-      <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
         <configuration>
-          <manifestLocation>${manifestdir}</manifestLocation>
           <instructions>
             <Eclipse-RegisterBuddy>org.apache.maven.embedder</Eclipse-RegisterBuddy>
-            <Include-Resource>LICENSE.txt,NOTICE.txt</Include-Resource>
             <Embed-Dependency>*;scope=compile|runtime;inline=true</Embed-Dependency>
-            <Embed-Transitive>false</Embed-Transitive>
             <Include-Resource>LICENSE.txt,NOTICE.txt</Include-Resource>
           </instructions>
         </configuration>

@@ -186,8 +186,7 @@ public class MavenProjectWrapper extends MavenProject implements Cloneable
 
     @Override
     public Object clone()
-    // TODO this will be needed when we upgrade the embedder
-    // throws CloneNotSupportedException
+        throws CloneNotSupportedException
     {
         return new MavenProjectWrapper( (MavenProject) delegate.clone() );
     }

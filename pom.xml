@@ -30,10 +30,15 @@
     </license>
   </licenses>
 
+  <prerequisites>
+    <!-- We need MNG-3396 and MNG-3410 from 2.0.9 -->
+    <maven>2.0.9-SNAPSHOT</maven>
+  </prerequisites>
+
   <properties>
-    <maven.embedder.version>2.1.0-629167</maven.embedder.version>
-    <felix.bundle.plugin.version>1.4.0</felix.bundle.plugin.version>
-    <pde.plugin.version>1.0-alpha-2-SNAPSHOT</pde.plugin.version>
+    <maven.embedder.version>2.1.0-632695</maven.embedder.version>
+    <felix.bundle.plugin.version>1.4.1-SNAPSHOT</felix.bundle.plugin.version>
+    <pde.plugin.version>1.0-SNAPSHOT</pde.plugin.version>
     <libdir>${basedir}/lib</libdir>
     <srcdir>${basedir}/sources</srcdir>
     <manifestdir>${basedir}/META-INF</manifestdir>
@@ -43,7 +48,7 @@
     <repository>
       <id>code.google.com</id>
       <name>Google Code Repository</name>
-      <url>dav:https://q4e.googlecode.com/svn/repository/releases</url>
+      <url>dav:https://q4e.googlecode.com/svn/repository/snapshots</url>
     </repository>
     <snapshotRepository>
       <id>code.google.com</id>
@@ -64,10 +69,10 @@
       </snapshots>
     </repository>
     <repository>
-      <id>code.google.com</id>
+      <id>snapshots.code.google.com</id>
       <url>http://q4e.googlecode.com/svn/repository/snapshots</url>
       <releases>
-        <enabled>false</enabled>
+        <enabled>true</enabled>
       </releases>
       <snapshots>
         <enabled>true</enabled>
@@ -88,11 +93,14 @@
     </pluginRepository>
   </pluginRepositories>
 
+  <!-- we can't build plugins and features in the same execution due to a bug
+       the features would be installed as .eclipse-feature instead of .jar
   <modules>
     <module>plugins</module>
     <module>features</module>
     <module>updatesite-dev</module>
   </modules>
+  -->
 
   <build>
     <extensions>
@@ -181,7 +189,7 @@
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-dependency-plugin</artifactId>
-          <version>2.0-alpha-4</version>
+          <version>2.0</version>
         </plugin>
       </plugins>
     </pluginManagement>
@@ -210,6 +218,11 @@
         <version>2.1.0.v200709131643</version>
       </dependency>
       <dependency>
+        <groupId>org.apache.commons</groupId>
+        <artifactId>collections</artifactId>
+        <version>3.2.0</version>
+      </dependency>
+      <dependency>
         <groupId>org.aspectj</groupId>
         <artifactId>runtime</artifactId>
         <version>1.5.4.200705211336</version>
@@ -225,9 +238,24 @@
         <version>0.1.31</version>
       </dependency>
       <dependency>
+        <groupId>org</groupId>
+        <artifactId>jdom</artifactId>
+        <version>1.0.0.v200801070541</version>
+      </dependency>
+      <dependency>
         <groupId>org.apache.maven.shared.dependency</groupId>
         <artifactId>tree</artifactId>
-        <version>1.1.0-v200802050958</version>
+        <version>1.1.0-v200803012119</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.zest</groupId>
+        <artifactId>core</artifactId>
+        <version>1.0.0</version>
+      </dependency>
+      <dependency>
+        <groupId>org.eclipse.zest</groupId>
+        <artifactId>layouts</artifactId>
+        <version>1.0.0</version>
       </dependency>
 
       <!-- required for pde plugin due to problems with Maven and Eclipse version ranges -->

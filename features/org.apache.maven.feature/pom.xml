@@ -23,6 +23,19 @@
   <name>Apache Maven</name>
   <description>Eclipse Feature for Apache Maven</description>
 
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <organization>
+    <name>The Apache Software Foundation</name>
+    <url>http://www.apache.org/</url>
+  </organization>
+  <url>http://www.apache.org/</url>
+
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -56,18 +69,4 @@
       </releases>
     </repository>
   </repositories>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>pde-maven-plugin</artifactId>
-        <configuration>
-          <!-- for building with Eclipse
-          <outputDirectory>${basedir}</outputDirectory>
-          -->
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>
