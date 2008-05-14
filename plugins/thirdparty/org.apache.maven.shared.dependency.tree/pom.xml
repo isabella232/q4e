@@ -17,6 +17,7 @@
     <groupId>org.devzuz.q.plugins</groupId>
     <artifactId>parent</artifactId>
     <version>1-SNAPSHOT</version>
+    <relativePath>../../pom.xml</relativePath>
   </parent>
   <groupId>org.apache.maven.shared.dependency</groupId>
   <artifactId>tree</artifactId>
@@ -25,7 +26,6 @@
   <name>Maven Dependency Tree</name>
 
   <build>
-<!-- doesn't work with bundle plugin see https://issues.apache.org/jira/browse/FELIX-400
     <resources>
       <resource>
         <directory>${basedir}</directory>
@@ -35,7 +35,6 @@
         </includes>
       </resource>
     </resources>
--->
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
@@ -55,6 +54,13 @@
       <groupId>org.apache.maven.shared</groupId>
       <artifactId>maven-dependency-tree</artifactId>
       <version>1.1</version>
+      <!-- Skip transitive dependencies when using -Peclipse-dev, they'll be provided by the embedder bundle -->
+      <exclusions>
+		<exclusion>
+		  <groupId>org.apache.maven</groupId>
+		  <artifactId>maven-project</artifactId>
+		</exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
 </project>
