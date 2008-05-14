@@ -14,6 +14,8 @@ import org.apache.maven.model.PluginExecution;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.devzuz.q.maven.pomeditor.pages.internal.DeleteItemAction;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -130,6 +132,40 @@ public class PluginTreeContentProviderTest
         showName( plugins , new PluginTreeLabelProvider() );
     }
     
+    @Test 
+    public void testXpp3Dom()
+    {
+        assertTrue ( "plugins != null ",plugins != null );
+        Xpp3Dom configDom = ( Xpp3Dom ) ( (PluginExecution) plugins.get( 1 ).getExecutions().get( 0 ) ).getConfiguration();
+        assertTrue ( "configDom != null", configDom != null );
+        assertTrue ( "configDom.getParent() == null" , configDom.getParent() == null );
+        printXpp3DomRecursive( configDom , 0 );
+    }
+    
+    private void printXpp3DomRecursive( Xpp3Dom dom , int gen )
+    {
+        String value = dom.getValue() == null ? "null" : dom.getValue();
+        System.out.printf( repeat( '\t', gen ) + "{ " + dom.getName() + " , " + value + " }\n" );
+        if ( dom.getChildCount() > 0 )
+        {
+            for ( Xpp3Dom child : dom.getChildren() )
+            {
+                printXpp3DomRecursive( child, gen + 1 );
+            }
+        }
+    }
+    
+    private String repeat( char ch , int times )
+    {
+        StringBuffer buffer = new StringBuffer("");
+        for( int i = 0 ; i < times; i++ )
+        {
+            buffer.append( ch );
+        }
+        
+        return buffer.toString();
+    }
+    
     public void showName( Object parent , PluginTreeLabelProvider labelProvider )
     {
         System.out.println("Label = " + labelProvider.getText( parent ) );
@@ -142,9 +178,38 @@ public class PluginTreeContentProviderTest
             }
         }
     }
-
+    
+    @Test
+    @SuppressWarnings ("unchecked")
+    public void testDeleteItemAction()
+    {
+        Build build = pomModel.getBuild();
+        List<Object> objectList = build.getPlugins();
+        Plugin plugin = ( Plugin ) objectList.get( 1 );
+        
+        assertTrue(objectList.contains( plugin ) );
+        
+        DeleteItemActionMock action = new DeleteItemActionMock( "Plugin", "Plugin" , new PluginTreeContentProvider( build ) );
+        action.doAction( plugin );
+        
+        assertTrue( !(objectList.contains( plugin )) );
+    }
+    
     @After
     public void tearDown() throws Exception
     {
+    }
+    
+    private class DeleteItemActionMock extends DeleteItemAction
+    {
+        public DeleteItemActionMock( String commandString, String objectClass, ITreeContentProvider contentProvider )
+        {
+            super( commandString , objectClass , contentProvider );
+        }
+        
+        protected boolean showWarningAndPrompt()
+        {
+            return true;
+        }
     }
 }

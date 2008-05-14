@@ -162,6 +162,12 @@ public class Messages
     
     public static String MavenPomEditor_MavenPomEditor_Tag;
     
+    public static String MavenPomEditor_MavenPomEditor_Plugins;
+    
+    public static String MavenPomEditor_MavenPomEditor_Inherited;
+    
+    public static String MavenPomEditor_MavenPomEditor_Phase;
+    
     static
     {
         // initialize resource bundle

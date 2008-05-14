@@ -99,6 +99,11 @@
 							<sourceDirectory>
 								${basedir}/src
 							</sourceDirectory>
+							<tests>
+							     <test>erle</test>
+							     <test>czar</test>
+							     <test>mantos</test>
+							</tests>
 						</configuration>
 						<goals>
 							<goal>checkstyle</goal>

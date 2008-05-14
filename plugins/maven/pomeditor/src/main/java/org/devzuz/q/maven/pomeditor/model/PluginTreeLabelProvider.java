@@ -107,8 +107,34 @@ public class PluginTreeLabelProvider implements ILabelProvider
         }
         else if ( element instanceof Xpp3Dom )
         {
-            Xpp3Dom dom = (Xpp3Dom) element;
-            return dom.getName();
+            Xpp3Dom dom = ( Xpp3Dom ) element;
+            if( dom.getName().equals( "configuration" ) )
+            {
+                return "Configuration";
+            }
+            else
+            {
+                String value = dom.getValue();
+                if ( value != null )
+                {
+                    StringBuffer configString = new StringBuffer();
+                    configString.append( "Configuration { " );
+                    configString.append( dom.getName() );
+                    configString.append( "," );
+                    configString.append( dom.getValue() );
+                    configString.append( " }" );
+                    
+                    return configString.toString();
+                }
+                else
+                {
+                    return dom.getName();
+                }
+            }
+        }
+        else if( element instanceof String )
+        {
+            return ( String ) element;
         }
         
         return null;

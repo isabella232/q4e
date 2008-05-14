@@ -18,6 +18,7 @@ import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBasicFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildPluginFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildResourcesPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildTestResourcesPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
@@ -54,6 +55,8 @@ public class MavenPomFormEditor extends FormEditor
     
     public static final String BUILD_TEST_RESOURCES_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildTestResourcesPage";
     
+    public static final String BUILD_PLUGINS_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildPluginFormPage";
+    
     private Model pomModel;
 
     private MavenPomBasicFormPage basicFormPage;
@@ -71,6 +74,8 @@ public class MavenPomFormEditor extends FormEditor
     private MavenPomBuildResourcesPage buildResourcesPage;
     
     private MavenPomBuildTestResourcesPage buildTestResourcesPage;
+    
+    private MavenPomBuildPluginFormPage buildPluginFormPage;
     
     public MavenPomFormEditor()
     {
@@ -114,6 +119,10 @@ public class MavenPomFormEditor extends FormEditor
                 buildTestResourcesPage =
                     new MavenPomBuildTestResourcesPage( this, BUILD_TEST_RESOURCES_FORM_PAGE, "Build Test Resources", this.pomModel);
                 addPage( buildTestResourcesPage );
+                
+                buildPluginFormPage =
+                    new MavenPomBuildPluginFormPage( this, BUILD_PLUGINS_FORM_PAGE, "Build Plugin", this.pomModel );
+                addPage( buildPluginFormPage );
             }
         }
         catch ( PartInitException pie )
@@ -216,6 +225,7 @@ public class MavenPomFormEditor extends FormEditor
         buildFormPage.setPageModified( false );
         buildResourcesPage.setPageModified( false );
         buildTestResourcesPage.setPageModified( false );
+        buildPluginFormPage.setPageModified( false );
         // clean other pages
     }
 

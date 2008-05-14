@@ -1,7 +1,7 @@
 package org.devzuz.q.maven.pomeditor.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -181,6 +181,10 @@ public class PluginTreeContentProvider implements ITreeContentProvider
                     if( ( goals != null ) && ( goals.size() > 0 ) )
                     {
                         childParentMap.put( goals , execution );
+                        for( String goal : goals )
+                        {
+                            childParentMap.put( goal , goals );
+                        }
                     }
                     
                     Xpp3Dom dom = ( Xpp3Dom ) execution.getConfiguration();
@@ -200,19 +204,17 @@ public class PluginTreeContentProvider implements ITreeContentProvider
             }
         }
     }
-    
-    private void addChildrenToMap( Map<Object, Object> map , Xpp3Dom dom )
+    /*
+     * private void addChildrenToMap( Map<Object, Object> map , Xpp3Dom dom ) { if( dom.getChildCount() > 0 ) { for(
+     * Xpp3Dom child : dom.getChildren() ) { if( child.getChildCount() > 0 ) { map.put( child , dom ); addChildrenToMap(
+     * map , child ); } } } }
+     */
+    private void addChildrenToMap( Map<Object, Object> map, Xpp3Dom dom )
     {
-        if( dom.getChildCount() > 0 )
+        for ( Xpp3Dom child : dom.getChildren() )
         {
-            for( Xpp3Dom child : dom.getChildren() )
-            {
-                if( child.getChildCount() > 0 )
-                {
-                    map.put( child , dom );
-                    addChildrenToMap( map , child );
-                }
-            }
+            map.put( child, dom );
+            addChildrenToMap( map, child );
         }
     }
     
@@ -225,11 +227,11 @@ public class PluginTreeContentProvider implements ITreeContentProvider
     public void setBuild( Build build )
     {
         this.build = build;
-        this.plugins = build.getPlugins();
+        plugins = build.getPlugins();
         
         if( childParentMap == null )
         {
-            childParentMap = new HashMap<Object, Object>();
+            childParentMap = new LinkedHashMap<Object, Object>();
         }
         else
         {
