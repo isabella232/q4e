@@ -14,7 +14,6 @@ import org.devzuz.q.maven.ui.archetype.provider.ArchetypeProviderFactory;
 import org.devzuz.q.maven.ui.archetype.provider.ArchetypeProviderNotAvailableException;
 import org.devzuz.q.maven.ui.archetype.provider.IArchetypeProvider;
 import org.devzuz.q.maven.ui.archetype.provider.impl.WikiArchetypeProvider;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.XMLMemento;
@@ -118,8 +117,9 @@ public class MavenUIPreferenceManagerAdapter
                                                                       + e.getName() + ") since its type ("
                                                                       + e.getType() + ") is not availble.", e );
                 }
-                catch ( CoreException e )
+                catch ( Exception e )
                 {
+                    // Catch any exception, including runtime, that could be risen while restoring the provider.
                     // TODO: Review exception handling. Should this be reported at the UI level?
                     MavenUiActivator.getLogger().error(
                                                         "An archetype provider could not be restored with the"
