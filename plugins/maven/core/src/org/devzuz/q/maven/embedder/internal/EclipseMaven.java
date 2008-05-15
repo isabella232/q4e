@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 import java.util.Stack;
+import java.util.StringTokenizer;
 
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.InvalidArtifactRTException;
@@ -220,7 +221,22 @@ public class EclipseMaven implements IMaven
     public void scheduleGoal( IMavenProject mavenProject, String goal, MavenExecutionParameter parameter,
                               MavenExecutionJobAdapter jobAdapter ) throws CoreException
     {
-        scheduleGoals( mavenProject, Collections.singletonList( goal ), parameter, jobAdapter );
+        List<String> goals = new ArrayList<String>();
+        
+        if( goal.indexOf( " " ) != -1 )
+        {
+            StringTokenizer st = new StringTokenizer( goal );
+            while ( st.hasMoreTokens() )
+            {
+               goals.add( st.nextToken() );
+            }
+        }
+        else
+        {
+            goals.add( goal );
+        }
+        
+        scheduleGoals( mavenProject, goals, parameter, jobAdapter );
     }
 
     public void scheduleGoals( IMavenProject mavenProject, List<String> goals ) throws CoreException
