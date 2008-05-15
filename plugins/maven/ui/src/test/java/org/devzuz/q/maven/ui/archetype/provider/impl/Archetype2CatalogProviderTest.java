@@ -5,18 +5,36 @@ import java.util.Collection;
 
 import junit.framework.TestCase;
 
+import org.devzuz.q.maven.embedder.QCoreException;
 import org.devzuz.q.maven.ui.archetype.provider.Archetype;
 
 public class Archetype2CatalogProviderTest extends TestCase
 {
+    private final Archetype2CatalogProvider provider = new Archetype2CatalogProviderMock();;
+
+    public void testArchetype2CatalogProviderLegalUsingURL() throws Exception
+    {
+        URL url = getClass().getResource( "Catalog.xml" );
+
+        provider.setCatalogFilename( url.toExternalForm() );
+
+        validateLegalCatalog();
+    }
+
     public void testArchetype2CatalogProviderLegal() throws Exception
     {
         URL url = getClass().getResource( "Catalog.xml" );
 
-        Archetype2CatalogProvider provider = new Archetype2CatalogProviderMock();
-
         provider.setCatalogFilename( url.getFile() );
 
+        validateLegalCatalog();
+    }
+
+    /**
+     * @throws QCoreException
+     */
+    private void validateLegalCatalog() throws QCoreException
+    {
         Collection<Archetype> archetypes = provider.getArchetypes();
         assertTrue( archetypes.size() == 1 );
 
@@ -32,8 +50,6 @@ public class Archetype2CatalogProviderTest extends TestCase
     public void testArchetype2CatalogProviderIllegal() throws Exception
     {
         URL url = getClass().getResource( "Catalog2.xml" );
-
-        Archetype2CatalogProvider provider = new Archetype2CatalogProviderMock();
 
         provider.setCatalogFilename( url.getFile() );
 
