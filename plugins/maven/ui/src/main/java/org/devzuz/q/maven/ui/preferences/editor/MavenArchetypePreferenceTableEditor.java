@@ -160,7 +160,9 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
     {
         addPropertyButton = createPushButton( box, Messages.MavenCustomComponent_AddButtonLabel );
         editPropertyButton = createPushButton( box, Messages.MavenCustomComponent_EditButtonLabel );
+        editPropertyButton.setEnabled( false );
         removePropertyButton = createPushButton( box, Messages.MavenCustomComponent_RemoveButtonLabel );
+        removePropertyButton.setEnabled( false );
     }
 
     private Button createPushButton( Composite parent, String key )
@@ -282,6 +284,9 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
             if ( dialog.open() == Window.OK )
             {
                 archetypeProviderContentProvider.refresh( provider );
+                // After deleting, there's no selection, but selection change events are not triggered
+                editPropertyButton.setEnabled( false );
+                removePropertyButton.setEnabled( false );
             }
         }
         else if ( e.getSource() == removePropertyButton )
