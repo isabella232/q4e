@@ -14,4 +14,9 @@ public class PomEditorUtils
                  build.getPluginManagement() == null && build.getDefaultGoal() == null && 
                  build.getFilters().size() <= 0 );
     }
+    
+    public static boolean isNullOrWhiteSpace( String str )
+    {
+        return ( str == null || str.trim().length() == 0 );
+    }
 }

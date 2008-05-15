@@ -168,6 +168,42 @@ public class Messages
     
     public static String MavenPomEditor_MavenPomEditor_Phase;
     
+    public static String MavenPomEditor_CiManagement_Title;
+
+    public static String MavenPomEditor_CiManagement_Description;
+
+    public static String MavenPomEditor_MailingList_Title;
+
+    public static String MavenPomEditor_MailingList_Description;
+
+    public static String MavenPomEditor_MavenPomEditor_System;
+
+    public static String MavenPomEditor_MavenPomEditor_Url;
+
+    public static String MavenPomEditor_MavenPomEditor_Notifiers;
+
+    public static String MavenPomEditor_MavenPomEditor_SendOnError;
+
+    public static String MavenPomEditor_MavenPomEditor_SendOnFailure;
+
+    public static String MavenPomEditor_MavenPomEditor_SendOnSuccess;
+
+    public static String MavenPomEditor_MavenPomEditor_SendOnWarning;
+
+    public static String MavenPomEditor_MavenPomEditor_Configurations;
+
+    public static String MavenPomEditor_MavenPomEditor_Address;
+
+    public static String MavenPomEditor_MavenPomEditor_Subscribe;
+
+    public static String MavenPomEditor_MavenPomEditor_Unsubscribe;
+
+    public static String MavenPomEditor_MavenPomEditor_Post;
+
+    public static String MavenPomEditor_MavenPomEditor_Archive;
+
+    public static String MavenPomEditor_MavenPomEditor_OtherArchives;
+    
     static
     {
         // initialize resource bundle

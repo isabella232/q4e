@@ -21,6 +21,7 @@ import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildPluginFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildResourcesPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildTestResourcesPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomCiManagementMailingListFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDevelopersFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesScmOrgFormPage;
@@ -57,6 +58,8 @@ public class MavenPomFormEditor extends FormEditor
     
     public static final String BUILD_PLUGINS_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildPluginFormPage";
     
+    public static final String CIMANAGEMENT_MAILINGLISTS_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomCiManagementMailingListsPage";
+    
     private Model pomModel;
 
     private MavenPomBasicFormPage basicFormPage;
@@ -76,6 +79,8 @@ public class MavenPomFormEditor extends FormEditor
     private MavenPomBuildTestResourcesPage buildTestResourcesPage;
     
     private MavenPomBuildPluginFormPage buildPluginFormPage;
+    
+    private MavenPomCiManagementMailingListFormPage ciManagementMailingListsPage;
     
     public MavenPomFormEditor()
     {
@@ -123,6 +128,11 @@ public class MavenPomFormEditor extends FormEditor
                 buildPluginFormPage =
                     new MavenPomBuildPluginFormPage( this, BUILD_PLUGINS_FORM_PAGE, "Build Plugin", this.pomModel );
                 addPage( buildPluginFormPage );
+                
+                ciManagementMailingListsPage =
+                    new MavenPomCiManagementMailingListFormPage( this, CIMANAGEMENT_MAILINGLISTS_FORM_PAGE,
+                                                                 "CiManagement/Mailing Lists", this.pomModel );
+                addPage( ciManagementMailingListsPage );
             }
         }
         catch ( PartInitException pie )
@@ -226,6 +236,7 @@ public class MavenPomFormEditor extends FormEditor
         buildResourcesPage.setPageModified( false );
         buildTestResourcesPage.setPageModified( false );
         buildPluginFormPage.setPageModified( false );
+        ciManagementMailingListsPage.setPageModified( false );
         // clean other pages
     }
 
