@@ -10,6 +10,7 @@ import org.devzuz.q.maven.search.ISearchCriteria;
 import org.devzuz.q.maven.search.SearchCriteria;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.DialogPage;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.search.ui.ISearchPage;
 import org.eclipse.search.ui.ISearchPageContainer;
 import org.eclipse.search.ui.NewSearchUI;
@@ -23,8 +24,8 @@ import org.eclipse.swt.widgets.Text;
 
 /**
  * Page to search for artifacts.
+ * 
  * @author Mike Poindexter
- *
  */
 public class ArtifactSearchPage
     extends DialogPage
@@ -40,8 +41,16 @@ public class ArtifactSearchPage
 
     public boolean performAction()
     {
-        NewSearchUI.runQueryInBackground( new ArtifactSearchQuery( createCriteria() ) );
-        return true;
+        if ( groupSearch.getSelection() || artifactSearch.getSelection() || versionSearch.getSelection() )
+        {
+            NewSearchUI.runQueryInBackground( new ArtifactSearchQuery( createCriteria() ) );
+            return true;
+        }
+        else
+        {
+            MessageDialog.openError( getShell(), "No criteria selected.", "Please check at least 1 criteria." );
+            return false;
+        }
     }
 
     public void setContainer( ISearchPageContainer container )
@@ -95,13 +104,13 @@ public class ArtifactSearchPage
 
         groupSearch = new Button( result, SWT.CHECK );
         groupSearch.setText( "Group Id" );
-        groupSearch.setSelection( false );
+        groupSearch.setSelection( true );
         groupSearch.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false, false, 1, 1 ) );
         groupSearch.setFont( result.getFont() );
 
         artifactSearch = new Button( result, SWT.CHECK );
         artifactSearch.setText( "Artifact Id" );
-        artifactSearch.setSelection( false );
+        artifactSearch.setSelection( true );
         artifactSearch.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, false, false, 1, 1 ) );
         artifactSearch.setFont( result.getFont() );
 
