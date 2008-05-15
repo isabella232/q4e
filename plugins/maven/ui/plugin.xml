@@ -160,6 +160,11 @@
             type="%archetypeProvider.wiki"
             ui-builder="org.devzuz.q.maven.ui.archetype.provider.impl.WikiArchetypeProviderUiBuilder">
       </provider-type>
+      <provider-type
+            class="org.devzuz.q.maven.ui.archetype.provider.impl.Archetype2CatalogProvider"
+            type="%archetypeProvider.archetype2Catalog"
+            ui-builder="org.devzuz.q.maven.ui.archetype.provider.impl.Archetype2CatalogProviderUiBuilder">
+      </provider-type>
    </extension>
    <extension
          point="org.eclipse.ui.decorators">
