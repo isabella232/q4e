@@ -127,7 +127,11 @@ public class EclipseMavenRequest extends Job implements IMavenJob
                 EventType type = event.getType();
                 if ( EventType.mojoExecution == type )
                 {
-                    monitor.subTask( mavenProject.getProject().getName() + ": " + event.toString() );
+                    String msg = mavenProject != null ? 
+                                    mavenProject.getProject().getName() + ": " + event.toString() : 
+                                        event.toString();
+                    
+                    monitor.subTask( msg );
                     monitor.worked( 1 );
                 }
             }
