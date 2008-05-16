@@ -312,20 +312,6 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
 
     }
 
-    private boolean isItemPresent( String archeTypeListSource, String type )
-    {
-        for ( int iCount = 0; iCount < providerTable.getItemCount(); iCount++ )
-        {
-            TableItem items = providerTable.getItem( iCount );
-
-            if ( items.getText( 0 ).equals( archeTypeListSource ) && items.getText( 1 ).equals( type ) )
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     /**
      * TODO Document
      * 
