@@ -140,14 +140,14 @@ public class UpdateClasspathJob extends WorkspaceJob implements IMavenJob
         }
 
         // TODO this is needed for now to avoid out of memory errors
-//        try
-//        {
-//            MavenManager.getMaven().refresh();
-//        }
-//        catch ( CoreException e )
-//        {
-//            // ignore
-//        }
+        try
+        {
+            MavenManager.getMaven().refresh();
+        }
+        catch ( CoreException e )
+        {
+            // ignore
+        }
 
         return new Status( IStatus.OK, MavenJdtCoreActivator.PLUGIN_ID, "Updated classpath container" );
     }
