@@ -70,6 +70,7 @@ public class MavenNatureHelper
         {
             project.setDescription( description, null );
         }
+        MavenCoreActivator.getDefault().getMavenProjectManager().removeMavenProject( project );
     }
 
     /**
