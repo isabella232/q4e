@@ -9,6 +9,7 @@ package org.devzuz.q.maven.embedder.internal;
 
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Properties;
 import java.util.Set;
 
 import org.apache.maven.execution.MavenExecutionRequest;
@@ -22,6 +23,7 @@ import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.IMavenListener;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
+import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenManager;
@@ -55,6 +57,8 @@ public class EclipseMavenRequest extends Job implements IMavenJob
      */
     private static final int TICKS_FOR_PACKAGING_DEPENDENCIES = 10;
 
+    private static final Properties PACKAGING_PROPERTIES = new Properties();
+
     private final EclipseMaven maven;
 
     private final MavenExecutionRequest request;
@@ -62,6 +66,11 @@ public class EclipseMavenRequest extends Job implements IMavenJob
     private IMavenExecutionResult executionResult;
 
     private final IMavenProject mavenProject;
+
+    static
+    {
+        PACKAGING_PROPERTIES.put( "maven.test.skip", "true" );
+    }
 
     public EclipseMavenRequest( String name, EclipseMaven maven, MavenExecutionRequest request, IMavenProject project )
     {
@@ -118,7 +127,7 @@ public class EclipseMavenRequest extends Job implements IMavenJob
                 EventType type = event.getType();
                 if ( EventType.mojoExecution == type )
                 {
-                    monitor.subTask( event.toString() );
+                    monitor.subTask( mavenProject.getProject().getName() + ": " + event.toString() );
                     monitor.worked( 1 );
                 }
             }
@@ -182,20 +191,23 @@ public class EclipseMavenRequest extends Job implements IMavenJob
         }
         // Package plug-ins in the workspace
         MavenProjectManager mavenProjectManager = MavenManager.getMavenProjectManager();
-        for ( MojoBinding mojo : mojos )
+        if ( mojos != null )
         {
-            try
+            for ( MojoBinding mojo : mojos )
             {
-                IMavenProject mojoProject =
-                    mavenProjectManager.getMavenProject( mojo.getGroupId(), mojo.getArtifactId(), mojo.getVersion(),
-                                                         false );
-                packageIfNeeded( mojoProject, monitor, TICKS_FOR_PACKAGING_PLUGINS );
-            }
-            catch ( CoreException e )
-            {
-                MavenCoreActivator.getLogger().log(
-                                                    "Error retrieving maven project on the workspace  for mojo: "
-                                                                    + mojo, e );
+                try
+                {
+                    IMavenProject mojoProject =
+                        mavenProjectManager.getMavenProject( mojo.getGroupId(), mojo.getArtifactId(),
+                                                             mojo.getVersion(), false );
+                    packageIfNeeded( mojoProject, monitor, TICKS_FOR_PACKAGING_PLUGINS );
+                }
+                catch ( CoreException e )
+                {
+                    MavenCoreActivator.getLogger().log(
+                                                        "Error retrieving maven project on the workspace  for mojo: " +
+                                                            mojo, e );
+                }
             }
         }
         // Direct dependencies
@@ -228,7 +240,9 @@ public class EclipseMavenRequest extends Job implements IMavenJob
         {
             try
             {
-                maven.executeGoal( dependencyProject, "package", new SubProgressMonitor( monitor, ticksUsed ) );
+                MavenExecutionParameter parameter =
+                    MavenExecutionParameter.newDefaultMavenExecutionParameter( PACKAGING_PROPERTIES );
+                maven.executeGoal( dependencyProject, "package", parameter, new SubProgressMonitor( monitor, ticksUsed ) );
                 // Make sure that the file timestamp is updated.
                 IFile file = maven.getGeneratedArtifactFile( dependencyProject );
                 try
