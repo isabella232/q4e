@@ -14,7 +14,9 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IActionDelegate;
 
-public class MavenManageDependenciesAction extends AbstractMavenAction implements IActionDelegate
+public class MavenManageDependenciesAction
+    extends AbstractMavenAction
+    implements IActionDelegate
 {
 
     @Override
@@ -53,23 +55,10 @@ public class MavenManageDependenciesAction extends AbstractMavenAction implement
     }
 
     @Override
-    protected void runInternal( IAction action ) throws CoreException
+    protected void runInternal( IAction action )
+        throws CoreException
     {
-        for ( IProject project : getProjects() )
-        {
-            if ( project.isOpen() )
-            {
-                if ( MavenNatureHelper.hasMavenNature( project ) )
-                {
-                    MavenNatureHelper.removeNature( project );
-                    action.setChecked( false );
-                }
-                else
-                {
-                    MavenNatureHelper.addNature( project );
-                    action.setChecked( true );
-                }
-            }
-        }
+        ManageDependenciesJob job = new ManageDependenciesJob( action, getProjects() );
+        job.schedule();
     }
 }
