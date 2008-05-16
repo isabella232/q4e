@@ -7,6 +7,7 @@
  */
 package org.devzuz.q.maven.embedder;
 
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,6 +21,12 @@ import org.eclipse.core.runtime.CoreException;
 
 public class MavenProjectManager
 {
+    /*
+     * after a failed build don't try to rebuild unless this amount of time has passed (a new snapshot could have been
+     * deployed for instance)
+     */
+    private static final long DEFAULT_REFRESHING_WINDOW = 60 * 1000;
+
     private final Map<IProject, MavenProjectCachedInfo> mavenProjects;
 
     /**
@@ -27,7 +34,7 @@ public class MavenProjectManager
      * @author amuino
      */
     // FIX for 371: Since ConcurrentHashMap does not allow null values, we define this special value
-    private final MavenProjectCachedInfo NULL_CACHED_INFO = new MavenProjectCachedInfo( null, false, true );
+    private final MavenProjectCachedInfo NULL_CACHED_INFO = new MavenProjectCachedInfo( null, false, 0, true );
 
     /**
      * <b>Not intended to be used by client code</b>
@@ -117,7 +124,7 @@ public class MavenProjectManager
 
         /* Create the cache object and add to cache */
         MavenProjectCachedInfo cachedProject =
-            MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolvedTransitively );
+            MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolvedTransitively, getModificationStamp( project ) );
 
         addCachedInfo( project, cachedProject );
     }
@@ -125,8 +132,7 @@ public class MavenProjectManager
     /**
      * Remove the given IProject from the cache
      * 
-     * @param project
-     *            The IProject this project represents in the workspace
+     * @param project The IProject this project represents in the workspace
      */
     public void removeMavenProject( IProject project )
     {
@@ -181,22 +187,68 @@ public class MavenProjectManager
                                       "Project cached without transitive dependencies needs them now: ", project );
             cachedProject = refreshProjectInCache( project, resolveTransitively );
         }
+        else if ( cachedProject.getMavenProject() == null )
+        {
+            /* project was in error last time */
+            long cacheStamp = cachedProject.getModificationStamp();
+            long pomStamp = getModificationStamp( project );
+            if ( ( pomStamp - cacheStamp ) > 0 )
+            {
+                MavenCoreActivator.trace( TraceOption.PROJECT_CACHE,
+                                          "Project was in error last time, pom was modified since, rebuilding: ",
+                                          project );
+                cachedProject = refreshProjectInCache( project, resolveTransitively );
+            }
+            else
+            {
+                long lastBuildStamp = cachedProject.getLastBuildStamp();
+                long currentStamp = new Date().getTime();
+                if ( ( currentStamp - lastBuildStamp ) > DEFAULT_REFRESHING_WINDOW )
+                {
+                    MavenCoreActivator.trace(
+                                              TraceOption.PROJECT_CACHE,
+                                              "Project was in error last time, no change but rebuilding due to timing: ",
+                                              project );
+                    cachedProject = refreshProjectInCache( project, resolveTransitively );
+                }
+                else
+                {
+                    MavenCoreActivator.trace( TraceOption.PROJECT_CACHE,
+                                              "Project was in error last time, no changes, not rebuilding: ", project );
+                }
+            }
+        }
 
         return cachedProject.getMavenProject();
+    }
+
+    private long getModificationStamp( IProject project )
+    {
+        return project.getFile( IMavenProject.POM_FILENAME ).getModificationStamp();
     }
 
     private MavenProjectCachedInfo refreshProjectInCache( IProject project, boolean resolveTransitively )
         throws CoreException
     {
         /* get maven project from maven embedder */
-        IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( project, resolveTransitively );
+        IMavenProject mavenProject;
+        try
+        {
+            mavenProject = MavenManager.getMaven().getMavenProject( project, resolveTransitively );
 
-        /* Add information we want to be persisted with the IProject */
-        setPersistentProperties( project, mavenProject );
+            /* Add information we want to be persisted with the IProject */
+            setPersistentProperties( project, mavenProject );
+        }
+        catch ( CoreException e )
+        {
+            /* error building project, let's catch the error to avoid building until fixed */
+            MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, e );
+            mavenProject = null;
+        }
 
         /* Create cache object */
         MavenProjectCachedInfo cachedProject =
-            MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolveTransitively );
+            MavenProjectCachedInfo.newMavenProjectCachedInfo( mavenProject, resolveTransitively, getModificationStamp( project ) );
 
         /* Add to cache */
         addCachedInfo( project, cachedProject );
@@ -299,7 +351,7 @@ public class MavenProjectManager
                 String _groupId = "", _artifactId = "", _version = "";
 
                 MavenProjectCachedInfo info = entry.getValue();
-                if ( info != null && info != NULL_CACHED_INFO )
+                if ( info != null && info != NULL_CACHED_INFO && info.getMavenProject() != null )
                 {
                     // This entry has a cached IMavenProject
                     IMavenProject mavenProject = info.getMavenProject();
@@ -345,19 +397,25 @@ public class MavenProjectManager
         private boolean resolvedTransitively = false;
 
         private boolean modified = false;
+        
+        private long modificationStamp;
+
+        private long lastBuildStamp;
 
         public static MavenProjectCachedInfo newMavenProjectCachedInfo( IMavenProject mavenProject,
-                                                                        boolean resolvedTransitively )
+                                                                        boolean resolvedTransitively, long modificationStamp )
         {
-            // TODO : add digest so we could detect if mavenProject's POM has changed
-            return new MavenProjectCachedInfo( mavenProject, resolvedTransitively, false );
+            return new MavenProjectCachedInfo( mavenProject, resolvedTransitively, modificationStamp, false );
         }
 
-        private MavenProjectCachedInfo( IMavenProject project, boolean resolvedTransitively, boolean modified )
+        private MavenProjectCachedInfo( IMavenProject project, boolean resolvedTransitively, long modificationStamp,
+                                        boolean modified )
         {
             this.mavenProject = project;
             this.resolvedTransitively = resolvedTransitively;
             this.modified = modified;
+            this.modificationStamp = modificationStamp;
+            this.lastBuildStamp = new Date().getTime();
         }
 
         public IMavenProject getMavenProject()
@@ -388,6 +446,26 @@ public class MavenProjectManager
         public void setModified( boolean modified )
         {
             this.modified = modified;
+        }
+
+        public long getModificationStamp()
+        {
+            return modificationStamp;
+        }
+
+        public void setModificationStamp( long modificationStamp )
+        {
+            this.modificationStamp = modificationStamp;
+        }
+
+        public long getLastBuildStamp()
+        {
+            return lastBuildStamp;
+        }
+
+        public void setLastBuildStamp( long lastBuildStamp )
+        {
+            this.lastBuildStamp = lastBuildStamp;
         }
 
         @Override
