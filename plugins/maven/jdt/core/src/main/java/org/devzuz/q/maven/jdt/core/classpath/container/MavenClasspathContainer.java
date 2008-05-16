@@ -161,14 +161,17 @@ public class MavenClasspathContainer implements IClasspathContainer
         try
         {
             IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, true );
-            container.refreshClasspath( mavenProject, mavenProject.getArtifacts(), downloadSources );
+            if ( mavenProject != null )
+            {
+                container.refreshClasspath( mavenProject, mavenProject.getArtifacts(), downloadSources );
+            }
         }
         catch ( CoreException e )
         {
             if ( e.getStatus() instanceof MavenExecutionStatus )
             {
                 MavenExecutionStatus status = (MavenExecutionStatus) e.getStatus();
-                // Mark execution errors as erros in the pom
+                // Mark execution errors as errors in the pom
                 // amuino: XXX This assumes that resolution exceptions are thrown, which is not the case in
                 // maven-artifact-3.0
                 IMavenExecutionResult result = status.getMavenExecutionResult();

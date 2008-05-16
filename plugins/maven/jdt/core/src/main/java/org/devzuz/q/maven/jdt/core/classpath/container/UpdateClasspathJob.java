@@ -15,9 +15,7 @@ import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.MavenMonitorHolder;
-import org.devzuz.q.maven.embedder.test.EclipseMavenForTesting;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -74,23 +72,31 @@ public class UpdateClasspathJob extends WorkspaceJob implements IMavenJob
         try
         {
             MavenClasspathContainer.newClasspath( project, monitor, downloadSources );
-        }
-        catch ( MavenInterruptedException e )
-        {
-            return Status.CANCEL_STATUS;
-        }
-        
-        //Update the classpaths of any projects that depend on this project (even transitively).
-        try
-        {
+
+            /* Update the classpaths of any projects that depend on this project (even transitively). */
             IMavenProject thisMavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, true );
-            Artifact thisArtifact = MavenManager.getMavenProjectManager().getMavenProject( project, false ).getRawMavenProject().getArtifact();
+            
+            if ( thisMavenProject == null )
+            {
+                /* this project is in error */
+                return new Status( IStatus.OK, MavenJdtCoreActivator.PLUGIN_ID,
+                                   "Project in error, not updating dependent projects" );
+            }
+
+            Artifact thisArtifact = thisMavenProject.getRawMavenProject().getArtifact();
             IProject[] workspaceProjects = MavenManager.getMavenProjectManager().getWorkspaceProjects();
             
             for ( IProject workspaceProject : workspaceProjects )
             {
-                IMavenProject workspaceMavenProject = MavenManager.getMavenProjectManager().getMavenProject( workspaceProject, true );
-                
+                IMavenProject workspaceMavenProject =
+                    MavenManager.getMavenProjectManager().getMavenProject( workspaceProject, true );
+
+                if ( workspaceMavenProject == null )
+                {
+                    /* project is in error, ignore */
+                    continue;
+                }
+
                 //Check if the project extends this one.
                 Artifact parent = workspaceMavenProject.getRawMavenProject().getParentArtifact();
                 if( thisArtifact.equals( parent ) )
@@ -124,20 +130,24 @@ public class UpdateClasspathJob extends WorkspaceJob implements IMavenJob
                 }
             }
         }
+        catch ( MavenInterruptedException e )
+        {
+            return Status.CANCEL_STATUS;
+        }
         catch ( CoreException e )
         {
-            //Probably a bad artifact - ignore.
+            // Probably a bad artifact - ignore.
         }
 
         // TODO this is needed for now to avoid out of memory errors
-        try
-        {
-            MavenManager.getMaven().refresh();
-        }
-        catch ( CoreException e )
-        {
-            // ignore
-        }
+//        try
+//        {
+//            MavenManager.getMaven().refresh();
+//        }
+//        catch ( CoreException e )
+//        {
+//            // ignore
+//        }
 
         return new Status( IStatus.OK, MavenJdtCoreActivator.PLUGIN_ID, "Updated classpath container" );
     }
