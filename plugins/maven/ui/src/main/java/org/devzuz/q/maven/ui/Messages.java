@@ -148,7 +148,7 @@ public class Messages extends NLS
 
     public static String MavenArchetypePreferenceEditor_FieldSeparator;
 
-    public static String MavenLifeCycleView_Project;
+    public static String MavenLifeCycleView_Lifecycle;
 
     public static String MavenLifeCycleView_PluginID;
 
