@@ -96,19 +96,23 @@ public class ImportProjectJob
 
         try
         {
-            // TODO set a better number
-            monitor.beginTask( "Importing projects...", pomDescriptors.size() );
+
+            SubProgressMonitor subProgressMonitor = new SubProgressMonitor( monitor, 1 );
+            subProgressMonitor.beginTask( "Importing projects...", pomDescriptors.size() );
             for ( PomFileDescriptor pomDescriptor : pomDescriptors )
             {
-                createProject( pomDescriptor, monitor );
+                createProject( pomDescriptor, subProgressMonitor );
             }
+            subProgressMonitor.done();
 
             /* postprocess imported projects */
-            monitor.beginTask( "Configuring Maven...", importedProjects.size() );
+            subProgressMonitor = new SubProgressMonitor( monitor, 1 );
+            subProgressMonitor.beginTask( "Configuring Maven...", importedProjects.size() );
             for ( IProject project : importedProjects )
             {
-                openProject( project, monitor );
+                openProject( project, subProgressMonitor );
             }
+            subProgressMonitor.done();
         }
         catch ( MavenInterruptedException e )
         {
