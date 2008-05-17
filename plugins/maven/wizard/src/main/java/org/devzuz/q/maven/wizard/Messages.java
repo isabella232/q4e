@@ -166,6 +166,10 @@ public class Messages
     
     public static String ImportArtifactAdvanceWizardPage_RepoURLRequired;
     
+    public static String wizard_project_location_skip_archetype_title;
+    
+    public static String wizard_project_location_skip_archetype_description;
+    
     static
     {
         // initialize resource bundle

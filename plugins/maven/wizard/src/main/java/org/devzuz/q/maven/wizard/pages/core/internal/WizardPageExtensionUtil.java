@@ -20,10 +20,9 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
 /**
- * Utility class for working with the wizard extensions provided by the archetype extenders.
- * 
- * It is expected that an instance of this class will be created with the New Maven Project Wizard and will be disposed
- * after all the postprocessors are executed.
+ * Utility class for working with the wizard extensions provided by the archetype extenders. It is expected that an
+ * instance of this class will be created with the New Maven Project Wizard and will be disposed after all the
+ * postprocessors are executed.
  * 
  * @author Abel Mui–o <amuino@gmail.com>
  */
@@ -52,13 +51,10 @@ public class WizardPageExtensionUtil
     /**
      * Finds the extra wizard pages registered for the given archetype.
      * 
-     * @param archetype
-     *            the archetype about to be created.
-     * @param wizardContext
-     *            the mutable context shared by every page of the wizard.
+     * @param archetype the archetype about to be created.
+     * @param wizardContext the mutable context shared by every page of the wizard.
      * @return the list of wizard pages configured with the global wizard context and the page specific configuration.
-     * @throws CoreException
-     *             if an error is detected accessing the extension registry.
+     * @throws CoreException if an error is detected accessing the extension registry.
      */
     public static List<IMavenWizardPage> getExtraPages( Archetype archetype, MavenWizardContext wizardContext )
         throws CoreException
@@ -101,10 +97,8 @@ public class WizardPageExtensionUtil
     /**
      * Finds the postprocessors to be applied after the creation of the maven project is complete.
      * 
-     * @param archetype
-     *            the archetype that has been created.
-     * @param wizardContext
-     *            the context with all the information added by the wizard pages.
+     * @param archetype the archetype that has been created.
+     * @param wizardContext the context with all the information added by the wizard pages.
      * @return the list of postprocessors configured with the global wizard context and the page specific configuration.
      */
     public static List<IMavenProjectPostprocessor> getPostProcessors( Archetype archetype,
@@ -113,26 +107,29 @@ public class WizardPageExtensionUtil
     {
         IConfigurationElement[] archetypeSpecs = getConfigurationElements();
         List<IMavenProjectPostprocessor> postprocessors = new LinkedList<IMavenProjectPostprocessor>();
-        for ( IConfigurationElement archetypeSpec : archetypeSpecs )
+        if ( archetype != null )
         {
-            if ( !ARCHETYPE_ELEMENT.equals( archetypeSpec.getName() ) )
+            for ( IConfigurationElement archetypeSpec : archetypeSpecs )
             {
-                // Not an archetype element, skip
-                continue;
-            }
-            String artifactSpec = archetypeSpec.getAttribute( ARTIFACT_ELEMENT );
-            String groupSpec = archetypeSpec.getAttribute( GROUP_ELEMENT );
-            if ( doesArchetypeSpecMatch( artifactSpec, groupSpec, archetype ) )
-            {
-                IConfigurationElement[] postprocessorSpecs = archetypeSpec.getChildren( POSTPROCESSOR_ELEMENT );
-                for ( IConfigurationElement postprocessorSpec : postprocessorSpecs )
+                if ( !ARCHETYPE_ELEMENT.equals( archetypeSpec.getName() ) )
                 {
-                    IMavenProjectPostprocessor postprocessor =
-                        (IMavenProjectPostprocessor) postprocessorSpec.createExecutableExtension( CLASS_ATTRIBUTE );
-                    String configId = postprocessorSpec.getAttribute( CONFIG_ATTRIBUTE );
-                    postprocessor.setConfig( wizardContext.getPageConfig( configId ) );
-                    postprocessor.setWizardContext( wizardContext );
-                    postprocessors.add( postprocessor );
+                    // Not an archetype element, skip
+                    continue;
+                }
+                String artifactSpec = archetypeSpec.getAttribute( ARTIFACT_ELEMENT );
+                String groupSpec = archetypeSpec.getAttribute( GROUP_ELEMENT );
+                if ( doesArchetypeSpecMatch( artifactSpec, groupSpec, archetype ) )
+                {
+                    IConfigurationElement[] postprocessorSpecs = archetypeSpec.getChildren( POSTPROCESSOR_ELEMENT );
+                    for ( IConfigurationElement postprocessorSpec : postprocessorSpecs )
+                    {
+                        IMavenProjectPostprocessor postprocessor =
+                            (IMavenProjectPostprocessor) postprocessorSpec.createExecutableExtension( CLASS_ATTRIBUTE );
+                        String configId = postprocessorSpec.getAttribute( CONFIG_ATTRIBUTE );
+                        postprocessor.setConfig( wizardContext.getPageConfig( configId ) );
+                        postprocessor.setWizardContext( wizardContext );
+                        postprocessors.add( postprocessor );
+                    }
                 }
             }
         }
@@ -142,12 +139,9 @@ public class WizardPageExtensionUtil
     /**
      * Check if the specification given for the artifact and group selector matches the actual archetype.
      * 
-     * @param artifactSpec
-     *            the archetype artifact selector.
-     * @param groupSpec
-     *            the archetype group selector.
-     * @param archetype
-     *            the actual archetype.
+     * @param artifactSpec the archetype artifact selector.
+     * @param groupSpec the archetype group selector.
+     * @param archetype the actual archetype.
      * @return <code>true</code> if the archetype matches the selectors.
      */
     protected static boolean doesArchetypeSpecMatch( String artifactSpec, String groupSpec, Archetype archetype )
@@ -160,11 +154,11 @@ public class WizardPageExtensionUtil
     /**
      * Returns a wizard configuration factory registered with the given id.
      * 
-     * @param id
-     *            the id of the factory.
+     * @param id the id of the factory.
      * @return a wizard configuration factory.
      */
-    public static IWizardConfigFactory getConfigFactory( String id ) throws CoreException
+    public static IWizardConfigFactory getConfigFactory( String id )
+        throws CoreException
     {
         IConfigurationElement[] configFactorySpecs = getConfigurationElements();
         for ( IConfigurationElement configFactorySpec : configFactorySpecs )

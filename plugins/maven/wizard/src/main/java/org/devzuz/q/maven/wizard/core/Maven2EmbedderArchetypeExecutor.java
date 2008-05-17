@@ -25,11 +25,13 @@ import org.eclipse.core.runtime.IPath;
  * @author amuino
  */
 // TODO: This class processes both 1.0 and 2.0 archetype goals. Should be split since there are many differences.
-public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
+public class Maven2EmbedderArchetypeExecutor
+    implements IArchetypeExecutor
 {
     public void executeArchetype( Archetype archetype, IPath baseDir, String groupId, String artifactId,
                                   String version, String packageName, IMavenWizardContext wizardContext,
-                                  MavenExecutionJobAdapter jobAdapter ) throws CoreException
+                                  MavenExecutionJobAdapter jobAdapter )
+        throws CoreException
     {
         MavenPreferenceManager preferenceManager = MavenCoreActivator.getDefault().getMavenPreferenceManager();
         String ver = preferenceManager.getArchetypePluginVersion();
@@ -40,8 +42,6 @@ public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
         archetypeProperties.setProperty( "groupId", groupId );
         archetypeProperties.setProperty( "artifactId", artifactId );
         archetypeProperties.setProperty( "version", version );
-        archetypeProperties.setProperty( "archetypeArtifactId", archetype.getArtifactId() );
-        archetypeProperties.setProperty( "archetypeGroupId", archetype.getGroupId() );
         archetypeProperties.setProperty( "basedir", baseDir.makeAbsolute().toOSString() );
 
         if ( isVersion20 )
@@ -53,19 +53,25 @@ public class Maven2EmbedderArchetypeExecutor implements IArchetypeExecutor
             archetypeProperties.setProperty( "packageName", packageName );
         }
 
-        if ( archetype.getVersion().length() > 0 )
+        if ( archetype != null )
         {
-            archetypeProperties.setProperty( "archetypeVersion", archetype.getVersion() );
-        }
+            archetypeProperties.setProperty( "archetypeArtifactId", archetype.getArtifactId() );
+            archetypeProperties.setProperty( "archetypeGroupId", archetype.getGroupId() );
+            if ( archetype.getVersion().length() > 0 )
+            {
+                archetypeProperties.setProperty( "archetypeVersion", archetype.getVersion() );
+            }
 
-        if ( archetype.getRemoteRepositories().length() > 0 )
-        {
-            archetypeProperties.setProperty( "remoteRepositories", archetype.getRemoteRepositories() );
-            if ( ver.equals( Messages.MavenArchetypePreferencePage_archetypeVersion_2_0_latest_label ) )
-                archetypeProperties.setProperty( "archetypeRepository", archetype.getRemoteRepositories() );
+            if ( archetype.getRemoteRepositories().length() > 0 )
+            {
+                archetypeProperties.setProperty( "remoteRepositories", archetype.getRemoteRepositories() );
+                if ( ver.equals( Messages.MavenArchetypePreferencePage_archetypeVersion_2_0_latest_label ) )
+                    archetypeProperties.setProperty( "archetypeRepository", archetype.getRemoteRepositories() );
+            }
         }
-
-        MavenManager.getMaven().scheduleGoal( baseDir,
+        
+        MavenManager.getMaven().scheduleGoal(
+                                              baseDir,
                                               getArchetypePluginCreationId( isVersion20 ),
                                               MavenExecutionParameter.newDefaultMavenExecutionParameter( archetypeProperties ),
                                               jobAdapter );

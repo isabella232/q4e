@@ -32,7 +32,9 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-public class Maven2ProjectWizard extends Wizard implements INewWizard
+public class Maven2ProjectWizard
+    extends Wizard
+    implements INewWizard
 {
     /** Number of pages created by the wizard for the default case (no extra pages) . */
     private static final int DEFAULT_PAGE_COUNT = 3;
@@ -93,7 +95,8 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
         {
             getContainer().run( true, true, new IRunnableWithProgress()
             {
-                public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
+                public void run( IProgressMonitor monitor )
+                    throws InvocationTargetException, InterruptedException
                 {
                     try
                     {
@@ -154,21 +157,35 @@ public class Maven2ProjectWizard extends Wizard implements INewWizard
     @Override
     public IWizardPage getNextPage( IWizardPage page )
     {
+        if ( locationPage == page && locationPage.skipArchetypeSelection() )
+        {
+            archetypePage.setPageComplete( true );
+            return archetypeInfoPage;
+        }
+
         if ( archetypeInfoPage == page )
         {
             addExtraPages();
         }
         return super.getNextPage( page );
     }
-
+    
     public boolean hasExtraPages()
     {
         Archetype selectedArchetype = archetypePage.getArchetype();
-        try
+
+        if ( selectedArchetype != null )
         {
-            return WizardPageExtensionUtil.getExtraPages( selectedArchetype, wizardContext ).size() > 0;
+            try
+            {
+                return WizardPageExtensionUtil.getExtraPages( selectedArchetype, wizardContext ).size() > 0;
+            }
+            catch ( CoreException e )
+            {
+                return false;
+            }
         }
-        catch ( CoreException e )
+        else
         {
             return false;
         }
