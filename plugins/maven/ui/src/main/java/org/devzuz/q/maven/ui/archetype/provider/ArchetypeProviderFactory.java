@@ -89,7 +89,7 @@ public class ArchetypeProviderFactory
     /**
      * Returns a read-only view of the set of archetype provider types known to the platform.
      * 
-     * This operation is intented for displaying the list to the end user.
+     * This operation is intended for displaying the list to the end user.
      * 
      * @return the non-null set of available types.
      */
