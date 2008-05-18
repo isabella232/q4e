@@ -35,4 +35,5 @@ Eclipse-RegisterBuddy: org.apache.maven.embedder
 Bundle-SymbolicName: org.apache.maven.shared.dependency.tree
 Tool: Bnd-0.0.255
 Embed-Dependency: *;scope=compile|runtime;inline=true
+Bundle-ClassPath: lib/maven-dependency-tree-1.1.jar
 
