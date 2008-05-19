@@ -136,6 +136,7 @@ public class MavenProjectManager
      */
     public void removeMavenProject( IProject project )
     {
+        MavenCoreActivator.trace( TraceOption.PROJECT_CACHE, "Removing project from cache: ", project );
         mavenProjects.remove( project );
     }
 
@@ -167,6 +168,12 @@ public class MavenProjectManager
      */
     public IMavenProject getMavenProject( IProject project, boolean resolveTransitively ) throws CoreException
     {
+        if ( !project.exists() || !project.isOpen() )
+        {
+            mavenProjects.remove( project );
+            return null;
+        }
+
         MavenProjectCachedInfo cachedProject = mavenProjects.get( project );
 
         // If we haven't cached the project yet or if the maven project's pom was modified or
@@ -346,44 +353,51 @@ public class MavenProjectManager
     {
         for ( Map.Entry<IProject, MavenProjectCachedInfo> entry : mavenProjects.entrySet() )
         {
-            try
+            String _groupId = "", _artifactId = "", _version = "";
+
+            MavenProjectCachedInfo info = entry.getValue();
+            if ( info != null && info != NULL_CACHED_INFO && info.getMavenProject() != null )
             {
-                String _groupId = "", _artifactId = "", _version = "";
+                // This entry has a cached IMavenProject
+                IMavenProject mavenProject = info.getMavenProject();
 
-                MavenProjectCachedInfo info = entry.getValue();
-                if ( info != null && info != NULL_CACHED_INFO && info.getMavenProject() != null )
+                _groupId = mavenProject.getGroupId();
+                _artifactId = mavenProject.getArtifactId();
+                _version = mavenProject.getVersion();
+            }
+            else
+            {
+                // No cached IMavenProject, we need to retrieve the triplet from the
+                // persistent properties of the IProject
+                IProject project = entry.getKey();
+
+                /* check that project was not deleted or closed in the meantime */
+                if ( !project.exists() || !project.isOpen() )
                 {
-                    // This entry has a cached IMavenProject
-                    IMavenProject mavenProject = info.getMavenProject();
-
-                    _groupId = mavenProject.getGroupId();
-                    _artifactId = mavenProject.getArtifactId();
-                    _version = mavenProject.getVersion();
+                    continue;
                 }
-                else
-                {
-                    // No cached IMavenProject, we need to retrieve the triplet from the
-                    // persistent properties of the IProject
-                    IProject project = entry.getKey();
 
+                try
+                {
                     _groupId = project.getPersistentProperty( IMavenProject.GROUP_ID );
                     _artifactId = project.getPersistentProperty( IMavenProject.ARTIFACT_ID );
                     _version = project.getPersistentProperty( IMavenProject.VERSION );
                 }
-
-                // The artifact resolver executes this loop before the project has been created, so ALWAYS skip maven
-                // projects without persistent properties.
-                if ( _groupId != null && _groupId.equals( groupId ) && _artifactId.equals( artifactId )
-                                && _version.equals( version ) )
+                catch ( CoreException e )
                 {
-                    return entry;
+                    MavenCoreActivator.getLogger().log(
+                                                        "Can't read triplet from project's '" +
+                                                            entry.getKey().getName() + "' persistent properties", e );
+                    continue;
                 }
             }
-            catch ( CoreException e )
+
+            // The artifact resolver executes this loop before the project has been created, so ALWAYS skip maven
+            // projects without persistent properties.
+            if ( _groupId != null && _groupId.equals( groupId ) && _artifactId.equals( artifactId ) &&
+                _version.equals( version ) )
             {
-                MavenCoreActivator.getLogger().error(
-                                                      "Can't read triplet from project's '" + entry.getKey().getName()
-                                                                      + "' persistent properties" );
+                return entry;
             }
         }
 
