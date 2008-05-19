@@ -222,7 +222,6 @@ public class MavenNature implements IProjectNature
         }
         catch ( CoreException e )
         {
-            MavenJdtCoreActivator.getLogger().log( "Exception adding classpath to project " + project, e );
             MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, e );
 
             /* try to gracefully recover using the super pom default values */
