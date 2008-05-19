@@ -189,60 +189,57 @@ public class MavenNature implements IProjectNature
         // use a List to manage the order of the elements
         List<IClasspathEntry> classpathEntriesList = SetUniqueList.decorate( new LinkedList<IClasspathEntry>() );
 
-        IMavenProject mavenProject;
+        IMavenProject mavenProject = null;
         String outputDirectory = null;
 
         try
         {
             mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, true );
 
-            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Executing process-test-resources on ",
-                                         project.getName() );
-            // (x) Execute process-test-resources on the maven project
-            IMavenExecutionResult result =
-                MavenManager.getMaven().executeGoal( mavenProject, "process-test-resources", new NullProgressMonitor() );
-
-            List<Exception> mavenExceptions = result.getExceptions();
-            // Mark any errors, particularly, on the launching of the process-test-resources goal
-            if ( ( mavenExceptions != null ) && ( mavenExceptions.size() > 0 ) )
+            if ( mavenProject != null )
             {
-                MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, mavenExceptions );
-            }
-            else
-            {
-                // Exchange the old maven project for the new one from the result
-                mavenProject = result.getMavenProject();
+                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Executing process-test-resources on ",
+                                             project.getName() );
+                // (x) Execute process-test-resources on the maven project
+                IMavenExecutionResult result =
+                    MavenManager.getMaven().executeGoal( mavenProject, "process-test-resources",
+                                                         new NullProgressMonitor() );
 
-                MavenManager.getMavenProjectManager().addMavenProject( project, mavenProject, true );
-                // Refresh ourself, to include the generated sources
-                // project.refreshLocal( IResource.DEPTH_INFINITE, null );
-            }
+                List<Exception> mavenExceptions = result.getExceptions();
+                // Mark any errors, particularly, on the launching of the process-test-resources goal
+                if ( ( mavenExceptions != null ) && ( mavenExceptions.size() > 0 ) )
+                {
+                    MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, mavenExceptions );
+                }
+                else
+                {
+                    // Exchange the old maven project for the new one from the result
+                    mavenProject = result.getMavenProject();
 
-            outputDirectory = mavenProject.getBuildOutputDirectory();
+                    MavenManager.getMavenProjectManager().addMavenProject( project, mavenProject, true );
+                    // Refresh ourself, to include the generated sources
+                    // project.refreshLocal( IResource.DEPTH_INFINITE, null );
+                }
+
+                outputDirectory = mavenProject.getBuildOutputDirectory();
+            }
         }
         catch ( CoreException e )
         {
-            MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, e );
-
-            /* try to gracefully recover using the super pom default values */
-            try
+            outputDirectory = project.getLocation().append( DEFAULT_OUTPUT_FOLDER ).toPortableString();
+            mavenProject = addFailSafeClasspath( classpathEntriesList  );
+            if ( mavenProject == null )
             {
-                mavenProject = MavenManager.getMaven().getMavenSuperProject();
-
-                /*
-                 * TODO quick hack, the output directory will be an absolute path in the Eclipse launch folder, use it
-                 * relative. And add the default source folder
-                 */
-                outputDirectory = DEFAULT_OUTPUT_FOLDER;
-                IPath src = project.getLocation().append( "src/main/java" );
-                addEntryToClasspath(
-                                     classpathEntriesList,
-                                     getClasspathFolders( project, Collections.singletonList( src.toPortableString() ) ),
-                                     SOURCE_INCLUDES, SOURCE_EXCLUDES, null );
+                return;
             }
-            catch ( CoreException e1 )
+        }
+
+        if ( mavenProject == null )
+        {
+            outputDirectory = project.getLocation().append( DEFAULT_OUTPUT_FOLDER ).toPortableString();
+            mavenProject = addFailSafeClasspath( classpathEntriesList );
+            if ( mavenProject == null )
             {
-                MavenJdtCoreActivator.getLogger().log( "Exception trying to get the Maven super project", e );
                 return;
             }
         }
@@ -288,6 +285,28 @@ public class MavenNature implements IProjectNature
         {
             MavenJdtCoreActivator.getLogger().log( "Exception adding classpath to project " + project, e );
             MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, e );
+        }
+    }
+
+    private IMavenProject addFailSafeClasspath( List<IClasspathEntry> classpathEntriesList )
+
+    {
+        /* try to gracefully recover using the super pom default values */
+        try
+        {
+            IMavenProject mavenProject = MavenManager.getMaven().getMavenSuperProject();
+
+            /* Add the default source folder */
+            IPath src = project.getLocation().append( "src/main/java" );
+            addEntryToClasspath( classpathEntriesList,
+                                 getClasspathFolders( project, Collections.singletonList( src.toPortableString() ) ),
+                                 SOURCE_INCLUDES, SOURCE_EXCLUDES, null );
+            return mavenProject;
+        }
+        catch ( CoreException e )
+        {
+            MavenJdtCoreActivator.getLogger().log( "Exception trying to get the Maven super project", e );
+            return null;
         }
     }
 
