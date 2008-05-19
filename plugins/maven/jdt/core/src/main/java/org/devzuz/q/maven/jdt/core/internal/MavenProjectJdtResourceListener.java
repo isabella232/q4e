@@ -103,6 +103,12 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
             return;
         }
 
+        if ( mavenProject == null )
+        {
+            /* project doesn't build, skip updates in related projects */
+            return;
+        }
+
         IProject[] iprojects = mavenProjectManager.getWorkspaceProjects();
         for ( IProject iproject : iprojects )
         {
