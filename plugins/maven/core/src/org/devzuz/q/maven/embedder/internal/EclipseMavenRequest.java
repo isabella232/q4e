@@ -195,6 +195,7 @@ public class EclipseMavenRequest extends Job implements IMavenJob
         }
         // Package plug-ins in the workspace
         MavenProjectManager mavenProjectManager = MavenManager.getMavenProjectManager();
+        Set<IMavenProject> projects = mavenProject.getDependencyProjects();
         if ( mojos != null )
         {
             for ( MojoBinding mojo : mojos )
@@ -213,13 +214,15 @@ public class EclipseMavenRequest extends Job implements IMavenJob
                                                             mojo, e );
                 }
             }
+
+            // Direct dependencies
+
+            if ( projects.isEmpty() || !isPackagingRequired( mojos ) )
+            {
+                return;
+            }
         }
-        // Direct dependencies
-        Set<IMavenProject> projects = mavenProject.getDependencyProjects();
-        if ( projects.isEmpty() || !isPackagingRequired( mojos ) )
-        {
-            return;
-        }
+
         for ( IMavenProject dependencyProject : projects )
         {
             monitor.subTask( "Packaging dependency: " + dependencyProject.toString() );
@@ -261,7 +264,18 @@ public class EclipseMavenRequest extends Job implements IMavenJob
                         eclipseProject.setPersistentProperty( IMavenProject.CHANGE_TIMESTAMP,
                                                               String.valueOf( System.currentTimeMillis() - 1000 ) );
                     }
-                    file.setLocalTimeStamp( System.currentTimeMillis() );
+
+                    if ( file.exists() )
+                    {
+                        file.setLocalTimeStamp( System.currentTimeMillis() );
+                    }
+                    else
+                    {
+                        // project is in error and could not be built
+                        // MavenCoreActivator.getLogger().warn(
+                        // "Error packaging dependency project, generated file does not exist: " +
+                        // dependencyProject );
+                    }
                 }
                 catch ( CoreException e )
                 {
@@ -408,7 +422,7 @@ public class EclipseMavenRequest extends Job implements IMavenJob
             }
             catch ( CoreException e )
             {
-                MavenCoreActivator.getLogger().log( "Could not get the list of mojos to be executed", e );
+                MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( mavenProject.getProject(), e );
             }
         }
         return mojos;
