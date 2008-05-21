@@ -54,7 +54,7 @@ public class AddPluginExecutionDialog extends AbstractResizableDialog
         
 		container.setLayout( new FillLayout() );
 		
-		pluginExecutionComponent = new PluginExecutionComponent( container, SWT.None );
+		pluginExecutionComponent = new PluginExecutionComponent( container, SWT.None, null );
 		pluginExecutionComponent.addComponentModifyListener( listener );
 		
 		return container;

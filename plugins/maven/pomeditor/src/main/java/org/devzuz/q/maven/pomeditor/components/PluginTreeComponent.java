@@ -78,6 +78,16 @@ public class PluginTreeComponent extends Composite
         treeViewer.expandAll();
     }
     
+    public void addSelectionChangeListener ( ISelectionChangedListener listener )
+    {
+        treeViewer.addSelectionChangedListener( listener );
+    }
+    
+    public void removeSelectionChangeListener ( ISelectionChangedListener listener )
+    {
+        treeViewer.removeSelectionChangedListener( listener );
+    }
+    
     private class TreeViewerSelectionListener implements ISelectionChangedListener
     {
         public void selectionChanged( SelectionChangedEvent event )

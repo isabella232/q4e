@@ -8,6 +8,7 @@ package org.devzuz.q.maven.pomeditor.pages;
 
 import java.util.List;
 
+import org.apache.maven.model.IssueManagement;
 import org.apache.maven.model.License;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Organization;
@@ -81,6 +82,12 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
     private Text organizationUrlText;
 
+    private Text issueManagementSystemText;
+
+    private Text issueManagementUrlText;
+
+    private IssueManagement issueManagement;
+
     public MavenPomLicensesScmOrgFormPage( String id, String title )
     {
         super( id, title );
@@ -94,6 +101,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         this.licenseList = modelPOM.getLicenses();
         this.organization = modelPOM.getOrganization();
         this.scm = modelPOM.getScm();
+        this.issueManagement = modelPOM.getIssueManagement();
     }
 
     @Override
@@ -118,7 +126,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         createScmSectionControls( container, toolkit );
         
         populateLicenseDatatable();
-        syncModelToControls();
+        //syncModelToControls();
     }
 
     private Control createLicenseTableControls( Composite parent, FormToolkit toolKit )
@@ -178,10 +186,44 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         organizationControls.setDescription( "This section specifies the organization that produces this project." );
         organizationControls.setText( "Organization" );
         organizationControls.setClient( createOrganizationControls( organizationControls, toolkit ) );
+        
+        Section issueManagementControls =
+            toolkit.createSection( container, Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED | 
+                                   Section.DESCRIPTION );
+        issueManagementControls.setDescription( "Information about the issue tracking (or bug tracking) system used to manage this project." );
+        issueManagementControls.setText( Messages.MavenPomEditor_MavenPomEditor_IssueManagement );
+        issueManagementControls.setClient( createIssueManagementControls( issueManagementControls, toolkit ) );
 
         return container;
     }
     
+    private Control createIssueManagementControls( Composite form, FormToolkit toolKit )
+    {
+        Composite parent = toolKit.createComposite( form );
+        parent.setLayout( new GridLayout( 2, false ) );
+        
+        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
+        labelData.widthHint = 50;
+        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
+        controlData.horizontalIndent = 10;
+        
+        Label systemLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_System, SWT.None );
+        systemLabel.setLayoutData( labelData );
+        
+        issueManagementSystemText = toolKit.createText( parent, "" );
+        createTextDisplay( issueManagementSystemText, controlData, issueManagement.getSystem() );
+        
+        Label urlLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.None );
+        urlLabel.setLayoutData( labelData );
+        
+        issueManagementUrlText = toolKit.createText( parent, "" );
+        createTextDisplay( issueManagementUrlText, controlData, issueManagement.getUrl() );
+        
+        toolKit.paintBordersFor( parent );        
+       
+        return parent;
+    }
+
     public Control createScmControls( Composite form, FormToolkit toolKit )
     {
         Composite parent = toolKit.createComposite( form );
@@ -197,26 +239,26 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         connectionLabel.setLayoutData( labelData );
 
         connectionText = toolKit.createText( parent, "" );
-        createTextDisplay( connectionText, controlData );
+        createTextDisplay( connectionText, controlData, scm.getConnection() );
         
         Label developerConnectionLabel =
             toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_DeveloperConnection, SWT.NONE );
         developerConnectionLabel.setLayoutData( labelData );
 
         developerConnectionText = toolKit.createText( parent, "" );
-        createTextDisplay( developerConnectionText, controlData );
+        createTextDisplay( developerConnectionText, controlData, scm.getDeveloperConnection() );
         
         Label tagLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Tag, SWT.NONE );
         tagLabel.setLayoutData( labelData );
 
         tagText = toolKit.createText( parent, "" );
-        createTextDisplay( tagText, controlData );
+        createTextDisplay( tagText, controlData, scm.getTag() );
         
         Label urlLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE );
         urlLabel.setLayoutData( labelData );
 
         urlText = toolKit.createText( parent, "" );
-        createTextDisplay( urlText, controlData );
+        createTextDisplay( urlText, controlData, scm.getUrl() );
         
         toolKit.paintBordersFor( parent );
 
@@ -237,20 +279,20 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         nameLabel.setLayoutData( labelData );
 
         nameText = toolKit.createText( parent, "" );
-        createTextDisplay( nameText, controlData );
+        createTextDisplay( nameText, controlData, organization.getName() );
         
         Label organizationUrlLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE );
         organizationUrlLabel.setLayoutData( labelData );
 
         organizationUrlText = toolKit.createText( parent, "" );
-        createTextDisplay( organizationUrlText, controlData );
+        createTextDisplay( organizationUrlText, controlData, organization.getUrl() );
         
         toolKit.paintBordersFor( parent );
 
         return parent;
     }
     
-    private void createTextDisplay( final Text text, GridData controlData )
+    private void createTextDisplay( final Text text, GridData controlData, String data )
     {
         if ( text != null )
         {
@@ -265,6 +307,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
             text.setLayoutData( controlData );
             text.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
+            text.setText( blankIfNull( data ) );
             text.addModifyListener( modifyingListener );
         }
     }
@@ -279,7 +322,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         }
     }
     
-    private void syncModelToControls()
+    /*private void syncModelToControls()
     {
         if ( scm != null )
         {
@@ -294,7 +337,14 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
             nameText.setText( blankIfNull( organization.getName() ) );
             organizationUrlText.setText( blankIfNull( organization.getUrl() ) );
         }
-    }
+        
+        if ( this.issueManagement != null )
+        {
+            issueManagementSystemText.setText( blankIfNull( this.issueManagement.getSystem() ) );
+            issueManagementUrlText.setText( blankIfNull( this.issueManagement.getUrl() ) );
+            
+        }
+    }*/
 
     private void syncControlsToModel()
     {
@@ -335,6 +385,23 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
             }
             organization.setName( nullIfBlank( nameText.getText().trim() ) );
             organization.setUrl( nullIfBlank( organizationUrlText.getText().trim() ) );
+        }
+        
+        if ( ( issueManagementSystemText.getText().trim().equals( "" ) ) &&
+             ( issueManagementUrlText.getText().trim().equals( "" ) ) )
+        {
+            issueManagement = null;
+            pomModel.setIssueManagement( issueManagement );
+        }
+        else
+        {
+            if ( issueManagement == null )
+            {
+                issueManagement = new IssueManagement();
+                pomModel.setIssueManagement( issueManagement );
+            }
+            issueManagement.setSystem( nullIfBlank( issueManagementSystemText.getText().trim() ) );
+            issueManagement.setUrl( nullIfBlank( issueManagementUrlText.getText().trim() ) );
         }
     }
 

@@ -30,8 +30,6 @@ public class AddEditDependencyExclusionDialog extends AbstractResizableDialog
 	{
 		return new AddEditDependencyExclusionDialog( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell() );
 	}
-
-	private Exclusion addedExclusion;
     
     private Text groupIdText;
 	
@@ -96,12 +94,19 @@ public class AddEditDependencyExclusionDialog extends AbstractResizableDialog
         return container;
 	}
 	
-	protected void createButtonsForButtonBar ( Composite parent )
-	{
-		super.createButtonsForButtonBar(parent);
-	}
+	protected void createButtonsForButtonBar( Composite parent )
+    {
+        super.createButtonsForButtonBar( parent );
+        synchronizeDataSourceWithGUI();
+    }
 	
-	public void onWindowActivate()
+	private void synchronizeDataSourceWithGUI()
+    {
+        groupIdText.setText( blankIfNull( getGroupId() ) );
+        artifactIdText.setText( blankIfNull( getArtifactId() ) );        
+    }
+
+    public void onWindowActivate()
     {
         validate();                
     }
@@ -133,15 +138,27 @@ public class AddEditDependencyExclusionDialog extends AbstractResizableDialog
 		
 	//}
 
+	public int openWithExclusion( Exclusion exclusion )
+	{
+	    if ( exclusion != null )
+	    {
+	        setGroupId( exclusion.getGroupId() );
+	        setArtifactId( exclusion.getArtifactId() );
+	    }
+	    else
+	    {
+	        setGroupId( "" );
+	        setArtifactId( "" );
+	    }
+	    
+	    return open();
+	    
+	}
+	
 	protected void okPressed()
 	{
 		groupId = groupIdText.getText().trim();
 		artifactId = artifactIdText.getText().trim();
-		
-		addedExclusion = new Exclusion();
-		
-		addedExclusion.setGroupId( groupId );
-		addedExclusion.setArtifactId( artifactId );
 		
 		super.okPressed();
 		
@@ -163,6 +180,11 @@ public class AddEditDependencyExclusionDialog extends AbstractResizableDialog
 			
 		return false;
 	}	
+	
+	private String blankIfNull( String str )
+    {
+        return str == null ? "" : str;    
+    }
 
 	@Override
 	protected Preferences getDialogPreferences() 
@@ -189,13 +211,5 @@ public class AddEditDependencyExclusionDialog extends AbstractResizableDialog
     {
         this.artifactId = artifactId;
     }
-
-	public Exclusion getAddedExclusion() {
-		return addedExclusion;
-	}
-
-	public void setAddedExclusion(Exclusion addedExclusion) {
-		this.addedExclusion = addedExclusion;
-	}
 
 }

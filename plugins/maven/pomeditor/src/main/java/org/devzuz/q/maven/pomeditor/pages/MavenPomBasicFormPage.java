@@ -237,7 +237,7 @@ public class MavenPomBasicFormPage extends FormPage
                 editor.setActivePage( MavenPomFormEditor.LICENSES_SCM_ORG_FORM_PAGE );
             }
         } );
-        licensesLink.setText( "Manage Licenses/SCM/Organization" );
+        licensesLink.setText( "Manage Licenses/SCM/Organization/Issue Management" );
         
         Hyperlink modulesPropertiesLink = toolKit.createHyperlink( parent, "Manage Modules/Properties", SWT.WRAP );
         modulesPropertiesLink.addHyperlinkListener( new HyperlinkAdapter()
@@ -254,7 +254,7 @@ public class MavenPomBasicFormPage extends FormPage
         {
             public void linkActivated( HyperlinkEvent e )
             {
-                editor.setActivePage( MavenPomFormEditor.DEVELOPERS_FORM_PAGE );
+                editor.setActivePage( MavenPomFormEditor.DEVELOPERS_CONTRIBUTORS_FORM_PAGE );
             }
         } );
         developersLink.setText( "Manage Developers Information" );
@@ -264,7 +264,7 @@ public class MavenPomBasicFormPage extends FormPage
         {
             public void linkActivated( HyperlinkEvent e )
             {
-                System.out.println( "Link activated!" );
+                editor.setActivePage( MavenPomFormEditor.DEVELOPERS_CONTRIBUTORS_FORM_PAGE );
             }
         } );
         contributorsLink.setText( "Manage Contributors Information" );

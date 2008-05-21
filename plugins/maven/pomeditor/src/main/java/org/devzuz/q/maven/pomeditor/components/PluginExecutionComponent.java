@@ -1,5 +1,6 @@
 package org.devzuz.q.maven.pomeditor.components;
 
+import org.apache.maven.model.PluginExecution;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -20,10 +21,19 @@ public class PluginExecutionComponent extends AbstractComponent
 	private Text phaseText;
 	
 	private Button inheritedRadioButton;
+	
+	private IComponentModificationListener componentListener;
+	
+	private boolean isModifiedFlag;
 
-	public PluginExecutionComponent ( Composite parent, int style )
+    private PluginExecution pluginExecution;
+
+	public PluginExecutionComponent ( Composite parent, int style,
+	                                  IComponentModificationListener componentListener)
 	{
 		super( parent, style );
+		
+		this.componentListener = componentListener;
 		
 		setLayout( new GridLayout( 2, false ) );
 		
@@ -57,7 +67,13 @@ public class PluginExecutionComponent extends AbstractComponent
         {
             public void modifyText( ModifyEvent e )
             {
-                notifyListeners( e.widget );
+                if ( isModifiedFlag() )
+                {
+                    pluginExecution.setId( nullIfBlank( getId() ) );
+                    pluginExecution.setPhase( nullIfBlank( getPhase() ) );
+                    
+                    notifyListeners( e.widget );
+                }
             }
         };
         
@@ -68,7 +84,19 @@ public class PluginExecutionComponent extends AbstractComponent
         {
             public void widgetSelected( SelectionEvent arg0 )
             {
-                notifyListeners( arg0.widget );
+                if ( isModifiedFlag() )
+                {
+                    if ( isInherited() == true )
+                    {
+                        pluginExecution.setInherited( "true" );
+                    }
+                    else
+                    {
+                        pluginExecution.setInherited( "false" );
+                    }
+                    
+                    notifyListeners( arg0.widget );
+                }
             }
             
             public void widgetDefaultSelected( SelectionEvent arg0 )
@@ -78,6 +106,29 @@ public class PluginExecutionComponent extends AbstractComponent
         };
         
         inheritedRadioButton.addSelectionListener( selectionListener );
+	}
+	
+	public void updateComponent( PluginExecution execution )
+	{
+	    this.pluginExecution = execution;
+	    
+	    setModifiedFlag( false );
+	    
+	    setId( blankIfNull( execution.getId() ) );
+	    setPhase( blankIfNull( execution.getPhase() ) );
+	    if ( ( execution.getInherited() != null ) &&
+	         ( execution.getInherited().equalsIgnoreCase( "true" ) ) )
+	    {
+	        setInherited( true );
+	    }
+	    else
+	    {
+	        setInherited( false );
+	    }
+	    
+	    addComponentModifyListener( componentListener );
+	    
+	    setModifiedFlag( true );
 	}
 	
 	public String getId() {
@@ -104,8 +155,23 @@ public class PluginExecutionComponent extends AbstractComponent
 		inheritedRadioButton.setSelection( inherited );
 	}
 	
-	private String blankIfNull( String str )
+	public boolean isModifiedFlag()
+    {
+        return isModifiedFlag;
+    }
+
+    public void setModifiedFlag( boolean isModifiedFlag )
+    {
+        this.isModifiedFlag = isModifiedFlag;
+    }
+
+    private String blankIfNull( String str )
     {
         return str != null ? str : "";
+    }
+    
+    private String nullIfBlank(String str) 
+    {
+        return ( str == null || str.equals( "" ) ) ? null : str;
     }
 }

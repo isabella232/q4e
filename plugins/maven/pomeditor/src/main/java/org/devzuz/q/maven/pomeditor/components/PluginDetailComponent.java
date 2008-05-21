@@ -1,5 +1,6 @@
 package org.devzuz.q.maven.pomeditor.components;
 
+import org.apache.maven.model.Plugin;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -25,9 +26,18 @@ public class PluginDetailComponent extends AbstractComponent
 
     private Button extensionRadioButton;
 
-    public PluginDetailComponent( Composite parent, int style )
+    private Plugin plugin;
+
+    private IComponentModificationListener componentListener;
+    
+    private boolean isModifiedFlag;
+
+    public PluginDetailComponent( Composite parent, int style, 
+                                  IComponentModificationListener componentListener )
     {
         super( parent, style );
+        
+        this.componentListener = componentListener;
 
         setLayout( new GridLayout( 2, false ) );
         
@@ -70,13 +80,23 @@ public class PluginDetailComponent extends AbstractComponent
 
         extensionRadioButton = new Button( this, SWT.CHECK );
         extensionRadioButton.setLayoutData( controlData );
-        
 
         ModifyListener listener = new ModifyListener()
         {
             public void modifyText( ModifyEvent e )
-            {
-                notifyListeners( e.widget );
+            {                 
+                
+                if ( isModifiedFlag() )
+                { 
+                    plugin.setGroupId( nullIfBlank( getGroupId() ) );                
+                    plugin.setArtifactId( nullIfBlank( getArtifactId() ) );                
+                    plugin.setVersion( nullIfBlank( getVersion() ) );
+                    
+                    notifyListeners( e.widget );
+                    
+                    
+                }
+                
             }
         };
         
@@ -88,7 +108,20 @@ public class PluginDetailComponent extends AbstractComponent
         {
             public void widgetSelected( SelectionEvent arg0 )
             {
-                notifyListeners( arg0.widget );
+                if ( isModifiedFlag() )
+                {
+                    plugin.setExtensions( isExtension() );
+                    if ( isInherited() == true )
+                    {
+                        plugin.setInherited( "true" );
+                    }
+                    else
+                    {
+                        plugin.setInherited( "false" );
+                    }
+                    
+                    notifyListeners( arg0.widget );  
+                }
             }
             
             public void widgetDefaultSelected( SelectionEvent arg0 )
@@ -100,6 +133,41 @@ public class PluginDetailComponent extends AbstractComponent
         inheritedRadioButton.addSelectionListener( selectionListener );
         extensionRadioButton.addSelectionListener( selectionListener );
     }
+
+    public void updateComponent( Plugin plugin )
+    {        
+        this.plugin = plugin;
+
+        setModifiedFlag( false );
+        
+        System.out.println("havok " + isModifiedFlag() );
+        
+        System.out.println(plugin.getGroupId());
+        setGroupId( blankIfNull( plugin.getGroupId() ) );        
+        
+        System.out.println(plugin.getArtifactId());
+        setArtifactId( blankIfNull( plugin.getArtifactId() ) );
+        
+        System.out.println(plugin.getVersion());
+        setVersion( blankIfNull( plugin.getVersion() ) );
+        
+        if ( ( plugin.getInherited() != null ) &&
+             ( plugin.getInherited().equalsIgnoreCase( "true" ) ) )
+        {
+            setInherited( true );
+        }
+        else
+        {
+            setInherited( false );
+        }
+        
+        setExtension( plugin.isExtensions() );
+        
+        addComponentModifyListener( this.componentListener );
+        
+        setModifiedFlag( true );
+        
+    }   
 
     public String getGroupId()
     {
@@ -150,9 +218,24 @@ public class PluginDetailComponent extends AbstractComponent
     {
         extensionRadioButton.setSelection( extension );
     }
-    
+
+    public boolean isModifiedFlag()
+    {
+        return isModifiedFlag;
+    }
+
+    public void setModifiedFlag( boolean isModified )
+    {
+        this.isModifiedFlag = isModified;
+    }
+
     private String blankIfNull( String str )
     {
         return str != null ? str : "";
+    }
+    
+    private String nullIfBlank(String str) 
+    {
+        return ( str == null || str.equals( "" ) ) ? null : str;
     }
 }

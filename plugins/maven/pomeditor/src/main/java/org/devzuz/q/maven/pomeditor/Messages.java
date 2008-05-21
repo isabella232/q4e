@@ -204,6 +204,18 @@ public class Messages
 
     public static String MavenPomEditor_MavenPomEditor_OtherArchives;
     
+    public static String MavenPomEditor_MavenPomEditor_IssueManagement;
+    
+    public static String MavenPomEditor_MavenPomEditor_Developers;
+    
+    public static String MavenPomEditor_MavenPomEditor_Contributors;
+    
+    public static String MavenPomEditor_MavenPomEditor_DependencyManagement;
+    
+    public static String MavenPomEditor_MavenPomEditor_DependencyExclusions;
+    
+    public static String MavenPomEditor_MavenPomEditor_Dependencies;
+    
     static
     {
         // initialize resource bundle

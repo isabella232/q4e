@@ -1,0 +1,202 @@
+package org.devzuz.q.maven.pomeditor.components;
+
+import org.devzuz.q.maven.pomeditor.Messages;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+
+public class ContributorDeveloperDetailComponent
+    extends Composite
+{    
+    private Text nameText;
+    
+    private Text emailText;
+    
+    private Text urlText;
+    
+    private Text organizationText;
+    
+    private Text organizationUrlText;
+    
+    private Text rolesText;
+    
+    private Text timezoneText;
+
+    private Text identityText;
+
+    private String type;
+
+    public ContributorDeveloperDetailComponent(Composite parent, int style, String type )
+    {   
+        super( parent, style );
+        
+        this.type = type;
+        
+        setLayout( new GridLayout( 2, false ) );
+        
+        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false );
+        labelData.widthHint = 100;
+        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false );
+        controlData.horizontalIndent = 10;
+        
+        if ( type.equalsIgnoreCase( Messages.MavenPomEditor_MavenPomEditor_Developers ) )
+        {
+            Label identityLabel = new Label( this, SWT.NULL );
+            identityLabel.setLayoutData( labelData );
+            identityLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Identity );
+            
+            identityText = new Text( this, SWT.BORDER | SWT.SINGLE );
+            identityText.setLayoutData( controlData );
+        }
+
+        Label nameLabel = new Label( this, SWT.NULL );
+        nameLabel.setLayoutData( labelData );
+        nameLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Name );
+        
+        nameText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        nameText.setLayoutData( controlData );
+
+        Label emailLabel = new Label( this, SWT.NULL );
+        emailLabel.setLayoutData( labelData );
+        emailLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Email );
+        
+        emailText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        emailText.setLayoutData( controlData );
+
+        Label urlLabel = new Label( this, SWT.NULL );
+        urlLabel.setLayoutData( labelData );
+        urlLabel.setText( Messages.MavenPomEditor_MavenPomEditor_URL );
+        
+        urlText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        urlText.setLayoutData( controlData );
+
+        Label organizationLabel = new Label( this, SWT.NULL );
+        organizationLabel.setLayoutData( labelData );
+        organizationLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Organization );
+        
+        organizationText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        organizationText.setLayoutData( controlData );
+
+        Label organizationUrlLabel = new Label( this, SWT.NULL );
+        organizationUrlLabel.setLayoutData( labelData );
+        organizationUrlLabel.setText( Messages.MavenPomEditor_MavenPomEditor_OrganizationUrl );
+        
+        organizationUrlText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        organizationUrlText.setLayoutData( controlData );
+
+        Label rolesLabel = new Label( this, SWT.NULL );
+        rolesLabel.setLayoutData( labelData );
+        rolesLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Roles );
+        
+        rolesText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        rolesText.setLayoutData( controlData );
+
+        Label timezoneLabel = new Label( this, SWT.NULL );
+        timezoneLabel.setLayoutData( labelData );
+        timezoneLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Timezone );
+        
+        timezoneText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        timezoneText.setLayoutData( controlData );
+        
+    }
+    
+    public void addModifyListener(ModifyListener listener) 
+    {
+        if ( type.equalsIgnoreCase( Messages.MavenPomEditor_MavenPomEditor_Developers ) )
+        {
+            identityText.addModifyListener( listener );
+        }
+        
+        nameText.addModifyListener( listener );
+        emailText.addModifyListener( listener );
+        urlText.addModifyListener( listener );
+        organizationText.addModifyListener( listener );
+        organizationUrlText.addModifyListener( listener );
+        rolesText.addModifyListener( listener );
+        timezoneText.addModifyListener( listener );
+    }
+
+    public String getId()
+    {
+        return identityText.getText().trim();
+    }
+
+    public void setId( String id )
+    {
+        identityText.setText( id );
+    }
+
+    public String getContributorName()
+    {
+        return nameText.getText().trim();
+    }
+
+    public void setContributorName( String contributorName )
+    {
+        nameText.setText( contributorName );
+    }
+
+    public String getEmail()
+    {
+        return emailText.getText().trim();
+    }
+
+    public void setEmail( String email )
+    {
+        emailText.setText( email );
+    }
+
+    public String getUrl()
+    {
+        return urlText.getText().trim();
+    }
+
+    public void setUrl( String url )
+    {
+        urlText.setText( url );
+    }
+
+    public String getOrganization()
+    {
+        return organizationText.getText().trim();
+    }
+
+    public void setOrganization( String organization )
+    {
+        organizationText.setText( organization );
+    }
+
+    public String getOrganizationUrl()
+    {
+        return organizationUrlText.getText().trim();
+    }
+
+    public void setOrganizationUrl( String organizationUrl )
+    {
+        organizationUrlText.setText( organizationUrl );
+    }
+
+    public String getRoles()
+    {
+        return rolesText.getText().trim();
+    }
+
+    public void setRoles( String roles )
+    {
+        rolesText.setText( roles );
+    }
+
+    public String getTimezone()
+    {
+        return timezoneText.getText().trim();
+    }
+
+    public void setTimezone( String timezone )
+    {
+        timezoneText.setText( timezone );
+    }
+}
