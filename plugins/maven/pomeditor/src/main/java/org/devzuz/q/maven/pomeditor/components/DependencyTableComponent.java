@@ -75,15 +75,19 @@ public class DependencyTableComponent
         typeColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Type );
         typeColumn.setWidth( 50 );
         
-        TableColumn scopeColumn = new TableColumn( dependenciesTable, SWT.BEGINNING, 4 );
+        TableColumn classifierColumn = new TableColumn( dependenciesTable, SWT.BEGINNING, 4 );
+        classifierColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Classifier );
+        classifierColumn.setWidth( 75 );
+        
+        TableColumn scopeColumn = new TableColumn( dependenciesTable, SWT.BEGINNING, 5 );
         scopeColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Scope );
         scopeColumn.setWidth( 75 );
         
-        TableColumn systemPathColumn = new TableColumn( dependenciesTable, SWT.BEGINNING, 5 );
+        TableColumn systemPathColumn = new TableColumn( dependenciesTable, SWT.BEGINNING, 6 );
         systemPathColumn.setText( Messages.MavenPomEditor_MavenPomEditor_SystemPath );
         systemPathColumn.setWidth( 125 );
         
-        TableColumn optionalColumn = new TableColumn( dependenciesTable, SWT.BEGINNING, 6 );
+        TableColumn optionalColumn = new TableColumn( dependenciesTable, SWT.BEGINNING, 7 );
         optionalColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Optional );
         optionalColumn.setWidth( 50 );
         
@@ -125,8 +129,8 @@ public class DependencyTableComponent
                 TableItem item = new TableItem( dependenciesTable, SWT.BEGINNING );
                 String optional = new Boolean( dependency.isOptional() ).toString();
                 item.setText( new String[] { dependency.getGroupId(), dependency.getArtifactId(),
-                    dependency.getVersion(), dependency.getType(), dependency.getScope(),
-                    dependency.getSystemPath(), optional } );
+                    dependency.getVersion(), dependency.getType(), dependency.getClassifier(),
+                    dependency.getScope(), dependency.getSystemPath(), optional } );
             }
         }
         
@@ -181,6 +185,7 @@ public class DependencyTableComponent
                     dependency.setArtifactId( addDialog.getArtifactId() );
                     dependency.setVersion( nullIfBlank( addDialog.getVersion() ) );
                     dependency.setType( nullIfBlank( addDialog.getType() ) );
+                    dependency.setClassifier( nullIfBlank( addDialog.getClassifier() ) );
                     dependency.setScope( nullIfBlank( addDialog.getScope() ) );
                     dependency.setSystemPath( nullIfBlank( addDialog.getSystemPath() ) );
                     dependency.setOptional( addDialog.isOptional() );
@@ -215,6 +220,7 @@ public class DependencyTableComponent
                 dependency.setArtifactId( addDialog.getArtifactId() );
                 dependency.setVersion( nullIfBlank( addDialog.getVersion() ) );
                 dependency.setType( nullIfBlank( addDialog.getType() ) );
+                dependency.setClassifier( nullIfBlank( addDialog.getClassifier() ) );
                 dependency.setScope( nullIfBlank( addDialog.getScope() ) );
                 dependency.setSystemPath( nullIfBlank( addDialog.getSystemPath() ) );
                 dependency.setOptional( addDialog.isOptional() );
