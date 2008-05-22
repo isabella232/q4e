@@ -342,6 +342,7 @@ public class MavenPomBuildPluginFormPage
         }
 	}
 	
+	@SuppressWarnings ("unchecked")
 	private class PluginTreeComponentListener implements ISelectionChangedListener
 	{
 	    public void selectionChanged( SelectionChangedEvent event )
@@ -408,7 +409,7 @@ public class MavenPomBuildPluginFormPage
             else if( element instanceof String )
             {               
                 
-                List<String> parent = ( List<String> )contentProvider.getParent( element );
+                List<String> parent = ( List<String> ) contentProvider.getParent( element );
                 
                 System.out.println("Goal testing: " + parent.get( 0 ) );
                 
@@ -425,7 +426,7 @@ public class MavenPomBuildPluginFormPage
     
     public void afterAction()
     {
-        System.out.println("test");
+        System.out.println("afterAction()");
         contentProvider.setBuild( pomModel.getBuild() );
         treeComponent.refresh();
         treeComponent.expandAll();
@@ -452,12 +453,10 @@ public class MavenPomBuildPluginFormPage
     }
 
     public void componentModified( Widget ctrl )
-    {        
-        pageModified();
-        
-        contentProvider.setBuild( pomModel.getBuild() );
-        
+    {   
+        System.out.println("componentModified()");
         treeComponent.refresh();
-        
+        contentProvider.setBuild( pomModel.getBuild() );
+        pageModified();
     }
 }

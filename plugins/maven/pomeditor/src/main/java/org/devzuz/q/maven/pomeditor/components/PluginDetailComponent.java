@@ -26,18 +26,16 @@ public class PluginDetailComponent extends AbstractComponent
 
     private Button extensionRadioButton;
 
-    private Plugin plugin;
-
-    private IComponentModificationListener componentListener;
+    public PluginDetailComponent( Composite parent, int style ,
+                                  IComponentModificationListener modificationListener )
+    {
+        this( parent , style );
+        addComponentModifyListener( modificationListener );
+    }
     
-    private boolean isModifiedFlag;
-
-    public PluginDetailComponent( Composite parent, int style, 
-                                  IComponentModificationListener componentListener )
+    public PluginDetailComponent( Composite parent, int style )
     {
         super( parent, style );
-        
-        this.componentListener = componentListener;
 
         setLayout( new GridLayout( 2, false ) );
         
@@ -84,19 +82,8 @@ public class PluginDetailComponent extends AbstractComponent
         ModifyListener listener = new ModifyListener()
         {
             public void modifyText( ModifyEvent e )
-            {                 
-                
-                if ( isModifiedFlag() )
-                { 
-                    plugin.setGroupId( nullIfBlank( getGroupId() ) );                
-                    plugin.setArtifactId( nullIfBlank( getArtifactId() ) );                
-                    plugin.setVersion( nullIfBlank( getVersion() ) );
-                    
-                    notifyListeners( e.widget );
-                    
-                    
-                }
-                
+            {
+                notifyListeners( e.widget );
             }
         };
         
@@ -108,20 +95,7 @@ public class PluginDetailComponent extends AbstractComponent
         {
             public void widgetSelected( SelectionEvent arg0 )
             {
-                if ( isModifiedFlag() )
-                {
-                    plugin.setExtensions( isExtension() );
-                    if ( isInherited() == true )
-                    {
-                        plugin.setInherited( "true" );
-                    }
-                    else
-                    {
-                        plugin.setInherited( "false" );
-                    }
-                    
-                    notifyListeners( arg0.widget );  
-                }
+                notifyListeners( arg0.widget );
             }
             
             public void widgetDefaultSelected( SelectionEvent arg0 )
@@ -135,20 +109,13 @@ public class PluginDetailComponent extends AbstractComponent
     }
 
     public void updateComponent( Plugin plugin )
-    {        
-        this.plugin = plugin;
-
-        setModifiedFlag( false );
+    {   
+        // disable notifications for the listeners to avoid firing when we are 
+        // programmatically changing the information on the text field
+        setDisableNotification( true );
         
-        System.out.println("havok " + isModifiedFlag() );
-        
-        System.out.println(plugin.getGroupId());
         setGroupId( blankIfNull( plugin.getGroupId() ) );        
-        
-        System.out.println(plugin.getArtifactId());
         setArtifactId( blankIfNull( plugin.getArtifactId() ) );
-        
-        System.out.println(plugin.getVersion());
         setVersion( blankIfNull( plugin.getVersion() ) );
         
         if ( ( plugin.getInherited() != null ) &&
@@ -163,15 +130,12 @@ public class PluginDetailComponent extends AbstractComponent
         
         setExtension( plugin.isExtensions() );
         
-        addComponentModifyListener( this.componentListener );
-        
-        setModifiedFlag( true );
-        
+        setDisableNotification( false );
     }   
 
     public String getGroupId()
     {
-        return groupIdText.getText().trim();
+        return nullIfBlank( groupIdText.getText().trim() );
     }
 
     public void setGroupId( String groupId )
@@ -181,7 +145,7 @@ public class PluginDetailComponent extends AbstractComponent
 
     public String getArtifactId()
     {
-        return artifactIdText.getText().trim();
+        return nullIfBlank( artifactIdText.getText().trim() );
     }
 
     public void setArtifactId( String artifactId )
@@ -191,7 +155,7 @@ public class PluginDetailComponent extends AbstractComponent
 
     public String getVersion()
     {
-        return versionText.getText().trim();
+        return nullIfBlank( versionText.getText().trim() );
     }
 
     public void setVersion( String version )
@@ -217,16 +181,6 @@ public class PluginDetailComponent extends AbstractComponent
     public void setExtension( boolean extension )
     {
         extensionRadioButton.setSelection( extension );
-    }
-
-    public boolean isModifiedFlag()
-    {
-        return isModifiedFlag;
-    }
-
-    public void setModifiedFlag( boolean isModified )
-    {
-        this.isModifiedFlag = isModified;
     }
 
     private String blankIfNull( String str )

@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Widget;
 public abstract class AbstractComponent extends Composite
 {
     private List< IComponentModificationListener > componentModificationListener;
+    private boolean disableNotification;
     
     public AbstractComponent( Composite parent, int style )
     {
@@ -28,9 +29,22 @@ public abstract class AbstractComponent extends Composite
     
     protected void notifyListeners( Widget ctrl )
     {
-        for( IComponentModificationListener listener : componentModificationListener )
+        if ( !disableNotification )
         {
-            listener.componentModified( ctrl );
+            for ( IComponentModificationListener listener : componentModificationListener )
+            {
+                listener.componentModified( ctrl );
+            }
         }
+    }
+
+    public boolean isDisableNotification()
+    {
+        return disableNotification;
+    }
+
+    public void setDisableNotification( boolean disableNotification )
+    {
+        this.disableNotification = disableNotification;
     }
 }

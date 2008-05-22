@@ -57,7 +57,7 @@ public class AddBuildPluginDialog extends AbstractResizableDialog
             }
         };
 
-        pluginComponent = new PluginDetailComponent( container, SWT.None, null );
+        pluginComponent = new PluginDetailComponent( container, SWT.None );
         pluginComponent.addComponentModifyListener( listener );
 
         return container;
