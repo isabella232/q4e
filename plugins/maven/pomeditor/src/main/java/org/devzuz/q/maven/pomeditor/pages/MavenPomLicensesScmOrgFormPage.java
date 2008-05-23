@@ -98,10 +98,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     {
         super( editor, id, title );
         this.pomModel = modelPOM;
-        this.licenseList = modelPOM.getLicenses();
-        this.organization = modelPOM.getOrganization();
-        this.scm = modelPOM.getScm();
-        this.issueManagement = modelPOM.getIssueManagement();
+        this.licenseList = pomModel.getLicenses();
     }
 
     @Override
@@ -134,7 +131,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         Composite container = toolKit.createComposite( parent );
 
         container.setLayout( new GridLayout( 2, false ) );
-
+        
         propertiesTable = toolKit.createTable( container, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
         propertiesTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
         propertiesTable.setLinesVisible( true );
@@ -202,6 +199,8 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new GridLayout( 2, false ) );
         
+        checkIfIssueManagementNull();
+        
         GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
         labelData.widthHint = 50;
         GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
@@ -219,7 +218,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         issueManagementUrlText = toolKit.createText( parent, "" );
         createTextDisplay( issueManagementUrlText, controlData, issueManagement.getUrl() );
         
-        toolKit.paintBordersFor( parent );        
+        toolKit.paintBordersFor( parent );
        
         return parent;
     }
@@ -228,6 +227,13 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     {
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new GridLayout( 2, false ) );
+        
+        checkIfScmNull();
+        
+        if ( scm == null )
+        {
+            System.out.println("scm is null");
+        }
 
         GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
         labelData.widthHint = 120;
@@ -269,6 +275,8 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     {
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new GridLayout( 2, false ) );
+        
+        checkIfOrganizationNull();
 
         GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
         labelData.widthHint = 30;
@@ -544,6 +552,44 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         return flag;
     }
     
+    private void checkIfIssueManagementNull()
+    {
+        if ( pomModel.getIssueManagement() == null )
+        {
+            IssueManagement issueManagement = new IssueManagement();
+            pomModel.setIssueManagement( issueManagement );
+        }
+        
+        this.issueManagement = pomModel.getIssueManagement();
+        
+    }
+
+    private void checkIfScmNull()
+    {
+       if ( pomModel.getScm() == null )
+       {
+           Scm scm = new Scm();
+           pomModel.setScm( scm );
+       }
+       
+       this.scm = pomModel.getScm();
+        
+    }
+
+    private void checkIfOrganizationNull()
+    {
+        if ( pomModel.getOrganization() == null )
+        {
+            Organization organization = new Organization();
+            pomModel.setOrganization( organization );
+            this.organization = organization;
+        }
+        
+        this.organization = pomModel.getOrganization();
+        
+        
+    }
+
     public void clear()
     {
         propertiesTable.deselect( propertiesTable.getSelectionIndex() );

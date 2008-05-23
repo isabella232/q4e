@@ -10,6 +10,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Exclusion;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginExecution;
+import org.apache.maven.model.PluginManagement;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -26,9 +27,16 @@ public class PluginTreeContentProvider implements ITreeContentProvider
 
     private Map<Object, Object> childParentMap;
 
+    private PluginManagement pluginManagement;
+
     public PluginTreeContentProvider( Build build )
     {
         setBuild( build );
+    }
+    
+    public PluginTreeContentProvider( PluginManagement pluginManagement )
+    {
+        setPluginManagement( pluginManagement );
     }
     /*
     @SuppressWarnings( "unchecked" )
@@ -240,5 +248,29 @@ public class PluginTreeContentProvider implements ITreeContentProvider
         
         childParentMap.put( plugins , build );
         setPlugins( plugins );
+    }
+
+    public PluginManagement getPluginManagement()
+    {
+        return pluginManagement;
+    }
+
+    public void setPluginManagement( PluginManagement pluginManagement )
+    {
+        this.pluginManagement = pluginManagement;        
+        plugins = pluginManagement.getPlugins();
+        
+        if( childParentMap == null )
+        {
+            childParentMap = new LinkedHashMap<Object, Object>();
+        }
+        else
+        {
+            childParentMap.clear();
+        }
+        
+        childParentMap.put( plugins, pluginManagement );
+        setPlugins( plugins );
+        
     }
 }
