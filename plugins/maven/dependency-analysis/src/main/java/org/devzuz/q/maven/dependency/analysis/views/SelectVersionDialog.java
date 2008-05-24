@@ -132,6 +132,7 @@ public class SelectVersionDialog
             if ( instance.getState() == IInstance.STATE_INCLUDED )
             {
                 mavenSelectedVersion = instance.getVersion();
+                userSelectedVersion = mavenSelectedVersion;
                 return true;
             }
         }
