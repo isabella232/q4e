@@ -8,6 +8,7 @@ import org.apache.maven.shared.dependency.tree.DependencyNode;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilder;
 import org.apache.maven.shared.dependency.tree.DependencyTreeBuilderException;
 import org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator;
+import org.devzuz.q.maven.dependency.analysis.internal.DependencyAnalysisUtil;
 import org.devzuz.q.maven.dependency.analysis.model.ModelManager;
 import org.devzuz.q.maven.dependency.analysis.model.SelectionManager;
 import org.devzuz.q.maven.dependency.analysis.views.AnalyserGui;
@@ -49,6 +50,14 @@ public class ResolveDependenciesJob
         this.display = display;
     }
 
+    /**
+     * @deprecated As of version 0.7.0 use DependencyAnalysisUtil.resolveDependencies(IMavenProject) instead
+     * 
+     * @param project
+     * @return dependency node
+     * @throws CoreException
+     */
+    @Deprecated
     public DependencyNode resolveDependencies( IMavenProject project )
         throws CoreException
     {
@@ -78,7 +87,7 @@ public class ResolveDependenciesJob
             monitor.beginTask( "Resolving dependencies", IProgressMonitor.UNKNOWN );
 
             // resolve the dependencies. this is the long running part
-            DependencyNode mavenDependencyRoot = resolveDependencies( project );
+            DependencyNode mavenDependencyRoot = DependencyAnalysisUtil.resolveDependencies( project );
 
             // create the gui
 

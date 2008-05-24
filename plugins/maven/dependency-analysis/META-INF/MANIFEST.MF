@@ -10,3 +10,4 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Bundle-Vendor: DevZuz
 Bundle-ClassPath: .
 Export-Package: org.devzuz.q.maven.dependency.analysis.extension
+Import-Package: org.eclipse.jdt.ui

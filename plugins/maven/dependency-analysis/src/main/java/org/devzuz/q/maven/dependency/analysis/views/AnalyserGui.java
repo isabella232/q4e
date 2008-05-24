@@ -9,12 +9,26 @@ package org.devzuz.q.maven.dependency.analysis.views;
 
 import java.util.Iterator;
 
+import org.apache.maven.shared.dependency.tree.DependencyNode;
+import org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator;
+import org.devzuz.q.maven.dependency.analysis.internal.DependencyAnalysisUtil;
 import org.devzuz.q.maven.dependency.analysis.model.Artifact;
 import org.devzuz.q.maven.dependency.analysis.model.Instance;
 import org.devzuz.q.maven.dependency.analysis.model.ModelManager;
 import org.devzuz.q.maven.dependency.analysis.model.Selectable;
 import org.devzuz.q.maven.dependency.analysis.model.SelectionManager;
 import org.devzuz.q.maven.dependency.analysis.model.Version;
+import org.devzuz.q.maven.embedder.IMavenProject;
+import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.ui.MavenUiActivator;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.action.GroupMarker;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -38,6 +52,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ViewPart;
 
 public class AnalyserGui
@@ -54,6 +69,96 @@ public class AnalyserGui
 
     private SelectionManager selections;
 
+    private IProject currentProject;
+
+    private String PROFILES_XML_FILE = "pom.xml";
+
+    /**
+     * Visitor that scans the change information and triggers an update on the view if the pom.xml resource on the
+     * {@link #currentProject} has changed.
+     */
+    private final IResourceDeltaVisitor workspaceDeltaVisitor = new IResourceDeltaVisitor()
+    {
+        public boolean visit( IResourceDelta delta )
+            throws CoreException
+        {
+            IResource res = delta.getResource();
+            System.out.println( "ResourceListener: " + res );
+            if ( res.equals( res.getWorkspace().getRoot() ) )
+            {
+                // Workspace modification, keep visiting to reach the children
+                return true;
+            }
+            if ( res.equals( res.getProject() ) )
+            {
+                // If a project was changed and not null, continue if it is the selected one
+                return currentProject != null ? res.equals( currentProject ) : false;
+            }
+            // A file in a project
+            if ( res.getName().equals( IMavenProject.POM_FILENAME ) || res.getName().equals( PROFILES_XML_FILE ) )
+            {
+                // pom.xml changed on the current project
+                System.out.println( "Updating Dependency Analysis View" );
+                updateTables();
+            }
+            // Anything else
+            return false;
+        }
+    };
+
+    /**
+     * Listener that will update the view when the currently displayed pom.xml file changes.
+     */
+    private final IResourceChangeListener pomChangeListener = new IResourceChangeListener()
+    {
+        public void resourceChanged( IResourceChangeEvent event )
+        {
+            if ( event.getType() == IResourceChangeEvent.POST_BUILD )
+            {
+                IResourceDelta delta = event.getDelta();
+                try
+                {
+                    delta.accept( workspaceDeltaVisitor );
+                }
+                catch ( CoreException e )
+                {
+                    // visit throws no exceptions, so we should never get here.
+                    MavenUiActivator.getLogger().log( "Unexpected exception", e );
+                }
+            }
+
+        }
+    };
+
+    public void updateTables()
+    {
+        IMavenProject mavenProject = null;
+        DependencyNode mavenDependencyRoot = null;
+        
+        try
+        {
+            mavenProject = MavenManager.getMavenProjectManager().getMavenProject( currentProject, false );
+            mavenDependencyRoot = DependencyAnalysisUtil.resolveDependencies( mavenProject );
+        }
+        catch ( CoreException e )
+        {
+            DependencyAnalysisActivator.getLogger().log( e );
+        }
+        
+        final ModelManager model = new ModelManager( mavenDependencyRoot, selections, mavenProject );
+        
+        PlatformUI.getWorkbench().getDisplay().asyncExec( new Runnable()
+        {
+            public void run()
+            {
+                instanceTree.setInput( model.getInstanceRoot() );
+                versionsTable.setInput( model.getVersions() );
+                artifactsTable.setInput( model.getArtifacts() );
+                refreshAll();
+            }
+        } );
+    }
+
     public void setModelInputs( ModelManager model, SelectionManager selections )
     {
         this.selections = selections;
@@ -64,6 +169,7 @@ public class AnalyserGui
         createContextMenu( instanceTree );
         createContextMenu( versionsTable );
         createContextMenu( artifactsTable );
+        currentProject = DependencyAnalysisUtil.findSelectedProjectInPackageExplorer();
     }
 
     @Override
@@ -89,6 +195,7 @@ public class AnalyserGui
         instanceTree.addSelectionChangedListener( new ISelectionChangedListener()
         {
 
+            @SuppressWarnings( "unchecked" )
             public void selectionChanged( SelectionChangedEvent event )
             {
                 if ( event.getSelection().isEmpty() )
@@ -113,6 +220,7 @@ public class AnalyserGui
         ColumnComparator versionListComparator = new ColumnComparator( Column.ARTIFACTID, false )
         {
 
+            @SuppressWarnings( "unchecked" )
             @Override
             protected Comparable getComparable( Object o )
             {
@@ -145,6 +253,7 @@ public class AnalyserGui
         versionsTable.addSelectionChangedListener( new ISelectionChangedListener()
         {
 
+            @SuppressWarnings( "unchecked" )
             public void selectionChanged( SelectionChangedEvent event )
             {
                 if ( event.getSelection().isEmpty() )
@@ -170,6 +279,7 @@ public class AnalyserGui
         ColumnComparator artifactListComparator = new ColumnComparator( Column.VERSIONS, true )
         {
 
+            @SuppressWarnings( "unchecked" )
             @Override
             protected Comparable getComparable( Object o )
             {
@@ -200,6 +310,7 @@ public class AnalyserGui
         artifactsTable.addSelectionChangedListener( new ISelectionChangedListener()
         {
 
+            @SuppressWarnings( "unchecked" )
             public void selectionChanged( SelectionChangedEvent event )
             {
                 if ( event.getSelection().isEmpty() )
@@ -219,14 +330,15 @@ public class AnalyserGui
             }
         } );
         artifactsTable.getTable().addListener( SWT.EraseItem, new SelectionListener() );
-
+        // Monitor any changes on the selected projects pom.xml
+        ResourcesPlugin.getWorkspace().addResourceChangeListener( pomChangeListener, IResourceChangeEvent.POST_BUILD );
     }
 
     public final void refreshAll()
     {
-        artifactsTable.refresh();
-        versionsTable.refresh();
-        instanceTree.refresh();
+        artifactsTable.refresh( true );
+        versionsTable.refresh( true );
+        instanceTree.refresh( true );
     }
 
     private void createColumnWithListener( String title, int width, final ColumnComparator comparator,
