@@ -66,9 +66,19 @@ public class Dom4JModel
     public void write()
         throws IOException
     {
-        Writer pomFileWriter = new BufferedWriter( new FileWriter( file ) );
-        XMLWriter writer = new XMLWriter( pomFileWriter );
-        writer.write( document );
-        writer.flush();
+        XMLWriter writer = null;
+        try
+        {
+            writer = new XMLWriter( new BufferedWriter( new FileWriter( file ) ) );
+            writer.write( document );
+            writer.flush();
+        }
+        finally
+        {
+            if ( writer != null )
+            {
+                writer.close();
+            }
+        }
     }
 }
