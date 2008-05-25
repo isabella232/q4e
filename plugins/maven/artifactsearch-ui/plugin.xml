@@ -4,7 +4,7 @@
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
-            category="org.eclipse.search.preferences.SearchPreferencePage"
+            category="org.devzuz.q.maven.ui.preferences.MavenPreferencePage"
             class="org.devzuz.q.maven.search.ui.preferences.ArtifactSearchPreferencePage"
             id="org.devzuz.q.maven.search.ui.preferences.ArtifactSearchPreferencePage"
             name="Artifact Search">
