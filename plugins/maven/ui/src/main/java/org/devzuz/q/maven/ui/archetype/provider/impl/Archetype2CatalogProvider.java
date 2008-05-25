@@ -53,6 +53,9 @@ public class Archetype2CatalogProvider extends AbstractArchetypeProvider
 
     private Source catalogSource;
 
+    public static final String INTERNAL_CATALOG_URL =
+        "platform:/plugin/org.devzuz.q.maven.ui/src/main/resources/config/archetype2catalogs/archetype-catalog.xml";
+
     public String getCatalogFilename()
     {
         return catalogFilename;

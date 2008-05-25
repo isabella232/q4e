@@ -42,7 +42,7 @@ public class MavenArchetypePreferencePage extends FieldEditorPreferencePage impl
     protected void createFieldEditors()
     {
         // noDefaultAndApplyButton();
-        addField( new MavenArchetypePreferenceTableEditor( MavenPreferenceManager.ARCHETYPE_LIST_KEY,
+        addField( new MavenArchetypePreferenceTableEditor( MavenUIPreferenceManagerAdapter.ARCHETYPE_LIST_KEY,
                                                            Messages.MavenArchetypePreferencePage_description,
                                                            getFieldEditorParent() ) );
 
@@ -52,10 +52,9 @@ public class MavenArchetypePreferencePage extends FieldEditorPreferencePage impl
 
         RadioGroupFieldEditor archetypePluginVersionEditor =
             new RadioGroupFieldEditor( MavenPreferenceManager.ARCHETYPE_PLUGIN_VERSION,
-                                  Messages.MavenArchetypePreferencePage_archetypeVersionLabel, 1, 
-                                  ARCHETYPE_PLUGIN_VERSIONS, archetypePluginGroup );
+                                       Messages.MavenArchetypePreferencePage_archetypeVersionLabel, 1,
+                                       ARCHETYPE_PLUGIN_VERSIONS, archetypePluginGroup );
         addField( archetypePluginVersionEditor );
-        
 
         // These two lines would give 20px margin/space between DefaultApply button group and FieldEditor group
         GridLayout parentLayout = (GridLayout) getFieldEditorParent().getParent().getLayout();

@@ -219,10 +219,7 @@ public class Archetype2CatalogProviderUiBuilder implements IArchetypeProviderUIB
         if ( builtinRadioButton.getSelection() )
         {
             provider.setCatalogSource( Archetype2CatalogProvider.Source.INTERNAL );
-            // This should work on a real instalation
-            provider.setCatalogFilename( "platform:/plugin/org.devzuz.q.maven.ui/resources/config/archetype2catalogs/archetype-catalog.xml" );
-            // This works on a run-time workbench
-            provider.setCatalogFilename( "platform:/plugin/org.devzuz.q.maven.ui/src/main/resources/config/archetype2catalogs/archetype-catalog.xml" );
+            provider.setCatalogFilename( Archetype2CatalogProvider.INTERNAL_CATALOG_URL );
         }
         else if ( localRadioButton.getSelection() )
         {

@@ -194,5 +194,11 @@
 	     class="org.devzuz.q.maven.ui.propertytester.MavenProjectPropertyTester">
  	  </propertyTester>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="org.devzuz.q.maven.ui.preferences.internal.ArchetypeProviderPreferenceInitializer">
+      </initializer>
+   </extension>
      	   
 </plugin>

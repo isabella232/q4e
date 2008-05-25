@@ -21,8 +21,6 @@ import org.eclipse.jface.preference.IPreferenceStore;
 
 public class MavenPreferenceManager
 {
-    public static final String ARCHETYPE_LIST_KEY = MavenCoreActivator.PLUGIN_ID + ".archetypeListKey";
-
     public static final String ARCHETYPE_PLUGIN_GROUPID = MavenCoreActivator.PLUGIN_ID + ".archetypePluginGroupId";
 
     public static final String ARCHETYPE_PLUGIN_ARTIFACTID =
@@ -206,16 +204,6 @@ public class MavenPreferenceManager
     }
 
     /* ******************************* Archetypes ******************************* */
-
-    public String getArchetypeSourceList()
-    {
-        return preferenceStore.getString( ARCHETYPE_LIST_KEY );
-    }
-
-    public void setArchetypeSourceList( String archetypeSourceList )
-    {
-        preferenceStore.setValue( ARCHETYPE_LIST_KEY, archetypeSourceList );
-    }
 
     public String getArchetypePluginGroupId()
     {
