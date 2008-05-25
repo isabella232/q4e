@@ -19,6 +19,8 @@ import org.devzuz.q.maven.ui.archetype.provider.internal.wizard.EditArchetypePro
 import org.devzuz.q.maven.ui.archetype.provider.internal.wizard.NewArchetypeProviderWizard;
 import org.devzuz.q.maven.ui.preferences.MavenArchetypePreferencePage;
 import org.devzuz.q.maven.ui.preferences.MavenUIPreferenceManagerAdapter;
+import org.devzuz.q.maven.ui.preferences.internal.ArchetypeProviderPreferenceInitializer;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -37,6 +39,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -160,9 +163,8 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
     {
         addPropertyButton = createPushButton( box, Messages.MavenCustomComponent_AddButtonLabel );
         editPropertyButton = createPushButton( box, Messages.MavenCustomComponent_EditButtonLabel );
-        editPropertyButton.setEnabled( false );
         removePropertyButton = createPushButton( box, Messages.MavenCustomComponent_RemoveButtonLabel );
-        removePropertyButton.setEnabled( false );
+        disableEditRemoveButtons();
     }
 
     private Button createPushButton( Composite parent, String key )
@@ -206,24 +208,21 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
     protected void doLoad()
     {
         archetypeProviders = MavenUIPreferenceManagerAdapter.getInstance().getConfiguredArchetypeProviders();
-        if ( !archetypeProviders.isEmpty() )
-        {
-            providerTableViewer.setInput( archetypeProviders );
-        }
-        else
-        {
-            // Should never happen. MavenUIPreferenceManagerAdapter#getConfiguredArchetypeProviders() always provides a
-            // non-empty list.
-            MavenUiActivator.getLogger().error( "No archetype providers available." );
-        }
         providerTableViewer.setInput( archetypeProviders );
     }
 
     @Override
     protected void doLoadDefault()
     {
-        // Nothing to to, defaults are always provided by
-        // MavenUIPreferenceManagerAdapter#getConfiguredArchetypeProviders()
+        boolean reset =
+            MessageDialog.openConfirm( Display.getCurrent().getActiveShell(), "Restore default providers",
+                                       "This action will remove any custom providers you might have added and restore the default list.\n\nAre you sure?" );
+        if ( reset )
+        {
+            System.out.println( "Reseting" );
+            archetypeProviders = ArchetypeProviderPreferenceInitializer.buildDefaultArchetypeProviderList();
+            providerTableViewer.setInput( ArchetypeProviderPreferenceInitializer.buildDefaultArchetypeProviderList() );
+        }
     }
 
     @Override
@@ -285,8 +284,7 @@ public class MavenArchetypePreferenceTableEditor extends FieldEditor
             {
                 archetypeProviderContentProvider.refresh( provider );
                 // After deleting, there's no selection, but selection change events are not triggered
-                editPropertyButton.setEnabled( false );
-                removePropertyButton.setEnabled( false );
+                disableEditRemoveButtons();
             }
         }
         else if ( e.getSource() == removePropertyButton )
