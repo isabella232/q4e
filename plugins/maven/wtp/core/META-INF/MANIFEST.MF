@@ -4,7 +4,7 @@ Bundle-Name: WTP integration Core Plug-in
 Bundle-SymbolicName: org.devzuz.q.maven.wtp.core;singleton:=true
 Bundle-Version: 0.7.0.qualifier
 Bundle-Activator: org.devzuz.q.maven.wtp.core.MavenWtpActivator
-Bundle-Vendor: devzuz
+Bundle-Vendor: Devzuz
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.common.project.facet.core,
  org.devzuz.q.maven.jdt.ui,

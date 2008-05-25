@@ -14,3 +14,4 @@ Eclipse-LazyStart: true
 Import-Package: org.apache.maven.model,
  org.apache.maven.model.io.xpp3,
  org.codehaus.plexus.util.xml.pull
+Bundle-Vendor: Devzuz
