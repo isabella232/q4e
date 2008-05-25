@@ -27,7 +27,6 @@ import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.PhraseQuery;
 import org.apache.lucene.search.PrefixQuery;
-import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.search.BooleanClause.Occur;
 import org.devzuz.q.maven.search.ArtifactInfo;
 import org.devzuz.q.maven.search.IArtifactInfo;
@@ -50,19 +49,19 @@ public class IndexManager
         INDEX_CACHE_DIR = new File( System.getProperty( "user.home" ) + File.separatorChar + ".m2indexcache" );
     }
 
-    private String remote = "";
+    private String remote = "http://repo1.maven.org/maven2/.index/nexus-maven-repository-index.zip";
 
-    private String groupIdField = "";
+    private String groupIdField = "g";
 
-    private String artifactIdField = "";
+    private String artifactIdField = "a";
 
-    private String versionIdField = "";
+    private String versionIdField = "v";
 
-    private boolean useCompositeValueField = false;
+    private boolean useCompositeValueField = true;
 
-    private String compositeValueField = "";
+    private String compositeValueField = "u";
 
-    private String compositeValueTemplate = "";
+    private String compositeValueTemplate = "{0}|{1}|{2}";
 
     private volatile boolean ready;
 
@@ -124,7 +123,6 @@ public class IndexManager
             return Collections.emptyList();
         }
 
-        
         try
         {
             IndexReader reader = IndexReader.open( getIndex() );
@@ -132,7 +130,7 @@ public class IndexManager
             {
                 BooleanQuery query = new BooleanQuery();
                 BooleanQuery.setMaxClauseCount( Integer.MAX_VALUE );
-                
+
                 if ( criteria.getArtifactId() != null )
                 {
                     query.add( createPhraseQuery( getArtifactIdField(), criteria.getArtifactId() ), Occur.MUST );
@@ -141,12 +139,13 @@ public class IndexManager
                 {
                     query.add( createPhraseQuery( getGroupIdField(), criteria.getGroupId() ), Occur.MUST );
                 }
-    
-                if ( criteria.getSearch() != null && criteria.getSearch().length() > 0)
+
+                if ( criteria.getSearch() != null && criteria.getSearch().length() > 0 )
                 {
                     if ( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_ARTIFACT_ID ) > 0 )
                     {
-                        query.add( new PrefixQuery( new Term( getArtifactIdField(), criteria.getSearch() ) ), Occur.SHOULD );
+                        query.add( new PrefixQuery( new Term( getArtifactIdField(), criteria.getSearch() ) ),
+                                   Occur.SHOULD );
                     }
                     if ( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_GROUP_ID ) > 0 )
                     {
@@ -154,13 +153,13 @@ public class IndexManager
                     }
                     if ( ( criteria.getSearchTypes() & ISearchCriteria.TYPE_VERSION ) > 0 )
                     {
-                        query.add( new PrefixQuery( new Term( getVersionIdField(), criteria.getSearch() ) ), Occur.SHOULD );
+                        query.add( new PrefixQuery( new Term( getVersionIdField(), criteria.getSearch() ) ),
+                                   Occur.SHOULD );
                     }
                 }
-    
-                
+
                 IndexSearcher searcher = new IndexSearcher( reader );
-    
+
                 Hits hits = searcher.search( query );
                 if ( ( hits == null ) || ( hits.length() <= 0 ) )
                 {
@@ -168,18 +167,18 @@ public class IndexManager
                 }
                 else
                 {
-    
+
                     List<IArtifactInfo> ret = new ArrayList<IArtifactInfo>( hits.length() );
-    
+
                     for ( int i = 0; i < hits.length(); i++ )
                     {
                         Document doc = hits.doc( i );
                         ret.add( toArtifact( doc ) );
                     }
-    
+
                     return ret;
                 }
-            } 
+            }
             finally
             {
                 reader.close();
@@ -191,14 +190,14 @@ public class IndexManager
             return Collections.emptyList();
         }
     }
-    
+
     private PhraseQuery createPhraseQuery( String field, String text ) throws IOException
     {
         StandardAnalyzer analyser = new StandardAnalyzer();
         TokenStream tokens = analyser.reusableTokenStream( field, new StringReader( text ) );
         Token currentToken = null;
         PhraseQuery phrase = new PhraseQuery();
-        while( ( currentToken = tokens.next() ) != null)
+        while ( ( currentToken = tokens.next() ) != null )
         {
             phrase.add( new Term( field, currentToken.termText() ) );
         }
@@ -206,8 +205,7 @@ public class IndexManager
         return phrase;
     }
 
-    private IArtifactInfo toArtifact( Document doc )
-        throws ParseException
+    private IArtifactInfo toArtifact( Document doc ) throws ParseException
     {
         ArtifactInfo hit = new ArtifactInfo();
 
