@@ -52,7 +52,7 @@ public class AddBuildPluginDialog extends AbstractResizableDialog
 
         IComponentModificationListener listener = new IComponentModificationListener()
         {
-            public void componentModified( AbstractComponent component ,  Widget ctrl )
+            public void componentModified( AbstractComponent component ,  Control ctrl )
             {
                 validate();
             }

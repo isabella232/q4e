@@ -10,6 +10,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -63,7 +64,7 @@ public class PluginExecutionComponent extends AbstractComponent
         {
             public void modifyText( ModifyEvent e )
             {
-                notifyListeners( e.widget );
+                notifyListeners( ( Control ) e.widget );
             }
         };
 
@@ -74,7 +75,7 @@ public class PluginExecutionComponent extends AbstractComponent
         {
             public void widgetSelected( SelectionEvent arg0 )
             {
-                notifyListeners( arg0.widget );
+                notifyListeners( ( Control ) arg0.widget );
             }
 
             public void widgetDefaultSelected( SelectionEvent arg0 )

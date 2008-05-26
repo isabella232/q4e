@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Widget;
+import org.eclipse.swt.widgets.Control;
 
 public abstract class AbstractComponent extends Composite
 {
@@ -27,7 +27,7 @@ public abstract class AbstractComponent extends Composite
         componentModificationListener.remove( listener );
     }
     
-    protected void notifyListeners( Widget ctrl )
+    protected void notifyListeners( Control ctrl )
     {
         if ( !disableNotification )
         {

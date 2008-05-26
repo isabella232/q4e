@@ -432,12 +432,17 @@ public class MavenPomBuildPluginFormPage
         
     }
 
-    public void componentModified( AbstractComponent component , Widget ctrl )
+    public void componentModified( AbstractComponent component , Control ctrl )
     {   
         Object object = component.save();
         contentProvider.setBuild( pomModel.getBuild() );
         treeComponent.refresh();
-        treeComponent.setSelection( new StructuredSelection( object ) );
+        if ( ( object instanceof Xpp3Dom ) || ( object instanceof String ) )
+        {
+            treeComponent.setSelection( new StructuredSelection( object ) );
+            ctrl.setFocus();
+        }
+        
         pageModified();
     }
 }

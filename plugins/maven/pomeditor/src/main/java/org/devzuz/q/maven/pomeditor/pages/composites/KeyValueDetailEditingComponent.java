@@ -26,8 +26,8 @@ public class KeyValueDetailEditingComponent extends KeyValueDetailComponent
         // create a new dom object
         // put the old data from the old dom object
         // put the edited data
-        Xpp3Dom newDom = new Xpp3Dom( nullIfBlank( getKey() ) );
-        newDom.setValue( nullIfBlank( getValue() ) );
+        Xpp3Dom newDom = new Xpp3Dom(  getKey()  );
+        newDom.setValue(  getValue()  );
 
         Xpp3Dom parent = dom.getParent();
         for ( int i = 0; i < parent.getChildCount(); i++ )
