@@ -1,6 +1,5 @@
 package org.devzuz.q.maven.pomeditor.components;
 
-import org.apache.maven.model.Exclusion;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -18,18 +17,16 @@ public class DependencyExclusionDetailComponent
     
     private Text artifactIdText;
 
-    private IComponentModificationListener componentListener;
-    
-    private boolean isModifiedFlag;
-
-    private Exclusion exclusion;
-
     public DependencyExclusionDetailComponent( Composite parent, int style,
                                                IComponentModificationListener componentListener)
     {
+        this( parent , style );
+        addComponentModifyListener( componentListener );
+    }
+    
+    public DependencyExclusionDetailComponent( Composite parent, int style )
+    {
         super( parent, style );
-        
-        this.componentListener = componentListener;
         
         setLayout( new GridLayout( 2 , false ) );
         
@@ -56,33 +53,13 @@ public class DependencyExclusionDetailComponent
         {
             public void modifyText( ModifyEvent e )
             {
-                if ( isModifiedFlag() )
-                {  
-                    exclusion.setGroupId( nullIfBlank( getGroupId() ) );
-                    exclusion.setArtifactId( nullIfBlank( getArtifactId() ) );
-                    
-                    notifyListeners( e.widget );
-                }
+                notifyListeners( e.widget );
             }
         };
         
         groupIdText.addModifyListener( listener );
         artifactIdText.addModifyListener( listener );
         
-    }
-    
-    public void updateComponent( Exclusion exclusion )
-    {
-        this.exclusion = exclusion;
-        
-        setModifiedFlag( false );
-        
-        setGroupId( blankIfNull( exclusion.getGroupId() ) );
-        setArtifactId( blankIfNull( exclusion.getArtifactId() ) );
-        
-        addComponentModifyListener( this.componentListener );
-        
-        setModifiedFlag( true );
     }
     
     public String getGroupId()
@@ -104,25 +81,4 @@ public class DependencyExclusionDetailComponent
     {
         artifactIdText.setText( blankIfNull( artifactId ) );
     }
-    
-    public boolean isModifiedFlag()
-    {
-        return isModifiedFlag;
-    }
-
-    public void setModifiedFlag( boolean isModifiedFlag )
-    {
-        this.isModifiedFlag = isModifiedFlag;
-    }
-
-    private String blankIfNull( String str )
-    {
-        return str != null ? str : "";
-    }
-    
-    private String nullIfBlank(String str) 
-    {
-        return ( str == null || str.equals( "" ) ) ? null : str;
-    }
-
 }

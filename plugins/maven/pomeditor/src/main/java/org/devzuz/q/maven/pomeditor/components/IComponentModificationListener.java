@@ -4,5 +4,5 @@ import org.eclipse.swt.widgets.Widget;
 
 public interface IComponentModificationListener
 {
-    public void componentModified( Widget ctrl );
+    public void componentModified( AbstractComponent component , Widget ctrl );
 }

@@ -201,8 +201,7 @@ public class DependencyExclusionTableComponent
                                                          SWT.ICON_ERROR | SWT.OK  );
                     mesgBox.setMessage( "Exclusion already exists." );
                     mesgBox.setText( "Saving Exclusion Error" );
-                
-                    int response = mesgBox.open( );
+                    mesgBox.open( );
                 }
                 else
                 {

@@ -248,7 +248,7 @@ public class DependencyTableComponent
                         mesgBox.setMessage( "Dependency already exists." );
                         mesgBox.setText( "Saving Dependency Error" );
                     
-                        int response = mesgBox.open( );
+                        mesgBox.open( );
                     }
                 }
                 else

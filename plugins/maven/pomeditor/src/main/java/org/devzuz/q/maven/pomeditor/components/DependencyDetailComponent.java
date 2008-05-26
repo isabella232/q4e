@@ -1,6 +1,5 @@
 package org.devzuz.q.maven.pomeditor.components;
 
-import org.apache.maven.model.Dependency;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -32,19 +31,17 @@ public class DependencyDetailComponent
     private Text typeText;
     
     private Text classifierText;
-
-    private Dependency dependency;
     
-    private boolean isModifiedFlag;
-
-    private IComponentModificationListener componentListener;
-
     public DependencyDetailComponent( Composite parent, int style,
                                       IComponentModificationListener componentListener )
     {
+        this( parent , style );
+        addComponentModifyListener( componentListener );
+    }
+    
+    public DependencyDetailComponent( Composite parent, int style )
+    {
         super( parent, style );
-        
-        this.componentListener = componentListener;
         
         setLayout( new GridLayout( 2 , false ) );
         
@@ -113,18 +110,7 @@ public class DependencyDetailComponent
         {
             public void modifyText( ModifyEvent e )
             {
-                if ( isModifiedFlag() )
-                {
-                    dependency.setGroupId( nullIfBlank( getGroupId() ) );
-                    dependency.setArtifactId( nullIfBlank( getArtifactId() ) );
-                    dependency.setVersion( nullIfBlank( getVersion() ) );
-                    dependency.setScope( nullIfBlank( getScope() ) );
-                    dependency.setType( nullIfBlank( getType() ) );
-                    dependency.setClassifier( nullIfBlank( getClassifier() ) );
-                    dependency.setSystemPath( nullIfBlank( getSystemPath() ) );
-                    
-                    notifyListeners( e.widget );
-                }
+                notifyListeners( e.widget );
             }
         };
         
@@ -140,12 +126,7 @@ public class DependencyDetailComponent
         {
             public void widgetSelected( SelectionEvent arg0 )
             {
-                if ( isModifiedFlag() )
-                {
-                    dependency.setOptional( isOptional() );
-                    
-                    notifyListeners( arg0.widget );
-                }
+                notifyListeners( arg0.widget );
             }
             
             public void widgetDefaultSelected( SelectionEvent arg0 )
@@ -155,26 +136,6 @@ public class DependencyDetailComponent
         };
         
         optionalRadioButton.addSelectionListener( selectionListener );
-    }
-    
-    public void updateComponent( Dependency dependency )
-    {
-        this.dependency = dependency;
-        
-        setModifiedFlag( false );
-        
-        setGroupId( blankIfNull( dependency.getGroupId() ) );
-        setArtifactId( blankIfNull( dependency.getArtifactId() ) );
-        setVersion( blankIfNull( dependency.getVersion() ) );
-        setScope( blankIfNull( dependency.getScope() ) );
-        setType( blankIfNull( dependency.getType() ) );
-        setClassifier( blankIfNull( dependency.getClassifier() ) );
-        setSystemPath( blankIfNull( dependency.getSystemPath() ) );
-        setOptional( dependency.isOptional() );
-        
-        addComponentModifyListener( componentListener );
-        
-        setModifiedFlag( true );
     }
     
     public String getGroupId()
@@ -256,25 +217,4 @@ public class DependencyDetailComponent
     {
         optionalRadioButton.setSelection( optional );
     }
-
-    private String blankIfNull( String str )
-    {
-        return str != null ? str : "";
-    }
-    
-    private String nullIfBlank(String str) 
-    {
-        return ( str == null || str.equals( "" ) ) ? null : str;
-    }
-
-    public boolean isModifiedFlag()
-    {
-        return isModifiedFlag;
-    }
-
-    public void setModifiedFlag( boolean isModifiedFlag )
-    {
-        this.isModifiedFlag = isModifiedFlag;
-    }
-
 }

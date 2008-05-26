@@ -1,6 +1,7 @@
 package org.devzuz.q.maven.pomeditor.dialogs;
 
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
+import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
 import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
 import org.devzuz.q.maven.pomeditor.components.PluginDetailComponent;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;
@@ -51,7 +52,7 @@ public class AddBuildPluginDialog extends AbstractResizableDialog
 
         IComponentModificationListener listener = new IComponentModificationListener()
         {
-            public void componentModified( Widget ctrl )
+            public void componentModified( AbstractComponent component ,  Widget ctrl )
             {
                 validate();
             }

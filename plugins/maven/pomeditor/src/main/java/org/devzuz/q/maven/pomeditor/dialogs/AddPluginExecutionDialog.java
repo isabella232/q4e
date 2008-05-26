@@ -1,6 +1,7 @@
 package org.devzuz.q.maven.pomeditor.dialogs;
 
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
+import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
 import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
 import org.devzuz.q.maven.pomeditor.components.PluginExecutionComponent;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;
@@ -46,7 +47,7 @@ public class AddPluginExecutionDialog extends AbstractResizableDialog
 	{
 	    IComponentModificationListener listener = new IComponentModificationListener()
         {
-            public void componentModified( Widget ctrl )
+            public void componentModified( AbstractComponent component , Widget ctrl )
             {
                 validate();
             }
@@ -54,7 +55,7 @@ public class AddPluginExecutionDialog extends AbstractResizableDialog
         
 		container.setLayout( new FillLayout() );
 		
-		pluginExecutionComponent = new PluginExecutionComponent( container, SWT.None, null );
+		pluginExecutionComponent = new PluginExecutionComponent( container, SWT.None );
 		pluginExecutionComponent.addComponentModifyListener( listener );
 		
 		return container;

@@ -237,6 +237,7 @@ public class PluginTreeContentProvider implements ITreeContentProvider
         this.build = build;
         plugins = build.getPlugins();
         
+        
         if( childParentMap == null )
         {
             childParentMap = new LinkedHashMap<Object, Object>();

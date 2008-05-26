@@ -1,6 +1,5 @@
 package org.devzuz.q.maven.pomeditor.components;
 
-import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.devzuz.q.maven.ui.Messages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -18,18 +17,16 @@ public class KeyValueDetailComponent
     
     private Text valueText;
     
-    private IComponentModificationListener componentListener;
-    
-    private boolean isModifiedFlag;
-
-    private Xpp3Dom dom;
-
     public KeyValueDetailComponent ( Composite parent, int style,
                                      IComponentModificationListener componentListener )
     {
+        this( parent , style );
+        addComponentModifyListener( componentListener );
+    }
+    
+    public KeyValueDetailComponent ( Composite parent, int style )
+    {
         super( parent, style );
-        
-        this.componentListener = componentListener;
         
         setLayout( new GridLayout( 2, false ) );
         
@@ -56,84 +53,14 @@ public class KeyValueDetailComponent
         {
             public void modifyText( ModifyEvent e )
             {
-                if ( isModifiedFlag() )
-                {
-                    //create a new dom object
-                    //put the old data from the old dom object
-                    // put the edited data
-                    int selectedIndex = -1;                  
-                    
-                    Xpp3Dom newDom = new Xpp3Dom( nullIfBlank(getKey() ) );
-                    newDom.setValue( nullIfBlank( getValue() ) );
-                    
-                    System.out.println("new dom name " + newDom.getName() );
-                    System.out.println("new dom value " + newDom.getValue() );
-                    
-                    Xpp3Dom parentDom = dom.getParent();
-                    
-                    for ( int index = 0; index < parentDom.getChildren().length; index++ )
-                    {
-                        Xpp3Dom temp = parentDom.getChild( index );
-                        
-                        if ( temp.equals( dom ) )
-                        {
-                            System.out.println("trace " + selectedIndex );
-                            selectedIndex = index;                            
-                        }
-                    }
-                    
-                    if ( selectedIndex >= 0 )
-                    {
-                        System.out.println("found it so remove it");
-                        parentDom.addChild( newDom );
-                        parentDom.removeChild( selectedIndex );
-                        
-                    }
-                    
-                    notifyListeners( e.widget );
-                }
+                notifyListeners( e.widget );
             }
         };
         
         keyText.addModifyListener( listener );
         valueText.addModifyListener( listener );
-        
     }
     
-    public void updateComponent( String key, String value )
-    {
-        setModifiedFlag( false );
-        
-        setKey( blankIfNull( key ) );
-        setValue( blankIfNull( value ) );
-        
-        addComponentModifyListener( this.componentListener );
-        
-        setModifiedFlag( true );
-    }
-    
-    public void updateComponent( Xpp3Dom dom )
-    {
-        this.dom = dom;
-        
-        setModifiedFlag( false );
-        
-        setKey ( blankIfNull( dom.getName() ) );
-        setValue( blankIfNull( dom.getValue() ) );
-        
-        addComponentModifyListener( this.componentListener );
-        
-        createTempDom();
-        
-        setModifiedFlag( true );
-    }
-
-    private void createTempDom()
-    {
-        // TODO Auto-generated method stub
-        
-    }
-
     public String getKey()
     {
         return keyText.getText().trim();
@@ -153,25 +80,4 @@ public class KeyValueDetailComponent
     {
         valueText.setText( blankIfNull( value ) );
     }
-    
-    public boolean isModifiedFlag()
-    {
-        return isModifiedFlag;
-    }
-
-    public void setModifiedFlag( boolean isModifiedFlag )
-    {
-        this.isModifiedFlag = isModifiedFlag;
-    }
-    
-    private String blankIfNull( String str )
-    {
-        return str != null ? str : "";
-    }
-
-    private String nullIfBlank(String str) 
-    {
-        return ( str == null || str.equals( "" ) ) ? null : str;
-    }
-
 }

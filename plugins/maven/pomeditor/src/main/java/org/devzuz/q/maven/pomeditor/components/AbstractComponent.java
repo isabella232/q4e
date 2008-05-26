@@ -33,7 +33,7 @@ public abstract class AbstractComponent extends Composite
         {
             for ( IComponentModificationListener listener : componentModificationListener )
             {
-                listener.componentModified( ctrl );
+                listener.componentModified( this , ctrl );
             }
         }
     }
@@ -46,5 +46,25 @@ public abstract class AbstractComponent extends Composite
     public void setDisableNotification( boolean disableNotification )
     {
         this.disableNotification = disableNotification;
+    }
+    
+    public void updateComponent( Object object )
+    {
+        
+    }
+    
+    public Object save()
+    {
+        return null;
+    }
+
+    protected static String blankIfNull( String str )
+    {
+        return str != null ? str : "";
+    }
+
+    protected static String nullIfBlank( String str )
+    {
+        return ( str == null || str.equals( "" ) ) ? null : str;
     }
 }

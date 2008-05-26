@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
@@ -66,6 +67,16 @@ public class PluginTreeComponent extends Composite
     public void setObjectActionMap( IObjectActionMap objectActionMap )
     {
         this.objectActionMap = objectActionMap;
+    }
+    
+    public ISelection getSelection()
+    {
+        return treeViewer.getSelection();
+    }
+    
+    public void setSelection( ISelection selection )
+    {
+        treeViewer.setSelection( selection );
     }
     
     public void refresh()

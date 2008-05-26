@@ -1,6 +1,5 @@
 package org.devzuz.q.maven.pomeditor.components;
 
-import org.apache.maven.model.Plugin;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -107,32 +106,7 @@ public class PluginDetailComponent extends AbstractComponent
         inheritedRadioButton.addSelectionListener( selectionListener );
         extensionRadioButton.addSelectionListener( selectionListener );
     }
-
-    public void updateComponent( Plugin plugin )
-    {   
-        // disable notifications for the listeners to avoid firing when we are 
-        // programmatically changing the information on the text field
-        setDisableNotification( true );
-        
-        setGroupId( blankIfNull( plugin.getGroupId() ) );        
-        setArtifactId( blankIfNull( plugin.getArtifactId() ) );
-        setVersion( blankIfNull( plugin.getVersion() ) );
-        
-        if ( ( plugin.getInherited() != null ) &&
-             ( plugin.getInherited().equalsIgnoreCase( "true" ) ) )
-        {
-            setInherited( true );
-        }
-        else
-        {
-            setInherited( false );
-        }
-        
-        setExtension( plugin.isExtensions() );
-        
-        setDisableNotification( false );
-    }   
-
+    
     public String getGroupId()
     {
         return nullIfBlank( groupIdText.getText().trim() );
@@ -181,15 +155,5 @@ public class PluginDetailComponent extends AbstractComponent
     public void setExtension( boolean extension )
     {
         extensionRadioButton.setSelection( extension );
-    }
-
-    private String blankIfNull( String str )
-    {
-        return str != null ? str : "";
-    }
-    
-    private String nullIfBlank(String str) 
-    {
-        return ( str == null || str.equals( "" ) ) ? null : str;
     }
 }

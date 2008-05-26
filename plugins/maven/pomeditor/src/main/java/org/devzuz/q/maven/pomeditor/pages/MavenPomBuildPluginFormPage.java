@@ -13,18 +13,20 @@ import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginExecution;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.devzuz.q.maven.pomeditor.Messages;
-import org.devzuz.q.maven.pomeditor.components.DependencyDetailComponent;
-import org.devzuz.q.maven.pomeditor.components.DependencyExclusionDetailComponent;
+import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
 import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
 import org.devzuz.q.maven.pomeditor.components.IObjectActionMap;
 import org.devzuz.q.maven.pomeditor.components.ITreeObjectAction;
-import org.devzuz.q.maven.pomeditor.components.KeyValueDetailComponent;
-import org.devzuz.q.maven.pomeditor.components.PluginDetailComponent;
-import org.devzuz.q.maven.pomeditor.components.PluginExecutionComponent;
 import org.devzuz.q.maven.pomeditor.components.PluginTreeComponent;
-import org.devzuz.q.maven.pomeditor.components.SimpleTextComponent;
 import org.devzuz.q.maven.pomeditor.model.PluginTreeContentProvider;
 import org.devzuz.q.maven.pomeditor.model.PluginTreeLabelProvider;
+import org.devzuz.q.maven.pomeditor.pages.composites.DependencyDetailEditingComponent;
+import org.devzuz.q.maven.pomeditor.pages.composites.DependencyExclusionDetailEditingComponent;
+import org.devzuz.q.maven.pomeditor.pages.composites.GoalEditingTextComponent;
+import org.devzuz.q.maven.pomeditor.pages.composites.KeyValueDetailEditingComponent;
+import org.devzuz.q.maven.pomeditor.pages.composites.PluginDetailEditingComponent;
+import org.devzuz.q.maven.pomeditor.pages.composites.PluginExecutionEditingComponent;
+import org.devzuz.q.maven.pomeditor.pages.composites.XppDomListEditingComponent;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddConfigurationAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddConfigurationItemListAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddDependencyAction;
@@ -38,6 +40,7 @@ import org.devzuz.q.maven.pomeditor.pages.internal.ITreeObjectActionListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.FillLayout;
@@ -67,7 +70,7 @@ public class MavenPomBuildPluginFormPage
     
     private PluginTreeContentProvider contentProvider;
     
-    private Map<String, Control> componentActionMap;
+    private Map<String, AbstractComponent> componentActionMap;
     
     private StackLayout stackLayout; 
     
@@ -124,34 +127,34 @@ public class MavenPomBuildPluginFormPage
 		
 		stackLayout.topControl = null;
 		
-		componentActionMap = new HashMap<String, Control>();
+		componentActionMap = new HashMap<String, AbstractComponent>();
 		
-		PluginDetailComponent pluginDetailComponent = 
-		    new PluginDetailComponent( rightContainer, SWT.None, this );      
+		PluginDetailEditingComponent pluginDetailComponent = 
+		    new PluginDetailEditingComponent( rightContainer, SWT.None, this );      
 		componentActionMap.put( "Plugin", pluginDetailComponent );
 		
-		PluginExecutionComponent executionComponent = 
-		    new PluginExecutionComponent( rightContainer, SWT.None, this );
+		PluginExecutionEditingComponent executionComponent = 
+		    new PluginExecutionEditingComponent( rightContainer, SWT.None, this );
 		componentActionMap.put( "PluginExecution", executionComponent );
 		
-		DependencyDetailComponent dependencyComponent = 
-		    new DependencyDetailComponent( rightContainer, SWT.None, this );
+		DependencyDetailEditingComponent dependencyComponent = 
+		    new DependencyDetailEditingComponent( rightContainer, SWT.None, this );
 		componentActionMap.put( "Dependency", dependencyComponent );
 		
-		DependencyExclusionDetailComponent exclusionComponent = 
-		    new DependencyExclusionDetailComponent( rightContainer, SWT.None, this );
+		DependencyExclusionDetailEditingComponent exclusionComponent = 
+		    new DependencyExclusionDetailEditingComponent( rightContainer, SWT.None, this );
 		componentActionMap.put( "Exclusion", exclusionComponent );
 		
-		KeyValueDetailComponent keyValueDetailComponent = 
-		    new KeyValueDetailComponent( rightContainer, SWT.None, this );
+		KeyValueDetailEditingComponent keyValueDetailComponent = 
+		    new KeyValueDetailEditingComponent( rightContainer, SWT.None, this );
 		componentActionMap.put( "Xpp3Dom", keyValueDetailComponent );
 		
-		SimpleTextComponent textConfigComponent = 
-		    new SimpleTextComponent( rightContainer, SWT.None, "Configuration", this );
+		XppDomListEditingComponent textConfigComponent = 
+		    new XppDomListEditingComponent( rightContainer, SWT.None, "Configuration", this );
 		componentActionMap.put( "Xpp3DomList", textConfigComponent );
 		
-		SimpleTextComponent textGoalComponent = 
-		    new SimpleTextComponent( rightContainer, SWT.None, "Goal", this );
+		GoalEditingTextComponent textGoalComponent = 
+		    new GoalEditingTextComponent( rightContainer, SWT.None, "Goal", this , contentProvider );
 		componentActionMap.put( "Goal", textGoalComponent );
 		
 		return rightContainer;
@@ -350,40 +353,33 @@ public class MavenPomBuildPluginFormPage
 	        IStructuredSelection structuredSelection = (IStructuredSelection) event.getSelection();
             Object element = structuredSelection.getFirstElement();
             
-            Control visibleControl = getControl( element );
-            stackLayout.topControl = visibleControl;
+            AbstractComponent visibleComponent = getControl( element );
+            if( visibleComponent != null )
+            {
+                visibleComponent.updateComponent( element );
+            }
+            
+            stackLayout.topControl = visibleComponent;
             rightContainer.layout();
         }
 	    
-        private Control getControl( Object element )
+        private AbstractComponent getControl( Object element )
 	    {
 	        if ( element instanceof Plugin )
             {
-	            PluginDetailComponent component = ( PluginDetailComponent ) componentActionMap.get( "Plugin" );	            
-	            component.updateComponent( ( Plugin ) element );
-                
-	            return component;
+	            return componentActionMap.get( "Plugin" );
             }
-            else if ( element instanceof Dependency )
+	        else if ( element instanceof PluginExecution )
             {
-                DependencyDetailComponent component = ( DependencyDetailComponent ) componentActionMap.get( "Dependency" );
-                component.updateComponent( ( Dependency  ) element );
-                
-                return component;
+                return componentActionMap.get( "PluginExecution" );
             }
-            else if ( element instanceof PluginExecution )
+	        else if ( element instanceof Dependency )
             {
-                PluginExecutionComponent component = ( PluginExecutionComponent ) componentActionMap.get( "PluginExecution" );
-                component.updateComponent( ( PluginExecution ) element );
-                
-                return component;
+                return componentActionMap.get( "Dependency" );
             }
-            else if ( element instanceof Exclusion )
+	        else if ( element instanceof Exclusion )
             {
-                DependencyExclusionDetailComponent component = ( DependencyExclusionDetailComponent ) componentActionMap.get( "Exclusion" );
-                component.updateComponent( (Exclusion ) element );
-                
-                return component;                
+                return componentActionMap.get( "Exclusion" );                
             }
             else if ( element instanceof Xpp3Dom )
             {
@@ -392,33 +388,18 @@ public class MavenPomBuildPluginFormPage
                 {
                     if( !dom.getName().equals( "configuration" ) )
                     {
-                        SimpleTextComponent component = ( SimpleTextComponent ) componentActionMap.get( "Xpp3DomList" );
-                        component.updateComponent( dom );
-                        
-                        return component;
+                        return componentActionMap.get( "Xpp3DomList" );
                     }
                 }
                 else
                 {
-                    KeyValueDetailComponent component = ( KeyValueDetailComponent ) componentActionMap.get( "Xpp3Dom" );
-                    component.updateComponent( dom );
-                    
-                    return component;
+                    return componentActionMap.get( "Xpp3Dom" );
                 }
             }
-            else if( element instanceof String )
+	        else if( element instanceof String )
             {               
-                
-                List<String> parent = ( List<String> ) contentProvider.getParent( element );
-                
-                System.out.println("Goal testing: " + parent.get( 0 ) );
-                
-                SimpleTextComponent component = ( SimpleTextComponent ) componentActionMap.get( "Goal" );
-                component.updateComponent( ( String ) element, parent );
-                
-                return component;
+                return componentActionMap.get( "Goal" );
             }
-            
 	        // no control should be visible
             return null;
 	    }
@@ -426,7 +407,6 @@ public class MavenPomBuildPluginFormPage
     
     public void afterAction()
     {
-        System.out.println("afterAction()");
         contentProvider.setBuild( pomModel.getBuild() );
         treeComponent.refresh();
         treeComponent.expandAll();
@@ -452,11 +432,12 @@ public class MavenPomBuildPluginFormPage
         
     }
 
-    public void componentModified( Widget ctrl )
+    public void componentModified( AbstractComponent component , Widget ctrl )
     {   
-        System.out.println("componentModified()");
-        treeComponent.refresh();
+        Object object = component.save();
         contentProvider.setBuild( pomModel.getBuild() );
+        treeComponent.refresh();
+        treeComponent.setSelection( new StructuredSelection( object ) );
         pageModified();
     }
 }
