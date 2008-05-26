@@ -29,7 +29,9 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.GroupMarker;
+import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
@@ -73,6 +75,8 @@ public class AnalyserGui
 
     private String PROFILES_XML_FILE = "pom.xml";
 
+    private Action updateTableAction;
+
     /**
      * Visitor that scans the change information and triggers an update on the view if the pom.xml resource on the
      * {@link #currentProject} has changed.
@@ -91,7 +95,8 @@ public class AnalyserGui
             }
             if ( res.equals( res.getProject() ) )
             {
-                // If a project was changed and not null, continue if it is the selected one
+                // If a project was changed and not null, continue if it is the
+                // selected one
                 return currentProject != null ? res.equals( currentProject ) : false;
             }
             // A file in a project
@@ -134,29 +139,32 @@ public class AnalyserGui
     {
         IMavenProject mavenProject = null;
         DependencyNode mavenDependencyRoot = null;
-        
-        try
+
+        if ( currentProject != null )
         {
-            mavenProject = MavenManager.getMavenProjectManager().getMavenProject( currentProject, false );
-            mavenDependencyRoot = DependencyAnalysisUtil.resolveDependencies( mavenProject );
-        }
-        catch ( CoreException e )
-        {
-            DependencyAnalysisActivator.getLogger().log( e );
-        }
-        
-        final ModelManager model = new ModelManager( mavenDependencyRoot, selections, mavenProject );
-        
-        PlatformUI.getWorkbench().getDisplay().asyncExec( new Runnable()
-        {
-            public void run()
+            try
             {
-                instanceTree.setInput( model.getInstanceRoot() );
-                versionsTable.setInput( model.getVersions() );
-                artifactsTable.setInput( model.getArtifacts() );
-                refreshAll();
+                mavenProject = MavenManager.getMavenProjectManager().getMavenProject( currentProject, false );
+                mavenDependencyRoot = DependencyAnalysisUtil.resolveDependencies( mavenProject );
             }
-        } );
+            catch ( CoreException e )
+            {
+                DependencyAnalysisActivator.getLogger().log( e );
+            }
+
+            final ModelManager model = new ModelManager( mavenDependencyRoot, selections, mavenProject );
+
+            PlatformUI.getWorkbench().getDisplay().asyncExec( new Runnable()
+            {
+                public void run()
+                {
+                    instanceTree.setInput( model.getInstanceRoot() );
+                    versionsTable.setInput( model.getVersions() );
+                    artifactsTable.setInput( model.getArtifacts() );
+                    refreshAll();
+                }
+            } );
+        }
     }
 
     public void setModelInputs( ModelManager model, SelectionManager selections )
@@ -330,8 +338,57 @@ public class AnalyserGui
             }
         } );
         artifactsTable.getTable().addListener( SWT.EraseItem, new SelectionListener() );
-        // Monitor any changes on the selected projects pom.xml
+        // Create menu
+        createActions();
+        createMenu();
+    }
+
+    @Override
+    public void dispose()
+    {
         ResourcesPlugin.getWorkspace().addResourceChangeListener( pomChangeListener, IResourceChangeEvent.POST_BUILD );
+        super.dispose();
+    }
+
+    private void createActions()
+    {
+        updateTableAction = new Action( "Auto update tables...", SWT.TOGGLE )
+        {
+            public void run()
+            {
+                setAutoUpdateTable( updateTableAction.isChecked() );
+            }
+        };
+    }
+
+    /**
+     * Create menu.
+     */
+    private void createMenu()
+    {
+        IMenuManager mgr = getViewSite().getActionBars().getMenuManager();
+        mgr.add( updateTableAction );
+    }
+
+    /**
+     * If set to true, this will Auto update the tables of this view to any changes of pom.xml
+     * 
+     * @param autoUpdate
+     */
+    public void setAutoUpdateTable( Boolean autoUpdate )
+    {
+        if ( autoUpdate )
+        {
+            // Start monitoring any changes on the selected projects pom.xml
+            ResourcesPlugin.getWorkspace().addResourceChangeListener( pomChangeListener,
+                                                                      IResourceChangeEvent.POST_BUILD );
+        }
+        else
+        {
+            // Remove the listener that monitors changes on the selected projects pom.xml
+            ResourcesPlugin.getWorkspace().removeResourceChangeListener( pomChangeListener );
+
+        }
     }
 
     public final void refreshAll()
