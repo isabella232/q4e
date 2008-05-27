@@ -6,6 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.jdt.ui.projectimport;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -30,20 +31,17 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
 /**
  * Imports a number of maven projects in the workspace.
  * 
  * @author amuino
  */
-public class ImportProjectJob
-    extends WorkspaceJob
-    implements IMavenJob
+public class ImportProjectJob extends WorkspaceJob implements IMavenJob
 {
     private Collection<PomFileDescriptor> pomDescriptors;
 
@@ -59,7 +57,8 @@ public class ImportProjectJob
      * Utility method to set a single project to be imported. Equivalent to invoking
      * {@link #setMavenProjects(Collection)} with a collection of a single element.
      * 
-     * @param pomDescriptor the project to import.
+     * @param pomDescriptor
+     *            the project to import.
      */
     public void setMavenProjects( PomFileDescriptor pomDescriptor )
     {
@@ -69,7 +68,8 @@ public class ImportProjectJob
     /**
      * Sets the projects to be imported.
      * 
-     * @param pomDescriptor the collection of projects to be imported.
+     * @param pomDescriptor
+     *            the collection of projects to be imported.
      */
     public void setMavenProjects( Collection<PomFileDescriptor> pomDescriptor )
     {
@@ -93,26 +93,36 @@ public class ImportProjectJob
     {
         MavenJdtUiActivator.trace( TraceOption.PROJECT_IMPORT, "Starting ", pomDescriptors );
         MavenMonitorHolder.setProgressMonitor( monitor );
+        List<IProject> rawProjects = new ArrayList<IProject>();
+        List<IMavenProject> mavenProjects = new ArrayList<IMavenProject>();
 
         try
         {
 
-            SubProgressMonitor subProgressMonitor = new SubProgressMonitor( monitor, 1 );
-            subProgressMonitor.beginTask( "Importing projects...", pomDescriptors.size() );
+            SubMonitor progress = SubMonitor.convert( monitor, 100 );
+
+            // Create a new progress monitor that uses 30% of the total progress and will allocate one tick
+            // for each element of the given collection.
+            SubMonitor createProjectMonitor = progress.newChild( 30 ).setWorkRemaining( pomDescriptors.size() );
+            createProjectMonitor.setTaskName( "Importing projects..." );
             for ( PomFileDescriptor pomDescriptor : pomDescriptors )
             {
-                createProject( pomDescriptor, subProgressMonitor );
+                rawProjects.add( createProject( pomDescriptor, createProjectMonitor.newChild( 1 ) ) );
             }
-            subProgressMonitor.done();
 
-            /* postprocess imported projects */
-            subProgressMonitor = new SubProgressMonitor( monitor, 1 );
-            subProgressMonitor.beginTask( "Configuring Maven...", importedProjects.size() );
-            for ( IProject project : importedProjects )
+            // Create a new progress monitor that uses 50% of the total progress and will allocate one tick
+            // for each element of the given collection.
+            SubMonitor configureMavenMonitor = progress.newChild( 50 ).setWorkRemaining( rawProjects.size() );
+            configureMavenMonitor.setTaskName( "Configuring Maven..." );
+            for ( IProject project : rawProjects )
             {
-                openProject( project, subProgressMonitor );
+                mavenProjects.add( openProject( project, configureMavenMonitor.newChild( 1 ) ) );
             }
-            subProgressMonitor.done();
+
+            // Create a new progress monitor that uses 20% of the total progress and will allocate one tick
+            // for each element of the given collection.
+            SubMonitor customizeProjectMonitor = progress.newChild( 20 ).setWorkRemaining( mavenProjects.size() );
+            customizeMavenProjects( mavenProjects, customizeProjectMonitor );
         }
         catch ( MavenInterruptedException e )
         {
@@ -120,12 +130,12 @@ public class ImportProjectJob
         }
 
         IStatus status;
-        int errorCount = ( pomDescriptors.size() - importedProjects.size() );
+        int errorCount = ( pomDescriptors.size() - rawProjects.size() );
         if ( errorCount > 0 )
         {
             status =
-                new Status( IStatus.ERROR, MavenJdtUiActivator.PLUGIN_ID, errorCount +
-                    " projects failed to import. See the error log for details." );
+                new Status( IStatus.ERROR, MavenJdtUiActivator.PLUGIN_ID, errorCount
+                                + " projects failed to import. See the error log for details." );
         }
         else
         {
@@ -138,7 +148,8 @@ public class ImportProjectJob
     /**
      * Get the eclipse project name from the maven project
      * 
-     * @param pomDescriptor the contents of the pom.
+     * @param pomDescriptor
+     *            the contents of the pom.
      * @return the name of the project, calculated from the information in the pom.
      */
     protected String getProjectName( final PomFileDescriptor pomDescriptor )
@@ -150,30 +161,6 @@ public class ImportProjectJob
         // able to specify a project location if it is on the workspace root .
         // (the location should be set to ("") if it is on the workspace root)
         return pomDescriptor.getBaseDirectory().getName();
-    }
-
-    private void createProject( PomFileDescriptor pomDescriptor, IProgressMonitor monitor )
-    {
-        if ( monitor.isCanceled() )
-        {
-            throw new OperationCanceledException();
-        }
-
-        SubProgressMonitor subProgressMonitor =
-            new SubProgressMonitor( monitor, 1, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK );
-        subProgressMonitor.beginTask( getProjectName( pomDescriptor ), 100 );
-
-        try
-        {
-            IProject project = createMavenProject( pomDescriptor, new SubProgressMonitor( subProgressMonitor, 100 ) );
-            importedProjects.add( project );
-        }
-        catch ( CoreException e )
-        {
-            String s = "Unable to import project from " + pomDescriptor.getBaseDirectory();
-            MavenJdtUiActivator.getLogger().log( s, e );
-        }
-        subProgressMonitor.done();
     }
 
     private IProject createMavenProject( final PomFileDescriptor pomDescriptor, IProgressMonitor monitor )
@@ -215,16 +202,26 @@ public class ImportProjectJob
         return project;
     }
 
-    private void openProject( IProject project, IProgressMonitor monitor )
+    private IProject createProject( PomFileDescriptor pomDescriptor, SubMonitor monitor )
     {
-        if ( monitor.isCanceled() )
-        {
-            throw new OperationCanceledException();
-        }
+        monitor.setTaskName( "Importing " + pomDescriptor.getBaseDirectory() );
 
-        SubProgressMonitor subProgressMonitor =
-            new SubProgressMonitor( monitor, 1, SubProgressMonitor.PREPEND_MAIN_LABEL_TO_SUBTASK );
-        subProgressMonitor.beginTask( project.getName(), 100 );
+        IProject project = null;
+        try
+        {
+            project = createMavenProject( pomDescriptor, monitor );
+        }
+        catch ( CoreException e )
+        {
+            String s = "Unable to import project from " + pomDescriptor.getBaseDirectory();
+            MavenJdtUiActivator.getLogger().log( s, e );
+        }
+        return project;
+    }
+
+    private IMavenProject openProject( IProject project, SubMonitor monitor )
+    {
+        monitor.setTaskName( "Opening " + project.getName() );
 
         IMavenProject mavenProject = null;
         try
@@ -236,36 +233,45 @@ public class ImportProjectJob
 
             /* Add maven nature to project */
             MavenNatureHelper.addNature( project );
-
             mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, false );
+            // TODO this is needed for now to avoid out of memory errors
+            try
+            {
+                MavenManager.getMaven().refresh();
+            }
+            catch ( CoreException e )
+            {
+                // ignore
+            }
         }
         catch ( CoreException e )
         {
             String s = "Error enabling Maven nature for project " + project.getName();
             MavenJdtUiActivator.getLogger().log( s, e );
         }
+        return mavenProject;
+    }
 
+    private void customizeMavenProjects( List<IMavenProject> mavenProjects, SubMonitor monitor )
+    {
+        monitor.setTaskName( "Customizing maven projects..." );
         /* Allow postprocessors to customize the project */
         IImportProjectPostprocessor[] postprocessors =
             ImportProjectPostprocessorManager.getInstance().getPostprocessors();
-        if ( ( mavenProject != null ) && ( postprocessors.length > 0 ) )
+
+        if ( postprocessors.length > 0 )
         {
-            for ( IImportProjectPostprocessor p : postprocessors )
+            for ( IMavenProject mavenProject : mavenProjects )
             {
-                p.process( mavenProject, monitor );
+                if ( ( mavenProject != null ) )
+                {
+                    for ( IImportProjectPostprocessor p : postprocessors )
+                    {
+                        monitor.newChild( 1 );
+                        p.process( mavenProject, monitor );
+                    }
+                }
             }
         }
-
-            // TODO this is needed for now to avoid out of memory errors
-//            try
-//            {
-//                MavenManager.getMaven().refresh();
-//            }
-//            catch ( CoreException e )
-//            {
-//                // ignore
-//            }
-
-        subProgressMonitor.done();
     }
 }
