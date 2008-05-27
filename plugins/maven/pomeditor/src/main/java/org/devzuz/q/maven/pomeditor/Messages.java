@@ -216,6 +216,10 @@ public class Messages
     
     public static String MavenPomEditor_MavenPomEditor_Dependencies;
     
+    public static String MavenPomEditor_MavenPomEditor_Filters;
+    
+    public static String MavenPomEditor_MavenPomEditor_DefaultGoal;
+    
     static
     {
         // initialize resource bundle

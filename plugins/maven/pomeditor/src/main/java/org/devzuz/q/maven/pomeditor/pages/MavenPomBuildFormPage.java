@@ -12,24 +12,25 @@ import org.apache.maven.model.Build;
 import org.apache.maven.model.Extension;
 import org.apache.maven.model.Model;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
+import org.devzuz.q.maven.pomeditor.components.BuildManagementDetailComponent;
+import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
+import org.devzuz.q.maven.pomeditor.components.SimpleTableComponent;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditExtensionDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -41,21 +42,7 @@ public class MavenPomBuildFormPage extends FormPage
 {
 	private Model pomModel;
 	
-	private ScrolledForm form;
-
-	private Text finalNameText;
-
-	private Text directoryText;
-
-	private Text outputDirectoryText;
-
-	private Text testOutputDirectoryText;
-
-	private Text sourceDirectoryText;
-
-	private Text scriptSourceDirectoryText;
-
-	private Text testSourceDirectoryText;
+	private ScrolledForm form;	
 
 	private boolean isPageModified;
 
@@ -72,6 +59,10 @@ public class MavenPomBuildFormPage extends FormPage
 	private Extension selectedExtension;  
 
 	private Button editExtensionButton;
+
+    private BuildManagementDetailComponent buildManagementDetailComponent;
+
+    private SimpleTableComponent filterTableComponent;
 
 	public MavenPomBuildFormPage ( FormEditor editor, String id, 
 			String title, Model model )
@@ -101,22 +92,36 @@ public class MavenPomBuildFormPage extends FormPage
         extensionTable.setLayoutData( layoutData );
         extensionTable.setClient( createExtensionTableControls ( extensionTable, toolkit ) );
         
-        Section directoryInfoControls = toolkit.createSection( form.getBody() , Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
-        directoryInfoControls.setDescription( "This section contains informations required to build the project." );
-        directoryInfoControls.setText( Messages.MavenPomEditor_MavenPomEditor_Build );
-        directoryInfoControls.setLayoutData( layoutData );
-        directoryInfoControls.setClient( createDirectoryControls ( directoryInfoControls, toolkit ) );
+        Composite container = toolkit.createComposite( form.getBody() );
+        container.setLayoutData( layoutData );
+        createRightSideControl( container, toolkit );
         
         build  = pomModel.getBuild();
         if( build != null )
         {
             extensionList = build.getExtensions();
             syncExtensionListToTable();
-            syncBuildToControls( build );
         }
     }
 
-	private Control createExtensionTableControls(Composite parent,
+	private Control createRightSideControl( Composite container, FormToolkit toolkit )
+    {
+	    container.setLayout( new FillLayout( SWT.VERTICAL ) );
+
+	    Section directoryInfoControls = toolkit.createSection( container , Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
+        directoryInfoControls.setDescription( "This section contains informations required to build the project." );
+        directoryInfoControls.setText( Messages.MavenPomEditor_MavenPomEditor_Build );
+        directoryInfoControls.setClient( createDirectoryControls ( directoryInfoControls, toolkit ) );
+        
+        Section filterControls = toolkit.createSection( container , Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
+        filterControls.setDescription( "The list of filter properties files that are used when filtering is enabled." );
+        filterControls.setText( Messages.MavenPomEditor_MavenPomEditor_Filters );
+        filterControls.setClient( createFilterControls( filterControls, toolkit ) );
+        
+        return container;
+    }
+
+    private Control createExtensionTableControls(Composite parent,
 			FormToolkit toolKit) 
 	{
 		Composite container = toolKit.createComposite( parent );
@@ -183,130 +188,77 @@ public class MavenPomBuildFormPage extends FormPage
             }
         }		
 	}
-	
-	private void syncBuildToControls( Build build )
-    {
-        if ( build != null )
+
+	private Control createDirectoryControls( Composite parent, FormToolkit toolKit )
+	{
+	    IComponentModificationListener listener = new IComponentModificationListener()
         {
-            finalNameText.setText( blankIfNull( build.getFinalName() ) );
-            directoryText.setText( blankIfNull( build.getDirectory() ) );
-            outputDirectoryText.setText( blankIfNull( build.getOutputDirectory() ) );
-            testOutputDirectoryText.setText( blankIfNull( build.getTestOutputDirectory() ) );
-            sourceDirectoryText.setText( blankIfNull( build.getSourceDirectory() ) );
-            scriptSourceDirectoryText.setText( blankIfNull( build.getScriptSourceDirectory() ) );
-            testSourceDirectoryText.setText( blankIfNull( build.getTestSourceDirectory() ) );
-        }
+            public void componentModified( AbstractComponent component ,  Control ctrl )
+            {
+                build.setDefaultGoal( buildManagementDetailComponent.getDefaultGoal() );
+                build.setFinalName( buildManagementDetailComponent.getFinalName() );
+                build.setDirectory( buildManagementDetailComponent.getDirectory() );
+                build.setOutputDirectory( buildManagementDetailComponent.getOutputDirectory() );
+                build.setTestOutputDirectory( buildManagementDetailComponent.getTestOutputDirectory() );
+                build.setSourceDirectory( buildManagementDetailComponent.getSourceDirectory() );
+                build.setTestOutputDirectory( buildManagementDetailComponent.getTestOutputDirectory() );
+                build.setScriptSourceDirectory( buildManagementDetailComponent.getScriptSourceDirectory() );
+                
+                pageModified();
+            }
+        };
+        
+	    Composite container = toolKit.createComposite( parent );
+        container.setLayout( new FillLayout( SWT.VERTICAL ) );
+        
+        buildManagementDetailComponent = 
+            new BuildManagementDetailComponent( container, SWT.NULL );
+        buildManagementDetailComponent.updateComponent( pomModel.getBuild() );
+        
+        buildManagementDetailComponent.addComponentModifyListener( listener );
+        
+        return container;
+	}	
+	
+	
+	
+	@SuppressWarnings("unchecked")
+    private Control createFilterControls( Composite parent, FormToolkit toolKit )
+    {
+	    SelectionAdapter buttonListener = new SelectionAdapter()
+        {
+            public void widgetDefaultSelected( SelectionEvent e )
+            {
+                widgetSelected( e );
+            }
+
+            public void widgetSelected( SelectionEvent e )
+            {
+                if ( filterTableComponent.isModified() == true )
+                {
+                    pageModified();
+                    
+                    filterTableComponent.setEditButtonEnabled( false );
+                    filterTableComponent.setRemoveButtonEnabled( false );
+                }
+            }
+        };
+        
+	    Composite container = toolKit.createComposite( parent );
+        container.setLayout( new FillLayout( SWT.VERTICAL ) );
+        
+        filterTableComponent = 
+            new SimpleTableComponent( container, SWT.NULL, 
+                                      pomModel.getBuild().getFilters(), "Filter"  );
+        
+        filterTableComponent.addAddButtonListener( buttonListener );
+        filterTableComponent.addEditButtonListener( buttonListener );
+        filterTableComponent.addRemoveButtonListener( buttonListener );
+        
+        return container;
     }
 
-	private Control createDirectoryControls(Composite directoryInfoControls, FormToolkit toolKit) 
-	{
-		Composite parent = toolKit.createComposite( directoryInfoControls );
-	    parent.setLayout( new GridLayout( 2 , false ) );
-	    
-	    GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
-	    labelData.widthHint = 110;
-	    GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
-	    controlData.horizontalIndent = 10;
-	    
-	    TextFieldListener textFieldListener = new TextFieldListener();
-	    
-	    finalNameText = 
-	        createTextControl( toolKit , parent , Messages.MavenPomEditor_MavenPomEditor_FinalName ,
-	                           labelData , controlData , textFieldListener );
-	    
-	    directoryText = 
-            createTextControl( toolKit , parent , Messages.MavenPomEditor_MavenPomEditor_Directory ,
-                               labelData , controlData , textFieldListener );
-	    
-	    outputDirectoryText = 
-            createTextControl( toolKit , parent , Messages.MavenPomEditor_MavenPomEditor_OutputDirectory ,
-                               labelData , controlData , textFieldListener );
-	    
-	    testOutputDirectoryText = 
-            createTextControl( toolKit , parent , Messages.MavenPomEditor_MavenPomEditor_TestOutputDirectory ,
-                               labelData , controlData , textFieldListener );
-        
-	    sourceDirectoryText = 
-            createTextControl( toolKit , parent , Messages.MavenPomEditor_MavenPomEditor_SourceDirectory ,
-                               labelData , controlData , textFieldListener );
-	    
-	    scriptSourceDirectoryText = 
-            createTextControl( toolKit , parent , Messages.MavenPomEditor_MavenPomEditor_ScriptSourceDirectory ,
-                               labelData , controlData , textFieldListener );
-        
-	    testSourceDirectoryText = 
-            createTextControl( toolKit , parent , Messages.MavenPomEditor_MavenPomEditor_TestSourceDirectory ,
-                               labelData , controlData , textFieldListener );
-	    
-	    toolKit.paintBordersFor(parent);
-	    
-		return parent;		
-		
-	}
-	
-	private Text createTextControl( FormToolkit toolKit , Composite parent , String labelStr , GridData labelData , 
-	                                GridData controlData ,TextFieldListener fieldListener )
-	{
-	    Label label = toolKit.createLabel( parent, labelStr , SWT.NONE );
-	    label.setLayoutData( labelData );
-        
-        Text text = toolKit.createText( parent, "" );
-        text.setLayoutData( controlData );
-        text.setData(FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER);
-        text.addModifyListener( fieldListener );
-        
-        return text;
-	}
-	
-	private class TextFieldListener implements ModifyListener
-	{
-		public void modifyText(ModifyEvent e) 
-		{
-		    Text modifiedText = (Text) e.widget;
-		    String modifiedTextString = modifiedText.getText().trim();
-		    
-		    if( build == null )
-		    {
-		        build = new Build();
-		        pomModel.setBuild( build );
-		    }
-		    
-		    if( modifiedText.equals( finalNameText ))
-		    {
-		        build.setFinalName( nullIfBlank( modifiedTextString ) );
-		    }
-		    else if( modifiedText.equals( directoryText ))
-            {
-                build.setDirectory( nullIfBlank( modifiedTextString ) );
-            }
-		    else if( modifiedText.equals( outputDirectoryText ))
-		    {
-		        build.setOutputDirectory( nullIfBlank( modifiedTextString ) );
-		    }
-		    else if( modifiedText.equals( testOutputDirectoryText ))
-		    {
-		        build.setTestOutputDirectory( nullIfBlank( modifiedTextString ) );
-		    }
-		    else if( modifiedText.equals( sourceDirectoryText ))
-		    {
-		        build.setSourceDirectory( nullIfBlank( modifiedTextString ) );
-		    }
-		    else if( modifiedText.equals( scriptSourceDirectoryText ))
-		    {
-		        build.setScriptSourceDirectory( nullIfBlank( modifiedTextString ) );
-		    }
-		    else if( modifiedText.equals( testSourceDirectoryText ))
-		    {
-		        build.setTestSourceDirectory( nullIfBlank( modifiedTextString ) );
-		    }
-		    
-		    checkBuild();
-		    
-		    pageModified();
-		}
-	}
-	
-	/*
+    /*
 	 *  The idea behind this function is that the build element should be null if it contains nothing.
 	 */
 	private boolean checkBuild()
@@ -472,23 +424,6 @@ public class MavenPomBuildFormPage extends FormPage
             }
         }
 		return false;
-	}
-
-	private String nullIfBlank(String str) 
-	{
-		return ( str == null || str.equals( "" ) ) ? null : str;
-	}
-
-	private String blankIfNull(String string) 
-	{
-		if( null != string )
-        {
-            return string;
-        }
-        else
-        {
-            return "";
-        }
 	}
 
 	protected void pageModified()

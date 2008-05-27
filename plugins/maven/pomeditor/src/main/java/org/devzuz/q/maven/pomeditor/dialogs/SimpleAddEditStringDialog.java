@@ -74,9 +74,15 @@ public class SimpleAddEditStringDialog extends AbstractResizableDialog
 	protected void createButtonsForButtonBar ( Composite parent )
 	{
 		super.createButtonsForButtonBar(parent);
+		synchronizeDataSourceWithGUI();
 	}
 	
-	protected void okPressed()
+	private void synchronizeDataSourceWithGUI()
+    {
+        textField.setText( blankIfNull( getTextString() ) );
+    }
+
+    protected void okPressed()
 	{
 		super.okPressed();
 	}
@@ -111,6 +117,12 @@ public class SimpleAddEditStringDialog extends AbstractResizableDialog
 		
 		return false;
 	}
+    
+    private String blankIfNull( String str )
+    {
+        return str != null ? str : "";
+    }
+
 
 	protected Preferences getDialogPreferences() 
 	{
