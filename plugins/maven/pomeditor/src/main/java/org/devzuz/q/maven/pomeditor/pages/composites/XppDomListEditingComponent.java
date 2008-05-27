@@ -23,11 +23,16 @@ public class XppDomListEditingComponent extends SimpleTextComponent
         // put the edited data
         Xpp3Dom newDom = new Xpp3Dom( nullIfBlank( getText() ) );
         newDom.setValue( null );
-
+        for( int j=0; j < oldDom.getChildCount(); j++ )
+        {
+            newDom.addChild( oldDom.getChild( j ) );
+        }
+        
         Xpp3Dom parent = oldDom.getParent();
+        Xpp3Dom children[] = parent.getChildren();
         for ( int i = 0; i < parent.getChildCount(); i++ )
         {
-            if ( parent.getChild( i ).equals( oldDom ) )
+            if ( children[i].equals( oldDom ) )
             {
                 parent.removeChild( i );
                 parent.addChild( newDom );

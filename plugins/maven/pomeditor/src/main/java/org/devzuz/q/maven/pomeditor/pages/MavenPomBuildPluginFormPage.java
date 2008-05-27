@@ -48,7 +48,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -56,8 +55,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
-public class MavenPomBuildPluginFormPage 
-    extends FormPage 
+public class MavenPomBuildPluginFormPage extends FormPage 
     implements ITreeObjectActionListener, IComponentModificationListener
 {
 	private PluginTreeComponent treeComponent;
@@ -412,6 +410,20 @@ public class MavenPomBuildPluginFormPage
         treeComponent.expandAll();
         pageModified();   
     }
+    
+    public void componentModified( AbstractComponent component , Control ctrl )
+    {   
+        Object object = component.save();
+        contentProvider.setBuild( pomModel.getBuild() );
+        treeComponent.refresh();
+        if ( ( object instanceof Xpp3Dom ) || ( object instanceof String ) )
+        {
+            treeComponent.setSelection( new StructuredSelection( object ) );
+            ctrl.setFocus();
+        }
+        
+        pageModified();
+    }
 
     @Override
     public boolean isDirty()
@@ -430,19 +442,5 @@ public class MavenPomBuildPluginFormPage
     {
         this.isPageModified = isPageModified;
         
-    }
-
-    public void componentModified( AbstractComponent component , Control ctrl )
-    {   
-        Object object = component.save();
-        contentProvider.setBuild( pomModel.getBuild() );
-        treeComponent.refresh();
-        if ( ( object instanceof Xpp3Dom ) || ( object instanceof String ) )
-        {
-            treeComponent.setSelection( new StructuredSelection( object ) );
-            ctrl.setFocus();
-        }
-        
-        pageModified();
     }
 }
