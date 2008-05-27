@@ -18,16 +18,6 @@ public class XppDomListEditingComponent extends SimpleTextComponent
     @Override
     public Object save()
     {
-        // create a new dom object
-        // put the old data from the old dom object
-        // put the edited data
-        Xpp3Dom newDom = new Xpp3Dom( nullIfBlank( getText() ) );
-        newDom.setValue( null );
-        for( int j=0; j < oldDom.getChildCount(); j++ )
-        {
-            newDom.addChild( oldDom.getChild( j ) );
-        }
-        
         Xpp3Dom parent = oldDom.getParent();
         Xpp3Dom children[] = parent.getChildren();
         for ( int i = 0; i < parent.getChildCount(); i++ )
@@ -35,12 +25,23 @@ public class XppDomListEditingComponent extends SimpleTextComponent
             if ( children[i].equals( oldDom ) )
             {
                 parent.removeChild( i );
-                parent.addChild( newDom );
                 break;
             }
         }
         
-        return newDom;
+        if( getText().length() > 0 )
+        {
+            Xpp3Dom newDom = new Xpp3Dom( getText() );
+            newDom.setValue( null );
+            for( int j=0; j < oldDom.getChildCount(); j++ )
+            {
+                newDom.addChild( oldDom.getChild( j ) );
+            }
+            
+            parent.addChild( newDom );
+        }
+        
+        return null;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.devzuz.q.maven.pomeditor.dialogs;
 
+import org.apache.maven.model.Plugin;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
 import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
@@ -12,7 +13,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
 
 public class AddBuildPluginDialog extends AbstractResizableDialog
@@ -37,6 +37,26 @@ public class AddBuildPluginDialog extends AbstractResizableDialog
     public AddBuildPluginDialog( Shell parentShell )
     {
         super( parentShell );
+    }
+    
+    public int openWithPlugin( Plugin plugin )
+    {
+        setGroupId( blankIfNull( plugin.getGroupId() ) );
+        setArtifactId( blankIfNull( plugin.getArtifactId() ) );
+        setVersion( blankIfNull( plugin.getVersion() ) );
+
+        if ( ( plugin.getInherited() != null ) && ( plugin.getInherited().equalsIgnoreCase( "true" ) ) )
+        {
+            setInherited( true );
+        }
+        else
+        {
+            setInherited( false );
+        }
+
+        setExtension( plugin.isExtensions() );
+        
+        return open();
     }
 
     @Override
@@ -96,6 +116,13 @@ public class AddBuildPluginDialog extends AbstractResizableDialog
     protected void createButtonsForButtonBar( Composite parent )
     {
         super.createButtonsForButtonBar( parent );
+        pluginComponent.setDisableNotification( true );
+        pluginComponent.setGroupId( blankIfNull( getGroupId() ) );
+        pluginComponent.setArtifactId( blankIfNull( getArtifactId() ) );
+        pluginComponent.setVersion( blankIfNull( getVersion() ) );
+        pluginComponent.setInherited( isInherited() );
+        pluginComponent.setExtension( isExtension() );
+        pluginComponent.setDisableNotification( false );
     }
 
     public boolean isInherited()
@@ -147,5 +174,14 @@ public class AddBuildPluginDialog extends AbstractResizableDialog
     {
         this.version = version;
     }
+    
+    protected String blankIfNull( String str )
+    {
+        return str != null ? str : "";
+    }
 
+    protected String nullIfBlank( String str )
+    {
+        return ( str == null || str.equals( "" ) ) ? null : str;
+    }
 }

@@ -11,6 +11,11 @@ public abstract class AbstractTreeObjectAction
     private String name;
     private List<ITreeObjectActionListener> listeners;
     
+    public AbstractTreeObjectAction()
+    {
+        listeners = new ArrayList<ITreeObjectActionListener>();
+    }
+    
     public AbstractTreeObjectAction( String name )
     {
         this.name = name;

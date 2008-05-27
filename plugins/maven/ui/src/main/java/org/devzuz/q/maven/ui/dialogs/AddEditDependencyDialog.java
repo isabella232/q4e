@@ -298,21 +298,21 @@ public class AddEditDependencyDialog
 
     protected void okPressed()
     {
-        groupId = groupIdText.getText().trim();
-        artifactId = artifactIdText.getText().trim();
-        version = versionText.getText().trim();
-        scope = scopeText.getText().trim();
-        type = typeText.getText().trim();
-        classifier = classifierText.getText().trim();
+        groupId = nullIfBlank( groupIdText.getText().trim() );
+        artifactId = nullIfBlank( artifactIdText.getText().trim() );
+        version = nullIfBlank( versionText.getText().trim() );
+        scope = nullIfBlank( scopeText.getText().trim() );
+        type = nullIfBlank( typeText.getText().trim() );
+        classifier = nullIfBlank( classifierText.getText().trim() );
         optional = optionalChkBox.getSelection();
         
         if( scope != null && scope.equalsIgnoreCase( "system" ) )
         {
-            systemPath = systemPathText.getText().trim();
+            systemPath = nullIfBlank( systemPathText.getText().trim() );
         }
         else
         {
-            systemPath = "";
+            systemPath = null;
         }
         
         super.okPressed();

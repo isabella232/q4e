@@ -14,33 +14,22 @@ import org.apache.maven.model.PluginExecution;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
-import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
 import org.devzuz.q.maven.pomeditor.components.IObjectActionMap;
 import org.devzuz.q.maven.pomeditor.components.ITreeObjectAction;
 import org.devzuz.q.maven.pomeditor.components.PluginTreeComponent;
 import org.devzuz.q.maven.pomeditor.model.PluginTreeContentProvider;
 import org.devzuz.q.maven.pomeditor.model.PluginTreeLabelProvider;
-import org.devzuz.q.maven.pomeditor.pages.composites.DependencyDetailEditingComponent;
-import org.devzuz.q.maven.pomeditor.pages.composites.DependencyExclusionDetailEditingComponent;
-import org.devzuz.q.maven.pomeditor.pages.composites.GoalEditingTextComponent;
-import org.devzuz.q.maven.pomeditor.pages.composites.KeyValueDetailEditingComponent;
-import org.devzuz.q.maven.pomeditor.pages.composites.PluginDetailEditingComponent;
-import org.devzuz.q.maven.pomeditor.pages.composites.PluginExecutionEditingComponent;
-import org.devzuz.q.maven.pomeditor.pages.composites.XppDomListEditingComponent;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddConfigurationAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddConfigurationItemListAction;
-import org.devzuz.q.maven.pomeditor.pages.internal.AddDependencyAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddDependencyExclusionAction;
+import org.devzuz.q.maven.pomeditor.pages.internal.AddEditDependencyAction;
+import org.devzuz.q.maven.pomeditor.pages.internal.AddEditPluginAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddExecutionAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddGoalAction;
-import org.devzuz.q.maven.pomeditor.pages.internal.AddPluginAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.DeleteAllItemsAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.DeleteItemAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.ITreeObjectActionListener;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
+import org.devzuz.q.maven.pomeditor.pages.internal.Mode;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.FillLayout;
@@ -56,7 +45,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
 public class MavenPomBuildPluginFormPage extends FormPage 
-    implements ITreeObjectActionListener, IComponentModificationListener
+    implements ITreeObjectActionListener
 {
 	private PluginTreeComponent treeComponent;
 	
@@ -108,17 +97,19 @@ public class MavenPomBuildPluginFormPage extends FormPage
         treeSection.setLayoutData( layoutData );
         treeSection.setClient( createTreeViewerControl( treeSection, toolkit ) );
         
+        /*
         Section detailedInfoSection = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.DESCRIPTION );
         detailedInfoSection.setDescription( "Detailed information required for a plugin" );
         detailedInfoSection.setText( "Detailed Plugin Information" );
         detailedInfoSection.setLayoutData( layoutData );
         detailedInfoSection.setClient( createDetailedInfoControls( detailedInfoSection, toolkit ) );
-        
+        */
 	}
-
+	/*
 	private Control createDetailedInfoControls(Composite form,
 			FormToolkit toolkit) 
 	{
+	    
 	    stackLayout = new StackLayout();
 		rightContainer = toolkit.createComposite( form, SWT.None );
 		rightContainer.setLayout( stackLayout );	
@@ -157,7 +148,7 @@ public class MavenPomBuildPluginFormPage extends FormPage
 		
 		return rightContainer;
 	}
-
+    */
 
 	private Control createTreeViewerControl( Composite form,
 			FormToolkit toolkit) 
@@ -172,7 +163,8 @@ public class MavenPomBuildPluginFormPage extends FormPage
 		treeComponent.setLabelProvider( new PluginTreeLabelProvider() );
 		treeComponent.setObjectActionMap( new PluginActionMap( this ) );
 		treeComponent.setInput( pomModel.getBuild() );
-		treeComponent.addSelectionChangeListener( new PluginTreeComponentListener() );
+		treeComponent.expandAll();
+		//treeComponent.addSelectionChangeListener( new PluginTreeComponentListener() );
 		
 		toolkit.paintBordersFor( parent );
 
@@ -196,13 +188,13 @@ public class MavenPomBuildPluginFormPage extends FormPage
             objectActionMap = new HashMap<String, List<ITreeObjectAction>>();
             
             List<ITreeObjectAction> pluginsActionMap = new ArrayList<ITreeObjectAction>();
-            pluginsActionMap.add( new AddPluginAction( listener ) );
+            pluginsActionMap.add( new AddEditPluginAction( listener , Mode.ADD ) );
             pluginsActionMap.add( new DeleteAllItemsAction( listener , "Delete all plugins" , "plugins" ) );
             
             objectActionMap.put( "Plugins", pluginsActionMap );
             
             List<ITreeObjectAction> dependenciesActionMap = new ArrayList<ITreeObjectAction>();
-            dependenciesActionMap.add( new AddDependencyAction( listener ) );
+            dependenciesActionMap.add( new AddEditDependencyAction( listener , Mode.ADD  ) );
             dependenciesActionMap.add( new DeleteAllItemsAction( listener , "Delete all dependencies" , "dependencies" ) );
             
             objectActionMap.put( "Dependencies", dependenciesActionMap );
@@ -226,8 +218,9 @@ public class MavenPomBuildPluginFormPage extends FormPage
             objectActionMap.put( "Goals", goalsActionMap );
             
             List<ITreeObjectAction> pluginActionMap = new ArrayList<ITreeObjectAction>();
+            pluginActionMap.add( new AddEditPluginAction( listener , Mode.EDIT ) );
             pluginActionMap.add( new AddExecutionAction( listener ) );
-            pluginActionMap.add( new AddDependencyAction( listener ) );
+            pluginActionMap.add( new AddEditDependencyAction( listener , Mode.ADD ) );
             pluginActionMap.add( new AddConfigurationAction( listener ) );
             pluginActionMap.add( new AddConfigurationItemListAction( listener ) );
             pluginActionMap.add( new DeleteItemAction( listener , "Delete plugin", "plugin", contentProvider ) );
@@ -236,6 +229,7 @@ public class MavenPomBuildPluginFormPage extends FormPage
             
             List<ITreeObjectAction> dependencyActionMap = new ArrayList<ITreeObjectAction>();
             dependencyActionMap.add( new AddDependencyExclusionAction( listener ) );
+            dependencyActionMap.add( new AddEditDependencyAction( listener , Mode.EDIT  ) );
             dependencyActionMap.add( new DeleteItemAction( listener , "Delete dependency", "dependency", contentProvider ) );
             
             objectActionMap.put( "Dependency" , dependencyActionMap );
@@ -266,7 +260,7 @@ public class MavenPomBuildPluginFormPage extends FormPage
             objectActionMap.put( "Xpp3DomList", configListActionMap );
             
             List<ITreeObjectAction> defaultActionMap = new ArrayList<ITreeObjectAction>();
-            defaultActionMap.add( new AddPluginAction( listener , pomModel.getBuild().getPlugins() ) );
+            defaultActionMap.add( new AddEditPluginAction( listener , pomModel.getBuild().getPlugins() ) );
             
             objectActionMap.put( "default", defaultActionMap );
         }
@@ -342,7 +336,7 @@ public class MavenPomBuildPluginFormPage extends FormPage
             return objectActionMap.get( "default" );
         }
 	}
-	
+	/*
 	@SuppressWarnings ("unchecked")
 	private class PluginTreeComponentListener implements ISelectionChangedListener
 	{
@@ -401,22 +395,24 @@ public class MavenPomBuildPluginFormPage extends FormPage
 	        // no control should be visible
             return null;
 	    }
-	}
+	} */
     
     public void afterAction()
     {
         contentProvider.setBuild( pomModel.getBuild() );
         treeComponent.refresh();
-        treeComponent.expandAll();
         pageModified();   
     }
     
+    /*
     public void componentModified( AbstractComponent component , Control ctrl )
     {   
         Object object = component.save();
         contentProvider.setBuild( pomModel.getBuild() );
         treeComponent.refresh();
-        if ( ( object instanceof Xpp3Dom ) || ( object instanceof String ) )
+        if ( ( object != null ) &&
+             ( ( object instanceof Xpp3Dom ) || 
+               ( object instanceof String ) ) )
         {
             treeComponent.setSelection( new StructuredSelection( object ) );
             ctrl.setFocus();
@@ -424,7 +420,7 @@ public class MavenPomBuildPluginFormPage extends FormPage
         
         pageModified();
     }
-
+    */
     @Override
     public boolean isDirty()
     {		
