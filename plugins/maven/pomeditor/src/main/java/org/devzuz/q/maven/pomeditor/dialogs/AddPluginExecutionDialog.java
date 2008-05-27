@@ -1,5 +1,6 @@
 package org.devzuz.q.maven.pomeditor.dialogs;
 
+import org.apache.maven.model.PluginExecution;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
 import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
@@ -12,7 +13,6 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.PlatformUI;
 
 public class AddPluginExecutionDialog extends AbstractResizableDialog 
@@ -34,6 +34,24 @@ public class AddPluginExecutionDialog extends AbstractResizableDialog
 	public AddPluginExecutionDialog( Shell parentShell )
 	{
 		super( parentShell );
+	}
+	
+	public int openWithExecution( PluginExecution execution )
+	{
+	    setId( execution.getId() );
+	    setPhase( execution.getPhase() );
+	    
+	    if ( ( execution.getInherited() != null ) &&
+	         ( execution.getInherited().equalsIgnoreCase( "true" ) ) )
+	    {
+	        setInherited( true );
+	    }
+	    else
+	    {
+	        setInherited( false );
+	    }
+	    
+	    return open();
 	}
 
 	@Override
@@ -93,8 +111,13 @@ public class AddPluginExecutionDialog extends AbstractResizableDialog
 	protected void createButtonsForButtonBar ( Composite parent )
 	{
 		super.createButtonsForButtonBar(parent);
+		pluginExecutionComponent.setDisableNotification( true );
+		pluginExecutionComponent.setId( blankIfNull( getId() ) );
+		pluginExecutionComponent.setPhase( blankIfNull( getPhase() ) );
+		pluginExecutionComponent.setInherited( isInherited() );
+		pluginExecutionComponent.setDisableNotification( false );
 	}
-
+	
 	public String getId() {
 		return id;
 	}
@@ -118,4 +141,14 @@ public class AddPluginExecutionDialog extends AbstractResizableDialog
 	public void setInherited(boolean inherited) {
 		this.inherited = inherited;
 	}
+	
+	protected String blankIfNull( String str )
+    {
+        return str != null ? str : "";
+    }
+
+    protected String nullIfBlank( String str )
+    {
+        return ( str == null || str.equals( "" ) ) ? null : str;
+    }
 }

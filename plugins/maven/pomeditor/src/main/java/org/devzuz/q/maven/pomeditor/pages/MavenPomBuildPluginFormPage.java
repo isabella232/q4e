@@ -21,10 +21,10 @@ import org.devzuz.q.maven.pomeditor.model.PluginTreeContentProvider;
 import org.devzuz.q.maven.pomeditor.model.PluginTreeLabelProvider;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddConfigurationAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddConfigurationItemListAction;
-import org.devzuz.q.maven.pomeditor.pages.internal.AddDependencyExclusionAction;
+import org.devzuz.q.maven.pomeditor.pages.internal.AddEditDependencyExclusionAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditDependencyAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditPluginAction;
-import org.devzuz.q.maven.pomeditor.pages.internal.AddExecutionAction;
+import org.devzuz.q.maven.pomeditor.pages.internal.AddEditExecutionAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddGoalAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.DeleteAllItemsAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.DeleteItemAction;
@@ -200,13 +200,13 @@ public class MavenPomBuildPluginFormPage extends FormPage
             objectActionMap.put( "Dependencies", dependenciesActionMap );
             
             List<ITreeObjectAction> executionsActionMap = new ArrayList<ITreeObjectAction>();
-            executionsActionMap.add( new AddExecutionAction( listener ) );
+            executionsActionMap.add( new AddEditExecutionAction( listener, Mode.ADD ) );
             executionsActionMap.add( new DeleteAllItemsAction( listener , "Delete all executions" , "executions" ) );
             
             objectActionMap.put( "Executions", executionsActionMap );
             
             List<ITreeObjectAction> exclusionsActionMap = new ArrayList<ITreeObjectAction>();
-            exclusionsActionMap.add( new AddDependencyExclusionAction( listener )  );
+            exclusionsActionMap.add( new AddEditDependencyExclusionAction( listener, Mode.ADD )  );
             exclusionsActionMap.add( new DeleteAllItemsAction( listener , "Delete all exclusions" , "exclusions" ) );
             
             objectActionMap.put( "Exclusions", exclusionsActionMap );
@@ -219,7 +219,7 @@ public class MavenPomBuildPluginFormPage extends FormPage
             
             List<ITreeObjectAction> pluginActionMap = new ArrayList<ITreeObjectAction>();
             pluginActionMap.add( new AddEditPluginAction( listener , Mode.EDIT ) );
-            pluginActionMap.add( new AddExecutionAction( listener ) );
+            pluginActionMap.add( new AddEditExecutionAction( listener, Mode.ADD ) );
             pluginActionMap.add( new AddEditDependencyAction( listener , Mode.ADD ) );
             pluginActionMap.add( new AddConfigurationAction( listener ) );
             pluginActionMap.add( new AddConfigurationItemListAction( listener ) );
@@ -228,21 +228,23 @@ public class MavenPomBuildPluginFormPage extends FormPage
             objectActionMap.put( "Plugin", pluginActionMap );
             
             List<ITreeObjectAction> dependencyActionMap = new ArrayList<ITreeObjectAction>();
-            dependencyActionMap.add( new AddDependencyExclusionAction( listener ) );
+            dependencyActionMap.add( new AddEditDependencyExclusionAction( listener, Mode.ADD ) );
             dependencyActionMap.add( new AddEditDependencyAction( listener , Mode.EDIT  ) );
             dependencyActionMap.add( new DeleteItemAction( listener , "Delete dependency", "dependency", contentProvider ) );
             
             objectActionMap.put( "Dependency" , dependencyActionMap );
             
-            List<ITreeObjectAction> pluginExecutionActionMap = new ArrayList<ITreeObjectAction>();
+            List<ITreeObjectAction> pluginExecutionActionMap = new ArrayList<ITreeObjectAction>();            
             pluginExecutionActionMap.add( new AddGoalAction( listener ) );
             pluginExecutionActionMap.add( new AddConfigurationAction( listener ) );
             pluginExecutionActionMap.add( new AddConfigurationItemListAction( listener ) );
+            pluginExecutionActionMap.add( new AddEditExecutionAction( listener, Mode.EDIT ) );
             pluginExecutionActionMap.add( new DeleteItemAction( listener , "Delete execution", "execution", contentProvider ) );
             
             objectActionMap.put( "PluginExecution" , pluginExecutionActionMap );
             
             List<ITreeObjectAction> exclusionActionMap = new ArrayList<ITreeObjectAction>();
+            exclusionActionMap.add( new AddEditDependencyExclusionAction( listener, Mode.EDIT ) );
             exclusionActionMap.add( new DeleteItemAction( listener , "Delete exclusion", "exclusion", contentProvider ) );
             
             objectActionMap.put( "Exclusion", exclusionActionMap );
