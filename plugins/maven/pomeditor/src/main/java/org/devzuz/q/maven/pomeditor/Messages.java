@@ -220,6 +220,8 @@ public class Messages
     
     public static String MavenPomEditor_MavenPomEditor_DefaultGoal;
     
+    public static String MavenPomEditor_MavenPomEditor_ModelVersion;
+    
     static
     {
         // initialize resource bundle

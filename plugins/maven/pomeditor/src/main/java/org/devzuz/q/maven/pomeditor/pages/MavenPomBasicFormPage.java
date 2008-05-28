@@ -92,7 +92,11 @@ public class MavenPomBasicFormPage extends FormPage
 
 	private Text parentPOMVersionText;
 
-	private Text parentPOMRelativePathText;	
+	private Text parentPOMRelativePathText;
+
+    private Text modelVersionText;
+
+    private String modelVersion;	
 	
     public MavenPomBasicFormPage( FormEditor editor, String id, 
     		String title, Model model )
@@ -316,6 +320,15 @@ public class MavenPomBasicFormPage extends FormPage
         inceptionYearText.setText(getInceptionYear());
         inceptionYearText.addKeyListener( textFieldListener );
         
+        Label modelVersionLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_ModelVersion, SWT.None );
+        modelVersionLabel.setLayoutData( labelData );
+        
+        modelVersionText = toolKit.createText( parent, "Model Version" );
+        this.createTextDisplay( modelVersionText, controlData );
+        modelVersionText.setText( getModelVersion() );
+        modelVersionText.addKeyListener( textFieldListener );
+        
+        
         toolKit.paintBordersFor(parent);
         
         return parent;
@@ -393,7 +406,8 @@ public class MavenPomBasicFormPage extends FormPage
         setName(blankIfNull(pomModel.getName()));        
         setDescription(blankIfNull(pomModel.getDescription()));
         setUrl(blankIfNull(pomModel.getUrl()));
-        setInceptionYear(blankIfNull(pomModel.getInceptionYear()));    
+        setInceptionYear(blankIfNull(pomModel.getInceptionYear()));
+        setModelVersion( blankIfNull( pomModel.getModelVersion() ) );
         
         //sets data to be used in createParentProjectControls
         if ( pomModel.getParent() != null )
@@ -423,6 +437,7 @@ public class MavenPomBasicFormPage extends FormPage
     	pomModel.setDescription(descriptionText.getText().trim());
     	pomModel.setUrl(urlText.getText().trim());
     	pomModel.setInceptionYear(inceptionYearText.getText().trim());
+    	pomModel.setModelVersion( modelVersionText.getText().trim() );
     	
     	if ( pomModel.getParent() == null ) 
     	{
@@ -587,7 +602,17 @@ public class MavenPomBasicFormPage extends FormPage
 		this.inceptionYear = inceptionYear;
 	}
 
-	public String getParentPOMgroupID() 
+	private String getModelVersion()
+    {
+       return modelVersion;
+    }
+	
+	private void setModelVersion( String modelVersion )
+	{
+	    this.modelVersion = modelVersion;
+	}
+
+    public String getParentPOMgroupID() 
 	{
 		return parentPOMgroupID;
 	}
