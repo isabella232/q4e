@@ -1,19 +1,19 @@
 package org.devzuz.q.maven.pomeditor.pages;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.model.Build;
 import org.apache.maven.model.Dependency;
 import org.apache.maven.model.Exclusion;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginExecution;
+import org.apache.maven.model.PluginManagement;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.devzuz.q.maven.pomeditor.Messages;
-import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
 import org.devzuz.q.maven.pomeditor.components.IObjectActionMap;
 import org.devzuz.q.maven.pomeditor.components.ITreeObjectAction;
 import org.devzuz.q.maven.pomeditor.components.PluginTreeComponent;
@@ -21,17 +21,17 @@ import org.devzuz.q.maven.pomeditor.model.PluginTreeContentProvider;
 import org.devzuz.q.maven.pomeditor.model.PluginTreeLabelProvider;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditConfigurationAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditConfigurationItemListAction;
-import org.devzuz.q.maven.pomeditor.pages.internal.AddEditDependencyExclusionAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditDependencyAction;
-import org.devzuz.q.maven.pomeditor.pages.internal.AddEditPluginAction;
+import org.devzuz.q.maven.pomeditor.pages.internal.AddEditDependencyExclusionAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditExecutionAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditGoalAction;
+import org.devzuz.q.maven.pomeditor.pages.internal.AddEditPluginAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.DeleteAllItemsAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.DeleteItemAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.ITreeObjectActionListener;
 import org.devzuz.q.maven.pomeditor.pages.internal.Mode;
+import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -51,15 +51,13 @@ public class MavenPomBuildPluginFormPage extends FormPage
 	
 	private Model pomModel;
 	
-	private Composite rightContainer;
-	
 	private boolean isPageModified;
     
     private PluginTreeContentProvider contentProvider;
-    
-    private Map<String, AbstractComponent> componentActionMap;
-    
-    private StackLayout stackLayout; 
+
+    private PluginTreeContentProvider pluginManagementContentProvider;
+
+    private PluginTreeComponent pluginManagementTreeComponent;
     
 	public MavenPomBuildPluginFormPage(FormEditor editor, String id,
 			String title) 
@@ -77,6 +75,9 @@ public class MavenPomBuildPluginFormPage extends FormPage
 	{
 		super( editor, id, title );
 		this.pomModel = pomModel;
+		
+		checkIfBuildNull();
+		checkIfPluginManagementNull();
 	}
 
 
@@ -97,60 +98,35 @@ public class MavenPomBuildPluginFormPage extends FormPage
         treeSection.setLayoutData( layoutData );
         treeSection.setClient( createTreeViewerControl( treeSection, toolkit ) );
         
-        /*
-        Section detailedInfoSection = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.DESCRIPTION );
-        detailedInfoSection.setDescription( "Detailed information required for a plugin" );
-        detailedInfoSection.setText( "Detailed Plugin Information" );
-        detailedInfoSection.setLayoutData( layoutData );
-        detailedInfoSection.setClient( createDetailedInfoControls( detailedInfoSection, toolkit ) );
-        */
+        Section pluginManagementSection = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.DESCRIPTION  );
+        pluginManagementSection.setDescription( "Section for management of default plugin information for use in a group of POMs." );
+        pluginManagementSection.setText( Messages.MavenPomEditor_MavenPomEditor_PluginManagement );
+        pluginManagementSection.setLayoutData( layoutData );
+        pluginManagementSection.setClient( createPluginManagementTreeViewerControl( pluginManagementSection, toolkit ) );
+        
 	}
-	/*
-	private Control createDetailedInfoControls(Composite form,
-			FormToolkit toolkit) 
-	{
-	    
-	    stackLayout = new StackLayout();
-		rightContainer = toolkit.createComposite( form, SWT.None );
-		rightContainer.setLayout( stackLayout );	
-		
-		stackLayout.topControl = null;
-		
-		componentActionMap = new HashMap<String, AbstractComponent>();
-		
-		PluginDetailEditingComponent pluginDetailComponent = 
-		    new PluginDetailEditingComponent( rightContainer, SWT.None, this );      
-		componentActionMap.put( "Plugin", pluginDetailComponent );
-		
-		PluginExecutionEditingComponent executionComponent = 
-		    new PluginExecutionEditingComponent( rightContainer, SWT.None, this );
-		componentActionMap.put( "PluginExecution", executionComponent );
-		
-		DependencyDetailEditingComponent dependencyComponent = 
-		    new DependencyDetailEditingComponent( rightContainer, SWT.None, this );
-		componentActionMap.put( "Dependency", dependencyComponent );
-		
-		DependencyExclusionDetailEditingComponent exclusionComponent = 
-		    new DependencyExclusionDetailEditingComponent( rightContainer, SWT.None, this );
-		componentActionMap.put( "Exclusion", exclusionComponent );
-		
-		KeyValueDetailEditingComponent keyValueDetailComponent = 
-		    new KeyValueDetailEditingComponent( rightContainer, SWT.None, this );
-		componentActionMap.put( "Xpp3Dom", keyValueDetailComponent );
-		
-		XppDomListEditingComponent textConfigComponent = 
-		    new XppDomListEditingComponent( rightContainer, SWT.None, "Configuration", this );
-		componentActionMap.put( "Xpp3DomList", textConfigComponent );
-		
-		GoalEditingTextComponent textGoalComponent = 
-		    new GoalEditingTextComponent( rightContainer, SWT.None, "Goal", this , contentProvider );
-		componentActionMap.put( "Goal", textGoalComponent );
-		
-		return rightContainer;
-	}
-    */
+	
 
-	private Control createTreeViewerControl( Composite form,
+	private Control createPluginManagementTreeViewerControl( Composite form, FormToolkit toolkit) 
+    {
+	    Composite parent = toolkit.createComposite( form );
+        parent.setLayout( new FillLayout() );
+        
+        pluginManagementContentProvider = new PluginTreeContentProvider( pomModel.getBuild().getPluginManagement() );
+        pluginManagementTreeComponent = new PluginTreeComponent( parent, SWT.None );
+        
+        pluginManagementTreeComponent.setContentProvider( pluginManagementContentProvider );
+        pluginManagementTreeComponent.setLabelProvider( new PluginTreeLabelProvider() );
+        pluginManagementTreeComponent.setObjectActionMap( new PluginActionMap( this, pluginManagementContentProvider ) );
+        pluginManagementTreeComponent.setInput( pomModel.getBuild().getPluginManagement() );
+        pluginManagementTreeComponent.expandAll();
+        
+        toolkit.paintBordersFor( parent );
+        
+        return parent;
+    }
+
+    private Control createTreeViewerControl( Composite form,
 			FormToolkit toolkit) 
 	{
 		Composite parent = toolkit.createComposite( form );
@@ -161,10 +137,9 @@ public class MavenPomBuildPluginFormPage extends FormPage
 		
 		treeComponent.setContentProvider( contentProvider );
 		treeComponent.setLabelProvider( new PluginTreeLabelProvider() );
-		treeComponent.setObjectActionMap( new PluginActionMap( this ) );
+		treeComponent.setObjectActionMap( new PluginActionMap( this, contentProvider ) );
 		treeComponent.setInput( pomModel.getBuild() );
 		treeComponent.expandAll();
-		//treeComponent.addSelectionChangeListener( new PluginTreeComponentListener() );
 		
 		toolkit.paintBordersFor( parent );
 
@@ -176,10 +151,13 @@ public class MavenPomBuildPluginFormPage extends FormPage
 	{
 	    private Map<String , List<ITreeObjectAction> > objectActionMap;
 	    private ITreeObjectActionListener listener;
+	    private ITreeContentProvider contentProvider;
 	    
-	    public PluginActionMap( ITreeObjectActionListener actionListener )
+	    public PluginActionMap( ITreeObjectActionListener actionListener,
+	                            ITreeContentProvider contentProvider )
 	    {
 	        this.listener = actionListener;
+	        this.contentProvider = contentProvider;
 	        constructObjectActionMap();
 	    }
 	    
@@ -363,10 +341,32 @@ public class MavenPomBuildPluginFormPage extends FormPage
     public void afterAction()
     {
         contentProvider.setBuild( pomModel.getBuild() );
+        pluginManagementContentProvider.setPluginManagement( pomModel.getBuild().getPluginManagement() );
         treeComponent.refresh();
+        pluginManagementTreeComponent.refresh();
         pageModified();   
     }
     
+    private void checkIfPluginManagementNull()
+    {
+        if ( pomModel.getBuild().getPluginManagement() == null )
+        {
+            PluginManagement pluginManagement = new PluginManagement();
+            pomModel.getBuild().setPluginManagement( pluginManagement );
+        }
+        
+    }
+
+    private void checkIfBuildNull()
+    {
+        if ( pomModel.getBuild() == null )
+        {
+            Build build = new Build();
+            pomModel.setBuild( build );
+        }
+        
+    }
+
     @Override
     public boolean isDirty()
     {		

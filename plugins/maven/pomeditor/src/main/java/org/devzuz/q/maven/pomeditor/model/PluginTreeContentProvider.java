@@ -256,6 +256,7 @@ public class PluginTreeContentProvider implements ITreeContentProvider
         return pluginManagement;
     }
 
+    @SuppressWarnings("unchecked")
     public void setPluginManagement( PluginManagement pluginManagement )
     {
         this.pluginManagement = pluginManagement;        

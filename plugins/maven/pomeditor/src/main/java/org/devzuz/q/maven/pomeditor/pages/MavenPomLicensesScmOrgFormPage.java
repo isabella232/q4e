@@ -113,7 +113,8 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
         Section licenseTable =
             toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
-        licenseTable.setDescription( "Set the License of this POM." );
+        licenseTable.setDescription( "Describes the licenses for this project. " +
+        		"The licenses listed for the project are that of the project itself, and not of dependencies." );
         licenseTable.setText( "License" );
         licenseTable.setLayoutData( layoutData );
         licenseTable.setClient( createLicenseTableControls( licenseTable, toolkit ) );

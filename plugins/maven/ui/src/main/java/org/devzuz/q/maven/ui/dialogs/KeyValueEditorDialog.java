@@ -110,8 +110,8 @@ public class KeyValueEditorDialog
 
     public void onWindowActivate()
     {
-        keyText.setText( key );
-        valueText.setText( value );
+        keyText.setText( blankIfNull( key ) );
+        valueText.setText( blankIfNull( value ) );
         validate();
     }
 
@@ -129,6 +129,7 @@ public class KeyValueEditorDialog
         setValue( value );
 
         return super.open();
+        
     }
 
     public void validate()
@@ -139,6 +140,11 @@ public class KeyValueEditorDialog
     private boolean didValidate()
     {
         return ( ( keyText.getText().trim().length() > 0 ) && ( valueText.getText().trim().length() > 0 ) );
+    }
+    
+    private String blankIfNull( String str )
+    {
+        return str != null ? str : "";
     }
 
     @Override

@@ -222,6 +222,8 @@ public class Messages
     
     public static String MavenPomEditor_MavenPomEditor_ModelVersion;
     
+    public static String MavenPomEditor_MavenPomEditor_PluginManagement;
+    
     static
     {
         // initialize resource bundle
