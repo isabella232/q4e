@@ -24,7 +24,6 @@ import org.eclipse.core.resources.IWorkspaceRunnable;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 
@@ -33,7 +32,8 @@ import org.eclipse.core.runtime.jobs.JobChangeAdapter;
  * 
  * @author amuino
  */
-public class MavenProjectJdtResourceListener implements IResourceChangeListener
+public class MavenProjectJdtResourceListener
+    implements IResourceChangeListener
 {
 
     // TODO: Needs refactoring to reduce complexity. Maybe use the IResourceDeltaVisitor
@@ -68,7 +68,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
             }
         }
         else if ( ( event.getType() == IResourceChangeEvent.PRE_CLOSE )
-                        || ( event.getType() == IResourceChangeEvent.PRE_DELETE ) )
+            || ( event.getType() == IResourceChangeEvent.PRE_DELETE ) )
         {
             /* IResourceChangeEvent documents that an IProject is always returned */
             IProject project = (IProject) event.getResource();
@@ -119,21 +119,26 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
                 {
                     // Determine if iproject is dependent on iresProject
                     IMavenProject iMavenProject = mavenProjectManager.getMavenProject( iproject, true );
-                    for ( IMavenArtifact artifact : iMavenProject.getArtifacts() )
+                    if ( iMavenProject != null )
                     {
-                        if ( artifact.getGroupId().equals( mavenProject.getGroupId() )
-                                        && artifact.getArtifactId().equals( mavenProject.getArtifactId() )
-                                        && artifact.getVersion().equals( mavenProject.getVersion() ) )
+                        for ( IMavenArtifact artifact : iMavenProject.getArtifacts() )
                         {
-                            MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Scheduling update for ",
-                                                         iproject );
-                            // ClasspathUpdateJobListener clears any error marker before the job executes.
-                            UpdateClasspathJob.scheduleNewUpdateClasspathJob( iproject, false,
-                                                                              new ClasspathUpdateJobListener( iproject ) );
-                            break;
+                            if ( artifact.getGroupId().equals( mavenProject.getGroupId() )
+                                && artifact.getArtifactId().equals( mavenProject.getArtifactId() )
+                                && artifact.getVersion().equals( mavenProject.getVersion() ) )
+                            {
+                                MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER,
+                                                             "Scheduling update for ", iproject );
+                                // ClasspathUpdateJobListener clears any error marker before the job executes.
+                                UpdateClasspathJob.scheduleNewUpdateClasspathJob(
+                                                                                  iproject,
+                                                                                  false,
+                                                                                  new ClasspathUpdateJobListener(
+                                                                                                                  iproject ) );
+                                break;
+                            }
                         }
                     }
-
                 }
                 catch ( CoreException e )
                 {
@@ -147,8 +152,7 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
      * Checks if the project is a maven project managed by q4e. This is used to check if maven classpaths need to be
      * recalculated when the project is opened/closed/deleted.
      * 
-     * @param project
-     *            the project.
+     * @param project the project.
      * @return <code>true</code> if the project is managed by q4e.
      */
     private boolean isMavenManagedProject( IProject project )
@@ -164,7 +168,8 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
         }
     }
 
-    private static class ClasspathUpdateJobListener extends JobChangeAdapter
+    private static class ClasspathUpdateJobListener
+        extends JobChangeAdapter
     {
         private final IProject project;
 
@@ -190,7 +195,8 @@ public class MavenProjectJdtResourceListener implements IResourceChangeListener
             {
                 new IWorkspaceRunnable()
                 {
-                    public void run( IProgressMonitor monitor ) throws CoreException
+                    public void run( IProgressMonitor monitor )
+                        throws CoreException
                     {
                         pom.deleteMarkers( MavenCoreActivator.MARKER_ID, false, IResource.DEPTH_ZERO );
                     }
