@@ -19,13 +19,13 @@ import org.devzuz.q.maven.pomeditor.components.ITreeObjectAction;
 import org.devzuz.q.maven.pomeditor.components.PluginTreeComponent;
 import org.devzuz.q.maven.pomeditor.model.PluginTreeContentProvider;
 import org.devzuz.q.maven.pomeditor.model.PluginTreeLabelProvider;
-import org.devzuz.q.maven.pomeditor.pages.internal.AddConfigurationAction;
-import org.devzuz.q.maven.pomeditor.pages.internal.AddConfigurationItemListAction;
+import org.devzuz.q.maven.pomeditor.pages.internal.AddEditConfigurationAction;
+import org.devzuz.q.maven.pomeditor.pages.internal.AddEditConfigurationItemListAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditDependencyExclusionAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditDependencyAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditPluginAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditExecutionAction;
-import org.devzuz.q.maven.pomeditor.pages.internal.AddGoalAction;
+import org.devzuz.q.maven.pomeditor.pages.internal.AddEditGoalAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.DeleteAllItemsAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.DeleteItemAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.ITreeObjectActionListener;
@@ -212,7 +212,7 @@ public class MavenPomBuildPluginFormPage extends FormPage
             objectActionMap.put( "Exclusions", exclusionsActionMap );
             
             List<ITreeObjectAction> goalsActionMap = new ArrayList<ITreeObjectAction>();
-            goalsActionMap.add( new AddGoalAction( listener ) );
+            goalsActionMap.add( new AddEditGoalAction( listener , Mode.ADD , null ) );
             goalsActionMap.add( new DeleteAllItemsAction( listener , "Delete all goals" , "goals" ) );
                                
             objectActionMap.put( "Goals", goalsActionMap );
@@ -221,45 +221,59 @@ public class MavenPomBuildPluginFormPage extends FormPage
             pluginActionMap.add( new AddEditPluginAction( listener , Mode.EDIT ) );
             pluginActionMap.add( new AddEditExecutionAction( listener, Mode.ADD ) );
             pluginActionMap.add( new AddEditDependencyAction( listener , Mode.ADD ) );
-            pluginActionMap.add( new AddConfigurationAction( listener ) );
-            pluginActionMap.add( new AddConfigurationItemListAction( listener ) );
-            pluginActionMap.add( new DeleteItemAction( listener , "Delete plugin", "plugin", contentProvider ) );
+            pluginActionMap.add( new AddEditConfigurationAction( listener , Mode.ADD ) );
+            pluginActionMap.add( new AddEditConfigurationItemListAction( listener , Mode.ADD ) );
+            pluginActionMap.add( new DeleteItemAction( listener , "Delete this plugin", "plugin", contentProvider ) );
             
             objectActionMap.put( "Plugin", pluginActionMap );
             
             List<ITreeObjectAction> dependencyActionMap = new ArrayList<ITreeObjectAction>();
-            dependencyActionMap.add( new AddEditDependencyExclusionAction( listener, Mode.ADD ) );
             dependencyActionMap.add( new AddEditDependencyAction( listener , Mode.EDIT  ) );
-            dependencyActionMap.add( new DeleteItemAction( listener , "Delete dependency", "dependency", contentProvider ) );
+            dependencyActionMap.add( new AddEditDependencyExclusionAction( listener, Mode.ADD ) );
+            dependencyActionMap.add( new DeleteItemAction( listener , "Delete this dependency", "dependency", contentProvider ) );
             
             objectActionMap.put( "Dependency" , dependencyActionMap );
             
             List<ITreeObjectAction> pluginExecutionActionMap = new ArrayList<ITreeObjectAction>();            
-            pluginExecutionActionMap.add( new AddGoalAction( listener ) );
-            pluginExecutionActionMap.add( new AddConfigurationAction( listener ) );
-            pluginExecutionActionMap.add( new AddConfigurationItemListAction( listener ) );
             pluginExecutionActionMap.add( new AddEditExecutionAction( listener, Mode.EDIT ) );
-            pluginExecutionActionMap.add( new DeleteItemAction( listener , "Delete execution", "execution", contentProvider ) );
+            pluginExecutionActionMap.add( new DeleteItemAction( listener , "Delete this execution", "execution", contentProvider ) );
+            pluginExecutionActionMap.add( new AddEditGoalAction( listener , Mode.ADD , null ) );
+            pluginExecutionActionMap.add( new AddEditConfigurationAction( listener , Mode.ADD ) );
+            pluginExecutionActionMap.add( new AddEditConfigurationItemListAction( listener , Mode.ADD ) );
             
             objectActionMap.put( "PluginExecution" , pluginExecutionActionMap );
             
             List<ITreeObjectAction> exclusionActionMap = new ArrayList<ITreeObjectAction>();
             exclusionActionMap.add( new AddEditDependencyExclusionAction( listener, Mode.EDIT ) );
-            exclusionActionMap.add( new DeleteItemAction( listener , "Delete exclusion", "exclusion", contentProvider ) );
+            exclusionActionMap.add( new DeleteItemAction( listener , "Delete this exclusion", "exclusion", contentProvider ) );
             
             objectActionMap.put( "Exclusion", exclusionActionMap );
             
             List<ITreeObjectAction> configActionMap = new ArrayList<ITreeObjectAction>();
-            configActionMap.add( new DeleteItemAction( listener , "Delete configuration", "configuration", contentProvider ) );
+            configActionMap.add( new AddEditConfigurationAction( listener , Mode.EDIT ) );
+            configActionMap.add( new DeleteItemAction( listener , "Delete this configuration", "configuration", contentProvider ) );
             
             objectActionMap.put( "Xpp3Dom", configActionMap );
             
             List<ITreeObjectAction> configListActionMap = new ArrayList<ITreeObjectAction>();
-            configListActionMap.add( new AddConfigurationAction( listener ) );
-            configListActionMap.add( new AddConfigurationItemListAction( listener ) );
-            configListActionMap.add( new DeleteItemAction( listener , "Delete configuration", "configuration", contentProvider ) );
+            configListActionMap.add( new AddEditConfigurationItemListAction( listener , Mode.EDIT ) );
+            configListActionMap.add( new DeleteItemAction( listener , "Delete this configuration", "configuration", contentProvider ) );
+            configListActionMap.add( new AddEditConfigurationAction( listener , Mode.ADD ) );
+            configListActionMap.add( new AddEditConfigurationItemListAction( listener , Mode.ADD ) );
             
             objectActionMap.put( "Xpp3DomList", configListActionMap );
+            
+            List<ITreeObjectAction> configObjectActionMap = new ArrayList<ITreeObjectAction>();
+            configObjectActionMap.add( new DeleteItemAction( listener , "Delete this configuration", "configuration", contentProvider ) );
+            configObjectActionMap.add( new AddEditConfigurationAction( listener , Mode.ADD ) );
+            configObjectActionMap.add( new AddEditConfigurationItemListAction( listener , Mode.ADD ) );
+            
+            objectActionMap.put( "Configuration", configObjectActionMap );
+            
+            List<ITreeObjectAction> goalActionMap = new ArrayList<ITreeObjectAction>();
+            goalActionMap.add( new AddEditGoalAction( listener , Mode.EDIT , contentProvider ) );
+            
+            objectActionMap.put( "Goal", goalActionMap );
             
             List<ITreeObjectAction> defaultActionMap = new ArrayList<ITreeObjectAction>();
             defaultActionMap.add( new AddEditPluginAction( listener , pomModel.getBuild().getPlugins() ) );
@@ -323,7 +337,14 @@ public class MavenPomBuildPluginFormPage extends FormPage
                 
                 if( dom.getValue() == null )
                 {
-                    return objectActionMap.get( "Xpp3DomList" );
+                    if( dom.getName().equalsIgnoreCase( "configuration" ) )
+                    {
+                        return objectActionMap.get( "Configuration" );
+                    }
+                    else
+                    {
+                        return objectActionMap.get( "Xpp3DomList" );
+                    }
                 }
                 else
                 {
@@ -332,72 +353,12 @@ public class MavenPomBuildPluginFormPage extends FormPage
             }
             else if( element instanceof String )
             {
-                return Collections.emptyList();
+                return objectActionMap.get( "Goal" );
             }
             
             return objectActionMap.get( "default" );
         }
 	}
-	/*
-	@SuppressWarnings ("unchecked")
-	private class PluginTreeComponentListener implements ISelectionChangedListener
-	{
-	    public void selectionChanged( SelectionChangedEvent event )
-        {
-	        IStructuredSelection structuredSelection = (IStructuredSelection) event.getSelection();
-            Object element = structuredSelection.getFirstElement();
-            
-            AbstractComponent visibleComponent = getControl( element );
-            if( visibleComponent != null )
-            {
-                visibleComponent.updateComponent( element );
-            }
-            
-            stackLayout.topControl = visibleComponent;
-            rightContainer.layout();
-        }
-	    
-        private AbstractComponent getControl( Object element )
-	    {
-	        if ( element instanceof Plugin )
-            {
-	            return componentActionMap.get( "Plugin" );
-            }
-	        else if ( element instanceof PluginExecution )
-            {
-                return componentActionMap.get( "PluginExecution" );
-            }
-	        else if ( element instanceof Dependency )
-            {
-                return componentActionMap.get( "Dependency" );
-            }
-	        else if ( element instanceof Exclusion )
-            {
-                return componentActionMap.get( "Exclusion" );                
-            }
-            else if ( element instanceof Xpp3Dom )
-            {
-                Xpp3Dom dom = ( Xpp3Dom ) element;
-                if( dom.getValue() == null )
-                {
-                    if( !dom.getName().equals( "configuration" ) )
-                    {
-                        return componentActionMap.get( "Xpp3DomList" );
-                    }
-                }
-                else
-                {
-                    return componentActionMap.get( "Xpp3Dom" );
-                }
-            }
-	        else if( element instanceof String )
-            {               
-                return componentActionMap.get( "Goal" );
-            }
-	        // no control should be visible
-            return null;
-	    }
-	} */
     
     public void afterAction()
     {
@@ -406,23 +367,6 @@ public class MavenPomBuildPluginFormPage extends FormPage
         pageModified();   
     }
     
-    /*
-    public void componentModified( AbstractComponent component , Control ctrl )
-    {   
-        Object object = component.save();
-        contentProvider.setBuild( pomModel.getBuild() );
-        treeComponent.refresh();
-        if ( ( object != null ) &&
-             ( ( object instanceof Xpp3Dom ) || 
-               ( object instanceof String ) ) )
-        {
-            treeComponent.setSelection( new StructuredSelection( object ) );
-            ctrl.setFocus();
-        }
-        
-        pageModified();
-    }
-    */
     @Override
     public boolean isDirty()
     {		

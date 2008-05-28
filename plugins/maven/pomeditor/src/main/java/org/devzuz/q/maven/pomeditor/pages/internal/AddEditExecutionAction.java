@@ -23,7 +23,7 @@ public class AddEditExecutionAction
         }
         else
         {
-            setName( ("Edit execution") );
+            setName( ("Edit this execution") );
         }
     }
 
