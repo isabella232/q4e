@@ -243,6 +243,16 @@ public class MavenPomBasicFormPage extends FormPage
         } );
         licensesLink.setText( "Manage Licenses/SCM/Organization/Issue Management" );
         
+        Hyperlink developersLink = toolKit.createHyperlink( parent, "Manage Developers/Contributors Information", SWT.WRAP );
+        developersLink.addHyperlinkListener( new HyperlinkAdapter()
+        {
+            public void linkActivated( HyperlinkEvent e )
+            {
+                editor.setActivePage( MavenPomFormEditor.DEVELOPERS_CONTRIBUTORS_FORM_PAGE );
+            }
+        } );
+        developersLink.setText( "Manage Developers/Contributors Information" );
+        
         Hyperlink modulesPropertiesLink = toolKit.createHyperlink( parent, "Manage Modules/Properties", SWT.WRAP );
         modulesPropertiesLink.addHyperlinkListener( new HyperlinkAdapter()
         {
@@ -253,25 +263,55 @@ public class MavenPomBasicFormPage extends FormPage
         } );
         modulesPropertiesLink.setText( "Manage Modules/Properties" );
         
-        Hyperlink developersLink = toolKit.createHyperlink( parent, "Manage Developers Information", SWT.WRAP );
-        developersLink.addHyperlinkListener( new HyperlinkAdapter()
+        Hyperlink buildManagementLink = toolKit.createHyperlink( parent, "Manage Build Management Basic Information", SWT.WRAP );
+        buildManagementLink.addHyperlinkListener( new HyperlinkAdapter()
         {
             public void linkActivated( HyperlinkEvent e )
             {
-                editor.setActivePage( MavenPomFormEditor.DEVELOPERS_CONTRIBUTORS_FORM_PAGE );
+                editor.setActivePage( MavenPomFormEditor.BUILD_FORM_PAGE );
             }
         } );
-        developersLink.setText( "Manage Developers Information" );
+        buildManagementLink.setText( "Manage Build Management Basic Information" );
         
-        Hyperlink contributorsLink = toolKit.createHyperlink( parent, "Manage Contributors Information", SWT.WRAP );
-        contributorsLink.addHyperlinkListener( new HyperlinkAdapter()
+        Hyperlink buildResourcesLink = toolKit.createHyperlink( parent, "Manage Build Management Resources", SWT.WRAP );
+        buildResourcesLink.addHyperlinkListener( new HyperlinkAdapter() 
+        {
+           public void linkActivated( HyperlinkEvent e )
+           {
+               editor.setActivePage( MavenPomFormEditor.BUILD_RESOURCES_FORM_PAGE );
+           }
+        });
+        buildResourcesLink.setText( "Manage Build Management Resources" );
+        
+        Hyperlink buildTestResourcesLink = toolKit.createHyperlink( parent, "Manage Build Management Test Resources", SWT.WRAP );
+        buildTestResourcesLink.addHyperlinkListener( new HyperlinkAdapter()
+        {
+            public void linkActivated( HyperlinkEvent e)
+            {
+                editor.setActivePage( MavenPomFormEditor.BUILD_TEST_RESOURCES_FORM_PAGE );
+            }
+        });
+        buildTestResourcesLink.setText( "Manage Build Management Test Resources" );
+        
+        Hyperlink buildPluginsLink = toolKit.createHyperlink( parent, "Manage Build Management Plugins and Plugin Management", SWT.WRAP );
+        buildPluginsLink.addHyperlinkListener( new HyperlinkAdapter()
         {
             public void linkActivated( HyperlinkEvent e )
             {
-                editor.setActivePage( MavenPomFormEditor.DEVELOPERS_CONTRIBUTORS_FORM_PAGE );
+                editor.setActivePage( MavenPomFormEditor.BUILD_PLUGINS_FORM_PAGE );
             }
-        } );
-        contributorsLink.setText( "Manage Contributors Information" );
+        });
+        buildPluginsLink.setText( "Manage Build Management Plugins and Plugin Management" );
+        
+        Hyperlink ciManagementLink = toolKit.createHyperlink( parent, "Manage Ci Management and Mailing Lists", SWT.WRAP );
+        ciManagementLink.addHyperlinkListener( new HyperlinkAdapter()
+        {
+            public void linkActivated( HyperlinkEvent e )
+            {
+                editor.setActivePage( MavenPomFormEditor.CIMANAGEMENT_MAILINGLISTS_FORM_PAGE );
+            }
+        });
+        ciManagementLink.setText( "Manage Ci Management and Mailing Lists" );
         
         return parent;
     }
