@@ -52,11 +52,11 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
     private Table licensesTable;
 
-    private Button newPropertyButton;
+    private Button newLicenseButton;
 
-    private Button removePropertyButton;
+    private Button removeLicenseButton;
 
-    private Button editPropertyButton;
+    private Button editLicenseButton;
 
     private Model pomModel;
 
@@ -151,19 +151,19 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         
         ButtonListener buttonListener = new ButtonListener();
 
-        newPropertyButton =
+        newLicenseButton =
             toolKit.createButton( container2, Messages.MavenPomEditor_MavenPomEditor_AddButton, SWT.PUSH | SWT.CENTER );
-        newPropertyButton.addSelectionListener( buttonListener );
+        newLicenseButton.addSelectionListener( buttonListener );
         
-        editPropertyButton =
+        editLicenseButton =
             toolKit.createButton( container2, Messages.MavenPomEditor_MavenPomEditor_EditButton, SWT.PUSH | SWT.CENTER );
-        editPropertyButton.setEnabled( false );
-        editPropertyButton.addSelectionListener( buttonListener );
+        editLicenseButton.setEnabled( false );
+        editLicenseButton.addSelectionListener( buttonListener );
         
-        removePropertyButton =
+        removeLicenseButton =
             toolKit.createButton( container2, Messages.MavenPomEditor_MavenPomEditor_RemoveButton, SWT.PUSH | SWT.CENTER );
-        removePropertyButton.setEnabled( false );
-        removePropertyButton.addSelectionListener( buttonListener );
+        removeLicenseButton.setEnabled( false );
+        removeLicenseButton.addSelectionListener( buttonListener );
         
         return container;
     }
@@ -304,7 +304,6 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
             {
                 public void modifyText( ModifyEvent e )
                 {
-                    System.out.println("gremmie");
                     syncControlsToModel();
                     pageModified();
                 }
@@ -430,8 +429,8 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
             if ( ( items != null ) && ( items.length > 0 ) )
             {
-                removePropertyButton.setEnabled( true );
-                editPropertyButton.setEnabled( true );
+                removeLicenseButton.setEnabled( true );
+                editLicenseButton.setEnabled( true );
                 int selectedIndex = licensesTable.getSelectionIndex(); 
                 if ( selectedIndex >= 0 )
                 {
@@ -448,12 +447,12 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         {
             Widget widget = event.widget;
             
-            if ( widget.equals( removePropertyButton ) )
+            if ( widget.equals( removeLicenseButton ) )
             {
                 licenseList.remove( selectedLicense );
                 resetControlsState();
             }
-            else if(  widget.equals( editPropertyButton ) )
+            else if(  widget.equals( editLicenseButton ) )
             {
                 AddEditLicenseDialog editDialog = AddEditLicenseDialog.newAddEditLicenseDialog();
                 if( editDialog.openWithLicense( selectedLicense.getName(), 
@@ -469,7 +468,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                     resetControlsState();
                 }
             }
-            else if ( widget.equals( newPropertyButton ) )
+            else if ( widget.equals( newLicenseButton ) )
             {
                 License license = new License();
                 AddEditLicenseDialog addDialog = AddEditLicenseDialog.newAddEditLicenseDialog();
@@ -488,11 +487,12 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                     resetControlsState();
                 }
             }
+            
+            clear();
         }
 
         private void resetControlsState()
         {
-            clear();
             populateLicenseDatatable();
             pageModified();
         }
@@ -580,8 +580,8 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     public void clear()
     {
         licensesTable.deselect( licensesTable.getSelectionIndex() );
-        removePropertyButton.setEnabled( false );
-        editPropertyButton.setEnabled( false );
+        removeLicenseButton.setEnabled( false );
+        editLicenseButton.setEnabled( false );
     }
     
     /**
