@@ -224,10 +224,7 @@ public class AddEditNotifierDialog
     {
         super.createButtonsForButtonBar( parent );
         typeText.addModifyListener( getModifyListener() );
-        addressText.addModifyListener( getModifyListener() );
-        sendOnErrorCombo.addModifyListener( getModifyListener() );
         disableEditDeleteButton();
-        getButton( IDialogConstants.OK_ID ).setEnabled( false );
     }
 
     private void initControlValues()

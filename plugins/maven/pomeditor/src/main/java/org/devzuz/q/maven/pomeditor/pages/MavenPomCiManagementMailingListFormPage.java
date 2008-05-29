@@ -42,8 +42,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 
-public class MavenPomCiManagementMailingListFormPage
-    extends FormPage
+public class MavenPomCiManagementMailingListFormPage extends FormPage
 {
     private static final int MAIL_COLUMN = 0;
 
@@ -124,7 +123,7 @@ public class MavenPomCiManagementMailingListFormPage
 
         Section ciManagementSection =
             toolkit.createSection( form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED
-                | Section.DESCRIPTION );
+                            | Section.DESCRIPTION );
         ciManagementSection.setDescription( Messages.MavenPomEditor_CiManagement_Description );
         ciManagementSection.setText( Messages.MavenPomEditor_CiManagement_Title );
         ciManagementSection.setLayoutData( layoutData );
@@ -132,7 +131,7 @@ public class MavenPomCiManagementMailingListFormPage
 
         Section mailingListsSection =
             toolkit.createSection( form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED
-                | Section.DESCRIPTION );
+                            | Section.DESCRIPTION );
         mailingListsSection.setDescription( Messages.MavenPomEditor_MailingList_Description );
         mailingListsSection.setText( Messages.MavenPomEditor_MailingList_Title );
         mailingListsSection.setLayoutData( layoutData );
@@ -189,13 +188,13 @@ public class MavenPomCiManagementMailingListFormPage
         Label groupIdLabel =
             toolKit.createLabel( ciManagementContainer, Messages.MavenPomEditor_MavenPomEditor_System, SWT.NONE );
         groupIdLabel.setLayoutData( labelData );
-        systemText = toolKit.createText( ciManagementContainer, "" );
+        systemText = toolKit.createText( ciManagementContainer, "", SWT.BORDER | SWT.SINGLE );
         createTextDisplay( systemText, controlData );
 
         Label urlLabel =
             toolKit.createLabel( ciManagementContainer, Messages.MavenPomEditor_MavenPomEditor_Url, SWT.NONE );
         urlLabel.setLayoutData( labelData );
-        urlText = toolKit.createText( ciManagementContainer, "" );
+        urlText = toolKit.createText( ciManagementContainer, "", SWT.BORDER | SWT.SINGLE );
         createTextDisplay( urlText, controlData );
 
         Label hiddenControl = toolKit.createLabel( ciManagementContainer, "" );

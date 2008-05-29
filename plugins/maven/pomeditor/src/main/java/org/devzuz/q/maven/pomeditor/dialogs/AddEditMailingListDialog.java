@@ -11,7 +11,6 @@ import java.util.List;
 
 import org.apache.maven.model.MailingList;
 import org.devzuz.q.maven.pomeditor.Messages;
-import org.devzuz.q.maven.pomeditor.PomEditorUtils;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;
 import org.eclipse.core.runtime.Preferences;
@@ -19,8 +18,6 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -72,8 +69,6 @@ public class AddEditMailingListDialog
     private Button removeButton;
 
     private SelectionListener selectionListener;
-
-    private ModifyListener modifyListener;
 
     public static AddEditMailingListDialog newAddEditMailingListDialog()
     {
@@ -202,16 +197,6 @@ public class AddEditMailingListDialog
         return container;
     }
 
-    @Override
-    protected void createButtonsForButtonBar( Composite parent )
-    {
-        super.createButtonsForButtonBar( parent );
-        nameText.addModifyListener( getModifyListener() );
-        subscribeText.addModifyListener( getModifyListener() );
-        unsubscibeText.addModifyListener( getModifyListener() );
-        getButton( IDialogConstants.OK_ID ).setEnabled( false );
-    }
-
     private void initControlValues()
     {
         nameText.setText( getName() );
@@ -231,35 +216,6 @@ public class AddEditMailingListDialog
             TableItem item = new TableItem( otherArchivesTable, SWT.BEGINNING );
             item.setText( archiveName );
         }
-    }
-
-    private ModifyListener getModifyListener()
-    {
-        if ( modifyListener == null )
-        {
-            modifyListener = new ModifyListener()
-            {
-                public void modifyText( ModifyEvent e )
-                {
-                    if ( e.widget instanceof Text )
-                    {
-                        if ( PomEditorUtils.isNullOrWhiteSpace( ( (Text) e.widget ).getText() ) )
-                        {
-                            getButton( IDialogConstants.OK_ID ).setEnabled( false );
-                        }
-                        else
-                        {
-                            getButton( IDialogConstants.OK_ID ).setEnabled( true );
-                        }
-                    }
-                    else if ( e.widget instanceof Text )
-                    {
-                        getButton( IDialogConstants.OK_ID ).setEnabled( true );
-                    }
-                }
-            };
-        }
-        return modifyListener;
     }
 
     private SelectionListener getSelectionListener()
