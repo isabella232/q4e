@@ -589,21 +589,20 @@ public class EclipseMaven implements IMaven
                 }
 
                 ConfigurationValidationResult validationResult = MavenEmbedder.validateConfiguration( config );
-                // TODO present the error in a user friendly way
-                // Fail when you have a settings.xml file and it does not parse
-                // FIXME: isUserSettingsFilePresent is deprecated
-                if ( validationResult.isUserSettingsFilePresent() && !validationResult.isUserSettingsFileParses() )
-                {
-                    throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID,
-                                                          "The user settings file is invalid" ) );
+                // Fix for 455: No UI available, report the errors through the eclipse log
+                boolean userSettingsError = validationResult.getUserSettingsException() != null; 
+                boolean globalSettingsError = validationResult.getGlobalSettingsException() != null; 
+                if (userSettingsError) {
+                	MavenCoreActivator.getLogger().log("The user settings file is invalid, will not be used.", 
+                			validationResult.getUserSettingsException());
+                	config.setUserSettingsFile(null);
                 }
-                // FIXME: isGlobalSettingsFilePresent is deprecated
-                if ( validationResult.isGlobalSettingsFilePresent() && !validationResult.isGlobalSettingsFileParses() )
-                {
-                    throw new QCoreException( new Status( Status.ERROR, MavenCoreActivator.PLUGIN_ID,
-                                                          "The global settings file is invalid" ) );
+                if (globalSettingsError) {
+                	MavenCoreActivator.getLogger().log("The global settings file is invalid, will not be used.", 
+                			validationResult.getGlobalSettingsException());
+                	config.setGlobalSettingsFile(null);
                 }
-
+                // End of Fix for 455
                 mavenEmbedder = new MavenEmbedder( config );
 
                 state = STARTED;
