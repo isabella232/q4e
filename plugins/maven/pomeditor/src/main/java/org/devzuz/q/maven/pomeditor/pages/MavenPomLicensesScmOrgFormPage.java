@@ -50,7 +50,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 {
     private ScrolledForm form;
 
-    private Table propertiesTable;
+    private Table licensesTable;
 
     private Button newPropertyButton;
 
@@ -133,14 +133,14 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
         container.setLayout( new GridLayout( 2, false ) );
         
-        propertiesTable = toolKit.createTable( container, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
-        propertiesTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
-        propertiesTable.setLinesVisible( true );
-        propertiesTable.setHeaderVisible( true );
-        PropertiesTableListener tableListener = new PropertiesTableListener();
-        propertiesTable.addSelectionListener( tableListener );
+        licensesTable = toolKit.createTable( container, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
+        licensesTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
+        licensesTable.setLinesVisible( true );
+        licensesTable.setHeaderVisible( true );
+        LicensesTableListener tableListener = new LicensesTableListener();
+        licensesTable.addSelectionListener( tableListener );
 
-        TableColumn column = new TableColumn( propertiesTable, SWT.BEGINNING, 0 );
+        TableColumn column = new TableColumn( licensesTable, SWT.BEGINNING, 0 );
         column.setWidth( 220 );
         column.setText( "License" );
         Composite container2 = toolKit.createComposite( container );
@@ -230,11 +230,6 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         parent.setLayout( new GridLayout( 2, false ) );
         
         checkIfScmNull();
-        
-        if ( scm == null )
-        {
-            System.out.println("scm is null");
-        }
 
         GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
         labelData.widthHint = 120;
@@ -309,6 +304,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
             {
                 public void modifyText( ModifyEvent e )
                 {
+                    System.out.println("gremmie");
                     syncControlsToModel();
                     pageModified();
                 }
@@ -323,10 +319,10 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     
     private void populateLicenseDatatable()
     {
-        propertiesTable.removeAll();
+        licensesTable.removeAll();
         for ( License license : licenseList )
         {
-            TableItem item = new TableItem( propertiesTable, SWT.BEGINNING );
+            TableItem item = new TableItem( licensesTable, SWT.BEGINNING );
             item.setText( new String[] { license.getName() } );
         }
     }
@@ -424,7 +420,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         return str == null ? "" : str;
     }
 
-    private class PropertiesTableListener extends SelectionAdapter
+    private class LicensesTableListener extends SelectionAdapter
     {
         public int selection;
 
@@ -435,13 +431,13 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
         public void widgetSelected( SelectionEvent e )
         {
-            TableItem[] items = propertiesTable.getSelection();
+            TableItem[] items = licensesTable.getSelection();
 
             if ( ( items != null ) && ( items.length > 0 ) )
             {
                 removePropertyButton.setEnabled( true );
                 editPropertyButton.setEnabled( true );
-                int selectedIndex = propertiesTable.getSelectionIndex(); 
+                int selectedIndex = licensesTable.getSelectionIndex(); 
                 if ( selectedIndex >= 0 )
                 {
                     selectedLicense = licenseList.get( selectedIndex );
@@ -593,7 +589,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
     public void clear()
     {
-        propertiesTable.deselect( propertiesTable.getSelectionIndex() );
+        licensesTable.deselect( licensesTable.getSelectionIndex() );
         removePropertyButton.setEnabled( false );
         editPropertyButton.setEnabled( false );
     }

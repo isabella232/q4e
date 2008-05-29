@@ -78,8 +78,6 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
 
     private SelectionListener selectionListener;
 
-    private ModifyListener modifyListener;
-
     public MavenPomCiManagementMailingListFormPage( String id, String title )
     {
         super( id, title );
@@ -140,23 +138,13 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         ciManagementSection.addExpansionListener( expansionAdapter );
         mailingListsSection.addExpansionListener( expansionAdapter );
 
-        initCiManangementControls();
+        initCiManagementControls();
         initMailingListsSection();
     }
 
     @SuppressWarnings( "unchecked" )
-    private void initCiManangementControls()
+    private void initCiManagementControls()
     {
-        if ( ciManagement.getSystem() != null )
-        {
-            systemText.setText( ciManagement.getSystem() );
-        }
-
-        if ( ciManagement.getUrl() != null )
-        {
-            urlText.setText( ciManagement.getUrl() );
-        }
-
         List<Notifier> notifiers = ciManagement.getNotifiers();
 
         for ( Notifier notifier : notifiers )
@@ -189,13 +177,13 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
             toolKit.createLabel( ciManagementContainer, Messages.MavenPomEditor_MavenPomEditor_System, SWT.NONE );
         groupIdLabel.setLayoutData( labelData );
         systemText = toolKit.createText( ciManagementContainer, "", SWT.BORDER | SWT.SINGLE );
-        createTextDisplay( systemText, controlData );
+        createTextDisplay( systemText, controlData, ciManagement.getSystem() );
 
         Label urlLabel =
             toolKit.createLabel( ciManagementContainer, Messages.MavenPomEditor_MavenPomEditor_Url, SWT.NONE );
         urlLabel.setLayoutData( labelData );
         urlText = toolKit.createText( ciManagementContainer, "", SWT.BORDER | SWT.SINGLE );
-        createTextDisplay( urlText, controlData );
+        createTextDisplay( urlText, controlData, ciManagement.getUrl() );
 
         Label hiddenControl = toolKit.createLabel( ciManagementContainer, "" );
         hiddenControl.setVisible( false );
@@ -284,38 +272,33 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         return mailingListsContainer;
     }
 
-    private void createTextDisplay( Text text, GridData controlData )
+    private void createTextDisplay( Text text, GridData controlData, String data )
     {
         if ( text != null )
         {
-            text.setLayoutData( controlData );
-            text.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
-            text.addModifyListener( getModifyListener() );
-        }
-    }
-
-    private ModifyListener getModifyListener()
-    {
-        if ( modifyListener == null )
-        {
-            modifyListener = new ModifyListener()
+            ModifyListener modifyingListener = new ModifyListener()
             {
                 public void modifyText( ModifyEvent e )
                 {
-                    if ( e.getSource() == systemText && ciManagement != null )
-                    {
-                        ciManagement.setSystem( systemText.getText().trim() );
-                        pageModified();
-                    }
-                    else if ( e.getSource() == urlText && ciManagement != null )
-                    {
-                        ciManagement.setUrl( urlText.getText().trim() );
-                        pageModified();
-                    }
+                    syncControlsToModel();
+                    pageModified();
                 }
             };
+            
+            text.setLayoutData( controlData );
+            text.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
+            text.setText( blankIfNull( data ) );
+            text.addModifyListener( modifyingListener );
         }
-        return modifyListener;
+    }
+
+    protected void syncControlsToModel()
+    {
+        if ( ciManagement != null )
+        {
+            ciManagement.setSystem( nullIfBlank( systemText.getText().trim()) );
+            ciManagement.setUrl( nullIfBlank( urlText.getText().trim() ) );
+        }        
     }
 
     private SelectionListener getSelectionListener()
@@ -378,8 +361,11 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
 
                                 TableItem tableItem = notifiersTable.getItem( selectedItem );
                                 tableItem.setText( new String[] { dialog.getType(), dialog.getAddress() } );
-                                pageModified();
+                                
+                                pageModified();                                
                             }
+                            
+                            disableEditDeleteNotifierButton();
                         }
                     }
                     else if ( e.getSource() == removeNotifierButton )
@@ -387,11 +373,10 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                         int selected = notifiersTable.getSelectionIndex();
                         notifiersTable.remove( selected );
                         ciManagement.getNotifiers().remove( selected );
-                        if ( notifiersTable.getItemCount() < 1 )
-                        {
-                            disableEditDeleteNotifierButton();
-                        }
+                        
                         pageModified();
+                        
+                        disableEditDeleteNotifierButton();
                     }
                     else if ( e.getSource() == mailingListTable )
                     {
@@ -441,6 +426,8 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                                 tableItem.setText( dialog.getName() );
                                 pageModified();
                             }
+                            
+                            disableEditDeleteMailingListButton();
                         }
                     }
                     else if ( e.getSource() == removeMailingListButton )
@@ -448,11 +435,10 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                         int selected = mailingListTable.getSelectionIndex();
                         mailingListTable.remove( selected );
                         mailingLists.remove( selected );
-                        if ( mailingListTable.getItemCount() < 1 )
-                        {
-                            disableEditDeleteMailingListButton();
-                        }
+                        
                         pageModified();
+                        
+                        disableEditDeleteMailingListButton();
                     }
                 }
             };
@@ -483,7 +469,17 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         editMailingListButton.setEnabled( false );
         removeMailingListButton.setEnabled( false );
     }
+    
+    private String blankIfNull( String str )
+    {
+        return str == null ? "" : str;
+    }
 
+    private String nullIfBlank( String str )
+    {
+        return ( str == null || str.equals( "" ) ) ? null : str;
+    }
+    
     protected void pageModified()
     {
         isPageModified = true;
