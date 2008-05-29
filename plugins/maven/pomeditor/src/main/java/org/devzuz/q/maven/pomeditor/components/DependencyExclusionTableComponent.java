@@ -118,11 +118,6 @@ public class DependencyExclusionTableComponent
     
     private class ExclusionTableListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-        
         public void widgetSelected( SelectionEvent e )
         {
             TableItem[] item = exclusionsTable.getSelection();
@@ -145,11 +140,6 @@ public class DependencyExclusionTableComponent
     
     private class AddButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             AddEditDependencyExclusionDialog addDialog = 
@@ -177,11 +167,6 @@ public class DependencyExclusionTableComponent
     
     private class EditButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             AddEditDependencyExclusionDialog editDialog = 
@@ -219,11 +204,6 @@ public class DependencyExclusionTableComponent
     
     private class RemoveButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             exclusionList.remove( selectedExclusion );

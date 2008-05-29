@@ -97,12 +97,7 @@ public class SimpleTableComponent extends Composite
 	
 	private class SimpleTableListener extends SelectionAdapter
 	{
-	    public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-        
-        public void widgetSelected( SelectionEvent e )
+	    public void widgetSelected( SelectionEvent e )
         {
             TableItem[] item = simpleTable.getItems();
             
@@ -123,12 +118,7 @@ public class SimpleTableComponent extends Composite
 	
 	private class AddButtonListener extends SelectionAdapter
 	{
-	    public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
-        public void widgetSelected( SelectionEvent e )
+	    public void widgetSelected( SelectionEvent e )
         {
             SimpleAddEditStringDialog addDialog = 
                 SimpleAddEditStringDialog.getSimpleAddEditStringDialog( type );
@@ -147,11 +137,6 @@ public class SimpleTableComponent extends Composite
 	
 	private class EditButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             SimpleAddEditStringDialog editDialog =
@@ -171,11 +156,6 @@ public class SimpleTableComponent extends Composite
 	
 	private class RemoveButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             dataList.remove( selectedString );

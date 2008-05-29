@@ -138,11 +138,6 @@ public class DependencyTableComponent
     
     private class DependenciesTableListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-        
         public void widgetSelected( SelectionEvent e )
         {
             TableItem[] item = dependenciesTable.getSelection();
@@ -166,11 +161,6 @@ public class DependencyTableComponent
     
     private class AddButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             AddEditDependencyDialog addDialog = AddEditDependencyDialog.getAddEditDependencyDialog();
@@ -203,11 +193,6 @@ public class DependencyTableComponent
     
     private class EditButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             AddEditDependencyDialog addDialog = AddEditDependencyDialog.getAddEditDependencyDialog();        
@@ -268,11 +253,6 @@ public class DependencyTableComponent
     
     private class RemoveButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             dependenciesList.remove( selectedDependency );

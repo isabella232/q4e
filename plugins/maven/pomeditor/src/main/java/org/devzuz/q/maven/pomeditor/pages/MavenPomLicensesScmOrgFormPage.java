@@ -423,12 +423,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     private class LicensesTableListener extends SelectionAdapter
     {
         public int selection;
-
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
+        
         public void widgetSelected( SelectionEvent e )
         {
             TableItem[] items = licensesTable.getSelection();
@@ -449,11 +444,6 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
     private class ButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent event )
-        {
-            widgetSelected( event );
-        }
-
         public void widgetSelected( SelectionEvent event )
         {
             Widget widget = event.widget;

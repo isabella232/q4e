@@ -113,11 +113,6 @@ public class PropertiesTableComponent
     
     private class PropertiesTableListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-        
         public void widgetSelected( SelectionEvent e )
         {
             TableItem[] item = propertiesTable.getSelection();
@@ -134,11 +129,6 @@ public class PropertiesTableComponent
     
     private class AddButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             KeyValueEditorDialog keyValueDialog = KeyValueEditorDialog.getKeyValueEditorDialog();
@@ -162,11 +152,6 @@ public class PropertiesTableComponent
     
     private class EditButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             TableItem[] selectedItem = propertiesTable.getSelection();
@@ -189,11 +174,6 @@ public class PropertiesTableComponent
     
     private class RemoveButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             TableItem[] selectedItem = propertiesTable.getSelection();

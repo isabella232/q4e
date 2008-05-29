@@ -18,6 +18,7 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -222,13 +223,8 @@ public class AddEditMailingListDialog
     {
         if ( selectionListener == null )
         {
-            selectionListener = new SelectionListener()
+            selectionListener = new SelectionAdapter()
             {
-                public void widgetDefaultSelected( SelectionEvent e )
-                {
-                    widgetSelected( e );
-                }
-
                 public void widgetSelected( SelectionEvent e )
                 {
                     IInputValidator validator = new IInputValidator()

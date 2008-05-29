@@ -114,11 +114,6 @@ public class ResourceComponent extends Composite
 
     private class ResourcesTableListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             TableItem[] item = resourcesTable.getSelection();
@@ -139,11 +134,6 @@ public class ResourceComponent extends Composite
 
     private class AddResourceButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             AddEditResourceDialog addDialog = AddEditResourceDialog.newAddEditResourceDialog();
@@ -167,11 +157,6 @@ public class ResourceComponent extends Composite
 
     private class EditResourceButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             AddEditResourceDialog editDialog = AddEditResourceDialog.newAddEditResourceDialog();
@@ -194,11 +179,6 @@ public class ResourceComponent extends Composite
 
     private class RemoveResourceButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             resourcesList.remove( selectedResource );

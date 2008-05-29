@@ -20,6 +20,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -301,13 +302,8 @@ public class AddEditNotifierDialog
     {
         if ( selectionListener == null )
         {
-            selectionListener = new SelectionListener()
+            selectionListener = new SelectionAdapter()
             {
-                public void widgetDefaultSelected( SelectionEvent e )
-                {
-                    widgetSelected( e );
-                }
-
                 public void widgetSelected( SelectionEvent e )
                 {
                     if ( e.getSource() == configurationTable )

@@ -10,8 +10,8 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
@@ -117,13 +117,8 @@ public class PluginTreeComponent extends Composite
                 {
                     MenuItem item = new MenuItem( rootMenu, SWT.PUSH );
                     item.setText( action.getName() );
-                    item.addSelectionListener( new SelectionListener()
+                    item.addSelectionListener( new SelectionAdapter()
                     {
-                        public void widgetDefaultSelected( SelectionEvent e )
-                        {
-                            widgetSelected( e );
-                        }
-
                         public void widgetSelected( SelectionEvent e )
                         {
                             action.doAction( firstElement );

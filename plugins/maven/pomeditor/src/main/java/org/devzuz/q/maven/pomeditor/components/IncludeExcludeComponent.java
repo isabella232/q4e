@@ -90,11 +90,6 @@ public class IncludeExcludeComponent extends Composite
 	
 	private class ComponentTableListener extends SelectionAdapter
 	{
-		public void widgetDefaultSelected( SelectionEvent e )
-		{
-			widgetSelected( e );
-		}
-		
 		public void widgetSelected( SelectionEvent e )
 		{
 			TableItem[] item = componentTable.getSelection();
@@ -116,11 +111,6 @@ public class IncludeExcludeComponent extends Composite
 	
 	private class AddButtonListener extends SelectionAdapter
 	{
-		public void widgetDefaultSelected( SelectionEvent e )
-		{
-			widgetDefaultSelected( e );
-		}
-		
 		public void widgetSelected( SelectionEvent e )
 		{
 			AddEditInclusionExclusionDialog addDialog  = 
@@ -141,11 +131,6 @@ public class IncludeExcludeComponent extends Composite
 	
 	private class EditButtonListener extends SelectionAdapter
 	{
-		public void widgetDefaultSelected( SelectionEvent e )
-		{
-			widgetDefaultSelected( e );
-		}
-		
 		public void widgetSelected( SelectionEvent e )
 		{
 			AddEditInclusionExclusionDialog editDialog = 
@@ -166,11 +151,6 @@ public class IncludeExcludeComponent extends Composite
 	
 	private class RemoveButtonListener extends SelectionAdapter
 	{
-		public void widgetDefaultSelected( SelectionEvent e )
-		{
-			widgetDefaultSelected( e );
-		}
-		
 		public void widgetSelected( SelectionEvent e )
 		{
 			dataSource.remove( selectedIndex );

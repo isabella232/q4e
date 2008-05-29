@@ -281,11 +281,6 @@ public class MavenPomBuildFormPage extends FormPage
 	
 	private class ExtensionsTableListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             TableItem[] items = extensionsTable.getSelection();
@@ -308,11 +303,6 @@ public class MavenPomBuildFormPage extends FormPage
 	
 	private class AddExtensionButtonListener extends SelectionAdapter
 	{
-		public void widgetDefaultSelected( SelectionEvent e )
-	    {
-			widgetSelected( e );
-	    }
-
 		@SuppressWarnings( "unchecked" )
 	    public void widgetSelected( SelectionEvent e )
 	    {
@@ -350,12 +340,7 @@ public class MavenPomBuildFormPage extends FormPage
 	
 	private class EditExtensionButtonListener extends SelectionAdapter
 	{
-		public void widgetDefaultSelected( SelectionEvent e )
-	    {
-			widgetSelected( e );
-	    }
-
-	    public void widgetSelected( SelectionEvent e )
+		public void widgetSelected( SelectionEvent e )
 	    {
 	    	AddEditExtensionDialog addDialog = 
 	    		AddEditExtensionDialog.newAddEditExtensionDialog();
@@ -387,12 +372,7 @@ public class MavenPomBuildFormPage extends FormPage
 	
 	private class RemoveExtensionButtonListener extends SelectionAdapter
 	{
-		public void widgetDefaultSelected( SelectionEvent e )
-	    {
-			widgetSelected( e );
-	    }
-
-	    public void widgetSelected( SelectionEvent e )
+		public void widgetSelected( SelectionEvent e )
 	    {
 	    	extensionList.remove( selectedExtension );
 	    	

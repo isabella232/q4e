@@ -341,11 +341,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
 
     private class DeveloperPropertiesTableComponentListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             if ( developerPropertiesTableComponent.isModified() == true )
@@ -357,11 +352,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     
     private class ContributorPropertiesTableComponentListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             if ( contributorPropertiesTableComponent.isModified() == true )
@@ -374,11 +364,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     private class DevelopersTableListener extends SelectionAdapter
     {
         private int selectedDeveloperIndex;
-
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
 
         public void widgetSelected( SelectionEvent e )
         {
@@ -405,11 +390,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     
     private class ContributorsTableListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             TableItem[] items = contributorsTable.getSelection();
@@ -434,11 +414,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     
     private class AddDeveloperButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             AddEditContributorDeveloperDialog addDialog = 
@@ -489,11 +464,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     
     private class EditDeveloperButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             TableItem[] selectedItem = developersTable.getSelection();
@@ -595,12 +565,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     
     private class RemoveDeveloperButtonListener extends SelectionAdapter
     {
-
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             for ( int index = 0; index < developerList.size(); index++ )
@@ -623,11 +587,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     
     private class AddContributorButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             AddEditContributorDeveloperDialog addDialog = 
@@ -677,11 +636,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     
     private class EditContributorButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             TableItem[] selectedItem = contributorsTable.getSelection();
@@ -784,11 +738,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     
     private class RemoveContributorButtonListener extends SelectionAdapter
     {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
         public void widgetSelected( SelectionEvent e )
         {
             for ( int index = 0; index < contributorList.size(); index++ )
