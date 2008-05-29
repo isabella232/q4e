@@ -32,6 +32,8 @@ public class IncludeExcludeComponent extends Composite
 	private String selectedElement;
 
 	private List<String> dataSource;
+
+    private boolean isModified;
 	
 	public IncludeExcludeComponent ( Composite parent, int style )
 	{
@@ -129,6 +131,8 @@ public class IncludeExcludeComponent extends Composite
 				String dataString = addDialog.getDataString();
 				dataSource.add( dataString );
 				
+				setModified( true );
+				
 				refreshComponentTable();
 			}
 		}
@@ -153,6 +157,8 @@ public class IncludeExcludeComponent extends Composite
 				String dataString = editDialog.getDataString();
 				dataSource.add( selectedIndex, dataString );
 				
+				setModified( true );
+				
 				refreshComponentTable();
 			}
 		}
@@ -168,6 +174,8 @@ public class IncludeExcludeComponent extends Composite
 		public void widgetSelected( SelectionEvent e )
 		{
 			dataSource.remove( selectedIndex );
+			
+			setModified( true );
 			
 			refreshComponentTable();
 		}
@@ -228,5 +236,15 @@ public class IncludeExcludeComponent extends Composite
     public void removeRemoveButtonListener( SelectionListener listener )
     {
         removeButton.removeSelectionListener( listener );
+    }
+    
+    public boolean isModified()
+    {
+        return isModified;
+    }
+    
+    public void setModified( boolean isModified )
+    {
+        this.isModified = isModified;
     }
 }

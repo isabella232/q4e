@@ -31,6 +31,8 @@ public class PropertiesTableComponent
 
     private Properties dataSource;
 
+    private boolean isModified;
+
     public PropertiesTableComponent( Composite parent, int style )
     {
         super( parent, style );
@@ -141,7 +143,7 @@ public class PropertiesTableComponent
         {
             KeyValueEditorDialog keyValueDialog = KeyValueEditorDialog.getKeyValueEditorDialog();
 
-            if ( keyValueDialog.openWithEntry( "", "" ) == Window.OK )
+            if ( keyValueDialog.open() == Window.OK )
             {
                 if ( !keyAlreadyExist( keyValueDialog.getKey() ) )
                 {
@@ -151,6 +153,8 @@ public class PropertiesTableComponent
                     // the property gets added in the middle.
                     TableItem item = new TableItem( propertiesTable, SWT.BEGINNING );
                     item.setText( new String[] { keyValueDialog.getKey(), keyValueDialog.getValue() } );
+                    
+                    setModified( true );
                 }
             }
         }
@@ -175,6 +179,8 @@ public class PropertiesTableComponent
             {
                 dataSource.remove( oldKey );
                 dataSource.put( keyValueDialog.getKey(), keyValueDialog.getValue() );
+                
+                setModified( true );
                     
                 refreshPropertiesTable();             
             }
@@ -193,6 +199,8 @@ public class PropertiesTableComponent
             TableItem[] selectedItem = propertiesTable.getSelection();
             String key = selectedItem[0].getText();
             dataSource.remove( key );
+            
+            setModified( true );
             
             refreshPropertiesTable();
         }
@@ -241,6 +249,16 @@ public class PropertiesTableComponent
     public void removeRemoveButtonListener( SelectionListener listener )
     {
         removeButton.removeSelectionListener( listener );
+    }
+    
+    public boolean isModified()
+    {
+        return isModified;
+    }
+    
+    public void setModified( boolean isModified )
+    {
+        this.isModified = isModified;
     }
 
     public boolean keyAlreadyExist( String key )

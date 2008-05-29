@@ -339,7 +339,11 @@ public class MavenPomDependenciesFormPage extends FormPage
 
         public void widgetSelected( SelectionEvent e )
         {
-            pageModified();
+            if ( ( exclusionTableComponent.isModified() == true ) ||
+                 ( dependencyManagementExclusionTableComponent.isModified() == true ) )
+            {
+                pageModified();
+            }            
             
             exclusionTableComponent.setEditButtonEnabled( false );
             exclusionTableComponent.setRemoveButtonEnabled( false );

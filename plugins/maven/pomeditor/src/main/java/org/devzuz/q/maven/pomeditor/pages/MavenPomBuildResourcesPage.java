@@ -223,7 +223,10 @@ public class MavenPomBuildResourcesPage extends FormPage
 
         public void widgetSelected( SelectionEvent e )
         {
-            pageModified();
+            if ( includeComponent.isModified() == true )
+            {
+                pageModified();
+            }
         }
     }
 
@@ -237,7 +240,10 @@ public class MavenPomBuildResourcesPage extends FormPage
 
         public void widgetSelected( SelectionEvent e )
         {
-            pageModified();
+            if ( excludeComponent.isModified() == true )
+            {
+                pageModified();
+            }
         }
     }
 

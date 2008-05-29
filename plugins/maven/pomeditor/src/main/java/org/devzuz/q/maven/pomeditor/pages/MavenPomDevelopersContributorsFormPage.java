@@ -348,7 +348,10 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
 
         public void widgetSelected( SelectionEvent e )
         {
-            pageModified();
+            if ( developerPropertiesTableComponent.isModified() == true )
+            {    
+                pageModified();
+            }
         }
     }
     
@@ -361,7 +364,10 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
 
         public void widgetSelected( SelectionEvent e )
         {
-            pageModified();
+            if ( contributorPropertiesTableComponent.isModified() == true )
+            {
+                pageModified();
+            }
         }
     }
 
