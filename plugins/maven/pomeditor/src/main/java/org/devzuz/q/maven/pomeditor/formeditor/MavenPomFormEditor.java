@@ -26,6 +26,7 @@ import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDevelopersContributorsFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesScmOrgFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomPropertiesModuleFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomRepositoriesFormPage;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -60,6 +61,8 @@ public class MavenPomFormEditor extends FormEditor
     
     public static final String CIMANAGEMENT_MAILINGLISTS_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomCiManagementMailingListsPage";
     
+    public static final String REPOSITORIES_FORM_PAGE="org.devzuz.q.maven.pomeditor.MavenPomRepositoriesFormPage";
+    
     private Model pomModel;
 
     private MavenPomBasicFormPage basicFormPage;
@@ -81,6 +84,8 @@ public class MavenPomFormEditor extends FormEditor
     private MavenPomBuildPluginFormPage buildPluginFormPage;
     
     private MavenPomCiManagementMailingListFormPage ciManagementMailingListsPage;
+    
+    private MavenPomRepositoriesFormPage repositoriesPage;
     
     public MavenPomFormEditor()
     {
@@ -133,6 +138,10 @@ public class MavenPomFormEditor extends FormEditor
                     new MavenPomCiManagementMailingListFormPage( this, CIMANAGEMENT_MAILINGLISTS_FORM_PAGE,
                                                                  "CiManagement/Mailing Lists", this.pomModel );
                 addPage( ciManagementMailingListsPage );
+                
+                repositoriesPage =
+                    new MavenPomRepositoriesFormPage( this, REPOSITORIES_FORM_PAGE, "Repositories", this.pomModel );
+                addPage( repositoriesPage );
             }
         }
         catch ( PartInitException pie )
@@ -237,6 +246,7 @@ public class MavenPomFormEditor extends FormEditor
         buildTestResourcesPage.setPageModified( false );
         buildPluginFormPage.setPageModified( false );
         ciManagementMailingListsPage.setPageModified( false );
+        repositoriesPage.setPageModified( false );
         // clean other pages
     }
 
