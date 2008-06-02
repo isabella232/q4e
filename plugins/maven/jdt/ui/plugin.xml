@@ -21,6 +21,9 @@
             adaptable="true"
             objectClass="org.eclipse.core.resources.IProject"
             id="org.devzuz.q.maven.jdt.ui.project.menu">
+          <enablement>
+             <test property="org.devzuz.q.maven.ui.hasPOM" value="true" forcePluginActivation="true"/>
+          </enablement>            
             <visibility>
               <not>
               <objectState
