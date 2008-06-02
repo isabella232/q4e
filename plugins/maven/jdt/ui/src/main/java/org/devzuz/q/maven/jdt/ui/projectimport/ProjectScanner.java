@@ -114,8 +114,9 @@ public class ProjectScanner
                 PomFileDescriptor parentProjectDescriptor = null;
 
                 PomFileDescriptor parent = getPomFileDescriptor( file );
-
-                if ( importParentProjects )
+                List<String> modules = parent.getModel().getModules();
+                
+                if ( importParentProjects || modules.size() == 0 )
                 {
                     root.addPomFileDescriptor( parent );
                     parentProjectDescriptor = parent;
@@ -125,7 +126,7 @@ public class ProjectScanner
                     parentProjectDescriptor = root;
                 }
 
-                List<String> modules = parent.getModel().getModules();
+
                 for ( String module : modules )
                 {
                     resolvePomFileDescriptor( new File( file, module ), monitor.newChild( 1 ), parentProjectDescriptor );          
