@@ -14,11 +14,14 @@ import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.ui.projectimport.ProjectScanner;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 
 public class ProjectScannerRunnable implements IRunnableWithProgress
 {
     private File directoryToScan;
+
+    private PomFileDescriptor pomDescriptor;
 
     private Collection<PomFileDescriptor> pomDescriptors;
 
@@ -40,8 +43,10 @@ public class ProjectScannerRunnable implements IRunnableWithProgress
         monitor.beginTask( "Scanning for Maven 2 Projects ...", IProgressMonitor.UNKNOWN );
         try
         {
+            SubMonitor progress = SubMonitor.convert( monitor, 100 );
+
             ProjectScanner scanner = new ProjectScanner( importParentsEnabled );
-            pomDescriptors = scanner.scanFolder( directoryToScan, monitor );
+            pomDescriptor = scanner.scanFolder( directoryToScan, progress );
         }
         catch ( InterruptedException e )
         {
@@ -67,5 +72,15 @@ public class ProjectScannerRunnable implements IRunnableWithProgress
     {
         this.importParentsEnabled = enable;
 
+    }
+
+    public PomFileDescriptor getPomDescriptor()
+    {
+        return pomDescriptor;
+    }
+
+    public void setPomDescriptor( PomFileDescriptor pomDescriptor )
+    {
+        this.pomDescriptor = pomDescriptor;
     }
 }

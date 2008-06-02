@@ -26,6 +26,7 @@ import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.devzuz.q.maven.jdt.ui.internal.TraceOption;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
 /**
@@ -83,6 +84,60 @@ public class ProjectScanner
         {
             return getProjects( file, monitor );
         }
+    }
+
+    @SuppressWarnings( "unchecked" )
+    public PomFileDescriptor scanFolder( File file, SubMonitor monitor ) throws InterruptedException
+    {
+        PomFileDescriptor root = new PomFileDescriptor();
+
+        if ( monitor.isCanceled() )
+        {
+            throw new InterruptedException();
+        }
+
+        File pom = new File( file, IMavenProject.POM_FILENAME );
+        if ( pom.exists() || file.isDirectory() )
+        {
+            /* if we can we get the list of projects ordered by the reactor */
+            List<PomFileDescriptor> projects = getSortedProjects( pom, monitor );
+            if ( projects != null )
+            {
+                /* we are done */
+                for ( PomFileDescriptor pomDescriptor : projects )
+                {
+                    root.addPomFileDescriptor( pomDescriptor );
+                }
+            }
+            else
+            {
+                PomFileDescriptor parentProjectDescriptor = null;
+
+                PomFileDescriptor parent = getPomFileDescriptor( file );
+
+                if ( importParentProjects )
+                {
+                    root.addPomFileDescriptor( parent );
+                    parentProjectDescriptor = parent;
+                }
+                else
+                {
+                    parentProjectDescriptor = root;
+                }
+
+                List<String> modules = parent.getModel().getModules();
+                for ( String module : modules )
+                {
+                    resolvePomFileDescriptor( new File( file, module ), monitor.newChild( 1 ), parentProjectDescriptor );          
+                }
+            }
+        }
+        else
+        {
+            MavenJdtUiActivator.getLogger().error( "Ignoring " + file + " : Not a directory or does not exist" );
+        }
+
+        return root;
     }
 
     /**
@@ -150,6 +205,7 @@ public class ProjectScanner
         return importParentProjects || !"pom".equals( model.getPackaging() );
     }
 
+    @SuppressWarnings( "unchecked" )
     private Collection<PomFileDescriptor> getProjects( File file, IProgressMonitor monitor )
         throws InterruptedException
     {
@@ -209,5 +265,57 @@ public class ProjectScanner
                                    " Maven 2 Projects by reading the poms." );
 
         return pomDescriptors;
+    }
+
+    @SuppressWarnings( "unchecked" )
+    private void resolvePomFileDescriptor( File file, SubMonitor monitor, PomFileDescriptor parent )
+        throws InterruptedException
+    {
+        if ( monitor.isCanceled() )
+        {
+            throw new InterruptedException();
+        }
+
+        PomFileDescriptor pomDescriptor = getPomFileDescriptor( file );
+        if ( pomDescriptor != null )
+        {
+            parent.addPomFileDescriptor( pomDescriptor );
+
+            List<String> modules = pomDescriptor.getModel().getModules();
+
+            for ( String module : modules )
+            {
+                resolvePomFileDescriptor( new File( file, module ), monitor.newChild( 1 ), pomDescriptor );
+            }
+        }
+    }
+
+    private PomFileDescriptor getPomFileDescriptor( File file )
+    {
+        PomFileDescriptor pomDescriptor = null;
+
+        File pom = new File( file, IMavenProject.POM_FILENAME );
+        if ( pom.exists() )
+        {
+            try
+            {
+                Model pomModel = new MavenXpp3Reader().read( new FileReader( pom ) );
+                pomDescriptor = new PomFileDescriptor( pom, pomModel );
+            }
+            catch ( IOException e )
+            {
+                // TODO the project doesn't build, but we should add it anyways or show the error to the
+                // user
+                MavenJdtUiActivator.getLogger().log( "Unable to read Maven project: " + pom, e );
+            }
+            catch ( XmlPullParserException e )
+            {
+                // TODO the project's pom can't be parsed, but we should add it anyways or show the
+                // error to the user
+                MavenJdtUiActivator.getLogger().log( "Maven project contains wrong markup: " + pom, e );
+            }
+        }
+
+        return pomDescriptor;
     }
 }

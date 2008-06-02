@@ -7,6 +7,8 @@
 package org.devzuz.q.maven.embedder;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.maven.model.Model;
 
@@ -21,6 +23,10 @@ public class PomFileDescriptor
 
     private Model model;
 
+    private PomFileDescriptor parent;
+
+    private List<PomFileDescriptor> subPomDescriptors = new ArrayList<PomFileDescriptor>();
+    
     /**
      * Default contructor.
      */
@@ -44,6 +50,14 @@ public class PomFileDescriptor
         this.model = model;
     }
 
+    public PomFileDescriptor( File file, Model model, PomFileDescriptor parent )
+    {
+        super();
+        this.file = file;
+        this.model = model;
+        this.parent = parent;
+    }
+    
     /**
      * Gets the pom.xml file.
      * 
@@ -101,4 +115,26 @@ public class PomFileDescriptor
     {
         return getModel().toString() + ":" + getFile();
     }
+    
+    public void addPomFileDescriptor(PomFileDescriptor pomDescriptor)
+    {
+        pomDescriptor.setParent( this );
+        subPomDescriptors.add( pomDescriptor );
+    }
+
+    public List<PomFileDescriptor> getSubPomDescriptors()
+    {
+        return subPomDescriptors;
+    }
+
+    public PomFileDescriptor getParent()
+    {
+        return parent;
+    }
+
+    public void setParent( PomFileDescriptor parent )
+    {
+        this.parent = parent;
+    }
+
 }
