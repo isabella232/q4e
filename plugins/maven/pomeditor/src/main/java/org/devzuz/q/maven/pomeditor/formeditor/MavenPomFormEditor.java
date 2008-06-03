@@ -61,7 +61,7 @@ public class MavenPomFormEditor extends FormEditor
     
     public static final String CIMANAGEMENT_MAILINGLISTS_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomCiManagementMailingListsPage";
     
-    public static final String REPOSITORIES_FORM_PAGE="org.devzuz.q.maven.pomeditor.MavenPomRepositoriesFormPage";
+    public static final String REPOSITORIES_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomRepositoriesFormPage";
     
     private Model pomModel;
 

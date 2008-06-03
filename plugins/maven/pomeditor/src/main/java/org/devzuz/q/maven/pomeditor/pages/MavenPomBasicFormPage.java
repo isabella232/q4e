@@ -313,6 +313,16 @@ public class MavenPomBasicFormPage extends FormPage
         });
         ciManagementLink.setText( "Manage Ci Management and Mailing Lists" );
         
+        Hyperlink repositoriesLink = toolKit.createHyperlink( parent, "Manage Repositories and Plugin Repositories", SWT.WRAP );
+        repositoriesLink.addHyperlinkListener( new HyperlinkAdapter()
+        {
+            public void linkActivated( HyperlinkEvent e )
+            {
+                editor.setActivePage( MavenPomFormEditor.REPOSITORIES_FORM_PAGE );
+            }
+        });
+        repositoriesLink.setText( "Manage Repositories and Plugin Repositories" );
+        
         return parent;
     }
     

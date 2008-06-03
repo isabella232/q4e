@@ -2,7 +2,6 @@ package org.devzuz.q.maven.pomeditor.pages;
 
 import org.apache.maven.model.Model;
 import org.devzuz.q.maven.pomeditor.Messages;
-import org.devzuz.q.maven.pomeditor.components.DependencyTableComponent;
 import org.devzuz.q.maven.pomeditor.components.RepositoryTableComponent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -15,8 +14,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.events.ExpansionAdapter;
-import org.eclipse.ui.forms.events.ExpansionEvent;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
@@ -69,13 +66,15 @@ public class MavenPomRepositoriesFormPage
                 
     }
     
+    @SuppressWarnings("unchecked")
     private Control createPluginRepositoryControls(Composite parent,
             FormToolkit toolKit) 
     {
         Composite container = toolKit.createComposite( parent, SWT.None );
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
                 
-        pluginRepositoriesTableComponent = new RepositoryTableComponent( container, SWT.None );
+        pluginRepositoriesTableComponent = new RepositoryTableComponent( container, SWT.None, 
+                                                                         pomModel.getPluginRepositories() );
                         
         ComponentListener buttonListener = new ComponentListener();
         pluginRepositoriesTableComponent.addAddButtonListener( buttonListener );
@@ -85,13 +84,15 @@ public class MavenPomRepositoriesFormPage
         return container;
     }
     
+    @SuppressWarnings("unchecked")
     private Control createRepositoryControls(Composite parent,
             FormToolkit toolKit) 
     {
         Composite container = toolKit.createComposite( parent, SWT.None );
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
                 
-        repositoriesTableComponent = new RepositoryTableComponent( container, SWT.None );
+        repositoriesTableComponent = new RepositoryTableComponent( container, SWT.None, 
+                                                                   pomModel.getRepositories() );
                         
         ComponentListener buttonListener = new ComponentListener();
         repositoriesTableComponent.addAddButtonListener( buttonListener );

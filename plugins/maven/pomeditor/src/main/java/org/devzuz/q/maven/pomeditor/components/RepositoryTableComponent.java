@@ -1,9 +1,15 @@
 package org.devzuz.q.maven.pomeditor.components;
 
+import java.util.List;
+
 import org.apache.maven.model.Repository;
+import org.apache.maven.model.RepositoryPolicy;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.dialogs.AddEditRepositoryDialog;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -12,6 +18,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 
 public class RepositoryTableComponent
     extends Composite
@@ -28,9 +35,15 @@ public class RepositoryTableComponent
 
     private boolean isModified;
 
-    public RepositoryTableComponent( Composite parent, int style )
+    private List<Repository> dataSource;
+
+    public int selectedIndex;
+
+    public RepositoryTableComponent( Composite parent, int style, List<Repository> dataSource )
     {
         super( parent, style );
+        
+        this.dataSource = dataSource;
         
         setLayout( new GridLayout( 2, false ) );
         
@@ -89,26 +102,173 @@ public class RepositoryTableComponent
         removeButton.addSelectionListener( removeButtonListener );
         removeButton.setEnabled( false );
         
+        refreshRepositoryTable();
+        
+    }
+    
+    public void refreshRepositoryTable()
+    {
+        repositoriesTable.removeAll();
+        
+        for ( Repository repository : dataSource )
+        {
+            RepositoryPolicy release = new RepositoryPolicy();
+            RepositoryPolicy snapshot = new RepositoryPolicy();
+            
+            release = repository.getReleases();
+            snapshot = repository.getSnapshots();
+            
+
+            String releaseString = release.isEnabled() + ", " + nullIfBlank( release.getUpdatePolicy() ) 
+                + ", " + nullIfBlank( release.getChecksumPolicy() );
+            String snapshotString = snapshot.isEnabled() + ", " + nullIfBlank( snapshot.getUpdatePolicy() ) 
+                + ", " +  nullIfBlank( snapshot.getChecksumPolicy() );
+            
+            TableItem item = new TableItem( repositoriesTable, SWT.BEGINNING );
+            item.setText( new String[] { repository.getId(), repository.getName(), 
+                repository.getUrl(), repository.getLayout(), releaseString, snapshotString } );
+            
+        }
     }
     
     private class RepositoriesTableListener extends SelectionAdapter
     {
+        public void defaultWidgetSelected ( SelectionEvent e )
+        {
+            widgetSelected( e );
+        }
         
+        public void widgetSelected( SelectionEvent e )
+        {
+            TableItem[] item = repositoriesTable.getSelection();
+            
+            if ( ( item != null ) &&
+                 ( item.length > 0 ) )
+            {
+                addButton.setEnabled( true );
+                removeButton.setEnabled( true );
+                editButton.setEnabled( true );
+                
+                if ( repositoriesTable.getSelectionIndex() >= 0 )
+                {
+                    selectedIndex = repositoriesTable.getSelectionIndex();
+                    selectedRepository = dataSource.get( selectedIndex );
+                }
+            }
+        }
     }
     
     private class AddButtonListener extends SelectionAdapter
     {
+        public void defaultWidgetSelected ( SelectionEvent e )
+        {
+            widgetSelected( e );
+        }
+        
+        public void widgetSelected( SelectionEvent e )
+        {
+            AddEditRepositoryDialog addDialog = 
+                AddEditRepositoryDialog.newAddEditRepositoryDialog();
+            
+            if ( addDialog.open() == Window.OK )
+            {                
+                Repository repository = new Repository();
+                RepositoryPolicy releases = new RepositoryPolicy();
+                RepositoryPolicy snapshots = new RepositoryPolicy();
+                
+                repository.setId( addDialog.getId() );
+                repository.setName( nullIfBlank( addDialog.getName() ) );
+                repository.setLayout( nullIfBlank( addDialog.getRepositoryLayout() ) );
+                repository.setUrl( addDialog.getUrl() );
+                
+                releases.setEnabled( addDialog.isReleasesEnabled() );
+                releases.setUpdatePolicy( addDialog.getReleasesUpdatePolicy() );
+                releases.setChecksumPolicy( addDialog.getReleasesChecksumPolicy() );
+                
+                snapshots.setEnabled( addDialog.isSnapshotsEnabled() );
+                snapshots.setUpdatePolicy( addDialog.getSnapshotsUpdatePolicy() );
+                snapshots.setChecksumPolicy( addDialog.getSnapshotsChecksumPolicy() );
+                
+                repository.setReleases( releases );
+                repository.setSnapshots( snapshots );
+                
+                dataSource.add( repository );
+                
+                refreshRepositoryTable();
+                
+                setModified( true );
+                
+            }
+        }
         
     }
     
     private class EditButtonListener extends SelectionAdapter
     {
+        public void defaultWidgetSelected ( SelectionEvent e )
+        {
+            widgetSelected( e );
+        }
+        
+        public void widgetSelected( SelectionEvent e )
+        {
+            AddEditRepositoryDialog editDialog = 
+                AddEditRepositoryDialog.newAddEditRepositoryDialog();
+            
+            if ( editDialog.openWithRepository( selectedRepository ) == Window.OK )
+            {
+                Repository repository = new Repository();
+                RepositoryPolicy releases = new RepositoryPolicy();
+                RepositoryPolicy snapshots = new RepositoryPolicy();
+                
+                repository.setId( editDialog.getId() );
+                repository.setName( nullIfBlank( editDialog.getName() ) );
+                repository.setLayout( nullIfBlank( editDialog.getRepositoryLayout() ) );
+                repository.setUrl( editDialog.getUrl() );
+                
+                releases.setEnabled( editDialog.isReleasesEnabled() );
+                releases.setUpdatePolicy( editDialog.getReleasesUpdatePolicy() );
+                releases.setChecksumPolicy( editDialog.getReleasesChecksumPolicy() );
+                
+                snapshots.setEnabled( editDialog.isSnapshotsEnabled() );
+                snapshots.setUpdatePolicy( editDialog.getSnapshotsUpdatePolicy() );
+                snapshots.setChecksumPolicy( editDialog.getSnapshotsChecksumPolicy() );
+                
+                repository.setReleases( releases );
+                repository.setSnapshots( snapshots );
+                
+                dataSource.remove( selectedRepository );
+                dataSource.add( repository );
+                
+                refreshRepositoryTable();
+                
+                setModified( true );
+            }
+            
+            editButton.setEnabled( false );
+            removeButton.setEnabled( false );
+        }
         
     }
     
     private class RemoveButtonListener extends SelectionAdapter
     {
+        public void defaultWidgetSelected ( SelectionEvent e )
+        {
+            widgetSelected( e );
+        }
         
+        public void widgetSelected( SelectionEvent e )
+        {
+            dataSource.remove( selectedRepository );
+            
+            refreshRepositoryTable();
+            
+            setModified( true );
+            
+            editButton.setEnabled( false );
+            removeButton.setEnabled( false );
+        }
     }
     
     private String nullIfBlank(String str) 
