@@ -187,6 +187,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         
         EditDeveloperButtonListener editButtonListener = new EditDeveloperButtonListener();
         editDeveloperButton.addSelectionListener( editButtonListener );
+        editDeveloperButton.setEnabled( false );
         
         removeDeveloperButton = toolKit.createButton( container2, 
                Messages.MavenPomEditor_MavenPomEditor_RemoveButton, SWT.PUSH | SWT.CENTER );

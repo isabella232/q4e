@@ -309,7 +309,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         Section dependencyManagementExclusionSection = toolKit.createSection( container, Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED |
                             Section.DESCRIPTION );
         dependencyManagementExclusionSection.setDescription( "Contains informations required to exclude an artifact to the project." );
-        dependencyManagementExclusionSection.setText( Messages.MavenPomEditor_MavenPomEditor_DependencyExclusions );
+        dependencyManagementExclusionSection.setText( Messages.MavenPomEditor_MavenPomEditor_DependencyManagementExclusions );
         dependencyManagementExclusionSection.setClient( createDependencyManagementExclusionInfoControls( dependencyManagementExclusionSection, toolKit ) );        
         
     }

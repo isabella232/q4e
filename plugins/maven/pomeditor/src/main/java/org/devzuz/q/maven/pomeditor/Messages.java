@@ -214,6 +214,8 @@ public class Messages
     
     public static String MavenPomEditor_MavenPomEditor_DependencyExclusions;
     
+    public static String MavenPomEditor_MavenPomEditor_DependencyManagementExclusions;
+    
     public static String MavenPomEditor_MavenPomEditor_Dependencies;
     
     public static String MavenPomEditor_MavenPomEditor_Filters;
