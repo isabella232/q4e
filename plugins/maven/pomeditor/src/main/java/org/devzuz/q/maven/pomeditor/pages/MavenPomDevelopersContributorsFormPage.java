@@ -44,7 +44,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
 {
     private ScrolledForm form;
 
-    private Model pomModel;
+    //private Model pomModel;
 
     private Table developersTable;
 
@@ -87,7 +87,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     public MavenPomDevelopersContributorsFormPage( FormEditor editor, String id, String title, Model modelPOM )
     {
         super( editor, id, title );
-        this.pomModel = modelPOM;
+        //this.pomModel = modelPOM;
         this.developerList = modelPOM.getDevelopers();
         this.contributorList = modelPOM.getContributors();
     }
@@ -546,8 +546,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                         MessageBox mesgBox = new MessageBox( form.getShell(), SWT.ICON_ERROR | SWT.OK  );
                         mesgBox.setMessage( "Developer ID already exists." );
                         mesgBox.setText( "Saving Developer Error" );
-                    
-                        int response = mesgBox.open( );
+                        mesgBox.open( );
                     }
                 }
                 else // id was modified
@@ -719,8 +718,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                         MessageBox mesgBox = new MessageBox( form.getShell(), SWT.ICON_ERROR | SWT.OK  );
                         mesgBox.setMessage( "Contributor already exists." );
                         mesgBox.setText( "Saving Contributor Error" );
-                    
-                        int response = mesgBox.open( );
+                        mesgBox.open( );
                     }
                 }                
                 else

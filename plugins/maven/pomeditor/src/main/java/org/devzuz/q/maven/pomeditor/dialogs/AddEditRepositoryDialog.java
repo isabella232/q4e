@@ -265,11 +265,6 @@ public class AddEditRepositoryDialog
     {
         return str == null ? "" : str;
     }
-    
-    private boolean isNotNullOrWhiteSpace( String str )
-    {
-        return ( str == null || str.trim().length() == 0 );
-    }
 
     @Override
     protected Preferences getDialogPreferences()

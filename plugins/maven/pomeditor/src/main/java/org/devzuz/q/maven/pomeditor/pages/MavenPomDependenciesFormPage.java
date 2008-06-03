@@ -62,6 +62,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         super( id, title );
     }
 
+    @SuppressWarnings ("unchecked")
     public MavenPomDependenciesFormPage( FormEditor editor, String id, 
     		String title, Model model)
     {
@@ -121,7 +122,8 @@ public class MavenPomDependenciesFormPage extends FormPage
             {
                 widgetSelected( e );
             }
-
+            
+            @SuppressWarnings ("unchecked")
             public void widgetSelected( SelectionEvent e )
             {
                 selectedDependency = dependencyTableComponent.getSelectedDependency();
@@ -157,6 +159,7 @@ public class MavenPomDependenciesFormPage extends FormPage
                 widgetSelected( e );
             }
 
+            @SuppressWarnings ("unchecked")
             public void widgetSelected( SelectionEvent e )
             {
                 if ( dependencyTableComponent.isModified() == true )
@@ -239,6 +242,7 @@ public class MavenPomDependenciesFormPage extends FormPage
                 widgetSelected( e );
             }
 
+            @SuppressWarnings ("unchecked")
             public void widgetSelected( SelectionEvent e )
             {
                 selectedDependencyInMgt = dependencyManagementTableComponent.getSelectedDependency();
@@ -273,6 +277,7 @@ public class MavenPomDependenciesFormPage extends FormPage
                 widgetSelected( e );
             }
 
+            @SuppressWarnings ("unchecked")
             public void widgetSelected( SelectionEvent e )
             {
                 if ( dependencyManagementTableComponent.isModified() == true )
