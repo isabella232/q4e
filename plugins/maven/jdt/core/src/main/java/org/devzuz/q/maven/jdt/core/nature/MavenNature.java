@@ -400,6 +400,10 @@ public class MavenNature implements IProjectNature
         for ( String sourceRoot : sourceRoots )
         {
             File sourceRootFile = new File( sourceRoot );
+            // Issue 462: Generated folders might not exist during import, but we need them
+            if (!sourceRootFile.exists()) {
+            	sourceRootFile.mkdirs();
+            }
             if ( sourceRootFile.exists() && sourceRootFile.isDirectory() )
             {
                 String relativePath = getRelativePath( project.getLocation(), sourceRoot );
