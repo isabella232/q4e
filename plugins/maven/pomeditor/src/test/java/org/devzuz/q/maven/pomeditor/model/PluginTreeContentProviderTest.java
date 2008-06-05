@@ -1,11 +1,12 @@
 package org.devzuz.q.maven.pomeditor.model;
-import static org.junit.Assert.assertTrue;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+
+import junit.framework.TestCase;
 
 import org.apache.maven.model.Build;
 import org.apache.maven.model.Model;
@@ -16,11 +17,9 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.pomeditor.pages.internal.DeleteItemAction;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
 
-public class PluginTreeContentProviderTest
+public class PluginTreeContentProviderTest extends TestCase
+    
 {
     Model pomModel;
     PluginTreeContentProvider provider;
@@ -28,7 +27,6 @@ public class PluginTreeContentProviderTest
     Build build;
     
     @SuppressWarnings ("unchecked")
-    @Before
     public void setUp() throws Exception
     {
         try
@@ -60,7 +58,6 @@ public class PluginTreeContentProviderTest
     }
     
     @SuppressWarnings ("unchecked")
-    @Test
     public void testSamplePom()
     {
         Object[] root = provider.getChildren( build );
@@ -107,7 +104,6 @@ public class PluginTreeContentProviderTest
         assertTrue( executionChildren.length == 2 );
     }
     
-    @Test
     public void testParentChild()
     {
         checkNode( plugins );
@@ -126,13 +122,11 @@ public class PluginTreeContentProviderTest
         }
     }
     
-    @Test
     public void testLabelProvider()
     {
         showName( plugins , new PluginTreeLabelProvider() );
     }
     
-    @Test 
     public void testXpp3Dom()
     {
         assertTrue ( "plugins != null ",plugins != null );
@@ -179,7 +173,6 @@ public class PluginTreeContentProviderTest
         }
     }
     
-    @Test
     @SuppressWarnings ("unchecked")
     public void testDeleteItemAction()
     {
@@ -195,7 +188,6 @@ public class PluginTreeContentProviderTest
         assertTrue( !(objectList.contains( plugin )) );
     }
     
-    @After
     public void tearDown() throws Exception
     {
     }
