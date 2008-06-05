@@ -68,12 +68,6 @@ public class Messages
     
     public static String MavenPomEditor_MavenDependencyLookupDialog_Label;
     
-    public static String MavenPomEditor_MavenCustomComponent_GroupIdLabel;
-    
-    public static String MavenPomEditor_MavenCustomComponent_ArtifactIdLabel;
-    
-    public static String MavenPomEditor_MavenCustomComponent_VersionLabel;
-    
     public static String MavenPomEditor_MavenPomEditor_Build;
     
     public static String MavenPomEditor_MavenPomEditor_FinalName;
@@ -106,14 +100,6 @@ public class Messages
     
     public static String MavenPomEditor_MavenPomEditor_DuplicateLicense;
     
-    public static String MavenAddEditLicenseDialog_Name;
-
-    public static String MavenAddEditLicenseDialog_Distribution;
-
-    public static String MavenAddEditLicenseDialog_URL;
-
-    public static String MavenAddEditLicenseDialog_Comment;
-    
     public static String MavenPomEditor_MavenPomEditor_Identity;
 	
 	public static String MavenPomEditor_MavenPomEditor_Email;
@@ -125,29 +111,7 @@ public class Messages
 	public static String MavenPomEditor_MavenPomEditor_Roles;
 	
 	public static String MavenPomEditor_MavenPomEditor_Timezone;
-	
-	public static String MavenAddEditDeveloperDialog_identityLabel;
-    
-    public static String MavenAddEditDeveloperDialog_nameLabel;
-    
-    public static String MavenAddEditDeveloperDialog_emailLabel;
-    
-    public static String MavenAddEditDeveloperDialog_urlLabel;
-    
-    public static String MavenAddEditDeveloperDialog_organizationLabel;
-    
-    public static String MavenAddEditDeveloperDialog_organizationUrlLabel;
-    
-    public static String MavenAddEditDeveloperDialog_rolesLabel;
-    
-    public static String MavenAddEditDeveloperDialog_timezoneLabel;
-    
-    public static String MavenAddEditDeveloperDialog_propertiesLabel;
-    
-    public static String MavenAddEditDeveloperPropertiesDialog_keyLabel;
-    
-    public static String MavenAddEditDeveloperPropertiesDialog_valueLabel;
-    
+	    
     public static String MavenPomEditor_MavenPomEditor_Resource_TargetPath;
     
     public static String MavenPomEditor_MavenPomEditor_Resource_Filtering;
@@ -177,8 +141,6 @@ public class Messages
     public static String MavenPomEditor_MailingList_Description;
 
     public static String MavenPomEditor_MavenPomEditor_System;
-
-    public static String MavenPomEditor_MavenPomEditor_Url;
 
     public static String MavenPomEditor_MavenPomEditor_Notifiers;
 
@@ -241,6 +203,24 @@ public class Messages
     public static String MavenPomEditor_MavenPomEditor_UpdatePolicy;
     
     public static String MavenPomEditor_MavenPomEditor_ChecksumPolicy;
+    
+    public static String MavenPomEditor_MavenPomEditor_Reporting;
+    
+    public static String MavenPomEditor_MavenPomEditor_DistributionManagement;
+    
+    public static String MavenPomEditor_MavenPomEditor_DownloadURL;
+    
+    public static String MavenPomEditor_MavenPomEditor_Status;
+    
+    public static String MavenPomEditor_MavenPomEditor_Site;
+    
+    public static String MavenPomEditor_MavenPomEditor_Relocation;
+    
+    public static String MavenPomEditor_MavenPomEditor_Message;
+    
+    public static String MavenPomEditor_MavenPomEditor_UniqueVersion;
+    
+    public static String MavenPomEditor_MavenPomEditor_SnapshotRepository;
     
     static
     {

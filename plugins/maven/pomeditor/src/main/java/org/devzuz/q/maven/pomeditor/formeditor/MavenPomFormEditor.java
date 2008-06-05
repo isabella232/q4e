@@ -24,6 +24,7 @@ import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildTestResourcesPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomCiManagementMailingListFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDevelopersContributorsFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomDistributionManagementFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesScmOrgFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomPropertiesModuleFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomRepositoriesFormPage;
@@ -63,6 +64,8 @@ public class MavenPomFormEditor extends FormEditor
     
     public static final String REPOSITORIES_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomRepositoriesFormPage";
     
+    public static final String DISTRIBUTION_MANAGEMENT_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomDistributionManagementFormPage";
+    
     private Model pomModel;
 
     private MavenPomBasicFormPage basicFormPage;
@@ -86,6 +89,8 @@ public class MavenPomFormEditor extends FormEditor
     private MavenPomCiManagementMailingListFormPage ciManagementMailingListsPage;
     
     private MavenPomRepositoriesFormPage repositoriesPage;
+    
+    private MavenPomDistributionManagementFormPage distributionManagementPage;
     
     public MavenPomFormEditor()
     {
@@ -142,6 +147,10 @@ public class MavenPomFormEditor extends FormEditor
                 repositoriesPage =
                     new MavenPomRepositoriesFormPage( this, REPOSITORIES_FORM_PAGE, "Repositories", this.pomModel );
                 addPage( repositoriesPage );
+                
+                distributionManagementPage =
+                    new MavenPomDistributionManagementFormPage( this, DISTRIBUTION_MANAGEMENT_FORM_PAGE, "Distribution Management", this.pomModel );
+                addPage( distributionManagementPage );
             }
         }
         catch ( PartInitException pie )
@@ -247,6 +256,7 @@ public class MavenPomFormEditor extends FormEditor
         buildPluginFormPage.setPageModified( false );
         ciManagementMailingListsPage.setPageModified( false );
         repositoriesPage.setPageModified( false );
+        distributionManagementPage.setPageModified( false );
         // clean other pages
     }
 

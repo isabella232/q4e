@@ -84,56 +84,56 @@ public class AddEditDeveloperDialog extends AbstractResizableDialog
         // Group ID Label, Text and Lookup Button
         Label label = new Label( container, SWT.NULL );
         label.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        label.setText( Messages.MavenAddEditDeveloperDialog_identityLabel );
+        label.setText( Messages.MavenPomEditor_MavenPomEditor_Identity );
         identityText = new Text( container, SWT.BORDER | SWT.SINGLE );
         identityText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
         identityText.addModifyListener( modifyingListener );
 
         Label label2 = new Label( container, SWT.NULL );
         label2.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        label2.setText( Messages.MavenAddEditDeveloperDialog_nameLabel );
+        label2.setText( Messages.MavenPomEditor_MavenPomEditor_Name );
         nameText = new Text( container, SWT.BORDER | SWT.SINGLE );
         nameText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
         nameText.addModifyListener( modifyingListener );
 
         Label label3 = new Label( container, SWT.NULL );
         label3.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        label3.setText( Messages.MavenAddEditDeveloperDialog_emailLabel );
+        label3.setText( Messages.MavenPomEditor_MavenPomEditor_Email );
         emailText = new Text( container, SWT.BORDER | SWT.SINGLE );
         emailText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
         emailText.addModifyListener( modifyingListener );
 
         Label label4 = new Label( container, SWT.NULL );
         label4.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        label4.setText( Messages.MavenAddEditDeveloperDialog_urlLabel );
+        label4.setText( Messages.MavenPomEditor_MavenPomEditor_URL );
         urlText = new Text( container, SWT.BORDER | SWT.SINGLE );
         urlText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
         urlText.addModifyListener( modifyingListener );
 
         Label label5 = new Label( container, SWT.NULL );
         label5.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        label5.setText( Messages.MavenAddEditDeveloperDialog_organizationLabel );
+        label5.setText( Messages.MavenPomEditor_MavenPomEditor_Organization );
         organizationText = new Text( container, SWT.BORDER | SWT.SINGLE );
         organizationText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
         organizationText.addModifyListener( modifyingListener );
 
         Label label6 = new Label( container, SWT.NULL );
         label6.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        label6.setText( Messages.MavenAddEditDeveloperDialog_organizationUrlLabel );
+        label6.setText( Messages.MavenPomEditor_MavenPomEditor_OrganizationUrl );
         organizationUrlText = new Text( container, SWT.BORDER | SWT.SINGLE );
         organizationUrlText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
         organizationUrlText.addModifyListener( modifyingListener );
 
         Label label7 = new Label( container, SWT.NULL );
         label7.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        label7.setText( Messages.MavenAddEditDeveloperDialog_rolesLabel + " (separated by comma)" );
+        label7.setText( Messages.MavenPomEditor_MavenPomEditor_Roles + " (separated by comma)" );
         rolesText = new Text( container, SWT.BORDER | SWT.SINGLE );
         rolesText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
         rolesText.addModifyListener( modifyingListener );
 
         Label label8 = new Label( container, SWT.NULL );
         label8.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        label8.setText( Messages.MavenAddEditDeveloperDialog_timezoneLabel );
+        label8.setText( Messages.MavenPomEditor_MavenPomEditor_Timezone );
         timezoneText = new Text( container, SWT.BORDER | SWT.SINGLE );
         timezoneText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
         timezoneText.addModifyListener( modifyingListener );

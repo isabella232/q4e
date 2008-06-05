@@ -59,7 +59,7 @@ public class AddEditDeveloperPropertiesDialog extends AbstractResizableDialog
 
         Label keylabel = new Label( container, SWT.NULL );
         keylabel.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        keylabel.setText( Messages.MavenAddEditDeveloperPropertiesDialog_keyLabel );
+        keylabel.setText( Messages.MavenPomEditor_MavenPomEditor_Key );
 
         keyText = new Text( container, SWT.BORDER | SWT.SINGLE );
         keyText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false ) );
@@ -67,7 +67,7 @@ public class AddEditDeveloperPropertiesDialog extends AbstractResizableDialog
 
         Label valueLabel = new Label( container, SWT.NULL );
         valueLabel.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        valueLabel.setText( Messages.MavenAddEditDeveloperPropertiesDialog_valueLabel );
+        valueLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Value );
 
         valueText = new Text( container, SWT.BORDER | SWT.SINGLE );
         valueText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false ) );

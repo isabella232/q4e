@@ -184,7 +184,7 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         createTextDisplay( systemText, controlData, ciManagement.getSystem() );
 
         Label urlLabel =
-            toolKit.createLabel( parentContainer, Messages.MavenPomEditor_MavenPomEditor_Url, SWT.NONE );
+            toolKit.createLabel( parentContainer, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE );
         urlLabel.setLayoutData( labelData );
         urlText = toolKit.createText( parentContainer, "", SWT.BORDER | SWT.SINGLE );
         createTextDisplay( urlText, controlData, ciManagement.getUrl() );

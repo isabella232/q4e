@@ -63,34 +63,30 @@ public class AddEditLicenseDialog extends AbstractResizableDialog
 
         container.setLayout( new GridLayout( 3, false ) );
 
-        // Group ID Label, Text and Lookup Button
         Label label = new Label( container, SWT.NULL );
         label.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        label.setText( Messages.MavenAddEditLicenseDialog_Name );
+        label.setText( Messages.MavenPomEditor_MavenPomEditor_Name );
 
         nameText = new Text( container, SWT.BORDER | SWT.SINGLE );
         nameText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
-        
-        // Version Label, Text and Lookup Button
+ 
         Label label3 = new Label( container, SWT.NULL );
         label3.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        label3.setText( Messages.MavenAddEditLicenseDialog_URL );
+        label3.setText( Messages.MavenPomEditor_MavenPomEditor_URL );
 
         urlText = new Text( container, SWT.BORDER | SWT.SINGLE );
         urlText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
-        
-        // Artifact ID Label, Text and Lookup Button
+ 
         Label label2 = new Label( container, SWT.NULL );
         label2.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        label2.setText( Messages.MavenAddEditLicenseDialog_Distribution );
+        label2.setText( Messages.MavenPomEditor_MavenPomEditor_Distribution );
 
         distributionText = new Text( container, SWT.BORDER | SWT.SINGLE );
         distributionText.setLayoutData( new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 ) );
         
-        // Scope Label, Text and Lookup Button
         Label label4 = new Label( container, SWT.NULL );
         label4.setLayoutData( new GridData( GridData.BEGINNING, GridData.CENTER, false, false ) );
-        label4.setText( Messages.MavenAddEditLicenseDialog_Comment );
+        label4.setText( Messages.MavenPomEditor_MavenPomEditor_Comment );
 
         commentText = new Text( container, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL );
         GridData grid = new GridData( GridData.FILL_HORIZONTAL );
