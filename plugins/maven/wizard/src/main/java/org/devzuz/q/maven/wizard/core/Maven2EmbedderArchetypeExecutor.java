@@ -72,12 +72,12 @@ public class Maven2EmbedderArchetypeExecutor
         
         MavenManager.getMaven().scheduleGoal(
                                               baseDir,
-                                              getArchetypePluginCreationId( isVersion20 ),
+                                              getArchetypePluginCreationId( isVersion20, archetype == null ),
                                               MavenExecutionParameter.newDefaultMavenExecutionParameter( archetypeProperties ),
                                               jobAdapter );
     }
 
-    private String getArchetypePluginCreationId( boolean isVersion20 )
+    private String getArchetypePluginCreationId( boolean isVersion20, boolean simpleProject )
     {
         StringBuilder sb = new StringBuilder();
         MavenPreferenceManager preferenceManager = MavenCoreActivator.getDefault().getMavenPreferenceManager();
@@ -87,7 +87,7 @@ public class Maven2EmbedderArchetypeExecutor
         sb.append( ":" );
         String ver = preferenceManager.getArchetypePluginVersion();
         sb.append( ver );
-        if ( isVersion20 )
+        if ( isVersion20 && !simpleProject )
         {
             sb.append( ":generate" );
         }
