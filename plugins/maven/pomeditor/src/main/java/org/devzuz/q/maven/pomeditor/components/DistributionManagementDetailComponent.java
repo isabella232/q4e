@@ -61,75 +61,58 @@ public class DistributionManagementDetailComponent
         GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
         labelData.widthHint = 90;
         GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
-        //controlData.horizontalIndent = 2;
         
-        //Label downloadURLLabel = new Label( this, SWT.NULL );
         Label downloadURLLabel = toolKit.createLabel( this, Messages.MavenPomEditor_MavenPomEditor_DownloadURL, SWT.None );
         downloadURLLabel.setLayoutData( labelData );
-        //downloadURLLabel.setText( Messages.MavenPomEditor_MavenPomEditor_DownloadURL );
         
-        //downloadURLText = new Text( this, SWT.BORDER | SWT.SINGLE );
         downloadURLText = toolKit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         downloadURLText.setLayoutData( controlData );
         
-        //Label statusLabel = new Label( this, SWT.NULL );
         Label statusLabel = toolKit.createLabel( this, Messages.MavenPomEditor_MavenPomEditor_Status, SWT.None );
         statusLabel.setLayoutData( labelData );
-        //statusLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Status );
         
-        //statusText = new Text( this, SWT.BORDER | SWT.SINGLE );
         statusText = toolKit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         statusText.setLayoutData( controlData );     
         
         Group repositoryGroup = new Group( this, SWT.None );
         repositoryGroup.setText( Messages.MavenPomEditor_MavenPomEditor_Repository );
+        repositoryGroup.setLayoutData( new GridData( SWT.FILL, SWT.CENTER , true, false, 2, 1 ) );
         repositoryGroup.setLayout( new GridLayout( 2, false ) );
-        repositoryGroup.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
         
-        //Label repositoryUniqueVersionLabel = new Label( repositoryGroup, SWT.NULL );
+        GridData label2Data = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
+        label2Data.widthHint = 100;
+        GridData control2Data = new GridData( SWT.FILL , SWT.CENTER , true , false  );
+        
         Label repositoryUniqueVersionLabel = toolKit.createLabel( repositoryGroup, Messages.MavenPomEditor_MavenPomEditor_UniqueVersion, SWT.NULL );
-        repositoryUniqueVersionLabel.setLayoutData( labelData );
-        //repositoryUniqueVersionLabel.setText( Messages.MavenPomEditor_MavenPomEditor_UniqueVersion );
+        repositoryUniqueVersionLabel.setLayoutData( label2Data );
         
-        //repositoryUniqueVersionText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
         repositoryUniqueVersionText = toolKit.createText( repositoryGroup, "", SWT.BORDER | SWT.SINGLE  );
-        repositoryUniqueVersionText.setLayoutData( controlData );
+        repositoryUniqueVersionText.setLayoutData( control2Data );
         
-        //Label repositoryIdLabel = new Label( repositoryGroup, SWT.NULL );
         Label repositoryIdLabel = toolKit.createLabel( repositoryGroup, Messages.MavenPomEditor_MavenPomEditor_Identity, SWT.NULL );
-        repositoryIdLabel.setLayoutData( labelData );
-        //repositoryIdLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Identity );
+        repositoryIdLabel.setLayoutData( label2Data );
         
-        //repositoryIdText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
         repositoryIdText = toolKit.createText( repositoryGroup, "", SWT.BORDER | SWT.SINGLE );
-        repositoryIdText.setLayoutData( controlData );
+        repositoryIdText.setLayoutData( control2Data );
         
-        //Label nameLabel = new Label( repositoryGroup, SWT.NULL );
         Label repositoryNameLabel = toolKit.createLabel( repositoryGroup, Messages.MavenPomEditor_MavenPomEditor_Name, SWT.NULL );
-        repositoryNameLabel.setLayoutData( labelData );
-        //repositoryNameLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Name );
+        repositoryNameLabel.setLayoutData( label2Data );
         
-        //repositoryNameText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
         repositoryNameText = toolKit.createText( repositoryGroup, "", SWT.SINGLE | SWT.BORDER );
-        repositoryNameText.setLayoutData( controlData );
+        repositoryNameText.setLayoutData( control2Data );
         
-        //Label urlLabel = new Label( repositoryGroup, SWT.NULL );
         Label repositoryUrlLabel = toolKit.createLabel( repositoryGroup, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NULL );
-        repositoryUrlLabel.setLayoutData( labelData );
-        //repositoryUrlLabel.setText( Messages.MavenPomEditor_MavenPomEditor_URL );
+        repositoryUrlLabel.setLayoutData( label2Data );
         
-        //repositoryUrlText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
         repositoryUrlText = toolKit.createText( repositoryGroup, "", SWT.BORDER | SWT.SINGLE );
-        repositoryUrlText.setLayoutData( controlData );
+        repositoryUrlText.setLayoutData( control2Data );
         
-        //Label repositoryLayoutLabel = new Label( repositoryGroup, SWT.NULL );
         Label repositoryLayoutLabel = toolKit.createLabel( repositoryGroup, Messages.MavenPomEditor_MavenPomEditor_Layout, SWT.NULL );
-        repositoryLayoutLabel.setLayoutData( labelData );
-        //repositoryLayoutLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Layout );
+        repositoryLayoutLabel.setLayoutData( label2Data );
         
-        //repositoryLayoutText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
         repositoryLayoutText = toolKit.createText( repositoryGroup, "", SWT.BORDER | SWT.SINGLE );
-        repositoryLayoutText.setLayoutData( controlData );  
+        repositoryLayoutText.setLayoutData( control2Data );  
+        
         
         /*Group snapshotsGroup = new Group( this, SWT.None );
         snapshotsGroup.setText( Messages.MavenPomEditor_MavenPomEditor_SnapshotRepository );
