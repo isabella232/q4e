@@ -111,26 +111,27 @@ public class ProjectScanner
             }
             else
             {
-                PomFileDescriptor parentProjectDescriptor = null;
-
-                PomFileDescriptor parent = getPomFileDescriptor( file );
-                List<String> modules = parent.getModel().getModules();
-                
-                if ( importParentProjects || modules.size() == 0 )
-                {
-                    root.addPomFileDescriptor( parent );
-                    parentProjectDescriptor = parent;
-                }
-                else
-                {
-                    parentProjectDescriptor = root;
-                }
-
-
-                for ( String module : modules )
-                {
-                    resolvePomFileDescriptor( new File( file, module ), monitor.newChild( 1 ), parentProjectDescriptor );          
-                }
+                resolvePomFileDescriptor( file, monitor.newChild( 1 ), root );
+                // PomFileDescriptor parentProjectDescriptor = null;
+                //
+                // PomFileDescriptor parent = getPomFileDescriptor( file );
+                // List<String> modules = parent.getModel().getModules();
+                //                
+                // if ( importParentProjects || modules.size() == 0 )
+                // {
+                // root.addPomFileDescriptor( parent );
+                // parentProjectDescriptor = parent;
+                // }
+                // else
+                // {
+                // parentProjectDescriptor = root;
+                // }
+                //
+                //
+                // for ( String module : modules )
+                // {
+                // resolvePomFileDescriptor( new File( file, module ), monitor.newChild( 1 ), parentProjectDescriptor );
+                // }
             }
         }
         else
@@ -278,15 +279,30 @@ public class ProjectScanner
         }
 
         PomFileDescriptor pomDescriptor = getPomFileDescriptor( file );
+
         if ( pomDescriptor != null )
         {
-            parent.addPomFileDescriptor( pomDescriptor );
+            PomFileDescriptor parentDescriptor = null;
+
+            if ( importParentProjects )
+            {
+                parent.addPomFileDescriptor( pomDescriptor );
+                parentDescriptor = pomDescriptor;
+            }
+            else
+            {
+                if ( pomDescriptor.getModel().getModules().isEmpty() )
+                {
+                    parent.addPomFileDescriptor( pomDescriptor );
+                }
+                parentDescriptor = parent;
+            }
 
             List<String> modules = pomDescriptor.getModel().getModules();
 
             for ( String module : modules )
             {
-                resolvePomFileDescriptor( new File( file, module ), monitor.newChild( 1 ), pomDescriptor );
+                resolvePomFileDescriptor( new File( file, module ), monitor.newChild( 1 ), parentDescriptor );
             }
         }
     }
