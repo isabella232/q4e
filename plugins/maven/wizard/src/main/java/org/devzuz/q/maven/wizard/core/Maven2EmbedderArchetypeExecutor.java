@@ -47,6 +47,7 @@ public class Maven2EmbedderArchetypeExecutor
         if ( isVersion20 )
         {
             archetypeProperties.setProperty( "package", packageName );
+            archetypeProperties.setProperty("archetype.interactive", "false");
         }
         else
         {

@@ -30,7 +30,7 @@ public class MavenArchetypePreferencePage extends FieldEditorPreferencePage impl
 
     public static String[][] ARCHETYPE_PLUGIN_VERSIONS =
         new String[][] { { Messages.MavenArchetypePreferencePage_archetypeVersion_1_0_latest_label, "1.0-alpha-7" },
-            { Messages.MavenArchetypePreferencePage_archetypeVersion_2_0_latest_label, "2.0-alpha-2" } };
+            { Messages.MavenArchetypePreferencePage_archetypeVersion_2_0_latest_label, "2.0-alpha-3" } };
 
     public MavenArchetypePreferencePage()
     {
