@@ -32,11 +32,11 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-public class Maven2ProjectWizard
-    extends Wizard
-    implements INewWizard
+public class Maven2ProjectWizard extends Wizard implements INewWizard
 {
-    /** Number of pages created by the wizard for the default case (no extra pages) . */
+    /**
+     * Number of pages created by the wizard for the default case (no extra pages) .
+     */
     private static final int DEFAULT_PAGE_COUNT = 3;
 
     private Maven2ProjectLocationPage locationPage;
@@ -83,7 +83,16 @@ public class Maven2ProjectWizard
     {
         projectName = locationPage.getProjectName().trim();
         projectPath = locationPage.getProjectLocation();
-        archetype = archetypePage.getArchetype();
+        if ( locationPage.skipArchetypeSelection() )
+        {
+            archetype =
+                new Archetype( "maven-archetype-quickstart", "org.apache.maven.archetypes", "RELEASE",
+                               "http://repo1.maven.org/maven2", "" );
+        }
+        else
+        {
+            archetype = archetypePage.getArchetype();
+        }
         groupID = archetypeInfoPage.getGroupID();
         artifactID = archetypeInfoPage.getArtifactID();
         packageName = archetypeInfoPage.getPackageName();
@@ -95,8 +104,7 @@ public class Maven2ProjectWizard
         {
             getContainer().run( true, true, new IRunnableWithProgress()
             {
-                public void run( IProgressMonitor monitor )
-                    throws InvocationTargetException, InterruptedException
+                public void run( IProgressMonitor monitor ) throws InvocationTargetException, InterruptedException
                 {
                     try
                     {
@@ -138,7 +146,9 @@ public class Maven2ProjectWizard
 
     }
 
-    /* Commented due to Eclipse having unstable API. This should be changed when 3.3 is finalized. */
+    /*
+     * Commented due to Eclipse having unstable API. This should be changed when 3.3 is finalized.
+     */
     /*
      * public void pageTransition(PageTransitionEvent event) { if( event.getType() == PageTransitionEvent.EVENT_NEXT &&
      * event.getSelectedPage() == locationPage) { setArchetypeInfoUIElements(); } }
@@ -169,7 +179,7 @@ public class Maven2ProjectWizard
         }
         return super.getNextPage( page );
     }
-    
+
     public boolean hasExtraPages()
     {
         Archetype selectedArchetype = archetypePage.getArchetype();
