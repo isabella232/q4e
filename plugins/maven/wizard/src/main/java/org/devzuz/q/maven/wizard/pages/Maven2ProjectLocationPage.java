@@ -68,16 +68,8 @@ public class Maven2ProjectLocationPage
         locationComponent.setLayoutData( new GridData( SWT.FILL , SWT.BEGINNING, true, false , 2 , 1 ) );
         locationComponent.setModifyListener( modifyListener );
 
-        Group skipArchetypeGroup = new Group(container, SWT.NULL);
-        skipArchetypeGroup.setText( Messages.wizard_project_location_skip_archetype_title );
-        skipArchetypeGroup.setLayoutData(new GridData( GridData.FILL, GridData.FILL, true, false, 2, 1 ));
-        GridLayout layout = new GridLayout( 2 , false );
-        layout.marginLeft = 8;
-        skipArchetypeGroup.setLayout(layout  );
-        
-        skipArchetypeButton = new Button(skipArchetypeGroup, SWT.CHECK);
-        Label skipArchetypeLabel = new Label(skipArchetypeGroup, SWT.WRAP);
-        skipArchetypeLabel.setText( Messages.wizard_project_location_skip_archetype_description );
+        skipArchetypeButton = new Button(container, SWT.CHECK);
+        skipArchetypeButton.setText( Messages.wizard_project_location_skip_archetype_description );
         
         validate();
 
