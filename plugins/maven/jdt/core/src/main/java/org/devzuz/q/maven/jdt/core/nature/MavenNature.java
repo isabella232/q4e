@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -392,6 +393,12 @@ public class MavenNature implements IProjectNature
     private List<String> getClasspathFolders( IProject project, List<String> sourceRoots )
     {
         List<String> classpathEntries = new LinkedList<String>();
+        // Issue 472: Filter out nested generated source folders
+        for (Iterator<String> it = sourceRoots.iterator(); it.hasNext(); ) {
+            if (isPathNestedInAny(it.next(), sourceRoots)) {
+                it.remove();
+            }
+        }
         for ( String sourceRoot : sourceRoots )
         {
             File sourceRootFile = new File( sourceRoot );
@@ -407,6 +414,22 @@ public class MavenNature implements IProjectNature
             }
         }
         return classpathEntries;
+    }
+
+    /**
+     * Checks if the path in the given string nested (but not equal to) any of the paths strings in the given list.
+     * @param path the path (as a string) to check
+     * @param pathList the list of path strings
+     * @return <code>true</code> if the string represents a path nested in any of the strings in the list.
+     */
+    private boolean isPathNestedInAny( String path, List<String> pathList )
+    {
+        boolean result = false;
+        for (Iterator<String> it = pathList.iterator(); !result && it.hasNext();) {
+            String currentPath = it.next();
+            result = !path.equals( currentPath ) && path.startsWith( currentPath );
+        }
+        return result;
     }
 
     String getRelativePath( IPath basedirPath, String fullPath )
