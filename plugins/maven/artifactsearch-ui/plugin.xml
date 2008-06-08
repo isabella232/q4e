@@ -16,8 +16,9 @@
             canSearchEnclosingProjects="false"
             class="org.devzuz.q.maven.search.ui.ArtifactSearchPage"
             enabled="true"
+            icon="icons/obj16/msearch_obj.gif"
             id="org.devzuz.q.maven.search.ui.artifactSearchPage"
-            label="Artifact Search Page "
+            label="Artifact Search"
             showScopeSection="false">
       </page>
    </extension>
