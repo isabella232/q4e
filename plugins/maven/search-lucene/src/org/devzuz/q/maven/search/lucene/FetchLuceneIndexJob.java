@@ -30,8 +30,7 @@ import org.eclipse.core.runtime.jobs.Job;
  * 
  * @author Mike Poindexter
  */
-public class FetchLuceneIndexJob
-    extends Job
+public class FetchLuceneIndexJob extends Job
 {
     private static final int BUF_SZ = 32767;
 
@@ -45,7 +44,7 @@ public class FetchLuceneIndexJob
 
     public FetchLuceneIndexJob( String remoteUrl, File cacheFile )
     {
-        super( Messages.getString("FetchLuceneIndexJob.fetchingIndex") + remoteUrl ); //$NON-NLS-1$
+        super( Messages.getString( "FetchLuceneIndexJob.fetchingIndex" ) + remoteUrl ); //$NON-NLS-1$
         this.remoteUrl = remoteUrl;
         this.cacheFile = cacheFile;
     }
@@ -67,15 +66,32 @@ public class FetchLuceneIndexJob
             int contentLength = connection.getContentLength();
             if ( contentLength > -1 )
             {
-                monitor.beginTask( Messages.getString("FetchLuceneIndexJob.fetchingIndex") + this.remoteUrl, contentLength ); //$NON-NLS-1$
+                monitor.beginTask(
+                                   Messages.getString( "FetchLuceneIndexJob.fetchingIndex" ) + this.remoteUrl, contentLength ); //$NON-NLS-1$
                 File tempFile = File.createTempFile( "q4e", ".tmp" ); //$NON-NLS-1$ //$NON-NLS-2$
-                writeToFile( monitor, tempFile, connection.getInputStream() );
-                tempFile.renameTo( this.cacheFile );
+                InputStream connectionStream = connection.getInputStream();
+                writeToFile( monitor, tempFile, connectionStream );
+                connectionStream.close();
+                // Delete current file
+                if (this.cacheFile.exists()) {
+                    this.cacheFile.delete();
+                }
+                if (!tempFile.renameTo( this.cacheFile )) {
+                    // Issue 461: On some cases, a rename is not possible (different filesystems, etc...)
+                    InputStream tempFileStream = new FileInputStream(this.cacheFile);
+                    try {
+                        writeToFile( new NullProgressMonitor(), this.cacheFile, tempFileStream );
+                    } finally {
+                        tempFileStream.close();
+                    }
+                }
+                tempFile.delete();
             }
 
             extractIndex();
             monitor.done();
-            return new Status( IStatus.OK, LuceneSearchPlugin.PLUGIN_ID, Messages.getString("FetchLuceneIndexJob.jobCompleted") ); //$NON-NLS-1$
+            return new Status( IStatus.OK, LuceneSearchPlugin.PLUGIN_ID,
+                               Messages.getString( "FetchLuceneIndexJob.jobCompleted" ) ); //$NON-NLS-1$
         }
         catch ( MalformedURLException e )
         {
@@ -87,7 +103,8 @@ public class FetchLuceneIndexJob
         }
         catch ( InterruptedException e )
         {
-            return new Status( IStatus.CANCEL, LuceneSearchPlugin.PLUGIN_ID, Messages.getString("FetchLuceneIndexJob.jobCanceled") ); //$NON-NLS-1$
+            return new Status( IStatus.CANCEL, LuceneSearchPlugin.PLUGIN_ID,
+                               Messages.getString( "FetchLuceneIndexJob.jobCanceled" ) ); //$NON-NLS-1$
         }
     }
 
@@ -95,23 +112,28 @@ public class FetchLuceneIndexJob
         throws IOException, InterruptedException
     {
         OutputStream out = new BufferedOutputStream( new FileOutputStream( outputFile ) );
-        byte[] buffer = new byte[BUF_SZ];
-        int bytesRead = -1;
-        while ( ( bytesRead = stream.read( buffer ) ) > -1 )
+        try
         {
-            if ( this.canceled )
+            byte[] buffer = new byte[BUF_SZ];
+            int bytesRead = -1;
+            while ( ( bytesRead = stream.read( buffer ) ) > -1 )
             {
-                throw new InterruptedException();
+                if ( this.canceled )
+                {
+                    throw new InterruptedException();
+                }
+                out.write( buffer, 0, bytesRead );
+                monitor.worked( bytesRead );
             }
-            out.write( buffer, 0, bytesRead );
-            monitor.worked( bytesRead );
         }
-        out.flush();
-        out.close();
+        finally
+        {
+            out.flush();
+            out.close();
+        }
     }
 
-    private void extractIndex()
-        throws IOException, InterruptedException
+    private void extractIndex() throws IOException, InterruptedException
     {
         String name = this.cacheFile.getName();
         int lastDot = name.lastIndexOf( '.' );
@@ -123,11 +145,15 @@ public class FetchLuceneIndexJob
                 outdir.mkdir();
             }
             ZipInputStream zip = new ZipInputStream( new FileInputStream( this.cacheFile ) );
-            ZipEntry zipEntry = null;
-            while ( ( zipEntry = zip.getNextEntry() ) != null )
-            {
-                File outFile = new File( outdir, zipEntry.getName() );
-                writeToFile( new NullProgressMonitor(), outFile, zip );
+            try {
+                ZipEntry zipEntry = null;
+                while ( ( zipEntry = zip.getNextEntry() ) != null )
+                {
+                    File outFile = new File( outdir, zipEntry.getName() );
+                    writeToFile( new NullProgressMonitor(), outFile, zip );
+                }
+            } finally {
+                zip.close();
             }
         }
     }
