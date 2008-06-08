@@ -78,6 +78,7 @@ public class FetchLuceneIndexJob extends Job
                 }
                 if (!tempFile.renameTo( this.cacheFile )) {
                     // Issue 461: On some cases, a rename is not possible (different filesystems, etc...)
+                    this.cacheFile.createNewFile();
                     InputStream tempFileStream = new FileInputStream(this.cacheFile);
                     try {
                         writeToFile( new NullProgressMonitor(), this.cacheFile, tempFileStream );
@@ -95,7 +96,7 @@ public class FetchLuceneIndexJob extends Job
         }
         catch ( MalformedURLException e )
         {
-            return new Status( IStatus.ERROR, LuceneSearchPlugin.PLUGIN_ID, e.getMessage(), e );
+            return new Status( IStatus.ERROR, LuceneSearchPlugin.PLUGIN_ID, "The URL for the index is invalid", e );
         }
         catch ( IOException e )
         {
