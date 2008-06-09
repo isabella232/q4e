@@ -45,7 +45,6 @@ public abstract class AbstractArtifactFieldContentProposer implements IElementCo
             {
                 String context = ContentAssistUtils.computeContextString( contentAssistRequest );
                 int replacementLength = isTextNode ? contentAssistRequest.getDocumentRegion().getLength() : context.length();
-                System.out.println(context);
                 List<IArtifactInfo> artifacts =
                     ArtifactSearchPlugin.getSearchService().findArtifacts( new SearchCriteria( getArtifactIdValue( node ),
                                                                            getGroupIdValue( node ), context,
