@@ -20,6 +20,7 @@ import org.eclipse.wst.xml.ui.internal.contentassist.ContentAssistRequest;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
 /**
  * Base class for content assist processors that provide assistance for artifact fields.
@@ -33,11 +34,18 @@ public abstract class AbstractArtifactFieldContentProposer implements IElementCo
     public void propose( ContentAssistRequest contentAssistRequest )
     {
         Node node = contentAssistRequest.getNode();
+        boolean isTextNode = false;
+        if (node instanceof Text) {
+            node = node.getParentNode();
+            isTextNode = true;
+        }
         if ( node instanceof Element )
         {
             if ( getNodeName().equals( node.getLocalName() ) )
             {
                 String context = ContentAssistUtils.computeContextString( contentAssistRequest );
+                int replacementLength = isTextNode ? contentAssistRequest.getDocumentRegion().getLength() : context.length();
+                System.out.println(context);
                 List<IArtifactInfo> artifacts =
                     ArtifactSearchPlugin.getSearchService().findArtifacts( new SearchCriteria( getArtifactIdValue( node ),
                                                                            getGroupIdValue( node ), context,
@@ -55,7 +63,7 @@ public abstract class AbstractArtifactFieldContentProposer implements IElementCo
                                                                                   proposal,
                                                                                   contentAssistRequest.getReplacementBeginPosition()
                                                                                                   - context.length(),
-                                                                                  context.length(), proposal.length() ) );
+                                                                                  replacementLength, proposal.length() ) );
                         proposed.add( proposal );
                     }
                 }
