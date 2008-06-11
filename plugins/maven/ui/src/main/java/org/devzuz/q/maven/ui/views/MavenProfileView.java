@@ -12,6 +12,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -110,6 +111,8 @@ public class MavenProfileView
     private List<ProfileModel> profiles;
 
     private List<ProfileModel> defaultProfiles;
+
+    private List<IMavenProject> mavenProjects = new LinkedList<IMavenProject>();
 
     private ISelectionListener listener;
 
@@ -228,7 +231,7 @@ public class MavenProfileView
     }
 
     /**
-     * When this view is about to be disposed, this method removes the SelectionListener in the page.
+     * When this view is about to be disposed, this meathod removes the SelectionListener in the page.
      * 
      * @see org.eclipse.ui.part.WorkbenchPart#dispose()
      */
@@ -239,7 +242,7 @@ public class MavenProfileView
         getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener( getSelectionListener() );
         ResourcesPlugin.getWorkspace().removeResourceChangeListener( pomChangeListener );
         MavenManager.getMavenPreferenceManager().getPreferenceStore().removePropertyChangeListener(
-                                                                                                preferenceStoreChangeListener );
+                                                                                                    preferenceStoreChangeListener );
         profiles = null;
         super.dispose();
     }
@@ -441,7 +444,7 @@ public class MavenProfileView
 
         if ( forceUpdate )
         {
-            updatePomModel();
+            updateMavenProjectsList();
             updateGlobalSettings();
             updateUserSettings();
             profilesChanged = true;
@@ -451,7 +454,7 @@ public class MavenProfileView
             if ( projectSelectedChanged() )
             {
                 updateProjectSelected();
-                updatePomModel();
+                updateMavenProjectsList();
                 updateProfilesRoot();
                 profilesChanged = true;
             }
@@ -459,7 +462,7 @@ public class MavenProfileView
             {
                 if ( pomProfileNeedsUpdate() )
                 {
-                    updatePomModel();
+                    updateMavenProjectsList();
                     profilesChanged = true;
                 }
 
@@ -491,9 +494,9 @@ public class MavenProfileView
 
             list.addAll( getDefaultProfile() );
 
-            if ( pomModel != null )
+            for ( IMavenProject mavenProject : mavenProjects )
             {
-                list.addAll( getProfileFromPomModel( pomModel, pomLocation ) );
+                list.addAll( getProfileFromPomModel( mavenProject.getModel(), mavenProject.getPomFile().getPath() ) );
             }
 
             if ( profileRoot != null )
@@ -675,6 +678,11 @@ public class MavenProfileView
      */
     protected void updatePomModel()
     {
+        if ( selectedProject != null )
+        {
+            currentProject = selectedProject;
+        }
+
         try
         {
             if ( currentProject != null )
@@ -689,6 +697,60 @@ public class MavenProfileView
         {
             MavenUiActivator.getLogger().log( e );
         }
+    }
+
+    /**
+     * Fills the list with the currently selected maven project and its modules.
+     */
+    private void updateMavenProjectsList()
+    {
+        if ( selectedProject != null )
+        {
+            currentProject = selectedProject;
+        }
+        try
+        {
+            if ( currentProject != null )
+            {
+                IMavenProject currentSelectedMavenProject =
+                    MavenManager.getMaven().getMavenProject( currentProject, false );
+                pomLocation = currentSelectedMavenProject.getPomFile().getPath();
+                pomFileLmod = new File( pomLocation ).lastModified();
+
+                mavenProjects.clear();
+                mavenProjects.add( currentSelectedMavenProject );
+                mavenProjects.addAll( getModules( currentSelectedMavenProject ) );
+            }
+        }
+        catch ( CoreException e )
+        {
+            MavenUiActivator.getLogger().log( e );
+        }
+    }
+
+    @SuppressWarnings( "unchecked" )
+    private List<IMavenProject> getModules( IMavenProject parentProject )
+    {
+        List<IMavenProject> mavenProjectModules = new LinkedList<IMavenProject>();
+
+        List<String> modules = parentProject.getModel().getModules();
+
+        for ( String module : modules )
+        {
+            File file = new File( parentProject.getBaseDirectory(), module + "/pom.xml" );
+            try
+            {
+                IMavenProject project = MavenManager.getMaven().getMavenProject( file, false );
+                mavenProjectModules.add( project );
+                mavenProjectModules.addAll( getModules( project ) );
+            }
+            catch ( CoreException e )
+            {
+                MavenUiActivator.getLogger().log( e );
+            }
+
+        }
+        return mavenProjectModules;
     }
 
     /**
