@@ -41,7 +41,7 @@ public class PluginDetailComponent extends AbstractComponent
         setLayout( new GridLayout( 2, false ) );
         
         GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        labelData.widthHint = 50;
+        labelData.widthHint = 55;
         GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
         controlData.horizontalIndent = 10;
 

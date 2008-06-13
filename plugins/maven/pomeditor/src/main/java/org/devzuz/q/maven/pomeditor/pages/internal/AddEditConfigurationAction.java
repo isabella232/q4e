@@ -45,6 +45,9 @@ public class AddEditConfigurationAction
                 {
                     ( (Xpp3Dom) obj ).addChild( newDom );
                 }
+                
+                super.doAction( obj );
+                
             }
             else
             {
@@ -64,8 +67,10 @@ public class AddEditConfigurationAction
                         break;
                     }
                 }
-            }
-            super.doAction( obj );
+                
+                super.doAction( obj );
+                
+            }            
         }
     }
     

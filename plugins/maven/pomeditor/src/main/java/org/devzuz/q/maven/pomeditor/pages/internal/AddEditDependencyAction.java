@@ -43,6 +43,9 @@ public class AddEditDependencyAction
                 {
                     ( (List<Dependency>) obj ).add( addDialog.getDependency() );
                 }
+                
+                super.doAction( obj );
+                
             }
         }
         else
@@ -58,9 +61,10 @@ public class AddEditDependencyAction
                 dependency.setOptional( addDialog.isOptional() );
                 dependency.setScope( addDialog.getScope() );
                 dependency.setSystemPath( addDialog.getSystemPath() );
+                
+                super.doAction( obj );
+                
             }
-        }
-        
-        super.doAction( obj );
+        }        
     }
 }

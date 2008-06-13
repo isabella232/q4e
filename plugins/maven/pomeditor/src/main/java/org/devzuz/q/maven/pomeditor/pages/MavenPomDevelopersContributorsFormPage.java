@@ -98,7 +98,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         form = managedForm.getForm();
         FormToolkit toolkit = managedForm.getToolkit();
         
-        form.getBody().setLayout( new GridLayout( 2 , true ) );        
+        form.getBody().setLayout( new GridLayout( 2 , false ) );        
         
         GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );        
         
@@ -195,8 +195,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         RemoveDeveloperButtonListener removeButtonListener = new RemoveDeveloperButtonListener();
         removeDeveloperButton.addSelectionListener( removeButtonListener );
         removeDeveloperButton.setEnabled( false );
-    
-        toolKit.paintBordersFor( parent );
         
         populateDeveloperDataTable();
         
@@ -301,8 +299,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         RemoveContributorButtonListener removeButtonListener = new RemoveContributorButtonListener();
         removeContributorButton.addSelectionListener( removeButtonListener );
         removeContributorButton.setEnabled( false );
-        
-        toolKit.paintBordersFor( parent );
         
         populateContributorDataTable();
         

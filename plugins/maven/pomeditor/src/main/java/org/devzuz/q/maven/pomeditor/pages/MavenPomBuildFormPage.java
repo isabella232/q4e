@@ -167,8 +167,6 @@ public class MavenPomBuildFormPage extends FormPage
         removeExtensionButton.addSelectionListener( removeButtonListener );
         removeExtensionButton.setEnabled( false );
         
-        toolKit.paintBordersFor( parent );
-        
 		return container;
 	}
 

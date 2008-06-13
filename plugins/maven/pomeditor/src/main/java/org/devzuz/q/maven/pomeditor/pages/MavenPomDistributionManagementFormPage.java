@@ -74,8 +74,6 @@ public class MavenPomDistributionManagementFormPage
         distributionManagementComponent = 
             new DistributionManagementDetailComponent( container, toolkit, SWT.None );
         
-        toolkit.paintBordersFor( parent );
-        
         return container;
     }
 

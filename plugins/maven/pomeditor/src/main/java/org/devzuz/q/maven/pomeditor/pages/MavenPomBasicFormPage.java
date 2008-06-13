@@ -166,7 +166,7 @@ public class MavenPomBasicFormPage extends FormPage
         parent.setLayout( new GridLayout( 2 , false ) );
         
         GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
-        labelData.widthHint = 50;
+        labelData.widthHint = 75;
         GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
         controlData.horizontalIndent = 10;
         
@@ -203,14 +203,6 @@ public class MavenPomBasicFormPage extends FormPage
         this.createTextDisplay( packagingText, controlData );
         packagingText.setText( getPackaging() );
         packagingText.addKeyListener( textFieldListener );
-        
-        Label classifierLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Classifier, SWT.NONE ); 
-        classifierLabel.setLayoutData( labelData );       
-        
-        classifierText = toolKit.createText( parent, ""  ); 
-        this.createTextDisplay( classifierText, controlData );
-        classifierText.setText( getClassifier() ); 
-        classifierText.addKeyListener( textFieldListener );
         
         toolKit.paintBordersFor(parent);
         
@@ -334,7 +326,7 @@ public class MavenPomBasicFormPage extends FormPage
         TextFieldListener textFieldListener = new TextFieldListener();
         
         GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
-        labelData.widthHint = 70;
+        labelData.widthHint = 80;
         GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
         controlData.horizontalIndent = 10;
         
@@ -391,7 +383,7 @@ public class MavenPomBasicFormPage extends FormPage
         parent.setLayout( new GridLayout( 2 , false ) );
         
         GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
-        labelData.widthHint = 70;
+        labelData.widthHint = 75;
         GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
         controlData.horizontalIndent = 10;
         
@@ -478,34 +470,29 @@ public class MavenPomBasicFormPage extends FormPage
     
     private void getPOMEditorProjectInformation()
     {    	
-    	pomModel.setGroupId(groupIdText.getText().trim());
-    	pomModel.setArtifactId(artifactIdText.getText().trim());
-    	pomModel.setVersion(versionText.getText().trim());     	
-    	pomModel.setPackaging(packagingText.getText().trim());    	
+    	pomModel.setGroupId( nullIfBlank( groupIdText.getText().trim() ) );
+    	pomModel.setArtifactId( nullIfBlank( artifactIdText.getText().trim() ) );
+    	pomModel.setVersion( nullIfBlank( versionText.getText().trim() ) );     	
+    	pomModel.setPackaging( nullIfBlank( packagingText.getText().trim() ) );
     	
-    	pomModel.setName(nameText.getText().trim());
-    	pomModel.setDescription(descriptionText.getText().trim());
-    	pomModel.setUrl(urlText.getText().trim());
-    	pomModel.setInceptionYear(inceptionYearText.getText().trim());
-    	pomModel.setModelVersion( modelVersionText.getText().trim() );
+    	pomModel.setName( nullIfBlank( nameText.getText().trim() ) );
+    	pomModel.setDescription( nullIfBlank( descriptionText.getText().trim() ) );
+    	pomModel.setUrl( nullIfBlank( urlText.getText().trim() ) );
+    	pomModel.setInceptionYear( nullIfBlank( inceptionYearText.getText().trim() ) );
+    	pomModel.setModelVersion( nullIfBlank( modelVersionText.getText().trim() ) );
     	
-    	if ( pomModel.getParent() == null ) 
-    	{
-    		if ( ( blankIfNull( getParentPOMgroupID() ) != "" ) ||
-    			 ( blankIfNull( this.getParentPOMArtifactID() ) != "" ) ||
-    			 ( blankIfNull( this.getParentPOMVersion() ) != "" ) ||
-    			 ( blankIfNull( this.getParentPOMRelPath() ) != "" ) )
-    		{
-    			Parent parent = new Parent();
-    			pomModel.setParent(parent);
-    			
-    			pomModel.getParent().setGroupId( nullIfBlank( parentPOMGroupIdText.getText().trim() ) );    	    	
-    			pomModel.getParent().setArtifactId( nullIfBlank( parentPOMArtifactIdText.getText().trim() ) );    	    	
-    			pomModel.getParent().setVersion( nullIfBlank( parentPOMVersionText.getText().trim() ) );    	    	
-    			pomModel.getParent().setRelativePath( nullIfBlank( parentPOMRelativePathText.getText().trim() ) );
-    		}
-    	} 	
-    
+    	
+   		if ( pomModel.getParent() == null )
+   		{
+   			Parent parent = new Parent();
+   			pomModel.setParent( parent );
+   		}
+    		
+   		pomModel.getParent().setGroupId( nullIfBlank( parentPOMGroupIdText.getText().trim() ) );    	    	
+		pomModel.getParent().setArtifactId( nullIfBlank( parentPOMArtifactIdText.getText().trim() ) );    	    	
+		pomModel.getParent().setVersion( nullIfBlank( parentPOMVersionText.getText().trim() ) );    	    	
+		pomModel.getParent().setRelativePath( nullIfBlank( parentPOMRelativePathText.getText().trim() ) );
+		
     }
     
     private String nullIfBlank(String str) 

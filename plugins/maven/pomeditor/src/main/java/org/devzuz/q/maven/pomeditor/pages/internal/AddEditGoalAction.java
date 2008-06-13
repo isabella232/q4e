@@ -50,6 +50,9 @@ public class AddEditGoalAction
                 {
                     ( (List<String>) obj ).add( addDialog.getTextString() );
                 }
+                
+                super.doAction( obj );
+                
             }
         }
         else
@@ -72,10 +75,13 @@ public class AddEditGoalAction
                         }
                     }
                 }
+                
+                super.doAction( obj );
+                
             }
         }
         
-        super.doAction( obj );
+        
     }
 
 }

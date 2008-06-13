@@ -56,6 +56,8 @@ public class AddEditPluginAction
                 {
                     plugins.add( plugin );
                 }
+                
+                super.doAction( obj );
             }
         }
         else
@@ -65,10 +67,10 @@ public class AddEditPluginAction
                 Plugin plugin = ( Plugin ) obj;
 
                 synchDialogToPlugin( addDialog, plugin );
+                
+                super.doAction( obj );
             }
-        }
-        
-        super.doAction( obj );
+        }        
     }
 
     private void synchDialogToPlugin( AddBuildPluginDialog addDialog, Plugin plugin )

@@ -48,6 +48,9 @@ public class AddEditExecutionAction
                 {
                     ((List<PluginExecution>) object).add( execution );
                 }
+                
+                super.doAction( object );
+                
             }            
         }
         else
@@ -58,9 +61,10 @@ public class AddEditExecutionAction
             {
                 synchDialogToPluginExecution( addDialog, execution );
             }
+            
+            super.doAction( object );
+            
         }
-        
-        super.doAction( object );
     }
     
     private void synchDialogToPluginExecution( AddPluginExecutionDialog addDialog,

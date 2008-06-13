@@ -86,7 +86,7 @@ public class AddEditRepositoryDialog
         
         container.setLayout( new GridLayout( 2, false ) );
         GridData labelData = new GridData( GridData.BEGINNING, GridData.CENTER, false, false );
-        labelData.widthHint = 80;
+        labelData.widthHint = 95;
         GridData controlData = new GridData( GridData.FILL, GridData.CENTER, true, false );
         controlData.horizontalIndent = 10;
         

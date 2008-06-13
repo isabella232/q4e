@@ -134,7 +134,7 @@ public class AddEditNotifierDialog
         container.setLayout( new GridLayout( 3, false ) );
 
         GridData labelData = new GridData( GridData.BEGINNING, GridData.CENTER, false, false );
-        labelData.widthHint = 80;
+        labelData.widthHint = 100;
         GridData controlData = new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 );
         controlData.horizontalIndent = 10;
 

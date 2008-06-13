@@ -49,7 +49,10 @@ public class AddEditDependencyExclusionAction
                 {
                     ((List<Exclusion>) obj).add( exclusion );
                 }
-            }            
+                
+                super.doAction( obj );
+                
+            }
         }
         else
         {
@@ -59,9 +62,10 @@ public class AddEditDependencyExclusionAction
             {
                 exclusion.setGroupId( addDialog.getGroupId() );
                 exclusion.setArtifactId( addDialog.getArtifactId() );
+                
+                super.doAction( obj );
+                
             }
-        }        
-        
-        super.doAction( obj );
+        }
     }
 }

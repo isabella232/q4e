@@ -232,7 +232,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         checkIfScmNull();
 
         GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        labelData.widthHint = 120;
+        labelData.widthHint = 125;
         GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
         controlData.horizontalIndent = 10;
 
@@ -275,7 +275,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         checkIfOrganizationNull();
 
         GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        labelData.widthHint = 30;
+        labelData.widthHint = 35;
         GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
         controlData.horizontalIndent = 10;
 

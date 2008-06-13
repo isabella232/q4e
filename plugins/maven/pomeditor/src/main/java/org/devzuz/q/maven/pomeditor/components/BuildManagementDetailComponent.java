@@ -40,7 +40,7 @@ public class BuildManagementDetailComponent
         setLayout( new GridLayout( 2, false ) );
         
         GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
-        labelData.widthHint = 110;
+        labelData.widthHint = 132;
         GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
         controlData.horizontalIndent = 10;
         
