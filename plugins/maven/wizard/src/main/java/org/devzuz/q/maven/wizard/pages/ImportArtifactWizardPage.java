@@ -20,6 +20,10 @@ public class ImportArtifactWizardPage extends Maven2ValidatingWizardPage
 {
     private final static String DEFAULT_PACKAGING = "jar"; //$NON-NLS-1$
     private final static String DEFAULT_JAR_FILTER = "*.jar"; //$NON-NLS-1$
+    private final static String WAR_FILTER = "*.war"; //$NON-NLS-1$
+    private final static String ZIP_FILTER = "*.zip"; //$NON-NLS-1$
+    private final static String GZ_FILTER = "*.gz"; //$NON-NLS-1$
+    private final static String ALL_FILTER = "*.*"; //$NON-NLS-1$
     
     private Text groupIdText;
 
@@ -241,13 +245,14 @@ public class ImportArtifactWizardPage extends Maven2ValidatingWizardPage
     {
         FileDialog fd = new FileDialog( this.getShell() , SWT.OPEN);                 
         fd.setText( Messages.InstallArtifactDialog_18 ); 
-        String[] filterExt = { DEFAULT_JAR_FILTER };  //$NON-NLS-1$
+        String[] filterExt = { DEFAULT_JAR_FILTER, WAR_FILTER, ZIP_FILTER, GZ_FILTER, ALL_FILTER };  //$NON-NLS-1$
         fd.setFilterExtensions( filterExt ); 
         
         String filename = fd.open( ); 
         if( filename != null )
         {
             fileToInstallText.setText( filename );
+            packagingText.setText( (filename.lastIndexOf( "." ) == -1) ? "" : filename.substring( filename.lastIndexOf( "." ) + 1, filename.length() ) );
         }
     }
 }
