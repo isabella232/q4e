@@ -134,14 +134,28 @@ public class MavenPomFormEditor extends FormEditor
         public boolean visit( IResourceDelta delta ) throws CoreException
         {
             IResource res = delta.getResource();
-            if ( res.equals( res.getWorkspace().getRoot() ) || res.equals( res.getProject() ) )
+            if ( res.equals( res.getWorkspace().getRoot() ) || res.equals( project ) )
             {
                 // Workspace or project modification, keep visiting to reach the children
                 return true;
             }
-            if ( res.getName().equals( IMavenProject.POM_FILENAME ) && !project.getFile( IMavenProject.POM_FILENAME ).exists() )
+            
+            if ( res.equals( project ) )
             {
-                close(false);
+                if( !project.isOpen() )
+                {
+                    close(false);
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            
+            if ( res.getName().equals( IMavenProject.POM_FILENAME )
+                            && !project.getFile( IMavenProject.POM_FILENAME ).exists() )
+            {
+                close( false );
             }
             // Anything else
             return false;
