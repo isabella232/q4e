@@ -14,6 +14,7 @@ import java.io.IOException;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
+import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenUtils;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBasicFormPage;
@@ -28,14 +29,21 @@ import org.devzuz.q.maven.pomeditor.pages.MavenPomDistributionManagementFormPage
 import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesScmOrgFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomPropertiesModuleFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomRepositoriesFormPage;
+import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -43,29 +51,36 @@ import org.eclipse.ui.forms.editor.FormEditor;
 public class MavenPomFormEditor extends FormEditor
 {
     public static final String BASIC_INFO_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomBasicFormPage";
-    
-    public static final String DEPENDENCIES_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage";
-    
-    public static final String LICENSES_SCM_ORG_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomLicensesScmOrgFormPage";
-    
-    public static final String MODULES_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage";
-    
-    public static final String DEVELOPERS_CONTRIBUTORS_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDevelopersContributorsFormPage";
-    
+
+    public static final String DEPENDENCIES_FORM_PAGE =
+        "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage";
+
+    public static final String LICENSES_SCM_ORG_FORM_PAGE =
+        "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomLicensesScmOrgFormPage";
+
+    public static final String MODULES_FORM_PAGE =
+        "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage";
+
+    public static final String DEVELOPERS_CONTRIBUTORS_FORM_PAGE =
+        "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDevelopersContributorsFormPage";
+
     public static final String BUILD_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildFormPage";
-    
+
     public static final String BUILD_RESOURCES_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildResourcesPage";
-    
-    public static final String BUILD_TEST_RESOURCES_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildTestResourcesPage";
-    
+
+    public static final String BUILD_TEST_RESOURCES_FORM_PAGE =
+        "org.devzuz.q.maven.pomeditor.MavenPomBuildTestResourcesPage";
+
     public static final String BUILD_PLUGINS_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildPluginFormPage";
-    
-    public static final String CIMANAGEMENT_MAILINGLISTS_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomCiManagementMailingListsPage";
-    
+
+    public static final String CIMANAGEMENT_MAILINGLISTS_FORM_PAGE =
+        "org.devzuz.q.maven.pomeditor.MavenPomCiManagementMailingListsPage";
+
     public static final String REPOSITORIES_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomRepositoriesFormPage";
-    
-    public static final String DISTRIBUTION_MANAGEMENT_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomDistributionManagementFormPage";
-    
+
+    public static final String DISTRIBUTION_MANAGEMENT_FORM_PAGE =
+        "org.devzuz.q.maven.pomeditor.MavenPomDistributionManagementFormPage";
+
     private Model pomModel;
 
     private MavenPomBasicFormPage basicFormPage;
@@ -75,25 +90,125 @@ public class MavenPomFormEditor extends FormEditor
     private MavenPomPropertiesModuleFormPage modulePropertiesFormPage;
 
     private MavenPomLicensesScmOrgFormPage mavenPomLicensesScmOrgFormPage;
-    
+
     private MavenPomDevelopersContributorsFormPage developersContributorsFormPage;
-    
+
     private MavenPomBuildFormPage buildFormPage;
-    
+
     private MavenPomBuildResourcesPage buildResourcesPage;
-    
+
     private MavenPomBuildTestResourcesPage buildTestResourcesPage;
-    
+
     private MavenPomBuildPluginFormPage buildPluginFormPage;
-    
+
     private MavenPomCiManagementMailingListFormPage ciManagementMailingListsPage;
-    
+
     private MavenPomRepositoriesFormPage repositoriesPage;
-    
+
     private MavenPomDistributionManagementFormPage distributionManagementPage;
-    
+
+    private IProject project;
+
+    private final IResourceDeltaVisitor preDeleteDeltaVisitor = new IResourceDeltaVisitor()
+    {
+        public boolean visit( IResourceDelta delta ) throws CoreException
+        {
+            IResource res = delta.getResource();
+            if ( res.equals( res.getWorkspace().getRoot() ) )
+            {
+                // Workspace keep visiting to reach the children
+                return true;
+            }
+
+            if ( res.equals( project ) )
+            {
+                close( false );
+            }
+            // Anything else
+            return false;
+        }
+    };
+
+    private final IResourceDeltaVisitor postChangeDeltaVisitor = new IResourceDeltaVisitor()
+    {
+        public boolean visit( IResourceDelta delta ) throws CoreException
+        {
+            IResource res = delta.getResource();
+            if ( res.equals( res.getWorkspace().getRoot() ) || res.equals( res.getProject() ) )
+            {
+                // Workspace or project modification, keep visiting to reach the children
+                return true;
+            }
+            if ( res.getName().equals( IMavenProject.POM_FILENAME ) && !project.getFile( IMavenProject.POM_FILENAME ).exists() )
+            {
+                close(false);
+            }
+            // Anything else
+            return false;
+        }
+    };
+
+    /**
+     * Listener that will close the pom editor when the pom.xml of that this editor refered to is deleted from the
+     * project or if the project that contains the pom.xml that this pom editor refered to is deleted.
+     */
+    private final IResourceChangeListener resourceChangeListener = new IResourceChangeListener()
+    {
+        public void resourceChanged( IResourceChangeEvent event )
+        {
+            if ( event.getType() == IResourceChangeEvent.POST_CHANGE )
+            {
+                IResourceDelta delta = event.getDelta();
+                try
+                {
+                    delta.accept( postChangeDeltaVisitor );
+                }
+                catch ( CoreException e )
+                {
+                    // visit throws no exceptions, so we should never get here.
+                    PomEditorActivator.getLogger().log( "Unexpected exception", e );
+                }
+            }
+            else if ( event.getType() == IResourceChangeEvent.PRE_DELETE )
+            {
+                IResourceDelta delta = event.getDelta();
+                try
+                {
+                    delta.accept( preDeleteDeltaVisitor );
+                }
+                catch ( CoreException e )
+                {
+                    // visit throws no exceptions, so we should never get here.
+                    PomEditorActivator.getLogger().log( "Unexpected exception", e );
+                }
+            }
+        }
+    };
+
     public MavenPomFormEditor()
     {
+    }
+
+    @Override
+    public void init( IEditorSite site, IEditorInput input ) throws PartInitException
+    {
+        if ( input instanceof IFileEditorInput )
+        {
+            project = ( (IFileEditorInput) input ).getFile().getProject();
+
+            ResourcesPlugin.getWorkspace().addResourceChangeListener(
+                                                                      resourceChangeListener,
+                                                                      IResourceChangeEvent.POST_CHANGE
+                                                                                      | IResourceChangeEvent.PRE_DELETE );
+        }
+        super.init( site, input );
+    }
+
+    @Override
+    public void dispose()
+    {
+        ResourcesPlugin.getWorkspace().removeResourceChangeListener( resourceChangeListener );
+        super.dispose();
     }
 
     @Override
@@ -103,53 +218,58 @@ public class MavenPomFormEditor extends FormEditor
         {
             if ( initializeAddPagesOK() )
             {
-                basicFormPage = 
-                    new MavenPomBasicFormPage( this, BASIC_INFO_FORM_PAGE , "Project Information", this.pomModel );
+                basicFormPage =
+                    new MavenPomBasicFormPage( this, BASIC_INFO_FORM_PAGE, "Project Information", this.pomModel );
                 addPage( basicFormPage );
 
-                dependenciesFormPage = 
-                    new MavenPomDependenciesFormPage( this, DEPENDENCIES_FORM_PAGE, "Dependencies/Dependency Management", this.pomModel );
+                dependenciesFormPage =
+                    new MavenPomDependenciesFormPage( this, DEPENDENCIES_FORM_PAGE,
+                                                      "Dependencies/Dependency Management", this.pomModel );
                 addPage( dependenciesFormPage );
 
-                mavenPomLicensesScmOrgFormPage = 
-                    new MavenPomLicensesScmOrgFormPage( this , LICENSES_SCM_ORG_FORM_PAGE , "Licenses/SCM/Organization/Issue Management", this.pomModel );
+                mavenPomLicensesScmOrgFormPage =
+                    new MavenPomLicensesScmOrgFormPage( this, LICENSES_SCM_ORG_FORM_PAGE,
+                                                        "Licenses/SCM/Organization/Issue Management", this.pomModel );
                 addPage( mavenPomLicensesScmOrgFormPage );
 
-                developersContributorsFormPage = 
-                    new MavenPomDevelopersContributorsFormPage( this , DEVELOPERS_CONTRIBUTORS_FORM_PAGE , "Developers/Contributors", this.pomModel );
+                developersContributorsFormPage =
+                    new MavenPomDevelopersContributorsFormPage( this, DEVELOPERS_CONTRIBUTORS_FORM_PAGE,
+                                                                "Developers/Contributors", this.pomModel );
                 addPage( developersContributorsFormPage );
-                
-                modulePropertiesFormPage = 
+
+                modulePropertiesFormPage =
                     new MavenPomPropertiesModuleFormPage( this, MODULES_FORM_PAGE, "Properties/Module", this.pomModel );
                 addPage( modulePropertiesFormPage );
-                
-                buildFormPage = 
-                    new MavenPomBuildFormPage( this, BUILD_FORM_PAGE, "Build Management", this.pomModel );             
+
+                buildFormPage = new MavenPomBuildFormPage( this, BUILD_FORM_PAGE, "Build Management", this.pomModel );
                 addPage( buildFormPage );
-                
+
                 buildResourcesPage =
                     new MavenPomBuildResourcesPage( this, BUILD_RESOURCES_FORM_PAGE, "Build Resources", this.pomModel );
                 addPage( buildResourcesPage );
-                
+
                 buildTestResourcesPage =
-                    new MavenPomBuildTestResourcesPage( this, BUILD_TEST_RESOURCES_FORM_PAGE, "Build Test Resources", this.pomModel);
+                    new MavenPomBuildTestResourcesPage( this, BUILD_TEST_RESOURCES_FORM_PAGE, "Build Test Resources",
+                                                        this.pomModel );
                 addPage( buildTestResourcesPage );
-                
+
                 buildPluginFormPage =
-                    new MavenPomBuildPluginFormPage( this, BUILD_PLUGINS_FORM_PAGE, "Build Plugin/Plugin Management", this.pomModel );
+                    new MavenPomBuildPluginFormPage( this, BUILD_PLUGINS_FORM_PAGE, "Build Plugin/Plugin Management",
+                                                     this.pomModel );
                 addPage( buildPluginFormPage );
-                
+
                 ciManagementMailingListsPage =
                     new MavenPomCiManagementMailingListFormPage( this, CIMANAGEMENT_MAILINGLISTS_FORM_PAGE,
                                                                  "CiManagement/Mailing Lists", this.pomModel );
                 addPage( ciManagementMailingListsPage );
-                
+
                 repositoriesPage =
                     new MavenPomRepositoriesFormPage( this, REPOSITORIES_FORM_PAGE, "Repositories", this.pomModel );
                 addPage( repositoriesPage );
-                
+
                 distributionManagementPage =
-                    new MavenPomDistributionManagementFormPage( this, DISTRIBUTION_MANAGEMENT_FORM_PAGE, "Distribution Management", this.pomModel );
+                    new MavenPomDistributionManagementFormPage( this, DISTRIBUTION_MANAGEMENT_FORM_PAGE,
+                                                                "Distribution Management", this.pomModel );
                 addPage( distributionManagementPage );
             }
         }
@@ -220,11 +340,11 @@ public class MavenPomFormEditor extends FormEditor
         {
             File pomFile = getPomFile();
 
-            MavenUtils.rewritePom( pomFile , pomModel );
-            
+            MavenUtils.rewritePom( pomFile, pomModel );
+
             IPath location = Path.fromOSString( pomFile.getAbsolutePath() );
             IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( location );
-            
+
             file.refreshLocal( IResource.DEPTH_ZERO, null );
 
         }
@@ -248,8 +368,8 @@ public class MavenPomFormEditor extends FormEditor
         basicFormPage.setPageModified( false );
         dependenciesFormPage.setPageModified( false );
         modulePropertiesFormPage.setPageModified( false );
-        mavenPomLicensesScmOrgFormPage.setPageModified(false);
-        developersContributorsFormPage.setPageModified(false);
+        mavenPomLicensesScmOrgFormPage.setPageModified( false );
+        developersContributorsFormPage.setPageModified( false );
         buildFormPage.setPageModified( false );
         buildResourcesPage.setPageModified( false );
         buildTestResourcesPage.setPageModified( false );
