@@ -133,52 +133,47 @@ public class AddEditNotifierDialog
     {
         container.setLayout( new GridLayout( 3, false ) );
 
-        GridData labelData = new GridData( GridData.BEGINNING, GridData.CENTER, false, false );
-        labelData.widthHint = 100;
-        GridData controlData = new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 );
-        controlData.horizontalIndent = 10;
-
         // Type
         Label label = new Label( container, SWT.NULL );
-        label.setLayoutData( labelData );
+        label.setLayoutData( createLabelLayoutData() );
         label.setText( Messages.MavenPomEditor_MavenPomEditor_Type );
         typeText = new Text( container, SWT.BORDER | SWT.SINGLE );
-        typeText.setLayoutData( controlData );
+        typeText.setLayoutData( createControlLayoutData() );
 
         // Address
         label = new Label( container, SWT.NULL );
-        label.setLayoutData( labelData );
+        label.setLayoutData( createLabelLayoutData() );
         label.setText( Messages.MavenPomEditor_MavenPomEditor_Address );
         addressText = new Text( container, SWT.BORDER | SWT.SINGLE );
-        addressText.setLayoutData( controlData );
+        addressText.setLayoutData( createControlLayoutData() );
 
         // Send on Error
         label = new Label( container, SWT.NULL );
-        label.setLayoutData( labelData );
+        label.setLayoutData( createLabelLayoutData() );
         label.setText( Messages.MavenPomEditor_MavenPomEditor_SendOnError );
         sendOnErrorCombo = new Combo( container, SWT.BORDER | SWT.READ_ONLY );
-        sendOnErrorCombo.setLayoutData( controlData );
+        sendOnErrorCombo.setLayoutData( createControlLayoutData() );
 
         // Send on Failure
         label = new Label( container, SWT.NULL );
-        label.setLayoutData( labelData );
+        label.setLayoutData( createLabelLayoutData() );
         label.setText( Messages.MavenPomEditor_MavenPomEditor_SendOnFailure );
         sendOnFailureCombo = new Combo( container, SWT.BORDER | SWT.READ_ONLY );
-        sendOnFailureCombo.setLayoutData( controlData );
+        sendOnFailureCombo.setLayoutData( createControlLayoutData() );
 
         // Send on Success
         label = new Label( container, SWT.NULL );
-        label.setLayoutData( labelData );
+        label.setLayoutData( createLabelLayoutData() );
         label.setText( Messages.MavenPomEditor_MavenPomEditor_SendOnSuccess );
         sendOnSuccessCombo = new Combo( container, SWT.BORDER | SWT.READ_ONLY );
-        sendOnSuccessCombo.setLayoutData( controlData );
+        sendOnSuccessCombo.setLayoutData( createControlLayoutData() );
 
         // Send on Warning
         label = new Label( container, SWT.NULL );
-        label.setLayoutData( labelData );
+        label.setLayoutData( createLabelLayoutData() );
         label.setText( Messages.MavenPomEditor_MavenPomEditor_SendOnSuccess );
         sendOnWarningCombo = new Combo( container, SWT.BORDER | SWT.READ_ONLY );
-        sendOnWarningCombo.setLayoutData( controlData );
+        sendOnWarningCombo.setLayoutData( createControlLayoutData() );
 
         // Configuration
         Group configurationsGroup = new Group( container, SWT.NONE );
@@ -218,6 +213,20 @@ public class AddEditNotifierDialog
         initControlValues();
 
         return container;
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData()
+    {
+        GridData labelData = new GridData( GridData.BEGINNING, GridData.CENTER, false, false );
+        labelData.widthHint = 100;
+        return labelData;
     }
 
     @Override

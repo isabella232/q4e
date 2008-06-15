@@ -38,70 +38,79 @@ public class ContributorDeveloperDetailComponent
         
         setLayout( new GridLayout( 2, false ) );
         
-        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false );
-        labelData.widthHint = 100;
-        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false );
-        controlData.horizontalIndent = 10;
-        
         if ( type.equalsIgnoreCase( Messages.MavenPomEditor_MavenPomEditor_Developers ) )
         {
             Label identityLabel = new Label( this, SWT.NULL );
-            identityLabel.setLayoutData( labelData );
+            identityLabel.setLayoutData( createLabelLayoutData() );
             identityLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Identity );
             
             identityText = new Text( this, SWT.BORDER | SWT.SINGLE );
-            identityText.setLayoutData( controlData );
+            identityText.setLayoutData( createControlLayoutData() );
         }
 
         Label nameLabel = new Label( this, SWT.NULL );
-        nameLabel.setLayoutData( labelData );
+        nameLabel.setLayoutData( createLabelLayoutData() );
         nameLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Name );
         
         nameText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        nameText.setLayoutData( controlData );
+        nameText.setLayoutData( createControlLayoutData() );
 
         Label emailLabel = new Label( this, SWT.NULL );
-        emailLabel.setLayoutData( labelData );
+        emailLabel.setLayoutData( createLabelLayoutData() );
         emailLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Email );
         
         emailText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        emailText.setLayoutData( controlData );
+        emailText.setLayoutData( createControlLayoutData() );
 
         Label urlLabel = new Label( this, SWT.NULL );
-        urlLabel.setLayoutData( labelData );
+        urlLabel.setLayoutData( createLabelLayoutData() );
         urlLabel.setText( Messages.MavenPomEditor_MavenPomEditor_URL );
         
         urlText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        urlText.setLayoutData( controlData );
+        urlText.setLayoutData( createControlLayoutData() );
 
         Label organizationLabel = new Label( this, SWT.NULL );
-        organizationLabel.setLayoutData( labelData );
+        organizationLabel.setLayoutData( createLabelLayoutData() );
         organizationLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Organization );
         
         organizationText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        organizationText.setLayoutData( controlData );
+        organizationText.setLayoutData( createControlLayoutData() );
 
         Label organizationUrlLabel = new Label( this, SWT.NULL );
-        organizationUrlLabel.setLayoutData( labelData );
+        organizationUrlLabel.setLayoutData( createLabelLayoutData() );
         organizationUrlLabel.setText( Messages.MavenPomEditor_MavenPomEditor_OrganizationUrl );
         
         organizationUrlText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        organizationUrlText.setLayoutData( controlData );
+        organizationUrlText.setLayoutData( createControlLayoutData() );
 
         Label rolesLabel = new Label( this, SWT.NULL );
-        rolesLabel.setLayoutData( labelData );
+        rolesLabel.setLayoutData( createLabelLayoutData() );
         rolesLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Roles );
         
         rolesText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        rolesText.setLayoutData( controlData );
+        rolesText.setLayoutData( createControlLayoutData() );
 
         Label timezoneLabel = new Label( this, SWT.NULL );
-        timezoneLabel.setLayoutData( labelData );
+        timezoneLabel.setLayoutData( createLabelLayoutData() );
         timezoneLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Timezone );
         
         timezoneText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        timezoneText.setLayoutData( controlData );
+        timezoneText.setLayoutData( createControlLayoutData() );
         
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData()
+    {
+        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false );
+        labelData.widthHint = 100;
+        return labelData;
     }
     
     public void addModifyListener(ModifyListener listener) 

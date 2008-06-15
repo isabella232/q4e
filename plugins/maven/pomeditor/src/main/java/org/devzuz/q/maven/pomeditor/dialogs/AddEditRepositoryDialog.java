@@ -85,41 +85,36 @@ public class AddEditRepositoryDialog
         };
         
         container.setLayout( new GridLayout( 2, false ) );
-        GridData labelData = new GridData( GridData.BEGINNING, GridData.CENTER, false, false );
-        labelData.widthHint = 95;
-        GridData controlData = new GridData( GridData.FILL, GridData.CENTER, true, false );
-        controlData.horizontalIndent = 10;
-        
         Label idLabel = new Label( container, SWT.NULL );
-        idLabel.setLayoutData( labelData );
+        idLabel.setLayoutData( createLabelLayoutData() );
         idLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Identity );
         
         idText = new Text( container, SWT.BORDER | SWT.SINGLE );
-        idText.setLayoutData( controlData );
+        idText.setLayoutData( createControlLayoutData() );
         idText.addModifyListener( modifyingListener );
         
         Label nameLabel = new Label( container, SWT.NULL );
-        nameLabel.setLayoutData( labelData );
+        nameLabel.setLayoutData( createLabelLayoutData() );
         nameLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Name );
         
         nameText = new Text( container, SWT.BORDER | SWT.SINGLE );
-        nameText.setLayoutData( controlData );
+        nameText.setLayoutData( createControlLayoutData() );
         nameText.addModifyListener( modifyingListener );
         
         Label urlLabel = new Label( container, SWT.NULL );
-        urlLabel.setLayoutData( labelData );
+        urlLabel.setLayoutData( createLabelLayoutData() );
         urlLabel.setText( Messages.MavenPomEditor_MavenPomEditor_URL );
         
         urlText = new Text( container, SWT.BORDER | SWT.SINGLE );
-        urlText.setLayoutData( controlData );
+        urlText.setLayoutData( createControlLayoutData() );
         urlText.addModifyListener( modifyingListener );
         
         Label layoutLabel = new Label( container, SWT.NULL );
-        layoutLabel.setLayoutData( labelData );
+        layoutLabel.setLayoutData( createLabelLayoutData() );
         layoutLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Layout );
         
         layoutText = new Text( container, SWT.BORDER | SWT.SINGLE );
-        layoutText.setLayoutData( controlData );
+        layoutText.setLayoutData( createControlLayoutData() );
         layoutText.addModifyListener( modifyingListener );
         
         Group releasesGroup = new Group( container, SWT.None );
@@ -128,26 +123,26 @@ public class AddEditRepositoryDialog
         releasesGroup.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 3, 1 ) );
         
         Label releasesEnabledLabel = new Label( releasesGroup, SWT.NULL );
-        releasesEnabledLabel.setLayoutData( labelData );
+        releasesEnabledLabel.setLayoutData( createLabelLayoutData() );
         releasesEnabledLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Enabled );
         
         releasesEnabledRadioButton = new Button( releasesGroup, SWT.CHECK );
-        releasesEnabledRadioButton.setLayoutData( controlData );
+        releasesEnabledRadioButton.setLayoutData( createControlLayoutData() );
         
         Label releasesUpdatePolicyLabel = new Label( releasesGroup, SWT.NULL );
-        releasesUpdatePolicyLabel.setLayoutData( labelData );
+        releasesUpdatePolicyLabel.setLayoutData( createLabelLayoutData() );
         releasesUpdatePolicyLabel.setText( Messages.MavenPomEditor_MavenPomEditor_UpdatePolicy );
         
         releasesUpdatePolicyText = new Text( releasesGroup, SWT.BORDER | SWT.SINGLE );
-        releasesUpdatePolicyText.setLayoutData( controlData );
+        releasesUpdatePolicyText.setLayoutData( createControlLayoutData() );
         releasesUpdatePolicyText.addModifyListener( modifyingListener );
         
         Label releasesChecksumPolicyLabel = new Label( releasesGroup, SWT.NULL );
-        releasesChecksumPolicyLabel.setLayoutData( labelData );
+        releasesChecksumPolicyLabel.setLayoutData( createLabelLayoutData() );
         releasesChecksumPolicyLabel.setText( Messages.MavenPomEditor_MavenPomEditor_ChecksumPolicy );
         
         releasesChecksumPolicyText = new Text( releasesGroup, SWT.SINGLE | SWT.BORDER );
-        releasesChecksumPolicyText.setLayoutData( controlData );
+        releasesChecksumPolicyText.setLayoutData( createControlLayoutData() );
         releasesChecksumPolicyText.addModifyListener( modifyingListener );
         
         Group snapshotsGroup = new Group( container, SWT.None );
@@ -156,29 +151,43 @@ public class AddEditRepositoryDialog
         snapshotsGroup.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 3, 1 ) );
         
         Label snapshotsEnabledLabel = new Label( snapshotsGroup, SWT.NULL );
-        snapshotsEnabledLabel.setLayoutData( labelData );
+        snapshotsEnabledLabel.setLayoutData( createLabelLayoutData() );
         snapshotsEnabledLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Enabled );
         
         snapshotsEnabledRadioButton = new Button( snapshotsGroup, SWT.CHECK );
-        snapshotsEnabledRadioButton.setLayoutData( controlData );
+        snapshotsEnabledRadioButton.setLayoutData( createControlLayoutData() );
         
         Label snapshotsUpdatePolicyLabel = new Label( snapshotsGroup, SWT.NULL );
-        snapshotsUpdatePolicyLabel.setLayoutData( labelData );
+        snapshotsUpdatePolicyLabel.setLayoutData( createLabelLayoutData() );
         snapshotsUpdatePolicyLabel.setText( Messages.MavenPomEditor_MavenPomEditor_UpdatePolicy );
         
         snapshotsUpdatePolicyText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
-        snapshotsUpdatePolicyText.setLayoutData( controlData );
+        snapshotsUpdatePolicyText.setLayoutData( createControlLayoutData() );
         snapshotsUpdatePolicyText.addModifyListener( modifyingListener );
         
         Label snapshotsChecksumPolicyLabel = new Label( snapshotsGroup, SWT.NULL );
-        snapshotsChecksumPolicyLabel.setLayoutData( labelData );
+        snapshotsChecksumPolicyLabel.setLayoutData( createLabelLayoutData() );
         snapshotsChecksumPolicyLabel.setText( Messages.MavenPomEditor_MavenPomEditor_ChecksumPolicy );
         
         snapshotsChecksumPolicyText = new Text( snapshotsGroup, SWT.SINGLE | SWT.BORDER );
-        snapshotsChecksumPolicyText.setLayoutData( controlData );
+        snapshotsChecksumPolicyText.setLayoutData( createControlLayoutData() );
         snapshotsChecksumPolicyText.addModifyListener( modifyingListener );
         
         return container;
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( GridData.FILL, GridData.CENTER, true, false );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData()
+    {
+        GridData labelData = new GridData( GridData.BEGINNING, GridData.CENTER, false, false );
+        labelData.widthHint = 95;
+        return labelData;
     }
     
     private void syncUIWithModel()

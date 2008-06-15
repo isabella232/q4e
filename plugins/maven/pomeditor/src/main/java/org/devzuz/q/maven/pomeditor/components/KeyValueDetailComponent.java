@@ -31,24 +31,19 @@ public class KeyValueDetailComponent
         
         setLayout( new GridLayout( 2, false ) );
         
-        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        labelData.widthHint = 50;
-        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
-        controlData.horizontalIndent = 10;
-        
         Label label = new Label( this, SWT.NULL );
-        label.setLayoutData( labelData );
+        label.setLayoutData( createLabelLayoutData() );
         label.setText( Messages.MavenCustomComponent_KeyPropertyLabel );
 
         keyText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        keyText.setLayoutData( controlData );
+        keyText.setLayoutData( createControlLayoutData() );
 
         Label label2 = new Label( this, SWT.NULL );
-        label2.setLayoutData( labelData );
+        label2.setLayoutData( createLabelLayoutData() );
         label2.setText( Messages.MavenCustomComponent_ValuePropertyLabel );
 
         valueText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        valueText.setLayoutData( controlData );
+        valueText.setLayoutData( createControlLayoutData() );
         
         ModifyListener listener = new ModifyListener()
         {
@@ -60,6 +55,20 @@ public class KeyValueDetailComponent
         
         keyText.addModifyListener( listener );
         valueText.addModifyListener( listener );
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData()
+    {
+        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
+        labelData.widthHint = 50;
+        return labelData;
     }
     
     public String getKey()

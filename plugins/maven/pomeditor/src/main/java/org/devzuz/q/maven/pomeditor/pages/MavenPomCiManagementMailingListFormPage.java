@@ -115,16 +115,14 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
 
         form = managedForm.getForm();
 
-        form.getBody().setLayout( new GridLayout( 2, false ) );
-
-        GridData layoutData = new GridData( SWT.FILL, SWT.FILL, true, true );
+        form.getBody().setLayout( new GridLayout( 1, false ) );
 
         Section ciManagementSection =
             toolkit.createSection( form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED
                             | Section.DESCRIPTION );
         ciManagementSection.setDescription( Messages.MavenPomEditor_CiManagement_Description );
         ciManagementSection.setText( Messages.MavenPomEditor_CiManagement_Title );
-        ciManagementSection.setLayoutData( layoutData );
+        ciManagementSection.setLayoutData( createSectionLayoutData() );
         ciManagementSection.setClient( createCiManagementControls( ciManagementSection, toolkit ) );
 
         Section mailingListsSection =
@@ -132,7 +130,7 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                             | Section.DESCRIPTION );
         mailingListsSection.setDescription( Messages.MavenPomEditor_MailingList_Description );
         mailingListsSection.setText( Messages.MavenPomEditor_MailingList_Title );
-        mailingListsSection.setLayoutData( layoutData );
+        mailingListsSection.setLayoutData( createSectionLayoutData() );
         mailingListsSection.setClient( createMailingListControls( mailingListsSection, toolkit ) );
         /*
         ciManagementSection.addExpansionListener( expansionAdapter );
@@ -140,6 +138,12 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         */
         initCiManagementControls();
         initMailingListsSection();
+    }
+
+    private GridData createSectionLayoutData()
+    {
+        GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false );
+        return layoutData;
     }
 
     @SuppressWarnings( "unchecked" )
@@ -172,26 +176,23 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         parentContainer.setLayoutData( new GridData( SWT.FILL , SWT.CENTER, true, false ) );
         parentContainer.setLayout( new GridLayout( 2, false ) );
         
-        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        labelData.widthHint = 50;
-        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
-        controlData.horizontalIndent = 10;
-
         Label groupIdLabel =
             toolKit.createLabel( parentContainer, Messages.MavenPomEditor_MavenPomEditor_System, SWT.NONE );
-        groupIdLabel.setLayoutData( labelData );
+        groupIdLabel.setLayoutData( createLabelLayoutData() );
         systemText = toolKit.createText( parentContainer, "", SWT.BORDER | SWT.SINGLE );
-        createTextDisplay( systemText, controlData, ciManagement.getSystem() );
+        createTextDisplay( systemText, createControlLayoutData(), ciManagement.getSystem() );
 
         Label urlLabel =
             toolKit.createLabel( parentContainer, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE );
-        urlLabel.setLayoutData( labelData );
+        urlLabel.setLayoutData( createLabelLayoutData() );
         urlText = toolKit.createText( parentContainer, "", SWT.BORDER | SWT.SINGLE );
-        createTextDisplay( urlText, controlData, ciManagement.getUrl() );
+        createTextDisplay( urlText, createControlLayoutData(), ciManagement.getUrl() );
 
-        Group notifiersGroup = new Group( ciManagementContainer, SWT.NONE );
+        Section notifiersSection = toolKit.createSection( ciManagementContainer, Section.TWISTIE | Section.TITLE_BAR);
+        notifiersSection.setLayoutData( createSectionLayoutData() );
+        notifiersSection.setText( Messages.MavenPomEditor_MavenPomEditor_Notifiers );
+        Composite notifiersGroup = toolKit.createComposite( notifiersSection );
         notifiersGroup.setLayoutData( new GridData( SWT.FILL , SWT.FILL, true, true ) );
-        notifiersGroup.setText( Messages.MavenPomEditor_MavenPomEditor_Notifiers );
         notifiersGroup.setLayout( new GridLayout( 2, false ) );
         
         notifiersTable = toolKit.createTable( notifiersGroup, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
@@ -227,8 +228,22 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         removeNotifierButton.addSelectionListener( getSelectionListener() );
 
         disableEditDeleteNotifierButton();
-
+        notifiersSection.setClient( notifiersGroup );
         return ciManagementContainer;
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData()
+    {
+        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
+        labelData.widthHint = 50;
+        return labelData;
     }
 
     public Control createMailingListControls( Composite form, FormToolkit toolKit )

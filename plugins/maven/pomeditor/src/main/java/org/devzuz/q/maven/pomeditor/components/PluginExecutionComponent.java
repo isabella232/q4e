@@ -35,31 +35,26 @@ public class PluginExecutionComponent extends AbstractComponent
 
         setLayout( new GridLayout( 2, false ) );
 
-        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        labelData.widthHint = 50;
-        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
-        controlData.horizontalIndent = 10;
-
         Label idLabel = new Label( this, SWT.NULL );
-        idLabel.setLayoutData( labelData );
+        idLabel.setLayoutData( createLabelLayoutData() );
         idLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Identity );
 
         idText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        idText.setLayoutData( controlData );
+        idText.setLayoutData( createControlLayoutData() );
 
         Label phaseLabel = new Label( this, SWT.NULL );
-        phaseLabel.setLayoutData( labelData );
+        phaseLabel.setLayoutData( createLabelLayoutData() );
         phaseLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Phase );
 
         phaseText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        phaseText.setLayoutData( controlData );
+        phaseText.setLayoutData( createControlLayoutData() );
 
         Label inheritedLabel = new Label( this, SWT.NULL );
-        inheritedLabel.setLayoutData( labelData );
+        inheritedLabel.setLayoutData( createLabelLayoutData() );
         inheritedLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Inherited );
 
         inheritedRadioButton = new Button( this, SWT.CHECK );
-        inheritedRadioButton.setLayoutData( controlData );
+        inheritedRadioButton.setLayoutData( createControlLayoutData() );
 
         ModifyListener listener = new ModifyListener()
         {
@@ -81,6 +76,20 @@ public class PluginExecutionComponent extends AbstractComponent
         };
 
         inheritedRadioButton.addSelectionListener( selectionListener );
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData()
+    {
+        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
+        labelData.widthHint = 50;
+        return labelData;
     }
 
     public String getId()

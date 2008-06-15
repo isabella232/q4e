@@ -90,21 +90,25 @@ public class MavenPomBuildPluginFormPage extends FormPage
         
         form.getBody().setLayout( new GridLayout( 2 , false ) );
         
-        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
-        
         Section treeSection = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         treeSection.setDescription( "Section for management of default plugin information for use in a group of POMs." );
         treeSection.setText( Messages.MavenPomEditor_MavenPomEditor_Plugins );
-        treeSection.setLayoutData( layoutData );
+        treeSection.setLayoutData( createSectionLayoutData() );
         treeSection.setClient( createTreeViewerControl( treeSection, toolkit ) );
         
         Section pluginManagementSection = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.DESCRIPTION  );
         pluginManagementSection.setDescription( "Section for management of default plugin information for use in a group of POMs." );
         pluginManagementSection.setText( Messages.MavenPomEditor_MavenPomEditor_PluginManagement );
-        pluginManagementSection.setLayoutData( layoutData );
+        pluginManagementSection.setLayoutData( createSectionLayoutData() );
         pluginManagementSection.setClient( createPluginManagementTreeViewerControl( pluginManagementSection, toolkit ) );
         
 	}
+
+    private GridData createSectionLayoutData()
+    {
+        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
+        return layoutData;
+    }
 	
 
 	private Control createPluginManagementTreeViewerControl( Composite form, FormToolkit toolkit) 

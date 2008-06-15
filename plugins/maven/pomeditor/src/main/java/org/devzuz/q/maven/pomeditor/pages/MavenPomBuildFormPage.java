@@ -84,16 +84,14 @@ public class MavenPomBuildFormPage extends FormPage
         
         form.getBody().setLayout( new GridLayout( 2 , false ) );
         
-        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
-        
         Section extensionTable = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         extensionTable.setDescription( "Describes a build extension to utilise.");
         extensionTable.setText( "Extensions" );
-        extensionTable.setLayoutData( layoutData );
+        extensionTable.setLayoutData( createSectionLayoutData() );
         extensionTable.setClient( createExtensionTableControls ( extensionTable, toolkit ) );
         
         Composite container = toolkit.createComposite( form.getBody() );
-        container.setLayoutData( layoutData );
+        container.setLayoutData( createSectionLayoutData() );
         createRightSideControl( container, toolkit );
         
         build  = pomModel.getBuild();
@@ -102,6 +100,12 @@ public class MavenPomBuildFormPage extends FormPage
             extensionList = build.getExtensions();
             syncExtensionListToTable();
         }
+    }
+
+    private GridData createSectionLayoutData()
+    {
+        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
+        return layoutData;
     }
 
 	private Control createRightSideControl( Composite container, FormToolkit toolkit )

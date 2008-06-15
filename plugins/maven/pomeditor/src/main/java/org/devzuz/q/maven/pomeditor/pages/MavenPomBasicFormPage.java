@@ -34,6 +34,10 @@ import org.eclipse.ui.forms.widgets.Section;
 
 public class MavenPomBasicFormPage extends FormPage
 {
+    private static final int RIGHT_LABEL_WIDTH_HINT = 80;
+
+    private static final int LEFT_LABEL_WIDTH_HINT = 75;
+
     private ScrolledForm form;
     
     private FormEditor editor;
@@ -130,33 +134,37 @@ public class MavenPomBasicFormPage extends FormPage
         
         form.getBody().setLayout( new GridLayout( 2 , false ) );
         
-        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
-        
         Section basicCoordinateControls = toolkit.createSection( form.getBody() , Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         basicCoordinateControls.setDescription( "These basic informations act like a coordinate system for Maven projects." );
         basicCoordinateControls.setText( Messages.MavenPomEditor_MavenPomEditor_BasicInformation );
-        basicCoordinateControls.setLayoutData( layoutData );
+        basicCoordinateControls.setLayoutData( createSectionLayoutData() );
         basicCoordinateControls.setClient( createBasicCoordinateControls( basicCoordinateControls , toolkit ) );
         
         Section linkControls = toolkit.createSection( form.getBody() , Section.TITLE_BAR | Section.EXPANDED );
         linkControls.setText( Messages.MavenPomEditor_MavenPomEditor_Links ); 
-        linkControls.setLayoutData( layoutData );
+        linkControls.setLayoutData( createSectionLayoutData() );
         linkControls.setClient( createLinkControls( linkControls , toolkit ) );
         
         Section moreProjectInfoControls = toolkit.createSection(form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION );
         moreProjectInfoControls.setDescription( "Add more project information to this POM." );
         moreProjectInfoControls.setText( Messages.MavenPomEditor_MavenPomEditor_MoreProjInfo );
-        moreProjectInfoControls.setLayoutData( layoutData );
+        moreProjectInfoControls.setLayoutData( createSectionLayoutData() );
         moreProjectInfoControls.setClient( createMoreProjectInfoControls( moreProjectInfoControls , toolkit ) );
         
         Section parentProjectControls = toolkit.createSection(form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION );
         parentProjectControls.setDescription( "Add a parent POM whose elements are inherited this POM." );
         parentProjectControls.setText( Messages.MavenPomEditor_MavenPomEditor_ParentPOM );
-        parentProjectControls.setLayoutData( layoutData );
+        parentProjectControls.setLayoutData( createSectionLayoutData() );
         parentProjectControls.setClient( createParentProjectControls( parentProjectControls , toolkit ) );
         
         parentProjectControls.addExpansionListener( expansionAdapter );
         moreProjectInfoControls.addExpansionListener( expansionAdapter );        
+    }
+
+    private GridData createSectionLayoutData()
+    {
+        GridData layoutData = new GridData( SWT.FILL , SWT.TOP , true , false );
+        return layoutData;
     }
     
     public Control createBasicCoordinateControls( Composite form , FormToolkit toolKit )
@@ -165,15 +173,12 @@ public class MavenPomBasicFormPage extends FormPage
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new GridLayout( 2 , false ) );
         
-        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
-        labelData.widthHint = 75;
-        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
-        controlData.horizontalIndent = 10;
+        GridData controlData = createControlLayoutData();
         
         TextFieldListener textFieldListener = new TextFieldListener();
             
         Label groupIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_GroupId , SWT.NONE ); 
-        groupIdLabel.setLayoutData( labelData );
+        groupIdLabel.setLayoutData( createLabelLayoutData(LEFT_LABEL_WIDTH_HINT) );
         
         groupIdText = toolKit.createText( parent, "" ); 
         this.createTextDisplay( groupIdText, controlData );
@@ -181,7 +186,7 @@ public class MavenPomBasicFormPage extends FormPage
         groupIdText.addKeyListener( textFieldListener );
    
         Label artifactIdLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_ArtifactId, SWT.NONE ); 
-        artifactIdLabel.setLayoutData( labelData );
+        artifactIdLabel.setLayoutData( createLabelLayoutData(LEFT_LABEL_WIDTH_HINT) );
         
         artifactIdText = toolKit.createText( parent, "" ); 
         this.createTextDisplay( artifactIdText, controlData );
@@ -189,7 +194,7 @@ public class MavenPomBasicFormPage extends FormPage
         artifactIdText.addKeyListener( textFieldListener );
 
         Label versionLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Version, SWT.NONE ); 
-        versionLabel.setLayoutData( labelData );
+        versionLabel.setLayoutData( createLabelLayoutData(LEFT_LABEL_WIDTH_HINT) );
 
         versionText = toolKit.createText( parent, "" ); 
         this.createTextDisplay( versionText, controlData );
@@ -197,7 +202,7 @@ public class MavenPomBasicFormPage extends FormPage
         versionText.addKeyListener( textFieldListener );
 
         Label packagingLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Packaging, SWT.NONE ); 
-        packagingLabel.setLayoutData( labelData );
+        packagingLabel.setLayoutData( createLabelLayoutData(LEFT_LABEL_WIDTH_HINT) );
        
         packagingText = toolKit.createText( parent, ""  ); 
         this.createTextDisplay( packagingText, controlData );
@@ -207,6 +212,20 @@ public class MavenPomBasicFormPage extends FormPage
         toolKit.paintBordersFor(parent);
         
         return parent;
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData(int widthHint)
+    {
+        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
+        labelData.widthHint = widthHint;
+        return labelData;
     }
     
     public Control createLinkControls( Composite form , FormToolkit toolKit )
@@ -325,48 +344,43 @@ public class MavenPomBasicFormPage extends FormPage
         
         TextFieldListener textFieldListener = new TextFieldListener();
         
-        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
-        labelData.widthHint = 80;
-        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
-        controlData.horizontalIndent = 10;
-        
         Label nameLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Name , SWT.NONE ); 
-        nameLabel.setLayoutData( labelData );
+        nameLabel.setLayoutData( createLabelLayoutData(RIGHT_LABEL_WIDTH_HINT) );
         
         nameText = toolKit.createText( parent, "Name" ); 
-        this.createTextDisplay( nameText, controlData );
+        this.createTextDisplay( nameText, createControlLayoutData() );
         nameText.setText(getName());
         nameText.addKeyListener( textFieldListener );
         
         Label descriptionLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Description, SWT.NONE ); 
-        descriptionLabel.setLayoutData( labelData );
+        descriptionLabel.setLayoutData( createLabelLayoutData(RIGHT_LABEL_WIDTH_HINT) );
         
         descriptionText = toolKit.createText( parent, "Description" ); 
-        this.createTextDisplay( descriptionText, controlData );
+        this.createTextDisplay( descriptionText, createControlLayoutData() );
         descriptionText.setText(getDescription());
         descriptionText.addKeyListener( textFieldListener );
         
         Label urlLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE ); 
-        urlLabel.setLayoutData( labelData );
+        urlLabel.setLayoutData( createLabelLayoutData(RIGHT_LABEL_WIDTH_HINT) );
         
         urlText = toolKit.createText( parent, "URL" ); 
-        this.createTextDisplay( urlText, controlData );
+        this.createTextDisplay( urlText, createControlLayoutData() );
         urlText.setText(getUrl());
         urlText.addKeyListener( textFieldListener );
         
         Label inceptionYearLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_InceptionYear, SWT.NONE ); 
-        inceptionYearLabel.setLayoutData( labelData );        
+        inceptionYearLabel.setLayoutData( createLabelLayoutData(RIGHT_LABEL_WIDTH_HINT) );        
         
         inceptionYearText = toolKit.createText( parent, "Inception Year" ); 
-        this.createTextDisplay( inceptionYearText, controlData );
+        this.createTextDisplay( inceptionYearText, createControlLayoutData() );
         inceptionYearText.setText(getInceptionYear());
         inceptionYearText.addKeyListener( textFieldListener );
         
         Label modelVersionLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_ModelVersion, SWT.None );
-        modelVersionLabel.setLayoutData( labelData );
+        modelVersionLabel.setLayoutData( createLabelLayoutData(RIGHT_LABEL_WIDTH_HINT) );
         
         modelVersionText = toolKit.createText( parent, "Model Version" );
-        this.createTextDisplay( modelVersionText, controlData );
+        this.createTextDisplay( modelVersionText, createControlLayoutData() );
         modelVersionText.setText( getModelVersion() );
         modelVersionText.addKeyListener( textFieldListener );
         
@@ -382,42 +396,37 @@ public class MavenPomBasicFormPage extends FormPage
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new GridLayout( 2 , false ) );
         
-        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
-        labelData.widthHint = 75;
-        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
-        controlData.horizontalIndent = 10;
-        
         TextFieldListener textFieldListener = new TextFieldListener();
         
         Label groupIdLabel = toolKit.createLabel( parent, "Group Id" , SWT.NONE ); 
-        groupIdLabel.setLayoutData( labelData );
+        groupIdLabel.setLayoutData( createLabelLayoutData(LEFT_LABEL_WIDTH_HINT) );
         
         parentPOMGroupIdText = toolKit.createText( parent, "groupId" ); 
-        this.createTextDisplay( parentPOMGroupIdText, controlData );      
+        this.createTextDisplay( parentPOMGroupIdText, createControlLayoutData() );      
         parentPOMGroupIdText.setText(getParentPOMgroupID());
         parentPOMGroupIdText.addKeyListener( textFieldListener );
         
         Label artifactIdLabel = toolKit.createLabel( parent, "Artifact Id", SWT.NONE ); 
-        artifactIdLabel.setLayoutData( labelData );
+        artifactIdLabel.setLayoutData( createLabelLayoutData(LEFT_LABEL_WIDTH_HINT) );
         
         parentPOMArtifactIdText = toolKit.createText( parent, "artifactId" ); 
-        this.createTextDisplay( parentPOMArtifactIdText, controlData );
+        this.createTextDisplay( parentPOMArtifactIdText, createControlLayoutData() );
         parentPOMArtifactIdText.setText(getParentPOMArtifactID());
         parentPOMArtifactIdText.addKeyListener( textFieldListener );
         
         Label versionLabel = toolKit.createLabel( parent, "Version", SWT.NONE ); 
-        versionLabel.setLayoutData( labelData );
+        versionLabel.setLayoutData( createLabelLayoutData(LEFT_LABEL_WIDTH_HINT) );
         
         parentPOMVersionText = toolKit.createText( parent, "Version" ); 
-        this.createTextDisplay( parentPOMVersionText, controlData );
+        this.createTextDisplay( parentPOMVersionText, createControlLayoutData() );
         parentPOMVersionText.setText(getParentPOMVersion());
         parentPOMVersionText.addKeyListener( textFieldListener );
         
         Label relativePathLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_RelativePath, SWT.NONE ); 
-        relativePathLabel.setLayoutData( labelData );
+        relativePathLabel.setLayoutData( createLabelLayoutData(LEFT_LABEL_WIDTH_HINT) );
         
         parentPOMRelativePathText = toolKit.createText( parent, "Relative Path" ); 
-        this.createTextDisplay( parentPOMRelativePathText, controlData );
+        this.createTextDisplay( parentPOMRelativePathText, createControlLayoutData() );
         parentPOMRelativePathText.setText(getParentPOMRelPath());
         parentPOMRelativePathText.addKeyListener( textFieldListener );
         

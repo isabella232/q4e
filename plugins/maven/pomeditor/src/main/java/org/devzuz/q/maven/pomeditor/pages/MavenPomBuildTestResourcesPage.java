@@ -15,6 +15,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.IManagedForm;
@@ -69,17 +70,21 @@ public class MavenPomBuildTestResourcesPage extends FormPage
 
         form.getBody().setLayout( new GridLayout( 2, false ) );
 
-        GridData layoutData = new GridData( SWT.FILL, SWT.FILL, true, true );
-
         Section resourceTable = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.DESCRIPTION );
         resourceTable.setDescription( "This element describes all of the classpath resources associated with a project or unit tests." );
         resourceTable.setText( Messages.MavenPomEditor_MavenPomEditor_TestResource );
-        resourceTable.setLayoutData( layoutData );
+        resourceTable.setLayoutData( createSectionLayoutData() );
         resourceTable.setClient( createResourceTableControls( resourceTable, toolkit ) );
 
         Composite container = toolkit.createComposite( form.getBody() );
-        container.setLayoutData( layoutData );
+        container.setLayoutData( createSectionLayoutData() );
         createIncludeExcludeTables( container, toolkit );
+    }
+
+    private GridData createSectionLayoutData()
+    {
+        GridData layoutData = new GridData( SWT.FILL, SWT.FILL, true, true );
+        return layoutData;
     }
 
     @SuppressWarnings( "unchecked" )
@@ -160,13 +165,15 @@ public class MavenPomBuildTestResourcesPage extends FormPage
 
     private Control createIncludeExcludeTables( Composite container, FormToolkit toolkit )
     {
-        container.setLayout( new FillLayout( SWT.VERTICAL ) );
+        GridLayout layout = new GridLayout( 1, false );
+        container.setLayout( layout );
 
         Section includeTable =
             toolkit.createSection( container, Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION | Section.EXPANDED );
         includeTable.setDescription( "A set of files patterns which specify the files to include as resources under that specified directory, using * as a wildcard." );
         includeTable.setText( Messages.MavenPomEditor_MavenPomEditor_Resource_Includes );
         includeTable.setClient( createIncludeTableControls( includeTable, toolkit ) );
+        includeTable.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
 
         Section excludeTable =
             toolkit.createSection( container, Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION | Section.EXPANDED );
@@ -174,6 +181,7 @@ public class MavenPomBuildTestResourcesPage extends FormPage
                         + "	The same structure as includes , but specifies which files to ignore. In conflicts between include  and exclude , exclude  wins." );
         excludeTable.setText( Messages.MavenPomEditor_MavenPomEditor_Resource_Excludes );
         excludeTable.setClient( createExcludeTableControls( excludeTable, toolkit ) );
+        excludeTable.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
 
         return container;
 
@@ -185,7 +193,7 @@ public class MavenPomBuildTestResourcesPage extends FormPage
         container.setLayout( new GridLayout( 1, false ) );
 
         excludeComponent = new IncludeExcludeComponent( container, SWT.NONE );
-        excludeComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
+        excludeComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
 
         ExcludeComponentButtonListener buttonListener = new ExcludeComponentButtonListener();
         excludeComponent.addAddButtonListener( buttonListener );
@@ -201,7 +209,7 @@ public class MavenPomBuildTestResourcesPage extends FormPage
         container.setLayout( new GridLayout( 1, false ) );
 
         includeComponent = new IncludeExcludeComponent( container, SWT.NONE );
-        includeComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
+        includeComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
 
         IncludeComponentButtonListener buttonListener = new IncludeComponentButtonListener();
         includeComponent.addAddButtonListener( buttonListener );

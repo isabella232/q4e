@@ -49,19 +49,23 @@ public class MavenPomDistributionManagementFormPage
         
         form.getBody().setLayout( new GridLayout( 2 , false ) );
         
-        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
-        
         Section distributionManagementSection = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         distributionManagementSection.setDescription( "This section describes all that pertains to distribution for a project. " +
         		"It is primarily used for deployment of artifacts and the site produced by the build." );
         distributionManagementSection.setText( Messages.MavenPomEditor_MavenPomEditor_DistributionManagement );
-        distributionManagementSection.setLayoutData( layoutData );
+        distributionManagementSection.setLayoutData( createSectionLayoutData() );
         distributionManagementSection.setClient( createDistributionManagementControls( distributionManagementSection, toolkit ) );
         
         Section tempSection = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         tempSection.setDescription( "Filler Section for now" );
         tempSection.setText( "Filler Section" );
-        tempSection.setLayoutData( layoutData );
+        tempSection.setLayoutData( createSectionLayoutData() );
+    }
+
+    private GridData createSectionLayoutData()
+    {
+        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
+        return layoutData;
     }
     
     private Control createDistributionManagementControls( Composite parent, FormToolkit toolkit )

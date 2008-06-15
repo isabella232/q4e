@@ -39,67 +39,76 @@ public class BuildManagementDetailComponent
 
         setLayout( new GridLayout( 2, false ) );
         
-        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
-        labelData.widthHint = 132;
-        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
-        controlData.horizontalIndent = 10;
-        
         Label defaultGoalLabel = new Label( this, SWT.NULL );
-        defaultGoalLabel.setLayoutData( labelData );
+        defaultGoalLabel.setLayoutData( createLabelLayoutData() );
         defaultGoalLabel.setText( Messages.MavenPomEditor_MavenPomEditor_DefaultGoal );
         
         defaultGoalText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        defaultGoalText.setLayoutData( controlData );
+        defaultGoalText.setLayoutData( createControlLayoutData() );
         
         Label finalNameLabel = new Label( this, SWT.NULL );
-        finalNameLabel.setLayoutData( labelData );
+        finalNameLabel.setLayoutData( createLabelLayoutData() );
         finalNameLabel.setText( Messages.MavenPomEditor_MavenPomEditor_FinalName );
         
         finalNameText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        finalNameText.setLayoutData( controlData );
+        finalNameText.setLayoutData( createControlLayoutData() );
         
         Label directoryLabel = new Label( this, SWT.NULL );
-        directoryLabel.setLayoutData( labelData );
+        directoryLabel.setLayoutData( createLabelLayoutData() );
         directoryLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Directory );
         
         directoryText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        directoryText.setLayoutData( controlData );
+        directoryText.setLayoutData( createControlLayoutData() );
         
         Label outputDirLabel = new Label( this, SWT.NULL );
-        outputDirLabel.setLayoutData( labelData );
+        outputDirLabel.setLayoutData( createLabelLayoutData() );
         outputDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_OutputDirectory );
         
         outputDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        outputDirText.setLayoutData( controlData );
+        outputDirText.setLayoutData( createControlLayoutData() );
         
         Label testOutputDirLabel = new Label( this, SWT.NULL );
-        testOutputDirLabel.setLayoutData( labelData );
+        testOutputDirLabel.setLayoutData( createLabelLayoutData() );
         testOutputDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_TestOutputDirectory );
         
         testOutputDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        testOutputDirText.setLayoutData( controlData );
+        testOutputDirText.setLayoutData( createControlLayoutData() );
         
         Label sourceDirLabel = new Label( this, SWT.NULL );
-        sourceDirLabel.setLayoutData( labelData );
+        sourceDirLabel.setLayoutData( createLabelLayoutData() );
         sourceDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_SourceDirectory );
         
         sourceDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        sourceDirText.setLayoutData( controlData );
+        sourceDirText.setLayoutData( createControlLayoutData() );
         
         Label scriptSourceDirLabel = new Label( this, SWT.NULL );
-        scriptSourceDirLabel.setLayoutData( labelData );
+        scriptSourceDirLabel.setLayoutData( createLabelLayoutData() );
         scriptSourceDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_ScriptSourceDirectory );
         
         scriptSourceDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        scriptSourceDirText.setLayoutData( controlData );
+        scriptSourceDirText.setLayoutData( createControlLayoutData() );
         
         Label testSourceDirLabel = new Label( this, SWT.NULL );
-        testSourceDirLabel.setLayoutData( labelData );
+        testSourceDirLabel.setLayoutData( createLabelLayoutData() );
         testSourceDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_TestSourceDirectory );
         
         testSourceDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        testSourceDirText.setLayoutData( controlData );
+        testSourceDirText.setLayoutData( createControlLayoutData() );
         
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData()
+    {
+        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
+        labelData.widthHint = 132;
+        return labelData;
     }
     
     public void updateComponent( Build buildData )

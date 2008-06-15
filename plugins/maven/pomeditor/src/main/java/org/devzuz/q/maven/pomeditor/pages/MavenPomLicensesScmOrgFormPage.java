@@ -48,6 +48,12 @@ import org.eclipse.ui.forms.widgets.Section;
  */
 public class MavenPomLicensesScmOrgFormPage extends FormPage
 {
+    private static final int SCM_LABEL_HINT = 125;
+
+    private static final int ORGANIZATION_LABEL_HINT = 35;
+
+    private static final int ISSUE_MANAGEMENT_LABEL_HINT = 50;
+
     private ScrolledForm form;
 
     private Table licensesTable;
@@ -109,22 +115,26 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
         form.getBody().setLayout( new GridLayout( 2, false ) );
 
-        GridData layoutData = new GridData( SWT.FILL, SWT.FILL, true, true );
-
         Section licenseTable =
             toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         licenseTable.setDescription( "Describes the licenses for this project. " +
         		"The licenses listed for the project are that of the project itself, and not of dependencies." );
         licenseTable.setText( "License" );
-        licenseTable.setLayoutData( layoutData );
+        licenseTable.setLayoutData( createSectionLayoutData(true) );
         licenseTable.setClient( createLicenseTableControls( licenseTable, toolkit ) );
 
         Composite container = toolkit.createComposite( form.getBody() );
-        container.setLayoutData( layoutData );
+        container.setLayoutData( createSectionLayoutData(false) );
         createScmSectionControls( container, toolkit );
         
         populateLicenseDatatable();
         //syncModelToControls();
+    }
+
+    private GridData createSectionLayoutData(boolean fill)
+    {
+        GridData layoutData = new GridData( SWT.FILL, SWT.FILL, true, fill );
+        return layoutData;
     }
 
     private Control createLicenseTableControls( Composite parent, FormToolkit toolKit )
@@ -170,13 +180,14 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     
     private Control createScmSectionControls( Composite container, FormToolkit toolkit )
     {
-        container.setLayout( new FillLayout( SWT.VERTICAL ) );
+        container.setLayout( new GridLayout( 1, false ) );
         
         Section scmControls =
             toolkit.createSection( container, Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         scmControls.setDescription( "This section contains informations required to the SCM (Source Control Management) of the project." );
         scmControls.setText( "SCM (Source Control Management)" );
         scmControls.setClient( createScmControls( scmControls, toolkit ) );
+        scmControls.setLayoutData( createSectionLayoutData(false) );
 
         Section organizationControls =
             toolkit.createSection( container, Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED |
@@ -184,6 +195,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         organizationControls.setDescription( "This section specifies the organization that produces this project." );
         organizationControls.setText( "Organization" );
         organizationControls.setClient( createOrganizationControls( organizationControls, toolkit ) );
+        organizationControls.setLayoutData( createSectionLayoutData(false) );
         
         Section issueManagementControls =
             toolkit.createSection( container, Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED | 
@@ -191,6 +203,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         issueManagementControls.setDescription( "Information about the issue tracking (or bug tracking) system used to manage this project." );
         issueManagementControls.setText( Messages.MavenPomEditor_MavenPomEditor_IssueManagement );
         issueManagementControls.setClient( createIssueManagementControls( issueManagementControls, toolkit ) );
+        issueManagementControls.setLayoutData( createSectionLayoutData(false) );
 
         return container;
     }
@@ -202,26 +215,35 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         
         checkIfIssueManagementNull();
         
-        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        labelData.widthHint = 50;
-        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
-        controlData.horizontalIndent = 10;
-        
         Label systemLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_System, SWT.None );
-        systemLabel.setLayoutData( labelData );
+        systemLabel.setLayoutData( createLabelLayoutData(ISSUE_MANAGEMENT_LABEL_HINT) );
         
         issueManagementSystemText = toolKit.createText( parent, "" );
-        createTextDisplay( issueManagementSystemText, controlData, issueManagement.getSystem() );
+        createTextDisplay( issueManagementSystemText, createControlLayoutData(), issueManagement.getSystem() );
         
         Label urlLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.None );
-        urlLabel.setLayoutData( labelData );
+        urlLabel.setLayoutData( createLabelLayoutData(ISSUE_MANAGEMENT_LABEL_HINT) );
         
         issueManagementUrlText = toolKit.createText( parent, "" );
-        createTextDisplay( issueManagementUrlText, controlData, issueManagement.getUrl() );
+        createTextDisplay( issueManagementUrlText, createControlLayoutData(), issueManagement.getUrl() );
         
         toolKit.paintBordersFor( parent );
        
         return parent;
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData(int widthHint)
+    {
+        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
+        labelData.widthHint = widthHint;
+        return labelData;
     }
 
     public Control createScmControls( Composite form, FormToolkit toolKit )
@@ -231,36 +253,31 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         
         checkIfScmNull();
 
-        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        labelData.widthHint = 125;
-        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
-        controlData.horizontalIndent = 10;
-
         Label connectionLabel =
             toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Connection, SWT.NONE );
-        connectionLabel.setLayoutData( labelData );
+        connectionLabel.setLayoutData( createLabelLayoutData( SCM_LABEL_HINT ) );
 
         connectionText = toolKit.createText( parent, "" );
-        createTextDisplay( connectionText, controlData, scm.getConnection() );
+        createTextDisplay( connectionText, createControlLayoutData(), scm.getConnection() );
         
         Label developerConnectionLabel =
             toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_DeveloperConnection, SWT.NONE );
-        developerConnectionLabel.setLayoutData( labelData );
+        developerConnectionLabel.setLayoutData( createLabelLayoutData( SCM_LABEL_HINT ) );
 
         developerConnectionText = toolKit.createText( parent, "" );
-        createTextDisplay( developerConnectionText, controlData, scm.getDeveloperConnection() );
+        createTextDisplay( developerConnectionText, createControlLayoutData(), scm.getDeveloperConnection() );
         
         Label tagLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Tag, SWT.NONE );
-        tagLabel.setLayoutData( labelData );
+        tagLabel.setLayoutData( createLabelLayoutData( SCM_LABEL_HINT ) );
 
         tagText = toolKit.createText( parent, "" );
-        createTextDisplay( tagText, controlData, scm.getTag() );
+        createTextDisplay( tagText, createControlLayoutData(), scm.getTag() );
         
         Label urlLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE );
-        urlLabel.setLayoutData( labelData );
+        urlLabel.setLayoutData( createLabelLayoutData( SCM_LABEL_HINT ) );
 
         urlText = toolKit.createText( parent, "" );
-        createTextDisplay( urlText, controlData, scm.getUrl() );
+        createTextDisplay( urlText, createControlLayoutData(), scm.getUrl() );
         
         toolKit.paintBordersFor( parent );
 
@@ -274,22 +291,17 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         
         checkIfOrganizationNull();
 
-        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        labelData.widthHint = 35;
-        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
-        controlData.horizontalIndent = 10;
-
         Label nameLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Name, SWT.NONE );
-        nameLabel.setLayoutData( labelData );
+        nameLabel.setLayoutData( createLabelLayoutData( ORGANIZATION_LABEL_HINT ) );
 
         nameText = toolKit.createText( parent, "" );
-        createTextDisplay( nameText, controlData, organization.getName() );
+        createTextDisplay( nameText, createControlLayoutData(), organization.getName() );
         
         Label organizationUrlLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE );
-        organizationUrlLabel.setLayoutData( labelData );
+        organizationUrlLabel.setLayoutData( createLabelLayoutData( ORGANIZATION_LABEL_HINT ) );
 
         organizationUrlText = toolKit.createText( parent, "" );
-        createTextDisplay( organizationUrlText, controlData, organization.getUrl() );
+        createTextDisplay( organizationUrlText, createControlLayoutData(), organization.getUrl() );
         
         toolKit.paintBordersFor( parent );
 

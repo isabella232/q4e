@@ -9,6 +9,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.IManagedForm;
@@ -48,22 +49,25 @@ public class MavenPomRepositoriesFormPage
         FormToolkit toolkit = managedForm.getToolkit();
         form = managedForm.getForm();
         
-        form.getBody().setLayout( new GridLayout( 2 , false ) );
-        
-        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );        
+        form.getBody().setLayout( new GridLayout( 1 , false ) );
         
         Section repositorySection = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         repositorySection.setDescription( "The lists of the remote repositories for discovering dependencies and extensions." );
         repositorySection.setText( Messages.MavenPomEditor_MavenPomEditor_Repository );
-        repositorySection.setLayoutData( layoutData );
+        repositorySection.setLayoutData( createSectionLayoutData() );
         repositorySection.setClient( createRepositoryControls( repositorySection, toolkit ) );
         
         Section pluginRepositorySection = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );        
         pluginRepositorySection.setDescription( "The lists of the remote repositories for discovering plugins for builds and reports." );
         pluginRepositorySection.setText( Messages.MavenPomEditor_MavenPomEditor_PluginRepository );
-        pluginRepositorySection.setLayoutData( layoutData );
+        pluginRepositorySection.setLayoutData( createSectionLayoutData() );
         pluginRepositorySection.setClient( createPluginRepositoryControls( pluginRepositorySection, toolkit ) );
                 
+    }
+    private GridData createSectionLayoutData()
+    {
+        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
+        return layoutData;
     }
     
     @SuppressWarnings("unchecked")

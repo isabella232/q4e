@@ -89,29 +89,25 @@ public class MavenPomDependenciesFormPage extends FormPage
         FormToolkit toolkit = managedForm.getToolkit();
         form = managedForm.getForm();
         
-        form.getBody().setLayout( new GridLayout( 2 , false ) );
-        
-        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
+        form.getBody().setLayout( new GridLayout( 1 , false ) );
         
         Section dependencyTableSection = toolkit.createSection(form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         dependencyTableSection.setDescription( "Contains information about a dependency of the project." );
         dependencyTableSection.setText( Messages.MavenPomEditor_MavenPomEditor_Dependencies ); 
-        dependencyTableSection.setLayoutData( layoutData );
+        dependencyTableSection.setLayoutData( createSectionLayoutData() );
         dependencyTableSection.setClient( createDependencyTableControls( dependencyTableSection , toolkit ) );
-        
-        Composite container = toolkit.createComposite( form.getBody() );
-        container.setLayoutData( layoutData );
-        createDependencyExclusionControls( container , toolkit );
         
         Section dependencyManagementTableSection = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         dependencyManagementTableSection.setDescription( "Section for management of default dependency information for use in a group of POMs." );
         dependencyManagementTableSection.setText( Messages.MavenPomEditor_MavenPomEditor_DependencyManagement );
-        dependencyManagementTableSection.setLayoutData( layoutData );
+        dependencyManagementTableSection.setLayoutData( createSectionLayoutData() );
         dependencyManagementTableSection.setClient( createDependencyManagementTableControls( dependencyManagementTableSection, toolkit ) );
-        
-        Composite container2 = toolkit.createComposite( form.getBody() );
-        container2.setLayoutData( layoutData );
-        createDependencyManagementExclusionControls( container2, toolkit );
+    }
+
+    private GridData createSectionLayoutData()
+    {
+        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
+        return layoutData;
     }
     
     private Control createDependencyTableControls( Composite parent , FormToolkit toolKit )
@@ -185,6 +181,11 @@ public class MavenPomDependenciesFormPage extends FormPage
         dependencyTableComponent.addEditButtonListener( buttonListener );
         dependencyTableComponent.addRemoveButtonListener( removeButtonListener );
         
+        // Excludes
+        Composite excludesContainer = toolKit.createComposite( container );
+        excludesContainer.setLayoutData( createSectionLayoutData() );
+        createDependencyExclusionControls( excludesContainer , toolKit );
+        
         return container;
     }
 
@@ -208,9 +209,9 @@ public class MavenPomDependenciesFormPage extends FormPage
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
         
         Section dependencyExclusionSection = toolKit.createSection( container, 
-                            Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED |
+                            Section.TWISTIE | Section.TITLE_BAR |
                             Section.DESCRIPTION );
-        dependencyExclusionSection.setDescription( "Contains informations required to exclude an artifact to the project." );
+        dependencyExclusionSection.setDescription( "Contains information required to exclude an artifact from the project." );
         dependencyExclusionSection.setText( Messages.MavenPomEditor_MavenPomEditor_DependencyExclusions );
         dependencyExclusionSection.setClient( createDependencyExclusionInfoControls( dependencyExclusionSection, toolKit ) );
         
@@ -223,7 +224,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         container.setLayout( new GridLayout( 1, false ) ); 
         
         exclusionTableComponent = new DependencyExclusionTableComponent( container, SWT.None );
-        exclusionTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
+        exclusionTableComponent.setLayoutData( new GridData( SWT.BEGINNING, SWT.FILL, false, true) );
         
         DependencyExclusionTableComponentListener buttonListener = new DependencyExclusionTableComponentListener();
         exclusionTableComponent.addAddButtonListener( buttonListener );
@@ -292,7 +293,7 @@ public class MavenPomDependenciesFormPage extends FormPage
             }
         };
         
-        Composite container = toolKit.createComposite( parent, SWT.None );
+        Composite container = toolKit.createComposite( parent, SWT.BORDER );
         container.setLayout( new GridLayout( 1, false ) );
         
         dependencyManagementTableComponent = 
@@ -304,6 +305,11 @@ public class MavenPomDependenciesFormPage extends FormPage
         dependencyManagementTableComponent.addEditButtonListener( buttonListener );
         dependencyManagementTableComponent.addRemoveButtonListener( removeButtonListener );
         
+        // Excludes
+        Composite excludesContainer = toolKit.createComposite( container );
+        excludesContainer.setLayoutData( createSectionLayoutData() );
+        createDependencyManagementExclusionControls( excludesContainer, toolKit );
+        
         return container;
     }
 
@@ -311,9 +317,9 @@ public class MavenPomDependenciesFormPage extends FormPage
     {
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
         
-        Section dependencyManagementExclusionSection = toolKit.createSection( container, Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED |
+        Section dependencyManagementExclusionSection = toolKit.createSection( container, Section.TWISTIE | Section.TITLE_BAR |
                             Section.DESCRIPTION );
-        dependencyManagementExclusionSection.setDescription( "Contains informations required to exclude an artifact to the project." );
+        dependencyManagementExclusionSection.setDescription( "Contains information required to exclude an artifact from the project." );
         dependencyManagementExclusionSection.setText( Messages.MavenPomEditor_MavenPomEditor_DependencyManagementExclusions );
         dependencyManagementExclusionSection.setClient( createDependencyManagementExclusionInfoControls( dependencyManagementExclusionSection, toolKit ) );        
         
@@ -325,7 +331,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         container.setLayout( new GridLayout( 1, false ) ); 
         
          dependencyManagementExclusionTableComponent = new DependencyExclusionTableComponent( container, SWT.None );
-         dependencyManagementExclusionTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
+         dependencyManagementExclusionTableComponent.setLayoutData( new GridData( SWT.BEGINNING, SWT.FILL, false, true, 2, 1 ) );
          
          DependencyExclusionTableComponentListener buttonListener = new DependencyExclusionTableComponentListener();
          dependencyManagementExclusionTableComponent.addAddButtonListener( buttonListener );

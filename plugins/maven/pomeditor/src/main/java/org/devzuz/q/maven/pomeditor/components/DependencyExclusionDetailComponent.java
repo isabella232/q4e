@@ -31,24 +31,19 @@ public class DependencyExclusionDetailComponent
         
         setLayout( new GridLayout( 2 , false ) );
         
-        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
-        labelData.widthHint = 60;
-        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
-        controlData.horizontalIndent = 10;
-        
         Label groupIdlabel = new Label( this, SWT.NULL );
-        groupIdlabel.setLayoutData( labelData );
+        groupIdlabel.setLayoutData( createLabelLayoutData() );
         groupIdlabel.setText( Messages.MavenPomEditor_MavenPomEditor_GroupId );
 
         groupIdText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        groupIdText.setLayoutData( controlData );
+        groupIdText.setLayoutData( createControlLayoutData() );
 
         Label artifactIdLabel = new Label( this, SWT.NULL );
-        artifactIdLabel.setLayoutData( labelData );
+        artifactIdLabel.setLayoutData( createLabelLayoutData() );
         artifactIdLabel.setText( Messages.MavenPomEditor_MavenPomEditor_ArtifactId );
 
         artifactIdText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        artifactIdText.setLayoutData( controlData );
+        artifactIdText.setLayoutData( createControlLayoutData() );
         
         ModifyListener listener = new ModifyListener()
         {
@@ -61,6 +56,20 @@ public class DependencyExclusionDetailComponent
         groupIdText.addModifyListener( listener );
         artifactIdText.addModifyListener( listener );
         
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData()
+    {
+        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
+        labelData.widthHint = 60;
+        return labelData;
     }
     
     public String getGroupId()

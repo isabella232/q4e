@@ -28,17 +28,12 @@ public class SimpleTextComponent
         
         setLayout( new GridLayout( 2, false ) );
         
-        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        labelData.widthHint = 70;
-        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
-        controlData.horizontalIndent = 10;
-        
         Label stringLabel = new Label( this, SWT.NULL );
-        stringLabel.setLayoutData( labelData );
+        stringLabel.setLayoutData( createLabelLayoutData() );
         stringLabel.setText( type );
         
         textField = new Text( this, SWT.BORDER | SWT.SINGLE );
-        textField.setLayoutData( controlData );
+        textField.setLayoutData( createControlLayoutData() );
         
         ModifyListener listener = new ModifyListener()
         {
@@ -49,6 +44,20 @@ public class SimpleTextComponent
         };
         
         textField.addModifyListener( listener );
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData()
+    {
+        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
+        labelData.widthHint = 70;
+        return labelData;
     }
     
     public String getText()

@@ -68,14 +68,12 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
 
         form.getBody().setLayout( new GridLayout( 2, false ) );
 
-        GridData layoutData = new GridData( SWT.FILL, SWT.FILL, true, true );
-
         Section propertiesControls =
             toolkit.createSection( form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED |
                                    Section.DESCRIPTION );
         propertiesControls.setDescription( "Set the properties of this POM." );
         propertiesControls.setText( Messages.MavenPomEditor_MavenPomEditor_Properties );
-        propertiesControls.setLayoutData( layoutData );
+        propertiesControls.setLayoutData( createSectionLabelData() );
         propertiesControls.setClient( createPropertiesControls( propertiesControls, toolkit ) );
 
         Section moduleControls =
@@ -83,11 +81,17 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
                                    Section.DESCRIPTION );
         moduleControls.setDescription( "Aggregate the build of a set of projects by adding them as modules." );
         moduleControls.setText( Messages.MavenPomEditor_MavenPomEditor_Modules );
-        moduleControls.setLayoutData( layoutData );
+        moduleControls.setLayoutData( createSectionLabelData() );
         moduleControls.setClient( createModulesControls( moduleControls, toolkit ) );
 
         propertiesControls.addExpansionListener( expansionAdapter );
         moduleControls.addExpansionListener( expansionAdapter );
+    }
+
+    private GridData createSectionLabelData()
+    {
+        GridData layoutData = new GridData( SWT.FILL, SWT.FILL, true, true );
+        return layoutData;
     }
 
     public Control createPropertiesControls( Composite form, FormToolkit toolKit )

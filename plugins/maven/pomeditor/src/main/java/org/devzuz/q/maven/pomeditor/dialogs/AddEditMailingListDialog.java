@@ -121,45 +121,40 @@ public class AddEditMailingListDialog
     {
         container.setLayout( new GridLayout( 3, false ) );
 
-        GridData labelData = new GridData( GridData.BEGINNING, GridData.CENTER, false, false );
-        labelData.widthHint = 80;
-        GridData controlData = new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 );
-        controlData.horizontalIndent = 10;
-
         // Name
         Label label = new Label( container, SWT.NULL );
-        label.setLayoutData( labelData );
+        label.setLayoutData( createLabelLayoutData() );
         label.setText( Messages.MavenPomEditor_MavenPomEditor_Name );
         nameText = new Text( container, SWT.BORDER | SWT.SINGLE );
-        nameText.setLayoutData( controlData );
+        nameText.setLayoutData( createControlLayoutData() );
 
         // Subscribe
         label = new Label( container, SWT.NULL );
-        label.setLayoutData( labelData );
+        label.setLayoutData( createLabelLayoutData() );
         label.setText( Messages.MavenPomEditor_MavenPomEditor_Subscribe );
         subscribeText = new Text( container, SWT.BORDER | SWT.SINGLE );
-        subscribeText.setLayoutData( controlData );
+        subscribeText.setLayoutData( createControlLayoutData() );
 
         // Unsubscribe
         label = new Label( container, SWT.NULL );
-        label.setLayoutData( labelData );
+        label.setLayoutData( createLabelLayoutData() );
         label.setText( Messages.MavenPomEditor_MavenPomEditor_Unsubscribe );
         unsubscibeText = new Text( container, SWT.BORDER );
-        unsubscibeText.setLayoutData( controlData );
+        unsubscibeText.setLayoutData( createControlLayoutData() );
 
         // Post
         label = new Label( container, SWT.NULL );
-        label.setLayoutData( labelData );
+        label.setLayoutData( createLabelLayoutData() );
         label.setText( Messages.MavenPomEditor_MavenPomEditor_Post );
         postText = new Text( container, SWT.BORDER );
-        postText.setLayoutData( controlData );
+        postText.setLayoutData( createControlLayoutData() );
 
         // Archive
         label = new Label( container, SWT.NULL );
-        label.setLayoutData( labelData );
+        label.setLayoutData( createLabelLayoutData() );
         label.setText( Messages.MavenPomEditor_MavenPomEditor_Archive );
         archiveText = new Text( container, SWT.BORDER );
-        archiveText.setLayoutData( controlData );
+        archiveText.setLayoutData( createControlLayoutData() );
 
         // Configuration
         Group configurationsGroup = new Group( container, SWT.NONE );
@@ -196,6 +191,20 @@ public class AddEditMailingListDialog
         initControlValues();
         disableEditDeleteButton();
         return container;
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( GridData.FILL, GridData.CENTER, true, false, 2, 1 );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData()
+    {
+        GridData labelData = new GridData( GridData.BEGINNING, GridData.CENTER, false, false );
+        labelData.widthHint = 80;
+        return labelData;
     }
 
     private void initControlValues()

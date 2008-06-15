@@ -40,45 +40,40 @@ public class PluginDetailComponent extends AbstractComponent
 
         setLayout( new GridLayout( 2, false ) );
         
-        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
-        labelData.widthHint = 55;
-        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
-        controlData.horizontalIndent = 10;
-
         Label groupIdlabel = new Label( this, SWT.NULL );
-        groupIdlabel.setLayoutData( labelData );
+        groupIdlabel.setLayoutData( createLabelLayoutData() );
         groupIdlabel.setText( Messages.MavenPomEditor_MavenPomEditor_GroupId );
 
         groupIdText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        groupIdText.setLayoutData( controlData );
+        groupIdText.setLayoutData( createControlLayoutData() );
 
         Label artifactIdLabel = new Label( this, SWT.NULL );
-        artifactIdLabel.setLayoutData( labelData );
+        artifactIdLabel.setLayoutData( createLabelLayoutData() );
         artifactIdLabel.setText( Messages.MavenPomEditor_MavenPomEditor_ArtifactId );
 
         artifactIdText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        artifactIdText.setLayoutData( controlData );
+        artifactIdText.setLayoutData( createControlLayoutData() );
 
         Label versionLabel = new Label( this, SWT.NULL );
-        versionLabel.setLayoutData( labelData );
+        versionLabel.setLayoutData( createLabelLayoutData() );
         versionLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Version );
 
         versionText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        versionText.setLayoutData( controlData );
+        versionText.setLayoutData( createControlLayoutData() );
 
         Label inheritedLabel = new Label( this, SWT.NULL );
-        inheritedLabel.setLayoutData( labelData );
+        inheritedLabel.setLayoutData( createLabelLayoutData() );
         inheritedLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Inherited );
 
         inheritedRadioButton = new Button( this, SWT.CHECK );
-        inheritedRadioButton.setLayoutData( controlData );
+        inheritedRadioButton.setLayoutData( createControlLayoutData() );
 
         Label extensionLabel = new Label( this, SWT.NULL );
-        extensionLabel.setLayoutData( labelData );
+        extensionLabel.setLayoutData( createLabelLayoutData() );
         extensionLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Extension );
 
         extensionRadioButton = new Button( this, SWT.CHECK );
-        extensionRadioButton.setLayoutData( controlData );
+        extensionRadioButton.setLayoutData( createControlLayoutData() );
 
         ModifyListener listener = new ModifyListener()
         {
@@ -102,6 +97,20 @@ public class PluginDetailComponent extends AbstractComponent
         
         inheritedRadioButton.addSelectionListener( selectionListener );
         extensionRadioButton.addSelectionListener( selectionListener );
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( SWT.FILL, SWT.CENTER, true, false );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData()
+    {
+        GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
+        labelData.widthHint = 55;
+        return labelData;
     }
     
     public String getGroupId()

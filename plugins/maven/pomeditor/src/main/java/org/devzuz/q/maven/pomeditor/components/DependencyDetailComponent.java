@@ -47,66 +47,61 @@ public class DependencyDetailComponent
         
         setLayout( new GridLayout( 2 , false ) );
         
-        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
-        labelData.widthHint = 60;
-        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
-        controlData.horizontalIndent = 10;
-        
         Label groupIdlabel = new Label( this, SWT.NULL );
-        groupIdlabel.setLayoutData( labelData );
+        groupIdlabel.setLayoutData( createLabelLayoutData() );
         groupIdlabel.setText( Messages.MavenPomEditor_MavenPomEditor_GroupId );
 
         groupIdText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        groupIdText.setLayoutData( controlData );
+        groupIdText.setLayoutData( createControlLayoutData() );
 
         Label artifactIdLabel = new Label( this, SWT.NULL );
-        artifactIdLabel.setLayoutData( labelData );
+        artifactIdLabel.setLayoutData( createLabelLayoutData() );
         artifactIdLabel.setText( Messages.MavenPomEditor_MavenPomEditor_ArtifactId );
 
         artifactIdText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        artifactIdText.setLayoutData( controlData );
+        artifactIdText.setLayoutData( createControlLayoutData() );
 
         Label versionLabel = new Label( this, SWT.NULL );
-        versionLabel.setLayoutData( labelData );
+        versionLabel.setLayoutData( createLabelLayoutData() );
         versionLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Version );
 
         versionText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        versionText.setLayoutData( controlData );
+        versionText.setLayoutData( createControlLayoutData() );
         
         Label scopeLabel = new Label( this, SWT.NULL );
-        scopeLabel.setLayoutData( labelData );
+        scopeLabel.setLayoutData( createLabelLayoutData() );
         scopeLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Scope );
         
         scopeText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        scopeText.setLayoutData( controlData );
+        scopeText.setLayoutData( createControlLayoutData() );
         
         Label typeLabel = new Label( this, SWT.NULL );
-        typeLabel.setLayoutData( labelData );
+        typeLabel.setLayoutData( createLabelLayoutData() );
         typeLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Type );
         
         typeText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        typeText.setLayoutData( controlData );
+        typeText.setLayoutData( createControlLayoutData() );
         
         Label classifierLabel = new Label( this, SWT.NULL );
-        classifierLabel.setLayoutData( labelData );
+        classifierLabel.setLayoutData( createLabelLayoutData() );
         classifierLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Classifier );
         
         classifierText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        classifierText.setLayoutData( controlData );
+        classifierText.setLayoutData( createControlLayoutData() );
         
         Label systemPathLabel = new Label( this, SWT.NULL );
-        systemPathLabel.setLayoutData( labelData );
+        systemPathLabel.setLayoutData( createLabelLayoutData() );
         systemPathLabel.setText( Messages.MavenPomEditor_MavenPomEditor_SystemPath );
         
         systemPathText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        systemPathText.setLayoutData( controlData );
+        systemPathText.setLayoutData( createControlLayoutData() );
         
         Label optionalLabel = new Label( this, SWT.NULL );
-        optionalLabel.setLayoutData( labelData );
+        optionalLabel.setLayoutData( createLabelLayoutData() );
         optionalLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Optional );
         
         optionalRadioButton = new Button( this, SWT.CHECK );
-        optionalRadioButton.setLayoutData( controlData );
+        optionalRadioButton.setLayoutData( createControlLayoutData() );
         
         ModifyListener listener = new ModifyListener()
         {
@@ -133,6 +128,20 @@ public class DependencyDetailComponent
         };
         
         optionalRadioButton.addSelectionListener( selectionListener );
+    }
+
+    private GridData createControlLayoutData()
+    {
+        GridData controlData = new GridData( SWT.FILL , SWT.CENTER , true , false  );
+        controlData.horizontalIndent = 10;
+        return controlData;
+    }
+
+    private GridData createLabelLayoutData()
+    {
+        GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
+        labelData.widthHint = 60;
+        return labelData;
     }
     
     public String getGroupId()
