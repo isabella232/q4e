@@ -344,7 +344,8 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                             urlText.setFocus();
                         }
                     }
-                    else if ( e.getSource().equals( issueManagementUrlText ) )
+                    else if ( ( e.getSource().equals( issueManagementUrlText ) ) &&
+                              ( issueManagementUrlText.getText().trim().length() > 0 ) )
                     {
                         if ( !( issueManagementUrlText.getText().trim().startsWith( "http://" ) ) &&
                              !( issueManagementUrlText.getText().trim().startsWith( "https://" ) ) )
@@ -355,7 +356,8 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                             issueManagementUrlText.setFocus();
                         }
                     }
-                    else if ( e.getSource().equals( organizationUrlText ) )
+                    else if ( ( e.getSource().equals( organizationUrlText ) ) &&
+                              ( organizationUrlText.getText().trim().length() > 0 ) )
                     {
                         if ( !( organizationUrlText.getText().trim().startsWith( "http://" ) ) &&
                              !( organizationUrlText.getText().trim().startsWith( "https://" ) ) )
@@ -366,8 +368,6 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                             organizationUrlText.setFocus();
                         }
                     }
-
-                    
                 }
                 
             };
@@ -416,60 +416,52 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
     private void syncControlsToModel()
     {
-        if ( connectionText.getText().trim().equals( "" ) && 
-             developerConnectionText.getText().trim().equals( "" ) &&
-             tagText.getText().trim().equals( "" ) && 
-             urlText.getText().trim().equals( "" ) )
-        {
-            scm = null;
-            pomModel.setScm( null );
-        }
-        else
-        {
-            if ( scm == null )
-            {
-                scm = new Scm();
-                pomModel.setScm( scm );
-            }
-            
+        if ( ( connectionText.getText().trim().length() > 0 ) ||
+             ( developerConnectionText.getText().trim().length() > 0 ) ||
+             ( urlText.getText().trim().length() > 0 ) )
+        {            
             scm.setConnection( nullIfBlank( connectionText.getText().trim() ) );
             scm.setDeveloperConnection( nullIfBlank( developerConnectionText.getText().trim() ) );
             scm.setTag( nullIfBlank( tagText.getText().trim() ) );
             scm.setUrl( nullIfBlank( urlText.getText().trim() ) );
         }
+        else
+        {
+            if ( ( !( tagText.getText().trim().equals( "HEAD" ) ) &&
+                 ( tagText.getText().trim().length() > 0 ) ) )
+            {
+                scm.setTag( nullIfBlank( tagText.getText().trim() ) );
+            }
+            else
+            {
+                scm = null;
+                pomModel.setScm( null );
+            }            
+        }       
 
-        if ( nameText.getText().trim().equals( "" ) && 
-             organizationUrlText.getText().trim().equals( "" ) )
+        if ( ( nameText.getText().trim().length() > 0 ) || 
+             ( organizationUrlText.getText().trim().length() > 0 ) )
+        {
+            organization.setName( nullIfBlank( nameText.getText().trim() ) );
+            organization.setUrl( nullIfBlank( organizationUrlText.getText().trim() ) );
+        }
+        else
         {
             organization = null;
             pomModel.setOrganization( null );
         }
-        else
-        {
-            if ( organization == null )
-            {
-                organization = new Organization();
-                pomModel.setOrganization( organization );
-            }
-            organization.setName( nullIfBlank( nameText.getText().trim() ) );
-            organization.setUrl( nullIfBlank( organizationUrlText.getText().trim() ) );
-        }
         
-        if ( ( issueManagementSystemText.getText().trim().equals( "" ) ) &&
-             ( issueManagementUrlText.getText().trim().equals( "" ) ) )
+        if ( ( issueManagementSystemText.getText().trim().length() > 0 ) ||
+             ( issueManagementUrlText.getText().trim().length() > 0 ) )
         {
-            issueManagement = null;
-            pomModel.setIssueManagement( issueManagement );
-        }
-        else
-        {
-            if ( issueManagement == null )
-            {
-                issueManagement = new IssueManagement();
-                pomModel.setIssueManagement( issueManagement );
-            }
             issueManagement.setSystem( nullIfBlank( issueManagementSystemText.getText().trim() ) );
             issueManagement.setUrl( nullIfBlank( issueManagementUrlText.getText().trim() ) );
+            
+        }
+        else
+        {
+            issueManagement = null;
+            pomModel.setIssueManagement( issueManagement );            
         }
     }
 
