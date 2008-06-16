@@ -133,7 +133,8 @@ public class PropertiesTableComponent
         {
             KeyValueEditorDialog keyValueDialog = KeyValueEditorDialog.getKeyValueEditorDialog();
 
-            if ( keyValueDialog.open() == Window.OK )
+            //if ( keyValueDialog.open() == Window.OK )
+            if ( keyValueDialog.openWithEntry( "", "" ) == Window.OK )
             {
                 if ( !keyAlreadyExist( keyValueDialog.getKey() ) )
                 {

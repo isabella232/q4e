@@ -1,7 +1,10 @@
 package org.devzuz.q.maven.pomeditor.components;
 
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -82,7 +85,7 @@ public class ContributorDeveloperDetailComponent
         
         organizationUrlText = new Text( this, SWT.BORDER | SWT.SINGLE );
         organizationUrlText.setLayoutData( createControlLayoutData() );
-
+        
         Label rolesLabel = new Label( this, SWT.NULL );
         rolesLabel.setLayoutData( createLabelLayoutData() );
         rolesLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Roles );
@@ -96,6 +99,44 @@ public class ContributorDeveloperDetailComponent
         
         timezoneText = new Text( this, SWT.BORDER | SWT.SINGLE );
         timezoneText.setLayoutData( createControlLayoutData() );
+        
+        FocusListener focusListener = new FocusListener() 
+        {
+            public void focusGained( FocusEvent e )
+            {
+                // TODO Auto-generated method stub
+            }
+
+            public void focusLost( FocusEvent e )
+            {
+                if ( ( e.getSource().equals( urlText ) ) && 
+                     ( urlText.getText().trim().length() > 0 ) )
+                {
+                    if ( !( urlText.getText().trim().startsWith( "http://" ) ) &&
+                         !( urlText.getText().trim().startsWith( "https://" ) ) )
+                    {
+                        MessageDialog.openWarning( getParent().getShell(), "Invalid URL", 
+                                                   "URL should start with http:// or https://");
+                        urlText.setFocus();
+                    }
+                } 
+                
+                if ( ( e.getSource().equals( organizationUrlText ) ) && 
+                     ( organizationUrlText.getText().trim().length() > 0 ) )
+                {
+                    if ( !( organizationUrlText.getText().trim().startsWith( "http://" ) ) &&
+                         !( organizationUrlText.getText().trim().startsWith( "https://" ) ) )
+                    {
+                        MessageDialog.openWarning( getParent().getShell(), "Invalid URL", 
+                                                   "URL should start with http:// or https://");
+                        organizationUrlText.setFocus();
+                    }
+                }   
+            }
+        };
+        
+        organizationUrlText.addFocusListener( focusListener );
+        urlText.addFocusListener( focusListener );
         
     }
 
@@ -127,7 +168,7 @@ public class ContributorDeveloperDetailComponent
         organizationUrlText.addModifyListener( listener );
         rolesText.addModifyListener( listener );
         timezoneText.addModifyListener( listener );
-    }
+    } 
 
     public String getId()
     {

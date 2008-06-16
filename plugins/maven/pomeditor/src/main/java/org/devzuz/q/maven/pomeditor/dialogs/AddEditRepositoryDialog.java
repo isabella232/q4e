@@ -6,7 +6,10 @@ import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
@@ -172,6 +175,34 @@ public class AddEditRepositoryDialog
         snapshotsChecksumPolicyText = new Text( snapshotsGroup, SWT.SINGLE | SWT.BORDER );
         snapshotsChecksumPolicyText.setLayoutData( createControlLayoutData() );
         snapshotsChecksumPolicyText.addModifyListener( modifyingListener );
+        
+        FocusListener focusListener = new FocusListener() 
+        {
+            public void focusGained( FocusEvent e )
+            {
+                // TODO Auto-generated method stub
+            }
+
+            public void focusLost( FocusEvent e )
+            {
+                if ( ( e.getSource().equals( urlText ) ) && 
+                     ( urlText.getText().trim().length() > 0 ) )
+                {
+                    if ( !( urlText.getText().trim().startsWith( "http://" ) ) &&
+                         !( urlText.getText().trim().startsWith( "https://" ) ) &&
+                         !( urlText.getText().trim().startsWith( "ftp://" ) ) &&
+                         !( urlText.getText().trim().startsWith( "file://" ) ) )
+                         
+                    {
+                        MessageDialog.openWarning( getShell(), "Invalid URL", 
+                                                   "URL should start with http:// or https://");
+                        urlText.setFocus();
+                    }
+                } 
+            }
+        };
+        
+        urlText.addFocusListener( focusListener );
         
         return container;
     }

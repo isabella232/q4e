@@ -338,8 +338,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                         if ( !( urlText.getText().trim().startsWith( "http://" ) ) &&
                              !( urlText.getText().trim().startsWith( "https://" ) ) )
                         {
-                            MessageDialog.openWarning( form.getShell(), "", 
-                                                       "Invalid URL.  " +
+                            MessageDialog.openWarning( form.getShell(), "Invalid URL", 
                                                        "URL should start with " +
                                                        "http:// or https://");
                             urlText.setFocus();
@@ -350,8 +349,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                         if ( !( issueManagementUrlText.getText().trim().startsWith( "http://" ) ) &&
                              !( issueManagementUrlText.getText().trim().startsWith( "https://" ) ) )
                         {
-                            MessageDialog.openWarning( form.getShell(), "", 
-                                                       "Invalid URL.  " +
+                            MessageDialog.openWarning( form.getShell(), "Invalid URL", 
                                                        "URL should start with " +
                                                        "http:// or https://");
                             issueManagementUrlText.setFocus();
@@ -362,8 +360,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                         if ( !( organizationUrlText.getText().trim().startsWith( "http://" ) ) &&
                              !( organizationUrlText.getText().trim().startsWith( "https://" ) ) )
                         {
-                            MessageDialog.openWarning( form.getShell(), "", 
-                                                       "Invalid URL.  " +
+                            MessageDialog.openWarning( form.getShell(), "Invalid URL", 
                                                        "URL should start with " +
                                                        "http:// or https://");
                             organizationUrlText.setFocus();
