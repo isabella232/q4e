@@ -490,18 +490,29 @@ public class MavenPomBasicFormPage extends FormPage
     	pomModel.setInceptionYear( nullIfBlank( inceptionYearText.getText().trim() ) );
     	pomModel.setModelVersion( nullIfBlank( modelVersionText.getText().trim() ) );
     	
-    	
-   		if ( pomModel.getParent() == null )
-   		{
-   			Parent parent = new Parent();
-   			pomModel.setParent( parent );
+    	if ( ( parentPOMGroupIdText.getText().trim().length() > 0 ) ||
+    	     ( parentPOMArtifactIdText.getText().trim().length() > 0 ) || 
+    	     ( parentPOMVersionText.getText().trim().length() > 0 ) ||
+    	     ( parentPOMRelativePathText.getText().trim().length() > 0 ) )
+    	{
+    	    if ( pomModel.getParent() == null )
+    	    {
+    	        Parent parent = new Parent();
+    	        pomModel.setParent( parent );
+    	    }
+    	    
+    	    pomModel.getParent().setGroupId( nullIfBlank( parentPOMGroupIdText.getText().trim() ) );               
+            pomModel.getParent().setArtifactId( nullIfBlank( parentPOMArtifactIdText.getText().trim() ) );              
+            pomModel.getParent().setVersion( nullIfBlank( parentPOMVersionText.getText().trim() ) );                
+            pomModel.getParent().setRelativePath( nullIfBlank( parentPOMRelativePathText.getText().trim() ) );
+            
    		}
+    	else
+    	{
+    	    pomModel.setParent( null );
+    	}
     		
-   		pomModel.getParent().setGroupId( nullIfBlank( parentPOMGroupIdText.getText().trim() ) );    	    	
-		pomModel.getParent().setArtifactId( nullIfBlank( parentPOMArtifactIdText.getText().trim() ) );    	    	
-		pomModel.getParent().setVersion( nullIfBlank( parentPOMVersionText.getText().trim() ) );    	    	
-		pomModel.getParent().setRelativePath( nullIfBlank( parentPOMRelativePathText.getText().trim() ) );
-		
+   		
     }
     
     private String nullIfBlank(String str) 
