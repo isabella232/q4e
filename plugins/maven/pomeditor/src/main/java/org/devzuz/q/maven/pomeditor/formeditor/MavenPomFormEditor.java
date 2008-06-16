@@ -29,7 +29,6 @@ import org.devzuz.q.maven.pomeditor.pages.MavenPomDistributionManagementFormPage
 import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesScmOrgFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomPropertiesModuleFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomRepositoriesFormPage;
-import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
