@@ -128,6 +128,7 @@ public class MavenPomDependenciesFormPage extends FormPage
             }
         };
         
+        //Listener for adding or editing dependencies
         SelectionAdapter buttonListener = new SelectionAdapter()
         {
             public void widgetDefaultSelected( SelectionEvent e )
