@@ -189,7 +189,7 @@ public class DependencyTableComponent extends Composite
                 {
                     String dependency =
                         addDialog.getGroupId() + ":" + addDialog.getArtifactId() + ":" + addDialog.getVersion();
-                    MessageDialog.openWarning( getParent().getShell(), "", dependency
+                    MessageDialog.openWarning( getParent().getShell(), "Existing dependency found.", dependency
                                     + " already exists." );
                 }
             }
