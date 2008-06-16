@@ -18,11 +18,12 @@ import org.devzuz.q.maven.pomeditor.dialogs.AddEditLicenseDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -320,11 +321,65 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                     pageModified();
                 }
             };
+            
+            FocusListener focusListener = new FocusListener()
+            {
+
+                public void focusGained( FocusEvent e )
+                {
+                    
+                }
+
+                public void focusLost( FocusEvent e )
+                {
+                    if ( ( e.getSource().equals( urlText ) ) &&
+                         ( urlText.getText().trim().length() > 0 ) )
+                    {
+                        if ( !( urlText.getText().trim().startsWith( "http://" ) ) &&
+                             !( urlText.getText().trim().startsWith( "https://" ) ) )
+                        {
+                            MessageDialog.openWarning( form.getShell(), "", 
+                                                       "Invalid URL.  " +
+                                                       "URL should start with " +
+                                                       "http:// or https://");
+                            urlText.setFocus();
+                        }
+                    }
+                    else if ( e.getSource().equals( issueManagementUrlText ) )
+                    {
+                        if ( !( issueManagementUrlText.getText().trim().startsWith( "http://" ) ) &&
+                             !( issueManagementUrlText.getText().trim().startsWith( "https://" ) ) )
+                        {
+                            MessageDialog.openWarning( form.getShell(), "", 
+                                                       "Invalid URL.  " +
+                                                       "URL should start with " +
+                                                       "http:// or https://");
+                            issueManagementUrlText.setFocus();
+                        }
+                    }
+                    else if ( e.getSource().equals( organizationUrlText ) )
+                    {
+                        if ( !( organizationUrlText.getText().trim().startsWith( "http://" ) ) &&
+                             !( organizationUrlText.getText().trim().startsWith( "https://" ) ) )
+                        {
+                            MessageDialog.openWarning( form.getShell(), "", 
+                                                       "Invalid URL.  " +
+                                                       "URL should start with " +
+                                                       "http:// or https://");
+                            organizationUrlText.setFocus();
+                        }
+                    }
+
+                    
+                }
+                
+            };
 
             text.setLayoutData( controlData );
             text.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
             text.setText( blankIfNull( data ) );
             text.addModifyListener( modifyingListener );
+            text.addFocusListener( focusListener );
         }
     }
     
