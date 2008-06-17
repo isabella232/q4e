@@ -110,6 +110,12 @@ public class ResourceComponent extends Composite
                 item.setText( new String[] { resource.getTargetPath(), filtering, resource.getDirectory() } );
             }
         }
+        
+        if( resourcesTable.getItems().length <= 0 )
+        {
+            removeResourceButton.setEnabled( false );
+            editResourceButton.setEnabled( false );
+        }
     }
 
     private class ResourcesTableListener extends SelectionAdapter
