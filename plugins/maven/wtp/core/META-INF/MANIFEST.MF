@@ -7,11 +7,12 @@ Bundle-Activator: org.devzuz.q.maven.wtp.core.MavenWtpActivator
 Bundle-Vendor: Devzuz
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.wst.common.project.facet.core,
- org.devzuz.q.maven.jdt.ui,
  org.eclipse.wst.web,
  org.eclipse.wst.common.frameworks,
  org.eclipse.jst.j2ee.web,
  org.eclipse.jst.j2ee,
- org.eclipse.jst.j2ee.core
+ org.eclipse.jst.j2ee.core,
+ org.devzuz.q.maven.core,
+ org.devzuz.q.maven.jdt.ui
 Eclipse-LazyStart: true
 Import-Package: org.eclipse.jem.util.emf.workbench

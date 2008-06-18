@@ -18,7 +18,7 @@ import org.devzuz.q.maven.embedder.IMavenArtifact;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.classpath.container.IMavenClasspathAttributeProvider;
-import org.devzuz.q.maven.jdt.ui.projectimport.IImportProjectPostprocessor;
+import org.devzuz.q.maven.project.configuration.IProjectConfigurationParticipant;
 import org.devzuz.q.maven.wtp.core.MavenWtpActivator;
 import org.devzuz.q.maven.wtp.core.internal.TraceOption;
 import org.eclipse.core.resources.IProject;
@@ -32,7 +32,6 @@ import org.eclipse.jem.util.emf.workbench.ProjectUtilities;
 import org.eclipse.jst.j2ee.classpathdep.UpdateClasspathAttributeUtil;
 import org.eclipse.jst.j2ee.web.project.facet.IWebFacetInstallDataModelProperties;
 import org.eclipse.wst.common.componentcore.ComponentCore;
-import org.eclipse.wst.common.componentcore.internal.operation.CreateReferenceComponentsOp;
 import org.eclipse.wst.common.componentcore.resources.IVirtualComponent;
 import org.eclipse.wst.common.componentcore.resources.IVirtualReference;
 import org.eclipse.wst.common.frameworks.datamodel.IDataModel;
@@ -49,7 +48,7 @@ import org.eclipse.wst.common.project.facet.core.IFacetedProject.Action;
  * 
  * @author amuino
  */
-public class WtpEnablerPostprocessor implements IImportProjectPostprocessor, IMavenClasspathAttributeProvider
+public class WtpEnablerPostprocessor implements IProjectConfigurationParticipant, IMavenClasspathAttributeProvider
 {
 
     private static final Set<String> DEPLOYABLE_SCOPES =

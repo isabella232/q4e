@@ -8,10 +8,17 @@
       </classpathAttributeProvider>
    </extension>
    <extension
-         point="org.devzuz.q.maven.jdt.ui.projectPostprocessors">
-      <postprocessor
+         point="org.devzuz.q.maven.core.project.configurationParticipants">
+      <participant
             class="org.devzuz.q.maven.wtp.core.postprocessor.WtpEnablerPostprocessor">
-      </postprocessor>
+            <enablement>
+            <and>
+            <test
+                  property="org.devzuz.q.packaging" value="war" forcePluginActivation="true">
+            </test>
+            </and>
+            </enablement>
+      </participant>
    </extension>
 
 </plugin>

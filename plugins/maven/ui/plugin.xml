@@ -56,7 +56,7 @@
              </separator>
           </menu>
           <enablement>
-             <test property="org.devzuz.q.maven.ui.hasPOM" value="true" forcePluginActivation="true"/>
+             <test property="org.devzuz.q.hasPOM" value="true" forcePluginActivation="true"/>
           </enablement>
        </objectContribution>
        <objectContribution
@@ -185,14 +185,6 @@
             </and>
          </enablement>
       </decorator>
-   </extension>
-   <extension point="org.eclipse.core.expressions.propertyTesters">
-      <propertyTester id="org.devzuz.q.maven.ui.actions.MavenProjectPropertyTester"
-	     type="org.eclipse.core.resources.IProject"
-	     namespace="org.devzuz.q.maven.ui"
-	     properties="hasPOM"
-	     class="org.devzuz.q.maven.ui.propertytester.MavenProjectPropertyTester">
- 	  </propertyTester>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">

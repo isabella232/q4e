@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import org.devzuz.q.maven.embedder.IMavenJob;
 import org.devzuz.q.maven.embedder.IMavenProject;
@@ -21,6 +22,8 @@ import org.devzuz.q.maven.embedder.PomFileDescriptor;
 import org.devzuz.q.maven.jdt.core.MavenNatureHelper;
 import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.devzuz.q.maven.jdt.ui.internal.TraceOption;
+import org.devzuz.q.maven.project.configuration.IProjectConfigurationParticipant;
+import org.devzuz.q.maven.project.configuration.ProjectConfigurationParticipantManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspace;
@@ -256,20 +259,16 @@ public class ImportProjectJob extends WorkspaceJob implements IMavenJob
     {
         monitor.setTaskName( "Customizing maven projects..." );
         /* Allow postprocessors to customize the project */
-        IImportProjectPostprocessor[] postprocessors =
-            ImportProjectPostprocessorManager.getInstance().getPostprocessors();
-
-        if ( postprocessors.length > 0 )
+        for ( IMavenProject mavenProject : mavenProjects )
         {
-            for ( IMavenProject mavenProject : mavenProjects )
+            if ( ( mavenProject != null ) )
             {
-                if ( ( mavenProject != null ) )
+                Set<IProjectConfigurationParticipant> postprocessors =
+                    ProjectConfigurationParticipantManager.getInstance().getPostProcessors( mavenProject );
+                for ( IProjectConfigurationParticipant p : postprocessors )
                 {
-                    for ( IImportProjectPostprocessor p : postprocessors )
-                    {
-                        monitor.newChild( 1 );
-                        p.process( mavenProject, monitor );
-                    }
+                    monitor.newChild( 1 );
+                    p.process( mavenProject, monitor );
                 }
             }
         }

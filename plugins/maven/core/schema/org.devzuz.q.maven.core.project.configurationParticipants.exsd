@@ -1,19 +1,27 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!-- Schema file written by PDE -->
-<schema targetNamespace="org.devzuz.q.maven.jdt.ui">
+<schema targetNamespace="org.devzuz.q.maven.core">
 <annotation>
       <appInfo>
-         <meta.schema plugin="org.devzuz.q.maven.jdt.ui" id="org.devzuz.q.maven.jdt.ui.projectPostprocessors" name="projectPostprocessors"/>
+         <meta.schema plugin="org.devzuz.q.maven.core" id="project.configurationParticipants" name="Maven Project Configuration Participants"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         &lt;p&gt;
+This extension point allows registering project configuration participants to be invoked during the configuration cycle of maven projects with q4e.
+&lt;/p&gt;&lt;p&gt;
+Configuration participants receive notification of events in a project lifecycle were additional configuration is allowed.
+&lt;/p&gt;&lt;p&gt;
+It is expected that not every configuration participant will be active for every project. The &amp;lt;enablement&amp;gt; element allows for declaratively specify when the contributed participant will be enabled, avoiding activation of the contributor plug-in.
+&lt;/p&gt;
       </documentation>
    </annotation>
+
+   <include schemaLocation="schema://org.eclipse.core.expressions/schema/expressionLanguage.exsd"/>
 
    <element name="extension">
       <complexType>
          <sequence>
-            <element ref="postprocessor"/>
+            <element ref="participant"/>
          </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
@@ -42,15 +50,18 @@
       </complexType>
    </element>
 
-   <element name="postprocessor">
+   <element name="participant">
       <complexType>
+         <sequence minOccurs="0" maxOccurs="1">
+            <element ref="enablement"/>
+         </sequence>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Configuration participant implementation class. Must implement &lt;code&gt;org.devzuz.q.maven.project.configuration.IProjectConfigurationParticipant&lt;/code&gt;.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.devzuz.q.maven.wizard.postprocessor.core.IMavenProjectPostprocessor"/>
+                  <meta.attribute kind="java" basedOn=":org.devzuz.q.maven.jdt.ui.projectimport.IImportProjectPostprocessor"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -62,7 +73,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.8.0
       </documentation>
    </annotation>
 

@@ -1,18 +1,22 @@
-package org.devzuz.q.maven.jdt.ui.projectimport;
+package org.devzuz.q.maven.project.configuration;
 
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
- * Project postprocessors must implement this interface.
+ * Project configuration participants are extensions to the basic maven configuration performed by q4e.
  * 
- * A project postprocessor can act upon a maven project right after it is imported in the eclipse workspace. It is
+ * A configuration participant can act upon a maven project right after it is imported in the eclipse workspace. It is
  * expected that 3rd parties use this interface to add specific support for their plug-ins when some requirements are
  * met by the maven project (like using a certain packaging in the pom).
  * 
+ * These requirements should be evaluated through the &lt;enablement&gt; expression in the
+ * <code>org.devzuz.q.maven.core.project.configurationParticipants</code> extension point to avoid activating plug-ins
+ * contributing to this extension point.
+ * 
  * @author amuino
  */
-public interface IImportProjectPostprocessor
+public interface IProjectConfigurationParticipant
 {
     /**
      * Processes the given maven project, if needed.

@@ -4,5 +4,7 @@ org.devzuz.q.maven.core/debug=false
 org.devzuz.q.maven.core/debug/artifact-resolver=false
 # Trace for events related to the maven project manager cache
 org.devzuz.q.maven.core/debug/project-cache=false
+# Trace for events related to the property tester
+org.devzuz.q.maven.core/debug/property-tester=false
 # This switch enables/disables time information in every other trace 
 org.devzuz.q.maven.core/debug/timing=false
