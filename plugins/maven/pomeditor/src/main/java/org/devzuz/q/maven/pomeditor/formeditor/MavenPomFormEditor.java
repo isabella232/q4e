@@ -283,7 +283,7 @@ public class MavenPomFormEditor extends FormEditor
                 distributionManagementPage =
                     new MavenPomDistributionManagementFormPage( this, DISTRIBUTION_MANAGEMENT_FORM_PAGE,
                                                                 "Distribution Management", this.pomModel );
-                //addPage( distributionManagementPage );
+                addPage( distributionManagementPage );
             }
         }
         catch ( PartInitException pie )

@@ -188,14 +188,15 @@ public class AddEditRepositoryDialog
                 if ( ( e.getSource().equals( urlText ) ) && 
                      ( urlText.getText().trim().length() > 0 ) )
                 {
-                    if ( !( urlText.getText().trim().startsWith( "http://" ) ) &&
-                         !( urlText.getText().trim().startsWith( "https://" ) ) &&
-                         !( urlText.getText().trim().startsWith( "ftp://" ) ) &&
-                         !( urlText.getText().trim().startsWith( "file://" ) ) )
+                    if ( !( urlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
+                         !( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) &&
+                         !( urlText.getText().trim().toLowerCase().startsWith( "ftp://" ) ) &&
+                         !( urlText.getText().trim().toLowerCase().startsWith( "file://" ) ) )
                          
                     {
                         MessageDialog.openWarning( getShell(), "Invalid URL", 
-                                                   "URL should start with http:// or https://");
+                                                   "URL should start with either of the following: " + 
+                                                   "http://, https://, ftp://, file://" );
                         urlText.setFocus();
                     }
                 } 

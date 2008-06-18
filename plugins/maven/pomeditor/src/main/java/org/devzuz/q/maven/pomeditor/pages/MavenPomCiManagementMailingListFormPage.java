@@ -15,8 +15,11 @@ import org.apache.maven.model.Notifier;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditMailingListDialog;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditNotifierDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -28,7 +31,6 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -297,10 +299,36 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                 }
             };
             
+            FocusListener focusListener = new FocusListener()
+            {
+
+                public void focusGained( FocusEvent e )
+                {
+                    // TODO Auto-generated method stub
+                    
+                }
+
+                public void focusLost( FocusEvent e )
+                {
+                    if ( ( e.getSource().equals( urlText ) ) &&
+                         ( urlText.getText().trim().length() > 0 ) )
+                    {
+                        if ( !( urlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
+                             !( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
+                        {
+                            MessageDialog.openWarning( form.getShell(), "Invalid URL", 
+                                "URL should start with http:// or https://");
+                            urlText.setFocus();
+                        }
+                    }
+                }
+            };
+            
             text.setLayoutData( controlData );
             text.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
             text.setText( blankIfNull( data ) );
             text.addModifyListener( modifyingListener );
+            text.addFocusListener( focusListener );
         }
     }
 

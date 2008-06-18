@@ -335,8 +335,8 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                     if ( ( e.getSource().equals( urlText ) ) &&
                          ( urlText.getText().trim().length() > 0 ) )
                     {
-                        if ( !( urlText.getText().trim().startsWith( "http://" ) ) &&
-                             !( urlText.getText().trim().startsWith( "https://" ) ) )
+                        if ( !( urlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
+                             !( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
                         {
                             MessageDialog.openWarning( form.getShell(), "Invalid URL", 
                                                        "URL should start with " +
@@ -347,8 +347,8 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                     else if ( ( e.getSource().equals( issueManagementUrlText ) ) &&
                               ( issueManagementUrlText.getText().trim().length() > 0 ) )
                     {
-                        if ( !( issueManagementUrlText.getText().trim().startsWith( "http://" ) ) &&
-                             !( issueManagementUrlText.getText().trim().startsWith( "https://" ) ) )
+                        if ( !( issueManagementUrlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
+                             !( issueManagementUrlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
                         {
                             MessageDialog.openWarning( form.getShell(), "Invalid URL", 
                                                        "URL should start with " +
@@ -359,8 +359,8 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                     else if ( ( e.getSource().equals( organizationUrlText ) ) &&
                               ( organizationUrlText.getText().trim().length() > 0 ) )
                     {
-                        if ( !( organizationUrlText.getText().trim().startsWith( "http://" ) ) &&
-                             !( organizationUrlText.getText().trim().startsWith( "https://" ) ) )
+                        if ( !( organizationUrlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
+                             !( organizationUrlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
                         {
                             MessageDialog.openWarning( form.getShell(), "Invalid URL", 
                                                        "URL should start with " +

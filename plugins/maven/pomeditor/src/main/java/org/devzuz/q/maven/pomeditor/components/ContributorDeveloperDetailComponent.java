@@ -116,7 +116,8 @@ public class ContributorDeveloperDetailComponent
                          !( urlText.getText().trim().startsWith( "https://" ) ) )
                     {
                         MessageDialog.openWarning( getParent().getShell(), "Invalid URL", 
-                                                   "URL should start with http:// or https://");
+                                                   "URL should start with either of the following: " + 
+                                                   "http:// or https://");
                         urlText.setFocus();
                     }
                 } 
@@ -128,7 +129,8 @@ public class ContributorDeveloperDetailComponent
                          !( organizationUrlText.getText().trim().startsWith( "https://" ) ) )
                     {
                         MessageDialog.openWarning( getParent().getShell(), "Invalid URL", 
-                                                   "URL should start with http:// or https://");
+                                                   "URL should start with either of the following: " + 
+                                                   "http:// or https://");
                         organizationUrlText.setFocus();
                     }
                 }   

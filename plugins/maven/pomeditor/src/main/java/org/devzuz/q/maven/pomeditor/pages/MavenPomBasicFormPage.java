@@ -10,7 +10,10 @@ import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.formeditor.MavenPomFormEditor;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
@@ -38,7 +41,7 @@ public class MavenPomBasicFormPage extends FormPage
 
     private static final int LEFT_LABEL_WIDTH_HINT = 75;
 
-    private ScrolledForm form;
+    private ScrolledForm scrolledForm;
 
     private FormEditor editor;
 
@@ -122,36 +125,36 @@ public class MavenPomBasicFormPage extends FormPage
         {
             public void expansionStateChanged( ExpansionEvent e )
             {
-                form.reflow( true );
+                scrolledForm.reflow( true );
             }
         };
 
-        form = managedForm.getForm();
+        scrolledForm = managedForm.getForm();
         FormToolkit toolkit = managedForm.getToolkit();
 
-        form.getBody().setLayout( new GridLayout( 2, false ) );
+        scrolledForm.getBody().setLayout( new GridLayout( 2, false ) );
 
         Section basicCoordinateControls =
-            toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
+            toolkit.createSection( scrolledForm.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         basicCoordinateControls.setDescription( "These basic informations act like a coordinate system for Maven projects." );
         basicCoordinateControls.setText( Messages.MavenPomEditor_MavenPomEditor_BasicInformation );
         basicCoordinateControls.setLayoutData( createSectionLayoutData() );
         basicCoordinateControls.setClient( createBasicCoordinateControls( basicCoordinateControls, toolkit ) );
 
-        Section linkControls = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED );
+        Section linkControls = toolkit.createSection( scrolledForm.getBody(), Section.TITLE_BAR | Section.EXPANDED );
         linkControls.setText( Messages.MavenPomEditor_MavenPomEditor_Links );
         linkControls.setLayoutData( createSectionLayoutData() );
         linkControls.setClient( createLinkControls( linkControls, toolkit ) );
 
         Section moreProjectInfoControls =
-            toolkit.createSection( form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION );
+            toolkit.createSection( scrolledForm.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION );
         moreProjectInfoControls.setDescription( "Add more project information to this POM." );
         moreProjectInfoControls.setText( Messages.MavenPomEditor_MavenPomEditor_MoreProjInfo );
         moreProjectInfoControls.setLayoutData( createSectionLayoutData() );
         moreProjectInfoControls.setClient( createMoreProjectInfoControls( moreProjectInfoControls, toolkit ) );
 
         Section parentProjectControls =
-            toolkit.createSection( form.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION );
+            toolkit.createSection( scrolledForm.getBody(), Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION );
         parentProjectControls.setDescription( "Add a parent POM whose elements are inherited this POM." );
         parentProjectControls.setText( Messages.MavenPomEditor_MavenPomEditor_ParentPOM );
         parentProjectControls.setLayoutData( createSectionLayoutData() );
@@ -340,6 +343,17 @@ public class MavenPomBasicFormPage extends FormPage
             }
         } );
         repositoriesLink.setText( "Manage Repositories and Plugin Repositories" );
+        
+        Hyperlink distributionManagementLink =
+            toolKit.createHyperlink( parent, "Manage Distribution Management", SWT.WRAP );
+        distributionManagementLink.addHyperlinkListener( new HyperlinkAdapter()
+        {
+            public void linkActivated( HyperlinkEvent e )
+            {
+                editor.setActivePage( MavenPomFormEditor.DISTRIBUTION_MANAGEMENT_FORM_PAGE );
+            }
+            
+        } );
 
         return parent;
     }
@@ -393,6 +407,33 @@ public class MavenPomBasicFormPage extends FormPage
         this.createTextDisplay( modelVersionText, createControlLayoutData() );
         modelVersionText.setText( getModelVersion() );
         modelVersionText.addModifyListener( textFieldListener );
+        
+        FocusListener focusListener = new FocusListener()
+        {
+
+            public void focusGained( FocusEvent e )
+            {
+                // TODO Auto-generated method stub
+                
+            }
+
+            public void focusLost( FocusEvent e )
+            {
+                if ( ( urlText.getText().trim().toLowerCase().startsWith( "http://" ) ) ||
+                     ( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
+                {
+                    MessageDialog.openWarning( scrolledForm.getShell(), "Invalid URL", 
+                                               "URL should start with either of the following: " + 
+                                               "http:// or https://");
+                    
+                    urlText.setFocus();
+                }
+                
+            }
+            
+        };
+        
+        urlText.addFocusListener( focusListener );
 
         toolKit.paintBordersFor( parent );
 
