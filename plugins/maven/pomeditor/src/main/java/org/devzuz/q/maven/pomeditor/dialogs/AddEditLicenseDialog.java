@@ -11,13 +11,17 @@ import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -157,10 +161,22 @@ public class AddEditLicenseDialog extends AbstractResizableDialog
 
     public boolean didValidate()
     {
-        if ( ( isNotNullOrWhiteSpace( nameText.getText() ) ) )
+        if ( ( isNotNullOrWhiteSpace( nameText.getText() ) ) )             
         {
             return false;
         }
+        else
+        {
+            if ( urlText.getText().trim().length() > 0 )
+            {
+                if ( !( urlText.getText().trim().toLowerCase().startsWith( "http://" ) ) && 
+                     !( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
+                {
+                    return false;
+                }
+            }
+        }
+        
         return true;
     }
 

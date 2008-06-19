@@ -9,6 +9,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
@@ -99,47 +100,6 @@ public class ContributorDeveloperDetailComponent
         
         timezoneText = new Text( this, SWT.BORDER | SWT.SINGLE );
         timezoneText.setLayoutData( createControlLayoutData() );
-        
-        FocusListener focusListener = new FocusListener() 
-        {
-            public void focusGained( FocusEvent e )
-            {
-                // TODO Auto-generated method stub
-            }
-
-            public void focusLost( FocusEvent e )
-            {
-                if ( ( e.getSource().equals( urlText ) ) && 
-                     ( urlText.getText().trim().length() > 0 ) )
-                {
-                    if ( !( urlText.getText().trim().startsWith( "http://" ) ) &&
-                         !( urlText.getText().trim().startsWith( "https://" ) ) )
-                    {
-                        MessageDialog.openWarning( getParent().getShell(), "Invalid URL", 
-                                                   "URL should start with either of the following: " + 
-                                                   "http:// or https://");
-                        urlText.setFocus();
-                    }
-                } 
-                
-                if ( ( e.getSource().equals( organizationUrlText ) ) && 
-                     ( organizationUrlText.getText().trim().length() > 0 ) )
-                {
-                    if ( !( organizationUrlText.getText().trim().startsWith( "http://" ) ) &&
-                         !( organizationUrlText.getText().trim().startsWith( "https://" ) ) )
-                    {
-                        MessageDialog.openWarning( getParent().getShell(), "Invalid URL", 
-                                                   "URL should start with either of the following: " + 
-                                                   "http:// or https://");
-                        organizationUrlText.setFocus();
-                    }
-                }   
-            }
-        };
-        
-        organizationUrlText.addFocusListener( focusListener );
-        urlText.addFocusListener( focusListener );
-        
     }
 
     private GridData createControlLayoutData()

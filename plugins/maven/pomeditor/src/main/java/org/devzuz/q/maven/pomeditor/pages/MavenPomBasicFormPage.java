@@ -21,6 +21,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
@@ -419,18 +420,25 @@ public class MavenPomBasicFormPage extends FormPage
 
             public void focusLost( FocusEvent e )
             {
-                if ( ( urlText.getText().trim().toLowerCase().startsWith( "http://" ) ) ||
-                     ( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
+                if ( urlText.getText().trim().length() > 0 )
                 {
-                    MessageDialog.openWarning( scrolledForm.getShell(), "Invalid URL", 
+                    if ( !( urlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
+                         !( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
+                    {
+                        MessageDialog.openWarning( scrolledForm.getShell(), "Invalid URL", 
                                                "URL should start with either of the following: " + 
                                                "http:// or https://");
                     
-                    urlText.setFocus();
+                        Display.getCurrent().asyncExec( new Runnable()
+                        {
+                            public void run()
+                            {
+                                urlText.setFocus();
+                            }                        
+                        });                    
+                    }                
                 }
-                
             }
-            
         };
         
         urlText.addFocusListener( focusListener );

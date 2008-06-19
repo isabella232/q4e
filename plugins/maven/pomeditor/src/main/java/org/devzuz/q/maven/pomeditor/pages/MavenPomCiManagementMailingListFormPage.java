@@ -31,6 +31,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -318,7 +319,14 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                         {
                             MessageDialog.openWarning( form.getShell(), "Invalid URL", 
                                 "URL should start with http:// or https://");
-                            urlText.setFocus();
+
+                            Display.getCurrent().asyncExec( new Runnable()
+                            {
+                               public void run()
+                               {
+                                   urlText.setFocus();
+                               }
+                            });  
                         }
                     }
                 }

@@ -17,6 +17,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -174,36 +175,7 @@ public class AddEditRepositoryDialog
         
         snapshotsChecksumPolicyText = new Text( snapshotsGroup, SWT.SINGLE | SWT.BORDER );
         snapshotsChecksumPolicyText.setLayoutData( createControlLayoutData() );
-        snapshotsChecksumPolicyText.addModifyListener( modifyingListener );
-        
-        FocusListener focusListener = new FocusListener() 
-        {
-            public void focusGained( FocusEvent e )
-            {
-                // TODO Auto-generated method stub
-            }
-
-            public void focusLost( FocusEvent e )
-            {
-                if ( ( e.getSource().equals( urlText ) ) && 
-                     ( urlText.getText().trim().length() > 0 ) )
-                {
-                    if ( !( urlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
-                         !( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) &&
-                         !( urlText.getText().trim().toLowerCase().startsWith( "ftp://" ) ) &&
-                         !( urlText.getText().trim().toLowerCase().startsWith( "file://" ) ) )
-                         
-                    {
-                        MessageDialog.openWarning( getShell(), "Invalid URL", 
-                                                   "URL should start with either of the following: " + 
-                                                   "http://, https://, ftp://, file://" );
-                        urlText.setFocus();
-                    }
-                } 
-            }
-        };
-        
-        urlText.addFocusListener( focusListener );
+        snapshotsChecksumPolicyText.addModifyListener( modifyingListener );        
         
         return container;
     }
@@ -280,6 +252,14 @@ public class AddEditRepositoryDialog
         if ( ( idText.getText().trim().length() > 0 ) &&
              ( urlText.getText().trim().length() > 0 ) )
         {
+            if ( !( urlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
+                 !( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) &&
+                 !( urlText.getText().trim().toLowerCase().startsWith( "ftp://" ) ) &&
+                 !( urlText.getText().trim().toLowerCase().startsWith( "file://" ) ) )
+            {
+                return false;
+            }
+            
             return true;
         }
         

@@ -121,6 +121,24 @@ public class AddEditContributorDeveloperDialog
                  ( contributorComponent.getContributorName().length() > 0 ) &&
                  ( contributorComponent.getEmail().length() > 0 ) )
             {
+                if ( contributorComponent.getUrl().length() > 0 )
+                {
+                    if ( !( contributorComponent.getUrl().toLowerCase().startsWith( "http://" ) ) && 
+                         !( contributorComponent.getUrl().toLowerCase().startsWith( "https://" ) ) )
+                    {
+                        return false;
+                    }
+                }
+                
+                if ( contributorComponent.getOrganizationUrl().length() > 0 )
+                {
+                    if ( !( contributorComponent.getOrganizationUrl().trim().toLowerCase().startsWith( "http://" ) ) &&
+                         !( contributorComponent.getOrganizationUrl().trim().toLowerCase().startsWith( "https://" ) ) )
+                    {
+                        return false;
+                    }
+                }
+                
                 return true;
             }
         }
@@ -129,6 +147,24 @@ public class AddEditContributorDeveloperDialog
             if ( ( contributorComponent.getContributorName().length() > 0 ) &&
                  ( contributorComponent.getEmail().length() > 0 ) )
             {
+                if ( contributorComponent.getUrl().length() > 0 )
+                {
+                    if ( !( contributorComponent.getUrl().toLowerCase().startsWith( "http://" ) ) && 
+                         !( contributorComponent.getUrl().toLowerCase().startsWith( "https://" ) ) )
+                    {
+                        return false;
+                    }
+                }
+                
+                if ( contributorComponent.getOrganizationUrl().length() > 0 )
+                {
+                    if ( !( contributorComponent.getOrganizationUrl().trim().toLowerCase().startsWith( "http://" ) ) &&
+                         !( contributorComponent.getOrganizationUrl().trim().toLowerCase().startsWith( "https://" ) ) )
+                    {
+                        return false;
+                    }
+                }
+                
                 return true;
             }
         }

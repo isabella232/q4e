@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -297,7 +298,7 @@ public class DistributionManagementDetailComponent
                 
             }
 
-            public void focusLost( FocusEvent e )
+            public void focusLost( final FocusEvent e )
             {
                 if ( validateURL( ( ( Text )e.getSource() ).getText().trim() ) == false )
                 {
@@ -306,7 +307,14 @@ public class DistributionManagementDetailComponent
                         "http://, https://, ftp://, file://, scp://, sftp:// " +
                         "and dav:http://");
                     
-                    ( ( Text )e.getSource() ).setFocus();
+                    
+                    Display.getCurrent().asyncExec( new Runnable()
+                    {
+                       public void run()
+                       {
+                           ( ( Text )e.getSource() ).setFocus();
+                       }
+                    });                      
                 }                
             }
             
@@ -320,18 +328,22 @@ public class DistributionManagementDetailComponent
     
     public boolean validateURL( String siteUrl )
     {
-        if ( ( siteUrl.toLowerCase().startsWith( "http://" ) ) ||
-             ( siteUrl.toLowerCase().startsWith( "https://" ) ) ||
-             ( siteUrl.toLowerCase().startsWith( "ftp://" ) ) ||
-             ( siteUrl.toLowerCase().startsWith( "file://" ) ) ||
-             ( siteUrl.toLowerCase().startsWith( "scp://" ) ) ||
-             ( siteUrl.toLowerCase().startsWith( "sftp://" ) ) ||
-             ( siteUrl.toLowerCase().startsWith( "dav:http://" ) ) )
+        if ( siteUrl.length() > 0 )
         {
-            return true;
+            if ( !( siteUrl.toLowerCase().startsWith( "http://" ) ) &&
+                 !( siteUrl.toLowerCase().startsWith( "https://" ) ) &&
+                 !( siteUrl.toLowerCase().startsWith( "ftp://" ) ) &&
+                 !( siteUrl.toLowerCase().startsWith( "file://" ) ) &&
+                 !( siteUrl.toLowerCase().startsWith( "scp://" ) ) &&
+                 !( siteUrl.toLowerCase().startsWith( "sftp://" ) ) &&
+                 !( siteUrl.toLowerCase().startsWith( "dav:http://" ) ) )
+            {
+                return false;
+            }
         }
-    
-        return false;
+        
+        return true;
+        
     }
 
     private void addModifyListener( ModifyListener listener )

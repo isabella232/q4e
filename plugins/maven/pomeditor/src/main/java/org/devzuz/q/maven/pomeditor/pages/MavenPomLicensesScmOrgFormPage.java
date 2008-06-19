@@ -30,6 +30,7 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -336,12 +337,21 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                          ( urlText.getText().trim().length() > 0 ) )
                     {
                         if ( !( urlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
-                             !( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
+                             !( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) &&
+                             !( urlText.getText().trim().toLowerCase().startsWith( "scm:" ) ) )
                         {
                             MessageDialog.openWarning( form.getShell(), "Invalid URL", 
-                                                       "URL should start with " +
-                                                       "http:// or https://");
-                            urlText.setFocus();
+                                                       "URL should start with either of the following: " +
+                                                       "http:// , https:// , or scm:");
+                            
+                            Display.getCurrent().asyncExec(new Runnable() 
+                            {
+                                public void run() 
+                                {
+                                    urlText.setFocus();
+                                }
+                            });
+                            
                         }
                     }
                     else if ( ( e.getSource().equals( issueManagementUrlText ) ) &&
@@ -353,7 +363,15 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                             MessageDialog.openWarning( form.getShell(), "Invalid URL", 
                                                        "URL should start with " +
                                                        "http:// or https://");
-                            issueManagementUrlText.setFocus();
+                            
+                            Display.getCurrent().asyncExec( new Runnable() 
+                            {
+                                public void run()
+                                {
+                                    issueManagementUrlText.setFocus();
+                                }
+                            });
+                            
                         }
                     }
                     else if ( ( e.getSource().equals( organizationUrlText ) ) &&
@@ -365,7 +383,14 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                             MessageDialog.openWarning( form.getShell(), "Invalid URL", 
                                                        "URL should start with " +
                                                        "http:// or https://");
-                            organizationUrlText.setFocus();
+                            
+                            Display.getCurrent().asyncExec( new Runnable()
+                            {
+                                public void run()
+                                {
+                                    organizationUrlText.setFocus();
+                                }                                
+                            });                            
                         }
                     }
                 }
