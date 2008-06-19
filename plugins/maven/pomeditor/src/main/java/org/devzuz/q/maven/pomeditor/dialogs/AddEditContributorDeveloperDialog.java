@@ -1,8 +1,11 @@
 package org.devzuz.q.maven.pomeditor.dialogs;
 
+import java.util.Properties;
+
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.components.ContributorDeveloperDetailComponent;
+import org.devzuz.q.maven.pomeditor.components.PropertiesTableComponent;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -12,6 +15,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
@@ -19,6 +23,8 @@ public class AddEditContributorDeveloperDialog
     extends AbstractResizableDialog
 {
     private ContributorDeveloperDetailComponent contributorComponent;
+    
+    private PropertiesTableComponent propertiesTableComponent;
     
     private String name;
     
@@ -37,6 +43,8 @@ public class AddEditContributorDeveloperDialog
     private String type;
 
     private String id = null;
+    
+    private Properties properties;
     
     public static AddEditContributorDeveloperDialog newAddEditContributorDialog( String type )
     {
@@ -58,7 +66,7 @@ public class AddEditContributorDeveloperDialog
     @Override
     protected Control internalCreateDialogArea( Composite container )
     {
-        container.setLayout( new FillLayout()  );
+        container.setLayout( new FillLayout( SWT.VERTICAL )  );
         
         ModifyListener contributorListener = new ModifyListener()
         {
@@ -69,9 +77,14 @@ public class AddEditContributorDeveloperDialog
         };  
     
         contributorComponent = new ContributorDeveloperDetailComponent( container, SWT.None, type );
+        
+        Group group = new Group( container , SWT.None );
+        group.setText( Messages.MavenPomEditor_MavenPomEditor_Properties );
+        group.setLayout( new FillLayout() );
+        propertiesTableComponent = new PropertiesTableComponent( group, SWT.None );
         syncData();
         contributorComponent.addModifyListener( contributorListener );
-    
+        
         return container;
     }
 
@@ -138,11 +151,15 @@ public class AddEditContributorDeveloperDialog
         contributorComponent.setRoles( blankIfNull( roles ) );
         contributorComponent.setTimezone( blankIfNull( timezone ) );
         
+        if( properties == null )
+            properties = new Properties();
+        
+        propertiesTableComponent.updateTable( properties );
     }
 
     public int openWithItem(String id, String name, String email, String url, 
                             String organization, String organizationUrl,
-                            String roles, String timezone )
+                            String roles, String timezone , Properties properties )
     {
         if ( id != null )
         {
@@ -157,7 +174,12 @@ public class AddEditContributorDeveloperDialog
         this.roles = roles;
         this.timezone = timezone;
         
-        if ( contributorComponent != null )
+        if( properties != null )
+            this.properties = ( Properties ) properties.clone();
+        else
+            this.properties = new Properties();
+        
+        if ( contributorComponent != null && propertiesTableComponent != null )
         {
             syncData();
         }
@@ -246,6 +268,16 @@ public class AddEditContributorDeveloperDialog
     public void setTimezone( String timezone )
     {
         this.timezone = timezone;
+    }
+    
+    public Properties getProperties()
+    {
+        return properties;
+    }
+
+    public void setProperties( Properties properties )
+    {
+        this.properties = properties;
     }
 
     @Override

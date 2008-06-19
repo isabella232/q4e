@@ -227,22 +227,11 @@ public class MavenPomBuildFormPage extends FormPage
 	@SuppressWarnings("unchecked")
     private Control createFilterControls( Composite parent, FormToolkit toolKit )
     {
-	    SelectionAdapter buttonListener = new SelectionAdapter()
+	    IComponentModificationListener buttonListener = new IComponentModificationListener()
         {
-            public void widgetDefaultSelected( SelectionEvent e )
+            public void componentModified( AbstractComponent component , Control ctrl )
             {
-                widgetSelected( e );
-            }
-
-            public void widgetSelected( SelectionEvent e )
-            {
-                if ( filterTableComponent.isModified() == true )
-                {
-                    pageModified();
-                    
-                    filterTableComponent.setEditButtonEnabled( false );
-                    filterTableComponent.setRemoveButtonEnabled( false );
-                }
+                pageModified();
             }
         };
         
@@ -253,9 +242,7 @@ public class MavenPomBuildFormPage extends FormPage
             new SimpleTableComponent( container, SWT.NULL, 
                                       pomModel.getBuild().getFilters(), "Filter"  );
         
-        filterTableComponent.addAddButtonListener( buttonListener );
-        filterTableComponent.addEditButtonListener( buttonListener );
-        filterTableComponent.addRemoveButtonListener( buttonListener );
+        filterTableComponent.addComponentModifyListener( buttonListener );
         
         return container;
     }

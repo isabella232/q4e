@@ -8,13 +8,14 @@ package org.devzuz.q.maven.pomeditor.pages;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 import org.apache.maven.model.Contributor;
 import org.apache.maven.model.Developer;
 import org.apache.maven.model.Model;
 import org.devzuz.q.maven.pomeditor.Messages;
-import org.devzuz.q.maven.pomeditor.components.PropertiesTableComponent;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditContributorDeveloperDialog;
 import org.devzuz.q.maven.pomeditor.model.ContributorComparator;
 import org.devzuz.q.maven.pomeditor.model.DeveloperComparator;
@@ -22,7 +23,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -48,7 +48,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
 
     private Table developersTable;
 
-    private List<Developer> developerList;
+    private List<Developer> developersList;
 
     private boolean isPageModified = false;
     
@@ -60,15 +60,11 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
 
     private Button removeContributorButton;
 
-    private PropertiesTableComponent contributorPropertiesTableComponent;
-
     private Button addDeveloperButton;
 
     private Button removeDeveloperButton;
 
     private Button editDeveloperButton;
-
-    private PropertiesTableComponent developerPropertiesTableComponent;
 
     private List<Contributor> contributorList;
 
@@ -88,7 +84,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     {
         super( editor, id, title );
         //this.pomModel = modelPOM;
-        this.developerList = modelPOM.getDevelopers();
+        this.developersList = modelPOM.getDevelopers();
         this.contributorList = modelPOM.getContributors();
     }
 
@@ -98,7 +94,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         form = managedForm.getForm();
         FormToolkit toolkit = managedForm.getToolkit();
         
-        form.getBody().setLayout( new GridLayout( 2 , false ) );        
+        form.getBody().setLayout( new GridLayout( 1 , false ) );        
         
         Section developerTable =
             toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
@@ -107,9 +103,11 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         developerTable.setLayoutData( createSectionLayoutData() );
         developerTable.setClient( createDeveloperTableControls( developerTable, toolkit ) );
         
+        /*
         Composite container = toolkit.createComposite( form.getBody() );
         container.setLayoutData( createSectionLayoutData() );
         createDeveloperPropertiesControls( container, toolkit );
+        */
         
         Section contributorTable = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         contributorTable.setDescription( "Information about people who have contributed to the project, but who do not have commit privileges" );
@@ -117,9 +115,11 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         contributorTable.setLayoutData( createSectionLayoutData() );
         contributorTable.setClient( createContributorTableControls( contributorTable, toolkit ) );
         
+        /*
         Composite container2 = toolkit.createComposite( form.getBody() );
         container2.setLayoutData( createSectionLayoutData() );
         createContributorPropertiesControls( container2, toolkit );
+        */
     }
 
     private GridData createSectionLayoutData()
@@ -133,7 +133,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         Composite container = toolKit.createComposite( parent );
         container.setLayout( new GridLayout( 2, false ) );
         
-        developersTable = toolKit.createTable( container, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
+        developersTable = toolKit.createTable( container, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE | SWT.H_SCROLL );
         developersTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
         developersTable.setLinesVisible( true );
         developersTable.setHeaderVisible( true );
@@ -174,6 +174,10 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         timezoneColumn.setWidth( 75 );
         timezoneColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Timezone );
         
+        TableColumn propertiesColumn = new TableColumn( developersTable, SWT.BEGINNING, 8 );
+        propertiesColumn.setWidth( 90 );
+        propertiesColumn.setText( "Properties" );
+        
         Composite container2 = toolKit.createComposite( container );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
         RowLayout layout = new RowLayout( SWT.VERTICAL );
@@ -205,45 +209,13 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         return container;
     
     }
-
-    private Control createDeveloperPropertiesControls( Composite container, FormToolkit toolKit )
-    {
     
-        container.setLayout( new FillLayout( SWT.VERTICAL ) );
-    
-        Section developerProperties =
-            toolKit.createSection( container, Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED |
-                            Section.DESCRIPTION );
-        developerProperties.setDescription( "Properties about the developer, such as an instant messenger handle." );
-        developerProperties.setText( Messages.MavenPomEditor_MavenPomEditor_Properties );
-        developerProperties.setClient( createDeveloperPropertiesInfoControls( developerProperties, toolKit ) );
-    
-        return container;
-    }
-
-    private Control createDeveloperPropertiesInfoControls( Composite form, FormToolkit toolKit )
-    {
-    
-        Composite container = toolKit.createComposite( form );
-        container.setLayout( new GridLayout( 1, false ) );        
-        
-        developerPropertiesTableComponent = new PropertiesTableComponent( container, SWT.None );
-        developerPropertiesTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
-        
-        DeveloperPropertiesTableComponentListener buttonListener = new DeveloperPropertiesTableComponentListener();
-        developerPropertiesTableComponent.addAddButtonListener( buttonListener );
-        developerPropertiesTableComponent.addEditButtonListener( buttonListener );
-        developerPropertiesTableComponent.addRemoveButtonListener( buttonListener );
-        
-        return container;
-    }
-
     private Control createContributorTableControls( Composite parent, FormToolkit toolKit )
     {
         Composite container = toolKit.createComposite( parent );
         container.setLayout( new GridLayout( 2, false ) );
         
-        contributorsTable = toolKit.createTable( container, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
+        contributorsTable = toolKit.createTable( container, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE | SWT.H_SCROLL );
         contributorsTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
         contributorsTable.setLinesVisible( true );
         contributorsTable.setHeaderVisible( true );
@@ -279,6 +251,10 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         timezoneColumn.setWidth( 75 );
         timezoneColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Timezone );
         
+        TableColumn propertiesColumn = new TableColumn( contributorsTable, SWT.BEGINNING, 7 );
+        propertiesColumn.setWidth( 90 );
+        propertiesColumn.setText( "Properties" );
+        
         Composite container2 = toolKit.createComposite( container );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
         RowLayout layout = new RowLayout( SWT.VERTICAL );
@@ -309,59 +285,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         return container;
     }
 
-    private Control createContributorPropertiesControls( Composite container, FormToolkit toolKit )
-    {
-        container.setLayout( new FillLayout( SWT.VERTICAL ) );
-        
-        Section contributorProperties =
-            toolKit.createSection( container, Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED |
-                            Section.DESCRIPTION );
-        contributorProperties.setDescription( "Properties about the contributor, such as an instant messenger handle." );
-        contributorProperties.setText( Messages.MavenPomEditor_MavenPomEditor_Properties );
-        contributorProperties.setClient( createContributorPropertiesInfoControls( contributorProperties, toolKit ) );
-        
-        return container;
-        
-    }
-
-    private Control createContributorPropertiesInfoControls( Composite form, FormToolkit toolKit )
-    {
-        Composite container = toolKit.createComposite( form );
-        container.setLayout( new GridLayout( 1, false ) );        
-        
-        contributorPropertiesTableComponent = new PropertiesTableComponent( container, SWT.None );
-        contributorPropertiesTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
-        
-        ContributorPropertiesTableComponentListener buttonListener = new ContributorPropertiesTableComponentListener();
-        contributorPropertiesTableComponent.addAddButtonListener( buttonListener );
-        contributorPropertiesTableComponent.addEditButtonListener( buttonListener );
-        contributorPropertiesTableComponent.addRemoveButtonListener( buttonListener );
-        
-        return container;
-    }
-
-    private class DeveloperPropertiesTableComponentListener extends SelectionAdapter
-    {
-        public void widgetSelected( SelectionEvent e )
-        {
-            if ( developerPropertiesTableComponent.isModified() == true )
-            {    
-                pageModified();
-            }
-        }
-    }
-    
-    private class ContributorPropertiesTableComponentListener extends SelectionAdapter
-    {
-        public void widgetSelected( SelectionEvent e )
-        {
-            if ( contributorPropertiesTableComponent.isModified() == true )
-            {
-                pageModified();
-            }
-        }
-    }
-
     private class DevelopersTableListener extends SelectionAdapter
     {
         private int selectedDeveloperIndex;
@@ -374,15 +297,12 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
             {
                 addDeveloperButton.setEnabled( true );
                 editDeveloperButton.setEnabled( true );
-                removeDeveloperButton.setEnabled( true );                
+                removeDeveloperButton.setEnabled( true );
                 
-                if ( developersTable.getSelectionIndex() >= 0 )
+                if( developersTable.getSelectionIndex() >= 0 )
                 {
                     selectedDeveloperIndex = developersTable.getSelectionIndex();
-                    selectedDeveloper = developerList.get( selectedDeveloperIndex );
-                    
-                    synchronizedSelectedDeveloperToProperties( selectedDeveloper.getProperties(), true);
-                   
+                    selectedDeveloper = developersList.get( selectedDeveloperIndex );
                 }
             }
         }
@@ -405,9 +325,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                 {
                     selectedContributorIndex = contributorsTable.getSelectionIndex();
                     selectedContributor = contributorList.get( selectedContributorIndex );
-                    
-                    synchronizedSelectedContributorToProperties( selectedContributor.getProperties(), true );
-                    
                 }
             }
         }
@@ -451,13 +368,13 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     }
                     
                     developer.setTimezone( nullIfBlank( addDialog.getTimezone() ) );
+                    developer.setProperties( nullIfSizeZero( addDialog.getProperties() ) );
                     
-                    developerList.add( developer );
+                    developersList.add( developer );
                     
                     populateDeveloperDataTable();
                     
                     pageModified();
-                    
                 }
             }
         }
@@ -494,7 +411,8 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                                          blankIfNull( selectedDeveloper.getOrganization() ), 
                                          blankIfNull( selectedDeveloper.getOrganizationUrl() ), 
                                          blankIfNull( oldRoles ), 
-                                         blankIfNull( selectedDeveloper.getTimezone() ) ) == Window.OK )
+                                         blankIfNull( selectedDeveloper.getTimezone() ),
+                                         selectedDeveloper.getProperties() ) == Window.OK )
             {             
                     
                 Developer newDeveloper = new Developer();
@@ -523,7 +441,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     newDeveloper.setRoles( null );
                 }
                 
-                newDeveloper.setProperties( selectedDeveloper.getProperties() );
+                newDeveloper.setProperties( nullIfSizeZero( editDialog.getProperties() ) );
                 
                 //if ( ( developerAlreadyExist( newDeveloper.getId() ) ) ||
                 //      ( !selectedDeveloper.getId().equalsIgnoreCase( newDeveloper.getId() ) ) )
@@ -532,9 +450,9 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     // old ID == new ID --> any field except ID was modified
                     if ( selectedDeveloper.getId().equalsIgnoreCase( newDeveloper.getId() ) )
                     {
-                        developerList.remove( selectedDeveloper );
+                        developersList.remove( selectedDeveloper );
                         
-                        developerList.add( newDeveloper );
+                        developersList.add( newDeveloper );
                         
                         populateDeveloperDataTable();
                         
@@ -551,9 +469,9 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                 }
                 else // id was modified
                 {
-                    developerList.remove( selectedDeveloper );
+                    developersList.remove( selectedDeveloper );
                     
-                    developerList.add( newDeveloper );
+                    developersList.add( newDeveloper );
                     
                     populateDeveloperDataTable();
                     
@@ -567,18 +485,15 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     {
         public void widgetSelected( SelectionEvent e )
         {
-            for ( int index = 0; index < developerList.size(); index++ )
+            for ( int index = 0; index < developersList.size(); index++ )
             {
                 if ( index == developersTable.getSelectionIndex() )
                 {
-                    Developer developer = (Developer) developerList.get( index );
-                    developerList.remove( developer );
+                    Developer developer = (Developer) developersList.get( index );
+                    developersList.remove( developer );
                 }
             }            
             
-            Properties prop = new Properties();
-            synchronizedSelectedDeveloperToProperties( prop , false );
-
             populateDeveloperDataTable();
             
             pageModified();
@@ -623,7 +538,8 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     }
                 
                     contributor.setTimezone( nullIfBlank( addDialog.getTimezone() ) );
-                
+                    contributor.setProperties( nullIfSizeZero( addDialog.getProperties() ) );
+                    
                     contributorList.add( contributor );
                 
                     populateContributorDataTable();
@@ -665,7 +581,8 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                                          blankIfNull( selectedContributor.getOrganization() ), 
                                          blankIfNull( selectedContributor.getOrganizationUrl() ), 
                                          blankIfNull( oldRoles ), 
-                                         blankIfNull( selectedContributor.getTimezone() ) ) == Window.OK )
+                                         blankIfNull( selectedContributor.getTimezone() ),
+                                         selectedContributor.getProperties() ) == Window.OK )
             {                    
                 Contributor newContributor = new Contributor();                    
                 
@@ -692,7 +609,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     newContributor.setRoles( null );
                 }
                 
-                newContributor.setProperties( selectedContributor.getProperties() );
+                newContributor.setProperties( nullIfSizeZero( editDialog.getProperties() ) );
                 
                 if ( contributorAlreadyExist( newContributor.getName(), newContributor.getEmail() ) )
                 {
@@ -748,20 +665,10 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                 }
             }
             
-            Properties prop = new Properties();
-            synchronizedSelectedContributorToProperties( prop, false );
-            
             populateContributorDataTable();
             
             pageModified();
         }
-    }
-
-    public void synchronizedSelectedContributorToProperties( Properties properties, 
-                                                             boolean addEnabled )
-    {
-        contributorPropertiesTableComponent.updateTable( properties );
-        contributorPropertiesTableComponent.setAddButtonEnabled( addEnabled ); 
     }
 
     public boolean contributorAlreadyExist( String name, String email )
@@ -778,16 +685,9 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         return false;
     }
 
-    public void synchronizedSelectedDeveloperToProperties( Properties properties, 
-                                                           boolean addEnabled  )
-    {
-        developerPropertiesTableComponent.updateTable( properties );
-        developerPropertiesTableComponent.setAddButtonEnabled( addEnabled );        
-    }
-
     private boolean developerAlreadyExist( String id )
     {
-        for ( Developer developer : developerList )
+        for ( Developer developer : developersList )
         {
             if ( developer.getId().equals( id ) )
             {
@@ -806,21 +706,19 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     @SuppressWarnings( "unchecked" )
     private void populateDeveloperDataTable()
     {
-        if ( developerList != null )
+        if ( developersList != null )
         {
             developersTable.removeAll();
-            Collections.sort( developerList, new DeveloperComparator() );            
+            Collections.sort( developersList, new DeveloperComparator() );            
             
-            for ( Developer developer : developerList )
+            for ( Developer developer : developersList )
             {
                 List<String> rolesList = developer.getRoles();
-                
-                String roleString = convertRolesListToString( rolesList );
-                    
                 TableItem item = new TableItem( developersTable, SWT.BEGINNING );
                 item.setText( new String[] { developer.getId(), developer.getName(), developer.getEmail(),
-                    developer.getUrl(), developer.getOrganization(), developer.getOrganizationUrl(),
-                                  roleString, developer.getTimezone() } );
+                                             developer.getUrl(), developer.getOrganization(), developer.getOrganizationUrl(),
+                                             convertRolesListToString( rolesList ), developer.getTimezone() , 
+                                             getPropertiesString( developer ) } );
             }
         }
     }
@@ -836,25 +734,38 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
             for ( Contributor cont : contributorList )
             {
                 List<String> rolesList = cont.getRoles();
-                
-                String roleString = convertRolesListToString( rolesList );
-                
                 TableItem item = new TableItem( contributorsTable, SWT.BEGINNING );
                 item.setText( new String[] { cont.getName(), cont.getEmail(),
                                   cont.getUrl(), cont.getOrganization(), cont.getOrganizationUrl(),
-                                  roleString, cont.getTimezone() } );
+                                  convertRolesListToString( rolesList ), cont.getTimezone(),
+                                  getPropertiesString( cont )} );
             }
         }
     }
     
-    private String nullIfBlank(String str) 
+    private String getPropertiesString( Contributor contributor )
     {
-        return ( str == null || str.equals( "" ) ) ? null : str;
-    }
-    
-    private String blankIfNull( String str )
-    {
-        return str != null ? str : "";
+        StringBuffer buffer = new StringBuffer();
+        Set< Map.Entry< Object , Object> > properties = contributor.getProperties().entrySet();
+        if( properties != null && properties.size() > 0 )
+        {
+            for( Map.Entry< Object , Object > object : properties )
+            {
+                if( buffer.length() > 0 )
+                    buffer.append( "," );
+                String key = ( String ) object.getKey();
+                String value = ( String ) object.getValue();
+                buffer.append( "{ " );
+                buffer.append( key );
+                buffer.append( " = " );
+                buffer.append( value );
+                buffer.append( " }" );
+            }
+            
+            return buffer.toString();
+        }
+        
+        return "";
     }
     
     private String convertRolesListToString( List<String> rolesList )
@@ -873,6 +784,24 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         }
         
         return roleString;
+    }
+    
+    private String nullIfBlank(String str) 
+    {
+        return ( str == null || str.equals( "" ) ) ? null : str;
+    }
+    
+    private String blankIfNull( String str )
+    {
+        return str != null ? str : "";
+    }
+    
+
+    private Properties nullIfSizeZero( Properties properties )
+    {
+        if( properties.size() > 0 )
+            return properties;
+        return null;
     }
 
     public boolean isDirty()

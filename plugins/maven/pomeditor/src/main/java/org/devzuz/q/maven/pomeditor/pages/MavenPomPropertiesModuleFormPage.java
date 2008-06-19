@@ -8,11 +8,11 @@ package org.devzuz.q.maven.pomeditor.pages;
 
 import org.apache.maven.model.Model;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
+import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
 import org.devzuz.q.maven.pomeditor.components.PropertiesTableComponent;
 import org.devzuz.q.maven.pomeditor.components.SimpleTableComponent;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -101,10 +101,7 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         
         propertiesTableComponent = new PropertiesTableComponent( container, SWT.None );
         
-        ComponentListener buttonListener = new ComponentListener();
-        propertiesTableComponent.addAddButtonListener( buttonListener );
-        propertiesTableComponent.addEditButtonListener( buttonListener );
-        propertiesTableComponent.addRemoveButtonListener( buttonListener );
+        propertiesTableComponent.addComponentModifyListener( new ComponentListener() );
         
         propertiesTableComponent.updateTable( pomModel.getProperties() );
         
@@ -120,28 +117,16 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         modulesTableComponent = new SimpleTableComponent( container, SWT.None, 
                                                           pomModel.getModules(), "Module" );
         
-        ComponentListener buttonListener = new ComponentListener();
-        modulesTableComponent.addAddButtonListener( buttonListener );
-        modulesTableComponent.addEditButtonListener( buttonListener );
-        modulesTableComponent.addRemoveButtonListener( buttonListener );
+        modulesTableComponent.addComponentModifyListener( new ComponentListener() );
         
         return container;
     }
 
-    private class ComponentListener extends SelectionAdapter
+    private class ComponentListener implements IComponentModificationListener
     {
-        public void widgetDefaultSelected( SelectionEvent e )
+        public void componentModified( AbstractComponent component , Control ctrl )
         {
-            widgetSelected( e );
-        }
-
-        public void widgetSelected( SelectionEvent e )
-        {
-            if ( ( modulesTableComponent.isModified() == true ) ||
-                 ( propertiesTableComponent.isModified() == true ) )
-            {
-                pageModified();
-            }
+            pageModified();
         }
     }
     

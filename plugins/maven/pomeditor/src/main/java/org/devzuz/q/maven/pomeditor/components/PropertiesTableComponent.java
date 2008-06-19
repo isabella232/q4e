@@ -8,7 +8,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -19,7 +18,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public class PropertiesTableComponent
-    extends Composite
+    extends AbstractComponent
 {
     private Table propertiesTable;
     
@@ -31,7 +30,7 @@ public class PropertiesTableComponent
 
     private Properties dataSource;
 
-    private boolean isModified;
+    private String oldKey , oldValue;
 
     public PropertiesTableComponent( Composite parent, int style )
     {
@@ -87,28 +86,27 @@ public class PropertiesTableComponent
         
         propertiesTable.removeAll();
         
-        if ( ( dataSource.keySet() != null ) && 
-             ( dataSource.size() > 0 ) )
-        {
-            for ( Object keys: dataSource.keySet() )
-            {
-                String str = ( String ) keys;
-                TableItem tableItem = new TableItem( propertiesTable, SWT.BEGINNING );
-                tableItem.setText( new String[] { str, dataSource.getProperty( str ).toString() } );
-            }
-        }
+        refreshPropertiesTable();
     }
     
     private void refreshPropertiesTable()
     {
         propertiesTable.removeAll();
         
-        for ( Object keys: dataSource.keySet() )
+        if ( ( dataSource.keySet() != null ) && ( dataSource.size() > 0 ) )
         {
-            String str = ( String ) keys;
-            TableItem tableItem = new TableItem( propertiesTable, SWT.BEGINNING );
-            tableItem.setText( new String[] { str, dataSource.getProperty( str ).toString() } );
+            for ( Object keys : dataSource.keySet() )
+            {
+                String str = (String) keys;
+                TableItem tableItem = new TableItem( propertiesTable, SWT.BEGINNING );
+                tableItem.setText( new String[] { str, dataSource.getProperty( str ).toString() } );
+            }
         }
+        
+        propertiesTable.deselectAll();
+        
+        removeButton.setEnabled( false );
+        editButton.setEnabled( false );
     }
     
     private class PropertiesTableListener extends SelectionAdapter
@@ -123,6 +121,10 @@ public class PropertiesTableComponent
                 addButton.setEnabled( true );
                 removeButton.setEnabled( true );
                 editButton.setEnabled( true );
+                
+                TableItem[] selectedItem = propertiesTable.getSelection();
+                oldKey = selectedItem[0].getText( 0 );
+                oldValue = selectedItem[0].getText( 1 );
             }
         }
     }
@@ -145,7 +147,7 @@ public class PropertiesTableComponent
                     TableItem item = new TableItem( propertiesTable, SWT.BEGINNING );
                     item.setText( new String[] { keyValueDialog.getKey(), keyValueDialog.getValue() } );
                     
-                    setModified( true );
+                    notifyListeners( propertiesTable );
                 }
             }
         }
@@ -155,10 +157,6 @@ public class PropertiesTableComponent
     {
         public void widgetSelected( SelectionEvent e )
         {
-            TableItem[] selectedItem = propertiesTable.getSelection();
-            String oldKey = selectedItem[0].getText( 0 );
-            String oldValue = selectedItem[0].getText( 1 );
-            
             KeyValueEditorDialog keyValueDialog = KeyValueEditorDialog.getKeyValueEditorDialog();
             
             if ( keyValueDialog.openWithEntry( oldKey, oldValue ) == Window.OK )
@@ -166,9 +164,9 @@ public class PropertiesTableComponent
                 dataSource.remove( oldKey );
                 dataSource.put( keyValueDialog.getKey(), keyValueDialog.getValue() );
                 
-                setModified( true );
-                    
-                refreshPropertiesTable();             
+                refreshPropertiesTable();
+                
+                notifyListeners( propertiesTable );
             }
         }
     }
@@ -177,69 +175,12 @@ public class PropertiesTableComponent
     {
         public void widgetSelected( SelectionEvent e )
         {
-            TableItem[] selectedItem = propertiesTable.getSelection();
-            String key = selectedItem[0].getText();
-            dataSource.remove( key );
-            
-            setModified( true );
+            dataSource.remove( oldKey );
             
             refreshPropertiesTable();
+            
+            notifyListeners( propertiesTable );
         }
-    }
-    
-    public void setAddButtonEnabled( boolean enabled )
-    {
-        addButton.setEnabled( enabled );
-    }
-    
-    public void setEditButtonEnabled( boolean enabled )
-    {
-        editButton.setEnabled( enabled );
-    }
-    
-    public void setRemoveButtonEnabled( boolean enabled )
-    {
-        removeButton.setEnabled( enabled );
-    }
-    
-    public void addAddButtonListener( SelectionListener listener )
-    {
-        addButton.addSelectionListener( listener );
-    }
-    
-    public void addEditButtonListener( SelectionListener listener )
-    {
-        editButton.addSelectionListener( listener );
-    }
-    
-    public void addRemoveButtonListener( SelectionListener listener )
-    {
-        removeButton.addSelectionListener( listener );
-    }
-    
-    public void removeAddButtonListener( SelectionListener listener )
-    {
-        addButton.removeSelectionListener( listener );
-    }
-    
-    public void removeEditButtonListener( SelectionListener listener )
-    {
-        editButton.removeSelectionListener( listener );
-    }
-    
-    public void removeRemoveButtonListener( SelectionListener listener )
-    {
-        removeButton.removeSelectionListener( listener );
-    }
-    
-    public boolean isModified()
-    {
-        return isModified;
-    }
-    
-    public void setModified( boolean isModified )
-    {
-        this.isModified = isModified;
     }
 
     public boolean keyAlreadyExist( String key )

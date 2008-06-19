@@ -8,7 +8,6 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -17,7 +16,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
-public class SimpleTableComponent extends Composite 
+public class SimpleTableComponent extends AbstractComponent 
 {
 	private Table simpleTable;
 	
@@ -26,8 +25,6 @@ public class SimpleTableComponent extends Composite
 	private Button editButton;
 	
 	private Button removeButton;
-
-    private boolean isModified;
 
     private List<String> dataList;
 
@@ -93,6 +90,11 @@ public class SimpleTableComponent extends Composite
 	            tableItem.setText( str );
 	        }
 	    }
+	    
+	    simpleTable.deselectAll();
+	    
+	    removeButton.setEnabled( false );
+        editButton.setEnabled( false );
 	}
 	
 	private class SimpleTableListener extends SelectionAdapter
@@ -129,8 +131,7 @@ public class SimpleTableComponent extends Composite
                 
                 populateTable();
                 
-                setModified( true );
-                
+                notifyListeners( simpleTable );
             }
         }
 	}
@@ -149,7 +150,7 @@ public class SimpleTableComponent extends Composite
                 
                 populateTable();
                 
-                setModified( true );
+                notifyListeners( simpleTable );
             }
         }
     }
@@ -162,63 +163,7 @@ public class SimpleTableComponent extends Composite
             
             populateTable();
             
-            setModified( true );
+            notifyListeners( simpleTable );
         }
     }
-	
-	public void setAddButtonEnabled( boolean enabled )
-    {
-        addButton.setEnabled( enabled );
-    }
-    
-    public void setEditButtonEnabled( boolean enabled )
-    {
-        editButton.setEnabled( enabled );
-    }
-    
-    public void setRemoveButtonEnabled( boolean enabled )
-    {
-        removeButton.setEnabled( enabled );
-    }
-    
-    public void addAddButtonListener( SelectionListener listener )
-    {
-        addButton.addSelectionListener( listener );
-    }
-    
-    public void addEditButtonListener( SelectionListener listener )
-    {
-        editButton.addSelectionListener( listener );
-    }
-    
-    public void addRemoveButtonListener( SelectionListener listener )
-    {
-        removeButton.addSelectionListener( listener );
-    }
-    
-    public void removeAddButtonListener( SelectionListener listener )
-    {
-        addButton.removeSelectionListener( listener );
-    }
-    
-    public void removeEditButtonListener( SelectionListener listener )
-    {
-        editButton.removeSelectionListener( listener );
-    }
-    
-    public void removeRemoveButtonListener( SelectionListener listener )
-    {
-        removeButton.removeSelectionListener( listener );
-    }
-    
-	public boolean isModified()
-    {
-        return isModified;
-    }
-    
-    public void setModified( boolean isModified )
-    {
-        this.isModified = isModified;
-    }
-
 }
