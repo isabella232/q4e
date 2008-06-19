@@ -171,7 +171,7 @@ public class MavenPomDependenciesFormPage extends FormPage
             }
         };
         
-        Composite container = toolKit.createComposite( parent, SWT.None );
+        Composite container = toolKit.createComposite( parent, SWT.BORDER );
         container.setLayout( new GridLayout( 1, false ) );
         
         dependencyTableComponent = new DependencyTableComponent( container, SWT.None, dependencyList );
