@@ -103,23 +103,11 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         developerTable.setLayoutData( createSectionLayoutData() );
         developerTable.setClient( createDeveloperTableControls( developerTable, toolkit ) );
         
-        /*
-        Composite container = toolkit.createComposite( form.getBody() );
-        container.setLayoutData( createSectionLayoutData() );
-        createDeveloperPropertiesControls( container, toolkit );
-        */
-        
         Section contributorTable = toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         contributorTable.setDescription( "Information about people who have contributed to the project, but who do not have commit privileges" );
         contributorTable.setText( Messages.MavenPomEditor_MavenPomEditor_Contributors );
         contributorTable.setLayoutData( createSectionLayoutData() );
         contributorTable.setClient( createContributorTableControls( contributorTable, toolkit ) );
-        
-        /*
-        Composite container2 = toolkit.createComposite( form.getBody() );
-        container2.setLayoutData( createSectionLayoutData() );
-        createContributorPropertiesControls( container2, toolkit );
-        */
     }
 
     private GridData createSectionLayoutData()
