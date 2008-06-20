@@ -57,8 +57,6 @@ public class MavenPomBasicFormPage extends FormPage
 
     private String packaging;
 
-    private String classifier;
-
     private String name;
 
     private String description;
@@ -74,6 +72,8 @@ public class MavenPomBasicFormPage extends FormPage
     private String parentPOMVersion;
 
     private String parentPOMRelPath;
+    
+    private String mavenVersion;
 
     private boolean isPageModified;
 
@@ -104,6 +104,8 @@ public class MavenPomBasicFormPage extends FormPage
     private Text modelVersionText;
 
     private String modelVersion;
+
+    private Text prerequisiteMavenText;
 
     public MavenPomBasicFormPage( FormEditor editor, String id, String title, Model model )
     {
@@ -410,6 +412,15 @@ public class MavenPomBasicFormPage extends FormPage
         modelVersionText.setText( getModelVersion() );
         modelVersionText.addModifyListener( textFieldListener );
         
+        Label prerequisiteMavenLabel =
+            toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_MavenVersion, SWT.None );
+        prerequisiteMavenLabel.setLayoutData( createLabelLayoutData( RIGHT_LABEL_WIDTH_HINT ) );
+        
+        prerequisiteMavenText = toolKit.createText( parent, "Prerequisites" );
+        this.createTextDisplay( prerequisiteMavenText, createControlLayoutData() );
+        prerequisiteMavenText.setText( getMavenVersion() );
+        prerequisiteMavenText.addModifyListener( textFieldListener );        
+        
         FocusListener focusListener = new FocusListener()
         {
 
@@ -511,7 +522,6 @@ public class MavenPomBasicFormPage extends FormPage
         setArtifactID( blankIfNull( pomModel.getArtifactId() ) );
         setVersion( blankIfNull( pomModel.getVersion() ) );
         setPackaging( blankIfNull( pomModel.getPackaging() ) );
-        setClassifier( "" );
 
         //sets data to be used in createMoreProjectInfoControls
         setName( blankIfNull( pomModel.getName() ) );
@@ -519,6 +529,15 @@ public class MavenPomBasicFormPage extends FormPage
         setUrl( blankIfNull( pomModel.getUrl() ) );
         setInceptionYear( blankIfNull( pomModel.getInceptionYear() ) );
         setModelVersion( blankIfNull( pomModel.getModelVersion() ) );
+        
+        if ( pomModel.getPrerequisites() != null )
+        {
+            setMavenVersion( blankIfNull( pomModel.getPrerequisites().getMaven() ) );
+        }
+        else
+        {
+            setMavenVersion( "" );
+        }
 
         //sets data to be used in createParentProjectControls
         if ( pomModel.getParent() != null )
@@ -549,6 +568,21 @@ public class MavenPomBasicFormPage extends FormPage
     	pomModel.setUrl( nullIfBlank( urlText.getText().trim() ) );
     	pomModel.setInceptionYear( nullIfBlank( inceptionYearText.getText().trim() ) );
     	pomModel.setModelVersion( nullIfBlank( modelVersionText.getText().trim() ) );
+    	
+    	if ( prerequisiteMavenText.getText().trim().length() > 0 )
+    	{
+    	    if ( pomModel.getPrerequisites() == null )
+    	    {
+    	        Prerequisites prerequisites = new Prerequisites();
+    	        pomModel.setPrerequisites( prerequisites );
+    	    }
+    	    
+    	    pomModel.getPrerequisites().setMaven( nullIfBlank( prerequisiteMavenText.getText().trim() ) );
+    	}
+    	else
+    	{
+    	    pomModel.setPrerequisites( null );
+    	}
     	
     	if ( ( parentPOMGroupIdText.getText().trim().length() > 0 ) ||
     	     ( parentPOMArtifactIdText.getText().trim().length() > 0 ) || 
@@ -651,16 +685,6 @@ public class MavenPomBasicFormPage extends FormPage
         this.packaging = packaging;
     }
 
-    public String getClassifier()
-    {
-        return classifier;
-    }
-
-    public void setClassifier( String classifier )
-    {
-        this.classifier = classifier;
-    }
-
     public String getName()
     {
         return name;
@@ -755,5 +779,15 @@ public class MavenPomBasicFormPage extends FormPage
     {
         this.isPageModified = isPageModified;
 
+    }
+
+    public String getMavenVersion()
+    {
+        return mavenVersion;
+    }
+
+    public void setMavenVersion( String mavenVersion )
+    {
+        this.mavenVersion = mavenVersion;
     }
 }
