@@ -296,21 +296,32 @@ public class MavenPomFormEditor extends FormEditor
     {
         if ( getPomFile() != null )
         {
-            try
+            if ( checkIfPomEmpty())
             {
-                this.pomModel = new MavenXpp3Reader().read( new FileReader( getPomFile() ) );
+                this.pomModel = new Model();
+                
+                pomModel.setGroupId( project.getName() );
+                pomModel.setArtifactId( project.getName() );
+                pomModel.setVersion( "1.0-SNAPSHOT" );
             }
-            catch ( FileNotFoundException e )
+            else
             {
-                e.printStackTrace();
-            }
-            catch ( IOException e )
-            {
-                e.printStackTrace();
-            }
-            catch ( XmlPullParserException e )
-            {
-                e.printStackTrace();
+                try
+                {
+                    this.pomModel = new MavenXpp3Reader().read( new FileReader( getPomFile() ) );
+                }
+                catch ( FileNotFoundException e )
+                {
+                    e.printStackTrace();
+                }
+                catch ( IOException e )
+                {
+                    e.printStackTrace();
+                }
+                catch ( XmlPullParserException e )
+                {
+                    e.printStackTrace();
+                }
             }
         }
         else
@@ -320,6 +331,19 @@ public class MavenPomFormEditor extends FormEditor
 
         return true;
 
+    }
+
+    private boolean checkIfPomEmpty()
+    {
+            File file =  getPomFile();
+            
+            if ( file.length() == 0 )
+            {    
+                
+                return true;
+            }                    
+        
+        return false;
     }
 
     @Override
@@ -398,7 +422,7 @@ public class MavenPomFormEditor extends FormEditor
         IEditorInput input = getEditorInput();
         if ( input instanceof IFileEditorInput )
         {
-            return ( (IFileEditorInput) input ).getFile().getLocation().toFile();
+            return ( (IFileEditorInput) input ).getFile().getLocation().toFile();            
         }
 
         return null;

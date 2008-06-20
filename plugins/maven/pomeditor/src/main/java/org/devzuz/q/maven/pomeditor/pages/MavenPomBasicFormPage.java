@@ -8,6 +8,7 @@ package org.devzuz.q.maven.pomeditor.pages;
 
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
+import org.apache.maven.model.Prerequisites;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.formeditor.MavenPomFormEditor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -109,7 +110,7 @@ public class MavenPomBasicFormPage extends FormPage
         super( editor, id, title );
         this.pomModel = model;
         this.editor = editor;
-
+        
         setPOMEditorProjectInformation();
 
     }
@@ -506,10 +507,10 @@ public class MavenPomBasicFormPage extends FormPage
     private void setPOMEditorProjectInformation()
     {
         //sets data to be used in createBasicCoordinateControls
-        setGroupID( pomModel.getGroupId() );
-        setArtifactID( pomModel.getArtifactId() );
-        setVersion( pomModel.getVersion() );
-        setPackaging( pomModel.getPackaging() );
+        setGroupID( blankIfNull( pomModel.getGroupId() ) );
+        setArtifactID( blankIfNull( pomModel.getArtifactId() ) );
+        setVersion( blankIfNull( pomModel.getVersion() ) );
+        setPackaging( blankIfNull( pomModel.getPackaging() ) );
         setClassifier( "" );
 
         //sets data to be used in createMoreProjectInfoControls
