@@ -125,7 +125,7 @@ public class MavenExceptionHandlerChain
         {
             /* handler not found for this class try with its superclass */
             classesTested.add( classToHandle );
-            classToHandle = (Class<? extends Exception>) classToHandle.getSuperclass();
+            classToHandle = (Class<? extends Throwable>) classToHandle.getSuperclass();
 
             handler = handlers.get( classToHandle );
         }
