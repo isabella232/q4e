@@ -6,16 +6,17 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.pomeditor.pages;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.DependencyManagement;
-import org.apache.maven.model.Exclusion;
-import org.apache.maven.model.Model;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.components.DependencyExclusionTableComponent;
 import org.devzuz.q.maven.pomeditor.components.DependencyTableComponent;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.observable.value.IValueChangeListener;
+import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
+import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -35,15 +36,11 @@ public class MavenPomDependenciesFormPage extends FormPage
 {
     private ScrolledForm form;
     
-    private Model pomModel;
+    private Model pomModel; 
     
-    private List<Dependency> dependencyList; 
+    private WritableValue selectedDependency = new WritableValue();
     
-    private Dependency selectedDependency;
-    
-    private Dependency selectedDependencyInMgt;
-   
-    private boolean isPageModified;
+    private WritableValue selectedDependencyInMgt = new WritableValue();
 
     private DependencyTableComponent dependencyTableComponent;
 
@@ -51,11 +48,11 @@ public class MavenPomDependenciesFormPage extends FormPage
 
     private DependencyTableComponent dependencyManagementTableComponent;
 
-    private DependencyManagement dependencyManagement;
-
-    private List<Dependency> dependencyManagementDependencyList;
-
     private DependencyExclusionTableComponent dependencyManagementExclusionTableComponent;
+    
+    private EditingDomain domain;
+    
+    private DataBindingContext bindingContext;
     
     public MavenPomDependenciesFormPage( String id, String title )
     {
@@ -64,22 +61,12 @@ public class MavenPomDependenciesFormPage extends FormPage
 
     @SuppressWarnings ("unchecked")
     public MavenPomDependenciesFormPage( FormEditor editor, String id, 
-    		String title, Model model)
+    		String title, Model model, EditingDomain domain, DataBindingContext bindingContext)
     {
         super( editor, id, title );
         this.pomModel = model;
-        
-        this.dependencyList = pomModel.getDependencies();
-        
-        dependencyManagement = pomModel.getDependencyManagement();
-        
-        if ( dependencyManagement == null )
-        {
-            dependencyManagement = new DependencyManagement();
-            pomModel.setDependencyManagement( dependencyManagement );
-        }
-        
-        this.dependencyManagementDependencyList = dependencyManagement.getDependencies();
+        this.domain = domain;
+        this.bindingContext = bindingContext;
     }
 
     @SuppressWarnings( "unchecked" )
@@ -112,75 +99,24 @@ public class MavenPomDependenciesFormPage extends FormPage
     
     private Control createDependencyTableControls( Composite parent , FormToolkit toolKit )
     {
-        SelectionAdapter tableListener = new SelectionAdapter()
-        {
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-                widgetSelected( e );
-            }
-            
-            @SuppressWarnings ("unchecked")
-            public void widgetSelected( SelectionEvent e )
-            {
-                selectedDependency = dependencyTableComponent.getSelectedDependency();
-                synchronizeSelectedDependencyToExclusion( selectedDependency.getExclusions(), 
-                                                          true );
-            }
-        };
-        
-        //Listener for adding or editing dependencies
-        SelectionAdapter buttonListener = new SelectionAdapter()
-        {
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-                widgetSelected( e );
-            }
-
-            public void widgetSelected( SelectionEvent e )
-            {
-                if ( dependencyTableComponent.isModified() == true )
-                {
-                    pageModified();
-                    
-                    dependencyTableComponent.setEditButtonEnabled( false );
-                    dependencyTableComponent.setRemoveButtonEnabled( false );
-                }
-                
-            }
-        };
-        
-        SelectionAdapter removeButtonListener = new SelectionAdapter()
-        {
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-                widgetSelected( e );
-            }
-
-            @SuppressWarnings ("unchecked")
-            public void widgetSelected( SelectionEvent e )
-            {
-                if ( dependencyTableComponent.isModified() == true )
-                {
-                    synchronizeSelectedDependencyToExclusion( Collections.EMPTY_LIST, false );
-                    
-                    pageModified();
-                    
-                    dependencyTableComponent.setEditButtonEnabled( false );
-                    dependencyTableComponent.setRemoveButtonEnabled( false );
-                }
-            }
-        };
         
         Composite container = toolKit.createComposite( parent, SWT.BORDER );
         container.setLayout( new GridLayout( 1, false ) );
         
-        dependencyTableComponent = new DependencyTableComponent( container, SWT.None, dependencyList );
+        dependencyTableComponent = new DependencyTableComponent( container, SWT.None, pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEPENDENCIES, PomPackage.Literals.DEPENDENCIES_TYPE__DEPENDENCY }, domain, selectedDependency );
         dependencyTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
-        
-        dependencyTableComponent.addDependencyTableListener( tableListener );
-        dependencyTableComponent.addAddButtonListener( buttonListener );
-        dependencyTableComponent.addEditButtonListener( buttonListener );
-        dependencyTableComponent.addRemoveButtonListener( removeButtonListener );
+        selectedDependency.addValueChangeListener( new IValueChangeListener() {
+        	public void handleValueChange(org.eclipse.core.databinding.observable.value.ValueChangeEvent event) {
+        		if( null == event.diff.getNewValue() )
+        		{
+        			exclusionTableComponent.setAddButtonEnabled( false );
+        		}
+        		else
+        		{
+        			exclusionTableComponent.setAddButtonEnabled( true );
+        		}
+        	};
+        } );
         
         // Excludes
         Composite excludesContainer = toolKit.createComposite( container );
@@ -188,20 +124,6 @@ public class MavenPomDependenciesFormPage extends FormPage
         createDependencyExclusionControls( excludesContainer , toolKit );
         
         return container;
-    }
-
-    protected void synchronizeSelectedDependencyToExclusion( List<Exclusion> exclusionList, 
-                                                             boolean enableAdd )
-    {
-        exclusionTableComponent.updateTable( exclusionList );
-        exclusionTableComponent.setAddButtonEnabled( enableAdd );        
-    }
-    
-    protected void synchronizeSelectedDependencyInMgtToExclusion( List<Exclusion> exclusionList,
-                                                                  boolean enableAdd )
-    {
-        dependencyManagementExclusionTableComponent.updateTable( exclusionList );
-        dependencyManagementExclusionTableComponent.setAddButtonEnabled( enableAdd );
     }
     
 
@@ -224,7 +146,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         Composite container = toolKit.createComposite( form );
         container.setLayout( new GridLayout( 1, false ) ); 
         
-        exclusionTableComponent = new DependencyExclusionTableComponent( container, SWT.None );
+        exclusionTableComponent = new DependencyExclusionTableComponent( container, SWT.None, selectedDependency, new EStructuralFeature[]{ PomPackage.Literals.DEPENDENCY__EXCLUSIONS, PomPackage.Literals.EXCLUSIONS_TYPE__EXCLUSION }, domain );
         exclusionTableComponent.setLayoutData( new GridData( SWT.BEGINNING, SWT.FILL, false, true) );
         
         DependencyExclusionTableComponentListener buttonListener = new DependencyExclusionTableComponentListener();
@@ -237,74 +159,24 @@ public class MavenPomDependenciesFormPage extends FormPage
 
     private Control createDependencyManagementTableControls( Composite parent, FormToolkit toolKit )
     {
-        SelectionAdapter tableListener = new SelectionAdapter()
-        {
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-                widgetSelected( e );
-            }
-
-            @SuppressWarnings ("unchecked")
-            public void widgetSelected( SelectionEvent e )
-            {
-                selectedDependencyInMgt = dependencyManagementTableComponent.getSelectedDependency();
-                synchronizeSelectedDependencyInMgtToExclusion( selectedDependencyInMgt.getExclusions(), 
-                                                               true );
-            }
-        };
-        
-        SelectionAdapter buttonListener = new SelectionAdapter()
-        {
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-                widgetSelected( e );
-            }
-
-            public void widgetSelected( SelectionEvent e )
-            {
-                if ( dependencyManagementTableComponent.isModified() == true )
-                {
-                    pageModified();
-                    
-                    dependencyManagementTableComponent.setEditButtonEnabled( false );
-                    dependencyManagementTableComponent.setRemoveButtonEnabled( false );
-                }
-            }
-        };
-        
-        SelectionAdapter removeButtonListener = new SelectionAdapter()
-        {
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-                widgetSelected( e );
-            }
-
-            @SuppressWarnings ("unchecked")
-            public void widgetSelected( SelectionEvent e )
-            {
-                if ( dependencyManagementTableComponent.isModified() == true )
-                {
-                    synchronizeSelectedDependencyInMgtToExclusion( Collections.EMPTY_LIST, false );
-                    
-                    pageModified();
-                    
-                    dependencyManagementTableComponent.setEditButtonEnabled( false );
-                    dependencyManagementTableComponent.setRemoveButtonEnabled( false );
-                }
-            }
-        };
-        
         Composite container = toolKit.createComposite( parent, SWT.BORDER );
         container.setLayout( new GridLayout( 1, false ) );
         
         dependencyManagementTableComponent = 
-            new DependencyTableComponent( container, SWT.None, dependencyManagementDependencyList );
+            new DependencyTableComponent( container, SWT.None, pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEPENDENCY_MANAGEMENT, PomPackage.Literals.DEPENDENCY_MANAGEMENT__DEPENDENCIES }, domain, selectedDependencyInMgt );
         dependencyManagementTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
-        
-        dependencyManagementTableComponent.addDependencyTableListener( tableListener );
-        dependencyManagementTableComponent.addAddButtonListener( buttonListener );
-        dependencyManagementTableComponent.addEditButtonListener( buttonListener );
-        dependencyManagementTableComponent.addRemoveButtonListener( removeButtonListener );
+        selectedDependencyInMgt.addValueChangeListener( new IValueChangeListener() {
+        	public void handleValueChange(ValueChangeEvent event) {
+        		if( null == event.diff.getNewValue() )
+        		{
+        			dependencyManagementExclusionTableComponent.setAddButtonEnabled( false );
+        		}
+        		else
+        		{
+        			dependencyManagementExclusionTableComponent.setAddButtonEnabled( true );
+        		}
+        	}
+        } );
         
         // Excludes
         Composite excludesContainer = toolKit.createComposite( container );
@@ -331,7 +203,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         Composite container = toolKit.createComposite( form );
         container.setLayout( new GridLayout( 1, false ) ); 
         
-         dependencyManagementExclusionTableComponent = new DependencyExclusionTableComponent( container, SWT.None );
+         dependencyManagementExclusionTableComponent = new DependencyExclusionTableComponent( container, SWT.None, selectedDependencyInMgt, new EStructuralFeature[]{ PomPackage.Literals.DEPENDENCY__EXCLUSIONS, PomPackage.Literals.EXCLUSIONS_TYPE__EXCLUSION }, domain );
          dependencyManagementExclusionTableComponent.setLayoutData( new GridData( SWT.BEGINNING, SWT.FILL, false, true, 2, 1 ) );
          
          DependencyExclusionTableComponentListener buttonListener = new DependencyExclusionTableComponentListener();
@@ -351,30 +223,8 @@ public class MavenPomDependenciesFormPage extends FormPage
 
         public void widgetSelected( SelectionEvent e )
         {
-            if ( ( exclusionTableComponent.isModified() == true ) ||
-                 ( dependencyManagementExclusionTableComponent.isModified() == true ) )
-            {
-                pageModified();
-            }            
-            
             exclusionTableComponent.setEditButtonEnabled( false );
             exclusionTableComponent.setRemoveButtonEnabled( false );
         }
-    }
-
-	protected void pageModified()
-	{
-	    isPageModified = true;
-		getEditor().editorDirtyStateChanged();
-	}    
-    
-    public boolean isDirty()
-    {
-        return isPageModified;
-    }
-    
-    public void setPageModified( boolean isPageModified )
-    {
-        this.isPageModified = isPageModified;
     }
 }

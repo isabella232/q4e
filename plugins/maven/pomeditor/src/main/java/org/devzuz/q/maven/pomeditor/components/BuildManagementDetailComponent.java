@@ -1,7 +1,14 @@
 package org.devzuz.q.maven.pomeditor.components;
 
 import org.apache.maven.model.Build;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -31,11 +38,18 @@ public class BuildManagementDetailComponent
 
     private Text defaultGoalText;
 
-    private Build build;   
+    private Model model;   
     
-    public BuildManagementDetailComponent( Composite parent, int style )
+    private EditingDomain domain;
+    
+    private DataBindingContext bindingContext;
+    
+    public BuildManagementDetailComponent( Composite parent, int style, Model model, EditingDomain domain, DataBindingContext bindingContext )
     {        
         super( parent, style );
+        this.model = model;
+        this.domain = domain;
+        this.bindingContext = bindingContext;
 
         setLayout( new GridLayout( 2, false ) );
         
@@ -45,6 +59,12 @@ public class BuildManagementDetailComponent
         
         defaultGoalText = new Text( this, SWT.BORDER | SWT.SINGLE );
         defaultGoalText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__DEFAULT_GOAL }, 
+        		SWTObservables.observeText( defaultGoalText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label finalNameLabel = new Label( this, SWT.NULL );
         finalNameLabel.setLayoutData( createLabelLayoutData() );
@@ -52,6 +72,12 @@ public class BuildManagementDetailComponent
         
         finalNameText = new Text( this, SWT.BORDER | SWT.SINGLE );
         finalNameText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__FINAL_NAME }, 
+        		SWTObservables.observeText( finalNameText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label directoryLabel = new Label( this, SWT.NULL );
         directoryLabel.setLayoutData( createLabelLayoutData() );
@@ -59,6 +85,12 @@ public class BuildManagementDetailComponent
         
         directoryText = new Text( this, SWT.BORDER | SWT.SINGLE );
         directoryText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__DIRECTORY }, 
+        		SWTObservables.observeText( directoryText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label outputDirLabel = new Label( this, SWT.NULL );
         outputDirLabel.setLayoutData( createLabelLayoutData() );
@@ -66,6 +98,12 @@ public class BuildManagementDetailComponent
         
         outputDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
         outputDirText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__OUTPUT_DIRECTORY }, 
+        		SWTObservables.observeText( outputDirText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label testOutputDirLabel = new Label( this, SWT.NULL );
         testOutputDirLabel.setLayoutData( createLabelLayoutData() );
@@ -73,6 +111,12 @@ public class BuildManagementDetailComponent
         
         testOutputDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
         testOutputDirText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__TEST_OUTPUT_DIRECTORY }, 
+        		SWTObservables.observeText( testOutputDirText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label sourceDirLabel = new Label( this, SWT.NULL );
         sourceDirLabel.setLayoutData( createLabelLayoutData() );
@@ -80,6 +124,12 @@ public class BuildManagementDetailComponent
         
         sourceDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
         sourceDirText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__SOURCE_DIRECTORY }, 
+        		SWTObservables.observeText( sourceDirText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label scriptSourceDirLabel = new Label( this, SWT.NULL );
         scriptSourceDirLabel.setLayoutData( createLabelLayoutData() );
@@ -87,6 +137,12 @@ public class BuildManagementDetailComponent
         
         scriptSourceDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
         scriptSourceDirText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__SCRIPT_SOURCE_DIRECTORY }, 
+        		SWTObservables.observeText( scriptSourceDirText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label testSourceDirLabel = new Label( this, SWT.NULL );
         testSourceDirLabel.setLayoutData( createLabelLayoutData() );
@@ -94,6 +150,12 @@ public class BuildManagementDetailComponent
         
         testSourceDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
         testSourceDirText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__TEST_SOURCE_DIRECTORY }, 
+        		SWTObservables.observeText( testSourceDirText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
     }
 
@@ -109,136 +171,6 @@ public class BuildManagementDetailComponent
         GridData labelData = new GridData( SWT.BEGINNING , SWT.CENTER , false , false  );
         labelData.widthHint = 132;
         return labelData;
-    }
-    
-    public void updateComponent( Build buildData )
-    {
-        ModifyListener listener = new ModifyListener()
-        {
-            public void modifyText( ModifyEvent e )
-            {
-                notifyListeners( ( Control ) e.widget );
-            }
-        };
-        
-        assert buildData != null;
-        
-        this.build = buildData;
-        
-        setDefaultGoal( build.getDefaultGoal() );
-        setFinalName( build.getFinalName() );
-        setDirectory( build.getDirectory() );
-        setOutputDirectory( build.getOutputDirectory() );
-        setTestOutputDirector( build.getTestOutputDirectory() );
-        setSourceDirectory( build.getSourceDirectory() );
-        setScriptSourceDirectory( build.getScriptSourceDirectory() );
-        setTestSourceDirectory( build.getTestSourceDirectory() );
-        
-        addModifyListener ( listener );
-    }
-    
-    public void addModifyListener( ModifyListener listener )
-    {
-        defaultGoalText.addModifyListener( listener );
-        finalNameText.addModifyListener( listener );
-        directoryText.addModifyListener( listener );
-        outputDirText.addModifyListener( listener );
-        testOutputDirText.addModifyListener( listener );
-        sourceDirText.addModifyListener( listener );
-        scriptSourceDirText.addModifyListener( listener );
-        testSourceDirText.addModifyListener( listener );        
-    }
-    
-    public void removeModifyListener( ModifyListener listener )
-    {
-        defaultGoalText.removeModifyListener( listener );
-        finalNameText.removeModifyListener( listener );
-        directoryText.removeModifyListener( listener );
-        outputDirText.removeModifyListener( listener );
-        testOutputDirText.removeModifyListener( listener );
-        sourceDirText.removeModifyListener( listener );
-        scriptSourceDirText.removeModifyListener( listener );
-        testSourceDirText.removeModifyListener( listener );
-    }
-    
-    public String getDefaultGoal()
-    {
-        return nullIfBlank( defaultGoalText.getText().trim() );
-    }
-    
-    public void setDefaultGoal( String defaultGoal )
-    {
-        defaultGoalText.setText( blankIfNull( defaultGoal ) );
-    }
-    
-    public String getFinalName()
-    {
-        return nullIfBlank( finalNameText.getText().trim() );
-    }
-    
-    public void setFinalName( String finalName )
-    {
-        finalNameText.setText( blankIfNull( finalName ) );
-    }
-    
-    public String getDirectory()
-    {
-        return nullIfBlank( directoryText.getText().trim() );
-    }
-    
-    public void setDirectory( String directory )
-    {
-        directoryText.setText( blankIfNull( directory ) );
-    }
-    
-    public String getOutputDirectory()
-    {
-        return nullIfBlank( outputDirText.getText().trim() );
-    }
-    
-    public void setOutputDirectory( String outputDirectory )
-    {
-        outputDirText.setText( blankIfNull( outputDirectory ) );
-    }
-    
-    public String getTestOutputDirectory()
-    {
-        return nullIfBlank( testOutputDirText.getText().trim() );
-    }
-    
-    public void setTestOutputDirector( String testOutputDirectory )
-    {
-        testOutputDirText.setText( blankIfNull( testOutputDirectory ) );
-    }
-    
-    public String getSourceDirectory()
-    {
-        return nullIfBlank( sourceDirText.getText().trim() );
-    }
-    
-    public void setSourceDirectory( String sourceDirectory )
-    {
-        sourceDirText.setText( blankIfNull( sourceDirectory ) );
-    }
-    
-    public String getScriptSourceDirectory()
-    {
-        return nullIfBlank( scriptSourceDirText.getText().trim() );
-    }
-    
-    public void setScriptSourceDirectory( String scriptSourceDirectory )
-    {
-        scriptSourceDirText.setText( blankIfNull( scriptSourceDirectory ) );
-    }
-    
-    public String getTestSourceDirectory()
-    {
-        return nullIfBlank( testSourceDirText.getText().trim() );
-    }
-    
-    public void setTestSourceDirectory( String testSourceDirectory )
-    {
-        testSourceDirText.setText( blankIfNull( testSourceDirectory ) );
     }
 
 }

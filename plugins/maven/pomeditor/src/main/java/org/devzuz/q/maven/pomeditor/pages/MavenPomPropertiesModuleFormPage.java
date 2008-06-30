@@ -114,10 +114,10 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         Composite container = toolKit.createComposite( form );
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
         
-        modulesTableComponent = new SimpleTableComponent( container, SWT.None, 
-                                                          pomModel.getModules(), "Module" );
+        //modulesTableComponent = new SimpleTableComponent( container, SWT.None, 
+        //                                                  pomModel.getModules(), "Module" );
         
-        modulesTableComponent.addComponentModifyListener( new ComponentListener() );
+        //modulesTableComponent.addComponentModifyListener( new ComponentListener() );
         
         return container;
     }

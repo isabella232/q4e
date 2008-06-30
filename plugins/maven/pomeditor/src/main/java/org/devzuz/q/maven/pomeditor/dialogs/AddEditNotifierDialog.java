@@ -8,7 +8,7 @@ package org.devzuz.q.maven.pomeditor.dialogs;
 
 import java.util.Properties;
 
-import org.apache.maven.model.Notifier;
+import org.devzuz.q.maven.pom.Notifier;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.PomEditorUtils;
 import org.devzuz.q.maven.ui.MavenUiActivator;
@@ -121,7 +121,7 @@ public class AddEditNotifierDialog
             setSendOnFailure( notifier.isSendOnFailure() );
             setSendOnSuccess( notifier.isSendOnSuccess() );
             setSendOnWarning( notifier.isSendOnWarning() );
-            setConfigurations( notifier.getConfiguration() );
+            //TODO: setConfigurations( notifier.getConfiguration() );
         }
         else
         {

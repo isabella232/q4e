@@ -2,8 +2,12 @@ package org.devzuz.q.maven.pomeditor.components;
 
 import java.util.List;
 
+import org.devzuz.q.maven.pom.Model;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.dialogs.SimpleAddEditStringDialog;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -26,20 +30,22 @@ public class SimpleTableComponent extends AbstractComponent
 	
 	private Button removeButton;
 
-    private List<String> dataList;
-
-    public int selectedIndex;
-
-    public String selectedString;
-
     private String type;
+    
+    private Model model;
+    
+    private EditingDomain domain;
+    
+    private EStructuralFeature[] path;
 
-	public SimpleTableComponent( Composite parent, int style, List<String> list, String type )
+	public SimpleTableComponent( Composite parent, int style, Model model, EStructuralFeature[] path, String type, EditingDomain domain )
 	{
 		super( parent, style );
 		
-        this.dataList = list;
         this.type = type;
+        this.model = model;
+        this.domain = domain;
+        this.path = path;
 		
 		setLayout( new GridLayout( 2, false ) );
 		
@@ -47,6 +53,13 @@ public class SimpleTableComponent extends AbstractComponent
 		simpleTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
 		simpleTable.setLinesVisible( true );
 		simpleTable.setHeaderVisible( true );
+		
+		ModelUtil.bindTable(
+        		model, 
+        		path, 
+        		null, 
+        		simpleTable, 
+        		domain);
 		
 		SimpleTableListener tableListener = new SimpleTableListener();
 		simpleTable.addSelectionListener( tableListener );
@@ -74,27 +87,6 @@ public class SimpleTableComponent extends AbstractComponent
         RemoveButtonListener removeButtonListener = new RemoveButtonListener();
         removeButton.addSelectionListener( removeButtonListener );
         removeButton.setEnabled( false );
-        
-        populateTable();
-	}
-	
-	public void populateTable()
-	{ 
-	    simpleTable.removeAll();
-	    
-	    if ( dataList != null )
-	    {
-	        for ( String str : dataList )
-	        {
-	            TableItem tableItem = new TableItem( simpleTable, SWT.BEGINNING );
-	            tableItem.setText( str );
-	        }
-	    }
-	    
-	    simpleTable.deselectAll();
-	    
-	    removeButton.setEnabled( false );
-        editButton.setEnabled( false );
 	}
 	
 	private class SimpleTableListener extends SelectionAdapter
@@ -108,12 +100,6 @@ public class SimpleTableComponent extends AbstractComponent
             {
                 removeButton.setEnabled( true );
                 editButton.setEnabled( true );
-                
-                if ( simpleTable.getSelectionIndex() >= 0 )
-                {
-                    selectedIndex = simpleTable.getSelectionIndex();
-                    selectedString = dataList.get( selectedIndex );                    
-                }
             }              
         }
 	}
@@ -127,9 +113,8 @@ public class SimpleTableComponent extends AbstractComponent
             
             if ( addDialog.open() == Window.OK )
             {
+            	List<String> dataList = (List<String>) ModelUtil.getValue( model, path, domain, true );
                 dataList.add( addDialog.getTextString() );
-                
-                populateTable();
                 
                 notifyListeners( simpleTable );
             }
@@ -143,14 +128,19 @@ public class SimpleTableComponent extends AbstractComponent
             SimpleAddEditStringDialog editDialog =
                 SimpleAddEditStringDialog.getSimpleAddEditStringDialog( type );
             
-            if ( editDialog.openWithItem( selectedString ) == Window.OK )
+            int selectedIndex = simpleTable.getSelectionIndex();
+            
+            if( selectedIndex > -1 )
             {
-                dataList.remove( selectedString );
-                dataList.add( selectedIndex, editDialog.getTextString() );
-                
-                populateTable();
-                
-                notifyListeners( simpleTable );
+            	List<String> dataList = (List<String>) ModelUtil.getValue( model, path, domain, true );
+            	String selectedString = dataList.get( selectedIndex );
+            	
+	            if ( editDialog.openWithItem( selectedString ) == Window.OK )
+	            {
+	                dataList.remove( selectedString );
+	                dataList.add( selectedIndex, editDialog.getTextString() );
+	                notifyListeners( simpleTable );
+	            }
             }
         }
     }
@@ -159,11 +149,16 @@ public class SimpleTableComponent extends AbstractComponent
     {
         public void widgetSelected( SelectionEvent e )
         {
-            dataList.remove( selectedString );
+        	int selectedIndex = simpleTable.getSelectionIndex();
             
-            populateTable();
+            if( selectedIndex > -1 )
+            {
+            	List<String> dataList = (List<String>) ModelUtil.getValue( model, path, domain, true );
+            	String selectedString = dataList.get( selectedIndex );
+            	dataList.remove( selectedString );
             
-            notifyListeners( simpleTable );
+            	notifyListeners( simpleTable );
+            }
         }
     }
 }

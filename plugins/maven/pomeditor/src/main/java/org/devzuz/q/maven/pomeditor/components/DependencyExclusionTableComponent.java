@@ -3,9 +3,23 @@ package org.devzuz.q.maven.pomeditor.components;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.maven.model.Exclusion;
+import org.devzuz.q.maven.pom.Exclusion;
+import org.devzuz.q.maven.pom.PomFactory;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditDependencyExclusionDialog;
+import org.eclipse.core.databinding.observable.Realm;
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.map.IObservableMap;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.emf.databinding.edit.EMFEditObservables;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -25,8 +39,6 @@ import org.eclipse.ui.PlatformUI;
 public class DependencyExclusionTableComponent
     extends Composite
 {
-    private List<Exclusion> exclusionList;
-    
     private Table exclusionsTable;
 
     private Button addButton;
@@ -37,13 +49,19 @@ public class DependencyExclusionTableComponent
 
     public int selectedIndex;
 
-    public Exclusion selectedExclusion;
+    private IObservableValue parentValue;
+    
+    private EStructuralFeature[] path;
+    
+    private EditingDomain domain;
 
-    private boolean isModified;
-
-    public DependencyExclusionTableComponent( Composite parent, int style )
+    public DependencyExclusionTableComponent( Composite parent, int style, IObservableValue parentValue, EStructuralFeature[] path, EditingDomain domain )
     {
         super( parent, style );
+        
+        this.parentValue = parentValue;
+        this.path = path;
+        this.domain = domain;
         
         setLayout( new GridLayout( 2, false ) );
         
@@ -62,6 +80,21 @@ public class DependencyExclusionTableComponent
         TableColumn artifactIdColumn = new TableColumn( exclusionsTable, SWT.BEGINNING, 1 );
         artifactIdColumn.setText( Messages.MavenPomEditor_MavenPomEditor_ArtifactId );
         artifactIdColumn.setWidth( 125 );
+        
+        TableViewer viewer = new TableViewer( exclusionsTable );
+		ObservableListContentProvider contentProvider = new ObservableListContentProvider();
+		viewer.setContentProvider( contentProvider );
+		IObservableValue ctx = parentValue;
+		for ( int i = 0; i < path.length - 1; i++ )
+		{
+			ctx = EMFEditObservables.observeDetailValue( Realm.getDefault(), domain, ctx, path[i] );
+		}
+		IObservableList list = EMFEditObservables.observeDetailList( Realm.getDefault(), domain, ctx, path[path.length - 1] );
+		viewer.setInput( list );
+		
+		IObservableMap[] labels = EMFEditObservables.observeMaps(domain, contentProvider.getKnownElements(), new EStructuralFeature[] { PomPackage.Literals.EXCLUSION__GROUP_ID, PomPackage.Literals.EXCLUSION__ARTIFACT_ID } );
+		
+		viewer.setLabelProvider( new ObservableMapLabelProvider(labels) );
         
         Composite container2 = new Composite( this, SWT.NULL );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -88,34 +121,7 @@ public class DependencyExclusionTableComponent
         removeButton.setEnabled( false );        
         
     }
-    
-    public void updateTable( List<Exclusion> exclusionList )
-    {
-        assert exclusionList != null;
-        
-        this.exclusionList = exclusionList;
-        
-        exclusionsTable.removeAll();
-        
-        for ( Exclusion exclusion : exclusionList )
-        {
-            TableItem item = new TableItem( exclusionsTable, SWT.BEGINNING );
-            item.setText( new String[] { exclusion.getGroupId(), exclusion.getArtifactId() } );
-        }
-    }
-    
-    private void populateExclusionsTable()
-    {
-        exclusionsTable.removeAll();
-        
-        for ( Exclusion exclusion : exclusionList )
-        {
-            TableItem item = new TableItem( exclusionsTable, SWT.BEGINNING );
-            item.setText( new String[] { exclusion.getGroupId(), exclusion.getArtifactId() } );
-        }
-    }
-    
-    
+
     private class ExclusionTableListener extends SelectionAdapter
     {
         public void widgetSelected( SelectionEvent e )
@@ -132,7 +138,6 @@ public class DependencyExclusionTableComponent
                 if ( exclusionsTable.getSelectionIndex() >= 0 )
                 {
                     selectedIndex = exclusionsTable.getSelectionIndex();
-                    selectedExclusion = exclusionList.get( selectedIndex );
                 }
             }
         }
@@ -149,16 +154,14 @@ public class DependencyExclusionTableComponent
             {
                 if ( !artifactAlreadyExist( addDialog.getGroupId(), addDialog.getArtifactId() ) )
                 {
-                    Exclusion exclusion = new Exclusion();
+                    Exclusion exclusion = PomFactory.eINSTANCE.createExclusion();
                     
                     exclusion.setGroupId( addDialog.getGroupId() );
                     exclusion.setArtifactId( addDialog.getArtifactId() );
                     
+                    EObject parent = (EObject) parentValue.getValue();
+                    List<Exclusion> exclusionList = (List<Exclusion>)ModelUtil.getValue(parent, path, domain, true );
                     exclusionList.add( exclusion );
-                    
-                    populateExclusionsTable();
-                    
-                    setModified( true );
                 }
             }
             
@@ -171,10 +174,12 @@ public class DependencyExclusionTableComponent
         {
             AddEditDependencyExclusionDialog editDialog = 
                 AddEditDependencyExclusionDialog.newAddEditDependencyExclusionDialog();
-            
+            EObject parent = (EObject) parentValue.getValue();
+            List<Exclusion> exclusionList = (List<Exclusion>)ModelUtil.getValue(parent, path, domain, true );
+            Exclusion selectedExclusion = exclusionList.get( selectedIndex );
             if ( editDialog.openWithExclusion( selectedExclusion ) == Window.OK )
             {
-                Exclusion exclusion = new Exclusion();
+                Exclusion exclusion = PomFactory.eINSTANCE.createExclusion();
                 
                 exclusion.setGroupId( editDialog.getGroupId() );
                 exclusion.setArtifactId( editDialog.getArtifactId() );
@@ -192,10 +197,6 @@ public class DependencyExclusionTableComponent
                 {
                     exclusionList.remove( selectedExclusion );
                     exclusionList.add( exclusion );
-                    
-                    populateExclusionsTable();
-                    
-                    setModified( true );
                 }
             }
             
@@ -206,16 +207,16 @@ public class DependencyExclusionTableComponent
     {
         public void widgetSelected( SelectionEvent e )
         {
-            exclusionList.remove( selectedExclusion );
-            
-            populateExclusionsTable();
-            
-            setModified( true );
+        	EObject parent = (EObject) parentValue.getValue();
+            List<Exclusion> exclusionList = (List<Exclusion>)ModelUtil.getValue(parent, path, domain, true );
+            exclusionList.remove( selectedIndex );
         }
     }
     
     private boolean artifactAlreadyExist(String groupId, String artifactId ) 
     {
+    	EObject parent = (EObject) parentValue.getValue();
+        List<Exclusion> exclusionList = (List<Exclusion>)ModelUtil.getValue(parent, path, domain, true );
         for ( Iterator<Exclusion> it = exclusionList.iterator(); it.hasNext(); )
         {
             Exclusion artifact = it.next();
@@ -271,16 +272,6 @@ public class DependencyExclusionTableComponent
     public void removeRemoveButtonListener( SelectionListener listener )
     {
         removeButton.removeSelectionListener( listener );
-    }
-    
-    public boolean isModified()
-    {
-        return isModified;
-    }
-    
-    public void setModified( boolean isModified )
-    {
-        this.isModified = isModified;
     }
 
 }

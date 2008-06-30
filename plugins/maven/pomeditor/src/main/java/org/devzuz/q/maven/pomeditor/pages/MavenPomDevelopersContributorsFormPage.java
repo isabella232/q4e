@@ -6,19 +6,19 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.pomeditor.pages;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-import java.util.Set;
 
-import org.apache.maven.model.Contributor;
-import org.apache.maven.model.Developer;
-import org.apache.maven.model.Model;
+import org.devzuz.q.maven.pom.Contributor;
+import org.devzuz.q.maven.pom.Developer;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomFactory;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditContributorDeveloperDialog;
-import org.devzuz.q.maven.pomeditor.model.ContributorComparator;
-import org.devzuz.q.maven.pomeditor.model.DeveloperComparator;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -44,13 +44,9 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
 {
     private ScrolledForm form;
 
-    //private Model pomModel;
+    private Model pomModel;
 
     private Table developersTable;
-
-    private List<Developer> developersList;
-
-    private boolean isPageModified = false;
     
     private Table contributorsTable;
 
@@ -66,26 +62,26 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
 
     private Button editDeveloperButton;
 
-    private List<Contributor> contributorList;
-
-    public Developer selectedDeveloper;
-
-    public int selectedContributorIndex;
-
-    public Contributor selectedContributor;
-
+    private int selectedContributorIndex;
+    
+    private int selectedDeveloperIndex;
+    
+    private EditingDomain domain;
+    
+    private DataBindingContext bindingContext;
+    
     public MavenPomDevelopersContributorsFormPage( String id, String title )
     {
         super( id, title );
     }
 
     @SuppressWarnings("unchecked")
-    public MavenPomDevelopersContributorsFormPage( FormEditor editor, String id, String title, Model modelPOM )
+    public MavenPomDevelopersContributorsFormPage( FormEditor editor, String id, String title, Model modelPOM, EditingDomain domain, DataBindingContext bindingContext )
     {
         super( editor, id, title );
-        //this.pomModel = modelPOM;
-        this.developersList = modelPOM.getDevelopers();
-        this.contributorList = modelPOM.getContributors();
+        this.pomModel = modelPOM;
+        this.domain = domain;
+        this.bindingContext = bindingContext;
     }
 
     @Override
@@ -154,17 +150,17 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         orgUrlColumn.setWidth( 100 );
         orgUrlColumn.setText( Messages.MavenPomEditor_MavenPomEditor_OrganizationUrl );
         
-        TableColumn rolesColumn = new TableColumn( developersTable, SWT.BEGINNING, 6 );
-        rolesColumn.setWidth( 100 );
-        rolesColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Roles );
-        
-        TableColumn timezoneColumn = new TableColumn( developersTable, SWT.BEGINNING, 7 );
+        TableColumn timezoneColumn = new TableColumn( developersTable, SWT.BEGINNING, 6 );
         timezoneColumn.setWidth( 75 );
         timezoneColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Timezone );
         
-        TableColumn propertiesColumn = new TableColumn( developersTable, SWT.BEGINNING, 8 );
-        propertiesColumn.setWidth( 90 );
-        propertiesColumn.setText( "Properties" );
+
+        ModelUtil.bindTable(
+        		pomModel, 
+        		new EStructuralFeature[] { PomPackage.Literals.MODEL__DEVELOPERS, PomPackage.Literals.DEVELOPERS_TYPE__DEVELOPER }, 
+        		new EStructuralFeature[] { PomPackage.Literals.DEVELOPER__ID, PomPackage.Literals.DEVELOPER__NAME, PomPackage.Literals.DEVELOPER__EMAIL, PomPackage.Literals.DEVELOPER__URL, PomPackage.Literals.DEVELOPER__ORGANIZATION, PomPackage.Literals.DEVELOPER__ORGANIZATION_URL, PomPackage.Literals.DEVELOPER__TIMEZONE }, 
+        		developersTable, 
+        		domain );
         
         Composite container2 = toolKit.createComposite( container );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -191,9 +187,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         RemoveDeveloperButtonListener removeButtonListener = new RemoveDeveloperButtonListener();
         removeDeveloperButton.addSelectionListener( removeButtonListener );
         removeDeveloperButton.setEnabled( false );
-        
-        populateDeveloperDataTable();
-        
+
         return container;
     
     }
@@ -231,17 +225,18 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         orgUrlColumn.setWidth( 100 );
         orgUrlColumn.setText( Messages.MavenPomEditor_MavenPomEditor_OrganizationUrl );
         
-        TableColumn rolesColumn = new TableColumn( contributorsTable, SWT.BEGINNING, 5 );
-        rolesColumn.setWidth( 100 );
-        rolesColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Roles );
         
-        TableColumn timezoneColumn = new TableColumn( contributorsTable, SWT.BEGINNING, 6 );
+        TableColumn timezoneColumn = new TableColumn( contributorsTable, SWT.BEGINNING, 5 );
         timezoneColumn.setWidth( 75 );
         timezoneColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Timezone );
         
-        TableColumn propertiesColumn = new TableColumn( contributorsTable, SWT.BEGINNING, 7 );
-        propertiesColumn.setWidth( 90 );
-        propertiesColumn.setText( "Properties" );
+        
+        ModelUtil.bindTable(
+        		pomModel, 
+        		new EStructuralFeature[] { PomPackage.Literals.MODEL__CONTRIBUTORS, PomPackage.Literals.CONTRIBUTORS_TYPE__CONTRIBUTOR }, 
+        		new EStructuralFeature[] { PomPackage.Literals.CONTRIBUTOR__NAME, PomPackage.Literals.CONTRIBUTOR__EMAIL, PomPackage.Literals.CONTRIBUTOR__URL, PomPackage.Literals.CONTRIBUTOR__ORGANIZATION, PomPackage.Literals.CONTRIBUTOR__ORGANIZATION_URL, PomPackage.Literals.CONTRIBUTOR__TIMEZONE }, 
+        		contributorsTable, 
+        		domain );
         
         Composite container2 = toolKit.createComposite( container );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -268,14 +263,11 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         removeContributorButton.addSelectionListener( removeButtonListener );
         removeContributorButton.setEnabled( false );
         
-        populateContributorDataTable();
-        
         return container;
     }
 
     private class DevelopersTableListener extends SelectionAdapter
     {
-        private int selectedDeveloperIndex;
 
         public void widgetSelected( SelectionEvent e )
         {
@@ -290,7 +282,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                 if( developersTable.getSelectionIndex() >= 0 )
                 {
                     selectedDeveloperIndex = developersTable.getSelectionIndex();
-                    selectedDeveloper = developersList.get( selectedDeveloperIndex );
                 }
             }
         }
@@ -312,7 +303,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                 if ( contributorsTable.getSelectionIndex() >= 0 )
                 {
                     selectedContributorIndex = contributorsTable.getSelectionIndex();
-                    selectedContributor = contributorList.get( selectedContributorIndex );
                 }
             }
         }
@@ -330,7 +320,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
             {
                 if ( !developerAlreadyExist( addDialog.getId() ) )
                 {
-                    Developer developer = new Developer();
+                    Developer developer = PomFactory.eINSTANCE.createDeveloper();
                     
                     developer.setId( addDialog.getId() );
                     developer.setName( addDialog.getName() );
@@ -343,11 +333,11 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     {
                         String roles = addDialog.getRoles();
                         
-                        String[] roleList = roles.split( "," );
-                        
-                        for ( String role : roleList )
+                        String[] roleArray = roles.split( "," );
+                        List<String> roleList = (List<String>) ModelUtil.getValue( developer, new EStructuralFeature[]{ PomPackage.Literals.DEVELOPER__ROLES, PomPackage.Literals.ROLES_TYPE1__ROLE } , domain, true );
+                        for ( String role : roleArray )
                         {
-                            developer.addRole( role.trim() );
+                        	roleList.add( role.trim() );
                         }
                     }
                     else
@@ -356,13 +346,10 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     }
                     
                     developer.setTimezone( nullIfBlank( addDialog.getTimezone() ) );
-                    developer.setProperties( nullIfSizeZero( addDialog.getProperties() ) );
+                    //TODO: developer.setProperties( nullIfSizeZero( addDialog.getProperties() ) );
                     
+                    List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS, PomPackage.Literals.DEVELOPERS_TYPE__DEVELOPER } , domain, true );
                     developersList.add( developer );
-                    
-                    populateDeveloperDataTable();
-                    
-                    pageModified();
                 }
             }
         }
@@ -372,24 +359,11 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     {
         public void widgetSelected( SelectionEvent e )
         {
-            TableItem[] selectedItem = developersTable.getSelection();
+            List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS, PomPackage.Literals.DEVELOPERS_TYPE__DEVELOPER } , domain, true );
+            Developer selectedDeveloper = developersList.get( selectedDeveloperIndex );
             
-            String oldRoles = nullIfBlank( selectedItem[0].getText( 6 ) );
-            
-            if ( oldRoles != null )
-            {
-                String[] oldRoleList = oldRoles.split( "," );
-            
-                for ( String role : oldRoleList )
-                {
-                    selectedDeveloper.addRole( role.trim() );
-                }
-            }
-            else
-            {
-                selectedDeveloper.setRoles( null );
-            }
-            
+            List<String> roleList = (List<String>) ModelUtil.getValue( selectedDeveloper, new EStructuralFeature[]{ PomPackage.Literals.DEVELOPER__ROLES, PomPackage.Literals.ROLES_TYPE1__ROLE } , domain, true );
+            String oldRoles = roleList == null ? null : convertRolesListToString( roleList );
             AddEditContributorDeveloperDialog editDialog = 
                 AddEditContributorDeveloperDialog.newAddEditContributorDialog( Messages.MavenPomEditor_MavenPomEditor_Developers );
                         
@@ -400,10 +374,10 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                                          blankIfNull( selectedDeveloper.getOrganizationUrl() ), 
                                          blankIfNull( oldRoles ), 
                                          blankIfNull( selectedDeveloper.getTimezone() ),
-                                         selectedDeveloper.getProperties() ) == Window.OK )
+                                         /*TODO: selectedDeveloper.getProperties() */ null ) == Window.OK )
             {             
                     
-                Developer newDeveloper = new Developer();
+                Developer newDeveloper = PomFactory.eINSTANCE.createDeveloper();
                     
                 newDeveloper.setId( editDialog.getId() );
                 newDeveloper.setName( editDialog.getName() );
@@ -417,11 +391,11 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                 {
                     String roles = editDialog.getRoles();
                         
-                    String[] roleList = roles.split( "," );
-                        
-                    for ( String role : roleList )
+                    String[] roleArray = roles.split( "," );
+                    List<String> newRoleList = (List<String>) ModelUtil.getValue( newDeveloper, new EStructuralFeature[]{ PomPackage.Literals.DEVELOPER__ROLES, PomPackage.Literals.ROLES_TYPE1__ROLE } , domain, true );
+                    for ( String role : roleArray )
                     {
-                        newDeveloper.addRole( role.trim() );
+                    	newRoleList.add( role.trim() );
                     }
                 }
                 else
@@ -429,7 +403,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     newDeveloper.setRoles( null );
                 }
                 
-                newDeveloper.setProperties( nullIfSizeZero( editDialog.getProperties() ) );
+                //TODO: newDeveloper.setProperties( nullIfSizeZero( editDialog.getProperties() ) );
                 
                 //if ( ( developerAlreadyExist( newDeveloper.getId() ) ) ||
                 //      ( !selectedDeveloper.getId().equalsIgnoreCase( newDeveloper.getId() ) ) )
@@ -441,10 +415,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                         developersList.remove( selectedDeveloper );
                         
                         developersList.add( newDeveloper );
-                        
-                        populateDeveloperDataTable();
-                        
-                        pageModified();
                     }
                     // this means user put in a duplicate ID
                     else
@@ -460,10 +430,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     developersList.remove( selectedDeveloper );
                     
                     developersList.add( newDeveloper );
-                    
-                    populateDeveloperDataTable();
-                    
-                    pageModified();
                 } 
             }
         }
@@ -473,18 +439,17 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     {
         public void widgetSelected( SelectionEvent e )
         {
+        	List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS, PomPackage.Literals.DEVELOPERS_TYPE__DEVELOPER } , domain, true );
             for ( int index = 0; index < developersList.size(); index++ )
             {
                 if ( index == developersTable.getSelectionIndex() )
                 {
                     Developer developer = (Developer) developersList.get( index );
                     developersList.remove( developer );
+                    removeDeveloperButton.setEnabled( false );
+                    editDeveloperButton.setEnabled( false );
                 }
             }            
-            
-            populateDeveloperDataTable();
-            
-            pageModified();
         }
     }
     
@@ -501,7 +466,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                 if ( !contributorAlreadyExist( addDialog.getName(), addDialog.getEmail() ) )
                 {
                 
-                    Contributor contributor = new Contributor();
+                    Contributor contributor = PomFactory.eINSTANCE.createContributor();
                 
                     contributor.setName( addDialog.getName() );
                     contributor.setEmail( addDialog.getEmail() );
@@ -513,11 +478,11 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     {
                         String roles = addDialog.getRoles();
                     
-                        String[] roleList = roles.split( "," );
-                    
-                        for ( String role : roleList )
+                        String[] roleArray = roles.split( "," );
+                        List<String> roleList = (List<String>) ModelUtil.getValue( contributor, new EStructuralFeature[]{ PomPackage.Literals.CONTRIBUTOR__ROLES, PomPackage.Literals.ROLES_TYPE__ROLE } , domain, true );
+                        for ( String role : roleArray )
                         {
-                            contributor.addRole( role.trim() );
+                        	roleList.add( role.trim() );
                         }
                     }
                     else
@@ -526,13 +491,10 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     }
                 
                     contributor.setTimezone( nullIfBlank( addDialog.getTimezone() ) );
-                    contributor.setProperties( nullIfSizeZero( addDialog.getProperties() ) );
+                    //TODO: contributor.setProperties( nullIfSizeZero( addDialog.getProperties() ) );
                     
+                    List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS, PomPackage.Literals.CONTRIBUTORS_TYPE__CONTRIBUTOR } , domain, true );
                     contributorList.add( contributor );
-                
-                    populateContributorDataTable();
-                
-                    pageModified();
                 }
             }
         }        
@@ -542,24 +504,11 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     {
         public void widgetSelected( SelectionEvent e )
         {
-            TableItem[] selectedItem = contributorsTable.getSelection();
-            
-            String oldRoles = nullIfBlank( selectedItem[0].getText( 5 ) );
-            
-            if ( oldRoles != null )
-            {
-                String[] oldRoleList = oldRoles.split( "," );
-            
-                for ( String role : oldRoleList )
-                {
-                    selectedContributor.addRole( role.trim() );
-                }
-            }
-            else
-            {
-                selectedContributor.setRoles( null );
-            }
-            
+        	List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS, PomPackage.Literals.CONTRIBUTORS_TYPE__CONTRIBUTOR } , domain, true );
+        	Contributor selectedContributor = contributorList.get( selectedContributorIndex );
+        	
+            List<String> roleList = (List<String>) ModelUtil.getValue( selectedContributor, new EStructuralFeature[]{ PomPackage.Literals.CONTRIBUTOR__ROLES, PomPackage.Literals.ROLES_TYPE__ROLE } , domain, true );
+            String oldRoles = roleList == null ? null : convertRolesListToString( roleList );
             AddEditContributorDeveloperDialog editDialog = 
                 AddEditContributorDeveloperDialog.newAddEditContributorDialog( Messages.MavenPomEditor_MavenPomEditor_Contributors );
                         
@@ -570,9 +519,9 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                                          blankIfNull( selectedContributor.getOrganizationUrl() ), 
                                          blankIfNull( oldRoles ), 
                                          blankIfNull( selectedContributor.getTimezone() ),
-                                         selectedContributor.getProperties() ) == Window.OK )
+                                         /* TODO: selectedContributor.getProperties() */ null ) == Window.OK )
             {                    
-                Contributor newContributor = new Contributor();                    
+                Contributor newContributor = PomFactory.eINSTANCE.createContributor();                    
                 
                 newContributor.setName( editDialog.getName() );
                 newContributor.setEmail( editDialog.getEmail() );
@@ -585,11 +534,11 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                 {
                     String roles = editDialog.getRoles();
                         
-                    String[] roleList = roles.split( "," );
-                        
-                    for ( String role : roleList )
+                    String[] roleArray = roles.split( "," );
+                    List<String> newRoleList = (List<String>) ModelUtil.getValue( selectedContributor, new EStructuralFeature[]{ PomPackage.Literals.CONTRIBUTOR__ROLES, PomPackage.Literals.ROLES_TYPE__ROLE } , domain, true );
+                    for ( String role : newRoleList )
                     {
-                        newContributor.addRole( role.trim() );
+                    	newRoleList.add( role.trim() );
                     }
                 }
                 else
@@ -597,7 +546,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     newContributor.setRoles( null );
                 }
                 
-                newContributor.setProperties( nullIfSizeZero( editDialog.getProperties() ) );
+                //TODO: newContributor.setProperties( nullIfSizeZero( editDialog.getProperties() ) );
                 
                 if ( contributorAlreadyExist( newContributor.getName(), newContributor.getEmail() ) )
                 {
@@ -613,10 +562,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                         contributorList.remove( selectedContributor );
                     
                         contributorList.add( newContributor );
-                    
-                        populateContributorDataTable();
-                    
-                        pageModified();
                     }
                     else
                     {
@@ -631,10 +576,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     contributorList.remove( selectedContributor );
                     
                     contributorList.add( newContributor );
-                
-                    populateContributorDataTable();
-                
-                    pageModified();
                 }                
             }
         }
@@ -644,23 +585,23 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     {
         public void widgetSelected( SelectionEvent e )
         {
+        	List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS, PomPackage.Literals.CONTRIBUTORS_TYPE__CONTRIBUTOR } , domain, true );
             for ( int index = 0; index < contributorList.size(); index++ )
             {
                 if ( index == contributorsTable.getSelectionIndex() )
                 {
                     Contributor contributor = ( Contributor ) contributorList.get( index );
                     contributorList.remove( contributor );
+                    removeContributorButton.setEnabled( false );
+                    editContributorButton.setEnabled( false );
                 }
             }
-            
-            populateContributorDataTable();
-            
-            pageModified();
         }
     }
 
     public boolean contributorAlreadyExist( String name, String email )
     {
+    	List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS, PomPackage.Literals.CONTRIBUTORS_TYPE__CONTRIBUTOR } , domain, true );
         for ( Contributor contributor : contributorList )
         {
             if ( ( contributor.getName().equals( name ) ) &&
@@ -675,6 +616,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
 
     private boolean developerAlreadyExist( String id )
     {
+    	List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS, PomPackage.Literals.DEVELOPERS_TYPE__DEVELOPER } , domain, true );
         for ( Developer developer : developersList )
         {
             if ( developer.getId().equals( id ) )
@@ -685,76 +627,6 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         return false;
     }
 
-    protected void pageModified()
-    {
-        isPageModified = true;
-        this.getEditor().editorDirtyStateChanged();
-    }
-
-    @SuppressWarnings( "unchecked" )
-    private void populateDeveloperDataTable()
-    {
-        if ( developersList != null )
-        {
-            developersTable.removeAll();
-            Collections.sort( developersList, new DeveloperComparator() );            
-            
-            for ( Developer developer : developersList )
-            {
-                List<String> rolesList = developer.getRoles();
-                TableItem item = new TableItem( developersTable, SWT.BEGINNING );
-                item.setText( new String[] { developer.getId(), developer.getName(), developer.getEmail(),
-                                             developer.getUrl(), developer.getOrganization(), developer.getOrganizationUrl(),
-                                             convertRolesListToString( rolesList ), developer.getTimezone() , 
-                                             getPropertiesString( developer ) } );
-            }
-        }
-    }
-    
-    @SuppressWarnings("unchecked")
-    private void populateContributorDataTable()
-    {
-        if ( contributorList != null )
-        {
-            contributorsTable.removeAll();
-            Collections.sort(  contributorList, new ContributorComparator() );
-            
-            for ( Contributor cont : contributorList )
-            {
-                List<String> rolesList = cont.getRoles();
-                TableItem item = new TableItem( contributorsTable, SWT.BEGINNING );
-                item.setText( new String[] { cont.getName(), cont.getEmail(),
-                                  cont.getUrl(), cont.getOrganization(), cont.getOrganizationUrl(),
-                                  convertRolesListToString( rolesList ), cont.getTimezone(),
-                                  getPropertiesString( cont )} );
-            }
-        }
-    }
-    
-    private String getPropertiesString( Contributor contributor )
-    {
-        StringBuffer buffer = new StringBuffer();
-        Set< Map.Entry< Object , Object> > properties = contributor.getProperties().entrySet();
-        if( properties != null && properties.size() > 0 )
-        {
-            for( Map.Entry< Object , Object > object : properties )
-            {
-                if( buffer.length() > 0 )
-                    buffer.append( "," );
-                String key = ( String ) object.getKey();
-                String value = ( String ) object.getValue();
-                buffer.append( "{ " );
-                buffer.append( key );
-                buffer.append( " = " );
-                buffer.append( value );
-                buffer.append( " }" );
-            }
-            
-            return buffer.toString();
-        }
-        
-        return "";
-    }
     
     private String convertRolesListToString( List<String> rolesList )
     {   
@@ -783,22 +655,5 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     {
         return str != null ? str : "";
     }
-    
 
-    private Properties nullIfSizeZero( Properties properties )
-    {
-        if( properties.size() > 0 )
-            return properties;
-        return null;
-    }
-
-    public boolean isDirty()
-    {
-        return isPageModified;
-    }
-
-    public void setPageModified( boolean isPageModified )
-    {
-        this.isPageModified = isPageModified;
-    }
 }

@@ -380,7 +380,7 @@ public class SSESyncAdapter
             {
                 element.removeChild( element.getFirstChild() );
             }
-            Text text = node.getOwnerDocument().createTextNode( newValue.toString() );
+            Text text = node.getOwnerDocument().createTextNode( newValue == null ? "" : newValue.toString() );
             element.appendChild( text );
         }
     }
