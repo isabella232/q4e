@@ -267,7 +267,7 @@ public class MavenPomFormEditor extends FormEditor
 
                 mavenPomLicensesScmOrgFormPage =
                     new MavenPomLicensesScmOrgFormPage( this, LICENSES_SCM_ORG_FORM_PAGE,
-                                                        "Licenses/SCM/Organization/Issue Management", this.pomModel );
+                                                        "Licenses/SCM/Organization/Issue Management", this.emfModel, editingDomain, bindingContext );
                 addPage( mavenPomLicensesScmOrgFormPage );
 
                 developersContributorsFormPage =
@@ -302,12 +302,12 @@ public class MavenPomFormEditor extends FormEditor
                 addPage( ciManagementMailingListsPage );
 
                 repositoriesPage =
-                    new MavenPomRepositoriesFormPage( this, REPOSITORIES_FORM_PAGE, "Repositories", this.pomModel );
+                    new MavenPomRepositoriesFormPage( this, REPOSITORIES_FORM_PAGE, "Repositories", this.emfModel, editingDomain, bindingContext );
                 addPage( repositoriesPage );
 
                 distributionManagementPage =
                     new MavenPomDistributionManagementFormPage( this, DISTRIBUTION_MANAGEMENT_FORM_PAGE,
-                                                                "Distribution Management", this.pomModel );
+                                                                "Distribution Management", this.emfModel, editingDomain, bindingContext );
                 addPage( distributionManagementPage );
                 
                 sourceEditor = new StructuredTextEditor();
@@ -374,11 +374,9 @@ public class MavenPomFormEditor extends FormEditor
     {
         basicFormPage.setPageModified( false );
         modulePropertiesFormPage.setPageModified( false );
-        mavenPomLicensesScmOrgFormPage.setPageModified( false );
         buildFormPage.setPageModified( false );
         buildPluginFormPage.setPageModified( false );
         repositoriesPage.setPageModified( false );
-        distributionManagementPage.setPageModified( false );
         // clean other pages
     }
     

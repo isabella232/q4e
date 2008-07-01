@@ -2,10 +2,16 @@ package org.devzuz.q.maven.pomeditor.components;
 
 import java.util.List;
 
-import org.apache.maven.model.Repository;
-import org.apache.maven.model.RepositoryPolicy;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomFactory;
+import org.devzuz.q.maven.pom.PomPackage;
+import org.devzuz.q.maven.pom.Repository;
+import org.devzuz.q.maven.pom.RepositoryPolicy;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditRepositoryDialog;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -35,16 +41,20 @@ public class RepositoryTableComponent
 
     private boolean isModified;
 
-    private List<Repository> dataSource;
+    private Model model;
+    
+    private EditingDomain domain;
+    
+    private EStructuralFeature[] path;
 
     public int selectedIndex;
 
-    public RepositoryTableComponent( Composite parent, int style, List<Repository> dataSource )
+    public RepositoryTableComponent( Composite parent, int style, Model model, EStructuralFeature[] path, EditingDomain domain )
     {
         super( parent, style );
-        
-        this.dataSource = dataSource;
-        
+        this.model = model;
+        this.path = path;
+        this.domain = domain;
         setLayout( new GridLayout( 2, false ) );
         
         repositoriesTable = new Table( this, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE  );
@@ -71,13 +81,12 @@ public class RepositoryTableComponent
         layoutColumn.setWidth( 75 );
         layoutColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Layout );
         
-        TableColumn releasesColumn = new TableColumn( repositoriesTable, SWT.BEGINNING, 4 );
-        releasesColumn.setWidth( 90 );
-        releasesColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Releases );
-        
-        TableColumn snapshotsColumn = new TableColumn( repositoriesTable, SWT.BEGINNING, 5 );
-        snapshotsColumn.setWidth( 90 );
-        snapshotsColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Snapshots );
+        ModelUtil.bindTable(
+        		model, 
+        		path, 
+        		new EStructuralFeature[] { PomPackage.Literals.REPOSITORY__ID, PomPackage.Literals.REPOSITORY__NAME, PomPackage.Literals.REPOSITORY__URL, PomPackage.Literals.REPOSITORY__LAYOUT }, 
+        		repositoriesTable, 
+        		domain );
         
         Composite container2 = new Composite( this, SWT.NULL );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -102,35 +111,8 @@ public class RepositoryTableComponent
         removeButton.addSelectionListener( removeButtonListener );
         removeButton.setEnabled( false );
         
-        refreshRepositoryTable();
-        
     }
-    
-    public void refreshRepositoryTable()
-    {
-        repositoriesTable.removeAll();
-        
-        for ( Repository repository : dataSource )
-        {
-            RepositoryPolicy release = new RepositoryPolicy();
-            RepositoryPolicy snapshot = new RepositoryPolicy();
-            
-            release = repository.getReleases();
-            snapshot = repository.getSnapshots();
-            
-
-            String releaseString = release.isEnabled() + ", " + nullIfBlank( release.getUpdatePolicy() ) 
-                + ", " + nullIfBlank( release.getChecksumPolicy() );
-            String snapshotString = snapshot.isEnabled() + ", " + nullIfBlank( snapshot.getUpdatePolicy() ) 
-                + ", " +  nullIfBlank( snapshot.getChecksumPolicy() );
-            
-            TableItem item = new TableItem( repositoriesTable, SWT.BEGINNING );
-            item.setText( new String[] { repository.getId(), repository.getName(), 
-                repository.getUrl(), repository.getLayout(), releaseString, snapshotString } );
-            
-        }
-    }
-    
+ 
     private class RepositoriesTableListener extends SelectionAdapter
     {
         public void defaultWidgetSelected ( SelectionEvent e )
@@ -152,6 +134,7 @@ public class RepositoryTableComponent
                 if ( repositoriesTable.getSelectionIndex() >= 0 )
                 {
                     selectedIndex = repositoriesTable.getSelectionIndex();
+                    List<Repository> dataSource = (List<Repository>)ModelUtil.getValue( model, path, domain, true );
                     selectedRepository = dataSource.get( selectedIndex );
                 }
             }
@@ -172,9 +155,9 @@ public class RepositoryTableComponent
             
             if ( addDialog.open() == Window.OK )
             {                
-                Repository repository = new Repository();
-                RepositoryPolicy releases = new RepositoryPolicy();
-                RepositoryPolicy snapshots = new RepositoryPolicy();
+                Repository repository = PomFactory.eINSTANCE.createRepository();
+                RepositoryPolicy releases = PomFactory.eINSTANCE.createRepositoryPolicy();
+                RepositoryPolicy snapshots = PomFactory.eINSTANCE.createRepositoryPolicy();
                 
                 repository.setId( addDialog.getId() );
                 repository.setName( nullIfBlank( addDialog.getName() ) );
@@ -192,9 +175,8 @@ public class RepositoryTableComponent
                 repository.setReleases( releases );
                 repository.setSnapshots( snapshots );
                 
+                List<Repository> dataSource = (List<Repository>)ModelUtil.getValue( model, path, domain, true );
                 dataSource.add( repository );
-                
-                refreshRepositoryTable();
                 
                 setModified( true );
                 
@@ -217,9 +199,9 @@ public class RepositoryTableComponent
             
             if ( editDialog.openWithRepository( selectedRepository ) == Window.OK )
             {
-                Repository repository = new Repository();
-                RepositoryPolicy releases = new RepositoryPolicy();
-                RepositoryPolicy snapshots = new RepositoryPolicy();
+                Repository repository = PomFactory.eINSTANCE.createRepository();
+                RepositoryPolicy releases = PomFactory.eINSTANCE.createRepositoryPolicy();
+                RepositoryPolicy snapshots = PomFactory.eINSTANCE.createRepositoryPolicy();
                 
                 repository.setId( editDialog.getId() );
                 repository.setName( nullIfBlank( editDialog.getName() ) );
@@ -237,10 +219,9 @@ public class RepositoryTableComponent
                 repository.setReleases( releases );
                 repository.setSnapshots( snapshots );
                 
+                List<Repository> dataSource = (List<Repository>)ModelUtil.getValue( model, path, domain, true );
                 dataSource.remove( selectedRepository );
                 dataSource.add( repository );
-                
-                refreshRepositoryTable();
                 
                 setModified( true );
             }
@@ -260,9 +241,8 @@ public class RepositoryTableComponent
         
         public void widgetSelected( SelectionEvent e )
         {
+        	List<Repository> dataSource = (List<Repository>)ModelUtil.getValue( model, path, domain, true );
             dataSource.remove( selectedRepository );
-            
-            refreshRepositoryTable();
             
             setModified( true );
             

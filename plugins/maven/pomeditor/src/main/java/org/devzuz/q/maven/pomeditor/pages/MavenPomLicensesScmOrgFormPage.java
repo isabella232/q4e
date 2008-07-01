@@ -8,13 +8,17 @@ package org.devzuz.q.maven.pomeditor.pages;
 
 import java.util.List;
 
-import org.apache.maven.model.IssueManagement;
-import org.apache.maven.model.License;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Organization;
-import org.apache.maven.model.Scm;
+import org.devzuz.q.maven.pom.License;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomFactory;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditLicenseDialog;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -68,16 +72,6 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
     private Model pomModel;
 
-    private List<License> licenseList;
-    
-    private License selectedLicense;
-
-    private Scm scm;
-    
-    private Organization organization;
-    
-    private boolean isPageModified;
-
     private Text connectionText;
 
     private Text developerConnectionText;
@@ -93,8 +87,12 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     private Text issueManagementSystemText;
 
     private Text issueManagementUrlText;
-
-    private IssueManagement issueManagement;
+    
+    private License selectedLicense;
+    
+    private EditingDomain domain;
+    
+    private DataBindingContext bindingContext;
 
     public MavenPomLicensesScmOrgFormPage( String id, String title )
     {
@@ -102,11 +100,12 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     }
 
     @SuppressWarnings( "unchecked" )
-    public MavenPomLicensesScmOrgFormPage( FormEditor editor, String id, String title, Model modelPOM )
+    public MavenPomLicensesScmOrgFormPage( FormEditor editor, String id, String title, Model modelPOM, EditingDomain domain, DataBindingContext bindingContext )
     {
         super( editor, id, title );
         this.pomModel = modelPOM;
-        this.licenseList = pomModel.getLicenses();
+        this.bindingContext = bindingContext;
+        this.domain = domain;
     }
 
     @Override
@@ -128,9 +127,6 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         Composite container = toolkit.createComposite( form.getBody() );
         container.setLayoutData( createSectionLayoutData(false) );
         createScmSectionControls( container, toolkit );
-        
-        populateLicenseDatatable();
-        //syncModelToControls();
     }
 
     private GridData createSectionLayoutData(boolean fill)
@@ -160,6 +156,13 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         RowLayout layout = new RowLayout( SWT.VERTICAL );
         layout.fill = true;
         container2.setLayout( layout );
+        
+        ModelUtil.bindTable(
+        		pomModel, 
+        		new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES, PomPackage.Literals.LICENSES_TYPE__LICENSE }, 
+        		new EStructuralFeature[] { PomPackage.Literals.LICENSE__NAME } , 
+        		licensesTable, 
+        		domain );
         
         ButtonListener buttonListener = new ButtonListener();
 
@@ -215,19 +218,29 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new GridLayout( 2, false ) );
         
-        checkIfIssueManagementNull();
-        
         Label systemLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_System, SWT.None );
         systemLabel.setLayoutData( createLabelLayoutData(ISSUE_MANAGEMENT_LABEL_HINT) );
         
         issueManagementSystemText = toolKit.createText( parent, "" );
-        createTextDisplay( issueManagementSystemText, createControlLayoutData(), issueManagement.getSystem() );
+        createTextDisplay( issueManagementSystemText, createControlLayoutData() );
+        ModelUtil.bind(
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__ISSUE_MANAGEMENT, PomPackage.Literals.ISSUE_MANAGEMENT__SYSTEM }, 
+        		SWTObservables.observeText( issueManagementSystemText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label urlLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.None );
         urlLabel.setLayoutData( createLabelLayoutData(ISSUE_MANAGEMENT_LABEL_HINT) );
         
         issueManagementUrlText = toolKit.createText( parent, "" );
-        createTextDisplay( issueManagementUrlText, createControlLayoutData(), issueManagement.getUrl() );
+        createTextDisplay( issueManagementUrlText, createControlLayoutData() );
+        ModelUtil.bind(
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__ISSUE_MANAGEMENT, PomPackage.Literals.ISSUE_MANAGEMENT__URL }, 
+        		SWTObservables.observeText( issueManagementUrlText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         toolKit.paintBordersFor( parent );
        
@@ -252,34 +265,56 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     {
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new GridLayout( 2, false ) );
-        
-        checkIfScmNull();
 
         Label connectionLabel =
             toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Connection, SWT.NONE );
         connectionLabel.setLayoutData( createLabelLayoutData( SCM_LABEL_HINT ) );
 
         connectionText = toolKit.createText( parent, "" );
-        createTextDisplay( connectionText, createControlLayoutData(), scm.getConnection() );
+        createTextDisplay( connectionText, createControlLayoutData() );
+        ModelUtil.bind(
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__SCM, PomPackage.Literals.SCM__CONNECTION }, 
+        		SWTObservables.observeText( connectionText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label developerConnectionLabel =
             toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_DeveloperConnection, SWT.NONE );
         developerConnectionLabel.setLayoutData( createLabelLayoutData( SCM_LABEL_HINT ) );
 
         developerConnectionText = toolKit.createText( parent, "" );
-        createTextDisplay( developerConnectionText, createControlLayoutData(), scm.getDeveloperConnection() );
+        createTextDisplay( developerConnectionText, createControlLayoutData() );
+        ModelUtil.bind(
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__SCM, PomPackage.Literals.SCM__DEVELOPER_CONNECTION }, 
+        		SWTObservables.observeText( developerConnectionText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label tagLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Tag, SWT.NONE );
         tagLabel.setLayoutData( createLabelLayoutData( SCM_LABEL_HINT ) );
 
         tagText = toolKit.createText( parent, "" );
-        createTextDisplay( tagText, createControlLayoutData(), scm.getTag() );
+        createTextDisplay( tagText, createControlLayoutData() );
+        ModelUtil.bind(
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__SCM, PomPackage.Literals.SCM__TAG }, 
+        		SWTObservables.observeText( tagText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label urlLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE );
         urlLabel.setLayoutData( createLabelLayoutData( SCM_LABEL_HINT ) );
 
         urlText = toolKit.createText( parent, "" );
-        createTextDisplay( urlText, createControlLayoutData(), scm.getUrl() );
+        createTextDisplay( urlText, createControlLayoutData() );
+        ModelUtil.bind(
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__SCM, PomPackage.Literals.SCM__URL }, 
+        		SWTObservables.observeText( urlText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         toolKit.paintBordersFor( parent );
 
@@ -290,27 +325,37 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     {
         Composite parent = toolKit.createComposite( form );
         parent.setLayout( new GridLayout( 2, false ) );
-        
-        checkIfOrganizationNull();
 
         Label nameLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Name, SWT.NONE );
         nameLabel.setLayoutData( createLabelLayoutData( ORGANIZATION_LABEL_HINT ) );
 
         nameText = toolKit.createText( parent, "" );
-        createTextDisplay( nameText, createControlLayoutData(), organization.getName() );
+        createTextDisplay( nameText, createControlLayoutData() );
+        ModelUtil.bind(
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__ORGANIZATION, PomPackage.Literals.ORGANIZATION__NAME }, 
+        		SWTObservables.observeText( nameText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label organizationUrlLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE );
         organizationUrlLabel.setLayoutData( createLabelLayoutData( ORGANIZATION_LABEL_HINT ) );
 
         organizationUrlText = toolKit.createText( parent, "" );
-        createTextDisplay( organizationUrlText, createControlLayoutData(), organization.getUrl() );
+        createTextDisplay( organizationUrlText, createControlLayoutData() );
+        ModelUtil.bind(
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__ORGANIZATION, PomPackage.Literals.ORGANIZATION__URL }, 
+        		SWTObservables.observeText( organizationUrlText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         toolKit.paintBordersFor( parent );
 
         return parent;
     }
     
-    private void createTextDisplay( final Text text, GridData controlData, String data )
+    private void createTextDisplay( final Text text, GridData controlData )
     {
         if ( text != null )
         {
@@ -318,8 +363,6 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
             {
                 public void modifyText( ModifyEvent e )
                 {
-                    syncControlsToModel();
-                    pageModified();
                 }
             };
             
@@ -399,96 +442,11 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
             text.setLayoutData( controlData );
             text.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
-            text.setText( blankIfNull( data ) );
             text.addModifyListener( modifyingListener );
             text.addFocusListener( focusListener );
         }
     }
-    
-    private void populateLicenseDatatable()
-    {
-        licensesTable.removeAll();
-        for ( License license : licenseList )
-        {
-            TableItem item = new TableItem( licensesTable, SWT.BEGINNING );
-            item.setText( new String[] { license.getName() } );
-        }
-    }
-    
-    /*private void syncModelToControls()
-    {
-        if ( scm != null )
-        {
-            connectionText.setText( blankIfNull( scm.getConnection() ) );
-            developerConnectionText.setText( blankIfNull( scm.getDeveloperConnection() ) );
-            tagText.setText( blankIfNull( scm.getTag() ) );
-            urlText.setText( blankIfNull( scm.getUrl() ) );
-        }
 
-        if ( organization != null )
-        {
-            nameText.setText( blankIfNull( organization.getName() ) );
-            organizationUrlText.setText( blankIfNull( organization.getUrl() ) );
-        }
-        
-        if ( this.issueManagement != null )
-        {
-            issueManagementSystemText.setText( blankIfNull( this.issueManagement.getSystem() ) );
-            issueManagementUrlText.setText( blankIfNull( this.issueManagement.getUrl() ) );
-            
-        }
-    }*/
-
-    private void syncControlsToModel()
-    {
-        if ( ( connectionText.getText().trim().length() > 0 ) ||
-             ( developerConnectionText.getText().trim().length() > 0 ) ||
-             ( urlText.getText().trim().length() > 0 ) )
-        {            
-            scm.setConnection( nullIfBlank( connectionText.getText().trim() ) );
-            scm.setDeveloperConnection( nullIfBlank( developerConnectionText.getText().trim() ) );
-            scm.setTag( nullIfBlank( tagText.getText().trim() ) );
-            scm.setUrl( nullIfBlank( urlText.getText().trim() ) );
-        }
-        else
-        {
-            if ( ( !( tagText.getText().trim().equals( "HEAD" ) ) &&
-                 ( tagText.getText().trim().length() > 0 ) ) )
-            {
-                scm.setTag( nullIfBlank( tagText.getText().trim() ) );
-            }
-            else
-            {
-                scm = null;
-                pomModel.setScm( null );
-            }            
-        }       
-
-        if ( ( nameText.getText().trim().length() > 0 ) || 
-             ( organizationUrlText.getText().trim().length() > 0 ) )
-        {
-            organization.setName( nullIfBlank( nameText.getText().trim() ) );
-            organization.setUrl( nullIfBlank( organizationUrlText.getText().trim() ) );
-        }
-        else
-        {
-            organization = null;
-            pomModel.setOrganization( null );
-        }
-        
-        if ( ( issueManagementSystemText.getText().trim().length() > 0 ) ||
-             ( issueManagementUrlText.getText().trim().length() > 0 ) )
-        {
-            issueManagement.setSystem( nullIfBlank( issueManagementSystemText.getText().trim() ) );
-            issueManagement.setUrl( nullIfBlank( issueManagementUrlText.getText().trim() ) );
-            
-        }
-        else
-        {
-            issueManagement = null;
-            pomModel.setIssueManagement( issueManagement );            
-        }
-    }
 
     private String nullIfBlank( String str )
     {
@@ -515,6 +473,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                 int selectedIndex = licensesTable.getSelectionIndex(); 
                 if ( selectedIndex >= 0 )
                 {
+                	List<License> licenseList = (List<License>)ModelUtil.getValue( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES, PomPackage.Literals.LICENSES_TYPE__LICENSE }, domain, true );
                     selectedLicense = licenseList.get( selectedIndex );
                 }
             }
@@ -530,6 +489,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
             
             if ( widget.equals( removeLicenseButton ) )
             {
+            	List<License> licenseList = (List<License>)ModelUtil.getValue( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES, PomPackage.Literals.LICENSES_TYPE__LICENSE }, domain, true );
                 licenseList.remove( selectedLicense );
                 resetControlsState();
             }
@@ -551,7 +511,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
             }
             else if ( widget.equals( newLicenseButton ) )
             {
-                License license = new License();
+                License license = PomFactory.eINSTANCE.createLicense();
                 AddEditLicenseDialog addDialog = AddEditLicenseDialog.newAddEditLicenseDialog();
 
                 if ( addDialog.open() == Window.OK )
@@ -562,6 +522,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                     license.setComments( addDialog.getComment() );
                     if ( isValidLicense( license ) && !duplicateLicense( license ) )
                     {
+                    	List<License> licenseList = (List<License>)ModelUtil.getValue( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES, PomPackage.Literals.LICENSES_TYPE__LICENSE }, domain, true );
                         licenseList.add( license );
                     }
 
@@ -574,8 +535,6 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
 
         private void resetControlsState()
         {
-            populateLicenseDatatable();
-            pageModified();
         }
     }
     
@@ -595,6 +554,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     
     private boolean duplicateLicense( License l )
     {
+    	List<License> licenseList = (List<License>)ModelUtil.getValue( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES, PomPackage.Literals.LICENSES_TYPE__LICENSE }, domain, true );
         boolean flag = false;
         if ( licenseList.contains( l ) )
         {
@@ -619,44 +579,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         }
         return flag;
     }
-    
-    private void checkIfIssueManagementNull()
-    {
-        if ( pomModel.getIssueManagement() == null )
-        {
-            IssueManagement issueManagement = new IssueManagement();
-            pomModel.setIssueManagement( issueManagement );
-        }
-        
-        this.issueManagement = pomModel.getIssueManagement();
-        
-    }
-
-    private void checkIfScmNull()
-    {
-       if ( pomModel.getScm() == null )
-       {
-           Scm scm = new Scm();
-           pomModel.setScm( scm );
-       }
-       
-       this.scm = pomModel.getScm();
-        
-    }
-
-    private void checkIfOrganizationNull()
-    {
-        if ( pomModel.getOrganization() == null )
-        {
-            Organization organization = new Organization();
-            pomModel.setOrganization( organization );
-            this.organization = organization;
-        }
-        
-        this.organization = pomModel.getOrganization();
-        
-        
-    }
+ 
 
     public void clear()
     {
@@ -665,23 +588,4 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         editLicenseButton.setEnabled( false );
     }
     
-    /**
-     * @return the isDirty
-     */
-    public boolean isDirty()
-    {
-        return isPageModified;
-    }
-
-    public void setPageModified( boolean isModified )
-    {
-        this.isPageModified = isModified;
-    }
-
-    protected void pageModified()
-    {
-        isPageModified = true;
-        this.getEditor().editorDirtyStateChanged();
-
-    }
 }
