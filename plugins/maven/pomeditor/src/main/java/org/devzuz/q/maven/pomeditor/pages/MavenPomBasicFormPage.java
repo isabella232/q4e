@@ -358,6 +358,26 @@ public class MavenPomBasicFormPage extends FormPage
             }
             
         } );
+        
+        Hyperlink reportingLink =
+            toolKit.createHyperlink( parent, "Manage Reporting Data", SWT.WRAP );
+        reportingLink.addHyperlinkListener( new HyperlinkAdapter()
+        {
+            public void linkActivated( HyperlinkEvent e )
+            {
+                editor.setActivePage( MavenPomFormEditor.REPORTING_FORM_PAGE );
+            }            
+        });
+        
+        Hyperlink profilesLink =
+            toolKit.createHyperlink( parent, "Manage Profiles Data", SWT.WRAP );
+        profilesLink.addHyperlinkListener( new HyperlinkAdapter() 
+        {
+            public void linkActivated( HyperlinkEvent e )
+            {
+                editor.setActivePage( MavenPomFormEditor.PROFILES_FORM_PAGE );
+            }            
+        });
 
         return parent;
     }

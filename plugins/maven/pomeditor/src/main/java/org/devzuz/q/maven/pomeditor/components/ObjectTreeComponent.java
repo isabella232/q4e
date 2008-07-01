@@ -17,13 +17,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-public class PluginTreeComponent extends Composite 
+public class ObjectTreeComponent extends Composite 
 {
 	private TreeViewer treeViewer;
 	
 	private IObjectActionMap objectActionMap;
 	
-	public PluginTreeComponent( Composite parent, int style )
+	public ObjectTreeComponent( Composite parent, int style )
 	{
 		super( parent, style );
 
@@ -112,7 +112,7 @@ public class PluginTreeComponent extends Composite
             List< ITreeObjectAction > actions = objectActionMap.getObjectActions( firstElement );            
             if ( actions != null )
             {
-                Menu rootMenu = new Menu( PluginTreeComponent.this.getParent() );
+                Menu rootMenu = new Menu( ObjectTreeComponent.this.getParent() );
                 for ( final ITreeObjectAction action : actions )
                 {
                     MenuItem item = new MenuItem( rootMenu, SWT.PUSH );

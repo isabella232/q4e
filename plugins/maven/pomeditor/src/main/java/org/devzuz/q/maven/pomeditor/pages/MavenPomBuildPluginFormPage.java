@@ -16,7 +16,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.components.IObjectActionMap;
 import org.devzuz.q.maven.pomeditor.components.ITreeObjectAction;
-import org.devzuz.q.maven.pomeditor.components.PluginTreeComponent;
+import org.devzuz.q.maven.pomeditor.components.ObjectTreeComponent;
 import org.devzuz.q.maven.pomeditor.model.PluginTreeContentProvider;
 import org.devzuz.q.maven.pomeditor.model.PluginTreeLabelProvider;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditConfigurationAction;
@@ -47,7 +47,7 @@ import org.eclipse.ui.forms.widgets.Section;
 public class MavenPomBuildPluginFormPage extends FormPage 
     implements ITreeObjectActionListener
 {
-	private PluginTreeComponent treeComponent;
+	private ObjectTreeComponent treeComponent;
 	
 	private Model pomModel;
 	
@@ -57,7 +57,7 @@ public class MavenPomBuildPluginFormPage extends FormPage
 
     private PluginTreeContentProvider pluginManagementContentProvider;
 
-    private PluginTreeComponent pluginManagementTreeComponent;
+    private ObjectTreeComponent pluginManagementTreeComponent;
     
 	public MavenPomBuildPluginFormPage(FormEditor editor, String id,
 			String title) 
@@ -117,7 +117,7 @@ public class MavenPomBuildPluginFormPage extends FormPage
         parent.setLayout( new FillLayout() );
         
         pluginManagementContentProvider = new PluginTreeContentProvider( pomModel.getBuild().getPluginManagement() );
-        pluginManagementTreeComponent = new PluginTreeComponent( parent, SWT.None );
+        pluginManagementTreeComponent = new ObjectTreeComponent( parent, SWT.None );
         
         pluginManagementTreeComponent.setContentProvider( pluginManagementContentProvider );
         pluginManagementTreeComponent.setLabelProvider( new PluginTreeLabelProvider() );
@@ -137,7 +137,7 @@ public class MavenPomBuildPluginFormPage extends FormPage
 		parent.setLayout( new FillLayout() );
 		
 		contentProvider = new PluginTreeContentProvider( pomModel.getBuild() );
-		treeComponent = new PluginTreeComponent( parent, SWT.None );
+		treeComponent = new ObjectTreeComponent( parent, SWT.None );
 		
 		treeComponent.setContentProvider( contentProvider );
 		treeComponent.setLabelProvider( new PluginTreeLabelProvider() );

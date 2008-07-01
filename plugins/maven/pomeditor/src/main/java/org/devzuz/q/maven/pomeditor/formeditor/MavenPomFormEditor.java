@@ -27,7 +27,9 @@ import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDevelopersContributorsFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomDistributionManagementFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesScmOrgFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomProfilesFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomPropertiesModuleFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomReportingFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomRepositoriesFormPage;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -79,6 +81,12 @@ public class MavenPomFormEditor extends FormEditor
 
     public static final String DISTRIBUTION_MANAGEMENT_FORM_PAGE =
         "org.devzuz.q.maven.pomeditor.MavenPomDistributionManagementFormPage";
+    
+    public static final String REPORTING_FORM_PAGE =
+        "org.devzuz.q.maven.pomeditor.MavenPomReportingFormPage";
+    
+    public static final String PROFILES_FORM_PAGE =
+        "org.devzuz.q.maven.pomeditor.MavenPomProfilesFormPage";
 
     private Model pomModel;
 
@@ -105,6 +113,10 @@ public class MavenPomFormEditor extends FormEditor
     private MavenPomRepositoriesFormPage repositoriesPage;
 
     private MavenPomDistributionManagementFormPage distributionManagementPage;
+    
+    private MavenPomReportingFormPage reportingPage;
+    
+    private MavenPomProfilesFormPage profilesPage;
 
     private IProject project;
 
@@ -284,6 +296,16 @@ public class MavenPomFormEditor extends FormEditor
                     new MavenPomDistributionManagementFormPage( this, DISTRIBUTION_MANAGEMENT_FORM_PAGE,
                                                                 "Distribution Management", this.pomModel );
                 addPage( distributionManagementPage );
+                
+                reportingPage =
+                    new MavenPomReportingFormPage( this, REPORTING_FORM_PAGE, 
+                                                   "Reporting", this.pomModel );                
+                addPage( reportingPage );
+                
+                profilesPage =
+                    new MavenPomProfilesFormPage( this, PROFILES_FORM_PAGE,
+                                                  "Profiles", this.pomModel );
+                addPage( profilesPage );
             }
         }
         catch ( PartInitException pie )
@@ -302,7 +324,7 @@ public class MavenPomFormEditor extends FormEditor
                 
                 pomModel.setGroupId( project.getName() );
                 pomModel.setArtifactId( project.getName() );
-                pomModel.setVersion( "1.0-SNAPSHOT" );
+                pomModel.setVersion( "1.0-SNAPSHOT" ); 
             }
             else
             {
@@ -414,6 +436,8 @@ public class MavenPomFormEditor extends FormEditor
         ciManagementMailingListsPage.setPageModified( false );
         repositoriesPage.setPageModified( false );
         distributionManagementPage.setPageModified( false );
+        reportingPage.setPageModified( false );
+        profilesPage.setPageModified( false );
         // clean other pages
     }
 
