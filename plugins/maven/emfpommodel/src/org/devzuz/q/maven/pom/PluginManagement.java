@@ -34,32 +34,32 @@ import org.eclipse.emf.ecore.EObject;
 public interface PluginManagement extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Plugins</b></em>' containment reference.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Plugins</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * <!-- begin-model-doc -->
-     * 4.0.0
-     * 
-     *             The list of plugins to use.
-     *           
-     * <!-- end-model-doc -->
-     * @return the value of the '<em>Plugins</em>' containment reference.
-     * @see #setPlugins(PluginsType3)
-     * @see org.devzuz.q.maven.pom.PomPackage#getPluginManagement_Plugins()
-     * @model containment="true"
-     *        extendedMetaData="kind='element' name='plugins' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * <!-- begin-model-doc -->
+	 * 4.0.0
+	 * 
+	 *             The list of plugins to use.
+	 *           
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Plugins</em>' containment reference.
+	 * @see #setPlugins(PluginsType3)
+	 * @see org.devzuz.q.maven.pom.PomPackage#getPluginManagement_Plugins()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='plugins' namespace='##targetNamespace'"
+	 * @generated
+	 */
     PluginsType3 getPlugins();
 
     /**
-     * Sets the value of the '{@link org.devzuz.q.maven.pom.PluginManagement#getPlugins <em>Plugins</em>}' containment reference.
-     * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.devzuz.q.maven.pom.PluginManagement#getPlugins <em>Plugins</em>}' containment reference.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Plugins</em>' containment reference.
-     * @see #getPlugins()
-     * @generated
-     */
+	 * @param value the new value of the '<em>Plugins</em>' containment reference.
+	 * @see #getPlugins()
+	 * @generated
+	 */
     void setPlugins(PluginsType3 value);
 
 } // PluginManagement

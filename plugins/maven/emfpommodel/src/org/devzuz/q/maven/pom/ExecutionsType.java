@@ -29,20 +29,20 @@ import org.eclipse.emf.ecore.EObject;
 public interface ExecutionsType extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Execution</b></em>' containment reference list.
-     * The list contents are of type {@link org.devzuz.q.maven.pom.PluginExecution}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Execution</b></em>' containment reference list.
+	 * The list contents are of type {@link org.devzuz.q.maven.pom.PluginExecution}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Execution</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Execution</em>' containment reference list.
-     * @see org.devzuz.q.maven.pom.PomPackage#getExecutionsType_Execution()
-     * @model containment="true"
-     *        extendedMetaData="kind='element' name='execution' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * @return the value of the '<em>Execution</em>' containment reference list.
+	 * @see org.devzuz.q.maven.pom.PomPackage#getExecutionsType_Execution()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='execution' namespace='##targetNamespace'"
+	 * @generated
+	 */
     EList<PluginExecution> getExecution();
 
 } // ExecutionsType

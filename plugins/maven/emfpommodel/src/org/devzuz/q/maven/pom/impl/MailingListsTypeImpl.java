@@ -40,132 +40,126 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class MailingListsTypeImpl extends EObjectImpl implements MailingListsType
 {
     /**
-     * The cached value of the '{@link #getMailingList() <em>Mailing List</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getMailingList() <em>Mailing List</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getMailingList()
-     * @generated
-     * @ordered
-     */
+	 * @see #getMailingList()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<MailingList> mailingList;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected MailingListsTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.MAILING_LISTS_TYPE;
-    }
+		return PomPackage.Literals.MAILING_LISTS_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<MailingList> getMailingList()
     {
-        if (mailingList == null)
-        {
-            mailingList = new EObjectContainmentEList<MailingList>(MailingList.class, this, PomPackage.MAILING_LISTS_TYPE__MAILING_LIST);
-        }
-        return mailingList;
-    }
+		if (mailingList == null) {
+			mailingList = new EObjectContainmentEList<MailingList>(MailingList.class, this, PomPackage.MAILING_LISTS_TYPE__MAILING_LIST);
+		}
+		return mailingList;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
     {
-        switch (featureID)
-        {
-            case PomPackage.MAILING_LISTS_TYPE__MAILING_LIST:
-                return ((InternalEList<?>)getMailingList()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case PomPackage.MAILING_LISTS_TYPE__MAILING_LIST:
+				return ((InternalEList<?>)getMailingList()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.MAILING_LISTS_TYPE__MAILING_LIST:
-                return getMailingList();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.MAILING_LISTS_TYPE__MAILING_LIST:
+				return getMailingList();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.MAILING_LISTS_TYPE__MAILING_LIST:
-                getMailingList().clear();
-                getMailingList().addAll((Collection<? extends MailingList>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.MAILING_LISTS_TYPE__MAILING_LIST:
+				getMailingList().clear();
+				getMailingList().addAll((Collection<? extends MailingList>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.MAILING_LISTS_TYPE__MAILING_LIST:
-                getMailingList().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.MAILING_LISTS_TYPE__MAILING_LIST:
+				getMailingList().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.MAILING_LISTS_TYPE__MAILING_LIST:
-                return mailingList != null && !mailingList.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.MAILING_LISTS_TYPE__MAILING_LIST:
+				return mailingList != null && !mailingList.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //MailingListsTypeImpl

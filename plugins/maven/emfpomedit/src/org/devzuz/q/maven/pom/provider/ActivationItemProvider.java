@@ -48,206 +48,203 @@ public class ActivationItemProvider
         IItemPropertySource		
 {
     /**
-     * This constructs an instance from a factory and a notifier.
-     * <!-- begin-user-doc -->
+	 * This constructs an instance from a factory and a notifier.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public ActivationItemProvider(AdapterFactory adapterFactory)
     {
-        super(adapterFactory);
-    }
+		super(adapterFactory);
+	}
 
     /**
-     * This returns the property descriptors for the adapted class.
-     * <!-- begin-user-doc -->
+	 * This returns the property descriptors for the adapted class.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
     {
-        if (itemPropertyDescriptors == null)
-        {
-            super.getPropertyDescriptors(object);
+		if (itemPropertyDescriptors == null) {
+			super.getPropertyDescriptors(object);
 
-            addActiveByDefaultPropertyDescriptor(object);
-            addJdkPropertyDescriptor(object);
-        }
-        return itemPropertyDescriptors;
-    }
+			addActiveByDefaultPropertyDescriptor(object);
+			addJdkPropertyDescriptor(object);
+		}
+		return itemPropertyDescriptors;
+	}
 
     /**
-     * This adds a property descriptor for the Active By Default feature.
-     * <!-- begin-user-doc -->
+	 * This adds a property descriptor for the Active By Default feature.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected void addActiveByDefaultPropertyDescriptor(Object object)
     {
-        itemPropertyDescriptors.add
-            (createItemPropertyDescriptor
-                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-                 getResourceLocator(),
-                 getString("_UI_Activation_activeByDefault_feature"),
-                 getString("_UI_PropertyDescriptor_description", "_UI_Activation_activeByDefault_feature", "_UI_Activation_type"),
-                 PomPackage.Literals.ACTIVATION__ACTIVE_BY_DEFAULT,
-                 true,
-                 false,
-                 false,
-                 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
-                 null,
-                 null));
-    }
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Activation_activeByDefault_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Activation_activeByDefault_feature", "_UI_Activation_type"),
+				 PomPackage.Literals.ACTIVATION__ACTIVE_BY_DEFAULT,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
+				 null,
+				 null));
+	}
 
     /**
-     * This adds a property descriptor for the Jdk feature.
-     * <!-- begin-user-doc -->
+	 * This adds a property descriptor for the Jdk feature.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected void addJdkPropertyDescriptor(Object object)
     {
-        itemPropertyDescriptors.add
-            (createItemPropertyDescriptor
-                (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-                 getResourceLocator(),
-                 getString("_UI_Activation_jdk_feature"),
-                 getString("_UI_PropertyDescriptor_description", "_UI_Activation_jdk_feature", "_UI_Activation_type"),
-                 PomPackage.Literals.ACTIVATION__JDK,
-                 true,
-                 false,
-                 false,
-                 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-                 null,
-                 null));
-    }
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_Activation_jdk_feature"),
+				 getString("_UI_PropertyDescriptor_description", "_UI_Activation_jdk_feature", "_UI_Activation_type"),
+				 PomPackage.Literals.ACTIVATION__JDK,
+				 true,
+				 false,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+				 null,
+				 null));
+	}
 
     /**
-     * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-     * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-     * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-     * <!-- begin-user-doc -->
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object)
     {
-        if (childrenFeatures == null)
-        {
-            super.getChildrenFeatures(object);
-            childrenFeatures.add(PomPackage.Literals.ACTIVATION__OS);
-            childrenFeatures.add(PomPackage.Literals.ACTIVATION__PROPERTY);
-            childrenFeatures.add(PomPackage.Literals.ACTIVATION__FILE);
-        }
-        return childrenFeatures;
-    }
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(PomPackage.Literals.ACTIVATION__OS);
+			childrenFeatures.add(PomPackage.Literals.ACTIVATION__PROPERTY);
+			childrenFeatures.add(PomPackage.Literals.ACTIVATION__FILE);
+		}
+		return childrenFeatures;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EStructuralFeature getChildFeature(Object object, Object child)
     {
-        // Check the type of the specified child object and return the proper feature to use for
-        // adding (see {@link AddCommand}) it as a child.
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
 
-        return super.getChildFeature(object, child);
-    }
+		return super.getChildFeature(object, child);
+	}
 
     /**
-     * This returns Activation.gif.
-     * <!-- begin-user-doc -->
+	 * This returns Activation.gif.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object getImage(Object object)
     {
-        return overlayImage(object, getResourceLocator().getImage("full/obj16/Activation"));
-    }
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/Activation"));
+	}
 
     /**
-     * This returns the label text for the adapted class.
-     * <!-- begin-user-doc -->
+	 * This returns the label text for the adapted class.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public String getText(Object object)
     {
-        Activation activation = (Activation)object;
-        return getString("_UI_Activation_type") + " " + activation.isActiveByDefault();
-    }
+		Activation activation = (Activation)object;
+		return getString("_UI_Activation_type") + " " + activation.isActiveByDefault();
+	}
 
     /**
-     * This handles model notifications by calling {@link #updateChildren} to update any cached
-     * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-     * <!-- begin-user-doc -->
+	 * This handles model notifications by calling {@link #updateChildren} to update any cached
+	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void notifyChanged(Notification notification)
     {
-        updateChildren(notification);
+		updateChildren(notification);
 
-        switch (notification.getFeatureID(Activation.class))
-        {
-            case PomPackage.ACTIVATION__ACTIVE_BY_DEFAULT:
-            case PomPackage.ACTIVATION__JDK:
-                fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-                return;
-            case PomPackage.ACTIVATION__OS:
-            case PomPackage.ACTIVATION__PROPERTY:
-            case PomPackage.ACTIVATION__FILE:
-                fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-                return;
-        }
-        super.notifyChanged(notification);
-    }
+		switch (notification.getFeatureID(Activation.class)) {
+			case PomPackage.ACTIVATION__ACTIVE_BY_DEFAULT:
+			case PomPackage.ACTIVATION__JDK:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case PomPackage.ACTIVATION__OS:
+			case PomPackage.ACTIVATION__PROPERTY:
+			case PomPackage.ACTIVATION__FILE:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
+				return;
+		}
+		super.notifyChanged(notification);
+	}
 
     /**
-     * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-     * that can be created under this object.
-     * <!-- begin-user-doc -->
+	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
+	 * that can be created under this object.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
     {
-        super.collectNewChildDescriptors(newChildDescriptors, object);
+		super.collectNewChildDescriptors(newChildDescriptors, object);
 
-        newChildDescriptors.add
-            (createChildParameter
-                (PomPackage.Literals.ACTIVATION__OS,
-                 PomFactory.eINSTANCE.createActivationOS()));
+		newChildDescriptors.add
+			(createChildParameter
+				(PomPackage.Literals.ACTIVATION__OS,
+				 PomFactory.eINSTANCE.createActivationOS()));
 
-        newChildDescriptors.add
-            (createChildParameter
-                (PomPackage.Literals.ACTIVATION__PROPERTY,
-                 PomFactory.eINSTANCE.createActivationProperty()));
+		newChildDescriptors.add
+			(createChildParameter
+				(PomPackage.Literals.ACTIVATION__PROPERTY,
+				 PomFactory.eINSTANCE.createActivationProperty()));
 
-        newChildDescriptors.add
-            (createChildParameter
-                (PomPackage.Literals.ACTIVATION__FILE,
-                 PomFactory.eINSTANCE.createActivationFile()));
-    }
+		newChildDescriptors.add
+			(createChildParameter
+				(PomPackage.Literals.ACTIVATION__FILE,
+				 PomFactory.eINSTANCE.createActivationFile()));
+	}
 
     /**
-     * Return the resource locator for this item provider's resources.
-     * <!-- begin-user-doc -->
+	 * Return the resource locator for this item provider's resources.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public ResourceLocator getResourceLocator()
     {
-        return PomEditPlugin.INSTANCE;
-    }
+		return PomEditPlugin.INSTANCE;
+	}
 
 }

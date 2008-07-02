@@ -276,7 +276,7 @@ public class MavenPomFormEditor extends FormEditor
                 addPage( developersContributorsFormPage );
 
                 modulePropertiesFormPage =
-                    new MavenPomPropertiesModuleFormPage( this, MODULES_FORM_PAGE, "Properties/Module", this.pomModel );
+                    new MavenPomPropertiesModuleFormPage( this, MODULES_FORM_PAGE, "Properties/Module", this.emfModel, editingDomain, bindingContext );
                 addPage( modulePropertiesFormPage );
 
                 buildFormPage = new MavenPomBuildFormPage( this, BUILD_FORM_PAGE, "Build Management", this.emfModel, this.editingDomain, this.bindingContext );

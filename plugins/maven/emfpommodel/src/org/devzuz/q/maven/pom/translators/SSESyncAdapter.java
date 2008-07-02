@@ -4,8 +4,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.devzuz.q.maven.pom.ConfigurationElement;
 import org.devzuz.q.maven.pom.PomFactory;
-import org.devzuz.q.maven.pom.util.PropertyUtil;
+import org.devzuz.q.maven.pom.PomPackage;
+import org.devzuz.q.maven.pom.PropertyElement;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
@@ -92,19 +94,6 @@ public class SSESyncAdapter
                             }
                             ExtendedEcoreUtil.eUnsetOrRemove( eobject, feature, value );
                         }
-                        else
-                        {
-                            //handle feature maps
-                            feature = PropertyUtil.getPropertyFeature( removedElement.getTagName() );
-                            for ( EAttribute classFeature : eobject.eClass().getEAttributes() )
-                            {
-                                if( classFeature.getEAttributeType() == EcorePackage.Literals.EFEATURE_MAP_ENTRY )
-                                {
-                                    FeatureMap featureMap = (FeatureMap) eobject.eGet( classFeature );
-                                    featureMap.unset( feature );
-                                }
-                            }
-                        }
                     }
                 }
                 else if( notifier instanceof IDOMElement && changedFeature instanceof Text )
@@ -148,14 +137,7 @@ public class SSESyncAdapter
                         break;
                         
                     case Notification.ADD:
-                        //On add or set of a feature map entry we get a SET and then an ADD
-                        //
-                        //I'm not sure why or how to handle this, so I'll
-                        //just ignore the add.
-                        if( !( notification.getNewValue() instanceof FeatureMap.Entry ) )
-                        {
-                            addChildElement( feature, notification.getNewValue(), notification.getPosition() );
-                        }
+                        addChildElement( feature, notification.getNewValue(), notification.getPosition() );
                         break;
                         
                     case Notification.ADD_MANY:
@@ -259,7 +241,23 @@ public class SSESyncAdapter
      */
     private void addChildElement( EStructuralFeature feature, Object value, int position )
     {
-        Element element = createAndInsertChildElement( value, feature.getName(), position );
+    	String name = feature.getName();
+    	Object usedValue = value;
+    	if( value instanceof PropertyElement )
+        {
+        	PropertyElement pe = (PropertyElement) value;
+        	name = pe.getName();
+        	usedValue = pe.getValue();
+        }
+    	
+    	if( value instanceof ConfigurationElement )
+        {
+    		ConfigurationElement ce = (ConfigurationElement) value;
+        	name = ce.getName();
+        	usedValue = ce.getValue() == null ? ce.getChildren() : ce.getValue();
+        }
+    	
+        Element element = createAndInsertChildElement( usedValue, name, position );
     }
     
     /**
@@ -592,7 +590,7 @@ public class SSESyncAdapter
                 EReference ref = (EReference)feature;
                 EObject childObject = null;
                 SSESyncAdapter existingAdapter = (SSESyncAdapter) ( (IDOMElement)element ).getExistingAdapter( SSESyncAdapter.class );
-                if( existingAdapter == null)
+                if( existingAdapter == null )
                 {
                     childObject = PomFactory.eINSTANCE.create( ref.getEReferenceType() );
                     SSESyncAdapter adapter = new SSESyncAdapter( resource, childObject, element );
@@ -606,6 +604,15 @@ public class SSESyncAdapter
                     childObject = existingAdapter.eobject;
                 }
             }
+            else if( feature instanceof EAttribute && ( (EAttribute) feature ).getEType() == PomPackage.Literals.PROPERTY_ELEMENT )
+            {
+            	PropertyElement childObject = PomFactory.eINSTANCE.createPropertyElement();
+                SSESyncAdapter adapter = new SSESyncAdapter( resource, childObject, element );
+                childObject.eAdapters().add( adapter );
+                ((IDOMElement)element).addAdapter( adapter );
+                ExtendedEcoreUtil.eSetOrAdd( eobject, feature, childObject, pos );
+                adapter.load();
+            }
             else
             {
                 String newValue = getElementText( element );
@@ -613,20 +620,7 @@ public class SSESyncAdapter
                 ((IDOMElement)element).addAdapter( new ValueUpdateAdapter(this ) );
             }
         }
-        else
-        {
-            //handle feature maps
-            
-            for ( EAttribute classFeature : eobject.eClass().getEAttributes() )
-            {
-                if( classFeature.getEAttributeType() == EcorePackage.Literals.EFEATURE_MAP_ENTRY )
-                {
-                    feature = PropertyUtil.getPropertyFeature( element.getTagName() );
-                    FeatureMap featureMap = (FeatureMap) eobject.eGet( classFeature );
-                    featureMap.set( feature, getElementText( element ) );
-                }
-            }
-        }
+        
     }
     
     /**

@@ -40,132 +40,126 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class ExtensionsTypeImpl extends EObjectImpl implements ExtensionsType
 {
     /**
-     * The cached value of the '{@link #getExtension() <em>Extension</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getExtension() <em>Extension</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getExtension()
-     * @generated
-     * @ordered
-     */
+	 * @see #getExtension()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<Extension> extension;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ExtensionsTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.EXTENSIONS_TYPE;
-    }
+		return PomPackage.Literals.EXTENSIONS_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<Extension> getExtension()
     {
-        if (extension == null)
-        {
-            extension = new EObjectContainmentEList<Extension>(Extension.class, this, PomPackage.EXTENSIONS_TYPE__EXTENSION);
-        }
-        return extension;
-    }
+		if (extension == null) {
+			extension = new EObjectContainmentEList<Extension>(Extension.class, this, PomPackage.EXTENSIONS_TYPE__EXTENSION);
+		}
+		return extension;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXTENSIONS_TYPE__EXTENSION:
-                return ((InternalEList<?>)getExtension()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case PomPackage.EXTENSIONS_TYPE__EXTENSION:
+				return ((InternalEList<?>)getExtension()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXTENSIONS_TYPE__EXTENSION:
-                return getExtension();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.EXTENSIONS_TYPE__EXTENSION:
+				return getExtension();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXTENSIONS_TYPE__EXTENSION:
-                getExtension().clear();
-                getExtension().addAll((Collection<? extends Extension>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.EXTENSIONS_TYPE__EXTENSION:
+				getExtension().clear();
+				getExtension().addAll((Collection<? extends Extension>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXTENSIONS_TYPE__EXTENSION:
-                getExtension().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.EXTENSIONS_TYPE__EXTENSION:
+				getExtension().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXTENSIONS_TYPE__EXTENSION:
-                return extension != null && !extension.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.EXTENSIONS_TYPE__EXTENSION:
+				return extension != null && !extension.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //ExtensionsTypeImpl

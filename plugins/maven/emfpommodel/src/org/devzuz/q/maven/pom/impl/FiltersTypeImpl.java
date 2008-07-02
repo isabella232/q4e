@@ -35,133 +35,128 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
 public class FiltersTypeImpl extends EObjectImpl implements FiltersType
 {
     /**
-     * The cached value of the '{@link #getFilter() <em>Filter</em>}' attribute list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getFilter() <em>Filter</em>}' attribute list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getFilter()
-     * @generated
-     * @ordered
-     */
+	 * @see #getFilter()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<String> filter;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected FiltersTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.FILTERS_TYPE;
-    }
+		return PomPackage.Literals.FILTERS_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<String> getFilter()
     {
-        if (filter == null)
-        {
-            filter = new EDataTypeEList<String>(String.class, this, PomPackage.FILTERS_TYPE__FILTER);
-        }
-        return filter;
-    }
+		if (filter == null) {
+			filter = new EDataTypeEList<String>(String.class, this, PomPackage.FILTERS_TYPE__FILTER);
+		}
+		return filter;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.FILTERS_TYPE__FILTER:
-                return getFilter();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.FILTERS_TYPE__FILTER:
+				return getFilter();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.FILTERS_TYPE__FILTER:
-                getFilter().clear();
-                getFilter().addAll((Collection<? extends String>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.FILTERS_TYPE__FILTER:
+				getFilter().clear();
+				getFilter().addAll((Collection<? extends String>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.FILTERS_TYPE__FILTER:
-                getFilter().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.FILTERS_TYPE__FILTER:
+				getFilter().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.FILTERS_TYPE__FILTER:
-                return filter != null && !filter.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.FILTERS_TYPE__FILTER:
+				return filter != null && !filter.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public String toString()
     {
-        if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (filter: ");
-        result.append(filter);
-        result.append(')');
-        return result.toString();
-    }
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (filter: ");
+		result.append(filter);
+		result.append(')');
+		return result.toString();
+	}
 
 } //FiltersTypeImpl

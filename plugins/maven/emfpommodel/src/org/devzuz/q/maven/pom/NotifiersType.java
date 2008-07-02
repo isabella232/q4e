@@ -29,20 +29,20 @@ import org.eclipse.emf.ecore.EObject;
 public interface NotifiersType extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Notifier</b></em>' containment reference list.
-     * The list contents are of type {@link org.devzuz.q.maven.pom.Notifier}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Notifier</b></em>' containment reference list.
+	 * The list contents are of type {@link org.devzuz.q.maven.pom.Notifier}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Notifier</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Notifier</em>' containment reference list.
-     * @see org.devzuz.q.maven.pom.PomPackage#getNotifiersType_Notifier()
-     * @model containment="true"
-     *        extendedMetaData="kind='element' name='notifier' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * @return the value of the '<em>Notifier</em>' containment reference list.
+	 * @see org.devzuz.q.maven.pom.PomPackage#getNotifiersType_Notifier()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='notifier' namespace='##targetNamespace'"
+	 * @generated
+	 */
     EList<Notifier> getNotifier();
 
 } // NotifiersType

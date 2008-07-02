@@ -29,20 +29,20 @@ import org.eclipse.emf.ecore.EObject;
 public interface DevelopersType extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Developer</b></em>' containment reference list.
-     * The list contents are of type {@link org.devzuz.q.maven.pom.Developer}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Developer</b></em>' containment reference list.
+	 * The list contents are of type {@link org.devzuz.q.maven.pom.Developer}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Developer</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Developer</em>' containment reference list.
-     * @see org.devzuz.q.maven.pom.PomPackage#getDevelopersType_Developer()
-     * @model containment="true"
-     *        extendedMetaData="kind='element' name='developer' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * @return the value of the '<em>Developer</em>' containment reference list.
+	 * @see org.devzuz.q.maven.pom.PomPackage#getDevelopersType_Developer()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='developer' namespace='##targetNamespace'"
+	 * @generated
+	 */
     EList<Developer> getDeveloper();
 
 } // DevelopersType

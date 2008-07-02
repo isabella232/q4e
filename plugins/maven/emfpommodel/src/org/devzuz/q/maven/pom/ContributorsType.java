@@ -29,20 +29,20 @@ import org.eclipse.emf.ecore.EObject;
 public interface ContributorsType extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Contributor</b></em>' containment reference list.
-     * The list contents are of type {@link org.devzuz.q.maven.pom.Contributor}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Contributor</b></em>' containment reference list.
+	 * The list contents are of type {@link org.devzuz.q.maven.pom.Contributor}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Contributor</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Contributor</em>' containment reference list.
-     * @see org.devzuz.q.maven.pom.PomPackage#getContributorsType_Contributor()
-     * @model containment="true"
-     *        extendedMetaData="kind='element' name='contributor' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * @return the value of the '<em>Contributor</em>' containment reference list.
+	 * @see org.devzuz.q.maven.pom.PomPackage#getContributorsType_Contributor()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='contributor' namespace='##targetNamespace'"
+	 * @generated
+	 */
     EList<Contributor> getContributor();
 
 } // ContributorsType

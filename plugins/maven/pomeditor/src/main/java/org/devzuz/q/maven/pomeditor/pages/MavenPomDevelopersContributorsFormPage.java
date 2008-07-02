@@ -346,7 +346,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     }
                     
                     developer.setTimezone( nullIfBlank( addDialog.getTimezone() ) );
-                    //TODO: developer.setProperties( nullIfSizeZero( addDialog.getProperties() ) );
+                    developer.setProperties( addDialog.getProperties() );
                     
                     List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS, PomPackage.Literals.DEVELOPERS_TYPE__DEVELOPER } , domain, true );
                     developersList.add( developer );
@@ -374,7 +374,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                                          blankIfNull( selectedDeveloper.getOrganizationUrl() ), 
                                          blankIfNull( oldRoles ), 
                                          blankIfNull( selectedDeveloper.getTimezone() ),
-                                         /*TODO: selectedDeveloper.getProperties() */ null ) == Window.OK )
+                                         selectedDeveloper.getProperties() ) == Window.OK )
             {             
                     
                 Developer newDeveloper = PomFactory.eINSTANCE.createDeveloper();
@@ -403,7 +403,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     newDeveloper.setRoles( null );
                 }
                 
-                //TODO: newDeveloper.setProperties( nullIfSizeZero( editDialog.getProperties() ) );
+                newDeveloper.setProperties( editDialog.getProperties() );
                 
                 //if ( ( developerAlreadyExist( newDeveloper.getId() ) ) ||
                 //      ( !selectedDeveloper.getId().equalsIgnoreCase( newDeveloper.getId() ) ) )
@@ -491,7 +491,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     }
                 
                     contributor.setTimezone( nullIfBlank( addDialog.getTimezone() ) );
-                    //TODO: contributor.setProperties( nullIfSizeZero( addDialog.getProperties() ) );
+                    contributor.setProperties( addDialog.getProperties() );
                     
                     List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS, PomPackage.Literals.CONTRIBUTORS_TYPE__CONTRIBUTOR } , domain, true );
                     contributorList.add( contributor );
@@ -519,7 +519,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                                          blankIfNull( selectedContributor.getOrganizationUrl() ), 
                                          blankIfNull( oldRoles ), 
                                          blankIfNull( selectedContributor.getTimezone() ),
-                                         /* TODO: selectedContributor.getProperties() */ null ) == Window.OK )
+                                         selectedContributor.getProperties() ) == Window.OK )
             {                    
                 Contributor newContributor = PomFactory.eINSTANCE.createContributor();                    
                 
@@ -546,7 +546,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     newContributor.setRoles( null );
                 }
                 
-                //TODO: newContributor.setProperties( nullIfSizeZero( editDialog.getProperties() ) );
+                newContributor.setProperties( editDialog.getProperties() );
                 
                 if ( contributorAlreadyExist( newContributor.getName(), newContributor.getEmail() ) )
                 {

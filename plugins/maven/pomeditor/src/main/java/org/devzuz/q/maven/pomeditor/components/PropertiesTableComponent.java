@@ -1,9 +1,16 @@
 package org.devzuz.q.maven.pomeditor.components;
 
-import java.util.Properties;
+import java.util.List;
 
+import org.devzuz.q.maven.pom.PomFactory;
+import org.devzuz.q.maven.pom.PomPackage;
+import org.devzuz.q.maven.pom.PropertyElement;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.ui.dialogs.KeyValueEditorDialog;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -28,9 +35,13 @@ public class PropertiesTableComponent
     
     private Button removeButton;
 
-    private Properties dataSource;
-
-    private String oldKey , oldValue;
+    private int selectedIndex;
+    
+    private EObject model;
+    
+    private EditingDomain domain;
+    
+    private EStructuralFeature[] path;
 
     public PropertiesTableComponent( Composite parent, int style )
     {
@@ -53,6 +64,8 @@ public class PropertiesTableComponent
         TableColumn valueColumn = new TableColumn( propertiesTable, SWT.BEGINNING, 1 );
         valueColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Value );
         valueColumn.setWidth( 200 );
+        
+        
 
         Composite container2 = new Composite( this, SWT.NULL );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -78,31 +91,21 @@ public class PropertiesTableComponent
         removeButton.setEnabled( false );
     }
     
-    public void updateTable( Properties dataSource )
+    public void bind( EObject model, EStructuralFeature[] path, EditingDomain domain )
     {
-        assert dataSource != null;
-
-        this.dataSource = dataSource;
-        
-        propertiesTable.removeAll();
-        
-        refreshPropertiesTable();
+    	ModelUtil.bindTable(
+        		model, 
+        		path, 
+        		new EStructuralFeature[] { PomPackage.Literals.PROPERTY_ELEMENT__NAME, PomPackage.Literals.PROPERTY_ELEMENT__VALUE }, 
+        		propertiesTable, 
+        		domain );
+    	this.model = model;
+    	this.path = path;
+    	this.domain = domain;
     }
     
     private void refreshPropertiesTable()
     {
-        propertiesTable.removeAll();
-        
-        if ( ( dataSource.keySet() != null ) && ( dataSource.size() > 0 ) )
-        {
-            for ( Object keys : dataSource.keySet() )
-            {
-                String str = (String) keys;
-                TableItem tableItem = new TableItem( propertiesTable, SWT.BEGINNING );
-                tableItem.setText( new String[] { str, dataSource.getProperty( str ).toString() } );
-            }
-        }
-        
         propertiesTable.deselectAll();
         
         removeButton.setEnabled( false );
@@ -122,9 +125,7 @@ public class PropertiesTableComponent
                 removeButton.setEnabled( true );
                 editButton.setEnabled( true );
                 
-                TableItem[] selectedItem = propertiesTable.getSelection();
-                oldKey = selectedItem[0].getText( 0 );
-                oldValue = selectedItem[0].getText( 1 );
+                selectedIndex = propertiesTable.getSelectionIndex();
             }
         }
     }
@@ -140,13 +141,11 @@ public class PropertiesTableComponent
             {
                 if ( !keyAlreadyExist( keyValueDialog.getKey() ) )
                 {
-                    dataSource.put( keyValueDialog.getKey(), keyValueDialog.getValue() );                    
-                    
-                    // Have to manually add it to the table since the order gets messed up.
-                    // the property gets added in the middle.
-                    TableItem item = new TableItem( propertiesTable, SWT.BEGINNING );
-                    item.setText( new String[] { keyValueDialog.getKey(), keyValueDialog.getValue() } );
-                    
+                	List<PropertyElement> properties = (List<PropertyElement>) ModelUtil.getValue( model, path, domain, true );
+                	PropertyElement newProp = PomFactory.eINSTANCE.createPropertyElement();
+                	newProp.setName( keyValueDialog.getKey() );
+                	newProp.setValue( keyValueDialog.getValue() );
+                    properties.add( newProp );                    
                     notifyListeners( propertiesTable );
                 }
             }
@@ -159,10 +158,15 @@ public class PropertiesTableComponent
         {
             KeyValueEditorDialog keyValueDialog = KeyValueEditorDialog.getKeyValueEditorDialog();
             
-            if ( keyValueDialog.openWithEntry( oldKey, oldValue ) == Window.OK )
+            List<PropertyElement> properties = (List<PropertyElement>) ModelUtil.getValue( model, path, domain, true );
+            PropertyElement prop = properties.get( selectedIndex );
+            if ( keyValueDialog.openWithEntry( prop.getName(), prop.getValue() ) == Window.OK )
             {
-                dataSource.remove( oldKey );
-                dataSource.put( keyValueDialog.getKey(), keyValueDialog.getValue() );
+            	properties.remove( selectedIndex );
+            	PropertyElement newProp = PomFactory.eINSTANCE.createPropertyElement();
+            	newProp.setName( keyValueDialog.getKey() );
+            	newProp.setValue( keyValueDialog.getValue() );
+                properties.add( selectedIndex, newProp );
                 
                 refreshPropertiesTable();
                 
@@ -175,7 +179,8 @@ public class PropertiesTableComponent
     {
         public void widgetSelected( SelectionEvent e )
         {
-            dataSource.remove( oldKey );
+            List<PropertyElement> properties = (List<PropertyElement>) ModelUtil.getValue( model, path, domain, true );
+            properties.remove( selectedIndex );
             
             refreshPropertiesTable();
             
@@ -185,12 +190,15 @@ public class PropertiesTableComponent
 
     public boolean keyAlreadyExist( String key )
     {
-        if ( dataSource.containsKey( key ) )
-        {
-            return true;
-        }
-    
-        return false;
+    	List<PropertyElement> properties = (List<PropertyElement>) ModelUtil.getValue( model, path, domain, true );
+    	for ( PropertyElement propertyElement : properties ) 
+    	{
+    		if( propertyElement.getName().equals( key ) )
+    		{
+    			return true;
+    		}
+		}
+    	return false;
     }
 
 }

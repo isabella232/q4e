@@ -35,315 +35,311 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 public class ActivationOSImpl extends EObjectImpl implements ActivationOS
 {
     /**
-     * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getName()
-     * @generated
-     * @ordered
-     */
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String NAME_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getName()
-     * @generated
-     * @ordered
-     */
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
     protected String name = NAME_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getFamily() <em>Family</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getFamily() <em>Family</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getFamily()
-     * @generated
-     * @ordered
-     */
+	 * @see #getFamily()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String FAMILY_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getFamily() <em>Family</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getFamily() <em>Family</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getFamily()
-     * @generated
-     * @ordered
-     */
+	 * @see #getFamily()
+	 * @generated
+	 * @ordered
+	 */
     protected String family = FAMILY_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getArch() <em>Arch</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getArch() <em>Arch</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getArch()
-     * @generated
-     * @ordered
-     */
+	 * @see #getArch()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String ARCH_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getArch() <em>Arch</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getArch() <em>Arch</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getArch()
-     * @generated
-     * @ordered
-     */
+	 * @see #getArch()
+	 * @generated
+	 * @ordered
+	 */
     protected String arch = ARCH_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getVersion() <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getVersion()
-     * @generated
-     * @ordered
-     */
+	 * @see #getVersion()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String VERSION_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getVersion() <em>Version</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getVersion()
-     * @generated
-     * @ordered
-     */
+	 * @see #getVersion()
+	 * @generated
+	 * @ordered
+	 */
     protected String version = VERSION_EDEFAULT;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ActivationOSImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.ACTIVATION_OS;
-    }
+		return PomPackage.Literals.ACTIVATION_OS;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getName()
     {
-        return name;
-    }
+		return name;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setName(String newName)
     {
-        String oldName = name;
-        name = newName;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_OS__NAME, oldName, name));
-    }
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_OS__NAME, oldName, name));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getFamily()
     {
-        return family;
-    }
+		return family;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setFamily(String newFamily)
     {
-        String oldFamily = family;
-        family = newFamily;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_OS__FAMILY, oldFamily, family));
-    }
+		String oldFamily = family;
+		family = newFamily;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_OS__FAMILY, oldFamily, family));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getArch()
     {
-        return arch;
-    }
+		return arch;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setArch(String newArch)
     {
-        String oldArch = arch;
-        arch = newArch;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_OS__ARCH, oldArch, arch));
-    }
+		String oldArch = arch;
+		arch = newArch;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_OS__ARCH, oldArch, arch));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getVersion()
     {
-        return version;
-    }
+		return version;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setVersion(String newVersion)
     {
-        String oldVersion = version;
-        version = newVersion;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_OS__VERSION, oldVersion, version));
-    }
+		String oldVersion = version;
+		version = newVersion;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_OS__VERSION, oldVersion, version));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.ACTIVATION_OS__NAME:
-                return getName();
-            case PomPackage.ACTIVATION_OS__FAMILY:
-                return getFamily();
-            case PomPackage.ACTIVATION_OS__ARCH:
-                return getArch();
-            case PomPackage.ACTIVATION_OS__VERSION:
-                return getVersion();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.ACTIVATION_OS__NAME:
+				return getName();
+			case PomPackage.ACTIVATION_OS__FAMILY:
+				return getFamily();
+			case PomPackage.ACTIVATION_OS__ARCH:
+				return getArch();
+			case PomPackage.ACTIVATION_OS__VERSION:
+				return getVersion();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.ACTIVATION_OS__NAME:
-                setName((String)newValue);
-                return;
-            case PomPackage.ACTIVATION_OS__FAMILY:
-                setFamily((String)newValue);
-                return;
-            case PomPackage.ACTIVATION_OS__ARCH:
-                setArch((String)newValue);
-                return;
-            case PomPackage.ACTIVATION_OS__VERSION:
-                setVersion((String)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.ACTIVATION_OS__NAME:
+				setName((String)newValue);
+				return;
+			case PomPackage.ACTIVATION_OS__FAMILY:
+				setFamily((String)newValue);
+				return;
+			case PomPackage.ACTIVATION_OS__ARCH:
+				setArch((String)newValue);
+				return;
+			case PomPackage.ACTIVATION_OS__VERSION:
+				setVersion((String)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.ACTIVATION_OS__NAME:
-                setName(NAME_EDEFAULT);
-                return;
-            case PomPackage.ACTIVATION_OS__FAMILY:
-                setFamily(FAMILY_EDEFAULT);
-                return;
-            case PomPackage.ACTIVATION_OS__ARCH:
-                setArch(ARCH_EDEFAULT);
-                return;
-            case PomPackage.ACTIVATION_OS__VERSION:
-                setVersion(VERSION_EDEFAULT);
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.ACTIVATION_OS__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case PomPackage.ACTIVATION_OS__FAMILY:
+				setFamily(FAMILY_EDEFAULT);
+				return;
+			case PomPackage.ACTIVATION_OS__ARCH:
+				setArch(ARCH_EDEFAULT);
+				return;
+			case PomPackage.ACTIVATION_OS__VERSION:
+				setVersion(VERSION_EDEFAULT);
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.ACTIVATION_OS__NAME:
-                return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-            case PomPackage.ACTIVATION_OS__FAMILY:
-                return FAMILY_EDEFAULT == null ? family != null : !FAMILY_EDEFAULT.equals(family);
-            case PomPackage.ACTIVATION_OS__ARCH:
-                return ARCH_EDEFAULT == null ? arch != null : !ARCH_EDEFAULT.equals(arch);
-            case PomPackage.ACTIVATION_OS__VERSION:
-                return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.ACTIVATION_OS__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case PomPackage.ACTIVATION_OS__FAMILY:
+				return FAMILY_EDEFAULT == null ? family != null : !FAMILY_EDEFAULT.equals(family);
+			case PomPackage.ACTIVATION_OS__ARCH:
+				return ARCH_EDEFAULT == null ? arch != null : !ARCH_EDEFAULT.equals(arch);
+			case PomPackage.ACTIVATION_OS__VERSION:
+				return VERSION_EDEFAULT == null ? version != null : !VERSION_EDEFAULT.equals(version);
+		}
+		return super.eIsSet(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public String toString()
     {
-        if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (name: ");
-        result.append(name);
-        result.append(", family: ");
-        result.append(family);
-        result.append(", arch: ");
-        result.append(arch);
-        result.append(", version: ");
-        result.append(version);
-        result.append(')');
-        return result.toString();
-    }
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (name: ");
+		result.append(name);
+		result.append(", family: ");
+		result.append(family);
+		result.append(", arch: ");
+		result.append(arch);
+		result.append(", version: ");
+		result.append(version);
+		result.append(')');
+		return result.toString();
+	}
 
 } //ActivationOSImpl

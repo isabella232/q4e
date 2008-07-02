@@ -29,20 +29,20 @@ import org.eclipse.emf.ecore.EObject;
 public interface ReportSetsType extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Report Set</b></em>' containment reference list.
-     * The list contents are of type {@link org.devzuz.q.maven.pom.ReportSet}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Report Set</b></em>' containment reference list.
+	 * The list contents are of type {@link org.devzuz.q.maven.pom.ReportSet}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Report Set</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Report Set</em>' containment reference list.
-     * @see org.devzuz.q.maven.pom.PomPackage#getReportSetsType_ReportSet()
-     * @model containment="true"
-     *        extendedMetaData="kind='element' name='reportSet' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * @return the value of the '<em>Report Set</em>' containment reference list.
+	 * @see org.devzuz.q.maven.pom.PomPackage#getReportSetsType_ReportSet()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='reportSet' namespace='##targetNamespace'"
+	 * @generated
+	 */
     EList<ReportSet> getReportSet();
 
 } // ReportSetsType

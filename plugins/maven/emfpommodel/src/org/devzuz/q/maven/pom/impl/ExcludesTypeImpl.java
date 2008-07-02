@@ -35,133 +35,128 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
 public class ExcludesTypeImpl extends EObjectImpl implements ExcludesType
 {
     /**
-     * The cached value of the '{@link #getExclude() <em>Exclude</em>}' attribute list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getExclude() <em>Exclude</em>}' attribute list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getExclude()
-     * @generated
-     * @ordered
-     */
+	 * @see #getExclude()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<String> exclude;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ExcludesTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.EXCLUDES_TYPE;
-    }
+		return PomPackage.Literals.EXCLUDES_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<String> getExclude()
     {
-        if (exclude == null)
-        {
-            exclude = new EDataTypeEList<String>(String.class, this, PomPackage.EXCLUDES_TYPE__EXCLUDE);
-        }
-        return exclude;
-    }
+		if (exclude == null) {
+			exclude = new EDataTypeEList<String>(String.class, this, PomPackage.EXCLUDES_TYPE__EXCLUDE);
+		}
+		return exclude;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUDES_TYPE__EXCLUDE:
-                return getExclude();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUDES_TYPE__EXCLUDE:
+				return getExclude();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUDES_TYPE__EXCLUDE:
-                getExclude().clear();
-                getExclude().addAll((Collection<? extends String>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUDES_TYPE__EXCLUDE:
+				getExclude().clear();
+				getExclude().addAll((Collection<? extends String>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUDES_TYPE__EXCLUDE:
-                getExclude().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUDES_TYPE__EXCLUDE:
+				getExclude().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUDES_TYPE__EXCLUDE:
-                return exclude != null && !exclude.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUDES_TYPE__EXCLUDE:
+				return exclude != null && !exclude.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public String toString()
     {
-        if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (exclude: ");
-        result.append(exclude);
-        result.append(')');
-        return result.toString();
-    }
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (exclude: ");
+		result.append(exclude);
+		result.append(')');
+		return result.toString();
+	}
 
 } //ExcludesTypeImpl

@@ -40,132 +40,126 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class LicensesTypeImpl extends EObjectImpl implements LicensesType
 {
     /**
-     * The cached value of the '{@link #getLicense() <em>License</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getLicense() <em>License</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getLicense()
-     * @generated
-     * @ordered
-     */
+	 * @see #getLicense()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<License> license;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected LicensesTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.LICENSES_TYPE;
-    }
+		return PomPackage.Literals.LICENSES_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<License> getLicense()
     {
-        if (license == null)
-        {
-            license = new EObjectContainmentEList<License>(License.class, this, PomPackage.LICENSES_TYPE__LICENSE);
-        }
-        return license;
-    }
+		if (license == null) {
+			license = new EObjectContainmentEList<License>(License.class, this, PomPackage.LICENSES_TYPE__LICENSE);
+		}
+		return license;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
     {
-        switch (featureID)
-        {
-            case PomPackage.LICENSES_TYPE__LICENSE:
-                return ((InternalEList<?>)getLicense()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case PomPackage.LICENSES_TYPE__LICENSE:
+				return ((InternalEList<?>)getLicense()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.LICENSES_TYPE__LICENSE:
-                return getLicense();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.LICENSES_TYPE__LICENSE:
+				return getLicense();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.LICENSES_TYPE__LICENSE:
-                getLicense().clear();
-                getLicense().addAll((Collection<? extends License>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.LICENSES_TYPE__LICENSE:
+				getLicense().clear();
+				getLicense().addAll((Collection<? extends License>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.LICENSES_TYPE__LICENSE:
-                getLicense().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.LICENSES_TYPE__LICENSE:
+				getLicense().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.LICENSES_TYPE__LICENSE:
-                return license != null && !license.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.LICENSES_TYPE__LICENSE:
+				return license != null && !license.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //LicensesTypeImpl

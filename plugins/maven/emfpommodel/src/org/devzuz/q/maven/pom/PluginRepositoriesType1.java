@@ -29,20 +29,20 @@ import org.eclipse.emf.ecore.EObject;
 public interface PluginRepositoriesType1 extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Plugin Repository</b></em>' containment reference list.
-     * The list contents are of type {@link org.devzuz.q.maven.pom.Repository}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Plugin Repository</b></em>' containment reference list.
+	 * The list contents are of type {@link org.devzuz.q.maven.pom.Repository}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Plugin Repository</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Plugin Repository</em>' containment reference list.
-     * @see org.devzuz.q.maven.pom.PomPackage#getPluginRepositoriesType1_PluginRepository()
-     * @model containment="true"
-     *        extendedMetaData="kind='element' name='pluginRepository' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * @return the value of the '<em>Plugin Repository</em>' containment reference list.
+	 * @see org.devzuz.q.maven.pom.PomPackage#getPluginRepositoriesType1_PluginRepository()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='pluginRepository' namespace='##targetNamespace'"
+	 * @generated
+	 */
     EList<Repository> getPluginRepository();
 
 } // PluginRepositoriesType1

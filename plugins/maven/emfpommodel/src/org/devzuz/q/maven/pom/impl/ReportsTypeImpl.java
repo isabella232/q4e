@@ -35,133 +35,128 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
 public class ReportsTypeImpl extends EObjectImpl implements ReportsType
 {
     /**
-     * The cached value of the '{@link #getReport() <em>Report</em>}' attribute list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getReport() <em>Report</em>}' attribute list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getReport()
-     * @generated
-     * @ordered
-     */
+	 * @see #getReport()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<String> report;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ReportsTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.REPORTS_TYPE;
-    }
+		return PomPackage.Literals.REPORTS_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<String> getReport()
     {
-        if (report == null)
-        {
-            report = new EDataTypeEList<String>(String.class, this, PomPackage.REPORTS_TYPE__REPORT);
-        }
-        return report;
-    }
+		if (report == null) {
+			report = new EDataTypeEList<String>(String.class, this, PomPackage.REPORTS_TYPE__REPORT);
+		}
+		return report;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.REPORTS_TYPE__REPORT:
-                return getReport();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.REPORTS_TYPE__REPORT:
+				return getReport();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.REPORTS_TYPE__REPORT:
-                getReport().clear();
-                getReport().addAll((Collection<? extends String>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.REPORTS_TYPE__REPORT:
+				getReport().clear();
+				getReport().addAll((Collection<? extends String>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.REPORTS_TYPE__REPORT:
-                getReport().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.REPORTS_TYPE__REPORT:
+				getReport().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.REPORTS_TYPE__REPORT:
-                return report != null && !report.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.REPORTS_TYPE__REPORT:
+				return report != null && !report.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public String toString()
     {
-        if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (report: ");
-        result.append(report);
-        result.append(')');
-        return result.toString();
-    }
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (report: ");
+		result.append(report);
+		result.append(')');
+		return result.toString();
+	}
 
 } //ReportsTypeImpl

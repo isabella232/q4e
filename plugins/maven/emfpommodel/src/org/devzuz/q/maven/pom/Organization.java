@@ -33,57 +33,57 @@ import org.eclipse.emf.ecore.EObject;
 public interface Organization extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Name</b></em>' attribute.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * <!-- begin-model-doc -->
-     * 3.0.0+
-     * The full name of the organization.
-     * <!-- end-model-doc -->
-     * @return the value of the '<em>Name</em>' attribute.
-     * @see #setName(String)
-     * @see org.devzuz.q.maven.pom.PomPackage#getOrganization_Name()
-     * @model dataType="org.eclipse.emf.ecore.xml.type.String"
-     *        extendedMetaData="kind='element' name='name' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * <!-- begin-model-doc -->
+	 * 3.0.0+
+	 * The full name of the organization.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Name</em>' attribute.
+	 * @see #setName(String)
+	 * @see org.devzuz.q.maven.pom.PomPackage#getOrganization_Name()
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        extendedMetaData="kind='element' name='name' namespace='##targetNamespace'"
+	 * @generated
+	 */
     String getName();
 
     /**
-     * Sets the value of the '{@link org.devzuz.q.maven.pom.Organization#getName <em>Name</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.devzuz.q.maven.pom.Organization#getName <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Name</em>' attribute.
-     * @see #getName()
-     * @generated
-     */
+	 * @param value the new value of the '<em>Name</em>' attribute.
+	 * @see #getName()
+	 * @generated
+	 */
     void setName(String value);
 
     /**
-     * Returns the value of the '<em><b>Url</b></em>' attribute.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Url</b></em>' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * <!-- begin-model-doc -->
-     * 3.0.0+
-     * The URL to the organization's home page.
-     * <!-- end-model-doc -->
-     * @return the value of the '<em>Url</em>' attribute.
-     * @see #setUrl(String)
-     * @see org.devzuz.q.maven.pom.PomPackage#getOrganization_Url()
-     * @model dataType="org.eclipse.emf.ecore.xml.type.String"
-     *        extendedMetaData="kind='element' name='url' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * <!-- begin-model-doc -->
+	 * 3.0.0+
+	 * The URL to the organization's home page.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Url</em>' attribute.
+	 * @see #setUrl(String)
+	 * @see org.devzuz.q.maven.pom.PomPackage#getOrganization_Url()
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        extendedMetaData="kind='element' name='url' namespace='##targetNamespace'"
+	 * @generated
+	 */
     String getUrl();
 
     /**
-     * Sets the value of the '{@link org.devzuz.q.maven.pom.Organization#getUrl <em>Url</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.devzuz.q.maven.pom.Organization#getUrl <em>Url</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Url</em>' attribute.
-     * @see #getUrl()
-     * @generated
-     */
+	 * @param value the new value of the '<em>Url</em>' attribute.
+	 * @see #getUrl()
+	 * @generated
+	 */
     void setUrl(String value);
 
 } // Organization

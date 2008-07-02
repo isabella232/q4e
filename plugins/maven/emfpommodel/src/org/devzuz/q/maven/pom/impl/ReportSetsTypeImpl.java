@@ -40,132 +40,126 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class ReportSetsTypeImpl extends EObjectImpl implements ReportSetsType
 {
     /**
-     * The cached value of the '{@link #getReportSet() <em>Report Set</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getReportSet() <em>Report Set</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getReportSet()
-     * @generated
-     * @ordered
-     */
+	 * @see #getReportSet()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<ReportSet> reportSet;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ReportSetsTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.REPORT_SETS_TYPE;
-    }
+		return PomPackage.Literals.REPORT_SETS_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<ReportSet> getReportSet()
     {
-        if (reportSet == null)
-        {
-            reportSet = new EObjectContainmentEList<ReportSet>(ReportSet.class, this, PomPackage.REPORT_SETS_TYPE__REPORT_SET);
-        }
-        return reportSet;
-    }
+		if (reportSet == null) {
+			reportSet = new EObjectContainmentEList<ReportSet>(ReportSet.class, this, PomPackage.REPORT_SETS_TYPE__REPORT_SET);
+		}
+		return reportSet;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
     {
-        switch (featureID)
-        {
-            case PomPackage.REPORT_SETS_TYPE__REPORT_SET:
-                return ((InternalEList<?>)getReportSet()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case PomPackage.REPORT_SETS_TYPE__REPORT_SET:
+				return ((InternalEList<?>)getReportSet()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.REPORT_SETS_TYPE__REPORT_SET:
-                return getReportSet();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.REPORT_SETS_TYPE__REPORT_SET:
+				return getReportSet();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.REPORT_SETS_TYPE__REPORT_SET:
-                getReportSet().clear();
-                getReportSet().addAll((Collection<? extends ReportSet>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.REPORT_SETS_TYPE__REPORT_SET:
+				getReportSet().clear();
+				getReportSet().addAll((Collection<? extends ReportSet>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.REPORT_SETS_TYPE__REPORT_SET:
-                getReportSet().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.REPORT_SETS_TYPE__REPORT_SET:
+				getReportSet().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.REPORT_SETS_TYPE__REPORT_SET:
-                return reportSet != null && !reportSet.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.REPORT_SETS_TYPE__REPORT_SET:
+				return reportSet != null && !reportSet.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //ReportSetsTypeImpl

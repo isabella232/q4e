@@ -33,205 +33,201 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 public class ExclusionImpl extends EObjectImpl implements Exclusion
 {
     /**
-     * The default value of the '{@link #getArtifactId() <em>Artifact Id</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getArtifactId() <em>Artifact Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getArtifactId()
-     * @generated
-     * @ordered
-     */
+	 * @see #getArtifactId()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String ARTIFACT_ID_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getArtifactId() <em>Artifact Id</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getArtifactId() <em>Artifact Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getArtifactId()
-     * @generated
-     * @ordered
-     */
+	 * @see #getArtifactId()
+	 * @generated
+	 * @ordered
+	 */
     protected String artifactId = ARTIFACT_ID_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getGroupId() <em>Group Id</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getGroupId() <em>Group Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getGroupId()
-     * @generated
-     * @ordered
-     */
+	 * @see #getGroupId()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String GROUP_ID_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getGroupId() <em>Group Id</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getGroupId() <em>Group Id</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getGroupId()
-     * @generated
-     * @ordered
-     */
+	 * @see #getGroupId()
+	 * @generated
+	 * @ordered
+	 */
     protected String groupId = GROUP_ID_EDEFAULT;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ExclusionImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.EXCLUSION;
-    }
+		return PomPackage.Literals.EXCLUSION;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getArtifactId()
     {
-        return artifactId;
-    }
+		return artifactId;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setArtifactId(String newArtifactId)
     {
-        String oldArtifactId = artifactId;
-        artifactId = newArtifactId;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.EXCLUSION__ARTIFACT_ID, oldArtifactId, artifactId));
-    }
+		String oldArtifactId = artifactId;
+		artifactId = newArtifactId;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.EXCLUSION__ARTIFACT_ID, oldArtifactId, artifactId));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getGroupId()
     {
-        return groupId;
-    }
+		return groupId;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setGroupId(String newGroupId)
     {
-        String oldGroupId = groupId;
-        groupId = newGroupId;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.EXCLUSION__GROUP_ID, oldGroupId, groupId));
-    }
+		String oldGroupId = groupId;
+		groupId = newGroupId;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.EXCLUSION__GROUP_ID, oldGroupId, groupId));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUSION__ARTIFACT_ID:
-                return getArtifactId();
-            case PomPackage.EXCLUSION__GROUP_ID:
-                return getGroupId();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUSION__ARTIFACT_ID:
+				return getArtifactId();
+			case PomPackage.EXCLUSION__GROUP_ID:
+				return getGroupId();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUSION__ARTIFACT_ID:
-                setArtifactId((String)newValue);
-                return;
-            case PomPackage.EXCLUSION__GROUP_ID:
-                setGroupId((String)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUSION__ARTIFACT_ID:
+				setArtifactId((String)newValue);
+				return;
+			case PomPackage.EXCLUSION__GROUP_ID:
+				setGroupId((String)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUSION__ARTIFACT_ID:
-                setArtifactId(ARTIFACT_ID_EDEFAULT);
-                return;
-            case PomPackage.EXCLUSION__GROUP_ID:
-                setGroupId(GROUP_ID_EDEFAULT);
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUSION__ARTIFACT_ID:
+				setArtifactId(ARTIFACT_ID_EDEFAULT);
+				return;
+			case PomPackage.EXCLUSION__GROUP_ID:
+				setGroupId(GROUP_ID_EDEFAULT);
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUSION__ARTIFACT_ID:
-                return ARTIFACT_ID_EDEFAULT == null ? artifactId != null : !ARTIFACT_ID_EDEFAULT.equals(artifactId);
-            case PomPackage.EXCLUSION__GROUP_ID:
-                return GROUP_ID_EDEFAULT == null ? groupId != null : !GROUP_ID_EDEFAULT.equals(groupId);
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUSION__ARTIFACT_ID:
+				return ARTIFACT_ID_EDEFAULT == null ? artifactId != null : !ARTIFACT_ID_EDEFAULT.equals(artifactId);
+			case PomPackage.EXCLUSION__GROUP_ID:
+				return GROUP_ID_EDEFAULT == null ? groupId != null : !GROUP_ID_EDEFAULT.equals(groupId);
+		}
+		return super.eIsSet(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public String toString()
     {
-        if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (artifactId: ");
-        result.append(artifactId);
-        result.append(", groupId: ");
-        result.append(groupId);
-        result.append(')');
-        return result.toString();
-    }
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (artifactId: ");
+		result.append(artifactId);
+		result.append(", groupId: ");
+		result.append(groupId);
+		result.append(')');
+		return result.toString();
+	}
 
 } //ExclusionImpl

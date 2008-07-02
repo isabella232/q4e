@@ -29,20 +29,20 @@ import org.eclipse.emf.ecore.EObject;
 public interface ExclusionsType extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Exclusion</b></em>' containment reference list.
-     * The list contents are of type {@link org.devzuz.q.maven.pom.Exclusion}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Exclusion</b></em>' containment reference list.
+	 * The list contents are of type {@link org.devzuz.q.maven.pom.Exclusion}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Exclusion</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Exclusion</em>' containment reference list.
-     * @see org.devzuz.q.maven.pom.PomPackage#getExclusionsType_Exclusion()
-     * @model containment="true"
-     *        extendedMetaData="kind='element' name='exclusion' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * @return the value of the '<em>Exclusion</em>' containment reference list.
+	 * @see org.devzuz.q.maven.pom.PomPackage#getExclusionsType_Exclusion()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='exclusion' namespace='##targetNamespace'"
+	 * @generated
+	 */
     EList<Exclusion> getExclusion();
 
 } // ExclusionsType

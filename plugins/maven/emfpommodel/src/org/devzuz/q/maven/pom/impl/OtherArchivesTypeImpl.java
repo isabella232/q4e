@@ -35,133 +35,128 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
 public class OtherArchivesTypeImpl extends EObjectImpl implements OtherArchivesType
 {
     /**
-     * The cached value of the '{@link #getOtherArchive() <em>Other Archive</em>}' attribute list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getOtherArchive() <em>Other Archive</em>}' attribute list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getOtherArchive()
-     * @generated
-     * @ordered
-     */
+	 * @see #getOtherArchive()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<String> otherArchive;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected OtherArchivesTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.OTHER_ARCHIVES_TYPE;
-    }
+		return PomPackage.Literals.OTHER_ARCHIVES_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<String> getOtherArchive()
     {
-        if (otherArchive == null)
-        {
-            otherArchive = new EDataTypeEList<String>(String.class, this, PomPackage.OTHER_ARCHIVES_TYPE__OTHER_ARCHIVE);
-        }
-        return otherArchive;
-    }
+		if (otherArchive == null) {
+			otherArchive = new EDataTypeEList<String>(String.class, this, PomPackage.OTHER_ARCHIVES_TYPE__OTHER_ARCHIVE);
+		}
+		return otherArchive;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.OTHER_ARCHIVES_TYPE__OTHER_ARCHIVE:
-                return getOtherArchive();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.OTHER_ARCHIVES_TYPE__OTHER_ARCHIVE:
+				return getOtherArchive();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.OTHER_ARCHIVES_TYPE__OTHER_ARCHIVE:
-                getOtherArchive().clear();
-                getOtherArchive().addAll((Collection<? extends String>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.OTHER_ARCHIVES_TYPE__OTHER_ARCHIVE:
+				getOtherArchive().clear();
+				getOtherArchive().addAll((Collection<? extends String>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.OTHER_ARCHIVES_TYPE__OTHER_ARCHIVE:
-                getOtherArchive().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.OTHER_ARCHIVES_TYPE__OTHER_ARCHIVE:
+				getOtherArchive().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.OTHER_ARCHIVES_TYPE__OTHER_ARCHIVE:
-                return otherArchive != null && !otherArchive.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.OTHER_ARCHIVES_TYPE__OTHER_ARCHIVE:
+				return otherArchive != null && !otherArchive.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public String toString()
     {
-        if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (otherArchive: ");
-        result.append(otherArchive);
-        result.append(')');
-        return result.toString();
-    }
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (otherArchive: ");
+		result.append(otherArchive);
+		result.append(')');
+		return result.toString();
+	}
 
 } //OtherArchivesTypeImpl

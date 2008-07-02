@@ -26,33 +26,32 @@ public class PomXMLProcessor extends XMLProcessor
 {
 
     /**
-     * Public constructor to instantiate the helper.
-     * <!-- begin-user-doc -->
+	 * Public constructor to instantiate the helper.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public PomXMLProcessor()
     {
-        super((EPackage.Registry.INSTANCE));
-        PomPackage.eINSTANCE.eClass();
-    }
+		super((EPackage.Registry.INSTANCE));
+		PomPackage.eINSTANCE.eClass();
+	}
     
     /**
-     * Register for "*" and "xml" file extensions the PomResourceFactoryImpl factory.
-     * <!-- begin-user-doc -->
+	 * Register for "*" and "xml" file extensions the PomResourceFactoryImpl factory.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected Map<String, Resource.Factory> getRegistrations()
     {
-        if (registrations == null)
-        {
-            super.getRegistrations();
-            registrations.put(XML_EXTENSION, new PomResourceFactoryImpl());
-            registrations.put(STAR_EXTENSION, new PomResourceFactoryImpl());
-        }
-        return registrations;
-    }
+		if (registrations == null) {
+			super.getRegistrations();
+			registrations.put(XML_EXTENSION, new PomResourceFactoryImpl());
+			registrations.put(STAR_EXTENSION, new PomResourceFactoryImpl());
+		}
+		return registrations;
+	}
 
 } //PomXMLProcessor

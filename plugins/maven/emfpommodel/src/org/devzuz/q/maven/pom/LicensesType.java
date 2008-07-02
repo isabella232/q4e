@@ -29,20 +29,20 @@ import org.eclipse.emf.ecore.EObject;
 public interface LicensesType extends EObject
 {
     /**
-     * Returns the value of the '<em><b>License</b></em>' containment reference list.
-     * The list contents are of type {@link org.devzuz.q.maven.pom.License}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>License</b></em>' containment reference list.
+	 * The list contents are of type {@link org.devzuz.q.maven.pom.License}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>License</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>License</em>' containment reference list.
-     * @see org.devzuz.q.maven.pom.PomPackage#getLicensesType_License()
-     * @model containment="true"
-     *        extendedMetaData="kind='element' name='license' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * @return the value of the '<em>License</em>' containment reference list.
+	 * @see org.devzuz.q.maven.pom.PomPackage#getLicensesType_License()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='license' namespace='##targetNamespace'"
+	 * @generated
+	 */
     EList<License> getLicense();
 
 } // LicensesType

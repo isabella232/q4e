@@ -35,133 +35,128 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
 public class ModulesTypeImpl extends EObjectImpl implements ModulesType
 {
     /**
-     * The cached value of the '{@link #getModule() <em>Module</em>}' attribute list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getModule() <em>Module</em>}' attribute list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getModule()
-     * @generated
-     * @ordered
-     */
+	 * @see #getModule()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<String> module;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ModulesTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.MODULES_TYPE;
-    }
+		return PomPackage.Literals.MODULES_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<String> getModule()
     {
-        if (module == null)
-        {
-            module = new EDataTypeEList<String>(String.class, this, PomPackage.MODULES_TYPE__MODULE);
-        }
-        return module;
-    }
+		if (module == null) {
+			module = new EDataTypeEList<String>(String.class, this, PomPackage.MODULES_TYPE__MODULE);
+		}
+		return module;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.MODULES_TYPE__MODULE:
-                return getModule();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.MODULES_TYPE__MODULE:
+				return getModule();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.MODULES_TYPE__MODULE:
-                getModule().clear();
-                getModule().addAll((Collection<? extends String>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.MODULES_TYPE__MODULE:
+				getModule().clear();
+				getModule().addAll((Collection<? extends String>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.MODULES_TYPE__MODULE:
-                getModule().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.MODULES_TYPE__MODULE:
+				getModule().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.MODULES_TYPE__MODULE:
-                return module != null && !module.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.MODULES_TYPE__MODULE:
+				return module != null && !module.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public String toString()
     {
-        if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (module: ");
-        result.append(module);
-        result.append(')');
-        return result.toString();
-    }
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (module: ");
+		result.append(module);
+		result.append(')');
+		return result.toString();
+	}
 
 } //ModulesTypeImpl

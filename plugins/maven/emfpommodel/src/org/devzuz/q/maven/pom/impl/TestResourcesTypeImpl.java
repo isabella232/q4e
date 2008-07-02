@@ -40,132 +40,126 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class TestResourcesTypeImpl extends EObjectImpl implements TestResourcesType
 {
     /**
-     * The cached value of the '{@link #getTestResource() <em>Test Resource</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getTestResource() <em>Test Resource</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getTestResource()
-     * @generated
-     * @ordered
-     */
+	 * @see #getTestResource()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<Resource> testResource;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected TestResourcesTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.TEST_RESOURCES_TYPE;
-    }
+		return PomPackage.Literals.TEST_RESOURCES_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<Resource> getTestResource()
     {
-        if (testResource == null)
-        {
-            testResource = new EObjectContainmentEList<Resource>(Resource.class, this, PomPackage.TEST_RESOURCES_TYPE__TEST_RESOURCE);
-        }
-        return testResource;
-    }
+		if (testResource == null) {
+			testResource = new EObjectContainmentEList<Resource>(Resource.class, this, PomPackage.TEST_RESOURCES_TYPE__TEST_RESOURCE);
+		}
+		return testResource;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
     {
-        switch (featureID)
-        {
-            case PomPackage.TEST_RESOURCES_TYPE__TEST_RESOURCE:
-                return ((InternalEList<?>)getTestResource()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case PomPackage.TEST_RESOURCES_TYPE__TEST_RESOURCE:
+				return ((InternalEList<?>)getTestResource()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.TEST_RESOURCES_TYPE__TEST_RESOURCE:
-                return getTestResource();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.TEST_RESOURCES_TYPE__TEST_RESOURCE:
+				return getTestResource();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.TEST_RESOURCES_TYPE__TEST_RESOURCE:
-                getTestResource().clear();
-                getTestResource().addAll((Collection<? extends Resource>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.TEST_RESOURCES_TYPE__TEST_RESOURCE:
+				getTestResource().clear();
+				getTestResource().addAll((Collection<? extends Resource>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.TEST_RESOURCES_TYPE__TEST_RESOURCE:
-                getTestResource().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.TEST_RESOURCES_TYPE__TEST_RESOURCE:
+				getTestResource().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.TEST_RESOURCES_TYPE__TEST_RESOURCE:
-                return testResource != null && !testResource.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.TEST_RESOURCES_TYPE__TEST_RESOURCE:
+				return testResource != null && !testResource.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //TestResourcesTypeImpl

@@ -40,132 +40,126 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class DevelopersTypeImpl extends EObjectImpl implements DevelopersType
 {
     /**
-     * The cached value of the '{@link #getDeveloper() <em>Developer</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getDeveloper() <em>Developer</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getDeveloper()
-     * @generated
-     * @ordered
-     */
+	 * @see #getDeveloper()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<Developer> developer;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected DevelopersTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.DEVELOPERS_TYPE;
-    }
+		return PomPackage.Literals.DEVELOPERS_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<Developer> getDeveloper()
     {
-        if (developer == null)
-        {
-            developer = new EObjectContainmentEList<Developer>(Developer.class, this, PomPackage.DEVELOPERS_TYPE__DEVELOPER);
-        }
-        return developer;
-    }
+		if (developer == null) {
+			developer = new EObjectContainmentEList<Developer>(Developer.class, this, PomPackage.DEVELOPERS_TYPE__DEVELOPER);
+		}
+		return developer;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
     {
-        switch (featureID)
-        {
-            case PomPackage.DEVELOPERS_TYPE__DEVELOPER:
-                return ((InternalEList<?>)getDeveloper()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case PomPackage.DEVELOPERS_TYPE__DEVELOPER:
+				return ((InternalEList<?>)getDeveloper()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.DEVELOPERS_TYPE__DEVELOPER:
-                return getDeveloper();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.DEVELOPERS_TYPE__DEVELOPER:
+				return getDeveloper();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.DEVELOPERS_TYPE__DEVELOPER:
-                getDeveloper().clear();
-                getDeveloper().addAll((Collection<? extends Developer>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.DEVELOPERS_TYPE__DEVELOPER:
+				getDeveloper().clear();
+				getDeveloper().addAll((Collection<? extends Developer>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.DEVELOPERS_TYPE__DEVELOPER:
-                getDeveloper().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.DEVELOPERS_TYPE__DEVELOPER:
+				getDeveloper().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.DEVELOPERS_TYPE__DEVELOPER:
-                return developer != null && !developer.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.DEVELOPERS_TYPE__DEVELOPER:
+				return developer != null && !developer.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //DevelopersTypeImpl

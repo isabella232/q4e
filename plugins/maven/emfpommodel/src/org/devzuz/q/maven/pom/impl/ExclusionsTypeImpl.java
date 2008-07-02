@@ -40,132 +40,126 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class ExclusionsTypeImpl extends EObjectImpl implements ExclusionsType
 {
     /**
-     * The cached value of the '{@link #getExclusion() <em>Exclusion</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getExclusion() <em>Exclusion</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getExclusion()
-     * @generated
-     * @ordered
-     */
+	 * @see #getExclusion()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<Exclusion> exclusion;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ExclusionsTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.EXCLUSIONS_TYPE;
-    }
+		return PomPackage.Literals.EXCLUSIONS_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<Exclusion> getExclusion()
     {
-        if (exclusion == null)
-        {
-            exclusion = new EObjectContainmentEList<Exclusion>(Exclusion.class, this, PomPackage.EXCLUSIONS_TYPE__EXCLUSION);
-        }
-        return exclusion;
-    }
+		if (exclusion == null) {
+			exclusion = new EObjectContainmentEList<Exclusion>(Exclusion.class, this, PomPackage.EXCLUSIONS_TYPE__EXCLUSION);
+		}
+		return exclusion;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUSIONS_TYPE__EXCLUSION:
-                return ((InternalEList<?>)getExclusion()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUSIONS_TYPE__EXCLUSION:
+				return ((InternalEList<?>)getExclusion()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUSIONS_TYPE__EXCLUSION:
-                return getExclusion();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUSIONS_TYPE__EXCLUSION:
+				return getExclusion();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUSIONS_TYPE__EXCLUSION:
-                getExclusion().clear();
-                getExclusion().addAll((Collection<? extends Exclusion>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUSIONS_TYPE__EXCLUSION:
+				getExclusion().clear();
+				getExclusion().addAll((Collection<? extends Exclusion>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUSIONS_TYPE__EXCLUSION:
-                getExclusion().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUSIONS_TYPE__EXCLUSION:
+				getExclusion().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXCLUSIONS_TYPE__EXCLUSION:
-                return exclusion != null && !exclusion.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.EXCLUSIONS_TYPE__EXCLUSION:
+				return exclusion != null && !exclusion.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //ExclusionsTypeImpl

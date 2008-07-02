@@ -40,132 +40,126 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class ExecutionsTypeImpl extends EObjectImpl implements ExecutionsType
 {
     /**
-     * The cached value of the '{@link #getExecution() <em>Execution</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getExecution() <em>Execution</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getExecution()
-     * @generated
-     * @ordered
-     */
+	 * @see #getExecution()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<PluginExecution> execution;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ExecutionsTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.EXECUTIONS_TYPE;
-    }
+		return PomPackage.Literals.EXECUTIONS_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<PluginExecution> getExecution()
     {
-        if (execution == null)
-        {
-            execution = new EObjectContainmentEList<PluginExecution>(PluginExecution.class, this, PomPackage.EXECUTIONS_TYPE__EXECUTION);
-        }
-        return execution;
-    }
+		if (execution == null) {
+			execution = new EObjectContainmentEList<PluginExecution>(PluginExecution.class, this, PomPackage.EXECUTIONS_TYPE__EXECUTION);
+		}
+		return execution;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXECUTIONS_TYPE__EXECUTION:
-                return ((InternalEList<?>)getExecution()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case PomPackage.EXECUTIONS_TYPE__EXECUTION:
+				return ((InternalEList<?>)getExecution()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXECUTIONS_TYPE__EXECUTION:
-                return getExecution();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.EXECUTIONS_TYPE__EXECUTION:
+				return getExecution();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXECUTIONS_TYPE__EXECUTION:
-                getExecution().clear();
-                getExecution().addAll((Collection<? extends PluginExecution>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.EXECUTIONS_TYPE__EXECUTION:
+				getExecution().clear();
+				getExecution().addAll((Collection<? extends PluginExecution>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXECUTIONS_TYPE__EXECUTION:
-                getExecution().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.EXECUTIONS_TYPE__EXECUTION:
+				getExecution().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.EXECUTIONS_TYPE__EXECUTION:
-                return execution != null && !execution.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.EXECUTIONS_TYPE__EXECUTION:
+				return execution != null && !execution.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //ExecutionsTypeImpl

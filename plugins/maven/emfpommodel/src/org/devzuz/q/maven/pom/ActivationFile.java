@@ -37,57 +37,57 @@ import org.eclipse.emf.ecore.EObject;
 public interface ActivationFile extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Missing</b></em>' attribute.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Missing</b></em>' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * <!-- begin-model-doc -->
-     * 4.0.0
-     * The name of the file that must be missing to activate the profile.
-     * <!-- end-model-doc -->
-     * @return the value of the '<em>Missing</em>' attribute.
-     * @see #setMissing(String)
-     * @see org.devzuz.q.maven.pom.PomPackage#getActivationFile_Missing()
-     * @model dataType="org.eclipse.emf.ecore.xml.type.String"
-     *        extendedMetaData="kind='element' name='missing' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * <!-- begin-model-doc -->
+	 * 4.0.0
+	 * The name of the file that must be missing to activate the profile.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Missing</em>' attribute.
+	 * @see #setMissing(String)
+	 * @see org.devzuz.q.maven.pom.PomPackage#getActivationFile_Missing()
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        extendedMetaData="kind='element' name='missing' namespace='##targetNamespace'"
+	 * @generated
+	 */
     String getMissing();
 
     /**
-     * Sets the value of the '{@link org.devzuz.q.maven.pom.ActivationFile#getMissing <em>Missing</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.devzuz.q.maven.pom.ActivationFile#getMissing <em>Missing</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Missing</em>' attribute.
-     * @see #getMissing()
-     * @generated
-     */
+	 * @param value the new value of the '<em>Missing</em>' attribute.
+	 * @see #getMissing()
+	 * @generated
+	 */
     void setMissing(String value);
 
     /**
-     * Returns the value of the '<em><b>Exists</b></em>' attribute.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Exists</b></em>' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * <!-- begin-model-doc -->
-     * 4.0.0
-     * The name of the file that must exist to activate the profile.
-     * <!-- end-model-doc -->
-     * @return the value of the '<em>Exists</em>' attribute.
-     * @see #setExists(String)
-     * @see org.devzuz.q.maven.pom.PomPackage#getActivationFile_Exists()
-     * @model dataType="org.eclipse.emf.ecore.xml.type.String"
-     *        extendedMetaData="kind='element' name='exists' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * <!-- begin-model-doc -->
+	 * 4.0.0
+	 * The name of the file that must exist to activate the profile.
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Exists</em>' attribute.
+	 * @see #setExists(String)
+	 * @see org.devzuz.q.maven.pom.PomPackage#getActivationFile_Exists()
+	 * @model dataType="org.eclipse.emf.ecore.xml.type.String"
+	 *        extendedMetaData="kind='element' name='exists' namespace='##targetNamespace'"
+	 * @generated
+	 */
     String getExists();
 
     /**
-     * Sets the value of the '{@link org.devzuz.q.maven.pom.ActivationFile#getExists <em>Exists</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.devzuz.q.maven.pom.ActivationFile#getExists <em>Exists</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Exists</em>' attribute.
-     * @see #getExists()
-     * @generated
-     */
+	 * @param value the new value of the '<em>Exists</em>' attribute.
+	 * @see #getExists()
+	 * @generated
+	 */
     void setExists(String value);
 
 } // ActivationFile

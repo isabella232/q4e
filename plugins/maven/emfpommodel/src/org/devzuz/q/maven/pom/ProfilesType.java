@@ -29,20 +29,20 @@ import org.eclipse.emf.ecore.EObject;
 public interface ProfilesType extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Profile</b></em>' containment reference list.
-     * The list contents are of type {@link org.devzuz.q.maven.pom.Profile}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Profile</b></em>' containment reference list.
+	 * The list contents are of type {@link org.devzuz.q.maven.pom.Profile}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Profile</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Profile</em>' containment reference list.
-     * @see org.devzuz.q.maven.pom.PomPackage#getProfilesType_Profile()
-     * @model containment="true"
-     *        extendedMetaData="kind='element' name='profile' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * @return the value of the '<em>Profile</em>' containment reference list.
+	 * @see org.devzuz.q.maven.pom.PomPackage#getProfilesType_Profile()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='profile' namespace='##targetNamespace'"
+	 * @generated
+	 */
     EList<Profile> getProfile();
 
 } // ProfilesType

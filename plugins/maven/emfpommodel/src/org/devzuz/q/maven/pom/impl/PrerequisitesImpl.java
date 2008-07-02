@@ -32,186 +32,182 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 public class PrerequisitesImpl extends EObjectImpl implements Prerequisites
 {
     /**
-     * The default value of the '{@link #getMaven() <em>Maven</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getMaven() <em>Maven</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getMaven()
-     * @generated
-     * @ordered
-     */
+	 * @see #getMaven()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String MAVEN_EDEFAULT = "2.0";
 
     /**
-     * The cached value of the '{@link #getMaven() <em>Maven</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getMaven() <em>Maven</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getMaven()
-     * @generated
-     * @ordered
-     */
+	 * @see #getMaven()
+	 * @generated
+	 * @ordered
+	 */
     protected String maven = MAVEN_EDEFAULT;
 
     /**
-     * This is true if the Maven attribute has been set.
-     * <!-- begin-user-doc -->
+	 * This is true if the Maven attribute has been set.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
+	 * @generated
+	 * @ordered
+	 */
     protected boolean mavenESet;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected PrerequisitesImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.PREREQUISITES;
-    }
+		return PomPackage.Literals.PREREQUISITES;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getMaven()
     {
-        return maven;
-    }
+		return maven;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setMaven(String newMaven)
     {
-        String oldMaven = maven;
-        maven = newMaven;
-        boolean oldMavenESet = mavenESet;
-        mavenESet = true;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.PREREQUISITES__MAVEN, oldMaven, maven, !oldMavenESet));
-    }
+		String oldMaven = maven;
+		maven = newMaven;
+		boolean oldMavenESet = mavenESet;
+		mavenESet = true;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.PREREQUISITES__MAVEN, oldMaven, maven, !oldMavenESet));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void unsetMaven()
     {
-        String oldMaven = maven;
-        boolean oldMavenESet = mavenESet;
-        maven = MAVEN_EDEFAULT;
-        mavenESet = false;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.UNSET, PomPackage.PREREQUISITES__MAVEN, oldMaven, MAVEN_EDEFAULT, oldMavenESet));
-    }
+		String oldMaven = maven;
+		boolean oldMavenESet = mavenESet;
+		maven = MAVEN_EDEFAULT;
+		mavenESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, PomPackage.PREREQUISITES__MAVEN, oldMaven, MAVEN_EDEFAULT, oldMavenESet));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public boolean isSetMaven()
     {
-        return mavenESet;
-    }
+		return mavenESet;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.PREREQUISITES__MAVEN:
-                return getMaven();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.PREREQUISITES__MAVEN:
+				return getMaven();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.PREREQUISITES__MAVEN:
-                setMaven((String)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.PREREQUISITES__MAVEN:
+				setMaven((String)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.PREREQUISITES__MAVEN:
-                unsetMaven();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.PREREQUISITES__MAVEN:
+				unsetMaven();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.PREREQUISITES__MAVEN:
-                return isSetMaven();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.PREREQUISITES__MAVEN:
+				return isSetMaven();
+		}
+		return super.eIsSet(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public String toString()
     {
-        if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (maven: ");
-        if (mavenESet) result.append(maven); else result.append("<unset>");
-        result.append(')');
-        return result.toString();
-    }
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (maven: ");
+		if (mavenESet) result.append(maven); else result.append("<unset>");
+		result.append(')');
+		return result.toString();
+	}
 
 } //PrerequisitesImpl

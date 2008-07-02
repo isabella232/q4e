@@ -29,20 +29,20 @@ import org.eclipse.emf.ecore.EObject;
 public interface MailingListsType extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Mailing List</b></em>' containment reference list.
-     * The list contents are of type {@link org.devzuz.q.maven.pom.MailingList}.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Mailing List</b></em>' containment reference list.
+	 * The list contents are of type {@link org.devzuz.q.maven.pom.MailingList}.
+	 * <!-- begin-user-doc -->
      * <p>
      * If the meaning of the '<em>Mailing List</em>' containment reference list isn't clear,
      * there really should be more of a description here...
      * </p>
      * <!-- end-user-doc -->
-     * @return the value of the '<em>Mailing List</em>' containment reference list.
-     * @see org.devzuz.q.maven.pom.PomPackage#getMailingListsType_MailingList()
-     * @model containment="true"
-     *        extendedMetaData="kind='element' name='mailingList' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * @return the value of the '<em>Mailing List</em>' containment reference list.
+	 * @see org.devzuz.q.maven.pom.PomPackage#getMailingListsType_MailingList()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='mailingList' namespace='##targetNamespace'"
+	 * @generated
+	 */
     EList<MailingList> getMailingList();
 
 } // MailingListsType

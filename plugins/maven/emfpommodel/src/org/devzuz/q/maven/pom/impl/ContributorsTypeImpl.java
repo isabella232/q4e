@@ -40,132 +40,126 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class ContributorsTypeImpl extends EObjectImpl implements ContributorsType
 {
     /**
-     * The cached value of the '{@link #getContributor() <em>Contributor</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getContributor() <em>Contributor</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getContributor()
-     * @generated
-     * @ordered
-     */
+	 * @see #getContributor()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<Contributor> contributor;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ContributorsTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.CONTRIBUTORS_TYPE;
-    }
+		return PomPackage.Literals.CONTRIBUTORS_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<Contributor> getContributor()
     {
-        if (contributor == null)
-        {
-            contributor = new EObjectContainmentEList<Contributor>(Contributor.class, this, PomPackage.CONTRIBUTORS_TYPE__CONTRIBUTOR);
-        }
-        return contributor;
-    }
+		if (contributor == null) {
+			contributor = new EObjectContainmentEList<Contributor>(Contributor.class, this, PomPackage.CONTRIBUTORS_TYPE__CONTRIBUTOR);
+		}
+		return contributor;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
     {
-        switch (featureID)
-        {
-            case PomPackage.CONTRIBUTORS_TYPE__CONTRIBUTOR:
-                return ((InternalEList<?>)getContributor()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case PomPackage.CONTRIBUTORS_TYPE__CONTRIBUTOR:
+				return ((InternalEList<?>)getContributor()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.CONTRIBUTORS_TYPE__CONTRIBUTOR:
-                return getContributor();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.CONTRIBUTORS_TYPE__CONTRIBUTOR:
+				return getContributor();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.CONTRIBUTORS_TYPE__CONTRIBUTOR:
-                getContributor().clear();
-                getContributor().addAll((Collection<? extends Contributor>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.CONTRIBUTORS_TYPE__CONTRIBUTOR:
+				getContributor().clear();
+				getContributor().addAll((Collection<? extends Contributor>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.CONTRIBUTORS_TYPE__CONTRIBUTOR:
-                getContributor().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.CONTRIBUTORS_TYPE__CONTRIBUTOR:
+				getContributor().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.CONTRIBUTORS_TYPE__CONTRIBUTOR:
-                return contributor != null && !contributor.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.CONTRIBUTORS_TYPE__CONTRIBUTOR:
+				return contributor != null && !contributor.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //ContributorsTypeImpl

@@ -33,205 +33,201 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 public class ActivationFileImpl extends EObjectImpl implements ActivationFile
 {
     /**
-     * The default value of the '{@link #getMissing() <em>Missing</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getMissing() <em>Missing</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getMissing()
-     * @generated
-     * @ordered
-     */
+	 * @see #getMissing()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String MISSING_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getMissing() <em>Missing</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getMissing() <em>Missing</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getMissing()
-     * @generated
-     * @ordered
-     */
+	 * @see #getMissing()
+	 * @generated
+	 * @ordered
+	 */
     protected String missing = MISSING_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getExists() <em>Exists</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getExists() <em>Exists</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getExists()
-     * @generated
-     * @ordered
-     */
+	 * @see #getExists()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String EXISTS_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getExists() <em>Exists</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getExists() <em>Exists</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getExists()
-     * @generated
-     * @ordered
-     */
+	 * @see #getExists()
+	 * @generated
+	 * @ordered
+	 */
     protected String exists = EXISTS_EDEFAULT;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ActivationFileImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.ACTIVATION_FILE;
-    }
+		return PomPackage.Literals.ACTIVATION_FILE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getMissing()
     {
-        return missing;
-    }
+		return missing;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setMissing(String newMissing)
     {
-        String oldMissing = missing;
-        missing = newMissing;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_FILE__MISSING, oldMissing, missing));
-    }
+		String oldMissing = missing;
+		missing = newMissing;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_FILE__MISSING, oldMissing, missing));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getExists()
     {
-        return exists;
-    }
+		return exists;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setExists(String newExists)
     {
-        String oldExists = exists;
-        exists = newExists;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_FILE__EXISTS, oldExists, exists));
-    }
+		String oldExists = exists;
+		exists = newExists;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_FILE__EXISTS, oldExists, exists));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.ACTIVATION_FILE__MISSING:
-                return getMissing();
-            case PomPackage.ACTIVATION_FILE__EXISTS:
-                return getExists();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.ACTIVATION_FILE__MISSING:
+				return getMissing();
+			case PomPackage.ACTIVATION_FILE__EXISTS:
+				return getExists();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.ACTIVATION_FILE__MISSING:
-                setMissing((String)newValue);
-                return;
-            case PomPackage.ACTIVATION_FILE__EXISTS:
-                setExists((String)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.ACTIVATION_FILE__MISSING:
+				setMissing((String)newValue);
+				return;
+			case PomPackage.ACTIVATION_FILE__EXISTS:
+				setExists((String)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.ACTIVATION_FILE__MISSING:
-                setMissing(MISSING_EDEFAULT);
-                return;
-            case PomPackage.ACTIVATION_FILE__EXISTS:
-                setExists(EXISTS_EDEFAULT);
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.ACTIVATION_FILE__MISSING:
+				setMissing(MISSING_EDEFAULT);
+				return;
+			case PomPackage.ACTIVATION_FILE__EXISTS:
+				setExists(EXISTS_EDEFAULT);
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.ACTIVATION_FILE__MISSING:
-                return MISSING_EDEFAULT == null ? missing != null : !MISSING_EDEFAULT.equals(missing);
-            case PomPackage.ACTIVATION_FILE__EXISTS:
-                return EXISTS_EDEFAULT == null ? exists != null : !EXISTS_EDEFAULT.equals(exists);
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.ACTIVATION_FILE__MISSING:
+				return MISSING_EDEFAULT == null ? missing != null : !MISSING_EDEFAULT.equals(missing);
+			case PomPackage.ACTIVATION_FILE__EXISTS:
+				return EXISTS_EDEFAULT == null ? exists != null : !EXISTS_EDEFAULT.equals(exists);
+		}
+		return super.eIsSet(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public String toString()
     {
-        if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (missing: ");
-        result.append(missing);
-        result.append(", exists: ");
-        result.append(exists);
-        result.append(')');
-        return result.toString();
-    }
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (missing: ");
+		result.append(missing);
+		result.append(", exists: ");
+		result.append(exists);
+		result.append(')');
+		return result.toString();
+	}
 
 } //ActivationFileImpl

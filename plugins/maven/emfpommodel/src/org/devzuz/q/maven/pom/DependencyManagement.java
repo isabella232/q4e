@@ -34,62 +34,62 @@ import org.eclipse.emf.ecore.EObject;
 public interface DependencyManagement extends EObject
 {
     /**
-     * Returns the value of the '<em><b>Dependencies</b></em>' containment reference.
-     * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Dependencies</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * <!-- begin-model-doc -->
-     * 4.0.0
-     * 
-     *             The dependencies specified here are not used until they
-     *             are referenced in a POM within the group. This allows the
-     *             specification of a "standard" version for a particular
-     *             dependency.
-     *           
-     * <!-- end-model-doc -->
-     * @return the value of the '<em>Dependencies</em>' containment reference.
-     * @see #isSetDependencies()
-     * @see #unsetDependencies()
-     * @see #setDependencies(DependenciesType1)
-     * @see org.devzuz.q.maven.pom.PomPackage#getDependencyManagement_Dependencies()
-     * @model containment="true" unsettable="true"
-     *        extendedMetaData="kind='element' name='dependencies' namespace='##targetNamespace'"
-     * @generated
-     */
+	 * <!-- begin-model-doc -->
+	 * 4.0.0
+	 * 
+	 *             The dependencies specified here are not used until they
+	 *             are referenced in a POM within the group. This allows the
+	 *             specification of a "standard" version for a particular
+	 *             dependency.
+	 *           
+	 * <!-- end-model-doc -->
+	 * @return the value of the '<em>Dependencies</em>' containment reference.
+	 * @see #isSetDependencies()
+	 * @see #unsetDependencies()
+	 * @see #setDependencies(DependenciesType1)
+	 * @see org.devzuz.q.maven.pom.PomPackage#getDependencyManagement_Dependencies()
+	 * @model containment="true" unsettable="true"
+	 *        extendedMetaData="kind='element' name='dependencies' namespace='##targetNamespace'"
+	 * @generated
+	 */
     DependenciesType1 getDependencies();
 
     /**
-     * Sets the value of the '{@link org.devzuz.q.maven.pom.DependencyManagement#getDependencies <em>Dependencies</em>}' containment reference.
-     * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.devzuz.q.maven.pom.DependencyManagement#getDependencies <em>Dependencies</em>}' containment reference.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @param value the new value of the '<em>Dependencies</em>' containment reference.
-     * @see #isSetDependencies()
-     * @see #unsetDependencies()
-     * @see #getDependencies()
-     * @generated
-     */
+	 * @param value the new value of the '<em>Dependencies</em>' containment reference.
+	 * @see #isSetDependencies()
+	 * @see #unsetDependencies()
+	 * @see #getDependencies()
+	 * @generated
+	 */
     void setDependencies(DependenciesType1 value);
 
     /**
-     * Unsets the value of the '{@link org.devzuz.q.maven.pom.DependencyManagement#getDependencies <em>Dependencies</em>}' containment reference.
-     * <!-- begin-user-doc -->
+	 * Unsets the value of the '{@link org.devzuz.q.maven.pom.DependencyManagement#getDependencies <em>Dependencies</em>}' containment reference.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #isSetDependencies()
-     * @see #getDependencies()
-     * @see #setDependencies(DependenciesType1)
-     * @generated
-     */
+	 * @see #isSetDependencies()
+	 * @see #getDependencies()
+	 * @see #setDependencies(DependenciesType1)
+	 * @generated
+	 */
     void unsetDependencies();
 
     /**
-     * Returns whether the value of the '{@link org.devzuz.q.maven.pom.DependencyManagement#getDependencies <em>Dependencies</em>}' containment reference is set.
-     * <!-- begin-user-doc -->
+	 * Returns whether the value of the '{@link org.devzuz.q.maven.pom.DependencyManagement#getDependencies <em>Dependencies</em>}' containment reference is set.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @return whether the value of the '<em>Dependencies</em>' containment reference is set.
-     * @see #unsetDependencies()
-     * @see #getDependencies()
-     * @see #setDependencies(DependenciesType1)
-     * @generated
-     */
+	 * @return whether the value of the '<em>Dependencies</em>' containment reference is set.
+	 * @see #unsetDependencies()
+	 * @see #getDependencies()
+	 * @see #setDependencies(DependenciesType1)
+	 * @generated
+	 */
     boolean isSetDependencies();
 
 } // DependencyManagement

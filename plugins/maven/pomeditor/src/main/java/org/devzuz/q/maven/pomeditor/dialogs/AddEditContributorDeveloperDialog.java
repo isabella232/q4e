@@ -1,13 +1,16 @@
 package org.devzuz.q.maven.pomeditor.dialogs;
 
-import java.util.Properties;
-
+import org.devzuz.q.maven.pom.PomFactory;
+import org.devzuz.q.maven.pom.PomPackage;
+import org.devzuz.q.maven.pom.Properties;
+import org.devzuz.q.maven.pom.PropertyElement;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.components.ContributorDeveloperDetailComponent;
 import org.devzuz.q.maven.pomeditor.components.PropertiesTableComponent;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;
 import org.eclipse.core.runtime.Preferences;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -44,7 +47,7 @@ public class AddEditContributorDeveloperDialog
 
     private String id = null;
     
-    private Properties properties;
+    private org.devzuz.q.maven.pom.Properties properties;
     
     public static AddEditContributorDeveloperDialog newAddEditContributorDialog( String type )
     {
@@ -188,9 +191,10 @@ public class AddEditContributorDeveloperDialog
         contributorComponent.setTimezone( blankIfNull( timezone ) );
         
         if( properties == null )
-            properties = new Properties();
+            properties = PomFactory.eINSTANCE.createProperties();
         
-        propertiesTableComponent.updateTable( properties );
+        propertiesTableComponent.bind( properties, new EStructuralFeature[] { PomPackage.Literals.PROPERTIES__PROPERTIES } , null );
+        
     }
 
     public int openWithItem(String id, String name, String email, String url, 
@@ -211,11 +215,22 @@ public class AddEditContributorDeveloperDialog
         this.timezone = timezone;
         
         if( properties != null )
-            this.properties = ( Properties ) properties.clone();
+        {
+        	Properties newProps = PomFactory.eINSTANCE.createProperties();
+        	for (PropertyElement prop : properties.getProperties() ) {
+        		PropertyElement pe = PomFactory.eINSTANCE.createPropertyElement();
+        		pe.setName( prop.getName() );
+        		pe.setValue( prop.getValue() );
+				newProps.getProperties().add( pe );
+			}
+            this.properties = newProps;
+        }
         else
-            this.properties = new Properties();
+        {
+            this.properties = PomFactory.eINSTANCE.createProperties();
+        }
         
-        if ( contributorComponent != null && propertiesTableComponent != null )
+        if ( contributorComponent != null  && propertiesTableComponent != null )
         {
             syncData();
         }

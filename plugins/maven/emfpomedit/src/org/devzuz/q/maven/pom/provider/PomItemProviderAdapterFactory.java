@@ -39,2391 +39,2173 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 public class PomItemProviderAdapterFactory extends PomAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable
 {
     /**
-     * This keeps track of the root adapter factory that delegates to this adapter factory.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the root adapter factory that delegates to this adapter factory.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ComposedAdapterFactory parentAdapterFactory;
 
     /**
-     * This is used to implement {@link org.eclipse.emf.edit.provider.IChangeNotifier}.
-     * <!-- begin-user-doc -->
+	 * This is used to implement {@link org.eclipse.emf.edit.provider.IChangeNotifier}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected IChangeNotifier changeNotifier = new ChangeNotifier();
 
     /**
-     * This keeps track of all the supported types checked by {@link #isFactoryForType isFactoryForType}.
-     * <!-- begin-user-doc -->
+	 * This keeps track of all the supported types checked by {@link #isFactoryForType isFactoryForType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected Collection<Object> supportedTypes = new ArrayList<Object>();
 
     /**
-     * This constructs an instance.
-     * <!-- begin-user-doc -->
+	 * This constructs an instance.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public PomItemProviderAdapterFactory()
     {
-        supportedTypes.add(IEditingDomainItemProvider.class);
-        supportedTypes.add(IStructuredItemContentProvider.class);
-        supportedTypes.add(ITreeItemContentProvider.class);
-        supportedTypes.add(IItemLabelProvider.class);
-        supportedTypes.add(IItemPropertySource.class);
-    }
+		supportedTypes.add(IEditingDomainItemProvider.class);
+		supportedTypes.add(IStructuredItemContentProvider.class);
+		supportedTypes.add(ITreeItemContentProvider.class);
+		supportedTypes.add(IItemLabelProvider.class);
+		supportedTypes.add(IItemPropertySource.class);
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Activation} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Activation} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ActivationItemProvider activationItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Activation}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Activation}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createActivationAdapter()
     {
-        if (activationItemProvider == null)
-        {
-            activationItemProvider = new ActivationItemProvider(this);
-        }
+		if (activationItemProvider == null) {
+			activationItemProvider = new ActivationItemProvider(this);
+		}
 
-        return activationItemProvider;
-    }
+		return activationItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ActivationFile} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ActivationFile} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ActivationFileItemProvider activationFileItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ActivationFile}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ActivationFile}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createActivationFileAdapter()
     {
-        if (activationFileItemProvider == null)
-        {
-            activationFileItemProvider = new ActivationFileItemProvider(this);
-        }
+		if (activationFileItemProvider == null) {
+			activationFileItemProvider = new ActivationFileItemProvider(this);
+		}
 
-        return activationFileItemProvider;
-    }
+		return activationFileItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ActivationOS} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ActivationOS} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ActivationOSItemProvider activationOSItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ActivationOS}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ActivationOS}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createActivationOSAdapter()
     {
-        if (activationOSItemProvider == null)
-        {
-            activationOSItemProvider = new ActivationOSItemProvider(this);
-        }
+		if (activationOSItemProvider == null) {
+			activationOSItemProvider = new ActivationOSItemProvider(this);
+		}
 
-        return activationOSItemProvider;
-    }
+		return activationOSItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ActivationProperty} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ActivationProperty} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ActivationPropertyItemProvider activationPropertyItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ActivationProperty}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ActivationProperty}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createActivationPropertyAdapter()
     {
-        if (activationPropertyItemProvider == null)
-        {
-            activationPropertyItemProvider = new ActivationPropertyItemProvider(this);
-        }
+		if (activationPropertyItemProvider == null) {
+			activationPropertyItemProvider = new ActivationPropertyItemProvider(this);
+		}
 
-        return activationPropertyItemProvider;
-    }
+		return activationPropertyItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Build} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Build} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected BuildItemProvider buildItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Build}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Build}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createBuildAdapter()
     {
-        if (buildItemProvider == null)
-        {
-            buildItemProvider = new BuildItemProvider(this);
-        }
+		if (buildItemProvider == null) {
+			buildItemProvider = new BuildItemProvider(this);
+		}
 
-        return buildItemProvider;
-    }
+		return buildItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.BuildBase} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.BuildBase} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected BuildBaseItemProvider buildBaseItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.BuildBase}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.BuildBase}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createBuildBaseAdapter()
     {
-        if (buildBaseItemProvider == null)
-        {
-            buildBaseItemProvider = new BuildBaseItemProvider(this);
-        }
+		if (buildBaseItemProvider == null) {
+			buildBaseItemProvider = new BuildBaseItemProvider(this);
+		}
 
-        return buildBaseItemProvider;
-    }
+		return buildBaseItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.CiManagement} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.CiManagement} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected CiManagementItemProvider ciManagementItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.CiManagement}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.CiManagement}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createCiManagementAdapter()
     {
-        if (ciManagementItemProvider == null)
-        {
-            ciManagementItemProvider = new CiManagementItemProvider(this);
-        }
+		if (ciManagementItemProvider == null) {
+			ciManagementItemProvider = new CiManagementItemProvider(this);
+		}
 
-        return ciManagementItemProvider;
-    }
-
-    /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ConfigurationType} instances.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    protected ConfigurationTypeItemProvider configurationTypeItemProvider;
+		return ciManagementItemProvider;
+	}
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ConfigurationType}.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Contributor} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
-    @Override
-    public Adapter createConfigurationTypeAdapter()
-    {
-        if (configurationTypeItemProvider == null)
-        {
-            configurationTypeItemProvider = new ConfigurationTypeItemProvider(this);
-        }
-
-        return configurationTypeItemProvider;
-    }
-
-    /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ConfigurationType1} instances.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    protected ConfigurationType1ItemProvider configurationType1ItemProvider;
-
-    /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ConfigurationType1}.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    @Override
-    public Adapter createConfigurationType1Adapter()
-    {
-        if (configurationType1ItemProvider == null)
-        {
-            configurationType1ItemProvider = new ConfigurationType1ItemProvider(this);
-        }
-
-        return configurationType1ItemProvider;
-    }
-
-    /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ConfigurationType2} instances.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    protected ConfigurationType2ItemProvider configurationType2ItemProvider;
-
-    /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ConfigurationType2}.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    @Override
-    public Adapter createConfigurationType2Adapter()
-    {
-        if (configurationType2ItemProvider == null)
-        {
-            configurationType2ItemProvider = new ConfigurationType2ItemProvider(this);
-        }
-
-        return configurationType2ItemProvider;
-    }
-
-    /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ConfigurationType3} instances.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    protected ConfigurationType3ItemProvider configurationType3ItemProvider;
-
-    /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ConfigurationType3}.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    @Override
-    public Adapter createConfigurationType3Adapter()
-    {
-        if (configurationType3ItemProvider == null)
-        {
-            configurationType3ItemProvider = new ConfigurationType3ItemProvider(this);
-        }
-
-        return configurationType3ItemProvider;
-    }
-
-    /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ConfigurationType4} instances.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    protected ConfigurationType4ItemProvider configurationType4ItemProvider;
-
-    /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ConfigurationType4}.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    @Override
-    public Adapter createConfigurationType4Adapter()
-    {
-        if (configurationType4ItemProvider == null)
-        {
-            configurationType4ItemProvider = new ConfigurationType4ItemProvider(this);
-        }
-
-        return configurationType4ItemProvider;
-    }
-
-    /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Contributor} instances.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ContributorItemProvider contributorItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Contributor}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Contributor}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createContributorAdapter()
     {
-        if (contributorItemProvider == null)
-        {
-            contributorItemProvider = new ContributorItemProvider(this);
-        }
+		if (contributorItemProvider == null) {
+			contributorItemProvider = new ContributorItemProvider(this);
+		}
 
-        return contributorItemProvider;
-    }
+		return contributorItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ContributorsType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ContributorsType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ContributorsTypeItemProvider contributorsTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ContributorsType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ContributorsType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createContributorsTypeAdapter()
     {
-        if (contributorsTypeItemProvider == null)
-        {
-            contributorsTypeItemProvider = new ContributorsTypeItemProvider(this);
-        }
+		if (contributorsTypeItemProvider == null) {
+			contributorsTypeItemProvider = new ContributorsTypeItemProvider(this);
+		}
 
-        return contributorsTypeItemProvider;
-    }
+		return contributorsTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DependenciesType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DependenciesType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected DependenciesTypeItemProvider dependenciesTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.DependenciesType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.DependenciesType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createDependenciesTypeAdapter()
     {
-        if (dependenciesTypeItemProvider == null)
-        {
-            dependenciesTypeItemProvider = new DependenciesTypeItemProvider(this);
-        }
+		if (dependenciesTypeItemProvider == null) {
+			dependenciesTypeItemProvider = new DependenciesTypeItemProvider(this);
+		}
 
-        return dependenciesTypeItemProvider;
-    }
+		return dependenciesTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DependenciesType1} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DependenciesType1} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected DependenciesType1ItemProvider dependenciesType1ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.DependenciesType1}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.DependenciesType1}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createDependenciesType1Adapter()
     {
-        if (dependenciesType1ItemProvider == null)
-        {
-            dependenciesType1ItemProvider = new DependenciesType1ItemProvider(this);
-        }
+		if (dependenciesType1ItemProvider == null) {
+			dependenciesType1ItemProvider = new DependenciesType1ItemProvider(this);
+		}
 
-        return dependenciesType1ItemProvider;
-    }
+		return dependenciesType1ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DependenciesType2} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DependenciesType2} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected DependenciesType2ItemProvider dependenciesType2ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.DependenciesType2}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.DependenciesType2}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createDependenciesType2Adapter()
     {
-        if (dependenciesType2ItemProvider == null)
-        {
-            dependenciesType2ItemProvider = new DependenciesType2ItemProvider(this);
-        }
+		if (dependenciesType2ItemProvider == null) {
+			dependenciesType2ItemProvider = new DependenciesType2ItemProvider(this);
+		}
 
-        return dependenciesType2ItemProvider;
-    }
+		return dependenciesType2ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DependenciesType3} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DependenciesType3} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected DependenciesType3ItemProvider dependenciesType3ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.DependenciesType3}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.DependenciesType3}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createDependenciesType3Adapter()
     {
-        if (dependenciesType3ItemProvider == null)
-        {
-            dependenciesType3ItemProvider = new DependenciesType3ItemProvider(this);
-        }
+		if (dependenciesType3ItemProvider == null) {
+			dependenciesType3ItemProvider = new DependenciesType3ItemProvider(this);
+		}
 
-        return dependenciesType3ItemProvider;
-    }
+		return dependenciesType3ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Dependency} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Dependency} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected DependencyItemProvider dependencyItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Dependency}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Dependency}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createDependencyAdapter()
     {
-        if (dependencyItemProvider == null)
-        {
-            dependencyItemProvider = new DependencyItemProvider(this);
-        }
+		if (dependencyItemProvider == null) {
+			dependencyItemProvider = new DependencyItemProvider(this);
+		}
 
-        return dependencyItemProvider;
-    }
+		return dependencyItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DependencyManagement} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DependencyManagement} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected DependencyManagementItemProvider dependencyManagementItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.DependencyManagement}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.DependencyManagement}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createDependencyManagementAdapter()
     {
-        if (dependencyManagementItemProvider == null)
-        {
-            dependencyManagementItemProvider = new DependencyManagementItemProvider(this);
-        }
+		if (dependencyManagementItemProvider == null) {
+			dependencyManagementItemProvider = new DependencyManagementItemProvider(this);
+		}
 
-        return dependencyManagementItemProvider;
-    }
+		return dependencyManagementItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DeploymentRepository} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DeploymentRepository} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected DeploymentRepositoryItemProvider deploymentRepositoryItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.DeploymentRepository}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.DeploymentRepository}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createDeploymentRepositoryAdapter()
     {
-        if (deploymentRepositoryItemProvider == null)
-        {
-            deploymentRepositoryItemProvider = new DeploymentRepositoryItemProvider(this);
-        }
+		if (deploymentRepositoryItemProvider == null) {
+			deploymentRepositoryItemProvider = new DeploymentRepositoryItemProvider(this);
+		}
 
-        return deploymentRepositoryItemProvider;
-    }
+		return deploymentRepositoryItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Developer} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Developer} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected DeveloperItemProvider developerItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Developer}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Developer}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createDeveloperAdapter()
     {
-        if (developerItemProvider == null)
-        {
-            developerItemProvider = new DeveloperItemProvider(this);
-        }
+		if (developerItemProvider == null) {
+			developerItemProvider = new DeveloperItemProvider(this);
+		}
 
-        return developerItemProvider;
-    }
+		return developerItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DevelopersType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DevelopersType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected DevelopersTypeItemProvider developersTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.DevelopersType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.DevelopersType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createDevelopersTypeAdapter()
     {
-        if (developersTypeItemProvider == null)
-        {
-            developersTypeItemProvider = new DevelopersTypeItemProvider(this);
-        }
+		if (developersTypeItemProvider == null) {
+			developersTypeItemProvider = new DevelopersTypeItemProvider(this);
+		}
 
-        return developersTypeItemProvider;
-    }
+		return developersTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DistributionManagement} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DistributionManagement} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected DistributionManagementItemProvider distributionManagementItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.DistributionManagement}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.DistributionManagement}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createDistributionManagementAdapter()
     {
-        if (distributionManagementItemProvider == null)
-        {
-            distributionManagementItemProvider = new DistributionManagementItemProvider(this);
-        }
+		if (distributionManagementItemProvider == null) {
+			distributionManagementItemProvider = new DistributionManagementItemProvider(this);
+		}
 
-        return distributionManagementItemProvider;
-    }
+		return distributionManagementItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DocumentRoot} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.DocumentRoot} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected DocumentRootItemProvider documentRootItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.DocumentRoot}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.DocumentRoot}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createDocumentRootAdapter()
     {
-        if (documentRootItemProvider == null)
-        {
-            documentRootItemProvider = new DocumentRootItemProvider(this);
-        }
+		if (documentRootItemProvider == null) {
+			documentRootItemProvider = new DocumentRootItemProvider(this);
+		}
 
-        return documentRootItemProvider;
-    }
+		return documentRootItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ExcludesType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ExcludesType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ExcludesTypeItemProvider excludesTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ExcludesType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ExcludesType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createExcludesTypeAdapter()
     {
-        if (excludesTypeItemProvider == null)
-        {
-            excludesTypeItemProvider = new ExcludesTypeItemProvider(this);
-        }
+		if (excludesTypeItemProvider == null) {
+			excludesTypeItemProvider = new ExcludesTypeItemProvider(this);
+		}
 
-        return excludesTypeItemProvider;
-    }
+		return excludesTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Exclusion} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Exclusion} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ExclusionItemProvider exclusionItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Exclusion}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Exclusion}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createExclusionAdapter()
     {
-        if (exclusionItemProvider == null)
-        {
-            exclusionItemProvider = new ExclusionItemProvider(this);
-        }
+		if (exclusionItemProvider == null) {
+			exclusionItemProvider = new ExclusionItemProvider(this);
+		}
 
-        return exclusionItemProvider;
-    }
+		return exclusionItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ExclusionsType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ExclusionsType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ExclusionsTypeItemProvider exclusionsTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ExclusionsType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ExclusionsType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createExclusionsTypeAdapter()
     {
-        if (exclusionsTypeItemProvider == null)
-        {
-            exclusionsTypeItemProvider = new ExclusionsTypeItemProvider(this);
-        }
+		if (exclusionsTypeItemProvider == null) {
+			exclusionsTypeItemProvider = new ExclusionsTypeItemProvider(this);
+		}
 
-        return exclusionsTypeItemProvider;
-    }
+		return exclusionsTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ExecutionsType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ExecutionsType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ExecutionsTypeItemProvider executionsTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ExecutionsType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ExecutionsType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createExecutionsTypeAdapter()
     {
-        if (executionsTypeItemProvider == null)
-        {
-            executionsTypeItemProvider = new ExecutionsTypeItemProvider(this);
-        }
+		if (executionsTypeItemProvider == null) {
+			executionsTypeItemProvider = new ExecutionsTypeItemProvider(this);
+		}
 
-        return executionsTypeItemProvider;
-    }
+		return executionsTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Extension} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Extension} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ExtensionItemProvider extensionItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Extension}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Extension}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createExtensionAdapter()
     {
-        if (extensionItemProvider == null)
-        {
-            extensionItemProvider = new ExtensionItemProvider(this);
-        }
+		if (extensionItemProvider == null) {
+			extensionItemProvider = new ExtensionItemProvider(this);
+		}
 
-        return extensionItemProvider;
-    }
+		return extensionItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ExtensionsType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ExtensionsType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ExtensionsTypeItemProvider extensionsTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ExtensionsType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ExtensionsType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createExtensionsTypeAdapter()
     {
-        if (extensionsTypeItemProvider == null)
-        {
-            extensionsTypeItemProvider = new ExtensionsTypeItemProvider(this);
-        }
+		if (extensionsTypeItemProvider == null) {
+			extensionsTypeItemProvider = new ExtensionsTypeItemProvider(this);
+		}
 
-        return extensionsTypeItemProvider;
-    }
+		return extensionsTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.FiltersType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.FiltersType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected FiltersTypeItemProvider filtersTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.FiltersType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.FiltersType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createFiltersTypeAdapter()
     {
-        if (filtersTypeItemProvider == null)
-        {
-            filtersTypeItemProvider = new FiltersTypeItemProvider(this);
-        }
+		if (filtersTypeItemProvider == null) {
+			filtersTypeItemProvider = new FiltersTypeItemProvider(this);
+		}
 
-        return filtersTypeItemProvider;
-    }
+		return filtersTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.FiltersType1} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.FiltersType1} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected FiltersType1ItemProvider filtersType1ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.FiltersType1}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.FiltersType1}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createFiltersType1Adapter()
     {
-        if (filtersType1ItemProvider == null)
-        {
-            filtersType1ItemProvider = new FiltersType1ItemProvider(this);
-        }
+		if (filtersType1ItemProvider == null) {
+			filtersType1ItemProvider = new FiltersType1ItemProvider(this);
+		}
 
-        return filtersType1ItemProvider;
-    }
+		return filtersType1ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.GoalsType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.GoalsType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected GoalsTypeItemProvider goalsTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.GoalsType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.GoalsType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createGoalsTypeAdapter()
     {
-        if (goalsTypeItemProvider == null)
-        {
-            goalsTypeItemProvider = new GoalsTypeItemProvider(this);
-        }
+		if (goalsTypeItemProvider == null) {
+			goalsTypeItemProvider = new GoalsTypeItemProvider(this);
+		}
 
-        return goalsTypeItemProvider;
-    }
+		return goalsTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.GoalsType1} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.GoalsType1} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected GoalsType1ItemProvider goalsType1ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.GoalsType1}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.GoalsType1}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createGoalsType1Adapter()
     {
-        if (goalsType1ItemProvider == null)
-        {
-            goalsType1ItemProvider = new GoalsType1ItemProvider(this);
-        }
+		if (goalsType1ItemProvider == null) {
+			goalsType1ItemProvider = new GoalsType1ItemProvider(this);
+		}
 
-        return goalsType1ItemProvider;
-    }
+		return goalsType1ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.IncludesType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.IncludesType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected IncludesTypeItemProvider includesTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.IncludesType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.IncludesType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createIncludesTypeAdapter()
     {
-        if (includesTypeItemProvider == null)
-        {
-            includesTypeItemProvider = new IncludesTypeItemProvider(this);
-        }
+		if (includesTypeItemProvider == null) {
+			includesTypeItemProvider = new IncludesTypeItemProvider(this);
+		}
 
-        return includesTypeItemProvider;
-    }
+		return includesTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.IssueManagement} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.IssueManagement} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected IssueManagementItemProvider issueManagementItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.IssueManagement}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.IssueManagement}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createIssueManagementAdapter()
     {
-        if (issueManagementItemProvider == null)
-        {
-            issueManagementItemProvider = new IssueManagementItemProvider(this);
-        }
+		if (issueManagementItemProvider == null) {
+			issueManagementItemProvider = new IssueManagementItemProvider(this);
+		}
 
-        return issueManagementItemProvider;
-    }
+		return issueManagementItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.License} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.License} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected LicenseItemProvider licenseItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.License}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.License}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createLicenseAdapter()
     {
-        if (licenseItemProvider == null)
-        {
-            licenseItemProvider = new LicenseItemProvider(this);
-        }
+		if (licenseItemProvider == null) {
+			licenseItemProvider = new LicenseItemProvider(this);
+		}
 
-        return licenseItemProvider;
-    }
+		return licenseItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.LicensesType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.LicensesType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected LicensesTypeItemProvider licensesTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.LicensesType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.LicensesType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createLicensesTypeAdapter()
     {
-        if (licensesTypeItemProvider == null)
-        {
-            licensesTypeItemProvider = new LicensesTypeItemProvider(this);
-        }
+		if (licensesTypeItemProvider == null) {
+			licensesTypeItemProvider = new LicensesTypeItemProvider(this);
+		}
 
-        return licensesTypeItemProvider;
-    }
+		return licensesTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.MailingList} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.MailingList} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected MailingListItemProvider mailingListItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.MailingList}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.MailingList}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createMailingListAdapter()
     {
-        if (mailingListItemProvider == null)
-        {
-            mailingListItemProvider = new MailingListItemProvider(this);
-        }
+		if (mailingListItemProvider == null) {
+			mailingListItemProvider = new MailingListItemProvider(this);
+		}
 
-        return mailingListItemProvider;
-    }
+		return mailingListItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.MailingListsType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.MailingListsType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected MailingListsTypeItemProvider mailingListsTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.MailingListsType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.MailingListsType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createMailingListsTypeAdapter()
     {
-        if (mailingListsTypeItemProvider == null)
-        {
-            mailingListsTypeItemProvider = new MailingListsTypeItemProvider(this);
-        }
+		if (mailingListsTypeItemProvider == null) {
+			mailingListsTypeItemProvider = new MailingListsTypeItemProvider(this);
+		}
 
-        return mailingListsTypeItemProvider;
-    }
+		return mailingListsTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Model} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Model} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ModelItemProvider modelItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Model}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Model}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createModelAdapter()
     {
-        if (modelItemProvider == null)
-        {
-            modelItemProvider = new ModelItemProvider(this);
-        }
+		if (modelItemProvider == null) {
+			modelItemProvider = new ModelItemProvider(this);
+		}
 
-        return modelItemProvider;
-    }
+		return modelItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ModulesType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ModulesType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ModulesTypeItemProvider modulesTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ModulesType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ModulesType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createModulesTypeAdapter()
     {
-        if (modulesTypeItemProvider == null)
-        {
-            modulesTypeItemProvider = new ModulesTypeItemProvider(this);
-        }
+		if (modulesTypeItemProvider == null) {
+			modulesTypeItemProvider = new ModulesTypeItemProvider(this);
+		}
 
-        return modulesTypeItemProvider;
-    }
+		return modulesTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ModulesType1} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ModulesType1} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ModulesType1ItemProvider modulesType1ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ModulesType1}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ModulesType1}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createModulesType1Adapter()
     {
-        if (modulesType1ItemProvider == null)
-        {
-            modulesType1ItemProvider = new ModulesType1ItemProvider(this);
-        }
+		if (modulesType1ItemProvider == null) {
+			modulesType1ItemProvider = new ModulesType1ItemProvider(this);
+		}
 
-        return modulesType1ItemProvider;
-    }
+		return modulesType1ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Notifier} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Notifier} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected NotifierItemProvider notifierItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Notifier}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Notifier}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createNotifierAdapter()
     {
-        if (notifierItemProvider == null)
-        {
-            notifierItemProvider = new NotifierItemProvider(this);
-        }
+		if (notifierItemProvider == null) {
+			notifierItemProvider = new NotifierItemProvider(this);
+		}
 
-        return notifierItemProvider;
-    }
+		return notifierItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.NotifiersType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.NotifiersType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected NotifiersTypeItemProvider notifiersTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.NotifiersType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.NotifiersType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createNotifiersTypeAdapter()
     {
-        if (notifiersTypeItemProvider == null)
-        {
-            notifiersTypeItemProvider = new NotifiersTypeItemProvider(this);
-        }
+		if (notifiersTypeItemProvider == null) {
+			notifiersTypeItemProvider = new NotifiersTypeItemProvider(this);
+		}
 
-        return notifiersTypeItemProvider;
-    }
+		return notifiersTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Organization} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Organization} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected OrganizationItemProvider organizationItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Organization}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Organization}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createOrganizationAdapter()
     {
-        if (organizationItemProvider == null)
-        {
-            organizationItemProvider = new OrganizationItemProvider(this);
-        }
+		if (organizationItemProvider == null) {
+			organizationItemProvider = new OrganizationItemProvider(this);
+		}
 
-        return organizationItemProvider;
-    }
+		return organizationItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.OtherArchivesType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.OtherArchivesType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected OtherArchivesTypeItemProvider otherArchivesTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.OtherArchivesType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.OtherArchivesType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createOtherArchivesTypeAdapter()
     {
-        if (otherArchivesTypeItemProvider == null)
-        {
-            otherArchivesTypeItemProvider = new OtherArchivesTypeItemProvider(this);
-        }
+		if (otherArchivesTypeItemProvider == null) {
+			otherArchivesTypeItemProvider = new OtherArchivesTypeItemProvider(this);
+		}
 
-        return otherArchivesTypeItemProvider;
-    }
+		return otherArchivesTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Parent} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Parent} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ParentItemProvider parentItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Parent}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Parent}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createParentAdapter()
     {
-        if (parentItemProvider == null)
-        {
-            parentItemProvider = new ParentItemProvider(this);
-        }
+		if (parentItemProvider == null) {
+			parentItemProvider = new ParentItemProvider(this);
+		}
 
-        return parentItemProvider;
-    }
+		return parentItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Plugin} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Plugin} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected PluginItemProvider pluginItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Plugin}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Plugin}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createPluginAdapter()
     {
-        if (pluginItemProvider == null)
-        {
-            pluginItemProvider = new PluginItemProvider(this);
-        }
+		if (pluginItemProvider == null) {
+			pluginItemProvider = new PluginItemProvider(this);
+		}
 
-        return pluginItemProvider;
-    }
+		return pluginItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginExecution} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginExecution} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected PluginExecutionItemProvider pluginExecutionItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginExecution}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginExecution}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createPluginExecutionAdapter()
     {
-        if (pluginExecutionItemProvider == null)
-        {
-            pluginExecutionItemProvider = new PluginExecutionItemProvider(this);
-        }
+		if (pluginExecutionItemProvider == null) {
+			pluginExecutionItemProvider = new PluginExecutionItemProvider(this);
+		}
 
-        return pluginExecutionItemProvider;
-    }
+		return pluginExecutionItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginManagement} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginManagement} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected PluginManagementItemProvider pluginManagementItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginManagement}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginManagement}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createPluginManagementAdapter()
     {
-        if (pluginManagementItemProvider == null)
-        {
-            pluginManagementItemProvider = new PluginManagementItemProvider(this);
-        }
+		if (pluginManagementItemProvider == null) {
+			pluginManagementItemProvider = new PluginManagementItemProvider(this);
+		}
 
-        return pluginManagementItemProvider;
-    }
+		return pluginManagementItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginRepositoriesType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginRepositoriesType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected PluginRepositoriesTypeItemProvider pluginRepositoriesTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginRepositoriesType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginRepositoriesType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createPluginRepositoriesTypeAdapter()
     {
-        if (pluginRepositoriesTypeItemProvider == null)
-        {
-            pluginRepositoriesTypeItemProvider = new PluginRepositoriesTypeItemProvider(this);
-        }
+		if (pluginRepositoriesTypeItemProvider == null) {
+			pluginRepositoriesTypeItemProvider = new PluginRepositoriesTypeItemProvider(this);
+		}
 
-        return pluginRepositoriesTypeItemProvider;
-    }
+		return pluginRepositoriesTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginRepositoriesType1} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginRepositoriesType1} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected PluginRepositoriesType1ItemProvider pluginRepositoriesType1ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginRepositoriesType1}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginRepositoriesType1}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createPluginRepositoriesType1Adapter()
     {
-        if (pluginRepositoriesType1ItemProvider == null)
-        {
-            pluginRepositoriesType1ItemProvider = new PluginRepositoriesType1ItemProvider(this);
-        }
+		if (pluginRepositoriesType1ItemProvider == null) {
+			pluginRepositoriesType1ItemProvider = new PluginRepositoriesType1ItemProvider(this);
+		}
 
-        return pluginRepositoriesType1ItemProvider;
-    }
+		return pluginRepositoriesType1ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginsType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginsType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected PluginsTypeItemProvider pluginsTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginsType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginsType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createPluginsTypeAdapter()
     {
-        if (pluginsTypeItemProvider == null)
-        {
-            pluginsTypeItemProvider = new PluginsTypeItemProvider(this);
-        }
+		if (pluginsTypeItemProvider == null) {
+			pluginsTypeItemProvider = new PluginsTypeItemProvider(this);
+		}
 
-        return pluginsTypeItemProvider;
-    }
+		return pluginsTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginsType1} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginsType1} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected PluginsType1ItemProvider pluginsType1ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginsType1}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginsType1}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createPluginsType1Adapter()
     {
-        if (pluginsType1ItemProvider == null)
-        {
-            pluginsType1ItemProvider = new PluginsType1ItemProvider(this);
-        }
+		if (pluginsType1ItemProvider == null) {
+			pluginsType1ItemProvider = new PluginsType1ItemProvider(this);
+		}
 
-        return pluginsType1ItemProvider;
-    }
+		return pluginsType1ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginsType2} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginsType2} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected PluginsType2ItemProvider pluginsType2ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginsType2}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginsType2}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createPluginsType2Adapter()
     {
-        if (pluginsType2ItemProvider == null)
-        {
-            pluginsType2ItemProvider = new PluginsType2ItemProvider(this);
-        }
+		if (pluginsType2ItemProvider == null) {
+			pluginsType2ItemProvider = new PluginsType2ItemProvider(this);
+		}
 
-        return pluginsType2ItemProvider;
-    }
+		return pluginsType2ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginsType3} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PluginsType3} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected PluginsType3ItemProvider pluginsType3ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginsType3}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.PluginsType3}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createPluginsType3Adapter()
     {
-        if (pluginsType3ItemProvider == null)
-        {
-            pluginsType3ItemProvider = new PluginsType3ItemProvider(this);
-        }
+		if (pluginsType3ItemProvider == null) {
+			pluginsType3ItemProvider = new PluginsType3ItemProvider(this);
+		}
 
-        return pluginsType3ItemProvider;
-    }
+		return pluginsType3ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Prerequisites} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Prerequisites} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected PrerequisitesItemProvider prerequisitesItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Prerequisites}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Prerequisites}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createPrerequisitesAdapter()
     {
-        if (prerequisitesItemProvider == null)
-        {
-            prerequisitesItemProvider = new PrerequisitesItemProvider(this);
-        }
+		if (prerequisitesItemProvider == null) {
+			prerequisitesItemProvider = new PrerequisitesItemProvider(this);
+		}
 
-        return prerequisitesItemProvider;
-    }
+		return prerequisitesItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Profile} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Profile} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ProfileItemProvider profileItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Profile}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Profile}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createProfileAdapter()
     {
-        if (profileItemProvider == null)
-        {
-            profileItemProvider = new ProfileItemProvider(this);
-        }
+		if (profileItemProvider == null) {
+			profileItemProvider = new ProfileItemProvider(this);
+		}
 
-        return profileItemProvider;
-    }
+		return profileItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ProfilesType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ProfilesType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ProfilesTypeItemProvider profilesTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ProfilesType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ProfilesType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createProfilesTypeAdapter()
     {
-        if (profilesTypeItemProvider == null)
-        {
-            profilesTypeItemProvider = new ProfilesTypeItemProvider(this);
-        }
+		if (profilesTypeItemProvider == null) {
+			profilesTypeItemProvider = new ProfilesTypeItemProvider(this);
+		}
 
-        return profilesTypeItemProvider;
-    }
-
-    /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PropertiesType} instances.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    protected PropertiesTypeItemProvider propertiesTypeItemProvider;
+		return profilesTypeItemProvider;
+	}
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.PropertiesType}.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Relocation} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
-    @Override
-    public Adapter createPropertiesTypeAdapter()
-    {
-        if (propertiesTypeItemProvider == null)
-        {
-            propertiesTypeItemProvider = new PropertiesTypeItemProvider(this);
-        }
-
-        return propertiesTypeItemProvider;
-    }
-
-    /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PropertiesType1} instances.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    protected PropertiesType1ItemProvider propertiesType1ItemProvider;
-
-    /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.PropertiesType1}.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    @Override
-    public Adapter createPropertiesType1Adapter()
-    {
-        if (propertiesType1ItemProvider == null)
-        {
-            propertiesType1ItemProvider = new PropertiesType1ItemProvider(this);
-        }
-
-        return propertiesType1ItemProvider;
-    }
-
-    /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PropertiesType2} instances.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    protected PropertiesType2ItemProvider propertiesType2ItemProvider;
-
-    /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.PropertiesType2}.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    @Override
-    public Adapter createPropertiesType2Adapter()
-    {
-        if (propertiesType2ItemProvider == null)
-        {
-            propertiesType2ItemProvider = new PropertiesType2ItemProvider(this);
-        }
-
-        return propertiesType2ItemProvider;
-    }
-
-    /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PropertiesType3} instances.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    protected PropertiesType3ItemProvider propertiesType3ItemProvider;
-
-    /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.PropertiesType3}.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    @Override
-    public Adapter createPropertiesType3Adapter()
-    {
-        if (propertiesType3ItemProvider == null)
-        {
-            propertiesType3ItemProvider = new PropertiesType3ItemProvider(this);
-        }
-
-        return propertiesType3ItemProvider;
-    }
-
-    /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Relocation} instances.
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected RelocationItemProvider relocationItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Relocation}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Relocation}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createRelocationAdapter()
     {
-        if (relocationItemProvider == null)
-        {
-            relocationItemProvider = new RelocationItemProvider(this);
-        }
+		if (relocationItemProvider == null) {
+			relocationItemProvider = new RelocationItemProvider(this);
+		}
 
-        return relocationItemProvider;
-    }
+		return relocationItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Reporting} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Reporting} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ReportingItemProvider reportingItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Reporting}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Reporting}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createReportingAdapter()
     {
-        if (reportingItemProvider == null)
-        {
-            reportingItemProvider = new ReportingItemProvider(this);
-        }
+		if (reportingItemProvider == null) {
+			reportingItemProvider = new ReportingItemProvider(this);
+		}
 
-        return reportingItemProvider;
-    }
+		return reportingItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ReportPlugin} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ReportPlugin} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ReportPluginItemProvider reportPluginItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ReportPlugin}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ReportPlugin}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createReportPluginAdapter()
     {
-        if (reportPluginItemProvider == null)
-        {
-            reportPluginItemProvider = new ReportPluginItemProvider(this);
-        }
+		if (reportPluginItemProvider == null) {
+			reportPluginItemProvider = new ReportPluginItemProvider(this);
+		}
 
-        return reportPluginItemProvider;
-    }
+		return reportPluginItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ReportSet} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ReportSet} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ReportSetItemProvider reportSetItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ReportSet}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ReportSet}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createReportSetAdapter()
     {
-        if (reportSetItemProvider == null)
-        {
-            reportSetItemProvider = new ReportSetItemProvider(this);
-        }
+		if (reportSetItemProvider == null) {
+			reportSetItemProvider = new ReportSetItemProvider(this);
+		}
 
-        return reportSetItemProvider;
-    }
+		return reportSetItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ReportSetsType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ReportSetsType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ReportSetsTypeItemProvider reportSetsTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ReportSetsType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ReportSetsType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createReportSetsTypeAdapter()
     {
-        if (reportSetsTypeItemProvider == null)
-        {
-            reportSetsTypeItemProvider = new ReportSetsTypeItemProvider(this);
-        }
+		if (reportSetsTypeItemProvider == null) {
+			reportSetsTypeItemProvider = new ReportSetsTypeItemProvider(this);
+		}
 
-        return reportSetsTypeItemProvider;
-    }
+		return reportSetsTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ReportsType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ReportsType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ReportsTypeItemProvider reportsTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ReportsType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ReportsType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createReportsTypeAdapter()
     {
-        if (reportsTypeItemProvider == null)
-        {
-            reportsTypeItemProvider = new ReportsTypeItemProvider(this);
-        }
+		if (reportsTypeItemProvider == null) {
+			reportsTypeItemProvider = new ReportsTypeItemProvider(this);
+		}
 
-        return reportsTypeItemProvider;
-    }
+		return reportsTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ReportsType1} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ReportsType1} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ReportsType1ItemProvider reportsType1ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ReportsType1}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ReportsType1}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createReportsType1Adapter()
     {
-        if (reportsType1ItemProvider == null)
-        {
-            reportsType1ItemProvider = new ReportsType1ItemProvider(this);
-        }
+		if (reportsType1ItemProvider == null) {
+			reportsType1ItemProvider = new ReportsType1ItemProvider(this);
+		}
 
-        return reportsType1ItemProvider;
-    }
+		return reportsType1ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ReportsType2} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ReportsType2} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ReportsType2ItemProvider reportsType2ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ReportsType2}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ReportsType2}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createReportsType2Adapter()
     {
-        if (reportsType2ItemProvider == null)
-        {
-            reportsType2ItemProvider = new ReportsType2ItemProvider(this);
-        }
+		if (reportsType2ItemProvider == null) {
+			reportsType2ItemProvider = new ReportsType2ItemProvider(this);
+		}
 
-        return reportsType2ItemProvider;
-    }
+		return reportsType2ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.RepositoriesType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.RepositoriesType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected RepositoriesTypeItemProvider repositoriesTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.RepositoriesType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.RepositoriesType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createRepositoriesTypeAdapter()
     {
-        if (repositoriesTypeItemProvider == null)
-        {
-            repositoriesTypeItemProvider = new RepositoriesTypeItemProvider(this);
-        }
+		if (repositoriesTypeItemProvider == null) {
+			repositoriesTypeItemProvider = new RepositoriesTypeItemProvider(this);
+		}
 
-        return repositoriesTypeItemProvider;
-    }
+		return repositoriesTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.RepositoriesType1} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.RepositoriesType1} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected RepositoriesType1ItemProvider repositoriesType1ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.RepositoriesType1}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.RepositoriesType1}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createRepositoriesType1Adapter()
     {
-        if (repositoriesType1ItemProvider == null)
-        {
-            repositoriesType1ItemProvider = new RepositoriesType1ItemProvider(this);
-        }
+		if (repositoriesType1ItemProvider == null) {
+			repositoriesType1ItemProvider = new RepositoriesType1ItemProvider(this);
+		}
 
-        return repositoriesType1ItemProvider;
-    }
+		return repositoriesType1ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Repository} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Repository} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected RepositoryItemProvider repositoryItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Repository}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Repository}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createRepositoryAdapter()
     {
-        if (repositoryItemProvider == null)
-        {
-            repositoryItemProvider = new RepositoryItemProvider(this);
-        }
+		if (repositoryItemProvider == null) {
+			repositoryItemProvider = new RepositoryItemProvider(this);
+		}
 
-        return repositoryItemProvider;
-    }
+		return repositoryItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.RepositoryPolicy} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.RepositoryPolicy} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected RepositoryPolicyItemProvider repositoryPolicyItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.RepositoryPolicy}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.RepositoryPolicy}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createRepositoryPolicyAdapter()
     {
-        if (repositoryPolicyItemProvider == null)
-        {
-            repositoryPolicyItemProvider = new RepositoryPolicyItemProvider(this);
-        }
+		if (repositoryPolicyItemProvider == null) {
+			repositoryPolicyItemProvider = new RepositoryPolicyItemProvider(this);
+		}
 
-        return repositoryPolicyItemProvider;
-    }
+		return repositoryPolicyItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Resource} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Resource} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ResourceItemProvider resourceItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Resource}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Resource}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createResourceAdapter()
     {
-        if (resourceItemProvider == null)
-        {
-            resourceItemProvider = new ResourceItemProvider(this);
-        }
+		if (resourceItemProvider == null) {
+			resourceItemProvider = new ResourceItemProvider(this);
+		}
 
-        return resourceItemProvider;
-    }
+		return resourceItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ResourcesType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ResourcesType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ResourcesTypeItemProvider resourcesTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ResourcesType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ResourcesType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createResourcesTypeAdapter()
     {
-        if (resourcesTypeItemProvider == null)
-        {
-            resourcesTypeItemProvider = new ResourcesTypeItemProvider(this);
-        }
+		if (resourcesTypeItemProvider == null) {
+			resourcesTypeItemProvider = new ResourcesTypeItemProvider(this);
+		}
 
-        return resourcesTypeItemProvider;
-    }
+		return resourcesTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ResourcesType1} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ResourcesType1} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ResourcesType1ItemProvider resourcesType1ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.ResourcesType1}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ResourcesType1}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createResourcesType1Adapter()
     {
-        if (resourcesType1ItemProvider == null)
-        {
-            resourcesType1ItemProvider = new ResourcesType1ItemProvider(this);
-        }
+		if (resourcesType1ItemProvider == null) {
+			resourcesType1ItemProvider = new ResourcesType1ItemProvider(this);
+		}
 
-        return resourcesType1ItemProvider;
-    }
+		return resourcesType1ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.RolesType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.RolesType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected RolesTypeItemProvider rolesTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.RolesType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.RolesType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createRolesTypeAdapter()
     {
-        if (rolesTypeItemProvider == null)
-        {
-            rolesTypeItemProvider = new RolesTypeItemProvider(this);
-        }
+		if (rolesTypeItemProvider == null) {
+			rolesTypeItemProvider = new RolesTypeItemProvider(this);
+		}
 
-        return rolesTypeItemProvider;
-    }
+		return rolesTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.RolesType1} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.RolesType1} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected RolesType1ItemProvider rolesType1ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.RolesType1}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.RolesType1}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createRolesType1Adapter()
     {
-        if (rolesType1ItemProvider == null)
-        {
-            rolesType1ItemProvider = new RolesType1ItemProvider(this);
-        }
+		if (rolesType1ItemProvider == null) {
+			rolesType1ItemProvider = new RolesType1ItemProvider(this);
+		}
 
-        return rolesType1ItemProvider;
-    }
+		return rolesType1ItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Scm} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Scm} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ScmItemProvider scmItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Scm}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Scm}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createScmAdapter()
     {
-        if (scmItemProvider == null)
-        {
-            scmItemProvider = new ScmItemProvider(this);
-        }
+		if (scmItemProvider == null) {
+			scmItemProvider = new ScmItemProvider(this);
+		}
 
-        return scmItemProvider;
-    }
+		return scmItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Site} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Site} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected SiteItemProvider siteItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.Site}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Site}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createSiteAdapter()
     {
-        if (siteItemProvider == null)
-        {
-            siteItemProvider = new SiteItemProvider(this);
-        }
+		if (siteItemProvider == null) {
+			siteItemProvider = new SiteItemProvider(this);
+		}
 
-        return siteItemProvider;
-    }
+		return siteItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.TestResourcesType} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.TestResourcesType} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected TestResourcesTypeItemProvider testResourcesTypeItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.TestResourcesType}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.TestResourcesType}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createTestResourcesTypeAdapter()
     {
-        if (testResourcesTypeItemProvider == null)
-        {
-            testResourcesTypeItemProvider = new TestResourcesTypeItemProvider(this);
-        }
+		if (testResourcesTypeItemProvider == null) {
+			testResourcesTypeItemProvider = new TestResourcesTypeItemProvider(this);
+		}
 
-        return testResourcesTypeItemProvider;
-    }
+		return testResourcesTypeItemProvider;
+	}
 
     /**
-     * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.TestResourcesType1} instances.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.TestResourcesType1} instances.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected TestResourcesType1ItemProvider testResourcesType1ItemProvider;
 
     /**
-     * This creates an adapter for a {@link org.devzuz.q.maven.pom.TestResourcesType1}.
-     * <!-- begin-user-doc -->
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.TestResourcesType1}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter createTestResourcesType1Adapter()
     {
-        if (testResourcesType1ItemProvider == null)
-        {
-            testResourcesType1ItemProvider = new TestResourcesType1ItemProvider(this);
-        }
+		if (testResourcesType1ItemProvider == null) {
+			testResourcesType1ItemProvider = new TestResourcesType1ItemProvider(this);
+		}
 
-        return testResourcesType1ItemProvider;
-    }
+		return testResourcesType1ItemProvider;
+	}
 
     /**
-     * This returns the root adapter factory that contains this factory.
-     * <!-- begin-user-doc -->
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.ConfigurationElement} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ConfigurationElementItemProvider configurationElementItemProvider;
+
+				/**
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.ConfigurationElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createConfigurationElementAdapter() {
+		if (configurationElementItemProvider == null) {
+			configurationElementItemProvider = new ConfigurationElementItemProvider(this);
+		}
+
+		return configurationElementItemProvider;
+	}
+
+				/**
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Properties} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PropertiesItemProvider propertiesItemProvider;
+
+				/**
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Properties}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPropertiesAdapter() {
+		if (propertiesItemProvider == null) {
+			propertiesItemProvider = new PropertiesItemProvider(this);
+		}
+
+		return propertiesItemProvider;
+	}
+
+				/**
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.PropertyElement} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected PropertyElementItemProvider propertyElementItemProvider;
+
+				/**
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.PropertyElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createPropertyElementAdapter() {
+		if (propertyElementItemProvider == null) {
+			propertyElementItemProvider = new PropertyElementItemProvider(this);
+		}
+
+		return propertyElementItemProvider;
+	}
+
+				/**
+	 * This keeps track of the one adapter used for all {@link org.devzuz.q.maven.pom.Configuration} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected ConfigurationItemProvider configurationItemProvider;
+
+				/**
+	 * This creates an adapter for a {@link org.devzuz.q.maven.pom.Configuration}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createConfigurationAdapter() {
+		if (configurationItemProvider == null) {
+			configurationItemProvider = new ConfigurationItemProvider(this);
+		}
+
+		return configurationItemProvider;
+	}
+
+				/**
+	 * This returns the root adapter factory that contains this factory.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public ComposeableAdapterFactory getRootAdapterFactory()
     {
-        return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
-    }
+		return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
+	}
 
     /**
-     * This sets the composed adapter factory that contains this factory.
-     * <!-- begin-user-doc -->
+	 * This sets the composed adapter factory that contains this factory.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory)
     {
-        this.parentAdapterFactory = parentAdapterFactory;
-    }
+		this.parentAdapterFactory = parentAdapterFactory;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean isFactoryForType(Object type)
     {
-        return supportedTypes.contains(type) || super.isFactoryForType(type);
-    }
+		return supportedTypes.contains(type) || super.isFactoryForType(type);
+	}
 
     /**
-     * This implementation substitutes the factory itself as the key for the adapter.
-     * <!-- begin-user-doc -->
+	 * This implementation substitutes the factory itself as the key for the adapter.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Adapter adapt(Notifier notifier, Object type)
     {
-        return super.adapt(notifier, this);
-    }
+		return super.adapt(notifier, this);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object adapt(Object object, Object type)
     {
-        if (isFactoryForType(type))
-        {
-            Object adapter = super.adapt(object, type);
-            if (!(type instanceof Class) || (((Class<?>)type).isInstance(adapter)))
-            {
-                return adapter;
-            }
-        }
+		if (isFactoryForType(type)) {
+			Object adapter = super.adapt(object, type);
+			if (!(type instanceof Class) || (((Class<?>)type).isInstance(adapter))) {
+				return adapter;
+			}
+		}
 
-        return null;
-    }
+		return null;
+	}
 
     /**
-     * This adds a listener.
-     * <!-- begin-user-doc -->
+	 * This adds a listener.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void addListener(INotifyChangedListener notifyChangedListener)
     {
-        changeNotifier.addListener(notifyChangedListener);
-    }
+		changeNotifier.addListener(notifyChangedListener);
+	}
 
     /**
-     * This removes a listener.
-     * <!-- begin-user-doc -->
+	 * This removes a listener.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void removeListener(INotifyChangedListener notifyChangedListener)
     {
-        changeNotifier.removeListener(notifyChangedListener);
-    }
+		changeNotifier.removeListener(notifyChangedListener);
+	}
 
     /**
-     * This delegates to {@link #changeNotifier} and to {@link #parentAdapterFactory}.
-     * <!-- begin-user-doc -->
+	 * This delegates to {@link #changeNotifier} and to {@link #parentAdapterFactory}.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void fireNotifyChanged(Notification notification)
     {
-        changeNotifier.fireNotifyChanged(notification);
+		changeNotifier.fireNotifyChanged(notification);
 
-        if (parentAdapterFactory != null)
-        {
-            parentAdapterFactory.fireNotifyChanged(notification);
-        }
-    }
+		if (parentAdapterFactory != null) {
+			parentAdapterFactory.fireNotifyChanged(notification);
+		}
+	}
 
     /**
-     * This disposes all of the item providers created by this factory. 
-     * <!-- begin-user-doc -->
+	 * This disposes all of the item providers created by this factory. 
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void dispose()
     {
-        if (activationItemProvider != null) activationItemProvider.dispose();
-        if (activationFileItemProvider != null) activationFileItemProvider.dispose();
-        if (activationOSItemProvider != null) activationOSItemProvider.dispose();
-        if (activationPropertyItemProvider != null) activationPropertyItemProvider.dispose();
-        if (buildItemProvider != null) buildItemProvider.dispose();
-        if (buildBaseItemProvider != null) buildBaseItemProvider.dispose();
-        if (ciManagementItemProvider != null) ciManagementItemProvider.dispose();
-        if (configurationTypeItemProvider != null) configurationTypeItemProvider.dispose();
-        if (configurationType1ItemProvider != null) configurationType1ItemProvider.dispose();
-        if (configurationType2ItemProvider != null) configurationType2ItemProvider.dispose();
-        if (configurationType3ItemProvider != null) configurationType3ItemProvider.dispose();
-        if (configurationType4ItemProvider != null) configurationType4ItemProvider.dispose();
-        if (contributorItemProvider != null) contributorItemProvider.dispose();
-        if (contributorsTypeItemProvider != null) contributorsTypeItemProvider.dispose();
-        if (dependenciesTypeItemProvider != null) dependenciesTypeItemProvider.dispose();
-        if (dependenciesType1ItemProvider != null) dependenciesType1ItemProvider.dispose();
-        if (dependenciesType2ItemProvider != null) dependenciesType2ItemProvider.dispose();
-        if (dependenciesType3ItemProvider != null) dependenciesType3ItemProvider.dispose();
-        if (dependencyItemProvider != null) dependencyItemProvider.dispose();
-        if (dependencyManagementItemProvider != null) dependencyManagementItemProvider.dispose();
-        if (deploymentRepositoryItemProvider != null) deploymentRepositoryItemProvider.dispose();
-        if (developerItemProvider != null) developerItemProvider.dispose();
-        if (developersTypeItemProvider != null) developersTypeItemProvider.dispose();
-        if (distributionManagementItemProvider != null) distributionManagementItemProvider.dispose();
-        if (documentRootItemProvider != null) documentRootItemProvider.dispose();
-        if (excludesTypeItemProvider != null) excludesTypeItemProvider.dispose();
-        if (exclusionItemProvider != null) exclusionItemProvider.dispose();
-        if (exclusionsTypeItemProvider != null) exclusionsTypeItemProvider.dispose();
-        if (executionsTypeItemProvider != null) executionsTypeItemProvider.dispose();
-        if (extensionItemProvider != null) extensionItemProvider.dispose();
-        if (extensionsTypeItemProvider != null) extensionsTypeItemProvider.dispose();
-        if (filtersTypeItemProvider != null) filtersTypeItemProvider.dispose();
-        if (filtersType1ItemProvider != null) filtersType1ItemProvider.dispose();
-        if (goalsTypeItemProvider != null) goalsTypeItemProvider.dispose();
-        if (goalsType1ItemProvider != null) goalsType1ItemProvider.dispose();
-        if (includesTypeItemProvider != null) includesTypeItemProvider.dispose();
-        if (issueManagementItemProvider != null) issueManagementItemProvider.dispose();
-        if (licenseItemProvider != null) licenseItemProvider.dispose();
-        if (licensesTypeItemProvider != null) licensesTypeItemProvider.dispose();
-        if (mailingListItemProvider != null) mailingListItemProvider.dispose();
-        if (mailingListsTypeItemProvider != null) mailingListsTypeItemProvider.dispose();
-        if (modelItemProvider != null) modelItemProvider.dispose();
-        if (modulesTypeItemProvider != null) modulesTypeItemProvider.dispose();
-        if (modulesType1ItemProvider != null) modulesType1ItemProvider.dispose();
-        if (notifierItemProvider != null) notifierItemProvider.dispose();
-        if (notifiersTypeItemProvider != null) notifiersTypeItemProvider.dispose();
-        if (organizationItemProvider != null) organizationItemProvider.dispose();
-        if (otherArchivesTypeItemProvider != null) otherArchivesTypeItemProvider.dispose();
-        if (parentItemProvider != null) parentItemProvider.dispose();
-        if (pluginItemProvider != null) pluginItemProvider.dispose();
-        if (pluginExecutionItemProvider != null) pluginExecutionItemProvider.dispose();
-        if (pluginManagementItemProvider != null) pluginManagementItemProvider.dispose();
-        if (pluginRepositoriesTypeItemProvider != null) pluginRepositoriesTypeItemProvider.dispose();
-        if (pluginRepositoriesType1ItemProvider != null) pluginRepositoriesType1ItemProvider.dispose();
-        if (pluginsTypeItemProvider != null) pluginsTypeItemProvider.dispose();
-        if (pluginsType1ItemProvider != null) pluginsType1ItemProvider.dispose();
-        if (pluginsType2ItemProvider != null) pluginsType2ItemProvider.dispose();
-        if (pluginsType3ItemProvider != null) pluginsType3ItemProvider.dispose();
-        if (prerequisitesItemProvider != null) prerequisitesItemProvider.dispose();
-        if (profileItemProvider != null) profileItemProvider.dispose();
-        if (profilesTypeItemProvider != null) profilesTypeItemProvider.dispose();
-        if (propertiesTypeItemProvider != null) propertiesTypeItemProvider.dispose();
-        if (propertiesType1ItemProvider != null) propertiesType1ItemProvider.dispose();
-        if (propertiesType2ItemProvider != null) propertiesType2ItemProvider.dispose();
-        if (propertiesType3ItemProvider != null) propertiesType3ItemProvider.dispose();
-        if (relocationItemProvider != null) relocationItemProvider.dispose();
-        if (reportingItemProvider != null) reportingItemProvider.dispose();
-        if (reportPluginItemProvider != null) reportPluginItemProvider.dispose();
-        if (reportSetItemProvider != null) reportSetItemProvider.dispose();
-        if (reportSetsTypeItemProvider != null) reportSetsTypeItemProvider.dispose();
-        if (reportsTypeItemProvider != null) reportsTypeItemProvider.dispose();
-        if (reportsType1ItemProvider != null) reportsType1ItemProvider.dispose();
-        if (reportsType2ItemProvider != null) reportsType2ItemProvider.dispose();
-        if (repositoriesTypeItemProvider != null) repositoriesTypeItemProvider.dispose();
-        if (repositoriesType1ItemProvider != null) repositoriesType1ItemProvider.dispose();
-        if (repositoryItemProvider != null) repositoryItemProvider.dispose();
-        if (repositoryPolicyItemProvider != null) repositoryPolicyItemProvider.dispose();
-        if (resourceItemProvider != null) resourceItemProvider.dispose();
-        if (resourcesTypeItemProvider != null) resourcesTypeItemProvider.dispose();
-        if (resourcesType1ItemProvider != null) resourcesType1ItemProvider.dispose();
-        if (rolesTypeItemProvider != null) rolesTypeItemProvider.dispose();
-        if (rolesType1ItemProvider != null) rolesType1ItemProvider.dispose();
-        if (scmItemProvider != null) scmItemProvider.dispose();
-        if (siteItemProvider != null) siteItemProvider.dispose();
-        if (testResourcesTypeItemProvider != null) testResourcesTypeItemProvider.dispose();
-        if (testResourcesType1ItemProvider != null) testResourcesType1ItemProvider.dispose();
-    }
+		if (activationItemProvider != null) activationItemProvider.dispose();
+		if (activationFileItemProvider != null) activationFileItemProvider.dispose();
+		if (activationOSItemProvider != null) activationOSItemProvider.dispose();
+		if (activationPropertyItemProvider != null) activationPropertyItemProvider.dispose();
+		if (buildItemProvider != null) buildItemProvider.dispose();
+		if (buildBaseItemProvider != null) buildBaseItemProvider.dispose();
+		if (ciManagementItemProvider != null) ciManagementItemProvider.dispose();
+		if (contributorItemProvider != null) contributorItemProvider.dispose();
+		if (contributorsTypeItemProvider != null) contributorsTypeItemProvider.dispose();
+		if (dependenciesTypeItemProvider != null) dependenciesTypeItemProvider.dispose();
+		if (dependenciesType1ItemProvider != null) dependenciesType1ItemProvider.dispose();
+		if (dependenciesType2ItemProvider != null) dependenciesType2ItemProvider.dispose();
+		if (dependenciesType3ItemProvider != null) dependenciesType3ItemProvider.dispose();
+		if (dependencyItemProvider != null) dependencyItemProvider.dispose();
+		if (dependencyManagementItemProvider != null) dependencyManagementItemProvider.dispose();
+		if (deploymentRepositoryItemProvider != null) deploymentRepositoryItemProvider.dispose();
+		if (developerItemProvider != null) developerItemProvider.dispose();
+		if (developersTypeItemProvider != null) developersTypeItemProvider.dispose();
+		if (distributionManagementItemProvider != null) distributionManagementItemProvider.dispose();
+		if (documentRootItemProvider != null) documentRootItemProvider.dispose();
+		if (excludesTypeItemProvider != null) excludesTypeItemProvider.dispose();
+		if (exclusionItemProvider != null) exclusionItemProvider.dispose();
+		if (exclusionsTypeItemProvider != null) exclusionsTypeItemProvider.dispose();
+		if (executionsTypeItemProvider != null) executionsTypeItemProvider.dispose();
+		if (extensionItemProvider != null) extensionItemProvider.dispose();
+		if (extensionsTypeItemProvider != null) extensionsTypeItemProvider.dispose();
+		if (filtersTypeItemProvider != null) filtersTypeItemProvider.dispose();
+		if (filtersType1ItemProvider != null) filtersType1ItemProvider.dispose();
+		if (goalsTypeItemProvider != null) goalsTypeItemProvider.dispose();
+		if (goalsType1ItemProvider != null) goalsType1ItemProvider.dispose();
+		if (includesTypeItemProvider != null) includesTypeItemProvider.dispose();
+		if (issueManagementItemProvider != null) issueManagementItemProvider.dispose();
+		if (licenseItemProvider != null) licenseItemProvider.dispose();
+		if (licensesTypeItemProvider != null) licensesTypeItemProvider.dispose();
+		if (mailingListItemProvider != null) mailingListItemProvider.dispose();
+		if (mailingListsTypeItemProvider != null) mailingListsTypeItemProvider.dispose();
+		if (modelItemProvider != null) modelItemProvider.dispose();
+		if (modulesTypeItemProvider != null) modulesTypeItemProvider.dispose();
+		if (modulesType1ItemProvider != null) modulesType1ItemProvider.dispose();
+		if (notifierItemProvider != null) notifierItemProvider.dispose();
+		if (notifiersTypeItemProvider != null) notifiersTypeItemProvider.dispose();
+		if (organizationItemProvider != null) organizationItemProvider.dispose();
+		if (otherArchivesTypeItemProvider != null) otherArchivesTypeItemProvider.dispose();
+		if (parentItemProvider != null) parentItemProvider.dispose();
+		if (pluginItemProvider != null) pluginItemProvider.dispose();
+		if (pluginExecutionItemProvider != null) pluginExecutionItemProvider.dispose();
+		if (pluginManagementItemProvider != null) pluginManagementItemProvider.dispose();
+		if (pluginRepositoriesTypeItemProvider != null) pluginRepositoriesTypeItemProvider.dispose();
+		if (pluginRepositoriesType1ItemProvider != null) pluginRepositoriesType1ItemProvider.dispose();
+		if (pluginsTypeItemProvider != null) pluginsTypeItemProvider.dispose();
+		if (pluginsType1ItemProvider != null) pluginsType1ItemProvider.dispose();
+		if (pluginsType2ItemProvider != null) pluginsType2ItemProvider.dispose();
+		if (pluginsType3ItemProvider != null) pluginsType3ItemProvider.dispose();
+		if (prerequisitesItemProvider != null) prerequisitesItemProvider.dispose();
+		if (profileItemProvider != null) profileItemProvider.dispose();
+		if (profilesTypeItemProvider != null) profilesTypeItemProvider.dispose();
+		if (relocationItemProvider != null) relocationItemProvider.dispose();
+		if (reportingItemProvider != null) reportingItemProvider.dispose();
+		if (reportPluginItemProvider != null) reportPluginItemProvider.dispose();
+		if (reportSetItemProvider != null) reportSetItemProvider.dispose();
+		if (reportSetsTypeItemProvider != null) reportSetsTypeItemProvider.dispose();
+		if (reportsTypeItemProvider != null) reportsTypeItemProvider.dispose();
+		if (reportsType1ItemProvider != null) reportsType1ItemProvider.dispose();
+		if (reportsType2ItemProvider != null) reportsType2ItemProvider.dispose();
+		if (repositoriesTypeItemProvider != null) repositoriesTypeItemProvider.dispose();
+		if (repositoriesType1ItemProvider != null) repositoriesType1ItemProvider.dispose();
+		if (repositoryItemProvider != null) repositoryItemProvider.dispose();
+		if (repositoryPolicyItemProvider != null) repositoryPolicyItemProvider.dispose();
+		if (resourceItemProvider != null) resourceItemProvider.dispose();
+		if (resourcesTypeItemProvider != null) resourcesTypeItemProvider.dispose();
+		if (resourcesType1ItemProvider != null) resourcesType1ItemProvider.dispose();
+		if (rolesTypeItemProvider != null) rolesTypeItemProvider.dispose();
+		if (rolesType1ItemProvider != null) rolesType1ItemProvider.dispose();
+		if (scmItemProvider != null) scmItemProvider.dispose();
+		if (siteItemProvider != null) siteItemProvider.dispose();
+		if (testResourcesTypeItemProvider != null) testResourcesTypeItemProvider.dispose();
+		if (testResourcesType1ItemProvider != null) testResourcesType1ItemProvider.dispose();
+		if (configurationElementItemProvider != null) configurationElementItemProvider.dispose();
+		if (propertiesItemProvider != null) propertiesItemProvider.dispose();
+		if (propertyElementItemProvider != null) propertyElementItemProvider.dispose();
+		if (configurationItemProvider != null) configurationItemProvider.dispose();
+	}
 
 }

@@ -8,7 +8,7 @@ package org.devzuz.q.maven.pom.impl;
 
 import org.devzuz.q.maven.pom.Contributor;
 import org.devzuz.q.maven.pom.PomPackage;
-import org.devzuz.q.maven.pom.PropertiesType;
+import org.devzuz.q.maven.pom.Properties;
 import org.devzuz.q.maven.pom.RolesType;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -43,715 +43,696 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 public class ContributorImpl extends EObjectImpl implements Contributor
 {
     /**
-     * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getName()
-     * @generated
-     * @ordered
-     */
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String NAME_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getName()
-     * @generated
-     * @ordered
-     */
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
     protected String name = NAME_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getEmail() <em>Email</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getEmail() <em>Email</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getEmail()
-     * @generated
-     * @ordered
-     */
+	 * @see #getEmail()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String EMAIL_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getEmail() <em>Email</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getEmail() <em>Email</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getEmail()
-     * @generated
-     * @ordered
-     */
+	 * @see #getEmail()
+	 * @generated
+	 * @ordered
+	 */
     protected String email = EMAIL_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getUrl() <em>Url</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getUrl() <em>Url</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getUrl()
-     * @generated
-     * @ordered
-     */
+	 * @see #getUrl()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String URL_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getUrl() <em>Url</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getUrl() <em>Url</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getUrl()
-     * @generated
-     * @ordered
-     */
+	 * @see #getUrl()
+	 * @generated
+	 * @ordered
+	 */
     protected String url = URL_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getOrganization() <em>Organization</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getOrganization() <em>Organization</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getOrganization()
-     * @generated
-     * @ordered
-     */
+	 * @see #getOrganization()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String ORGANIZATION_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getOrganization() <em>Organization</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getOrganization() <em>Organization</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getOrganization()
-     * @generated
-     * @ordered
-     */
+	 * @see #getOrganization()
+	 * @generated
+	 * @ordered
+	 */
     protected String organization = ORGANIZATION_EDEFAULT;
 
     /**
-     * The default value of the '{@link #getOrganizationUrl() <em>Organization Url</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getOrganizationUrl() <em>Organization Url</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getOrganizationUrl()
-     * @generated
-     * @ordered
-     */
+	 * @see #getOrganizationUrl()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String ORGANIZATION_URL_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getOrganizationUrl() <em>Organization Url</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getOrganizationUrl() <em>Organization Url</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getOrganizationUrl()
-     * @generated
-     * @ordered
-     */
+	 * @see #getOrganizationUrl()
+	 * @generated
+	 * @ordered
+	 */
     protected String organizationUrl = ORGANIZATION_URL_EDEFAULT;
 
     /**
-     * The cached value of the '{@link #getRoles() <em>Roles</em>}' containment reference.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getRoles() <em>Roles</em>}' containment reference.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getRoles()
-     * @generated
-     * @ordered
-     */
+	 * @see #getRoles()
+	 * @generated
+	 * @ordered
+	 */
     protected RolesType roles;
 
     /**
-     * This is true if the Roles containment reference has been set.
-     * <!-- begin-user-doc -->
+	 * This is true if the Roles containment reference has been set.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
+	 * @generated
+	 * @ordered
+	 */
     protected boolean rolesESet;
 
     /**
-     * The default value of the '{@link #getTimezone() <em>Timezone</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getTimezone() <em>Timezone</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getTimezone()
-     * @generated
-     * @ordered
-     */
+	 * @see #getTimezone()
+	 * @generated
+	 * @ordered
+	 */
     protected static final String TIMEZONE_EDEFAULT = null;
 
     /**
-     * The cached value of the '{@link #getTimezone() <em>Timezone</em>}' attribute.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getTimezone() <em>Timezone</em>}' attribute.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getTimezone()
-     * @generated
-     * @ordered
-     */
+	 * @see #getTimezone()
+	 * @generated
+	 * @ordered
+	 */
     protected String timezone = TIMEZONE_EDEFAULT;
 
     /**
-     * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getProperties() <em>Properties</em>}' containment reference.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getProperties()
-     * @generated
-     * @ordered
-     */
-    protected PropertiesType properties;
+	 * @see #getProperties()
+	 * @generated
+	 * @ordered
+	 */
+    protected Properties properties;
 
     /**
-     * This is true if the Properties containment reference has been set.
-     * <!-- begin-user-doc -->
+	 * This is true if the Properties containment reference has been set.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     * @ordered
-     */
+	 * @generated
+	 * @ordered
+	 */
     protected boolean propertiesESet;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ContributorImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.CONTRIBUTOR;
-    }
+		return PomPackage.Literals.CONTRIBUTOR;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getName()
     {
-        return name;
-    }
+		return name;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setName(String newName)
     {
-        String oldName = name;
-        name = newName;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__NAME, oldName, name));
-    }
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__NAME, oldName, name));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getEmail()
     {
-        return email;
-    }
+		return email;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setEmail(String newEmail)
     {
-        String oldEmail = email;
-        email = newEmail;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__EMAIL, oldEmail, email));
-    }
+		String oldEmail = email;
+		email = newEmail;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__EMAIL, oldEmail, email));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getUrl()
     {
-        return url;
-    }
+		return url;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setUrl(String newUrl)
     {
-        String oldUrl = url;
-        url = newUrl;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__URL, oldUrl, url));
-    }
+		String oldUrl = url;
+		url = newUrl;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__URL, oldUrl, url));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getOrganization()
     {
-        return organization;
-    }
+		return organization;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setOrganization(String newOrganization)
     {
-        String oldOrganization = organization;
-        organization = newOrganization;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__ORGANIZATION, oldOrganization, organization));
-    }
+		String oldOrganization = organization;
+		organization = newOrganization;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__ORGANIZATION, oldOrganization, organization));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getOrganizationUrl()
     {
-        return organizationUrl;
-    }
+		return organizationUrl;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setOrganizationUrl(String newOrganizationUrl)
     {
-        String oldOrganizationUrl = organizationUrl;
-        organizationUrl = newOrganizationUrl;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__ORGANIZATION_URL, oldOrganizationUrl, organizationUrl));
-    }
+		String oldOrganizationUrl = organizationUrl;
+		organizationUrl = newOrganizationUrl;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__ORGANIZATION_URL, oldOrganizationUrl, organizationUrl));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public RolesType getRoles()
     {
-        return roles;
-    }
+		return roles;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public NotificationChain basicSetRoles(RolesType newRoles, NotificationChain msgs)
     {
-        RolesType oldRoles = roles;
-        roles = newRoles;
-        boolean oldRolesESet = rolesESet;
-        rolesESet = true;
-        if (eNotificationRequired())
-        {
-            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__ROLES, oldRoles, newRoles, !oldRolesESet);
-            if (msgs == null) msgs = notification; else msgs.add(notification);
-        }
-        return msgs;
-    }
+		RolesType oldRoles = roles;
+		roles = newRoles;
+		boolean oldRolesESet = rolesESet;
+		rolesESet = true;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__ROLES, oldRoles, newRoles, !oldRolesESet);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setRoles(RolesType newRoles)
     {
-        if (newRoles != roles)
-        {
-            NotificationChain msgs = null;
-            if (roles != null)
-                msgs = ((InternalEObject)roles).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PomPackage.CONTRIBUTOR__ROLES, null, msgs);
-            if (newRoles != null)
-                msgs = ((InternalEObject)newRoles).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PomPackage.CONTRIBUTOR__ROLES, null, msgs);
-            msgs = basicSetRoles(newRoles, msgs);
-            if (msgs != null) msgs.dispatch();
-        }
-        else
-        {
-            boolean oldRolesESet = rolesESet;
-            rolesESet = true;
-            if (eNotificationRequired())
-                eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__ROLES, newRoles, newRoles, !oldRolesESet));
-        }
-    }
+		if (newRoles != roles) {
+			NotificationChain msgs = null;
+			if (roles != null)
+				msgs = ((InternalEObject)roles).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PomPackage.CONTRIBUTOR__ROLES, null, msgs);
+			if (newRoles != null)
+				msgs = ((InternalEObject)newRoles).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PomPackage.CONTRIBUTOR__ROLES, null, msgs);
+			msgs = basicSetRoles(newRoles, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else {
+			boolean oldRolesESet = rolesESet;
+			rolesESet = true;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__ROLES, newRoles, newRoles, !oldRolesESet));
+		}
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public NotificationChain basicUnsetRoles(NotificationChain msgs)
     {
-        RolesType oldRoles = roles;
-        roles = null;
-        boolean oldRolesESet = rolesESet;
-        rolesESet = false;
-        if (eNotificationRequired())
-        {
-            ENotificationImpl notification = new ENotificationImpl(this, Notification.UNSET, PomPackage.CONTRIBUTOR__ROLES, oldRoles, null, oldRolesESet);
-            if (msgs == null) msgs = notification; else msgs.add(notification);
-        }
-        return msgs;
-    }
+		RolesType oldRoles = roles;
+		roles = null;
+		boolean oldRolesESet = rolesESet;
+		rolesESet = false;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.UNSET, PomPackage.CONTRIBUTOR__ROLES, oldRoles, null, oldRolesESet);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void unsetRoles()
     {
-        if (roles != null)
-        {
-            NotificationChain msgs = null;
-            msgs = ((InternalEObject)roles).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PomPackage.CONTRIBUTOR__ROLES, null, msgs);
-            msgs = basicUnsetRoles(msgs);
-            if (msgs != null) msgs.dispatch();
-        }
-        else
-        {
-            boolean oldRolesESet = rolesESet;
-            rolesESet = false;
-            if (eNotificationRequired())
-                eNotify(new ENotificationImpl(this, Notification.UNSET, PomPackage.CONTRIBUTOR__ROLES, null, null, oldRolesESet));
-        }
-    }
+		if (roles != null) {
+			NotificationChain msgs = null;
+			msgs = ((InternalEObject)roles).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PomPackage.CONTRIBUTOR__ROLES, null, msgs);
+			msgs = basicUnsetRoles(msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else {
+			boolean oldRolesESet = rolesESet;
+			rolesESet = false;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.UNSET, PomPackage.CONTRIBUTOR__ROLES, null, null, oldRolesESet));
+		}
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public boolean isSetRoles()
     {
-        return rolesESet;
-    }
+		return rolesESet;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public String getTimezone()
     {
-        return timezone;
-    }
+		return timezone;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void setTimezone(String newTimezone)
     {
-        String oldTimezone = timezone;
-        timezone = newTimezone;
-        if (eNotificationRequired())
-            eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__TIMEZONE, oldTimezone, timezone));
-    }
+		String oldTimezone = timezone;
+		timezone = newTimezone;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__TIMEZONE, oldTimezone, timezone));
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
-    public PropertiesType getProperties()
+	 * @generated
+	 */
+    public Properties getProperties()
     {
-        return properties;
-    }
+		return properties;
+	}
 
     /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public NotificationChain basicSetProperties(PropertiesType newProperties, NotificationChain msgs)
-    {
-        PropertiesType oldProperties = properties;
-        properties = newProperties;
-        boolean oldPropertiesESet = propertiesESet;
-        propertiesESet = true;
-        if (eNotificationRequired())
-        {
-            ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__PROPERTIES, oldProperties, newProperties, !oldPropertiesESet);
-            if (msgs == null) msgs = notification; else msgs.add(notification);
-        }
-        return msgs;
-    }
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetProperties(Properties newProperties, NotificationChain msgs) {
+		Properties oldProperties = properties;
+		properties = newProperties;
+		boolean oldPropertiesESet = propertiesESet;
+		propertiesESet = true;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__PROPERTIES, oldProperties, newProperties, !oldPropertiesESet);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
-    /**
-     * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-     * @generated
-     */
-    public void setProperties(PropertiesType newProperties)
-    {
-        if (newProperties != properties)
-        {
-            NotificationChain msgs = null;
-            if (properties != null)
-                msgs = ((InternalEObject)properties).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PomPackage.CONTRIBUTOR__PROPERTIES, null, msgs);
-            if (newProperties != null)
-                msgs = ((InternalEObject)newProperties).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PomPackage.CONTRIBUTOR__PROPERTIES, null, msgs);
-            msgs = basicSetProperties(newProperties, msgs);
-            if (msgs != null) msgs.dispatch();
-        }
-        else
-        {
-            boolean oldPropertiesESet = propertiesESet;
-            propertiesESet = true;
-            if (eNotificationRequired())
-                eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__PROPERTIES, newProperties, newProperties, !oldPropertiesESet));
-        }
-    }
+				/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setProperties(Properties newProperties) {
+		if (newProperties != properties) {
+			NotificationChain msgs = null;
+			if (properties != null)
+				msgs = ((InternalEObject)properties).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PomPackage.CONTRIBUTOR__PROPERTIES, null, msgs);
+			if (newProperties != null)
+				msgs = ((InternalEObject)newProperties).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PomPackage.CONTRIBUTOR__PROPERTIES, null, msgs);
+			msgs = basicSetProperties(newProperties, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else {
+			boolean oldPropertiesESet = propertiesESet;
+			propertiesESet = true;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.CONTRIBUTOR__PROPERTIES, newProperties, newProperties, !oldPropertiesESet));
+		}
+	}
 
-    /**
-     * <!-- begin-user-doc -->
+				/**
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public NotificationChain basicUnsetProperties(NotificationChain msgs)
     {
-        PropertiesType oldProperties = properties;
-        properties = null;
-        boolean oldPropertiesESet = propertiesESet;
-        propertiesESet = false;
-        if (eNotificationRequired())
-        {
-            ENotificationImpl notification = new ENotificationImpl(this, Notification.UNSET, PomPackage.CONTRIBUTOR__PROPERTIES, oldProperties, null, oldPropertiesESet);
-            if (msgs == null) msgs = notification; else msgs.add(notification);
-        }
-        return msgs;
-    }
+		Properties oldProperties = properties;
+		properties = null;
+		boolean oldPropertiesESet = propertiesESet;
+		propertiesESet = false;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.UNSET, PomPackage.CONTRIBUTOR__PROPERTIES, oldProperties, null, oldPropertiesESet);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public void unsetProperties()
     {
-        if (properties != null)
-        {
-            NotificationChain msgs = null;
-            msgs = ((InternalEObject)properties).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PomPackage.CONTRIBUTOR__PROPERTIES, null, msgs);
-            msgs = basicUnsetProperties(msgs);
-            if (msgs != null) msgs.dispatch();
-        }
-        else
-        {
-            boolean oldPropertiesESet = propertiesESet;
-            propertiesESet = false;
-            if (eNotificationRequired())
-                eNotify(new ENotificationImpl(this, Notification.UNSET, PomPackage.CONTRIBUTOR__PROPERTIES, null, null, oldPropertiesESet));
-        }
-    }
+		if (properties != null) {
+			NotificationChain msgs = null;
+			msgs = ((InternalEObject)properties).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PomPackage.CONTRIBUTOR__PROPERTIES, null, msgs);
+			msgs = basicUnsetProperties(msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else {
+			boolean oldPropertiesESet = propertiesESet;
+			propertiesESet = false;
+			if (eNotificationRequired())
+				eNotify(new ENotificationImpl(this, Notification.UNSET, PomPackage.CONTRIBUTOR__PROPERTIES, null, null, oldPropertiesESet));
+		}
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public boolean isSetProperties()
     {
-        return propertiesESet;
-    }
+		return propertiesESet;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
     {
-        switch (featureID)
-        {
-            case PomPackage.CONTRIBUTOR__ROLES:
-                return basicUnsetRoles(msgs);
-            case PomPackage.CONTRIBUTOR__PROPERTIES:
-                return basicUnsetProperties(msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case PomPackage.CONTRIBUTOR__ROLES:
+				return basicUnsetRoles(msgs);
+			case PomPackage.CONTRIBUTOR__PROPERTIES:
+				return basicUnsetProperties(msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.CONTRIBUTOR__NAME:
-                return getName();
-            case PomPackage.CONTRIBUTOR__EMAIL:
-                return getEmail();
-            case PomPackage.CONTRIBUTOR__URL:
-                return getUrl();
-            case PomPackage.CONTRIBUTOR__ORGANIZATION:
-                return getOrganization();
-            case PomPackage.CONTRIBUTOR__ORGANIZATION_URL:
-                return getOrganizationUrl();
-            case PomPackage.CONTRIBUTOR__ROLES:
-                return getRoles();
-            case PomPackage.CONTRIBUTOR__TIMEZONE:
-                return getTimezone();
-            case PomPackage.CONTRIBUTOR__PROPERTIES:
-                return getProperties();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.CONTRIBUTOR__NAME:
+				return getName();
+			case PomPackage.CONTRIBUTOR__EMAIL:
+				return getEmail();
+			case PomPackage.CONTRIBUTOR__URL:
+				return getUrl();
+			case PomPackage.CONTRIBUTOR__ORGANIZATION:
+				return getOrganization();
+			case PomPackage.CONTRIBUTOR__ORGANIZATION_URL:
+				return getOrganizationUrl();
+			case PomPackage.CONTRIBUTOR__ROLES:
+				return getRoles();
+			case PomPackage.CONTRIBUTOR__TIMEZONE:
+				return getTimezone();
+			case PomPackage.CONTRIBUTOR__PROPERTIES:
+				return getProperties();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.CONTRIBUTOR__NAME:
-                setName((String)newValue);
-                return;
-            case PomPackage.CONTRIBUTOR__EMAIL:
-                setEmail((String)newValue);
-                return;
-            case PomPackage.CONTRIBUTOR__URL:
-                setUrl((String)newValue);
-                return;
-            case PomPackage.CONTRIBUTOR__ORGANIZATION:
-                setOrganization((String)newValue);
-                return;
-            case PomPackage.CONTRIBUTOR__ORGANIZATION_URL:
-                setOrganizationUrl((String)newValue);
-                return;
-            case PomPackage.CONTRIBUTOR__ROLES:
-                setRoles((RolesType)newValue);
-                return;
-            case PomPackage.CONTRIBUTOR__TIMEZONE:
-                setTimezone((String)newValue);
-                return;
-            case PomPackage.CONTRIBUTOR__PROPERTIES:
-                setProperties((PropertiesType)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.CONTRIBUTOR__NAME:
+				setName((String)newValue);
+				return;
+			case PomPackage.CONTRIBUTOR__EMAIL:
+				setEmail((String)newValue);
+				return;
+			case PomPackage.CONTRIBUTOR__URL:
+				setUrl((String)newValue);
+				return;
+			case PomPackage.CONTRIBUTOR__ORGANIZATION:
+				setOrganization((String)newValue);
+				return;
+			case PomPackage.CONTRIBUTOR__ORGANIZATION_URL:
+				setOrganizationUrl((String)newValue);
+				return;
+			case PomPackage.CONTRIBUTOR__ROLES:
+				setRoles((RolesType)newValue);
+				return;
+			case PomPackage.CONTRIBUTOR__TIMEZONE:
+				setTimezone((String)newValue);
+				return;
+			case PomPackage.CONTRIBUTOR__PROPERTIES:
+				setProperties((Properties)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.CONTRIBUTOR__NAME:
-                setName(NAME_EDEFAULT);
-                return;
-            case PomPackage.CONTRIBUTOR__EMAIL:
-                setEmail(EMAIL_EDEFAULT);
-                return;
-            case PomPackage.CONTRIBUTOR__URL:
-                setUrl(URL_EDEFAULT);
-                return;
-            case PomPackage.CONTRIBUTOR__ORGANIZATION:
-                setOrganization(ORGANIZATION_EDEFAULT);
-                return;
-            case PomPackage.CONTRIBUTOR__ORGANIZATION_URL:
-                setOrganizationUrl(ORGANIZATION_URL_EDEFAULT);
-                return;
-            case PomPackage.CONTRIBUTOR__ROLES:
-                unsetRoles();
-                return;
-            case PomPackage.CONTRIBUTOR__TIMEZONE:
-                setTimezone(TIMEZONE_EDEFAULT);
-                return;
-            case PomPackage.CONTRIBUTOR__PROPERTIES:
-                unsetProperties();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.CONTRIBUTOR__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case PomPackage.CONTRIBUTOR__EMAIL:
+				setEmail(EMAIL_EDEFAULT);
+				return;
+			case PomPackage.CONTRIBUTOR__URL:
+				setUrl(URL_EDEFAULT);
+				return;
+			case PomPackage.CONTRIBUTOR__ORGANIZATION:
+				setOrganization(ORGANIZATION_EDEFAULT);
+				return;
+			case PomPackage.CONTRIBUTOR__ORGANIZATION_URL:
+				setOrganizationUrl(ORGANIZATION_URL_EDEFAULT);
+				return;
+			case PomPackage.CONTRIBUTOR__ROLES:
+				unsetRoles();
+				return;
+			case PomPackage.CONTRIBUTOR__TIMEZONE:
+				setTimezone(TIMEZONE_EDEFAULT);
+				return;
+			case PomPackage.CONTRIBUTOR__PROPERTIES:
+				unsetProperties();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.CONTRIBUTOR__NAME:
-                return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-            case PomPackage.CONTRIBUTOR__EMAIL:
-                return EMAIL_EDEFAULT == null ? email != null : !EMAIL_EDEFAULT.equals(email);
-            case PomPackage.CONTRIBUTOR__URL:
-                return URL_EDEFAULT == null ? url != null : !URL_EDEFAULT.equals(url);
-            case PomPackage.CONTRIBUTOR__ORGANIZATION:
-                return ORGANIZATION_EDEFAULT == null ? organization != null : !ORGANIZATION_EDEFAULT.equals(organization);
-            case PomPackage.CONTRIBUTOR__ORGANIZATION_URL:
-                return ORGANIZATION_URL_EDEFAULT == null ? organizationUrl != null : !ORGANIZATION_URL_EDEFAULT.equals(organizationUrl);
-            case PomPackage.CONTRIBUTOR__ROLES:
-                return isSetRoles();
-            case PomPackage.CONTRIBUTOR__TIMEZONE:
-                return TIMEZONE_EDEFAULT == null ? timezone != null : !TIMEZONE_EDEFAULT.equals(timezone);
-            case PomPackage.CONTRIBUTOR__PROPERTIES:
-                return isSetProperties();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.CONTRIBUTOR__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case PomPackage.CONTRIBUTOR__EMAIL:
+				return EMAIL_EDEFAULT == null ? email != null : !EMAIL_EDEFAULT.equals(email);
+			case PomPackage.CONTRIBUTOR__URL:
+				return URL_EDEFAULT == null ? url != null : !URL_EDEFAULT.equals(url);
+			case PomPackage.CONTRIBUTOR__ORGANIZATION:
+				return ORGANIZATION_EDEFAULT == null ? organization != null : !ORGANIZATION_EDEFAULT.equals(organization);
+			case PomPackage.CONTRIBUTOR__ORGANIZATION_URL:
+				return ORGANIZATION_URL_EDEFAULT == null ? organizationUrl != null : !ORGANIZATION_URL_EDEFAULT.equals(organizationUrl);
+			case PomPackage.CONTRIBUTOR__ROLES:
+				return isSetRoles();
+			case PomPackage.CONTRIBUTOR__TIMEZONE:
+				return TIMEZONE_EDEFAULT == null ? timezone != null : !TIMEZONE_EDEFAULT.equals(timezone);
+			case PomPackage.CONTRIBUTOR__PROPERTIES:
+				return isSetProperties();
+		}
+		return super.eIsSet(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public String toString()
     {
-        if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-        StringBuffer result = new StringBuffer(super.toString());
-        result.append(" (name: ");
-        result.append(name);
-        result.append(", email: ");
-        result.append(email);
-        result.append(", url: ");
-        result.append(url);
-        result.append(", organization: ");
-        result.append(organization);
-        result.append(", organizationUrl: ");
-        result.append(organizationUrl);
-        result.append(", timezone: ");
-        result.append(timezone);
-        result.append(')');
-        return result.toString();
-    }
+		StringBuffer result = new StringBuffer(super.toString());
+		result.append(" (name: ");
+		result.append(name);
+		result.append(", email: ");
+		result.append(email);
+		result.append(", url: ");
+		result.append(url);
+		result.append(", organization: ");
+		result.append(organization);
+		result.append(", organizationUrl: ");
+		result.append(organizationUrl);
+		result.append(", timezone: ");
+		result.append(timezone);
+		result.append(')');
+		return result.toString();
+	}
 
 } //ContributorImpl

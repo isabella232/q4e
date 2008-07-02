@@ -40,132 +40,126 @@ import org.eclipse.emf.ecore.util.InternalEList;
 public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
 {
     /**
-     * The cached value of the '{@link #getResource() <em>Resource</em>}' containment reference list.
-     * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getResource() <em>Resource</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see #getResource()
-     * @generated
-     * @ordered
-     */
+	 * @see #getResource()
+	 * @generated
+	 * @ordered
+	 */
     protected EList<Resource> resource;
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     protected ResourcesTypeImpl()
     {
-        super();
-    }
+		super();
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     protected EClass eStaticClass()
     {
-        return PomPackage.Literals.RESOURCES_TYPE;
-    }
+		return PomPackage.Literals.RESOURCES_TYPE;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     public EList<Resource> getResource()
     {
-        if (resource == null)
-        {
-            resource = new EObjectContainmentEList<Resource>(Resource.class, this, PomPackage.RESOURCES_TYPE__RESOURCE);
-        }
-        return resource;
-    }
+		if (resource == null) {
+			resource = new EObjectContainmentEList<Resource>(Resource.class, this, PomPackage.RESOURCES_TYPE__RESOURCE);
+		}
+		return resource;
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
     {
-        switch (featureID)
-        {
-            case PomPackage.RESOURCES_TYPE__RESOURCE:
-                return ((InternalEList<?>)getResource()).basicRemove(otherEnd, msgs);
-        }
-        return super.eInverseRemove(otherEnd, featureID, msgs);
-    }
+		switch (featureID) {
+			case PomPackage.RESOURCES_TYPE__RESOURCE:
+				return ((InternalEList<?>)getResource()).basicRemove(otherEnd, msgs);
+		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public Object eGet(int featureID, boolean resolve, boolean coreType)
     {
-        switch (featureID)
-        {
-            case PomPackage.RESOURCES_TYPE__RESOURCE:
-                return getResource();
-        }
-        return super.eGet(featureID, resolve, coreType);
-    }
+		switch (featureID) {
+			case PomPackage.RESOURCES_TYPE__RESOURCE:
+				return getResource();
+		}
+		return super.eGet(featureID, resolve, coreType);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @SuppressWarnings("unchecked")
     @Override
     public void eSet(int featureID, Object newValue)
     {
-        switch (featureID)
-        {
-            case PomPackage.RESOURCES_TYPE__RESOURCE:
-                getResource().clear();
-                getResource().addAll((Collection<? extends Resource>)newValue);
-                return;
-        }
-        super.eSet(featureID, newValue);
-    }
+		switch (featureID) {
+			case PomPackage.RESOURCES_TYPE__RESOURCE:
+				getResource().clear();
+				getResource().addAll((Collection<? extends Resource>)newValue);
+				return;
+		}
+		super.eSet(featureID, newValue);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public void eUnset(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.RESOURCES_TYPE__RESOURCE:
-                getResource().clear();
-                return;
-        }
-        super.eUnset(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.RESOURCES_TYPE__RESOURCE:
+				getResource().clear();
+				return;
+		}
+		super.eUnset(featureID);
+	}
 
     /**
-     * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @generated
-     */
+	 * @generated
+	 */
     @Override
     public boolean eIsSet(int featureID)
     {
-        switch (featureID)
-        {
-            case PomPackage.RESOURCES_TYPE__RESOURCE:
-                return resource != null && !resource.isEmpty();
-        }
-        return super.eIsSet(featureID);
-    }
+		switch (featureID) {
+			case PomPackage.RESOURCES_TYPE__RESOURCE:
+				return resource != null && !resource.isEmpty();
+		}
+		return super.eIsSet(featureID);
+	}
 
 } //ResourcesTypeImpl
