@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
@@ -56,12 +57,6 @@ public class MavenPomReportingFormPage
 
     private Button removePluginButton;
 
-    private Button addReportSetButton;
-
-    private Button editReportSetButton;
-
-    private Button removeReportSetButton;
-
     private Button pluginConfigurationButton;
 
     private Button reportSetButton;
@@ -71,6 +66,8 @@ public class MavenPomReportingFormPage
     private Table reportPluginTable;
     
     private List<ReportPlugin> reportPluginList;
+    
+    private int selectedIndex;
 
     @SuppressWarnings("unchecked")
     public MavenPomReportingFormPage( FormEditor editor, String id, String title, Model model )
@@ -191,14 +188,14 @@ public class MavenPomReportingFormPage
         
         editPluginButton = new Button( pluginButtonContainer, SWT.PUSH | SWT.CENTER );
         editPluginButton.setText( Messages.MavenPomEditor_MavenPomEditor_EditButton );
-        //EditButtonListener editButtonListener = new EditButtonListener();
-        //editButton.addSelectionListener( editButtonListener );
+        EditPluginButtonListener editButtonListener = new EditPluginButtonListener();
+        editPluginButton.addSelectionListener( editButtonListener );
         editPluginButton.setEnabled( false );
 
         removePluginButton = new Button( pluginButtonContainer, SWT.PUSH | SWT.CENTER );
         removePluginButton.setText( Messages.MavenPomEditor_MavenPomEditor_RemoveButton );
-        //RemoveButtonListener removeButtonListener = new RemoveButtonListener();
-        //removeButton.addSelectionListener( removeButtonListener );
+        RemoveReportPluginButtonListener removeButtonListener = new RemoveReportPluginButtonListener();
+        removePluginButton.addSelectionListener( removeButtonListener );
         removePluginButton.setEnabled( false );
         
         pluginConfigurationButton = new Button( pluginButtonContainer, SWT.PUSH | SWT.CENTER );
@@ -242,8 +239,6 @@ public class MavenPomReportingFormPage
     
     private class ReportPluginTableListener extends SelectionAdapter
     {
-        private int selectedIndex;
-
         public void defaultWidgetSelected ( SelectionEvent e )
         {
             widgetSelected( e );
@@ -264,8 +259,6 @@ public class MavenPomReportingFormPage
                 {
                     selectedIndex = reportPluginTable.getSelectionIndex();
                     selectedReportPlugin = reportPluginList.get( selectedIndex );
-                    
-                    System.out.println("ReportPluginTableListener " + selectedReportPlugin.getArtifactId());
                 }
             }
         }
@@ -308,7 +301,7 @@ public class MavenPomReportingFormPage
         }
     }
     
-    private class ReportSetButtonListener extends SelectionAdapter
+    private class EditPluginButtonListener extends SelectionAdapter
     {
         public void defaultWidgetSelected ( SelectionEvent e )
         {
@@ -317,11 +310,83 @@ public class MavenPomReportingFormPage
         
         public void widgetSelected( SelectionEvent e )
         {
+            AddEditReportPluginDialog editDialog = AddEditReportPluginDialog.newAddEditPluginReportDialog();
+            
+            if ( editDialog.openWithReportPlugin( selectedReportPlugin ) == Window.OK )
+            {
+                ReportPlugin newReportPlugin = new ReportPlugin();
+                
+                newReportPlugin.setGroupId( editDialog.getGroupId() );
+                newReportPlugin.setArtifactId( editDialog.getArtifactId() );
+                newReportPlugin.setVersion( editDialog.getVersion() );
+                if ( editDialog.isInherited() == true )
+                {
+                    newReportPlugin.setInherited( "true" );
+                }
+                else
+                {
+                    newReportPlugin.setInherited( "false" );
+                }
+                
+                if ( reportPluginAlreadyExist( newReportPlugin.getGroupId(), newReportPlugin.getArtifactId() ) )
+                {
+                    MessageBox mesgBox = new MessageBox( form.getShell(), SWT.ICON_ERROR | SWT.OK  );
+                    mesgBox.setMessage( "Report Plugin already exists." );
+                    mesgBox.setText( "Saving Report Plugin Error" );
+                    mesgBox.open( );
+                }
+                else
+                {
+                    reportPluginList.remove( selectedReportPlugin );
+                    
+                    reportPluginList.add( newReportPlugin );
+                    
+                    pageModified();
+                    
+                    populateReportPluginTable();
+                }
+            }
+        
+        }
+    }
+    
+    private class RemoveReportPluginButtonListener extends SelectionAdapter
+    {
+        public void defaultWidgetSelected ( SelectionEvent e )
+        {
+            widgetSelected( e );
+        }
+        
+        public void widgetSelected( SelectionEvent e )
+        {
+            reportPluginList.remove( selectedReportPlugin );
+            
+            pageModified();
+            
+            populateReportPluginTable();
+        }
+    }
+    
+    private class ReportSetButtonListener extends SelectionAdapter
+    {
+        public void defaultWidgetSelected ( SelectionEvent e )
+        {
+            widgetSelected( e );
+        }
+        
+        @SuppressWarnings("unchecked")
+        public void widgetSelected( SelectionEvent e )
+        {
             ReportSetDialog reportSetDialog = ReportSetDialog.newReportSetDialog();
             
-            if ( reportSetDialog.open() == Window.OK )
+            if ( reportSetDialog.opentWithReportSetList( selectedReportPlugin.getReportSets() ) == Window.OK )
             {
                 System.out.println("moogle testing #1 kupo");
+                
+                if ( reportSetDialog.isPageModified() == true )
+                {
+                    pageModified();
+                }                
             }
         }
     }
@@ -336,8 +401,6 @@ public class MavenPomReportingFormPage
         public void widgetSelected( SelectionEvent e )
         {
             ConfigurationDialog configDialog = ConfigurationDialog.newConfigurationDialog();
-            
-            System.out.println(selectedReportPlugin.getArtifactId());
             
             Xpp3Dom dom = ( Xpp3Dom )selectedReportPlugin.getConfiguration();            
             
@@ -356,6 +419,12 @@ public class MavenPomReportingFormPage
         return labelData;
     }
     
+    public boolean reportPluginAlreadyExist( String groupId, String artifactId )
+    {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
     public void populateReportPluginTable()
     {
         reportPluginTable.removeAll();
@@ -365,9 +434,8 @@ public class MavenPomReportingFormPage
             for ( ReportPlugin reportPlugin : reportPluginList )
             {
                 TableItem item = new TableItem( reportPluginTable, SWT.BEGINNING );
-                String inherited = new Boolean( reportPlugin.getInherited()).toString();
                 item.setText( new String[] { reportPlugin.getGroupId(), reportPlugin.getArtifactId(), 
-                    reportPlugin.getVersion(), inherited } );
+                    reportPlugin.getVersion(), reportPlugin.getInherited() } );
             }
         }
         

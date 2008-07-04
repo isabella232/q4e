@@ -20,8 +20,11 @@ public class ConfigurationTreeLabelProvider
         if ( element instanceof Xpp3Dom )
         {
             Xpp3Dom dom = ( Xpp3Dom ) element;
-            if( dom.getName().equals( "configuration" ) )
+            System.out.println("getText element is Xpp3Dom");
+            System.out.println("getText " + dom.getName() + " " + dom.getValue() );
+            if( dom.getName().equalsIgnoreCase( "configuration" ) )
             {
+                System.out.println("moogle testing dom");
                 return "Configuration";
             }
             else
@@ -45,7 +48,7 @@ public class ConfigurationTreeLabelProvider
             }
         }
         
-        return null;
+        return null;        
     }
 
     public void addListener( ILabelProviderListener listener )

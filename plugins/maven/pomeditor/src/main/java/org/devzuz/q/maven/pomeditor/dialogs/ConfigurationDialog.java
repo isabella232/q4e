@@ -76,7 +76,7 @@ public class ConfigurationDialog
     {
         if ( dom != null )
         {
-            System.out.println("dom not null");
+            System.out.println(dom.getName());
             this.dom = dom;
         }
         else
@@ -155,6 +155,7 @@ public class ConfigurationDialog
             }
             
             return objectActionMap.get( "default" );
+            //return objectActionMap.get( "Configuration" );
         }
         
     }

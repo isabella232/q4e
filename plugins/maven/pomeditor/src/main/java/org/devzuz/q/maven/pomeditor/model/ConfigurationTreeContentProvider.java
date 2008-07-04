@@ -31,6 +31,9 @@ public class ConfigurationTreeContentProvider
     {
         this.dom = dom;
         
+        System.out.println("setDom " + dom.getName() );
+        System.out.println("setDom again " + dom.getValue() );
+        
         if( childParentMap == null )
         {
             childParentMap = new LinkedHashMap<Object, Object>();
@@ -40,6 +43,7 @@ public class ConfigurationTreeContentProvider
             childParentMap.clear();
         }
         
+        //childParentMap.put( dom, null );
         setDomObjects( dom );        
         
     }
@@ -48,7 +52,7 @@ public class ConfigurationTreeContentProvider
     {        
         if( dom != null )
         {
-            childParentMap.put( dom, dom.getParent() );
+            childParentMap.put( dom.getChildren(), dom );
             addChildrenToMap( childParentMap , dom );
         }
     }
@@ -62,6 +66,7 @@ public class ConfigurationTreeContentProvider
     {
         for ( Xpp3Dom child : dom.getChildren() )
         {
+            System.out.println("addChildrenToMap " + dom.getValue() + " " + dom.getName() );
             map.put( child, dom );
             addChildrenToMap( map, child );
         }

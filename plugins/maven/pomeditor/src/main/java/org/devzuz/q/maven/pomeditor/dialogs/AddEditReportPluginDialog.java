@@ -94,11 +94,19 @@ public class AddEditReportPluginDialog
         return container;
     }
     
-    public int openWithItem( ReportPlugin reportPlugin )
+    public int openWithReportPlugin( ReportPlugin reportPlugin )
     {
         setGroupId( blankIfNull( reportPlugin.getGroupId() ) );
         setArtifactId( blankIfNull( reportPlugin.getArtifactId() ) );
         setVersion( blankIfNull( reportPlugin.getVersion() ) );
+        if ( reportPlugin.getInherited().equalsIgnoreCase( "true" ) )
+        {
+            setInherited( true );
+        }
+        else
+        {
+            setInherited( false );
+        }
         
         return open();
     }
@@ -108,17 +116,27 @@ public class AddEditReportPluginDialog
         setGroupId( nullIfBlank( groupIdText.getText().trim() ) );
         setArtifactId( nullIfBlank( artifactIdText.getText().trim() ) );
         setVersion( nullIfBlank( versionText.getText().trim() ) );
-        setInherited( inheritedRadioButton.getSelection() );       
+        setInherited( inheritedRadioButton.getSelection() );   
+        
+        super.okPressed();
     }
     
     protected Control createButtonBar( Composite parent )
     {
         Control bar = super.createButtonBar( parent );
         
-        //syncUIWithModel();
+        syncUIWithModel();
         
         validate();
         return bar; 
+    }
+
+    private void syncUIWithModel()
+    {
+        groupIdText.setText( blankIfNull( getGroupId() ) );
+        artifactIdText.setText( blankIfNull( getArtifactId() ) );
+        versionText.setText( blankIfNull( getVersion() ) );
+        inheritedRadioButton.setSelection( isInherited() );        
     }
 
     protected void validate()
