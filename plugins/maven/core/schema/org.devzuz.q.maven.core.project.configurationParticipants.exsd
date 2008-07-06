@@ -61,7 +61,7 @@ It is expected that not every configuration participant will be active for every
                   Configuration participant implementation class. Must implement &lt;code&gt;org.devzuz.q.maven.project.configuration.IProjectConfigurationParticipant&lt;/code&gt;.
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":org.devzuz.q.maven.jdt.ui.projectimport.IImportProjectPostprocessor"/>
+                  <meta.attribute kind="java" basedOn=":org.devzuz.q.maven.project.configuration.IProjectConfigurationParticipant"/>
                </appInfo>
             </annotation>
          </attribute>
