@@ -118,10 +118,17 @@ public class WtpEnablerPostprocessor implements IProjectConfigurationParticipant
      */
     private void addAsJEEDependency( IMavenProject mavenProject, IMavenArtifact artifact )
     {
+        IVirtualComponent affected = ComponentCore.createComponent( mavenProject.getProject() );
+        if ( affected == null )
+        {
+            // The project is not WTP enabled.
+            MavenWtpActivator.trace( TraceOption.CP_ATTRIBUTE_PROVIDER, "Not adding ", artifact,
+                                     " as a JEE module since ", mavenProject, " is not WTP-enabled" );
+            return;
+        }
         IProject project =
             MavenManager.getMavenProjectManager().getWorkspaceProject( artifact.getGroupId(), artifact.getArtifactId(),
                                                                        artifact.getVersion() );
-        IVirtualComponent affected = ComponentCore.createComponent( mavenProject.getProject() );
         try
         {
             IMavenProject mavenDependencyProject =
