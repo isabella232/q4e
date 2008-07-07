@@ -27,12 +27,11 @@ public class ConfigurationTreeContentProvider
     }
 
     @SuppressWarnings("unchecked")
-    private void setDom( Xpp3Dom dom )
+    public void setDom( Xpp3Dom dom )
     {
         this.dom = dom;
         
-        System.out.println("setDom " + dom.getName() );
-        System.out.println("setDom again " + dom.getValue() );
+        System.out.println("setDom name = " + dom.getName() );
         
         if( childParentMap == null )
         {
@@ -43,16 +42,13 @@ public class ConfigurationTreeContentProvider
             childParentMap.clear();
         }
         
-        //childParentMap.put( dom, null );
-        setDomObjects( dom );        
-        
+        setDomObjects( dom );
     }
     
     private void setDomObjects( Xpp3Dom dom )
     {        
         if( dom != null )
         {
-            childParentMap.put( dom.getChildren(), dom );
             addChildrenToMap( childParentMap , dom );
         }
     }
@@ -76,6 +72,20 @@ public class ConfigurationTreeContentProvider
     public Object[] getChildren( Object parentElement )
     {
         List< Object > children = new ArrayList< Object >();
+        
+        // This is a hack for the "Configuration" string to appear
+        // in the tree 
+        // -start-
+        if( parentElement == this.dom )
+        {
+            return new String[] { "Configuration" };
+        }
+        else if( parentElement instanceof String )
+        {
+            parentElement = this.dom;
+        }
+        // -end-
+        
         if( childParentMap.containsValue( parentElement ) )
         {
             for( Object object :  childParentMap.entrySet() )
@@ -86,13 +96,13 @@ public class ConfigurationTreeContentProvider
                     children.add( entry.getKey() );
                 }
             }
-            return children.toArray();
         }
-        return null;
+        
+        return children.toArray();
     }
 
     public Object getParent( Object element )
-    {
+    {   
         return childParentMap.get( element );
     }
 
@@ -109,13 +119,10 @@ public class ConfigurationTreeContentProvider
     public void dispose()
     {
         // TODO Auto-generated method stub
-
     }
 
     public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
     {
         // TODO Auto-generated method stub
-
     }
-
 }

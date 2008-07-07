@@ -19,12 +19,11 @@ public class ConfigurationTreeLabelProvider
     {
         if ( element instanceof Xpp3Dom )
         {
-            Xpp3Dom dom = ( Xpp3Dom ) element;
             System.out.println("getText element is Xpp3Dom");
-            System.out.println("getText " + dom.getName() + " " + dom.getValue() );
-            if( dom.getName().equalsIgnoreCase( "configuration" ) )
+            Xpp3Dom dom = ( Xpp3Dom ) element;
+            if( dom.getName().equalsIgnoreCase( "configuration" ) && dom.getParent() == null )
             {
-                System.out.println("moogle testing dom");
+                System.out.println("Parent");
                 return "Configuration";
             }
             else
@@ -39,6 +38,8 @@ public class ConfigurationTreeLabelProvider
                     configString.append( dom.getValue() );
                     configString.append( " }" );
                     
+                    System.out.println( configString.toString() );
+                    
                     return configString.toString();
                 }
                 else
@@ -47,8 +48,12 @@ public class ConfigurationTreeLabelProvider
                 }
             }
         }
+        else if ( element instanceof String )
+        {
+            return "Configuration";
+        }
         
-        return null;        
+        return "null - i'm a bug!";
     }
 
     public void addListener( ILabelProviderListener listener )

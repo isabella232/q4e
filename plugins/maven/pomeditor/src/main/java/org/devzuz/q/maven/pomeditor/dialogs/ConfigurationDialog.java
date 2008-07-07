@@ -55,19 +55,15 @@ public class ConfigurationDialog
     @Override
     protected Control internalCreateDialogArea( Composite container )
     {
-        System.out.println("internalCreateDialogArea start");
         container.setLayout( new FillLayout() );
         
         treeComponent = new ObjectTreeComponent( container, SWT.None );
         contentProvider = new ConfigurationTreeContentProvider( this.dom );
-        
         treeComponent.setContentProvider( contentProvider );
         treeComponent.setLabelProvider( new ConfigurationTreeLabelProvider() );
         treeComponent.setObjectActionMap( new ConfigurationActionMap( this, contentProvider ) );
         treeComponent.setInput( this.dom );
         treeComponent.expandAll();
-        
-        System.out.println("internalCreateDialogArea end");
         
         return container;
     }
@@ -82,7 +78,7 @@ public class ConfigurationDialog
         else
         {
             System.out.println("dom null");
-            this.dom = null;
+            this.dom = new Xpp3Dom("configuration");
         }
         
         return open();
@@ -154,8 +150,7 @@ public class ConfigurationDialog
                 }
             }
             
-            return objectActionMap.get( "default" );
-            //return objectActionMap.get( "Configuration" );
+            return objectActionMap.get( "Configuration" );
         }
         
     }
