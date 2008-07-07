@@ -59,7 +59,7 @@ public class PostProcessorDeclaration
         // An expression has been configured for the extension, evaluate
         try
         {
-            EvaluationResult result = enablementExpression.evaluate( new EvaluationContext( null, project ) );
+            EvaluationResult result = enablementExpression.evaluate( new EvaluationContext( null, project.getProject() ) );
             return result == EvaluationResult.TRUE;
         }
         catch ( CoreException e )
