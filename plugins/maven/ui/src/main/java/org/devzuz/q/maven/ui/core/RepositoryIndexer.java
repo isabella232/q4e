@@ -27,8 +27,11 @@ import org.apache.lucene.queryParser.QueryParser;
 import org.apache.lucene.search.Hits;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Query;
+import org.devzuz.q.maven.embedder.QCoreException;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 public class RepositoryIndexer
 {
@@ -40,7 +43,26 @@ public class RepositoryIndexer
 
     public static final String FULL_NAME = "f";
 
-    public Set<Dependency> search( File indexPath, String queryString, IProgressMonitor monitor )
+    public Set<Dependency> search( File indexPath, String queryString, IProgressMonitor monitor ) throws QCoreException
+    {
+
+        try
+        {
+            return unsafeSearch( indexPath, queryString, monitor );
+        }
+        catch ( IOException e )
+        {
+            throw new QCoreException( new Status( IStatus.ERROR, MavenUiActivator.PLUGIN_ID,
+                                                  "Unable to perform search: " + queryString, e ) );
+        }
+        catch ( ParseException e )
+        {
+            throw new QCoreException( new Status( IStatus.ERROR, MavenUiActivator.PLUGIN_ID,
+                                                  "Unable to parse query: " + queryString, e ) );
+        }
+    }
+
+    protected Set<Dependency> unsafeSearch( File indexPath, String queryString, IProgressMonitor monitor )
         throws IOException, ParseException
     {
         if ( queryString.indexOf( ':' ) == -1 )

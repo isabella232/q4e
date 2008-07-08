@@ -12,6 +12,7 @@ import java.util.Set;
 
 import org.apache.lucene.queryParser.ParseException;
 import org.devzuz.q.maven.embedder.MavenManager;
+import org.devzuz.q.maven.embedder.QCoreException;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -124,25 +125,24 @@ public class RepositoryIndexerManager
         @Override
         protected IStatus run( IProgressMonitor monitor )
         {
-            IStatus status = Status.OK_STATUS;
             try
             {
                 RepositoryIndexer indexer = new RepositoryIndexer();
 
                 setOfHits = indexer.search( INDEX_DIR, getQuery(), monitor );
 
-                return status;
+                return Status.OK_STATUS;
             }
-            catch ( IOException e )
+            catch ( QCoreException e )
             {
-                status = new Status( IStatus.ERROR, MavenUiActivator.PLUGIN_ID, -1, "Indexing error", e );
-                return status;
-            }
-            catch ( ParseException e )
-            {
-            	// squash parse errors
-            	// this is mainly for the cases where you begin a field search.. v:[1.2 TO 1.4]
-            	return status;
+                Throwable cause = e.getStatus().getException();
+                if (cause instanceof ParseException) {
+                    // squash parse errors
+                    // this is mainly for the cases where you begin a field search.. v:[1.2 TO 1.4]
+                    return Status.OK_STATUS;
+                } else {
+                    return e.getStatus();
+                }
             }
         }
 
