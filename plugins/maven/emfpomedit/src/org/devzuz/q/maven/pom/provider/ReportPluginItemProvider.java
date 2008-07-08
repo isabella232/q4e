@@ -1,11 +1,14 @@
 /**
- * <copyright>
- * </copyright>
+ * Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
  *
  * $Id$
  */
 package org.devzuz.q.maven.pom.provider;
-
 
 import java.util.Collection;
 import java.util.List;
@@ -33,263 +36,234 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link org.devzuz.q.maven.pom.ReportPlugin} object.
- * <!-- begin-user-doc -->
+ * This is the item provider adapter for a {@link org.devzuz.q.maven.pom.ReportPlugin} object. <!-- begin-user-doc -->
  * <!-- end-user-doc -->
+ * 
  * @generated
  */
 public class ReportPluginItemProvider
     extends ItemProviderAdapter
-    implements	
-        IEditingDomainItemProvider,	
-        IStructuredItemContentProvider,	
-        ITreeItemContentProvider,	
-        IItemLabelProvider,	
-        IItemPropertySource		
+    implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider,
+    IItemLabelProvider, IItemPropertySource
 {
     /**
-	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    public ReportPluginItemProvider(AdapterFactory adapterFactory)
+     * This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    public ReportPluginItemProvider( AdapterFactory adapterFactory )
     {
-		super(adapterFactory);
-	}
+        super( adapterFactory );
+    }
 
     /**
-	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
+    public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object )
     {
-		if (itemPropertyDescriptors == null) {
-			super.getPropertyDescriptors(object);
+        if ( itemPropertyDescriptors == null )
+        {
+            super.getPropertyDescriptors( object );
 
-			addGroupIdPropertyDescriptor(object);
-			addArtifactIdPropertyDescriptor(object);
-			addVersionPropertyDescriptor(object);
-			addInheritedPropertyDescriptor(object);
-		}
-		return itemPropertyDescriptors;
-	}
+            addGroupIdPropertyDescriptor( object );
+            addArtifactIdPropertyDescriptor( object );
+            addVersionPropertyDescriptor( object );
+            addInheritedPropertyDescriptor( object );
+        }
+        return itemPropertyDescriptors;
+    }
 
     /**
-	 * This adds a property descriptor for the Group Id feature.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    protected void addGroupIdPropertyDescriptor(Object object)
+     * This adds a property descriptor for the Group Id feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    protected void addGroupIdPropertyDescriptor( Object object )
     {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ReportPlugin_groupId_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ReportPlugin_groupId_feature", "_UI_ReportPlugin_type"),
-				 PomPackage.Literals.REPORT_PLUGIN__GROUP_ID,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
+        itemPropertyDescriptors.add( createItemPropertyDescriptor(
+                                                                   ( (ComposeableAdapterFactory) adapterFactory ).getRootAdapterFactory(),
+                                                                   getResourceLocator(),
+                                                                   getString( "_UI_ReportPlugin_groupId_feature" ),
+                                                                   getString( "_UI_PropertyDescriptor_description",
+                                                                              "_UI_ReportPlugin_groupId_feature",
+                                                                              "_UI_ReportPlugin_type" ),
+                                                                   PomPackage.Literals.REPORT_PLUGIN__GROUP_ID, true,
+                                                                   false, false,
+                                                                   ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+                                                                   null ) );
+    }
 
     /**
-	 * This adds a property descriptor for the Artifact Id feature.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    protected void addArtifactIdPropertyDescriptor(Object object)
+     * This adds a property descriptor for the Artifact Id feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    protected void addArtifactIdPropertyDescriptor( Object object )
     {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ReportPlugin_artifactId_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ReportPlugin_artifactId_feature", "_UI_ReportPlugin_type"),
-				 PomPackage.Literals.REPORT_PLUGIN__ARTIFACT_ID,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
+        itemPropertyDescriptors.add( createItemPropertyDescriptor(
+                                                                   ( (ComposeableAdapterFactory) adapterFactory ).getRootAdapterFactory(),
+                                                                   getResourceLocator(),
+                                                                   getString( "_UI_ReportPlugin_artifactId_feature" ),
+                                                                   getString( "_UI_PropertyDescriptor_description",
+                                                                              "_UI_ReportPlugin_artifactId_feature",
+                                                                              "_UI_ReportPlugin_type" ),
+                                                                   PomPackage.Literals.REPORT_PLUGIN__ARTIFACT_ID,
+                                                                   true, false, false,
+                                                                   ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+                                                                   null ) );
+    }
 
     /**
-	 * This adds a property descriptor for the Version feature.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    protected void addVersionPropertyDescriptor(Object object)
+     * This adds a property descriptor for the Version feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    protected void addVersionPropertyDescriptor( Object object )
     {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ReportPlugin_version_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ReportPlugin_version_feature", "_UI_ReportPlugin_type"),
-				 PomPackage.Literals.REPORT_PLUGIN__VERSION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
+        itemPropertyDescriptors.add( createItemPropertyDescriptor(
+                                                                   ( (ComposeableAdapterFactory) adapterFactory ).getRootAdapterFactory(),
+                                                                   getResourceLocator(),
+                                                                   getString( "_UI_ReportPlugin_version_feature" ),
+                                                                   getString( "_UI_PropertyDescriptor_description",
+                                                                              "_UI_ReportPlugin_version_feature",
+                                                                              "_UI_ReportPlugin_type" ),
+                                                                   PomPackage.Literals.REPORT_PLUGIN__VERSION, true,
+                                                                   false, false,
+                                                                   ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+                                                                   null ) );
+    }
 
     /**
-	 * This adds a property descriptor for the Inherited feature.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    protected void addInheritedPropertyDescriptor(Object object)
+     * This adds a property descriptor for the Inherited feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    protected void addInheritedPropertyDescriptor( Object object )
     {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_ReportPlugin_inherited_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_ReportPlugin_inherited_feature", "_UI_ReportPlugin_type"),
-				 PomPackage.Literals.REPORT_PLUGIN__INHERITED,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
+        itemPropertyDescriptors.add( createItemPropertyDescriptor(
+                                                                   ( (ComposeableAdapterFactory) adapterFactory ).getRootAdapterFactory(),
+                                                                   getResourceLocator(),
+                                                                   getString( "_UI_ReportPlugin_inherited_feature" ),
+                                                                   getString( "_UI_PropertyDescriptor_description",
+                                                                              "_UI_ReportPlugin_inherited_feature",
+                                                                              "_UI_ReportPlugin_type" ),
+                                                                   PomPackage.Literals.REPORT_PLUGIN__INHERITED, true,
+                                                                   false, false,
+                                                                   ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+                                                                   null ) );
+    }
 
     /**
-	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
-	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
-	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+     * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+     * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object)
+    public Collection<? extends EStructuralFeature> getChildrenFeatures( Object object )
     {
-		if (childrenFeatures == null) {
-			super.getChildrenFeatures(object);
-			childrenFeatures.add(PomPackage.Literals.REPORT_PLUGIN__CONFIGURATION);
-			childrenFeatures.add(PomPackage.Literals.REPORT_PLUGIN__REPORT_SETS);
-		}
-		return childrenFeatures;
-	}
+        if ( childrenFeatures == null )
+        {
+            super.getChildrenFeatures( object );
+            childrenFeatures.add( PomPackage.Literals.REPORT_PLUGIN__REPORT_SETS );
+        }
+        return childrenFeatures;
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    protected EStructuralFeature getChildFeature(Object object, Object child)
+    protected EStructuralFeature getChildFeature( Object object, Object child )
     {
-		// Check the type of the specified child object and return the proper feature to use for
-		// adding (see {@link AddCommand}) it as a child.
+        // Check the type of the specified child object and return the proper feature to use for
+        // adding (see {@link AddCommand}) it as a child.
 
-		return super.getChildFeature(object, child);
-	}
+        return super.getChildFeature( object, child );
+    }
 
     /**
-	 * This returns ReportPlugin.gif.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * This returns ReportPlugin.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public Object getImage(Object object)
+    public Object getImage( Object object )
     {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/ReportPlugin"));
-	}
+        return overlayImage( object, getResourceLocator().getImage( "full/obj16/ReportPlugin" ) );
+    }
 
     /**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public String getText(Object object)
+    public String getText( Object object )
     {
-		String label = ((ReportPlugin)object).getGroupId();
-		return label == null || label.length() == 0 ?
-			getString("_UI_ReportPlugin_type") :
-			getString("_UI_ReportPlugin_type") + " " + label;
-	}
+        String label = ( (ReportPlugin) object ).getGroupId();
+        return label == null || label.length() == 0 ? getString( "_UI_ReportPlugin_type" )
+                        : getString( "_UI_ReportPlugin_type" ) + " " + label;
+    }
 
     /**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * This handles model notifications by calling {@link #updateChildren} to update any cached children and by creating
+     * a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc
+     * -->
+     * 
+     * @generated
+     */
     @Override
-    public void notifyChanged(Notification notification)
+    public void notifyChanged( Notification notification )
     {
-		updateChildren(notification);
+        updateChildren( notification );
 
-		switch (notification.getFeatureID(ReportPlugin.class)) {
-			case PomPackage.REPORT_PLUGIN__GROUP_ID:
-			case PomPackage.REPORT_PLUGIN__ARTIFACT_ID:
-			case PomPackage.REPORT_PLUGIN__VERSION:
-			case PomPackage.REPORT_PLUGIN__INHERITED:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			case PomPackage.REPORT_PLUGIN__CONFIGURATION:
-			case PomPackage.REPORT_PLUGIN__REPORT_SETS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
-				return;
-		}
-		super.notifyChanged(notification);
-	}
+        switch ( notification.getFeatureID( ReportPlugin.class ) )
+        {
+            case PomPackage.REPORT_PLUGIN__GROUP_ID:
+            case PomPackage.REPORT_PLUGIN__ARTIFACT_ID:
+            case PomPackage.REPORT_PLUGIN__VERSION:
+            case PomPackage.REPORT_PLUGIN__INHERITED:
+                fireNotifyChanged( new ViewerNotification( notification, notification.getNotifier(), false, true ) );
+                return;
+            case PomPackage.REPORT_PLUGIN__REPORT_SETS:
+                fireNotifyChanged( new ViewerNotification( notification, notification.getNotifier(), true, false ) );
+                return;
+        }
+        super.notifyChanged( notification );
+    }
 
     /**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
+     * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
+    protected void collectNewChildDescriptors( Collection<Object> newChildDescriptors, Object object )
     {
-		super.collectNewChildDescriptors(newChildDescriptors, object);
+        super.collectNewChildDescriptors( newChildDescriptors, object );
 
-		newChildDescriptors.add
-			(createChildParameter
-				(PomPackage.Literals.REPORT_PLUGIN__CONFIGURATION,
-				 PomFactory.eINSTANCE.createConfiguration()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(PomPackage.Literals.REPORT_PLUGIN__REPORT_SETS,
-				 PomFactory.eINSTANCE.createReportSetsType()));
-	}
+        newChildDescriptors.add( createChildParameter( PomPackage.Literals.REPORT_PLUGIN__REPORT_SETS,
+                                                       PomFactory.eINSTANCE.createReportSet() ) );
+    }
 
     /**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
     public ResourceLocator getResourceLocator()
     {
-		return PomEditPlugin.INSTANCE;
-	}
+        return PomEditPlugin.INSTANCE;
+    }
 
 }

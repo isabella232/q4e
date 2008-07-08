@@ -1,6 +1,10 @@
 /**
- * <copyright>
- * </copyright>
+ * Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
  *
  * $Id$
  */
@@ -17,217 +21,224 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Activation Property</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Activation Property</b></em>'. <!--
+ * end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.devzuz.q.maven.pom.impl.ActivationPropertyImpl#getName <em>Name</em>}</li>
- *   <li>{@link org.devzuz.q.maven.pom.impl.ActivationPropertyImpl#getValue <em>Value</em>}</li>
+ * <li>{@link org.devzuz.q.maven.pom.impl.ActivationPropertyImpl#getName <em>Name</em>}</li>
+ * <li>{@link org.devzuz.q.maven.pom.impl.ActivationPropertyImpl#getValue <em>Value</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
-public class ActivationPropertyImpl extends EObjectImpl implements ActivationProperty
+public class ActivationPropertyImpl
+    extends EObjectImpl
+    implements ActivationProperty
 {
     /**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
+     * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
+     * @see #getName()
+     * @generated
+     * @ordered
+     */
     protected static final String NAME_EDEFAULT = null;
 
     /**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
+     * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
+     * -->
+     * 
+     * @see #getName()
+     * @generated
+     * @ordered
+     */
     protected String name = NAME_EDEFAULT;
 
     /**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
+     * The default value of the '{@link #getValue() <em>Value</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
+     * @see #getValue()
+     * @generated
+     * @ordered
+     */
     protected static final String VALUE_EDEFAULT = null;
 
     /**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
+     * The cached value of the '{@link #getValue() <em>Value</em>}' attribute. <!-- begin-user-doc --> <!--
+     * end-user-doc -->
+     * 
+     * @see #getValue()
+     * @generated
+     * @ordered
+     */
     protected String value = VALUE_EDEFAULT;
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     protected ActivationPropertyImpl()
     {
-		super();
-	}
+        super();
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
     protected EClass eStaticClass()
     {
-		return PomPackage.Literals.ACTIVATION_PROPERTY;
-	}
+        return PomPackage.Literals.ACTIVATION_PROPERTY;
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     public String getName()
     {
-		return name;
-	}
+        return name;
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    public void setName(String newName)
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    public void setName( String newName )
     {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_PROPERTY__NAME, oldName, name));
-	}
+        String oldName = name;
+        name = newName;
+        if ( eNotificationRequired() )
+            eNotify( new ENotificationImpl( this, Notification.SET, PomPackage.ACTIVATION_PROPERTY__NAME, oldName, name ) );
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     public String getValue()
     {
-		return value;
-	}
+        return value;
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    public void setValue(String newValue)
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    public void setValue( String newValue )
     {
-		String oldValue = value;
-		value = newValue;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.ACTIVATION_PROPERTY__VALUE, oldValue, value));
-	}
+        String oldValue = value;
+        value = newValue;
+        if ( eNotificationRequired() )
+            eNotify( new ENotificationImpl( this, Notification.SET, PomPackage.ACTIVATION_PROPERTY__VALUE, oldValue,
+                                            value ) );
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public Object eGet(int featureID, boolean resolve, boolean coreType)
+    public Object eGet( int featureID, boolean resolve, boolean coreType )
     {
-		switch (featureID) {
-			case PomPackage.ACTIVATION_PROPERTY__NAME:
-				return getName();
-			case PomPackage.ACTIVATION_PROPERTY__VALUE:
-				return getValue();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+        switch ( featureID )
+        {
+            case PomPackage.ACTIVATION_PROPERTY__NAME:
+                return getName();
+            case PomPackage.ACTIVATION_PROPERTY__VALUE:
+                return getValue();
+        }
+        return super.eGet( featureID, resolve, coreType );
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public void eSet(int featureID, Object newValue)
+    public void eSet( int featureID, Object newValue )
     {
-		switch (featureID) {
-			case PomPackage.ACTIVATION_PROPERTY__NAME:
-				setName((String)newValue);
-				return;
-			case PomPackage.ACTIVATION_PROPERTY__VALUE:
-				setValue((String)newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+        switch ( featureID )
+        {
+            case PomPackage.ACTIVATION_PROPERTY__NAME:
+                setName( (String) newValue );
+                return;
+            case PomPackage.ACTIVATION_PROPERTY__VALUE:
+                setValue( (String) newValue );
+                return;
+        }
+        super.eSet( featureID, newValue );
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public void eUnset(int featureID)
+    public void eUnset( int featureID )
     {
-		switch (featureID) {
-			case PomPackage.ACTIVATION_PROPERTY__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case PomPackage.ACTIVATION_PROPERTY__VALUE:
-				setValue(VALUE_EDEFAULT);
-				return;
-		}
-		super.eUnset(featureID);
-	}
+        switch ( featureID )
+        {
+            case PomPackage.ACTIVATION_PROPERTY__NAME:
+                setName( NAME_EDEFAULT );
+                return;
+            case PomPackage.ACTIVATION_PROPERTY__VALUE:
+                setValue( VALUE_EDEFAULT );
+                return;
+        }
+        super.eUnset( featureID );
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public boolean eIsSet(int featureID)
+    public boolean eIsSet( int featureID )
     {
-		switch (featureID) {
-			case PomPackage.ACTIVATION_PROPERTY__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case PomPackage.ACTIVATION_PROPERTY__VALUE:
-				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
-		}
-		return super.eIsSet(featureID);
-	}
+        switch ( featureID )
+        {
+            case PomPackage.ACTIVATION_PROPERTY__NAME:
+                return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals( name );
+            case PomPackage.ACTIVATION_PROPERTY__VALUE:
+                return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals( value );
+        }
+        return super.eIsSet( featureID );
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
     public String toString()
     {
-		if (eIsProxy()) return super.toString();
+        if ( eIsProxy() )
+            return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (name: ");
-		result.append(name);
-		result.append(", value: ");
-		result.append(value);
-		result.append(')');
-		return result.toString();
-	}
+        StringBuffer result = new StringBuffer( super.toString() );
+        result.append( " (name: " );
+        result.append( name );
+        result.append( ", value: " );
+        result.append( value );
+        result.append( ')' );
+        return result.toString();
+    }
 
-} //ActivationPropertyImpl
+} // ActivationPropertyImpl

@@ -48,7 +48,7 @@ public class SSESyncResource
                 IDOMModel domModel = buildModel( file );
                 Model model = PomFactory.eINSTANCE.createModel();
                 SSESyncAdapter adapter = new SSESyncAdapter( this, model, domModel.getDocument().getDocumentElement() );
-                ((IDOMElement) domModel.getDocument().getDocumentElement()).addAdapter( adapter );
+                ( (IDOMElement) domModel.getDocument().getDocumentElement() ).addAdapter( adapter );
                 model.eAdapters().add( adapter );
                 adapter.load();
                 this.getContents().add( model );
@@ -67,13 +67,14 @@ public class SSESyncResource
         }
     }
 
-    private synchronized IDOMModel buildModel( IFile file ) throws IOException
+    private synchronized IDOMModel buildModel( IFile file )
+        throws IOException
     {
         try
         {
             IModelManager modelManager = StructuredModelManager.getModelManager();
             IDOMModel model = (IDOMModel) modelManager.getExistingModelForEdit( file );
-            if( null == model )
+            if ( null == model )
             {
                 model = (IDOMModel) modelManager.getModelForEdit( file );
             }

@@ -1,11 +1,14 @@
 /**
- * <copyright>
- * </copyright>
+ * Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
  *
  * $Id$
  */
 package org.devzuz.q.maven.pom.provider;
-
 
 import java.util.Collection;
 import java.util.List;
@@ -30,216 +33,192 @@ import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
- * This is the item provider adapter for a {@link org.devzuz.q.maven.pom.License} object.
- * <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * This is the item provider adapter for a {@link org.devzuz.q.maven.pom.License} object. <!-- begin-user-doc --> <!--
+ * end-user-doc -->
+ * 
  * @generated
  */
 public class LicenseItemProvider
     extends ItemProviderAdapter
-    implements	
-        IEditingDomainItemProvider,	
-        IStructuredItemContentProvider,	
-        ITreeItemContentProvider,	
-        IItemLabelProvider,	
-        IItemPropertySource		
+    implements IEditingDomainItemProvider, IStructuredItemContentProvider, ITreeItemContentProvider,
+    IItemLabelProvider, IItemPropertySource
 {
     /**
-	 * This constructs an instance from a factory and a notifier.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    public LicenseItemProvider(AdapterFactory adapterFactory)
+     * This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    public LicenseItemProvider( AdapterFactory adapterFactory )
     {
-		super(adapterFactory);
-	}
+        super( adapterFactory );
+    }
 
     /**
-	 * This returns the property descriptors for the adapted class.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * This returns the property descriptors for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object)
+    public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object )
     {
-		if (itemPropertyDescriptors == null) {
-			super.getPropertyDescriptors(object);
+        if ( itemPropertyDescriptors == null )
+        {
+            super.getPropertyDescriptors( object );
 
-			addNamePropertyDescriptor(object);
-			addUrlPropertyDescriptor(object);
-			addDistributionPropertyDescriptor(object);
-			addCommentsPropertyDescriptor(object);
-		}
-		return itemPropertyDescriptors;
-	}
+            addNamePropertyDescriptor( object );
+            addUrlPropertyDescriptor( object );
+            addDistributionPropertyDescriptor( object );
+            addCommentsPropertyDescriptor( object );
+        }
+        return itemPropertyDescriptors;
+    }
 
     /**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    protected void addNamePropertyDescriptor(Object object)
+     * This adds a property descriptor for the Name feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    protected void addNamePropertyDescriptor( Object object )
     {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_License_name_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_License_name_feature", "_UI_License_type"),
-				 PomPackage.Literals.LICENSE__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
+        itemPropertyDescriptors.add( createItemPropertyDescriptor(
+                                                                   ( (ComposeableAdapterFactory) adapterFactory ).getRootAdapterFactory(),
+                                                                   getResourceLocator(),
+                                                                   getString( "_UI_License_name_feature" ),
+                                                                   getString( "_UI_PropertyDescriptor_description",
+                                                                              "_UI_License_name_feature",
+                                                                              "_UI_License_type" ),
+                                                                   PomPackage.Literals.LICENSE__NAME, true, false,
+                                                                   false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                                                                   null, null ) );
+    }
 
     /**
-	 * This adds a property descriptor for the Url feature.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    protected void addUrlPropertyDescriptor(Object object)
+     * This adds a property descriptor for the Url feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    protected void addUrlPropertyDescriptor( Object object )
     {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_License_url_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_License_url_feature", "_UI_License_type"),
-				 PomPackage.Literals.LICENSE__URL,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
+        itemPropertyDescriptors.add( createItemPropertyDescriptor(
+                                                                   ( (ComposeableAdapterFactory) adapterFactory ).getRootAdapterFactory(),
+                                                                   getResourceLocator(),
+                                                                   getString( "_UI_License_url_feature" ),
+                                                                   getString( "_UI_PropertyDescriptor_description",
+                                                                              "_UI_License_url_feature",
+                                                                              "_UI_License_type" ),
+                                                                   PomPackage.Literals.LICENSE__URL, true, false,
+                                                                   false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                                                                   null, null ) );
+    }
 
     /**
-	 * This adds a property descriptor for the Distribution feature.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    protected void addDistributionPropertyDescriptor(Object object)
+     * This adds a property descriptor for the Distribution feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    protected void addDistributionPropertyDescriptor( Object object )
     {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_License_distribution_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_License_distribution_feature", "_UI_License_type"),
-				 PomPackage.Literals.LICENSE__DISTRIBUTION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
+        itemPropertyDescriptors.add( createItemPropertyDescriptor(
+                                                                   ( (ComposeableAdapterFactory) adapterFactory ).getRootAdapterFactory(),
+                                                                   getResourceLocator(),
+                                                                   getString( "_UI_License_distribution_feature" ),
+                                                                   getString( "_UI_PropertyDescriptor_description",
+                                                                              "_UI_License_distribution_feature",
+                                                                              "_UI_License_type" ),
+                                                                   PomPackage.Literals.LICENSE__DISTRIBUTION, true,
+                                                                   false, false,
+                                                                   ItemPropertyDescriptor.GENERIC_VALUE_IMAGE, null,
+                                                                   null ) );
+    }
 
     /**
-	 * This adds a property descriptor for the Comments feature.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    protected void addCommentsPropertyDescriptor(Object object)
+     * This adds a property descriptor for the Comments feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    protected void addCommentsPropertyDescriptor( Object object )
     {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_License_comments_feature"),
-				 getString("_UI_PropertyDescriptor_description", "_UI_License_comments_feature", "_UI_License_type"),
-				 PomPackage.Literals.LICENSE__COMMENTS,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
+        itemPropertyDescriptors.add( createItemPropertyDescriptor(
+                                                                   ( (ComposeableAdapterFactory) adapterFactory ).getRootAdapterFactory(),
+                                                                   getResourceLocator(),
+                                                                   getString( "_UI_License_comments_feature" ),
+                                                                   getString( "_UI_PropertyDescriptor_description",
+                                                                              "_UI_License_comments_feature",
+                                                                              "_UI_License_type" ),
+                                                                   PomPackage.Literals.LICENSE__COMMENTS, true, false,
+                                                                   false, ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+                                                                   null, null ) );
+    }
 
     /**
-	 * This returns License.gif.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * This returns License.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public Object getImage(Object object)
+    public Object getImage( Object object )
     {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/License"));
-	}
+        return overlayImage( object, getResourceLocator().getImage( "full/obj16/License" ) );
+    }
 
     /**
-	 * This returns the label text for the adapted class.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public String getText(Object object)
+    public String getText( Object object )
     {
-		String label = ((License)object).getName();
-		return label == null || label.length() == 0 ?
-			getString("_UI_License_type") :
-			getString("_UI_License_type") + " " + label;
-	}
+        String label = ( (License) object ).getName();
+        return label == null || label.length() == 0 ? getString( "_UI_License_type" ) : getString( "_UI_License_type" )
+            + " " + label;
+    }
 
     /**
-	 * This handles model notifications by calling {@link #updateChildren} to update any cached
-	 * children and by creating a viewer notification, which it passes to {@link #fireNotifyChanged}.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * This handles model notifications by calling {@link #updateChildren} to update any cached children and by creating
+     * a viewer notification, which it passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!-- end-user-doc
+     * -->
+     * 
+     * @generated
+     */
     @Override
-    public void notifyChanged(Notification notification)
+    public void notifyChanged( Notification notification )
     {
-		updateChildren(notification);
+        updateChildren( notification );
 
-		switch (notification.getFeatureID(License.class)) {
-			case PomPackage.LICENSE__NAME:
-			case PomPackage.LICENSE__URL:
-			case PomPackage.LICENSE__DISTRIBUTION:
-			case PomPackage.LICENSE__COMMENTS:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-		}
-		super.notifyChanged(notification);
-	}
+        switch ( notification.getFeatureID( License.class ) )
+        {
+            case PomPackage.LICENSE__NAME:
+            case PomPackage.LICENSE__URL:
+            case PomPackage.LICENSE__DISTRIBUTION:
+            case PomPackage.LICENSE__COMMENTS:
+                fireNotifyChanged( new ViewerNotification( notification, notification.getNotifier(), false, true ) );
+                return;
+        }
+        super.notifyChanged( notification );
+    }
 
     /**
-	 * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
-	 * that can be created under this object.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children that can be created
+     * under this object. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object)
+    protected void collectNewChildDescriptors( Collection<Object> newChildDescriptors, Object object )
     {
-		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
+        super.collectNewChildDescriptors( newChildDescriptors, object );
+    }
 
     /**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * Return the resource locator for this item provider's resources. <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
     public ResourceLocator getResourceLocator()
     {
-		return PomEditPlugin.INSTANCE;
-	}
+        return PomEditPlugin.INSTANCE;
+    }
 
 }

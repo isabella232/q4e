@@ -1,191 +1,176 @@
 /**
- * <copyright>
- * </copyright>
+ * Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.) and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ * 
  *
  * $Id$
  */
 package org.devzuz.q.maven.pom.impl;
 
+import java.util.Collection;
+
+import org.devzuz.q.maven.pom.Plugin;
 import org.devzuz.q.maven.pom.PluginManagement;
-import org.devzuz.q.maven.pom.PluginsType3;
 import org.devzuz.q.maven.pom.PomPackage;
 
-import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
-import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Plugin Management</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Plugin Management</b></em>'. <!--
+ * end-user-doc -->
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link org.devzuz.q.maven.pom.impl.PluginManagementImpl#getPlugins <em>Plugins</em>}</li>
+ * <li>{@link org.devzuz.q.maven.pom.impl.PluginManagementImpl#getPlugins <em>Plugins</em>}</li>
  * </ul>
  * </p>
- *
+ * 
  * @generated
  */
-public class PluginManagementImpl extends EObjectImpl implements PluginManagement
+public class PluginManagementImpl
+    extends EObjectImpl
+    implements PluginManagement
 {
     /**
-	 * The cached value of the '{@link #getPlugins() <em>Plugins</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @see #getPlugins()
-	 * @generated
-	 * @ordered
-	 */
-    protected PluginsType3 plugins;
+     * The cached value of the '{@link #getPlugins() <em>Plugins</em>}' containment reference list. <!--
+     * begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @see #getPlugins()
+     * @generated
+     * @ordered
+     */
+    protected EList<Plugin> plugins;
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     protected PluginManagementImpl()
     {
-		super();
-	}
+        super();
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
     protected EClass eStaticClass()
     {
-		return PomPackage.Literals.PLUGIN_MANAGEMENT;
-	}
+        return PomPackage.Literals.PLUGIN_MANAGEMENT;
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    public PluginsType3 getPlugins()
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    public EList<Plugin> getPlugins()
     {
-		return plugins;
-	}
+        if ( plugins == null )
+        {
+            plugins = new EObjectContainmentEList<Plugin>( Plugin.class, this, PomPackage.PLUGIN_MANAGEMENT__PLUGINS );
+        }
+        return plugins;
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    public NotificationChain basicSetPlugins(PluginsType3 newPlugins, NotificationChain msgs)
-    {
-		PluginsType3 oldPlugins = plugins;
-		plugins = newPlugins;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, PomPackage.PLUGIN_MANAGEMENT__PLUGINS, oldPlugins, newPlugins);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-    /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
-    public void setPlugins(PluginsType3 newPlugins)
-    {
-		if (newPlugins != plugins) {
-			NotificationChain msgs = null;
-			if (plugins != null)
-				msgs = ((InternalEObject)plugins).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - PomPackage.PLUGIN_MANAGEMENT__PLUGINS, null, msgs);
-			if (newPlugins != null)
-				msgs = ((InternalEObject)newPlugins).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - PomPackage.PLUGIN_MANAGEMENT__PLUGINS, null, msgs);
-			msgs = basicSetPlugins(newPlugins, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PomPackage.PLUGIN_MANAGEMENT__PLUGINS, newPlugins, newPlugins));
-	}
-
-    /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+    public NotificationChain eInverseRemove( InternalEObject otherEnd, int featureID, NotificationChain msgs )
     {
-		switch (featureID) {
-			case PomPackage.PLUGIN_MANAGEMENT__PLUGINS:
-				return basicSetPlugins(null, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
+        switch ( featureID )
+        {
+            case PomPackage.PLUGIN_MANAGEMENT__PLUGINS:
+                return ( (InternalEList<?>) getPlugins() ).basicRemove( otherEnd, msgs );
+        }
+        return super.eInverseRemove( otherEnd, featureID, msgs );
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public Object eGet(int featureID, boolean resolve, boolean coreType)
+    public Object eGet( int featureID, boolean resolve, boolean coreType )
     {
-		switch (featureID) {
-			case PomPackage.PLUGIN_MANAGEMENT__PLUGINS:
-				return getPlugins();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+        switch ( featureID )
+        {
+            case PomPackage.PLUGIN_MANAGEMENT__PLUGINS:
+                return getPlugins();
+        }
+        return super.eGet( featureID, resolve, coreType );
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
+    @SuppressWarnings( "unchecked" )
     @Override
-    public void eSet(int featureID, Object newValue)
+    public void eSet( int featureID, Object newValue )
     {
-		switch (featureID) {
-			case PomPackage.PLUGIN_MANAGEMENT__PLUGINS:
-				setPlugins((PluginsType3)newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+        switch ( featureID )
+        {
+            case PomPackage.PLUGIN_MANAGEMENT__PLUGINS:
+                getPlugins().clear();
+                getPlugins().addAll( (Collection<? extends Plugin>) newValue );
+                return;
+        }
+        super.eSet( featureID, newValue );
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public void eUnset(int featureID)
+    public void eUnset( int featureID )
     {
-		switch (featureID) {
-			case PomPackage.PLUGIN_MANAGEMENT__PLUGINS:
-				setPlugins((PluginsType3)null);
-				return;
-		}
-		super.eUnset(featureID);
-	}
+        switch ( featureID )
+        {
+            case PomPackage.PLUGIN_MANAGEMENT__PLUGINS:
+                getPlugins().clear();
+                return;
+        }
+        super.eUnset( featureID );
+    }
 
     /**
-	 * <!-- begin-user-doc -->
-     * <!-- end-user-doc -->
-	 * @generated
-	 */
+     * <!-- begin-user-doc --> <!-- end-user-doc -->
+     * 
+     * @generated
+     */
     @Override
-    public boolean eIsSet(int featureID)
+    public boolean eIsSet( int featureID )
     {
-		switch (featureID) {
-			case PomPackage.PLUGIN_MANAGEMENT__PLUGINS:
-				return plugins != null;
-		}
-		return super.eIsSet(featureID);
-	}
+        switch ( featureID )
+        {
+            case PomPackage.PLUGIN_MANAGEMENT__PLUGINS:
+                return plugins != null && !plugins.isEmpty();
+        }
+        return super.eIsSet( featureID );
+    }
 
-} //PluginManagementImpl
+} // PluginManagementImpl

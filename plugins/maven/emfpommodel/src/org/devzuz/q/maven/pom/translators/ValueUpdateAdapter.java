@@ -10,33 +10,143 @@ package org.devzuz.q.maven.pom.translators;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.wst.common.internal.emf.utilities.ExtendedEcoreUtil;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMElement;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Text;
 
-class ValueUpdateAdapter 
-    implements INodeAdapter, HasLinkedWhitespaceNodes
+/**
+ * Handles notifications from the DOM that a simple text value has changed.
+ * 
+ * @author Mike Poindexter
+ */
+class ValueUpdateAdapter
+    extends TranslatorAdapter
+    implements INodeAdapter
 {
     /**
      * 
      */
-    private final SSESyncAdapter syncAdapter;
+    private EObject modelObject;
+
+    private EStructuralFeature feature;
+
+    private Element node;
+
     private List<Node> linkedWhitespaceNodes = Collections.emptyList();
-    public ValueUpdateAdapter(SSESyncAdapter syncAdapter )
+
+    public ValueUpdateAdapter( SSESyncResource resource, Element node, EObject object, EStructuralFeature feature )
     {
-        super();
-        this.syncAdapter = syncAdapter;
+        super( resource );
+        this.node = node;
+        this.modelObject = object;
+        this.feature = feature;
     }
 
     public boolean isAdapterForType( Object type )
     {
-        return true;
+        return ValueUpdateAdapter.class.equals( type );
     }
-    
+
     public void notifyChanged( INodeNotifier notifier, int eventType, Object changedFeature, Object oldValue,
                                Object newValue, int pos )
     {
-        this.syncAdapter.notifyChanged( notifier, eventType, changedFeature, oldValue, newValue, pos );
+        if ( resource.isProcessEvents() )
+        {
+            try
+            {
+                resource.setProcessEvents( false );
+                if ( changedFeature instanceof Text )
+                {
+                    if ( null == newValue )
+                    {
+                        ExtendedEcoreUtil.eUnsetOrRemove( modelObject, feature, oldValue );
+                    }
+                    else
+                    {
+                        ExtendedEcoreUtil.eSetOrAdd( modelObject, feature, newValue.toString().trim() );
+                    }
+                }
+            }
+            finally
+            {
+                resource.setProcessEvents( true );
+            }
+
+        }
+
+    }
+
+    @Override
+    public void load()
+    {
+        modelObject.eSet( feature, getElementText( node ) );
+    }
+
+    @Override
+    public void save()
+    {
+        setElementTextValue( node, null, modelObject.eGet( feature ) );
+    }
+
+    @Override
+    public void update( Object oldValue )
+    {
+        setElementTextValue( node, oldValue, modelObject.eGet( feature ) );
+    }
+
+    /**
+     * Sets the text value of an existing node, attempting to preserve whitespace
+     * 
+     * @param element
+     * @param oldValue
+     * @param newValue
+     */
+    private void setElementTextValue( Element element, Object oldValue, Object newValue )
+    {
+        boolean replacedChild = false;
+
+        if ( oldValue != null )
+        {
+            // First try to find a text node with the old value and set it (to preserve whitespace)
+            NodeList children = element.getChildNodes();
+            int nChildren = children.getLength();
+            for ( int i = 0; i < nChildren; i++ )
+            {
+                Node child = children.item( i );
+                if ( child instanceof Text )
+                {
+                    String value = ( (Text) child ).getData();
+                    int oldIdx = value.indexOf( oldValue.toString() );
+                    if ( oldIdx > -1 )
+                    {
+                        String replacement =
+                            value.substring( 0, oldIdx ) + newValue.toString()
+                                + value.substring( oldIdx + oldValue.toString().length() );
+                        ( (Text) child ).setData( replacement );
+                        replacedChild = true;
+                    }
+                }
+            }
+        }
+
+        // If for some reason we couldn't find a text to update, just clear the
+        // element contents and put in our text.
+        if ( !replacedChild )
+        {
+            while ( element.getFirstChild() != null )
+            {
+                element.removeChild( element.getFirstChild() );
+            }
+            Text text = node.getOwnerDocument().createTextNode( newValue == null ? "" : newValue.toString() );
+            element.appendChild( text );
+        }
     }
 
     public List<Node> getLinkedWhitespaceNodes()
