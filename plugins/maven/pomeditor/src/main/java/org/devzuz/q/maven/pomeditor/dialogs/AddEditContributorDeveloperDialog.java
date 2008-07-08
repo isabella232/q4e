@@ -1,16 +1,16 @@
 package org.devzuz.q.maven.pomeditor.dialogs;
 
-import org.devzuz.q.maven.pom.PomFactory;
-import org.devzuz.q.maven.pom.PomPackage;
-import org.devzuz.q.maven.pom.Properties;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.devzuz.q.maven.pom.PropertyElement;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.components.ContributorDeveloperDetailComponent;
 import org.devzuz.q.maven.pomeditor.components.PropertiesTableComponent;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;
+import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.runtime.Preferences;
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -47,7 +47,7 @@ public class AddEditContributorDeveloperDialog
 
     private String id = null;
     
-    private org.devzuz.q.maven.pom.Properties properties;
+    private List<PropertyElement> properties;
     
     public static AddEditContributorDeveloperDialog newAddEditContributorDialog( String type )
     {
@@ -191,15 +191,16 @@ public class AddEditContributorDeveloperDialog
         contributorComponent.setTimezone( blankIfNull( timezone ) );
         
         if( properties == null )
-            properties = PomFactory.eINSTANCE.createProperties();
+            properties = new ArrayList<PropertyElement>();
         
-        propertiesTableComponent.bind( properties, new EStructuralFeature[] { PomPackage.Literals.PROPERTIES__PROPERTIES } , null );
+        WritableList ol = new WritableList( properties, PropertyElement.class );
+        propertiesTableComponent.bind( ol );
         
     }
 
     public int openWithItem(String id, String name, String email, String url, 
                             String organization, String organizationUrl,
-                            String roles, String timezone , Properties properties )
+                            String roles, String timezone , List<PropertyElement> properties )
     {
         if ( id != null )
         {
@@ -213,22 +214,13 @@ public class AddEditContributorDeveloperDialog
         this.organizationUrl = organizationUrl;
         this.roles = roles;
         this.timezone = timezone;
+        this.properties = new ArrayList<PropertyElement>();
         
         if( properties != null )
         {
-        	Properties newProps = PomFactory.eINSTANCE.createProperties();
-        	for (PropertyElement prop : properties.getProperties() ) {
-        		PropertyElement pe = PomFactory.eINSTANCE.createPropertyElement();
-        		pe.setName( prop.getName() );
-        		pe.setValue( prop.getValue() );
-				newProps.getProperties().add( pe );
-			}
-            this.properties = newProps;
+            this.properties.addAll( properties );
         }
-        else
-        {
-            this.properties = PomFactory.eINSTANCE.createProperties();
-        }
+        
         
         if ( contributorComponent != null  && propertiesTableComponent != null )
         {
@@ -321,12 +313,12 @@ public class AddEditContributorDeveloperDialog
         this.timezone = timezone;
     }
     
-    public Properties getProperties()
+    public List<PropertyElement> getProperties()
     {
         return properties;
     }
 
-    public void setProperties( Properties properties )
+    public void setProperties( List<PropertyElement> properties )
     {
         this.properties = properties;
     }

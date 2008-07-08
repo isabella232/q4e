@@ -103,7 +103,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         Composite container = toolKit.createComposite( parent, SWT.BORDER );
         container.setLayout( new GridLayout( 1, false ) );
         
-        dependencyTableComponent = new DependencyTableComponent( container, SWT.None, pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEPENDENCIES, PomPackage.Literals.DEPENDENCIES_TYPE__DEPENDENCY }, domain, selectedDependency );
+        dependencyTableComponent = new DependencyTableComponent( container, SWT.None, pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEPENDENCIES }, domain, selectedDependency );
         dependencyTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
         selectedDependency.addValueChangeListener( new IValueChangeListener() {
         	public void handleValueChange(org.eclipse.core.databinding.observable.value.ValueChangeEvent event) {
@@ -146,7 +146,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         Composite container = toolKit.createComposite( form );
         container.setLayout( new GridLayout( 1, false ) ); 
         
-        exclusionTableComponent = new DependencyExclusionTableComponent( container, SWT.None, selectedDependency, new EStructuralFeature[]{ PomPackage.Literals.DEPENDENCY__EXCLUSIONS, PomPackage.Literals.EXCLUSIONS_TYPE__EXCLUSION }, domain );
+        exclusionTableComponent = new DependencyExclusionTableComponent( container, SWT.None, selectedDependency, new EStructuralFeature[]{ PomPackage.Literals.DEPENDENCY__EXCLUSIONS }, domain );
         exclusionTableComponent.setLayoutData( new GridData( SWT.BEGINNING, SWT.FILL, false, true) );
         
         DependencyExclusionTableComponentListener buttonListener = new DependencyExclusionTableComponentListener();
@@ -203,7 +203,7 @@ public class MavenPomDependenciesFormPage extends FormPage
         Composite container = toolKit.createComposite( form );
         container.setLayout( new GridLayout( 1, false ) ); 
         
-         dependencyManagementExclusionTableComponent = new DependencyExclusionTableComponent( container, SWT.None, selectedDependencyInMgt, new EStructuralFeature[]{ PomPackage.Literals.DEPENDENCY__EXCLUSIONS, PomPackage.Literals.EXCLUSIONS_TYPE__EXCLUSION }, domain );
+         dependencyManagementExclusionTableComponent = new DependencyExclusionTableComponent( container, SWT.None, selectedDependencyInMgt, new EStructuralFeature[]{ PomPackage.Literals.DEPENDENCY__EXCLUSIONS }, domain );
          dependencyManagementExclusionTableComponent.setLayoutData( new GridData( SWT.BEGINNING, SWT.FILL, false, true, 2, 1 ) );
          
          DependencyExclusionTableComponentListener buttonListener = new DependencyExclusionTableComponentListener();

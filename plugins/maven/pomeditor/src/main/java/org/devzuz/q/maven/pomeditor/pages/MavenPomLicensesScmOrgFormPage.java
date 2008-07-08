@@ -159,7 +159,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
         
         ModelUtil.bindTable(
         		pomModel, 
-        		new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES, PomPackage.Literals.LICENSES_TYPE__LICENSE }, 
+        		new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES }, 
         		new EStructuralFeature[] { PomPackage.Literals.LICENSE__NAME } , 
         		licensesTable, 
         		domain );
@@ -473,7 +473,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                 int selectedIndex = licensesTable.getSelectionIndex(); 
                 if ( selectedIndex >= 0 )
                 {
-                	List<License> licenseList = (List<License>)ModelUtil.getValue( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES, PomPackage.Literals.LICENSES_TYPE__LICENSE }, domain, true );
+                	List<License> licenseList = (List<License>)ModelUtil.getValue( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES }, domain, true );
                     selectedLicense = licenseList.get( selectedIndex );
                 }
             }
@@ -489,7 +489,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
             
             if ( widget.equals( removeLicenseButton ) )
             {
-            	List<License> licenseList = (List<License>)ModelUtil.getValue( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES, PomPackage.Literals.LICENSES_TYPE__LICENSE }, domain, true );
+            	List<License> licenseList = (List<License>)ModelUtil.getValue( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES }, domain, true );
                 licenseList.remove( selectedLicense );
                 resetControlsState();
             }
@@ -522,7 +522,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
                     license.setComments( addDialog.getComment() );
                     if ( isValidLicense( license ) && !duplicateLicense( license ) )
                     {
-                    	List<License> licenseList = (List<License>)ModelUtil.getValue( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES, PomPackage.Literals.LICENSES_TYPE__LICENSE }, domain, true );
+                    	List<License> licenseList = (List<License>)ModelUtil.getValue( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES }, domain, true );
                         licenseList.add( license );
                     }
 
@@ -554,7 +554,7 @@ public class MavenPomLicensesScmOrgFormPage extends FormPage
     
     private boolean duplicateLicense( License l )
     {
-    	List<License> licenseList = (List<License>)ModelUtil.getValue( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES, PomPackage.Literals.LICENSES_TYPE__LICENSE }, domain, true );
+    	List<License> licenseList = (List<License>)ModelUtil.getValue( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES }, domain, true );
         boolean flag = false;
         if ( licenseList.contains( l ) )
         {

@@ -86,7 +86,7 @@ public class MavenPomRepositoriesFormPage
                 
         pluginRepositoriesTableComponent = new RepositoryTableComponent( container, SWT.None, 
                                                                          pomModel, 
-                                                                         new EStructuralFeature[] { PomPackage.Literals.MODEL__PLUGIN_REPOSITORIES, PomPackage.Literals.PLUGIN_REPOSITORIES_TYPE__PLUGIN_REPOSITORY },
+                                                                         new EStructuralFeature[] { PomPackage.Literals.MODEL__PLUGIN_REPOSITORIES },
                                                                          domain );
                         
         
@@ -102,7 +102,7 @@ public class MavenPomRepositoriesFormPage
                 
         repositoriesTableComponent = new RepositoryTableComponent( container, SWT.None, 
 													                pomModel, 
-													                new EStructuralFeature[] { PomPackage.Literals.MODEL__REPOSITORIES, PomPackage.Literals.REPOSITORIES_TYPE__REPOSITORY },
+													                new EStructuralFeature[] { PomPackage.Literals.MODEL__REPOSITORIES },
 													                domain );
 
         return container;

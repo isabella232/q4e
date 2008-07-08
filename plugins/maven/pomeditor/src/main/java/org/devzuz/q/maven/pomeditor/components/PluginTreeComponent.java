@@ -2,6 +2,7 @@ package org.devzuz.q.maven.pomeditor.components;
 
 import java.util.List;
 
+import org.devzuz.q.maven.pomeditor.model.TreeRoot;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -121,7 +122,12 @@ public class PluginTreeComponent extends Composite
                     {
                         public void widgetSelected( SelectionEvent e )
                         {
-                            action.doAction( firstElement );
+                        	Object target = firstElement;
+                        	if( target instanceof TreeRoot )
+                        	{
+                        		target = ( (TreeRoot) target ).createOrGetModelRoot();
+                        	}
+                            action.doAction( target );
                         }
                     } );
                 }

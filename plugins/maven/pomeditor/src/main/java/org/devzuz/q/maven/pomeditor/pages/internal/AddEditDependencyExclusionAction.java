@@ -2,9 +2,11 @@ package org.devzuz.q.maven.pomeditor.pages.internal;
 
 import java.util.List;
 
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Exclusion;
+import org.devzuz.q.maven.pom.Dependency;
+import org.devzuz.q.maven.pom.Exclusion;
+import org.devzuz.q.maven.pom.PomFactory;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditDependencyExclusionDialog;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.window.Window;
 
 public class AddEditDependencyExclusionAction
@@ -12,8 +14,9 @@ public class AddEditDependencyExclusionAction
 {
     private Mode mode;
     
-    public AddEditDependencyExclusionAction( ITreeObjectActionListener listener, Mode mode )
+    public AddEditDependencyExclusionAction( ITreeObjectActionListener listener, Mode mode, EditingDomain domain )
     {
+    	super( domain );
         addTreeObjectActionListener( listener );
         this.mode = mode;
         
@@ -36,14 +39,14 @@ public class AddEditDependencyExclusionAction
         {
             if ( addDialog.open() == Window.OK )
             {
-                Exclusion exclusion = new Exclusion();
+                Exclusion exclusion = PomFactory.eINSTANCE.createExclusion();
                 
                 exclusion.setGroupId( addDialog.getGroupId() );
                 exclusion.setArtifactId( addDialog.getArtifactId() );
                 
                 if( obj instanceof Dependency )
                 {
-                    ((Dependency) obj).addExclusion( exclusion );
+                    ((Dependency) obj).getExclusions().add( exclusion );
                 }
                 else if( obj instanceof List )
                 {

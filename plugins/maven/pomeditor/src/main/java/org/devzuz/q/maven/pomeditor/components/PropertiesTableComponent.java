@@ -8,9 +8,19 @@ import org.devzuz.q.maven.pom.PropertyElement;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.ui.dialogs.KeyValueEditorDialog;
+import org.eclipse.core.databinding.observable.Realm;
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.map.IObservableMap;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.emf.databinding.EMFObservables;
+import org.eclipse.emf.databinding.edit.EMFEditObservables;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -37,11 +47,7 @@ public class PropertiesTableComponent
 
     private int selectedIndex;
     
-    private EObject model;
-    
-    private EditingDomain domain;
-    
-    private EStructuralFeature[] path;
+    private IObservableList list;
 
     public PropertiesTableComponent( Composite parent, int style )
     {
@@ -91,17 +97,15 @@ public class PropertiesTableComponent
         removeButton.setEnabled( false );
     }
     
-    public void bind( EObject model, EStructuralFeature[] path, EditingDomain domain )
+    public void bind( IObservableList list )
     {
-    	ModelUtil.bindTable(
-        		model, 
-        		path, 
-        		new EStructuralFeature[] { PomPackage.Literals.PROPERTY_ELEMENT__NAME, PomPackage.Literals.PROPERTY_ELEMENT__VALUE }, 
-        		propertiesTable, 
-        		domain );
-    	this.model = model;
-    	this.path = path;
-    	this.domain = domain;
+    	this.list = list;
+    	TableViewer viewer = new TableViewer( propertiesTable );
+		ObservableListContentProvider contentProvider = new ObservableListContentProvider();
+		viewer.setContentProvider( contentProvider );
+		viewer.setInput( list );
+		IObservableMap[] labels = EMFObservables.observeMaps(contentProvider.getKnownElements(), new EStructuralFeature[] { PomPackage.Literals.PROPERTY_ELEMENT__NAME, PomPackage.Literals.PROPERTY_ELEMENT__VALUE } );
+		viewer.setLabelProvider( new ObservableMapLabelProvider( labels ) );
     }
     
     private void refreshPropertiesTable()
@@ -141,7 +145,7 @@ public class PropertiesTableComponent
             {
                 if ( !keyAlreadyExist( keyValueDialog.getKey() ) )
                 {
-                	List<PropertyElement> properties = (List<PropertyElement>) ModelUtil.getValue( model, path, domain, true );
+                	List<PropertyElement> properties = (List<PropertyElement>) list;
                 	PropertyElement newProp = PomFactory.eINSTANCE.createPropertyElement();
                 	newProp.setName( keyValueDialog.getKey() );
                 	newProp.setValue( keyValueDialog.getValue() );
@@ -158,7 +162,7 @@ public class PropertiesTableComponent
         {
             KeyValueEditorDialog keyValueDialog = KeyValueEditorDialog.getKeyValueEditorDialog();
             
-            List<PropertyElement> properties = (List<PropertyElement>) ModelUtil.getValue( model, path, domain, true );
+            List<PropertyElement> properties = (List<PropertyElement>) list;
             PropertyElement prop = properties.get( selectedIndex );
             if ( keyValueDialog.openWithEntry( prop.getName(), prop.getValue() ) == Window.OK )
             {
@@ -179,7 +183,7 @@ public class PropertiesTableComponent
     {
         public void widgetSelected( SelectionEvent e )
         {
-            List<PropertyElement> properties = (List<PropertyElement>) ModelUtil.getValue( model, path, domain, true );
+            List<PropertyElement> properties = (List<PropertyElement>) list;
             properties.remove( selectedIndex );
             
             refreshPropertiesTable();
@@ -190,7 +194,7 @@ public class PropertiesTableComponent
 
     public boolean keyAlreadyExist( String key )
     {
-    	List<PropertyElement> properties = (List<PropertyElement>) ModelUtil.getValue( model, path, domain, true );
+    	List<PropertyElement> properties = (List<PropertyElement>) list;
     	for ( PropertyElement propertyElement : properties ) 
     	{
     		if( propertyElement.getName().equals( key ) )

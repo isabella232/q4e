@@ -11,7 +11,6 @@ import java.util.List;
 import org.devzuz.q.maven.pom.MailingList;
 import org.devzuz.q.maven.pom.Model;
 import org.devzuz.q.maven.pom.Notifier;
-import org.devzuz.q.maven.pom.OtherArchivesType;
 import org.devzuz.q.maven.pom.PomFactory;
 import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
@@ -192,7 +191,7 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         
         ModelUtil.bindTable(
         		model, 
-        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__NOTIFIERS, PomPackage.Literals.NOTIFIERS_TYPE__NOTIFIER }, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__NOTIFIERS }, 
         		new EStructuralFeature[]{ PomPackage.Literals.NOTIFIER__TYPE, PomPackage.Literals.NOTIFIER__ADDRESS },
         		notifiersTable,
         		domain );
@@ -251,7 +250,7 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         
         ModelUtil.bindTable(
         		model, 
-        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MAILING_LISTS, PomPackage.Literals.MAILING_LISTS_TYPE__MAILING_LIST }, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MAILING_LISTS }, 
         		new EStructuralFeature[]{ PomPackage.Literals.MAILING_LIST__NAME },
         		mailingListTable,
         		domain );
@@ -355,7 +354,7 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                             
                             List<Notifier> notifierList = (List<Notifier>)ModelUtil.getValue( 
                             		model, 
-                            		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__NOTIFIERS, PomPackage.Literals.NOTIFIERS_TYPE__NOTIFIER }, 
+                            		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__NOTIFIERS }, 
                             		domain, 
                             		true );
                             notifierList.add( notifier );
@@ -366,7 +365,7 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                         int selectedItem = notifiersTable.getSelectionIndex();
                         List<Notifier> notifierList = (List<Notifier>)ModelUtil.getValue( 
                         		model, 
-                        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__NOTIFIERS, PomPackage.Literals.NOTIFIERS_TYPE__NOTIFIER }, 
+                        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__NOTIFIERS }, 
                         		domain, 
                         		true );
                         Notifier notifier = notifierList.get( selectedItem );
@@ -393,7 +392,7 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                         int selected = notifiersTable.getSelectionIndex();
                         List<Notifier> notifierList = (List<Notifier>)ModelUtil.getValue( 
                         		model, 
-                        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__NOTIFIERS, PomPackage.Literals.NOTIFIERS_TYPE__NOTIFIER }, 
+                        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__NOTIFIERS }, 
                         		domain, 
                         		true );
                         notifierList.remove( selected );
@@ -417,16 +416,15 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                             mailingList.setArchive( dialog.getArchive() );
                             mailingList.setName( dialog.getName() );
                             
-                            OtherArchivesType otherArchives = PomFactory.eINSTANCE.createOtherArchivesType();
-                            otherArchives.getOtherArchive().addAll( dialog.getOtherArchives() );
-                            mailingList.setOtherArchives( otherArchives );
+                            
+                            mailingList.getOtherArchives().addAll( dialog.getOtherArchives() );
                             mailingList.setPost( dialog.getPost() );
                             mailingList.setSubscribe( dialog.getSubscribe() );
                             mailingList.setUnsubscribe( dialog.getUnsubscribe() );
                             
                             List<MailingList> mailingLists = (List<MailingList>)ModelUtil.getValue( 
                             		model, 
-                            		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MAILING_LISTS, PomPackage.Literals.MAILING_LISTS_TYPE__MAILING_LIST }, 
+                            		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MAILING_LISTS }, 
                             		domain, 
                             		true );
                             mailingLists.add( mailingList );
@@ -437,7 +435,7 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                         int selectedItem = mailingListTable.getSelectionIndex();
                         List<MailingList> mailingLists = (List<MailingList>)ModelUtil.getValue( 
                         		model, 
-                        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MAILING_LISTS, PomPackage.Literals.MAILING_LISTS_TYPE__MAILING_LIST }, 
+                        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MAILING_LISTS }, 
                         		domain, 
                         		true );
                         MailingList mailingList = (MailingList) mailingLists.get( selectedItem );
@@ -449,9 +447,8 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                             {
                                 mailingList.setArchive( dialog.getArchive() );
                                 mailingList.setName( dialog.getName() );
-                                OtherArchivesType otherArchives = PomFactory.eINSTANCE.createOtherArchivesType();
-                                otherArchives.getOtherArchive().addAll( dialog.getOtherArchives() );
-                                mailingList.setOtherArchives( otherArchives );
+                                mailingList.getOtherArchives().clear();
+                                mailingList.getOtherArchives().addAll( dialog.getOtherArchives() );
                                 mailingList.setPost( dialog.getPost() );
                                 mailingList.setSubscribe( dialog.getSubscribe() );
                                 mailingList.setUnsubscribe( dialog.getUnsubscribe() );
@@ -466,7 +463,7 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                         mailingListTable.remove( selected );
                         List<MailingList> mailingLists = (List<MailingList>)ModelUtil.getValue( 
                         		model, 
-                        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MAILING_LISTS, PomPackage.Literals.MAILING_LISTS_TYPE__MAILING_LIST }, 
+                        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MAILING_LISTS }, 
                         		domain, 
                         		true );
                         mailingLists.remove( selected );

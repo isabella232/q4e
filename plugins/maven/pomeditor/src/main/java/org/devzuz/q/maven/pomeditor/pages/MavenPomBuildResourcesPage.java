@@ -85,7 +85,7 @@ public class MavenPomBuildResourcesPage extends FormPage
         Composite container = toolKit.createComposite( parent, SWT.None );
         container.setLayout( new GridLayout( 1, false ) );
 
-        resourceComponent = new ResourceComponent( container, SWT.NONE, pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__RESOURCES, PomPackage.Literals.RESOURCES_TYPE1__RESOURCE }, domain, selectedResource );
+        resourceComponent = new ResourceComponent( container, SWT.NONE, pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__RESOURCES }, domain, selectedResource );
         resourceComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
         selectedResource.addValueChangeListener( new IValueChangeListener() {
         	public void handleValueChange(ValueChangeEvent event) {
@@ -134,7 +134,7 @@ public class MavenPomBuildResourcesPage extends FormPage
         Composite container = toolKit.createComposite( parent, SWT.None );
         container.setLayout( new GridLayout( 1, false ) );
 
-        excludeComponent = new IncludeExcludeComponent( container, SWT.NONE, selectedResource, new EStructuralFeature[]{ PomPackage.Literals.RESOURCE__EXCLUDES, PomPackage.Literals.EXCLUDES_TYPE__EXCLUDE }, domain );
+        excludeComponent = new IncludeExcludeComponent( container, SWT.NONE, selectedResource, new EStructuralFeature[]{ PomPackage.Literals.RESOURCE__EXCLUDES }, domain );
         excludeComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
 
         return container;
@@ -145,7 +145,7 @@ public class MavenPomBuildResourcesPage extends FormPage
         Composite container = toolKit.createComposite( parent, SWT.None );
         container.setLayout( new GridLayout( 1, false ) );
 
-        includeComponent = new IncludeExcludeComponent( container, SWT.NONE, selectedResource, new EStructuralFeature[]{ PomPackage.Literals.RESOURCE__INCLUDES, PomPackage.Literals.INCLUDES_TYPE__INCLUDE }, domain );
+        includeComponent = new IncludeExcludeComponent( container, SWT.NONE, selectedResource, new EStructuralFeature[]{ PomPackage.Literals.RESOURCE__INCLUDES }, domain );
         includeComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
 
 

@@ -6,8 +6,9 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.pomeditor.pages;
 
+import java.util.List;
+
 import org.devzuz.q.maven.pom.Extension;
-import org.devzuz.q.maven.pom.ExtensionsType;
 import org.devzuz.q.maven.pom.Model;
 import org.devzuz.q.maven.pom.PomFactory;
 import org.devzuz.q.maven.pom.PomPackage;
@@ -139,7 +140,7 @@ public class MavenPomBuildFormPage extends FormPage
         
         ModelUtil.bindTable(
         		pomModel,
-        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__EXTENSIONS, PomPackage.Literals.EXTENSIONS_TYPE__EXTENSION },
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__EXTENSIONS },
         		new EStructuralFeature[]{ PomPackage.Literals.EXTENSION__GROUP_ID, PomPackage.Literals.EXTENSION__ARTIFACT_ID, PomPackage.Literals.EXTENSION__VERSION },
         		extensionsTable,
         		domain);
@@ -210,7 +211,7 @@ public class MavenPomBuildFormPage extends FormPage
         		container, 
         		SWT.NULL, 
                 pomModel, 
-                new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__FILTERS, PomPackage.Literals.FILTERS_TYPE1__FILTER },
+                new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__FILTERS },
                 "Filter",
                 domain
                 );
@@ -255,13 +256,13 @@ public class MavenPomBuildFormPage extends FormPage
 	    			extension.setArtifactId( addDialog.getArtifactId() );
 	    			extension.setVersion( addDialog.getVersion() );
 	    			
-	    			ExtensionsType extensions = (ExtensionsType) ModelUtil.createOrGetContainer( 
+	    			List<Extension> extensions = (List<Extension>) ModelUtil.createOrGetContainer( 
 	    					pomModel, 
 	    					new EReference[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__EXTENSIONS }, 
 	    					domain );
 	    			
 	    			
-	    			extensions.getExtension().add( extension );
+	    			extensions.add( extension );
 	    			
 	    			pageModified();
 	    		}	    		
@@ -281,12 +282,12 @@ public class MavenPomBuildFormPage extends FormPage
 	    	
 	    	if( selectedIndex > -1 )
 	    	{
-	    		ExtensionsType extensions = (ExtensionsType) ModelUtil.createOrGetContainer( 
+	    		List<Extension> extensions = (List<Extension>) ModelUtil.createOrGetContainer( 
     					pomModel, 
     					new EReference[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__EXTENSIONS }, 
     					domain );
 	    		
-	    		Extension selectedExtension = extensions.getExtension().get( selectedIndex );
+	    		Extension selectedExtension = extensions.get( selectedIndex );
 	    		
 		    	if ( addDialog.openWithItem(selectedExtension.getGroupId(), 
 		    	                            selectedExtension.getArtifactId(), 
@@ -320,11 +321,11 @@ public class MavenPomBuildFormPage extends FormPage
 	    	
 	    	if( selectedIndex > -1 )
 	    	{
-	    		ExtensionsType extensions = (ExtensionsType) ModelUtil.createOrGetContainer( 
+	    		List<Extension> extensions = (List<Extension>) ModelUtil.createOrGetContainer( 
     					pomModel, 
     					new EReference[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__EXTENSIONS }, 
     					domain );
-		    	extensions.getExtension().remove( selectedIndex );
+		    	extensions.remove( selectedIndex );
 		    	
 		    	pageModified();
 		    	
@@ -343,12 +344,12 @@ public class MavenPomBuildFormPage extends FormPage
 		
 	    if ( pomModel.getBuild() != null && pomModel.getBuild().getExtensions() != null )
         {
-	    	ExtensionsType extensions = (ExtensionsType) ModelUtil.createOrGetContainer( 
+	    	List<Extension> extensions = (List<Extension>) ModelUtil.createOrGetContainer( 
 					pomModel, 
 					new EReference[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__EXTENSIONS }, 
 					domain );
 
-            for ( Extension extension : extensions.getExtension() )
+            for ( Extension extension : extensions )
             {
                 if ( ( extension.getGroupId().equals( groupId ) ) &&
                      ( extension.getArtifactId().equals( artifactId ) ) &&

@@ -1,6 +1,6 @@
 package org.devzuz.q.maven.pomeditor.dialogs;
 
-import org.apache.maven.model.PluginExecution;
+import org.devzuz.q.maven.pom.PluginExecution;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
 import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;

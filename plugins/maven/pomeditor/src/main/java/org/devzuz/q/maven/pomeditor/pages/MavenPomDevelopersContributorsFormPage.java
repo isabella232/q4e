@@ -157,7 +157,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
 
         ModelUtil.bindTable(
         		pomModel, 
-        		new EStructuralFeature[] { PomPackage.Literals.MODEL__DEVELOPERS, PomPackage.Literals.DEVELOPERS_TYPE__DEVELOPER }, 
+        		new EStructuralFeature[] { PomPackage.Literals.MODEL__DEVELOPERS }, 
         		new EStructuralFeature[] { PomPackage.Literals.DEVELOPER__ID, PomPackage.Literals.DEVELOPER__NAME, PomPackage.Literals.DEVELOPER__EMAIL, PomPackage.Literals.DEVELOPER__URL, PomPackage.Literals.DEVELOPER__ORGANIZATION, PomPackage.Literals.DEVELOPER__ORGANIZATION_URL, PomPackage.Literals.DEVELOPER__TIMEZONE }, 
         		developersTable, 
         		domain );
@@ -233,7 +233,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
         
         ModelUtil.bindTable(
         		pomModel, 
-        		new EStructuralFeature[] { PomPackage.Literals.MODEL__CONTRIBUTORS, PomPackage.Literals.CONTRIBUTORS_TYPE__CONTRIBUTOR }, 
+        		new EStructuralFeature[] { PomPackage.Literals.MODEL__CONTRIBUTORS }, 
         		new EStructuralFeature[] { PomPackage.Literals.CONTRIBUTOR__NAME, PomPackage.Literals.CONTRIBUTOR__EMAIL, PomPackage.Literals.CONTRIBUTOR__URL, PomPackage.Literals.CONTRIBUTOR__ORGANIZATION, PomPackage.Literals.CONTRIBUTOR__ORGANIZATION_URL, PomPackage.Literals.CONTRIBUTOR__TIMEZONE }, 
         		contributorsTable, 
         		domain );
@@ -334,7 +334,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                         String roles = addDialog.getRoles();
                         
                         String[] roleArray = roles.split( "," );
-                        List<String> roleList = (List<String>) ModelUtil.getValue( developer, new EStructuralFeature[]{ PomPackage.Literals.DEVELOPER__ROLES, PomPackage.Literals.ROLES_TYPE1__ROLE } , domain, true );
+                        List<String> roleList = (List<String>) ModelUtil.getValue( developer, new EStructuralFeature[]{ PomPackage.Literals.DEVELOPER__ROLES } , domain, true );
                         for ( String role : roleArray )
                         {
                         	roleList.add( role.trim() );
@@ -342,13 +342,14 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     }
                     else
                     {
-                        developer.setRoles( null );
+                        developer.unsetRoles();
                     }
                     
                     developer.setTimezone( nullIfBlank( addDialog.getTimezone() ) );
-                    developer.setProperties( addDialog.getProperties() );
+                    developer.unsetProperties();
+                    developer.getProperties().addAll( addDialog.getProperties() );
                     
-                    List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS, PomPackage.Literals.DEVELOPERS_TYPE__DEVELOPER } , domain, true );
+                    List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS } , domain, true );
                     developersList.add( developer );
                 }
             }
@@ -359,10 +360,10 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     {
         public void widgetSelected( SelectionEvent e )
         {
-            List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS, PomPackage.Literals.DEVELOPERS_TYPE__DEVELOPER } , domain, true );
+            List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS } , domain, true );
             Developer selectedDeveloper = developersList.get( selectedDeveloperIndex );
             
-            List<String> roleList = (List<String>) ModelUtil.getValue( selectedDeveloper, new EStructuralFeature[]{ PomPackage.Literals.DEVELOPER__ROLES, PomPackage.Literals.ROLES_TYPE1__ROLE } , domain, true );
+            List<String> roleList = (List<String>) ModelUtil.getValue( selectedDeveloper, new EStructuralFeature[]{ PomPackage.Literals.DEVELOPER__ROLES } , domain, true );
             String oldRoles = roleList == null ? null : convertRolesListToString( roleList );
             AddEditContributorDeveloperDialog editDialog = 
                 AddEditContributorDeveloperDialog.newAddEditContributorDialog( Messages.MavenPomEditor_MavenPomEditor_Developers );
@@ -392,7 +393,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     String roles = editDialog.getRoles();
                         
                     String[] roleArray = roles.split( "," );
-                    List<String> newRoleList = (List<String>) ModelUtil.getValue( newDeveloper, new EStructuralFeature[]{ PomPackage.Literals.DEVELOPER__ROLES, PomPackage.Literals.ROLES_TYPE1__ROLE } , domain, true );
+                    List<String> newRoleList = (List<String>) ModelUtil.getValue( newDeveloper, new EStructuralFeature[]{ PomPackage.Literals.DEVELOPER__ROLES } , domain, true );
                     for ( String role : roleArray )
                     {
                     	newRoleList.add( role.trim() );
@@ -400,10 +401,10 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                 }
                 else
                 {
-                    newDeveloper.setRoles( null );
+                    newDeveloper.unsetRoles();
                 }
                 
-                newDeveloper.setProperties( editDialog.getProperties() );
+                newDeveloper.getProperties().addAll( editDialog.getProperties() );
                 
                 //if ( ( developerAlreadyExist( newDeveloper.getId() ) ) ||
                 //      ( !selectedDeveloper.getId().equalsIgnoreCase( newDeveloper.getId() ) ) )
@@ -439,7 +440,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     {
         public void widgetSelected( SelectionEvent e )
         {
-        	List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS, PomPackage.Literals.DEVELOPERS_TYPE__DEVELOPER } , domain, true );
+        	List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS } , domain, true );
             for ( int index = 0; index < developersList.size(); index++ )
             {
                 if ( index == developersTable.getSelectionIndex() )
@@ -479,7 +480,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                         String roles = addDialog.getRoles();
                     
                         String[] roleArray = roles.split( "," );
-                        List<String> roleList = (List<String>) ModelUtil.getValue( contributor, new EStructuralFeature[]{ PomPackage.Literals.CONTRIBUTOR__ROLES, PomPackage.Literals.ROLES_TYPE__ROLE } , domain, true );
+                        List<String> roleList = (List<String>) ModelUtil.getValue( contributor, new EStructuralFeature[]{ PomPackage.Literals.CONTRIBUTOR__ROLES } , domain, true );
                         for ( String role : roleArray )
                         {
                         	roleList.add( role.trim() );
@@ -487,13 +488,14 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     }
                     else
                     {
-                        contributor.setRoles( null );
+                        contributor.unsetRoles();
                     }
                 
                     contributor.setTimezone( nullIfBlank( addDialog.getTimezone() ) );
-                    contributor.setProperties( addDialog.getProperties() );
+                    contributor.unsetProperties();
+                    contributor.getProperties().addAll( addDialog.getProperties() );
                     
-                    List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS, PomPackage.Literals.CONTRIBUTORS_TYPE__CONTRIBUTOR } , domain, true );
+                    List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS } , domain, true );
                     contributorList.add( contributor );
                 }
             }
@@ -504,10 +506,10 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     {
         public void widgetSelected( SelectionEvent e )
         {
-        	List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS, PomPackage.Literals.CONTRIBUTORS_TYPE__CONTRIBUTOR } , domain, true );
+        	List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS } , domain, true );
         	Contributor selectedContributor = contributorList.get( selectedContributorIndex );
         	
-            List<String> roleList = (List<String>) ModelUtil.getValue( selectedContributor, new EStructuralFeature[]{ PomPackage.Literals.CONTRIBUTOR__ROLES, PomPackage.Literals.ROLES_TYPE__ROLE } , domain, true );
+            List<String> roleList = (List<String>) ModelUtil.getValue( selectedContributor, new EStructuralFeature[]{ PomPackage.Literals.CONTRIBUTOR__ROLES } , domain, true );
             String oldRoles = roleList == null ? null : convertRolesListToString( roleList );
             AddEditContributorDeveloperDialog editDialog = 
                 AddEditContributorDeveloperDialog.newAddEditContributorDialog( Messages.MavenPomEditor_MavenPomEditor_Contributors );
@@ -535,7 +537,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                     String roles = editDialog.getRoles();
                         
                     String[] roleArray = roles.split( "," );
-                    List<String> newRoleList = (List<String>) ModelUtil.getValue( selectedContributor, new EStructuralFeature[]{ PomPackage.Literals.CONTRIBUTOR__ROLES, PomPackage.Literals.ROLES_TYPE__ROLE } , domain, true );
+                    List<String> newRoleList = (List<String>) ModelUtil.getValue( selectedContributor, new EStructuralFeature[]{ PomPackage.Literals.CONTRIBUTOR__ROLES } , domain, true );
                     for ( String role : newRoleList )
                     {
                     	newRoleList.add( role.trim() );
@@ -543,10 +545,10 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
                 }
                 else
                 {
-                    newContributor.setRoles( null );
+                    newContributor.unsetRoles();
                 }
                 
-                newContributor.setProperties( editDialog.getProperties() );
+                newContributor.getProperties().addAll( editDialog.getProperties() );
                 
                 if ( contributorAlreadyExist( newContributor.getName(), newContributor.getEmail() ) )
                 {
@@ -585,7 +587,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
     {
         public void widgetSelected( SelectionEvent e )
         {
-        	List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS, PomPackage.Literals.CONTRIBUTORS_TYPE__CONTRIBUTOR } , domain, true );
+        	List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS } , domain, true );
             for ( int index = 0; index < contributorList.size(); index++ )
             {
                 if ( index == contributorsTable.getSelectionIndex() )
@@ -601,7 +603,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
 
     public boolean contributorAlreadyExist( String name, String email )
     {
-    	List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS, PomPackage.Literals.CONTRIBUTORS_TYPE__CONTRIBUTOR } , domain, true );
+    	List<Contributor> contributorList = (List<Contributor>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__CONTRIBUTORS } , domain, true );
         for ( Contributor contributor : contributorList )
         {
             if ( ( contributor.getName().equals( name ) ) &&
@@ -616,7 +618,7 @@ public class MavenPomDevelopersContributorsFormPage extends FormPage
 
     private boolean developerAlreadyExist( String id )
     {
-    	List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS, PomPackage.Literals.DEVELOPERS_TYPE__DEVELOPER } , domain, true );
+    	List<Developer> developersList = (List<Developer>) ModelUtil.getValue( pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEVELOPERS } , domain, true );
         for ( Developer developer : developersList )
         {
             if ( developer.getId().equals( id ) )

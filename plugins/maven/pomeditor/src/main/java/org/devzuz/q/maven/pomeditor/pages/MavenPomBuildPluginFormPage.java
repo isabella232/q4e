@@ -5,22 +5,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.maven.model.Build;
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Exclusion;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Plugin;
-import org.apache.maven.model.PluginExecution;
-import org.apache.maven.model.PluginManagement;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.devzuz.q.maven.pom.Dependency;
+import org.devzuz.q.maven.pom.Exclusion;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.Plugin;
+import org.devzuz.q.maven.pom.PluginExecution;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.components.IObjectActionMap;
 import org.devzuz.q.maven.pomeditor.components.ITreeObjectAction;
 import org.devzuz.q.maven.pomeditor.components.PluginTreeComponent;
 import org.devzuz.q.maven.pomeditor.model.PluginTreeContentProvider;
 import org.devzuz.q.maven.pomeditor.model.PluginTreeLabelProvider;
-import org.devzuz.q.maven.pomeditor.pages.internal.AddEditConfigurationAction;
-import org.devzuz.q.maven.pomeditor.pages.internal.AddEditConfigurationItemListAction;
+import org.devzuz.q.maven.pomeditor.model.TreeRoot;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditDependencyAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditDependencyExclusionAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditExecutionAction;
@@ -30,6 +27,8 @@ import org.devzuz.q.maven.pomeditor.pages.internal.DeleteAllItemsAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.DeleteItemAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.ITreeObjectActionListener;
 import org.devzuz.q.maven.pomeditor.pages.internal.Mode;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
@@ -52,12 +51,10 @@ public class MavenPomBuildPluginFormPage extends FormPage
 	private Model pomModel;
 	
 	private boolean isPageModified;
-    
-    private PluginTreeContentProvider contentProvider;
-
-    private PluginTreeContentProvider pluginManagementContentProvider;
 
     private PluginTreeComponent pluginManagementTreeComponent;
+    
+    private EditingDomain domain;
     
 	public MavenPomBuildPluginFormPage(FormEditor editor, String id,
 			String title) 
@@ -71,13 +68,11 @@ public class MavenPomBuildPluginFormPage extends FormPage
 	}
 
 	public MavenPomBuildPluginFormPage ( FormEditor editor, String id,
-			String title, Model pomModel )
+			String title, Model pomModel, EditingDomain domain )
 	{
 		super( editor, id, title );
 		this.pomModel = pomModel;
-		
-		checkIfBuildNull();
-		checkIfPluginManagementNull();
+		this.domain = domain;
 	}
 
 
@@ -115,14 +110,14 @@ public class MavenPomBuildPluginFormPage extends FormPage
     {
 	    Composite parent = toolkit.createComposite( form );
         parent.setLayout( new FillLayout() );
-        
-        pluginManagementContentProvider = new PluginTreeContentProvider( pomModel.getBuild().getPluginManagement() );
+
+        //pluginManagementContentProvider = new PluginTreeContentProvider( pomModel.getBuild().getPluginManagement() );
         pluginManagementTreeComponent = new PluginTreeComponent( parent, SWT.None );
         
-        pluginManagementTreeComponent.setContentProvider( pluginManagementContentProvider );
+        pluginManagementTreeComponent.setContentProvider( new PluginTreeContentProvider( new EReference[] { PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__PLUGIN_MANAGEMENT, PomPackage.Literals.PLUGIN_MANAGEMENT__PLUGINS }, domain, "Plugin Management" ) );
         pluginManagementTreeComponent.setLabelProvider( new PluginTreeLabelProvider() );
-        pluginManagementTreeComponent.setObjectActionMap( new PluginActionMap( this, pluginManagementContentProvider ) );
-        pluginManagementTreeComponent.setInput( pomModel.getBuild().getPluginManagement() );
+        //pluginManagementTreeComponent.setObjectActionMap( new PluginActionMap( this, pluginManagementContentProvider ) );
+        pluginManagementTreeComponent.setInput( pomModel );
         pluginManagementTreeComponent.expandAll();
         
         toolkit.paintBordersFor( parent );
@@ -136,13 +131,14 @@ public class MavenPomBuildPluginFormPage extends FormPage
 		Composite parent = toolkit.createComposite( form );
 		parent.setLayout( new FillLayout() );
 		
-		contentProvider = new PluginTreeContentProvider( pomModel.getBuild() );
+		//contentProvider = new PluginTreeContentProvider( pomModel.getBuild() );
 		treeComponent = new PluginTreeComponent( parent, SWT.None );
-		
+
+		ITreeContentProvider contentProvider = new PluginTreeContentProvider( new EReference[] { PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__PLUGINS }, domain, "Plugins" );
 		treeComponent.setContentProvider( contentProvider );
 		treeComponent.setLabelProvider( new PluginTreeLabelProvider() );
 		treeComponent.setObjectActionMap( new PluginActionMap( this, contentProvider ) );
-		treeComponent.setInput( pomModel.getBuild() );
+		treeComponent.setInput( pomModel );
 		treeComponent.expandAll();
 		
 		toolkit.paintBordersFor( parent );
@@ -170,95 +166,70 @@ public class MavenPomBuildPluginFormPage extends FormPage
             objectActionMap = new HashMap<String, List<ITreeObjectAction>>();
             
             List<ITreeObjectAction> pluginsActionMap = new ArrayList<ITreeObjectAction>();
-            pluginsActionMap.add( new AddEditPluginAction( listener , Mode.ADD ) );
-            pluginsActionMap.add( new DeleteAllItemsAction( listener , "Delete all plugins" , "plugins" ) );
+            pluginsActionMap.add( new AddEditPluginAction( listener , Mode.ADD, domain ) );
+            pluginsActionMap.add( new DeleteAllItemsAction( listener , "Delete all plugins" , "plugins", domain ) );
             
             objectActionMap.put( "Plugins", pluginsActionMap );
             
             List<ITreeObjectAction> dependenciesActionMap = new ArrayList<ITreeObjectAction>();
-            dependenciesActionMap.add( new AddEditDependencyAction( listener , Mode.ADD  ) );
-            dependenciesActionMap.add( new DeleteAllItemsAction( listener , "Delete all dependencies" , "dependencies" ) );
+            dependenciesActionMap.add( new AddEditDependencyAction( listener , Mode.ADD, domain  ) );
+            dependenciesActionMap.add( new DeleteAllItemsAction( listener , "Delete all dependencies" , "dependencies", domain ) );
             
             objectActionMap.put( "Dependencies", dependenciesActionMap );
             
             List<ITreeObjectAction> executionsActionMap = new ArrayList<ITreeObjectAction>();
-            executionsActionMap.add( new AddEditExecutionAction( listener, Mode.ADD ) );
-            executionsActionMap.add( new DeleteAllItemsAction( listener , "Delete all executions" , "executions" ) );
+            executionsActionMap.add( new AddEditExecutionAction( listener, Mode.ADD, domain ) );
+            executionsActionMap.add( new DeleteAllItemsAction( listener , "Delete all executions" , "executions", domain ) );
             
             objectActionMap.put( "Executions", executionsActionMap );
             
             List<ITreeObjectAction> exclusionsActionMap = new ArrayList<ITreeObjectAction>();
-            exclusionsActionMap.add( new AddEditDependencyExclusionAction( listener, Mode.ADD )  );
-            exclusionsActionMap.add( new DeleteAllItemsAction( listener , "Delete all exclusions" , "exclusions" ) );
+            exclusionsActionMap.add( new AddEditDependencyExclusionAction( listener, Mode.ADD, domain )  );
+            exclusionsActionMap.add( new DeleteAllItemsAction( listener , "Delete all exclusions" , "exclusions", domain ) );
             
             objectActionMap.put( "Exclusions", exclusionsActionMap );
             
             List<ITreeObjectAction> goalsActionMap = new ArrayList<ITreeObjectAction>();
-            goalsActionMap.add( new AddEditGoalAction( listener , Mode.ADD , null ) );
-            goalsActionMap.add( new DeleteAllItemsAction( listener , "Delete all goals" , "goals" ) );
+            goalsActionMap.add( new AddEditGoalAction( listener , Mode.ADD , null, domain ) );
+            goalsActionMap.add( new DeleteAllItemsAction( listener , "Delete all goals" , "goals", domain ) );
                                
             objectActionMap.put( "Goals", goalsActionMap );
             
             List<ITreeObjectAction> pluginActionMap = new ArrayList<ITreeObjectAction>();
-            pluginActionMap.add( new AddEditPluginAction( listener , Mode.EDIT ) );
-            pluginActionMap.add( new AddEditExecutionAction( listener, Mode.ADD ) );
-            pluginActionMap.add( new AddEditDependencyAction( listener , Mode.ADD ) );
-            pluginActionMap.add( new AddEditConfigurationAction( listener , Mode.ADD ) );
-            pluginActionMap.add( new AddEditConfigurationItemListAction( listener , Mode.ADD ) );
-            pluginActionMap.add( new DeleteItemAction( listener , "Delete this plugin", "plugin", contentProvider ) );
+            pluginActionMap.add( new AddEditPluginAction( listener , Mode.EDIT, domain ) );
+            pluginActionMap.add( new AddEditExecutionAction( listener, Mode.ADD, domain ) );
+            pluginActionMap.add( new AddEditDependencyAction( listener , Mode.ADD, domain ) );
+            pluginActionMap.add( new DeleteItemAction( listener , "Delete this plugin", "plugin", contentProvider, domain ) );
             
             objectActionMap.put( "Plugin", pluginActionMap );
             
             List<ITreeObjectAction> dependencyActionMap = new ArrayList<ITreeObjectAction>();
-            dependencyActionMap.add( new AddEditDependencyAction( listener , Mode.EDIT  ) );
-            dependencyActionMap.add( new AddEditDependencyExclusionAction( listener, Mode.ADD ) );
-            dependencyActionMap.add( new DeleteItemAction( listener , "Delete this dependency", "dependency", contentProvider ) );
+            dependencyActionMap.add( new AddEditDependencyAction( listener , Mode.EDIT, domain  ) );
+            dependencyActionMap.add( new AddEditDependencyExclusionAction( listener, Mode.ADD, domain ) );
+            dependencyActionMap.add( new DeleteItemAction( listener , "Delete this dependency", "dependency", contentProvider, domain ) );
             
             objectActionMap.put( "Dependency" , dependencyActionMap );
             
             List<ITreeObjectAction> pluginExecutionActionMap = new ArrayList<ITreeObjectAction>();            
-            pluginExecutionActionMap.add( new AddEditExecutionAction( listener, Mode.EDIT ) );
-            pluginExecutionActionMap.add( new DeleteItemAction( listener , "Delete this execution", "execution", contentProvider ) );
-            pluginExecutionActionMap.add( new AddEditGoalAction( listener , Mode.ADD , null ) );
-            pluginExecutionActionMap.add( new AddEditConfigurationAction( listener , Mode.ADD ) );
-            pluginExecutionActionMap.add( new AddEditConfigurationItemListAction( listener , Mode.ADD ) );
+            pluginExecutionActionMap.add( new AddEditExecutionAction( listener, Mode.EDIT, domain ) );
+            pluginExecutionActionMap.add( new DeleteItemAction( listener , "Delete this execution", "execution", contentProvider, domain ) );
+            pluginExecutionActionMap.add( new AddEditGoalAction( listener , Mode.ADD , null, domain ) );
             
             objectActionMap.put( "PluginExecution" , pluginExecutionActionMap );
             
             List<ITreeObjectAction> exclusionActionMap = new ArrayList<ITreeObjectAction>();
-            exclusionActionMap.add( new AddEditDependencyExclusionAction( listener, Mode.EDIT ) );
-            exclusionActionMap.add( new DeleteItemAction( listener , "Delete this exclusion", "exclusion", contentProvider ) );
+            exclusionActionMap.add( new AddEditDependencyExclusionAction( listener, Mode.EDIT, domain ) );
+            exclusionActionMap.add( new DeleteItemAction( listener , "Delete this exclusion", "exclusion", contentProvider, domain ) );
             
             objectActionMap.put( "Exclusion", exclusionActionMap );
             
-            List<ITreeObjectAction> configActionMap = new ArrayList<ITreeObjectAction>();
-            configActionMap.add( new AddEditConfigurationAction( listener , Mode.EDIT ) );
-            configActionMap.add( new DeleteItemAction( listener , "Delete this configuration", "configuration", contentProvider ) );
-            
-            objectActionMap.put( "Xpp3Dom", configActionMap );
-            
-            List<ITreeObjectAction> configListActionMap = new ArrayList<ITreeObjectAction>();
-            configListActionMap.add( new AddEditConfigurationItemListAction( listener , Mode.EDIT ) );
-            configListActionMap.add( new DeleteItemAction( listener , "Delete this configuration", "configuration", contentProvider ) );
-            configListActionMap.add( new AddEditConfigurationAction( listener , Mode.ADD ) );
-            configListActionMap.add( new AddEditConfigurationItemListAction( listener , Mode.ADD ) );
-            
-            objectActionMap.put( "Xpp3DomList", configListActionMap );
-            
-            List<ITreeObjectAction> configObjectActionMap = new ArrayList<ITreeObjectAction>();
-            configObjectActionMap.add( new DeleteItemAction( listener , "Delete this configuration", "configuration", contentProvider ) );
-            configObjectActionMap.add( new AddEditConfigurationAction( listener , Mode.ADD ) );
-            configObjectActionMap.add( new AddEditConfigurationItemListAction( listener , Mode.ADD ) );
-            
-            objectActionMap.put( "Configuration", configObjectActionMap );
-            
             List<ITreeObjectAction> goalActionMap = new ArrayList<ITreeObjectAction>();
-            goalActionMap.add( new AddEditGoalAction( listener , Mode.EDIT , contentProvider ) );
+            goalActionMap.add( new AddEditGoalAction( listener , Mode.EDIT , contentProvider, domain ) );
             
             objectActionMap.put( "Goal", goalActionMap );
             
             List<ITreeObjectAction> defaultActionMap = new ArrayList<ITreeObjectAction>();
-            defaultActionMap.add( new AddEditPluginAction( listener , pomModel.getBuild().getPlugins() ) );
+            //defaultActionMap.add( new AddEditPluginAction( listener , pomModel.getBuild().getPlugins() ) );
             
             objectActionMap.put( "default", defaultActionMap );
         }
@@ -297,6 +268,10 @@ public class MavenPomBuildPluginFormPage extends FormPage
                     }
                 }
             }
+            else if ( element instanceof TreeRoot )
+            {                
+                return objectActionMap.get( "Plugins" );                
+            }
             else if ( element instanceof Plugin )
             {                
                 return objectActionMap.get( "Plugin" );                
@@ -313,26 +288,6 @@ public class MavenPomBuildPluginFormPage extends FormPage
             {
                 return objectActionMap.get( "Exclusion" );                
             }
-            else if ( element instanceof Xpp3Dom )
-            {
-                Xpp3Dom dom = ( Xpp3Dom ) element;
-                
-                if( dom.getValue() == null )
-                {
-                    if( dom.getName().equalsIgnoreCase( "configuration" ) )
-                    {
-                        return objectActionMap.get( "Configuration" );
-                    }
-                    else
-                    {
-                        return objectActionMap.get( "Xpp3DomList" );
-                    }
-                }
-                else
-                {
-                    return objectActionMap.get( "Xpp3Dom" );
-                }
-            }
             else if( element instanceof String )
             {
                 return objectActionMap.get( "Goal" );
@@ -344,32 +299,14 @@ public class MavenPomBuildPluginFormPage extends FormPage
     
     public void afterAction()
     {
-        contentProvider.setBuild( pomModel.getBuild() );
-        pluginManagementContentProvider.setPluginManagement( pomModel.getBuild().getPluginManagement() );
+//        contentProvider.setBuild( pomModel.getBuild() );
+//        pluginManagementContentProvider.setPluginManagement( pomModel.getBuild().getPluginManagement() );
         treeComponent.refresh();
         pluginManagementTreeComponent.refresh();
         pageModified();   
     }
     
-    private void checkIfPluginManagementNull()
-    {
-        if ( pomModel.getBuild().getPluginManagement() == null )
-        {
-            PluginManagement pluginManagement = new PluginManagement();
-            pomModel.getBuild().setPluginManagement( pluginManagement );
-        }
-        
-    }
-
-    private void checkIfBuildNull()
-    {
-        if ( pomModel.getBuild() == null )
-        {
-            Build build = new Build();
-            pomModel.setBuild( build );
-        }
-        
-    }
+ 
 
     @Override
     public boolean isDirty()

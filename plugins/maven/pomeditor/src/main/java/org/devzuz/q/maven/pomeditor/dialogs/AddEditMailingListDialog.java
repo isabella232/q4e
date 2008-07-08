@@ -109,7 +109,7 @@ public class AddEditMailingListDialog
             setSubscribe( mailingList.getSubscribe() );
             setUnsubscribe( mailingList.getUnsubscribe() );
             setPost( mailingList.getPost() );
-            setOtherArchives( mailingList.getOtherArchives().getOtherArchive() );
+            setOtherArchives( mailingList.getOtherArchives() );
         }
         else
         {

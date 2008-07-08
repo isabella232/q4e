@@ -293,7 +293,7 @@ public class MavenPomFormEditor extends FormEditor
 
                 buildPluginFormPage =
                     new MavenPomBuildPluginFormPage( this, BUILD_PLUGINS_FORM_PAGE, "Build Plugin/Plugin Management",
-                                                     this.pomModel );
+                                                     this.emfModel, editingDomain );
                 addPage( buildPluginFormPage );
 
                 ciManagementMailingListsPage =

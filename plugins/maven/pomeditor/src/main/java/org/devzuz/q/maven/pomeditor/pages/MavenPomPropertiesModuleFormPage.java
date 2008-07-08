@@ -14,6 +14,8 @@ import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
 import org.devzuz.q.maven.pomeditor.components.PropertiesTableComponent;
 import org.devzuz.q.maven.pomeditor.components.SimpleTableComponent;
 import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.emf.databinding.edit.EMFEditObservables;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
@@ -109,7 +111,8 @@ public class MavenPomPropertiesModuleFormPage extends FormPage
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
         
         propertiesTableComponent = new PropertiesTableComponent( container, SWT.None );
-        propertiesTableComponent.bind( pomModel, new EStructuralFeature[] { PomPackage.Literals.MODEL__PROPERTIES, PomPackage.Literals.PROPERTIES__PROPERTIES }, domain );
+        IObservableList ol = EMFEditObservables.observeList( domain, pomModel, PomPackage.Literals.MODEL__PROPERTIES );
+        propertiesTableComponent.bind( ol );
         
         propertiesTableComponent.addComponentModifyListener( new ComponentListener() );
         
