@@ -12,6 +12,7 @@ import org.devzuz.q.maven.pomeditor.components.ITreeObjectAction;
 import org.devzuz.q.maven.pomeditor.components.ObjectTreeComponent;
 import org.devzuz.q.maven.pomeditor.model.ConfigurationTreeContentProvider;
 import org.devzuz.q.maven.pomeditor.model.ConfigurationTreeLabelProvider;
+import org.devzuz.q.maven.pomeditor.model.DomContainer;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditConfigurationAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.AddEditConfigurationItemListAction;
 import org.devzuz.q.maven.pomeditor.pages.internal.DeleteItemAction;
@@ -32,7 +33,7 @@ public class ConfigurationDialog
 {
     private ObjectTreeComponent treeComponent;
     
-    private Xpp3Dom dom;
+    private DomContainer domContainer;
 
     private ConfigurationTreeContentProvider contentProvider;
     
@@ -58,11 +59,11 @@ public class ConfigurationDialog
         container.setLayout( new FillLayout() );
         
         treeComponent = new ObjectTreeComponent( container, SWT.None );
-        contentProvider = new ConfigurationTreeContentProvider( this.dom );
+        contentProvider = new ConfigurationTreeContentProvider( domContainer );
         treeComponent.setContentProvider( contentProvider );
         treeComponent.setLabelProvider( new ConfigurationTreeLabelProvider() );
         treeComponent.setObjectActionMap( new ConfigurationActionMap( this, contentProvider ) );
-        treeComponent.setInput( this.dom );
+        treeComponent.setInput( domContainer );
         treeComponent.expandAll();
         
         return container;
@@ -73,12 +74,12 @@ public class ConfigurationDialog
         if ( dom != null )
         {
             System.out.println(dom.getName());
-            this.dom = dom;
+            domContainer = new DomContainer( dom );
         }
         else
         {
             System.out.println("dom null");
-            this.dom = new Xpp3Dom("configuration");
+            domContainer = new DomContainer( new Xpp3Dom("configuration") );
         }
         
         return open();
@@ -157,8 +158,8 @@ public class ConfigurationDialog
 
     public void afterAction()
     {
-        // TODO Auto-generated method stub
-        
+        contentProvider.setDomContainer( domContainer );
+        treeComponent.refresh();
     }
 
 }

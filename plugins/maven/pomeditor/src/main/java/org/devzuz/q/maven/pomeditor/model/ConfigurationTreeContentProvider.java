@@ -14,24 +14,22 @@ public class ConfigurationTreeContentProvider
 {    
     private Map<Object, Object> childParentMap;
     
-    private Xpp3Dom dom;
+    private DomContainer domContainer;
     
-    public ConfigurationTreeContentProvider( Xpp3Dom dom )
+    public ConfigurationTreeContentProvider( DomContainer dom )
     {
-        setDom( dom );
+        setDomContainer( dom );
     }
     
-    public Xpp3Dom getDom()
+    public DomContainer getDomContainer()
     {
-        return dom;
+        return domContainer;
     }
 
     @SuppressWarnings("unchecked")
-    public void setDom( Xpp3Dom dom )
+    public void setDomContainer( DomContainer container )
     {
-        this.dom = dom;
-        
-        System.out.println("setDom name = " + dom.getName() );
+        this.domContainer = container;
         
         if( childParentMap == null )
         {
@@ -42,13 +40,15 @@ public class ConfigurationTreeContentProvider
             childParentMap.clear();
         }
         
-        setDomObjects( dom );
+        setDomObjects( domContainer );
     }
     
-    private void setDomObjects( Xpp3Dom dom )
-    {        
+    private void setDomObjects( DomContainer domContainer )
+    {       
+        Xpp3Dom dom = domContainer.getDom();
         if( dom != null )
         {
+            childParentMap.put( dom, domContainer );
             addChildrenToMap( childParentMap , dom );
         }
     }
@@ -72,19 +72,6 @@ public class ConfigurationTreeContentProvider
     public Object[] getChildren( Object parentElement )
     {
         List< Object > children = new ArrayList< Object >();
-        
-        // This is a hack for the "Configuration" string to appear
-        // in the tree 
-        // -start-
-        if( parentElement == this.dom )
-        {
-            return new String[] { "Configuration" };
-        }
-        else if( parentElement instanceof String )
-        {
-            parentElement = this.dom;
-        }
-        // -end-
         
         if( childParentMap.containsValue( parentElement ) )
         {

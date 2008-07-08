@@ -19,11 +19,9 @@ public class ConfigurationTreeLabelProvider
     {
         if ( element instanceof Xpp3Dom )
         {
-            System.out.println("getText element is Xpp3Dom");
             Xpp3Dom dom = ( Xpp3Dom ) element;
             if( dom.getName().equalsIgnoreCase( "configuration" ) && dom.getParent() == null )
             {
-                System.out.println("Parent");
                 return "Configuration";
             }
             else
@@ -47,10 +45,6 @@ public class ConfigurationTreeLabelProvider
                     return dom.getName();
                 }
             }
-        }
-        else if ( element instanceof String )
-        {
-            return "Configuration";
         }
         
         return "null - i'm a bug!";

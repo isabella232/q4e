@@ -31,6 +31,7 @@ public class ConfigurationTreeContentProviderTest
         super( name );
     }
 
+    @SuppressWarnings ("unchecked")
     protected void setUp()
         throws Exception
     {
@@ -46,7 +47,7 @@ public class ConfigurationTreeContentProviderTest
             
             assertTrue( dom != null );
             
-            provider = new ConfigurationTreeContentProvider( dom );
+            provider = new ConfigurationTreeContentProvider( new DomContainer( dom ) );
         }
         catch ( FileNotFoundException e )
         {
