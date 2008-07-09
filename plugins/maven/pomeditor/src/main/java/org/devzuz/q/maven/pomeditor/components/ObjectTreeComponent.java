@@ -2,7 +2,6 @@ package org.devzuz.q.maven.pomeditor.components;
 
 import java.util.List;
 
-import org.devzuz.q.maven.pomeditor.model.TreeRoot;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -18,13 +17,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 
-public class PluginTreeComponent extends Composite 
+public class ObjectTreeComponent extends Composite 
 {
 	private TreeViewer treeViewer;
 	
 	private IObjectActionMap objectActionMap;
 	
-	public PluginTreeComponent( Composite parent, int style )
+	public ObjectTreeComponent( Composite parent, int style )
 	{
 		super( parent, style );
 
@@ -113,7 +112,7 @@ public class PluginTreeComponent extends Composite
             List< ITreeObjectAction > actions = objectActionMap.getObjectActions( firstElement );            
             if ( actions != null )
             {
-                Menu rootMenu = new Menu( PluginTreeComponent.this.getParent() );
+                Menu rootMenu = new Menu( ObjectTreeComponent.this.getParent() );
                 for ( final ITreeObjectAction action : actions )
                 {
                     MenuItem item = new MenuItem( rootMenu, SWT.PUSH );
@@ -122,12 +121,7 @@ public class PluginTreeComponent extends Composite
                     {
                         public void widgetSelected( SelectionEvent e )
                         {
-                        	Object target = firstElement;
-                        	if( target instanceof TreeRoot )
-                        	{
-                        		target = ( (TreeRoot) target ).createOrGetModelRoot();
-                        	}
-                            action.doAction( target );
+                            action.doAction( firstElement );
                         }
                     } );
                 }

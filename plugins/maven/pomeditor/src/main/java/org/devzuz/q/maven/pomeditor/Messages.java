@@ -223,6 +223,17 @@ public class Messages
     public static String MavenPomEditor_MavenPomEditor_SnapshotRepository;
     
     public static String MavenPomEditor_MavenPomEditor_MavenVersion;
+    
+    public static String MavenPomEditor_MavenPomEditor_Profiles;
+    
+    public static String MavenPomEditor_MavenPomEditor_ExcludeDefaults;
+    
+    public static String MavenPomEditor_MavenPomEditor_Configuration;
+    
+    public static String MavenPomEditor_MavenPomEditor_ReportSet;
+    
+    public static String MavenPomEditor_MavenPomEditor_Report;
+    
     static
     {
         // initialize resource bundle
