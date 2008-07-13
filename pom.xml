@@ -210,17 +210,17 @@
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>cli</artifactId>
-        <version>1.0.0.v200709131616</version>
+        <version>1.0.0.v20080604-1500</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>lang</artifactId>
-        <version>2.1.0.v200709131643</version>
+        <version>2.1.0.v200803061811</version>
       </dependency>
       <dependency>
         <groupId>org.apache.commons</groupId>
         <artifactId>collections</artifactId>
-        <version>3.2.0</version>
+        <version>3.2.0.v200803061811</version>
       </dependency>
       <dependency>
         <groupId>org.aspectj</groupId>
