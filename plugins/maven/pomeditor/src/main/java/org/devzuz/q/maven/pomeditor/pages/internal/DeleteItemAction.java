@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginExecution;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.devzuz.q.maven.pomeditor.model.DomContainer;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -65,6 +66,11 @@ public class DeleteItemAction extends AbstractTreeObjectAction
                     {
                         ((PluginExecution) obj).setConfiguration( null );
                     }
+                    else if ( obj instanceof DomContainer )
+                    {
+                    	( ( DomContainer ) obj ).setDom( new Xpp3Dom("configuration") );
+                    }
+                    
                     object = null;
                 }
                 else
