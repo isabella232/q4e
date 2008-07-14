@@ -1,103 +1,103 @@
 <toc label="Q for Eclipse">
 	<topic label="Getting Started Guide"
-		href="html_files/gettingStarted.html">
+		href="html/gettingStarted.html">
 		<topic label="Installing Q for Eclipse"
-			href="html_files/gettingStarted.html#installation" />
+			href="html/gettingStarted.html#installation" />
 		<topic label="Verifying Installation"
-			href="html_files/gettingStarted.html#verification" />
+			href="html/gettingStarted.html#verification" />
 		<topic label="Uninstalling the Eclipse Integration Plugin"
-			href="html_files/gettingStarted.html#uninstallation" />
+			href="html/gettingStarted.html#uninstallation" />
 	</topic>
 	<topic label="XML Automatic Complete Suggestion"
-		href="html_files/xmlAutoComplete.html" />
+		href="html/xmlAutoComplete.html" />
 	<topic label="Importing Maven 2 Projects"
-		href="html_files/importProject.html" />
+		href="html/importProject.html" />
 	<topic label="Importing Artifacts into Repository"
-		href="html_files/importArtifact.html" />
+		href="html/importArtifact.html" />
 	<topic label="Setting Preferences and Properties"
-		href="html_files/settingPrefProp.html">
+		href="html/settingPrefProp.html">
 		<topic label="Setting Global Preferences"
-			href="html_files/globalPreferences.html" />
+			href="html/globalPreferences.html" />
 		<topic label="Managing Archetype List URL Preferences"
-			href="html_files/archetypeList.html" />
+			href="html/archetypeList.html" />
 		<topic label="Searching Artifacts"
-			href="html_files/searchArtifacts.html" />
+			href="html/searchArtifacts.html" />
 	</topic>
-	<topic label="Dependencies" href="html_files/dependencies.html">
+	<topic label="Dependencies" href="html/dependencies.html">
 		<topic label="Use Maven Dependency Management"
-			href="html_files/useDepManagement.html" />
+			href="html/useDepManagement.html" />
 		<topic label="Managing Dependencies"
-			href="html_files/manageDependencies.html" />
+			href="html/manageDependencies.html" />
 		<topic label="Viewing Dependency Graph"
-			href="html_files/viewGraph.html" />
+			href="html/viewGraph.html" />
 		<topic label="Analyse Dependencies"
-			href="html_files/analyseDependencies.html">
+			href="html/analyseDependencies.html">
 			<topic label="Analyse Dependencies View"
-				href="html_files/viewDependencies.html" />
+				href="html/viewDependencies.html" />
 			<topic label="Exclude All"
-				href="html_files/excludeAll.html" />
+				href="html/excludeAll.html" />
 			<topic label="Force Version"
-				href="html_files/forceVersion.html" />
+				href="html/forceVersion.html" />
 		</topic>
 	</topic>
 	<topic label="Using Custom Goals"
-		href="html_files/customGoals.html" />
-	<topic label="Executing Goals" href="html_files/executeGoals.html" />
-	<topic label="Generating Reports" href="html_files/reports.html" />
+		href="html/customGoals.html" />
+	<topic label="Executing Goals" href="html/executeGoals.html" />
+	<topic label="Generating Reports" href="html/reports.html" />
 	<topic label="Artifacts">
 		<topic label="Deploying Artifacts"
-			href="html_files/deployArtifacts.html" />
+			href="html/deployArtifacts.html" />
 		<topic label="Locally Installing Artifacts"
-			href="html_files/installArtifacts.html" />
+			href="html/installArtifacts.html" />
 		<topic label="Packaging an Artifact"
-			href="html_files/packageArtifact.html" />
+			href="html/packageArtifact.html" />
 	</topic>
-	<topic label="Reloading Maven" href="html_files/reloadMaven.html" />
+	<topic label="Reloading Maven" href="html/reloadMaven.html" />
 	<topic label="Update Snapshot JARs"
-		href="html_files/updateJars.html" />
+		href="html/updateJars.html" />
 	<topic label="Fetching Source JARs"
-		href="html_files/fetchSourceJars.html" />
+		href="html/fetchSourceJars.html" />
 	<topic label="Processing Modules Recursively"
-		href="html_files/modules.html" />
+		href="html/modules.html" />
 	<topic label="Activating and Deactivating Profiles"
-		href="html_files/profiles.html" />
+		href="html/profiles.html" />
 	<topic label="Adding Remote and Local Repositories"
-		href="html_files/repositories.html" />
-	<topic label="POM Editor" href="html_files/pom.html">
+		href="html/repositories.html" />
+	<topic label="POM Editor" href="html/pom.html">
 		<topic label="Modifying Project Information"
-			href="html_files/projectInfo.html" />
+			href="html/projectInfo.html" />
 		<topic label="Dependency Management"
-			href="html_files/dependencyManagement.html" />
+			href="html/dependencyManagement.html" />
 		<topic label="Licenses/SCM/Organization/Issue Management"
-			href="html_files/licensesScmOrganization.html">
+			href="html/licensesScmOrganization.html">
 			<topic label="Modifying Licenses"
-				href="html_files/licensesScmOrganization.html#licenses" />
+				href="html/licensesScmOrganization.html#licenses" />
 			<topic label="Source Code Management"
-				href="html_files/licensesScmOrganization.html#scm" />
+				href="html/licensesScmOrganization.html#scm" />
 			<topic label="Organization Information"
-				href="html_files/licensesScmOrganization.html#organization" />
+				href="html/licensesScmOrganization.html#organization" />
 			<topic label="Issue Management"
-				href="html_files/licensesScmOrganization.html#issue" />
+				href="html/licensesScmOrganization.html#issue" />
 		</topic>
 		<topic label="Developers and Contributors"
-			href="html_files/developersContributors.html" />
+			href="html/developersContributors.html" />
 		<topic label="Properties and Modules Management"
-			href="html_files/propertiesModules.html" />
+			href="html/propertiesModules.html" />
 		<topic label="Build Management"
-			href="html_files/buildManagement.html" />
+			href="html/buildManagement.html" />
 		<topic label="Build Resources"
-			href="html_files/buildResources.html" />
+			href="html/buildResources.html" />
 		<topic label="Build Test Resources"
-			href="html_files/buildTest.html" />
+			href="html/buildTest.html" />
 		<topic label="Build Plugin and Plugin Management"
-			href="html_files/buildPlugin.html" />
+			href="html/buildPlugin.html" />
 		<topic label="CI Managment and Mailing Lists"
-			href="html_files/ciMailingList.html" />
+			href="html/ciMailingList.html" />
 		<topic label="Repositories"
-			href="html_files/pluginRemoteRepositories.html" />
+			href="html/pluginRemoteRepositories.html" />
 		<topic label="Distribution Management"
-			href="html_files/distributionManagement.html" />
+			href="html/distributionManagement.html" />
 	</topic>
 	<topic label="Additional Resources"
-		href="html_files/additionalResources.html" />
+		href="html/additionalResources.html" />
 </toc>
