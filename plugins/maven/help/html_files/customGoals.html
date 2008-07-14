@@ -1,0 +1,49 @@
+<html>
+<head>
+<link rel="stylesheet" href="stylesheet.css" />
+<h3>Using Custom Goals</h3>
+</head>
+
+<body>
+<h4>Creating a Custom Goal</h4>
+<ol>
+	<li>Right-click on the name of your project, then select <b>Run
+	As > Run Configurations...</b>. The <b>Create, manage, and run
+	configurations</b> window appears.</li>
+	<li>Right-click on <b>Maven 2</b> on the left side of the screen,
+	then select <b>New</b> to display a new input page on the right side of
+	the screen</li>
+	<li>Type a name for the new custom goal/configuration into the <b>Name</b>
+	field at the top of the input screen.</li>
+	<li>Either type the name of your project into the <b>Project</b>
+	field, or click on the <b>Browse</b> button to locate and select your
+	project.</li>
+	<li>Type the type of Maven goal into the <b>Goal</b> field (for
+	example, <code>install</code>, <code>test</code>, or <code>package</code>).</li>
+	<li>Click on the <b>New</b> button to enter a property for the new
+	custom goal. A new dialog opens with fields for the key and the value</li>
+	<li>Type the <b>Key</b> and <b>Value</b> for the property, then
+	click on <b>OK</b> to add them to the list for the new goal.<br />
+	<i>While you are adding properties, you can use the <b>Edit</b>
+	button on the right of the screen to make changes to a property you
+	added, or use the <b>Remove</b> button to delete a property from the
+	list. To remove all of the goals you added, click on the <b>Revert</b>
+	button.</i></li>
+	<li>Click on <b>Run</b> to run the new goal you created, then <b>Close</b>
+	to exit.<br />
+	<i>To run the goal later, right-click on the project file in the <b>Package
+	Explorer</b> window, then select <b>Run As > Maven 2</b>. From the dialog
+	box, select your custom goal and click <b>OK</b>.</i></li>
+</ol>
+
+<h4>Executing Custom Goal</h4>
+<p>To run a custom goal:</p>
+<ol>
+	<li>In the <b>Package Explorer</b> window, right-click on the
+	project file for which you created the custom goal.</li>
+	<li>Select <b>Run As > Maven 2</b>.</li>
+	<li>In the dialog box, select the custom goal you want to run and
+	click <b>OK</b>.</li>
+</ol>
+</body>
+</html>

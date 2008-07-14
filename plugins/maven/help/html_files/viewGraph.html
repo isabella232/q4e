@@ -1,0 +1,50 @@
+<html>
+<head>
+<link rel="stylesheet" href="stylesheet.css" />
+<h3>Viewing a Dependency Graph</h3>
+</head>
+
+<body>
+<p>The <b>View Dependencies Graph</b> option from the Maestro
+Eclipse Integration (Maven 2) menu displays a detailed, graphical
+representation of project dependencies. The graph includes several
+options that allows you to adjust how the graph appears, as explained
+below.</p>
+<p>To display the dependencies graph:</p>
+<ol>
+	<li>In the <b>Package Explorer</b> window, right-click on the
+	folder that contains your project, then select <b>Maven 2</b> to
+	display the Maven 2 Menu options.</li>
+	<li>Click the <b>View Dependencies</b> option. After a few
+	seconds, a window appears, showing the dependencies graph.</li>
+</ol>
+<h4>Dependency Graph Representation</h4>
+<table>
+	<tr>
+		<td width="200"><b>Box Color</b></td>
+		<td width="400"><b>Representation</b></td>
+	</tr>
+	<tr>
+		<td>Green</td>
+		<td>Represents the project. It is displayed in the center.</td>
+	</tr>
+	<tr>
+		<td>Blue</td>
+		<td>Runtime dependencies.</td>
+	</tr>
+	<tr>
+		<td>Dark Yellow</td>
+		<td>Test-scope dependencies.</td>
+	</tr>
+	<tr>
+		<td>Yellow</td>
+		<td>Selected dependency.</td>
+	</tr>
+</table>
+<p>The arrows between boxes show the dependencies including the
+version. Thicker lines represent direct dependencies, while the thinner
+ones represent transitive dependencies (dependencies of dependencies)
+for the project.</p>
+<p>It is possible to reorder the boxes by using drag and drop.</p>
+</body>
+</html>
