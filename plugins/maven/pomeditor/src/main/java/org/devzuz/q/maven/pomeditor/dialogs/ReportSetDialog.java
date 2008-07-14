@@ -247,12 +247,21 @@ public class ReportSetDialog
                     reportSet.setReports( null );
                 }
                 
-                reportSetList.add( reportSet );
+                if ( reportSetAlreadyExist( reportSet.getId() ) )
+                {
+                    MessageBox mesgBox = new MessageBox( getShell(), SWT.ICON_ERROR | SWT.OK  );
+                    mesgBox.setMessage( "Report Set already exists." );
+                    mesgBox.setText( "Saving Report Set Error" );
+                    mesgBox.open( );
+                }
+                else
+                {
+                    reportSetList.add( reportSet );
                 
-                setPageModified( true );
+                    setPageModified( true );
                 
-                populateReportSetTable();
-                
+                    populateReportSetTable();
+                }                
             }
         }
     }
@@ -301,7 +310,9 @@ public class ReportSetDialog
                 
                 if ( reportSetAlreadyExist( newReportSet.getId() ) )
                 {
-                    if ( selectedReportSet.getId().equalsIgnoreCase( newReportSet.getId() ) )
+                    // check other fields
+                    if ( ( !( newReportSet.getInherited().equalsIgnoreCase( selectedReportSet.getInherited() ) ) ) || 
+                    	 ( !( newReportSet.getReports().equals( selectedReportSet.getReports() ) ) ) )                    
                     {
                         reportSetList.remove( selectedReportSet );
                         
@@ -373,6 +384,12 @@ public class ReportSetDialog
             if ( configDialog.openWithConfiguration( dom ) == Window.OK )
             {
                 System.out.println("moogle testing #4 kupo");
+                
+                Xpp3Dom newDom = configDialog.getDomContainer().getDom();
+                
+                selectedReportSet.setConfiguration( newDom );
+                
+                setPageModified( true );
             }
         }
     }

@@ -94,9 +94,10 @@ public class AddEditReportSetDialog
     @SuppressWarnings("unchecked")
     public int openWithReportSet( ReportSet reportSet )
     {
-        setId( blankIfNull( reportSet.getId() ) );
+        setId( blankIfNull( reportSet.getId() ) );        
         
-        if ( reportSet.getInherited().equalsIgnoreCase( "true" ) )
+        if ( ( reportSet.getInherited() != null ) &&
+        	( reportSet.getInherited().equalsIgnoreCase( "true" ) ) )
         {
             setInherited( true );
         }

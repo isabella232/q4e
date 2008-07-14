@@ -291,11 +291,21 @@ public class MavenPomReportingFormPage
                     reportPlugin.setInherited( "false" );
                 }
                 
-                pomModel.getReporting().addPlugin( reportPlugin );
+                if ( reportPluginAlreadyExist( reportPlugin.getGroupId(), reportPlugin.getArtifactId() ) )
+                {
+                    MessageBox mesgBox = new MessageBox( form.getShell(), SWT.ICON_ERROR | SWT.OK  );
+                    mesgBox.setMessage( "Report Plugin already exists." );
+                    mesgBox.setText( "Saving Report Plugin Error" );
+                    mesgBox.open( );
+                }
+                else
+                {
+                    pomModel.getReporting().addPlugin( reportPlugin );
                 
-                populateReportPluginTable();
+                    populateReportPluginTable();
                 
-                pageModified();
+                    pageModified();
+                }
                 
             }
         }
@@ -330,10 +340,39 @@ public class MavenPomReportingFormPage
                 
                 if ( reportPluginAlreadyExist( newReportPlugin.getGroupId(), newReportPlugin.getArtifactId() ) )
                 {
-                    MessageBox mesgBox = new MessageBox( form.getShell(), SWT.ICON_ERROR | SWT.OK  );
-                    mesgBox.setMessage( "Report Plugin already exists." );
-                    mesgBox.setText( "Saving Report Plugin Error" );
-                    mesgBox.open( );
+                    if ( ( newReportPlugin.getGroupId().equals( selectedReportPlugin.getGroupId() ) ) &&
+                         ( newReportPlugin.getGroupId().equals( selectedReportPlugin.getArtifactId() ) ) )
+                    {
+                        // check other fields
+                        if ( ( !( blankIfNull( newReportPlugin.getVersion() )).equalsIgnoreCase( selectedReportPlugin.getVersion()  ) ) || 
+                             ( !( newReportPlugin.getInherited().equalsIgnoreCase( selectedReportPlugin.getInherited() ) ) ) )
+                        {
+                            reportPluginList.remove( selectedReportPlugin );
+                        
+                            reportPluginList.add( newReportPlugin );
+                        
+                            pageModified();
+                        
+                            populateReportPluginTable();
+                        }
+                        else
+                        {
+                            MessageBox mesgBox = new MessageBox( form.getShell(), SWT.ICON_ERROR | SWT.OK  );
+                            mesgBox.setMessage( "Report Plugin already exists." );
+                            mesgBox.setText( "Saving Report Plugin Error" );
+                            mesgBox.open( );
+                        }
+                    }
+                    else
+                    {
+                        reportPluginList.remove( selectedReportPlugin );
+                        
+                        reportPluginList.add( newReportPlugin );
+                    
+                        pageModified();
+                    
+                        populateReportPluginTable();
+                    }
                 }
                 else
                 {
@@ -381,8 +420,6 @@ public class MavenPomReportingFormPage
             
             if ( reportSetDialog.opentWithReportSetList( selectedReportPlugin.getReportSets() ) == Window.OK )
             {
-                System.out.println("moogle testing #1 kupo");
-                
                 if ( reportSetDialog.isPageModified() == true )
                 {
                     pageModified();
@@ -406,7 +443,11 @@ public class MavenPomReportingFormPage
             
             if ( configDialog.openWithConfiguration( dom ) == Window.OK )
             {
-                System.out.println("moogle testing #2 kupo");
+                Xpp3Dom newDom = configDialog.getDomContainer().getDom();
+                
+                selectedReportPlugin.setConfiguration( newDom );
+                
+                pageModified();
             }
             
         }
@@ -421,7 +462,15 @@ public class MavenPomReportingFormPage
     
     public boolean reportPluginAlreadyExist( String groupId, String artifactId )
     {
-        // TODO Auto-generated method stub
+        for ( ReportPlugin reportPlugin : reportPluginList )
+        {
+            if ( ( reportPlugin.getGroupId().equals( groupId ) ) &&
+                 ( reportPlugin.getArtifactId().equals( artifactId ) ) )
+            {
+                return true;
+            }
+        }
+        
         return false;
     }
 

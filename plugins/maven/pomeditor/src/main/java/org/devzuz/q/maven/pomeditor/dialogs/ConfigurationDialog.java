@@ -162,4 +162,14 @@ public class ConfigurationDialog
         treeComponent.refresh();
     }
 
+    public DomContainer getDomContainer()
+    {
+        return domContainer;
+    }
+
+    public void setDomContainer( DomContainer domContainer )
+    {
+        this.domContainer = domContainer;
+    }
+
 }

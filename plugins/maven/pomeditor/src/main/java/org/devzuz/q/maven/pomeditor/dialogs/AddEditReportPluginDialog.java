@@ -99,7 +99,9 @@ public class AddEditReportPluginDialog
         setGroupId( blankIfNull( reportPlugin.getGroupId() ) );
         setArtifactId( blankIfNull( reportPlugin.getArtifactId() ) );
         setVersion( blankIfNull( reportPlugin.getVersion() ) );
-        if ( reportPlugin.getInherited().equalsIgnoreCase( "true" ) )
+        
+        if ( ( reportPlugin.getInherited() != null ) && 
+           ( reportPlugin.getInherited().equalsIgnoreCase( "true" ) ) )
         {
             setInherited( true );
         }
