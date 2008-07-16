@@ -163,7 +163,7 @@ public class MavenProjectManager
      *            The IProject this project represents in the workspace
      * @param resolveTransitively
      *            Should it be retrieved with transitive dependencies resolved?
-     * @return The maven project
+     * @return The maven project, null if the project is in error
      * @throws CoreException
      */
     public IMavenProject getMavenProject( IProject project, boolean resolveTransitively ) throws CoreException

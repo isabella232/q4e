@@ -145,6 +145,11 @@ public class AnalyserGui
             try
             {
                 mavenProject = MavenManager.getMavenProjectManager().getMavenProject( currentProject, false );
+                if ( mavenProject == null )
+                {
+                    /* project in error */
+                    return;
+                }
                 mavenDependencyRoot = DependencyAnalysisUtil.resolveDependencies( mavenProject );
             }
             catch ( CoreException e )
