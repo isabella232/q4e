@@ -8,7 +8,9 @@ package org.devzuz.q.maven.search.ui;
 
 import java.text.Collator;
 
+import org.devzuz.q.maven.commons.ui.MavenProjectSelectionDialog;
 import org.devzuz.q.maven.search.IArtifactInfo;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -28,8 +30,11 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.part.Page;
 
@@ -56,6 +61,7 @@ public class ArtifactSearchResultPage
         
         //TODO:  It would be nice to be able to do things with these search results.
         //(i.e. Add to deps, exclude, etc.)
+        resultsList.setMenu( getMenu( parent ) );
 
         SelectionListener listener = new SelectionAdapter()
         {
@@ -97,6 +103,36 @@ public class ArtifactSearchResultPage
 
         resultsList.setHeaderVisible( true );
 
+    }
+
+    private Menu getMenu( Composite parent )
+    {
+        Menu searchMenu = new Menu( parent );
+        MenuItem item = new MenuItem( searchMenu, SWT.PUSH );
+        item.setText( "Add to Dependencies" );
+        item.addSelectionListener( new SelectionAdapter()
+        {
+            public void widgetSelected( SelectionEvent e )
+            {
+                for( TableItem item : resultsList.getSelection() )
+                {
+                    System.out.println( item.getText( 0 ) + ":" +
+                                        item.getText( 1 ) + ":" +
+                                        item.getText( 2 ) );
+                }
+                
+                MavenProjectSelectionDialog dialog = new MavenProjectSelectionDialog( ArtifactSearchResultPage.this.getSite().getShell() );
+                
+                IProject[] projects = dialog.getSelectedProjects();
+                for( IProject project : projects )
+                {
+                    System.out.println("Project = " + project.getName() );
+                    
+                }
+            }
+        } );
+        
+        return searchMenu;
     }
 
     public String getID()
@@ -256,6 +292,5 @@ public class ArtifactSearchResultPage
         public void removeListener( ILabelProviderListener listener )
         {
         }
-
     }
 }
