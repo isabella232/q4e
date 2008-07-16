@@ -111,4 +111,11 @@
          version="0.8.0.qualifier"
          unpack="false"/>
 
+   <plugin
+         id="org.dom4j"
+         download-size="0"
+         install-size="0"
+         version="1.6.1"
+         unpack="false"/>
+
 </feature>
