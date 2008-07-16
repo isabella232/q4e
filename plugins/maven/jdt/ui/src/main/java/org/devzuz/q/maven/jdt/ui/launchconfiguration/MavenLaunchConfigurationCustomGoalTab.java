@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.devzuz.q.maven.commons.ui.MavenProjectSelectionDialog;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.customcomponents.PropertiesComponent;
 import org.eclipse.core.resources.IProject;
@@ -18,8 +19,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -32,7 +31,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.dialogs.ElementListSelectionDialog;
 
 public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigurationTab
 {
@@ -190,35 +188,8 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
 
     private IProject getSelectedMavenProject()
     {
-        ElementListSelectionDialog dialog = new ElementListSelectionDialog( getShell(), new LabelProvider()
-        {
-            public String getText( Object element )
-            {
-                if ( element instanceof IProject )
-                    return ( (IProject) element ).getName();
-
-                return null;
-            }
-        } );
-
-        dialog.setTitle( Messages.MavenLaunchConfigurationCustomGoalTab_ProjectSelection );
-        dialog.setMessage( Messages.MavenLaunchConfigurationCustomGoalTab_ChooseProject );
-        dialog.setBlockOnOpen( true );
-
-        IProject[] projects = MavenLaunchConfigurationUtils.getMavenProjects();
-        if ( ( projects != null ) && ( projects.length > 0 ) )
-        {
-            dialog.setElements( projects );
-            if ( dialog.open() == Window.OK )
-            {
-                return (IProject) dialog.getFirstResult();
-            }
-        }
-        else
-        {
-            // TODO : Show a dialog that shows no maven project is in the workspace
-        }
-
-        return null;
+        MavenProjectSelectionDialog dialog = new MavenProjectSelectionDialog( getShell() );
+        
+        return dialog.getSelectedProjects()[0];
     }
 }
