@@ -108,6 +108,9 @@
    <feature url="features/org.devzuz.q.feature.pomeditor_0.8.0.200806301838.jar" id="org.devzuz.q.feature.pomeditor" version="0.8.0.200806301838">
       <category name="Optional"/>
    </feature>
+   <feature url="features/org.devzuz.q.feature_0.8.0.200807161433.jar" id="org.devzuz.q.feature" version="0.8.0.200807161433">
+      <category name="Community"/>
+   </feature>
    <category-def name="Community" label="Community"/>
    <category-def name="Enabling Features" label="Enabling Features"/>
    <category-def name="Optional" label="Optional">
