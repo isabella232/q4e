@@ -40,7 +40,6 @@ public class ListAdapter
         this.resource = resc;
     }
 
-    @Override
     public void notifyChanged( INodeNotifier notifier, int eventType, Object changedFeature, Object oldValue,
                                Object newValue, int pos )
     {
@@ -206,7 +205,6 @@ public class ListAdapter
         }
     }
 
-    @Override
     public boolean isAdapterForType( Object type )
     {
         return ListAdapter.class.equals( type );

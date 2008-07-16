@@ -94,13 +94,11 @@ public class PropertiesAdapter
         {
             private Notifier notifier;
 
-            @Override
             public boolean isAdapterForType( Object type )
             {
                 return this.getClass().equals( type );
             }
 
-            @Override
             public void notifyChanged( Notification notification )
             {
                 if ( resource.isProcessEvents() )
@@ -125,13 +123,11 @@ public class PropertiesAdapter
                 }
             }
 
-            @Override
             public Notifier getTarget()
             {
                 return notifier;
             }
 
-            @Override
             public void setTarget( Notifier newTarget )
             {
                 this.notifier = newTarget;
