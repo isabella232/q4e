@@ -10,8 +10,10 @@ package org.devzuz.q.maven.pom.translators;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.wst.common.internal.emf.utilities.ExtendedEcoreUtil;
 import org.eclipse.wst.sse.core.internal.provisional.INodeAdapter;
 import org.eclipse.wst.sse.core.internal.provisional.INodeNotifier;
@@ -86,7 +88,14 @@ class ValueUpdateAdapter
     @Override
     public void load()
     {
-        modelObject.eSet( feature, getElementText( node ) );
+        Object value = getElementText( node );
+        if( feature instanceof EAttribute )
+        {
+            EAttribute ea = (EAttribute) feature;
+            value = EcoreUtil.createFromString( ea.getEAttributeType(), value.toString() );
+        }
+        
+        modelObject.eSet( feature, value );
     }
 
     @Override
