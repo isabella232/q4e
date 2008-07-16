@@ -35,19 +35,6 @@ public class MavenLaunchConfigurationUtils
         }
     }
     
-    public static IProject[] getMavenProjects()
-    {
-        List<IProject> mavenProjects = new ArrayList<IProject>();
-        IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-        for( IProject project : root.getProjects() )
-        {
-            if( project.findMember( IMavenProject.POM_FILENAME ) != null )
-                mavenProjects.add( project );
-        }
-        
-        return mavenProjects.toArray( new IProject[mavenProjects.size()] );
-    }
-    
     public static IProject getProjectWithName( String name )
     {
         if( name.length() > 0 )
