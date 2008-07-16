@@ -113,11 +113,6 @@
       <artifactId>maven-embedder</artifactId>
       <version>2.1-SNAPSHOT</version>
       <exclusions>
-        <!-- for now we wont include webdav until is cleared in the maven mailing list -->
-        <exclusion>
-          <groupId>org.apache.maven.wagon</groupId>
-          <artifactId>wagon-webdav</artifactId>
-        </exclusion>
         <!-- we'll use eclipse bundles for these -->
         <exclusion>
           <groupId>junit</groupId>
@@ -126,10 +121,6 @@
         <exclusion>
           <groupId>xml-apis</groupId>
           <artifactId>xml-apis</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.jcraft</groupId>
-          <artifactId>jsch</artifactId>
         </exclusion>
         <exclusion>
           <groupId>commons-cli</groupId>
@@ -171,10 +162,6 @@
     <dependency>
       <groupId>org.w3c</groupId>
       <artifactId>tidy</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.jcraft</groupId>
-      <artifactId>jsch</artifactId>
     </dependency>
     <!-- this is a wagon-webdav dependency
     <dependency>
