@@ -1,0 +1,46 @@
+<html>
+<head>
+<link rel="stylesheet" href="stylesheet.css" />
+<h3>Analyse Dependencies View</h3>
+</head>
+
+<body>
+<p>The Analyse Dependencies tab is divided into three sections:</p>
+<ul>
+	<li><b>Instances Pane</b> is at the left side section of the tab.
+	This shows the tree of transitive dependencies. Each item in the tree
+	is an instance of a dependency, and a given dependency may appear many
+	times in the same tree. Selecting an item in this pane will highlight
+	the corresponding version and artifact in the other panes.</li>
+	<li><b>Versions Pane</b> is at the top right section of the tab.
+	This shows a sortable list of all dependencies including the version of
+	the artifact. The <b>Instances</b> column shows a count of the number
+	of times that a given dependency appears in the dependency tree.
+	Selecting an item in this pane will highlight the corresponding
+	instances in the Instances Pane and artifact in the Artifacts Pane.</li>
+	<li><b>Artifacts Pane</b> is at the bottom right section of the
+	tab. This shows a sortable list of all dependencies without the version
+	information. The versions column indicates the number of different
+	versions of that artifact in the dependency tree, which is very useful
+	for finding artifacts with more than one version. Selecting an item in
+	this pane will highlight the corresponding versions and instances in
+	the other panes.</li>
+</ul>
+<p>The following describes the selection type and the highlighting
+colors associated with it:</p>
+<ul>
+	<li><b>Primary Selection</b>: The item selected in any of the
+	three panes. This is highlighted in orange.</li>
+	<li><b>Secondary Selection</b>: These are the items that are
+	related to your Primary Selection. For example if you select a
+	particular version from the <b>Versions Pane</b>, the related items are
+	the corresponding artifacts in the <b>Artifacts Pane</b> and the
+	instances of that version in the <b>Instances Pane</b>. This is
+	highlighted in yellow.</li>
+	<li><b>Tertiary Selection</b>: These items represent the parent
+	instances of the currently selected instances. They indicate the path
+	from the tree root to the selected instances. These only appear in the
+	Instances Pane and are highlighted in light yellow.</li>
+</ul>
+</body>
+</html>

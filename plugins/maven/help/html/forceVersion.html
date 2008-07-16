@@ -1,0 +1,26 @@
+<html>
+<head>
+<link rel="stylesheet" href="stylesheet.css" />
+<h3>Force Version</h3>
+</head>
+
+<body>
+<p>The <b>Force Version</b> option utilizes Maven's <<code>dependencyManagement</code>>
+section of the project's <code>pom.xml</code> to ensure that the version
+of the selected artifact is a specific version or a version within a
+certain range.</p>
+<p>To select a specific version for an artifact:</p>
+<ol>
+	<li>Right click on the selected artifact and select <b>Force
+	Version</b> from the menu.</li>
+	<li>A popup will be displayed with the list of all the other
+	versions present in the dependency tree. Select the version to use or
+	type the version range in the <b>Other</b> text field. <br />
+	The item marked as <b>Currently Selected</b> is the version that Maven
+	has currently resolved.</li>
+	<li>Click <b>OK</b>. <br />
+	Selecting <b>Cancel</b> will cancel the operation without making any
+	changes to the project's <code>pom.xml</code>.</li>
+</ol>
+</body>
+</html>
