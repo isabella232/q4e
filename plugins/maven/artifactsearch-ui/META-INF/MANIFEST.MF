@@ -9,6 +9,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.search,
- org.devzuz.q.maven.search,
- org.devzuz.q.maven.commons.ui
+ org.devzuz.q.maven.search
 Eclipse-LazyStart: true
+Import-Package: org.devzuz.q.maven.ui.dialogs

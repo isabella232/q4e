@@ -14,8 +14,7 @@ Require-Bundle: org.devzuz.q.maven.jdt.core;bundle-version="[0.8.0,0.9.0)";visib
  org.eclipse.ui.editors;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
- org.eclipse.core.expressions,
- org.devzuz.q.maven.commons.ui
+ org.eclipse.core.expressions
 Eclipse-LazyStart: true
 Bundle-Vendor: DevZuz
 Export-Package: org.devzuz.q.maven.jdt.ui,

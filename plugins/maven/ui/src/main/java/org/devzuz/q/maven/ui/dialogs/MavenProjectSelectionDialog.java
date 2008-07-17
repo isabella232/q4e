@@ -1,5 +1,6 @@
-package org.devzuz.q.maven.commons.ui;
+package org.devzuz.q.maven.ui.dialogs;
 
+import org.devzuz.q.maven.embedder.MavenManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
@@ -28,7 +29,7 @@ public class MavenProjectSelectionDialog extends ElementListSelectionDialog
     
     public IProject[] getSelectedProjects()
     {
-        IProject[] projects = CommonDialogsUtil.getMavenProjects();
+        IProject[] projects = MavenManager.getMavenProjectManager().getWorkspaceProjects();
         if ( ( projects != null ) && ( projects.length > 0 ) )
         {
             setElements( projects );

@@ -8,8 +8,8 @@ package org.devzuz.q.maven.search.ui;
 
 import java.text.Collator;
 
-import org.devzuz.q.maven.commons.ui.MavenProjectSelectionDialog;
 import org.devzuz.q.maven.search.IArtifactInfo;
+import org.devzuz.q.maven.ui.dialogs.MavenProjectSelectionDialog;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;

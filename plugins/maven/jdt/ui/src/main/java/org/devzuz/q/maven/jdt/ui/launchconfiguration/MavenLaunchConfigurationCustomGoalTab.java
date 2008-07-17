@@ -11,9 +11,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.devzuz.q.maven.commons.ui.MavenProjectSelectionDialog;
 import org.devzuz.q.maven.ui.Messages;
 import org.devzuz.q.maven.ui.customcomponents.PropertiesComponent;
+import org.devzuz.q.maven.ui.dialogs.MavenProjectSelectionDialog;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
