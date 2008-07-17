@@ -32,4 +32,12 @@
       <requires-nature id="org.eclipse.jdt.core.javanature"/>
       <builder id="org.devzuz.q.maven.jdt.core.mavenIncrementalBuilder"/>
    </extension>
+   <extension
+         point="org.eclipse.jdt.launching.runtimeClasspathEntryResolvers">
+      <runtimeClasspathEntryResolver
+            class="org.devzuz.q.maven.jdt.core.classpath.container.MavenRuntimeClasspathEntryResolver"
+            container="org.devzuz.q.maven.jdt.core.mavenClasspathContainer"
+            id="org.devzuz.q.maven.jdt.core.runtimeClasspathEntryResolver1">
+      </runtimeClasspathEntryResolver>
+   </extension>
 </plugin>
