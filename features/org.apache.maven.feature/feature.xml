@@ -21,7 +21,7 @@
          id="org.apache.maven.embedder"
          download-size="2121"
          install-size="2121"
-         version="2.1.0.659801"
+         version="2.1.0.659801b"
          unpack="false"/>
 
    <plugin
