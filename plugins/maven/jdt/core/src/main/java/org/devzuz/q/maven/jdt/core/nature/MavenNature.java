@@ -39,6 +39,7 @@ import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathAttributePr
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.ICommand;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
@@ -109,6 +110,8 @@ public class MavenNature implements IProjectNature
         try
         {
             addBuilder();
+            // TODO: (amuino) classpath should only be set for Java projects (exclude pom).
+            // TODO: (amuino) Use the extension points (like WTP) so the CP is only set for the right projects
             addClasspath( getProject() );
         }
         catch ( CoreException e )
@@ -364,14 +367,41 @@ public class MavenNature implements IProjectNature
         for ( String folder : folders )
         {
             IResource resource = project.findMember( folder );
-            IClasspathEntry classpathEntry =
-                JavaCore.newSourceEntry( resource.getFullPath(), inclussionPattern, exclussionPattern,
-                                         specificDestination );
-            if ( !MavenClasspathHelper.classpathContainsFolder( classpathSrcEntries, classpathEntry ) )
-            {
-                // Avoid duplicates
-                classpathSrcEntries.add( classpathEntry );
+            if (resource == null) {
+                // [Issue 512] Maven did not create the source folders it is declaring
+                resource = createSourceFolder( folder );
             }
+            if (resource != null) {
+                IClasspathEntry classpathEntry =
+                    JavaCore.newSourceEntry( resource.getFullPath(), inclussionPattern, exclussionPattern,
+                                             specificDestination );
+                if ( !MavenClasspathHelper.classpathContainsFolder( classpathSrcEntries, classpathEntry ) )
+                {
+                    // Avoid duplicates
+                    classpathSrcEntries.add( classpathEntry );
+                }
+            } else {
+                MavenJdtCoreActivator.getLogger().error( "Required source folder does not exist" );
+            }
+        }
+    }
+
+    private IResource createSourceFolder( String folder )
+    {
+        IPath path = new Path(folder);
+        IContainer currentContainer = getProject();
+        try {
+            for (int i = 1; i < path.segmentCount(); i++) {
+                IFolder newFolder = getProject().getFolder( path.uptoSegment( i ) );
+                if (!newFolder.exists()) {
+                    newFolder.create( true, true, null );
+                }
+                currentContainer = newFolder;
+            }
+            return currentContainer;
+        } catch (CoreException e) {
+            MavenJdtCoreActivator.getLogger().log( "Unable to create missing source folders", e );
+            return null;
         }
     }
 
