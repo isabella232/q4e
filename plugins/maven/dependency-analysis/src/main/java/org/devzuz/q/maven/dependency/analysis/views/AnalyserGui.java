@@ -163,10 +163,14 @@ public class AnalyserGui
             {
                 public void run()
                 {
-                    instanceTree.setInput( model.getInstanceRoot() );
-                    versionsTable.setInput( model.getVersions() );
-                    artifactsTable.setInput( model.getArtifacts() );
-                    refreshAll();
+                    if ( instanceTree.getContentProvider() != null && versionsTable.getContentProvider() != null
+                        && artifactsTable.getContentProvider() != null )
+                    {
+                        instanceTree.setInput( model.getInstanceRoot() );
+                        versionsTable.setInput( model.getVersions() );
+                        artifactsTable.setInput( model.getArtifacts() );
+                        refreshAll();
+                    }
                 }
             } );
         }
