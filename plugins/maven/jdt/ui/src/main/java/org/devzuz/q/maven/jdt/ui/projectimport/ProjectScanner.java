@@ -26,6 +26,7 @@ import org.devzuz.q.maven.jdt.ui.MavenJdtUiActivator;
 import org.devzuz.q.maven.jdt.ui.internal.TraceOption;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
@@ -136,13 +137,13 @@ public class ProjectScanner
         List<IMavenProject> sortedProjects;
         try
         {
-            /* TODO : an awful waste of embedder execution if we can't put this in the cache */
-            IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( pom, false );
-
             MavenExecutionParameter parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter();
             parameter.setRecursive( true );
+            if (!pom.isAbsolute()) {
+                pom = pom.getAbsoluteFile();
+            }
             IMavenExecutionResult result =
-                MavenManager.getMaven().executeGoal( mavenProject, "validate", parameter, monitor );
+                MavenManager.getMaven().executeGoal( new Path( pom.getParent() ), "validate", parameter, monitor );
             sortedProjects = result.getSortedProjects();
 
             if ( sortedProjects == null )
