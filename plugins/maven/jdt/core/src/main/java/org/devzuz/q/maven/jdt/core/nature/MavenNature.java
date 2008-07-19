@@ -30,6 +30,7 @@ import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
+import org.devzuz.q.maven.embedder.MavenExecutionParameter;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenClasspathHelper;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
@@ -205,8 +206,12 @@ public class MavenNature implements IProjectNature
                 MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Executing process-test-resources on ",
                                              project.getName() );
                 // (x) Execute process-test-resources on the maven project
+                MavenExecutionParameter params = MavenExecutionParameter.newDefaultMavenExecutionParameter();
+                params.setRecursive( false );
+                // TODO: (amuino) The list of excluded goals should be configurable
+                params.setFilteredGoals( Collections.singleton( "org.apache.maven.plugins:maven-compiler-plugin:compile:default" ) );
                 IMavenExecutionResult result =
-                    MavenManager.getMaven().executeGoal( mavenProject, "process-test-resources",
+                    MavenManager.getMaven().executeGoal( mavenProject, "process-test-resources", params,
                                                          new NullProgressMonitor() );
 
                 List<Exception> mavenExceptions = result.getExceptions();
