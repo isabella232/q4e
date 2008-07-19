@@ -31,7 +31,7 @@
       <import plugin="org.eclipse.core.runtime" version="3.3.0" match="compatible"/>
       <import plugin="org.eclipse.jdt.core" version="3.3.0" match="compatible"/>
       <import plugin="org.eclipse.search"/>
-      <import feature="org.apache.maven.feature" version="2.1.0.659801" match="perfect"/>
+      <import feature="org.apache.maven.feature" version="2.1.0.659801b" match="perfect"/>
    </requires>
 
    <plugin
