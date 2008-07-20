@@ -44,7 +44,6 @@ import org.eclipse.jdt.core.JavaModelException;
  */
 public class MavenClasspathContainer implements IClasspathContainer
 {
-
     public static final String MAVEN_CLASSPATH_CONTAINER = "org.devzuz.q.maven.jdt.core.mavenClasspathContainer"; //$NON-NLS-1$
 
     public static final IPath MAVEN_CLASSPATH_CONTAINER_PATH = new Path( MAVEN_CLASSPATH_CONTAINER );
@@ -128,17 +127,24 @@ public class MavenClasspathContainer implements IClasspathContainer
         {
             MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Refreshing classpath for maven project ",
                                          mavenProject.getArtifactId(), " - Processing ", artifacts.size(), " artifacts" );
-
             this.project = mavenProject.getProject();
-
             List<IClasspathEntry> newClasspathEntries = resolveArtifacts( mavenProject, artifacts, downloadSources );
-
             /* compare before setting to new value to avoid clean and rebuild */
             IClasspathEntry[] newEntries =
                 newClasspathEntries.toArray( new IClasspathEntry[newClasspathEntries.size()] );
             if ( !Arrays.equals( classpathEntries, newEntries ) )
             {
                 classpathEntries = newEntries;
+                MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE,
+                                             "Done refreshing classpath for maven project ",
+                                             mavenProject.getArtifactId(), " - ", classpathEntries.length,
+                                             " entries set." );
+            }
+            else
+            {
+                MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE,
+                                             "Done refreshing classpath for maven project ",
+                                             mavenProject.getArtifactId(), " - No entries updated" );
             }
         }
     }
@@ -154,10 +160,9 @@ public class MavenClasspathContainer implements IClasspathContainer
     public static MavenClasspathContainer newClasspath( IProject project, IProgressMonitor monitor,
                                                         boolean downloadSources )
     {
-        MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "New classpath for project ", project.getName() );
-
+        MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Building new classpath for project ",
+                                     project.getName() );
         MavenClasspathContainer container = new MavenClasspathContainer( project );
-
         try
         {
             IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( project, true );
@@ -187,7 +192,6 @@ public class MavenClasspathContainer implements IClasspathContainer
                 MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( project, e );
             }
         }
-
         try
         {
             IJavaProject javaProject = JavaCore.create( project );
@@ -199,7 +203,8 @@ public class MavenClasspathContainer implements IClasspathContainer
         {
             MavenJdtCoreActivator.getLogger().log( e );
         }
-
+        MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Done building new classpath for project ",
+                                     project.getName() );
         return container;
     }
 
@@ -265,20 +270,17 @@ public class MavenClasspathContainer implements IClasspathContainer
         IProject workspaceProject =
             MavenManager.getMavenProjectManager().getWorkspaceProject( artifact.getGroupId(), artifact.getArtifactId(),
                                                                        artifact.getVersion() );
-
         boolean export = false;
         String scope = artifact.getScope();
         if ( ( scope == null ) || Artifact.SCOPE_COMPILE.equals( scope ) || Artifact.SCOPE_RUNTIME.equals( scope ) )
         {
             export = true;
         }
-
         if ( ( workspaceProject != null ) && ( workspaceProject.isOpen() ) )
         {
             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in ", mavenProject.getArtifactId(),
                                          " as project dependency - ", workspaceProject.getFullPath() );
             IClasspathAttribute[] attributes = getExtraAttributes( mavenProject, artifact, true );
-
             return JavaCore.newProjectEntry( workspaceProject.getFullPath(), new IAccessRule[0], true, attributes,
                                              export );
         }
@@ -288,12 +290,10 @@ public class MavenClasspathContainer implements IClasspathContainer
             clone.setType( SOURCES_TYPE );
             clone.setClassifier( SOURCES_CLASSIFIER );
             IPath sourcePath = getArtifactPath( mavenProject, clone, downloadSources );
-
             IPath jarPath = new Path( artifact.getFile().getAbsolutePath() );
             IClasspathAttribute[] attributes = getExtraAttributes( mavenProject, artifact, false );
             MavenJdtCoreActivator.trace( TraceOption.JDT_RESOURCE_LISTENER, "Added in ", mavenProject.getArtifactId(),
                                          " as jar dependency - ", jarPath.toOSString() );
-
             return JavaCore.newLibraryEntry( jarPath, sourcePath, null, new IAccessRule[0], attributes, export );
         }
         else
@@ -304,7 +304,6 @@ public class MavenClasspathContainer implements IClasspathContainer
                                          " does not require being added to the classpath." );
         }
         return null;
-
     }
 
     /**
@@ -361,7 +360,6 @@ public class MavenClasspathContainer implements IClasspathContainer
             buffer.append( ":" );
             buffer.append( entry.getPath().toOSString() );
         }
-
         return buffer.toString();
     }
 
@@ -374,7 +372,6 @@ public class MavenClasspathContainer implements IClasspathContainer
     {
         IPath artifactPath = MavenManager.getMaven().getLocalRepository().getPath( artifact );
         File artifactFile = new File( artifactPath.toOSString() );
-
         if ( !artifactFile.exists() )
         {
             if ( materialize )
@@ -403,7 +400,6 @@ public class MavenClasspathContainer implements IClasspathContainer
                 }
             }
         }
-
         return artifactPath;
     }
 }

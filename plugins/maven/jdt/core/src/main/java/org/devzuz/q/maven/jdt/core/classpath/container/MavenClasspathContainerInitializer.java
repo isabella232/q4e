@@ -35,12 +35,10 @@ public class MavenClasspathContainerInitializer extends ClasspathContainerInitia
     {
         if ( containerPath.equals( MavenClasspathContainer.MAVEN_CLASSPATH_CONTAINER_PATH ) )
         {
-            MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Initializing classpath for ", javaProject );
-
+            MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Initializing classpath for ",
+                                         javaProject.getElementName() );
             IProject project = javaProject.getProject();
-
             IClasspathContainer container = JavaCore.getClasspathContainer( containerPath, javaProject );
-
             MavenClasspathContainer mavenContainer;
             if ( container == null )
             {
@@ -50,16 +48,17 @@ public class MavenClasspathContainerInitializer extends ClasspathContainerInitia
             {
                 mavenContainer = new MavenClasspathContainer( project, container.getClasspathEntries() );
             }
-
             /* we must call setClasspathContainer before scheduling a job or we will be called again */
             JavaCore.setClasspathContainer( containerPath, new IJavaProject[] { javaProject },
                                             new IClasspathContainer[] { mavenContainer }, new NullProgressMonitor() );
-
             if ( container == null )
             {
-                UpdateClasspathJob.scheduleNewUpdateClasspathJob( project, MavenManager.getMavenPreferenceManager().isDownloadSources() );
+                UpdateClasspathJob.scheduleNewUpdateClasspathJob(
+                                                                  project,
+                                                                  MavenManager.getMavenPreferenceManager().isDownloadSources() );
             }
+            MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Done initializing classpath for ",
+                                         javaProject.getElementName() );
         }
     }
-
 }
