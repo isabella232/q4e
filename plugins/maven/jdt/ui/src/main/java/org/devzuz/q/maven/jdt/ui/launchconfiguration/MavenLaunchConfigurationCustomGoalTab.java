@@ -181,15 +181,9 @@ public class MavenLaunchConfigurationCustomGoalTab extends AbstractLaunchConfigu
 
     private void launchProjectSelectionDialog()
     {
-        IProject project = getSelectedMavenProject();
+        MavenProjectSelectionDialog dialog = new MavenProjectSelectionDialog( getShell() );
+        IProject project = dialog.getSelectedProjects()[0];
         if ( project != null )
             projectText.setText( project.getName() );
-    }
-
-    private IProject getSelectedMavenProject()
-    {
-        MavenProjectSelectionDialog dialog = new MavenProjectSelectionDialog( getShell() );
-        
-        return dialog.getSelectedProjects()[0];
     }
 }

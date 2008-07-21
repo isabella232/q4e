@@ -7,10 +7,13 @@
 package org.devzuz.q.maven.search.ui;
 
 import java.text.Collator;
+import java.util.HashSet;
+import java.util.Set;
 
+import org.devzuz.q.maven.search.ArtifactInfo;
 import org.devzuz.q.maven.search.IArtifactInfo;
-import org.devzuz.q.maven.ui.dialogs.MavenProjectSelectionDialog;
-import org.eclipse.core.resources.IProject;
+import org.devzuz.q.maven.search.ui.searchActions.ISearchAction;
+import org.devzuz.q.maven.search.ui.searchActions.SearchActionFactory;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -108,29 +111,26 @@ public class ArtifactSearchResultPage
     private Menu getMenu( Composite parent )
     {
         Menu searchMenu = new Menu( parent );
-        MenuItem item = new MenuItem( searchMenu, SWT.PUSH );
-        item.setText( "Add to Dependencies" );
-        item.addSelectionListener( new SelectionAdapter()
+        for ( final ISearchAction searchAction : SearchActionFactory.getSearchActions() )
         {
-            public void widgetSelected( SelectionEvent e )
+            MenuItem item = new MenuItem( searchMenu, SWT.PUSH );
+            item.setText( searchAction.getName() );
+            item.addSelectionListener( new SelectionAdapter()
             {
-                for( TableItem item : resultsList.getSelection() )
+                public void widgetSelected( SelectionEvent e )
                 {
-                    System.out.println( item.getText( 0 ) + ":" +
-                                        item.getText( 1 ) + ":" +
-                                        item.getText( 2 ) );
-                }
-                
-                MavenProjectSelectionDialog dialog = new MavenProjectSelectionDialog( ArtifactSearchResultPage.this.getSite().getShell() );
-                
-                IProject[] projects = dialog.getSelectedProjects();
-                for( IProject project : projects )
-                {
-                    System.out.println("Project = " + project.getName() );
+                    Set<IArtifactInfo> selectedArtifacts = new HashSet<IArtifactInfo>();
+                    for ( TableItem selection : resultsList.getSelection() )
+                    {
+                        ArtifactInfo artifact =
+                            new ArtifactInfo( selection.getText( 0 ), selection.getText( 1 ), selection.getText( 2 ) );
+                        selectedArtifacts.add( artifact );
+                    }
                     
+                    searchAction.doAction( selectedArtifacts );
                 }
-            }
-        } );
+            } );
+        };
         
         return searchMenu;
     }
