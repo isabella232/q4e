@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %pluginName
+Bundle-SymbolicName: org.devzuz.q.maven.pom.model; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-ClassPath: .
+Bundle-Vendor: %providerName
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: org.devzuz.q.maven.pom,
+ org.devzuz.q.maven.pom.impl,
+ org.devzuz.q.maven.pom.util
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.common,
+ org.eclipse.emf.ecore.xmi,
+ org.eclipse.core.databinding,
+ org.eclipse.wst.common.emf,
+ org.eclipse.wst,
+ org.eclipse.wst.common.core,
+ org.eclipse.wst.xml.core,
+ org.eclipse.wst.sse.core,
+ org.eclipse.core.resources
+Eclipse-LazyStart: true
