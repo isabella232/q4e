@@ -1,6 +1,6 @@
 package org.devzuz.q.maven.pomeditor.dialogs;
 
-import org.apache.maven.model.Repository;
+import org.devzuz.q.maven.pom.Repository;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;

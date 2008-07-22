@@ -2,9 +2,11 @@ package org.devzuz.q.maven.pomeditor.pages.internal;
 
 import java.util.List;
 
-import org.apache.maven.model.Plugin;
-import org.apache.maven.model.PluginExecution;
+import org.devzuz.q.maven.pom.Plugin;
+import org.devzuz.q.maven.pom.PluginExecution;
+import org.devzuz.q.maven.pom.PomFactory;
 import org.devzuz.q.maven.pomeditor.dialogs.AddPluginExecutionDialog;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.window.Window;
 
 public class AddEditExecutionAction
@@ -12,8 +14,9 @@ public class AddEditExecutionAction
 {
     private Mode mode;
 
-    public AddEditExecutionAction( ITreeObjectActionListener listener, Mode mode )
+    public AddEditExecutionAction( ITreeObjectActionListener listener, Mode mode, EditingDomain domain )
     {
+    	super( domain );
         addTreeObjectActionListener( listener );
         this.mode = mode;
         
@@ -36,7 +39,7 @@ public class AddEditExecutionAction
         {
             if ( addDialog.open() == Window.OK )
             {
-                PluginExecution execution = new PluginExecution();
+                PluginExecution execution = PomFactory.eINSTANCE.createPluginExecution();
             
                 synchDialogToPluginExecution( addDialog, execution );
             

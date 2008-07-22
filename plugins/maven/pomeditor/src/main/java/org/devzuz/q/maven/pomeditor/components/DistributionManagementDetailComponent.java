@@ -1,22 +1,18 @@
 package org.devzuz.q.maven.pomeditor.components;
 
-import org.apache.maven.model.DistributionManagement;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -58,15 +54,22 @@ public class DistributionManagementDetailComponent
 
     private Text messageText;
 
-    private DistributionManagement dataSource;
-
     private Button repositoryUniqueVersionRadioButton;
 
     private Button snapshotsUniqueVersionRadioButton;
+    
+    private Model model;
+    
+    private EditingDomain domain;
+    
+    private DataBindingContext bindingContext;
 
-    public DistributionManagementDetailComponent( Composite parent, int style )
+    public DistributionManagementDetailComponent( Composite parent, int style, Model model, EditingDomain domain, DataBindingContext bindingContext )
     {        
         super( parent, style );
+        this.model = model;
+        this.domain = domain;
+        this.bindingContext = bindingContext;
         
         setLayout( new GridLayout( 2, false ) );
         
@@ -76,6 +79,12 @@ public class DistributionManagementDetailComponent
         
         downloadURLText = new Text( this, SWT.BORDER | SWT.SINGLE );
         downloadURLText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__DOWNLOAD_URL }, 
+        		SWTObservables.observeText( downloadURLText , SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label statusLabel = new Label( this, SWT.None );
         statusLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Status );
@@ -83,6 +92,12 @@ public class DistributionManagementDetailComponent
         
         statusText = new Text( this, SWT.BORDER | SWT.SINGLE );
         statusText.setLayoutData( createControlLayoutData() );     
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__STATUS }, 
+        		SWTObservables.observeText( statusText , SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Group repositoryGroup = new Group( this, SWT.None );
         repositoryGroup.setText( Messages.MavenPomEditor_MavenPomEditor_Repository );
@@ -95,6 +110,12 @@ public class DistributionManagementDetailComponent
         
         repositoryUniqueVersionRadioButton = new Button( repositoryGroup, SWT.CHECK );
         repositoryUniqueVersionRadioButton.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__UNIQUE_VERSION }, 
+        		SWTObservables.observeSelection( repositoryUniqueVersionRadioButton ), 
+        		domain, 
+        		bindingContext );
         
         Label repositoryIdLabel = new Label( repositoryGroup, SWT.None );
         repositoryIdLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Identity );
@@ -102,6 +123,12 @@ public class DistributionManagementDetailComponent
         
         repositoryIdText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
         repositoryIdText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__ID }, 
+        		SWTObservables.observeText( repositoryIdText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label repositoryNameLabel = new Label( repositoryGroup, SWT.None );
         repositoryNameLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Name );
@@ -109,6 +136,12 @@ public class DistributionManagementDetailComponent
         
         repositoryNameText = new Text( repositoryGroup, SWT.SINGLE | SWT.BORDER );
         repositoryNameText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__NAME }, 
+        		SWTObservables.observeText( repositoryNameText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label repositoryUrlLabel = new Label( repositoryGroup, SWT.None );
         repositoryUrlLabel.setText( Messages.MavenPomEditor_MavenPomEditor_URL );
@@ -116,13 +149,25 @@ public class DistributionManagementDetailComponent
         
         repositoryUrlText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
         repositoryUrlText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__URL }, 
+        		SWTObservables.observeText( repositoryUrlText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label repositoryLayoutLabel = new Label( repositoryGroup, SWT.NULL );
         repositoryLayoutLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Layout );
         repositoryLayoutLabel.setLayoutData( createLabel2LayoutData() );
         
         repositoryLayoutText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
-        repositoryLayoutText.setLayoutData( createControlLayoutData() );          
+        repositoryLayoutText.setLayoutData( createControlLayoutData() );    
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__LAYOUT }, 
+        		SWTObservables.observeText( repositoryLayoutText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Group snapshotsGroup = new Group( this, SWT.None );
         snapshotsGroup.setText( Messages.MavenPomEditor_MavenPomEditor_SnapshotRepository );
@@ -135,6 +180,12 @@ public class DistributionManagementDetailComponent
         
         snapshotsUniqueVersionRadioButton = new Button( snapshotsGroup, SWT.CHECK );
         snapshotsUniqueVersionRadioButton.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SNAPSHOT_REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__UNIQUE_VERSION }, 
+        		SWTObservables.observeSelection( snapshotsUniqueVersionRadioButton ), 
+        		domain, 
+        		bindingContext );
         
         Label snapshotsIdLabel = new Label( snapshotsGroup, SWT.None );
         snapshotsIdLabel.setLayoutData( createLabel2LayoutData() );
@@ -142,6 +193,12 @@ public class DistributionManagementDetailComponent
         
         snapshotsIdText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
         snapshotsIdText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SNAPSHOT_REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__ID }, 
+        		SWTObservables.observeText( snapshotsIdText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label snapshotsNameLabel = new Label( snapshotsGroup, SWT.None );
         snapshotsNameLabel.setLayoutData( createLabel2LayoutData() );
@@ -149,6 +206,12 @@ public class DistributionManagementDetailComponent
         
         snapshotsNameText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
         snapshotsNameText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SNAPSHOT_REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__NAME }, 
+        		SWTObservables.observeText( snapshotsNameText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label snapshotsUrlLabel = new Label( snapshotsGroup, SWT.None );
         snapshotsUrlLabel.setLayoutData( createLabel2LayoutData() );
@@ -156,6 +219,12 @@ public class DistributionManagementDetailComponent
         
         snapshotsUrlText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
         snapshotsUrlText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SNAPSHOT_REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__URL }, 
+        		SWTObservables.observeText( snapshotsUrlText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label snapshotsLayoutLabel = new Label( snapshotsGroup, SWT.None );
         snapshotsLayoutLabel.setLayoutData( createLabel2LayoutData() );
@@ -163,6 +232,12 @@ public class DistributionManagementDetailComponent
         
         snapshotsLayoutText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
         snapshotsLayoutText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SNAPSHOT_REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__LAYOUT }, 
+        		SWTObservables.observeText( snapshotsLayoutText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Group siteGroup = new Group( this, SWT.None );
         siteGroup.setText( Messages.MavenPomEditor_MavenPomEditor_Site );
@@ -175,6 +250,12 @@ public class DistributionManagementDetailComponent
         
         siteIdText = new Text( siteGroup, SWT.BORDER | SWT.SINGLE );
         siteIdText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SITE, PomPackage.Literals.SITE__ID }, 
+        		SWTObservables.observeText( siteIdText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label siteNameLabel = new Label( siteGroup, SWT.None );
         siteNameLabel.setLayoutData( createLabel2LayoutData() );
@@ -182,6 +263,12 @@ public class DistributionManagementDetailComponent
         
         siteNameText = new Text( siteGroup, SWT.BORDER | SWT.SINGLE );
         siteNameText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SITE, PomPackage.Literals.SITE__NAME }, 
+        		SWTObservables.observeText( siteNameText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label siteUrlLabel = new Label( siteGroup, SWT.None );
         siteUrlLabel.setLayoutData( createLabel2LayoutData() );
@@ -189,6 +276,12 @@ public class DistributionManagementDetailComponent
         
         siteUrlText = new Text( siteGroup, SWT.BORDER | SWT.SINGLE );
         siteUrlText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SITE, PomPackage.Literals.SITE__URL }, 
+        		SWTObservables.observeText( siteUrlText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Group relocationGroup = new Group( this, SWT.None );
         relocationGroup.setText( Messages.MavenPomEditor_MavenPomEditor_Relocation );
@@ -201,6 +294,12 @@ public class DistributionManagementDetailComponent
         
         groupIdText = new Text( relocationGroup, SWT.BORDER | SWT.SINGLE );
         groupIdText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__RELOCATION, PomPackage.Literals.RELOCATION__GROUP_ID }, 
+        		SWTObservables.observeText( groupIdText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label artifactIdLabel = new Label( relocationGroup, SWT.None );
         artifactIdLabel.setLayoutData( createLabel2LayoutData() );
@@ -208,6 +307,12 @@ public class DistributionManagementDetailComponent
         
         artifactIdText = new Text( relocationGroup, SWT.BORDER | SWT.SINGLE );
         artifactIdText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__RELOCATION, PomPackage.Literals.RELOCATION__ARTIFACT_ID }, 
+        		SWTObservables.observeText( artifactIdText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label versionLabel = new Label( relocationGroup, SWT.None );
         versionLabel.setLayoutData( createLabel2LayoutData() );
@@ -215,6 +320,12 @@ public class DistributionManagementDetailComponent
         
         versionText = new Text( relocationGroup, SWT.BORDER | SWT.SINGLE );
         versionText.setLayoutData( createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__RELOCATION, PomPackage.Literals.RELOCATION__VERSION }, 
+        		SWTObservables.observeText( versionText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
         
         Label messageLabel = new Label( relocationGroup, SWT.None );
         messageLabel.setLayoutData( createLabel2LayoutData() );
@@ -224,108 +335,14 @@ public class DistributionManagementDetailComponent
         GridData grid = new GridData( GridData.FILL_HORIZONTAL );
         grid.heightHint = 40;
         messageText.setLayoutData( grid );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__RELOCATION, PomPackage.Literals.RELOCATION__MESSAGE }, 
+        		SWTObservables.observeText( messageText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
     }
-    
-    public void updateComponent( DistributionManagement dataSource )
-    {
-        ModifyListener listener = new ModifyListener()
-        {
-            public void modifyText( ModifyEvent e )
-            {
-                notifyListeners( ( Control ) e.widget );
-            }
-        };
-        
-        assert dataSource != null;
-        
-        this.dataSource = dataSource;
-        
-        setDownloadURL( blankIfNull( dataSource.getDownloadUrl() ) );
-        setStatus( blankIfNull( dataSource.getStatus() ) );
-        
-        if ( dataSource.getRepository() != null )
-        {
-            setRepositoryUniqueVersion( dataSource.getRepository().isUniqueVersion() );
-            setRepositoryId( blankIfNull( dataSource.getRepository().getId() ) );
-            setRepositoryName( blankIfNull( dataSource.getRepository().getName() ) );
-            setRepositoryUrl( blankIfNull( dataSource.getRepository().getUrl() ) );
-            setRepositoryLayout( blankIfNull( dataSource.getRepository().getLayout() ) );
-        }
-        
-        if( dataSource.getSnapshotRepository() != null )
-        {
-            setSnapshotsUniqueVersion( dataSource.getSnapshotRepository().isUniqueVersion() );
-            setSnapshotsId( blankIfNull( dataSource.getSnapshotRepository().getId() ) );
-            setSnapshotsName( blankIfNull( dataSource.getSnapshotRepository().getName() ) );
-            setSnapshotsUrl( blankIfNull( dataSource.getSnapshotRepository().getUrl() ) );
-            setSnapshotsLayout( blankIfNull( dataSource.getSnapshotRepository().getLayout() ) );
-        }
-        
-        if ( dataSource.getSite() != null )
-        {
-            setSiteId( blankIfNull( dataSource.getSite().getId() ) );
-            setSiteName( blankIfNull( dataSource.getSite().getName() ) );
-            setSiteUrl( blankIfNull( dataSource.getSite().getUrl() ) );
-        }
-        
-        if ( dataSource.getRelocation() != null )
-        {
-            setGroupId( blankIfNull( dataSource.getRelocation().getGroupId() ) );
-            setArtifactId( blankIfNull( dataSource.getRelocation().getArtifactId() ) );
-            setVersion( blankIfNull( dataSource.getRelocation().getVersion() ) );
-            setMessage( blankIfNull( dataSource.getRelocation().getMessage() ) );           
-        }
-        
-        addModifyListener( listener );
-        
-        SelectionListener selectionListener = new SelectionAdapter()
-        {
-            public void widgetSelected( SelectionEvent arg0 )
-            {
-                notifyListeners( ( Control ) arg0.widget );
-            }
-        };
-        
-        repositoryUniqueVersionRadioButton.addSelectionListener( selectionListener );
-        snapshotsUniqueVersionRadioButton.addSelectionListener( selectionListener );
-        
-        FocusListener focusListener = new FocusListener()
-        {
 
-            public void focusGained( FocusEvent e )
-            {
-                // TODO Auto-generated method stub
-                
-            }
-
-            public void focusLost( final FocusEvent e )
-            {
-                if ( validateURL( ( ( Text )e.getSource() ).getText().trim() ) == false )
-                {
-                    MessageDialog.openWarning( getShell(), "Invalid URL", 
-                        "URL should start with either of the following: " + 
-                        "http://, https://, ftp://, file://, scp://, sftp:// " +
-                        "and dav:http://");
-                    
-                    
-                    Display.getCurrent().asyncExec( new Runnable()
-                    {
-                       public void run()
-                       {
-                           ( ( Text )e.getSource() ).setFocus();
-                       }
-                    });                      
-                }                
-            }
-            
-        };
-        
-        downloadURLText.addFocusListener( focusListener );
-        repositoryUrlText.addFocusListener( focusListener );
-        snapshotsUrlText.addFocusListener( focusListener );
-        siteUrlText.addFocusListener( focusListener );
-    }
-    
     public boolean validateURL( String siteUrl )
     {
         if ( siteUrl.length() > 0 )
@@ -346,55 +363,6 @@ public class DistributionManagementDetailComponent
         
     }
 
-    private void addModifyListener( ModifyListener listener )
-    {
-        downloadURLText.addModifyListener( listener );
-        statusText.addModifyListener( listener );
-        
-        repositoryIdText.addModifyListener( listener );
-        repositoryNameText.addModifyListener( listener );
-        repositoryUrlText.addModifyListener( listener );
-        repositoryLayoutText.addModifyListener( listener );
-        
-        snapshotsIdText.addModifyListener( listener );
-        snapshotsNameText.addModifyListener( listener );
-        snapshotsUrlText.addModifyListener( listener );
-        snapshotsLayoutText.addModifyListener( listener );
-        
-        siteIdText.addModifyListener( listener );
-        siteNameText.addModifyListener( listener );
-        siteUrlText.addModifyListener( listener );
-        
-        groupIdText.addModifyListener( listener );
-        artifactIdText.addModifyListener( listener );
-        versionText.addModifyListener( listener );
-        messageText.addModifyListener( listener );
-    }
-    
-    public void removeModifyListener( ModifyListener listener )
-    {
-        downloadURLText.removeModifyListener( listener );
-        statusText.removeModifyListener( listener );
-        
-        repositoryIdText.removeModifyListener( listener );
-        repositoryNameText.removeModifyListener( listener );
-        repositoryUrlText.removeModifyListener( listener );
-        repositoryLayoutText.removeModifyListener( listener );
-        
-        snapshotsIdText.removeModifyListener( listener );
-        snapshotsNameText.removeModifyListener( listener );
-        snapshotsUrlText.removeModifyListener( listener );
-        snapshotsLayoutText.removeModifyListener( listener );
-        
-        siteIdText.removeModifyListener( listener );
-        siteNameText.removeModifyListener( listener );
-        siteUrlText.removeModifyListener( listener );
-        
-        groupIdText.removeModifyListener( listener );
-        artifactIdText.removeModifyListener( listener );
-        versionText.removeModifyListener( listener );
-        messageText.removeModifyListener( listener );
-    }
 
     private GridData createLabel2LayoutData()
     {
@@ -416,194 +384,5 @@ public class DistributionManagementDetailComponent
         return labelData;
     }
 
-    public String getDownloadURL()
-    {
-        return nullIfBlank( downloadURLText.getText().trim() );
-    }
-
-    public void setDownloadURL( String downloadURL )
-    {
-        downloadURLText.setText( downloadURL );
-    }
-
-    public String getStatus()
-    {
-        return nullIfBlank( statusText.getText().trim() );
-    }
-
-    public void setStatus( String status )
-    {
-        statusText.setText( status );
-    }
-
-    public boolean isRepositoryUniqueVersion()
-    {
-        return repositoryUniqueVersionRadioButton.getSelection();
-    }
-
-    public void setRepositoryUniqueVersion( boolean repositoryUniqueVersion )
-    {
-        repositoryUniqueVersionRadioButton.setSelection( repositoryUniqueVersion );
-    }
-
-    public String getRepositoryId()
-    {
-        return nullIfBlank( repositoryIdText.getText().trim() );
-    }
-
-    public void setRepositoryId( String repositoryId )
-    {
-        repositoryIdText.setText( repositoryId );
-    }
-
-    public String getRepositoryName()
-    {
-        return nullIfBlank( repositoryNameText.getText().trim() );
-    }
-
-    public void setRepositoryName( String repositoryName )
-    {
-        repositoryNameText.setText( repositoryName );
-    }
-
-    public String getRepositoryUrl()
-    {
-        return nullIfBlank( repositoryUrlText.getText().trim() );
-    }
-
-    public void setRepositoryUrl( String repositoryUrl )
-    {
-        repositoryUrlText.setText( repositoryUrl );
-    }
-
-    public String getRepositoryLayout()
-    {
-        return nullIfBlank( repositoryLayoutText.getText().trim() );
-    }
-
-    public void setRepositoryLayout( String repositoryLayout )
-    {
-        repositoryLayoutText.setText( repositoryLayout );
-    }
-
-    public boolean isSnapshotsUniqueVersion()
-    {
-        return snapshotsUniqueVersionRadioButton.getSelection();
-    }
-
-    public void setSnapshotsUniqueVersion( boolean snapshotsUniqueVersion )
-    {
-        snapshotsUniqueVersionRadioButton.setSelection( snapshotsUniqueVersion );
-    }
-
-    public String getSnapshotsId()
-    {
-        return nullIfBlank( snapshotsIdText.getText().trim() );
-    }
-
-    public void setSnapshotsId( String snapshotsId )
-    {
-        snapshotsIdText.setText( snapshotsId );
-    }
-
-    public String getSnapshotsName()
-    {
-        return nullIfBlank( snapshotsNameText.getText().trim() );
-    }
-
-    public void setSnapshotsName( String snapshotsName )
-    {
-        snapshotsNameText.setText( snapshotsName );
-    }
-
-    public String getSnapshotsUrl()
-    {
-        return nullIfBlank( snapshotsUrlText.getText().trim() );
-    }
-
-    public void setSnapshotsUrl( String snapshotsUrl )
-    {
-        snapshotsUrlText.setText( snapshotsUrl );
-    }
-
-    public String getSnapshotsLayout()
-    {
-        return nullIfBlank( snapshotsLayoutText.getText().trim() );
-    }
-
-    public void setSnapshotsLayout( String snapshotsLayout )
-    {
-        snapshotsLayoutText.setText( snapshotsLayout );
-    }
-
-    public String getSiteId()
-    {
-        return nullIfBlank( siteIdText.getText().trim() );
-    }
-
-    public void setSiteId( String siteId )
-    {
-        siteIdText.setText( siteId );
-    }
-
-    public String getSiteName()
-    {
-        return nullIfBlank( siteNameText.getText().trim() );
-    }
-
-    public void setSiteName( String siteName )
-    {
-        siteNameText.setText( siteName );
-    }
-
-    public String getSiteUrl()
-    {
-        return nullIfBlank( siteUrlText.getText().trim() );
-    }
-
-    public void setSiteUrl( String siteUrl )
-    {
-        siteUrlText.setText( siteUrl );
-    }
-
-    public String getGroupId()
-    {
-        return nullIfBlank( groupIdText.getText().trim() );
-    }
-
-    public void setGroupId( String groupId )
-    {
-        groupIdText.setText( groupId );
-    }
-
-    public String getArtifactId()
-    {
-        return nullIfBlank( artifactIdText.getText().trim() );
-    }
-
-    public void setArtifactId( String artifactId )
-    {
-        artifactIdText.setText( artifactId );
-    }
-
-    public String getVersion()
-    {
-        return nullIfBlank( versionText.getText().trim() );
-    }
-
-    public void setVersion( String version )
-    {
-        versionText.setText( version );
-    }
-
-    public String getMessage()
-    {
-        return nullIfBlank( messageText.getText().trim() );
-    }
-
-    public void setMessage( String message )
-    {
-        messageText.setText( message );
-    }
 
 }

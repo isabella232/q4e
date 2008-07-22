@@ -6,11 +6,15 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.pomeditor.pages;
 
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Parent;
-import org.apache.maven.model.Prerequisites;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.formeditor.MavenPomFormEditor;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -49,32 +53,6 @@ public class MavenPomBasicFormPage extends FormPage
 
     private Model pomModel;
 
-    private String groupID;
-
-    private String artifactID;
-
-    private String version;
-
-    private String packaging;
-
-    private String name;
-
-    private String description;
-
-    private String url;
-
-    private String inceptionYear;
-
-    private String parentPOMgroupID;
-
-    private String parentPOMArtifactID;
-
-    private String parentPOMVersion;
-
-    private String parentPOMRelPath;
-    
-    private String mavenVersion;
-
     private boolean isPageModified;
 
     private Text groupIdText;
@@ -103,18 +81,19 @@ public class MavenPomBasicFormPage extends FormPage
 
     private Text modelVersionText;
 
-    private String modelVersion;
-
     private Text prerequisiteMavenText;
+    
+    private EditingDomain domain;
+    
+    private DataBindingContext bindingContext;
 
-    public MavenPomBasicFormPage( FormEditor editor, String id, String title, Model model )
+    public MavenPomBasicFormPage( FormEditor editor, String id, String title, Model model, EditingDomain domain, DataBindingContext bindingContext )
     {
         super( editor, id, title );
         this.pomModel = model;
         this.editor = editor;
-        
-        setPOMEditorProjectInformation();
-
+        this.domain = domain;
+        this.bindingContext = bindingContext;
     }
 
     public MavenPomBasicFormPage( String id, String title )
@@ -189,8 +168,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         groupIdText = toolKit.createText( parent, "" );
         this.createTextDisplay( groupIdText, controlData );
-        groupIdText.setText( getGroupID() == null ? "" : getGroupID() );
-        groupIdText.addModifyListener( textFieldListener );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__GROUP_ID }, 
+        		SWTObservables.observeText( groupIdText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         groupIdText.addModifyListener( textFieldListener );
 
         Label artifactIdLabel =
@@ -199,7 +182,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         artifactIdText = toolKit.createText( parent, "" );
         this.createTextDisplay( artifactIdText, controlData );
-        artifactIdText.setText( getArtifactID() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__ARTIFACT_ID }, 
+        		SWTObservables.observeText( artifactIdText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         artifactIdText.addModifyListener( textFieldListener );
 
         Label versionLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Version, SWT.NONE );
@@ -207,7 +195,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         versionText = toolKit.createText( parent, "" );
         this.createTextDisplay( versionText, controlData );
-        versionText.setText( getVersion() == null ? "" : getVersion() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__VERSION }, 
+        		SWTObservables.observeText( versionText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         versionText.addModifyListener( textFieldListener );
 
         Label packagingLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Packaging, SWT.NONE );
@@ -215,7 +208,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         packagingText = toolKit.createText( parent, "" );
         this.createTextDisplay( packagingText, controlData );
-        packagingText.setText( getPackaging() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__PACKAGING }, 
+        		SWTObservables.observeText( packagingText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         packagingText.addModifyListener( textFieldListener );
 
         toolKit.paintBordersFor( parent );
@@ -394,7 +392,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         nameText = toolKit.createText( parent, "Name" );
         this.createTextDisplay( nameText, createControlLayoutData() );
-        nameText.setText( getName() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__NAME }, 
+        		SWTObservables.observeText( nameText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         nameText.addModifyListener( textFieldListener );
 
         Label descriptionLabel =
@@ -403,7 +406,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         descriptionText = toolKit.createText( parent, "Description" );
         this.createTextDisplay( descriptionText, createControlLayoutData() );
-        descriptionText.setText( getDescription() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__DESCRIPTION }, 
+        		SWTObservables.observeText( descriptionText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         descriptionText.addModifyListener( textFieldListener );
 
         Label urlLabel = toolKit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE );
@@ -411,7 +419,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         urlText = toolKit.createText( parent, "URL" );
         this.createTextDisplay( urlText, createControlLayoutData() );
-        urlText.setText( getUrl() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__URL }, 
+        		SWTObservables.observeText( urlText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         urlText.addModifyListener( textFieldListener );
 
         Label inceptionYearLabel =
@@ -420,7 +433,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         inceptionYearText = toolKit.createText( parent, "Inception Year" );
         this.createTextDisplay( inceptionYearText, createControlLayoutData() );
-        inceptionYearText.setText( getInceptionYear() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__INCEPTION_YEAR }, 
+        		SWTObservables.observeText( inceptionYearText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         inceptionYearText.addModifyListener( textFieldListener );
 
         Label modelVersionLabel =
@@ -429,7 +447,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         modelVersionText = toolKit.createText( parent, "Model Version" );
         this.createTextDisplay( modelVersionText, createControlLayoutData() );
-        modelVersionText.setText( getModelVersion() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MODEL_VERSION }, 
+        		SWTObservables.observeText( modelVersionText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         modelVersionText.addModifyListener( textFieldListener );
         
         Label prerequisiteMavenLabel =
@@ -438,7 +461,12 @@ public class MavenPomBasicFormPage extends FormPage
         
         prerequisiteMavenText = toolKit.createText( parent, "Prerequisites" );
         this.createTextDisplay( prerequisiteMavenText, createControlLayoutData() );
-        prerequisiteMavenText.setText( getMavenVersion() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__PREREQUISITES, PomPackage.Literals.PREREQUISITES__MAVEN }, 
+        		SWTObservables.observeText( prerequisiteMavenText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         prerequisiteMavenText.addModifyListener( textFieldListener );        
         
         FocusListener focusListener = new FocusListener()
@@ -493,7 +521,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         parentPOMGroupIdText = toolKit.createText( parent, "groupId" );
         this.createTextDisplay( parentPOMGroupIdText, createControlLayoutData() );
-        parentPOMGroupIdText.setText( getParentPOMgroupID() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__PARENT, PomPackage.Literals.PARENT__GROUP_ID }, 
+        		SWTObservables.observeText( parentPOMGroupIdText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         parentPOMGroupIdText.addModifyListener( textFieldListener );
 
         Label artifactIdLabel = toolKit.createLabel( parent, "Artifact Id", SWT.NONE );
@@ -501,7 +534,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         parentPOMArtifactIdText = toolKit.createText( parent, "artifactId" );
         this.createTextDisplay( parentPOMArtifactIdText, createControlLayoutData() );
-        parentPOMArtifactIdText.setText( getParentPOMArtifactID() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__PARENT, PomPackage.Literals.PARENT__ARTIFACT_ID }, 
+        		SWTObservables.observeText( parentPOMArtifactIdText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         parentPOMArtifactIdText.addModifyListener( textFieldListener );
 
         Label versionLabel = toolKit.createLabel( parent, "Version", SWT.NONE );
@@ -509,7 +547,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         parentPOMVersionText = toolKit.createText( parent, "Version" );
         this.createTextDisplay( parentPOMVersionText, createControlLayoutData() );
-        parentPOMVersionText.setText( getParentPOMVersion() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__PARENT, PomPackage.Literals.PARENT__VERSION }, 
+        		SWTObservables.observeText( parentPOMVersionText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         parentPOMVersionText.addModifyListener( textFieldListener );
 
         Label relativePathLabel =
@@ -518,7 +561,12 @@ public class MavenPomBasicFormPage extends FormPage
 
         parentPOMRelativePathText = toolKit.createText( parent, "Relative Path" );
         this.createTextDisplay( parentPOMRelativePathText, createControlLayoutData() );
-        parentPOMRelativePathText.setText( getParentPOMRelPath() );
+        ModelUtil.bind( 
+        		pomModel, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__PARENT, PomPackage.Literals.PARENT__RELATIVE_PATH }, 
+        		SWTObservables.observeText( parentPOMRelativePathText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext);	
         parentPOMRelativePathText.addModifyListener( textFieldListener );
 
         toolKit.paintBordersFor( parent );
@@ -535,97 +583,7 @@ public class MavenPomBasicFormPage extends FormPage
         }
     }
 
-    private void setPOMEditorProjectInformation()
-    {
-        //sets data to be used in createBasicCoordinateControls
-        setGroupID( blankIfNull( pomModel.getGroupId() ) );
-        setArtifactID( blankIfNull( pomModel.getArtifactId() ) );
-        setVersion( blankIfNull( pomModel.getVersion() ) );
-        setPackaging( blankIfNull( pomModel.getPackaging() ) );
 
-        //sets data to be used in createMoreProjectInfoControls
-        setName( blankIfNull( pomModel.getName() ) );
-        setDescription( blankIfNull( pomModel.getDescription() ) );
-        setUrl( blankIfNull( pomModel.getUrl() ) );
-        setInceptionYear( blankIfNull( pomModel.getInceptionYear() ) );
-        setModelVersion( blankIfNull( pomModel.getModelVersion() ) );
-        
-        if ( pomModel.getPrerequisites() != null )
-        {
-            setMavenVersion( blankIfNull( pomModel.getPrerequisites().getMaven() ) );
-        }
-        else
-        {
-            setMavenVersion( "" );
-        }
-
-        //sets data to be used in createParentProjectControls
-        if ( pomModel.getParent() != null )
-        {
-            setParentPOMgroupID( blankIfNull( pomModel.getParent().getGroupId() ) );
-            setParentPOMArtifactID( blankIfNull( pomModel.getParent().getArtifactId() ) );
-            setParentPOMVersion( blankIfNull( pomModel.getParent().getVersion() ) );
-            setParentPOMRelPath( blankIfNull( pomModel.getParent().getRelativePath() ) );
-        }
-        else
-        {
-            setParentPOMgroupID( "" );
-            setParentPOMArtifactID( "" );
-            setParentPOMVersion( "" );
-            setParentPOMRelPath( "" );
-        }
-    }
-
-    private void getPOMEditorProjectInformation()
-    {    	
-    	pomModel.setGroupId( nullIfBlank( groupIdText.getText().trim() ) );
-    	pomModel.setArtifactId( nullIfBlank( artifactIdText.getText().trim() ) );
-    	pomModel.setVersion( nullIfBlank( versionText.getText().trim() ) );     	
-    	pomModel.setPackaging( nullIfBlank( packagingText.getText().trim() ) );
-    	
-    	pomModel.setName( nullIfBlank( nameText.getText().trim() ) );
-    	pomModel.setDescription( nullIfBlank( descriptionText.getText().trim() ) );
-    	pomModel.setUrl( nullIfBlank( urlText.getText().trim() ) );
-    	pomModel.setInceptionYear( nullIfBlank( inceptionYearText.getText().trim() ) );
-    	pomModel.setModelVersion( nullIfBlank( modelVersionText.getText().trim() ) );
-    	
-    	if ( prerequisiteMavenText.getText().trim().length() > 0 )
-    	{
-    	    if ( pomModel.getPrerequisites() == null )
-    	    {
-    	        Prerequisites prerequisites = new Prerequisites();
-    	        pomModel.setPrerequisites( prerequisites );
-    	    }
-    	    
-    	    pomModel.getPrerequisites().setMaven( nullIfBlank( prerequisiteMavenText.getText().trim() ) );
-    	}
-    	else
-    	{
-    	    pomModel.setPrerequisites( null );
-    	}
-    	
-    	if ( ( parentPOMGroupIdText.getText().trim().length() > 0 ) ||
-    	     ( parentPOMArtifactIdText.getText().trim().length() > 0 ) || 
-    	     ( parentPOMVersionText.getText().trim().length() > 0 ) ||
-    	     ( parentPOMRelativePathText.getText().trim().length() > 0 ) )
-    	{
-    	    if ( pomModel.getParent() == null )
-    	    {
-    	        Parent parent = new Parent();
-    	        pomModel.setParent( parent );
-    	    }
-    	    
-    	    pomModel.getParent().setGroupId( nullIfBlank( parentPOMGroupIdText.getText().trim() ) );               
-            pomModel.getParent().setArtifactId( nullIfBlank( parentPOMArtifactIdText.getText().trim() ) );              
-            pomModel.getParent().setVersion( nullIfBlank( parentPOMVersionText.getText().trim() ) );                
-            pomModel.getParent().setRelativePath( nullIfBlank( parentPOMRelativePathText.getText().trim() ) );
-            
-   		}
-    	else
-    	{
-    	    pomModel.setParent( null );
-    	}
-    }
 
     private String nullIfBlank( String str )
     {
@@ -637,7 +595,6 @@ public class MavenPomBasicFormPage extends FormPage
         public void modifyText( ModifyEvent e )
         {
             System.out.println( "trace 1." );
-            getPOMEditorProjectInformation();
             pageModified();
         }
     };
@@ -665,149 +622,10 @@ public class MavenPomBasicFormPage extends FormPage
         return isPageModified;
     }
 
-    public String getGroupID()
-    {
-        return groupID;
-    }
-
-    private void setGroupID( String groupID )
-    {
-        this.groupID = groupID;
-    }
-
-    public String getArtifactID()
-    {
-        return artifactID;
-    }
-
-    private void setArtifactID( String artifactID )
-    {
-        this.artifactID = artifactID;
-    }
-
-    public String getVersion()
-    {
-        return version;
-    }
-
-    private void setVersion( String version )
-    {
-        this.version = version;
-    }
-
-    public String getPackaging()
-    {
-        return packaging;
-    }
-
-    private void setPackaging( String packaging )
-    {
-        this.packaging = packaging;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    private void setName( String name )
-    {
-        this.name = name;
-    }
-
-    public String getDescription()
-    {
-        return description;
-    }
-
-    private void setDescription( String description )
-    {
-        this.description = description;
-    }
-
-    public String getUrl()
-    {
-        return url;
-    }
-
-    private void setUrl( String url )
-    {
-        this.url = url;
-    }
-
-    public String getInceptionYear()
-    {
-        return inceptionYear;
-    }
-
-    private void setInceptionYear( String inceptionYear )
-    {
-        this.inceptionYear = inceptionYear;
-    }
-
-    private String getModelVersion()
-    {
-        return modelVersion;
-    }
-
-    private void setModelVersion( String modelVersion )
-    {
-        this.modelVersion = modelVersion;
-    }
-
-    public String getParentPOMgroupID()
-    {
-        return parentPOMgroupID;
-    }
-
-    private void setParentPOMgroupID( String parenPOMgroupID )
-    {
-        this.parentPOMgroupID = parenPOMgroupID;
-    }
-
-    public String getParentPOMArtifactID()
-    {
-        return parentPOMArtifactID;
-    }
-
-    private void setParentPOMArtifactID( String parentPOMArtifactID )
-    {
-        this.parentPOMArtifactID = parentPOMArtifactID;
-    }
-
-    public String getParentPOMVersion()
-    {
-        return parentPOMVersion;
-    }
-
-    private void setParentPOMVersion( String parentPOMVersion )
-    {
-        this.parentPOMVersion = parentPOMVersion;
-    }
-
-    public String getParentPOMRelPath()
-    {
-        return parentPOMRelPath;
-    }
-
-    private void setParentPOMRelPath( String parentPOMRelPath )
-    {
-        this.parentPOMRelPath = parentPOMRelPath;
-    }
 
     public void setPageModified( boolean isPageModified )
     {
         this.isPageModified = isPageModified;
 
-    }
-
-    public String getMavenVersion()
-    {
-        return mavenVersion;
-    }
-
-    public void setMavenVersion( String mavenVersion )
-    {
-        this.mavenVersion = mavenVersion;
     }
 }

@@ -4,22 +4,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.devzuz.q.maven.pomeditor.components.ITreeObjectAction;
+import org.eclipse.emf.edit.domain.EditingDomain;
 
 public abstract class AbstractTreeObjectAction
     implements ITreeObjectAction
 {
     private String name;
     private List<ITreeObjectActionListener> listeners;
+    protected EditingDomain editingDomain;
     
-    public AbstractTreeObjectAction()
+    public AbstractTreeObjectAction( EditingDomain domain )
     {
         listeners = new ArrayList<ITreeObjectActionListener>();
+        this.editingDomain = domain;
     }
     
-    public AbstractTreeObjectAction( String name )
+    public AbstractTreeObjectAction( EditingDomain domain, String name )
     {
         this.name = name;
         listeners = new ArrayList<ITreeObjectActionListener>();
+        this.editingDomain = editingDomain;
     }
     
     public String getName()

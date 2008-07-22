@@ -2,7 +2,7 @@ package org.devzuz.q.maven.pomeditor.dialogs;
 
 import java.util.List;
 
-import org.apache.maven.model.ReportSet;
+import org.devzuz.q.maven.pom.ReportSet;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;
@@ -96,8 +96,7 @@ public class AddEditReportSetDialog
     {
         setId( blankIfNull( reportSet.getId() ) );        
         
-        if ( ( reportSet.getInherited() != null ) &&
-        	( reportSet.getInherited().equalsIgnoreCase( "true" ) ) )
+        if ( reportSet.getInherited().equalsIgnoreCase( "true" ) )
         {
             setInherited( true );
         }

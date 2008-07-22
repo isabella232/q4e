@@ -1,17 +1,17 @@
 package org.devzuz.q.maven.pomeditor.pages;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.apache.maven.model.Build;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Resource;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.components.IncludeExcludeComponent;
 import org.devzuz.q.maven.pomeditor.components.ResourceComponent;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.core.databinding.observable.value.IValueChangeListener;
+import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
+import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -27,12 +27,6 @@ public class MavenPomBuildResourcesPage extends FormPage
 {
     private Model pomModel;
 
-    private Build build;
-
-    private List<Resource> resourcesList;
-    
-    private Resource selectedResource;
-
     private ScrolledForm form;
 
     private ResourceComponent resourceComponent;
@@ -41,22 +35,20 @@ public class MavenPomBuildResourcesPage extends FormPage
 
     private IncludeExcludeComponent excludeComponent;
 
-    private boolean isPageModified;
+    private WritableValue selectedResource = new WritableValue();
+    
+    private EditingDomain domain;
+    
+    private DataBindingContext bindingContext;
 
     @SuppressWarnings( "unchecked" )
-    public MavenPomBuildResourcesPage( FormEditor editor, String id, String title, Model model )
+    public MavenPomBuildResourcesPage( FormEditor editor, String id, String title, Model model, EditingDomain domain, DataBindingContext bindingContext )
     {
         super( editor, id, title );
         this.pomModel = model;
-        build = model.getBuild();
-        if ( build == null )
-        {
-            build = new Build();
-            pomModel.setBuild( build );
+        this.domain = domain;
+        this.bindingContext = bindingContext;
         }
-
-        resourcesList = build.getResources();
-    }
 
     public MavenPomBuildResourcesPage( String id, String title )
     {
@@ -90,78 +82,28 @@ public class MavenPomBuildResourcesPage extends FormPage
     @SuppressWarnings( "unchecked" )
     private Control createResourceTableControls( Composite parent, FormToolkit toolKit )
     {
-        SelectionAdapter tableListener = new SelectionAdapter()
-        {
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-                widgetSelected( e );
-            }
-
-            public void widgetSelected( SelectionEvent e )
-            {
-                selectedResource = resourceComponent.getSelectedResource();
-                synchronizedSelectedResourceToDetails( selectedResource.getIncludes() , 
-                                                       selectedResource.getExcludes() ,
-                                                       true );
-            }
-        };
-
-        SelectionAdapter buttonListener = new SelectionAdapter()
-        {
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-                widgetSelected( e );
-            }
-
-            public void widgetSelected( SelectionEvent e )
-            {
-                if ( resourceComponent.isModified() == true )
-                {
-                    pageModified();
-                }
-            }
-        };
-        
-        SelectionAdapter removebuttonListener = new SelectionAdapter()
-        {
-            public void widgetDefaultSelected( SelectionEvent e )
-            {
-                widgetSelected( e );
-            }
-
-            public void widgetSelected( SelectionEvent e )
-            {
-                if ( resourceComponent.isModified() == true )
-                {
-                    synchronizedSelectedResourceToDetails( Collections.EMPTY_LIST , 
-                                                           Collections.EMPTY_LIST ,
-                                                           false );
-                    pageModified();
-                }
-            }
-        };
-
         Composite container = toolKit.createComposite( parent, SWT.None );
         container.setLayout( new GridLayout( 1, false ) );
 
-        resourceComponent = new ResourceComponent( container, SWT.NONE, resourcesList );
+        resourceComponent = new ResourceComponent( container, SWT.NONE, pomModel, new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__RESOURCES }, domain, selectedResource );
         resourceComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
-        resourceComponent.addResourcesTableListener( tableListener );
-        resourceComponent.addAddButtonListener( buttonListener );
-        resourceComponent.addEditButtonListener( buttonListener );
-        resourceComponent.addRemoveButtonListener( removebuttonListener );
-
+        selectedResource.addValueChangeListener( new IValueChangeListener() {
+        	public void handleValueChange(ValueChangeEvent event) {
+        		if( event.diff.getNewValue() != null)
+            {
+        			includeComponent.setAddButtonEnabled( true );
+        			excludeComponent.setAddButtonEnabled( true );
+            }
+        		else
+        {
+        			includeComponent.setAddButtonEnabled( false );
+        			excludeComponent.setAddButtonEnabled( false );
+                }
+            }
+        });
         return container;
     }
     
-    private void synchronizedSelectedResourceToDetails( List<String> includes , List<String> excludes  , 
-                                                        boolean enableAdd )
-    {
-        includeComponent.updateTable( includes );
-        excludeComponent.updateTable( excludes );
-        includeComponent.setAddButtonEnabled( enableAdd );
-        excludeComponent.setAddButtonEnabled( enableAdd );
-    }
 
     private Control createIncludeExcludeTables( Composite container, FormToolkit toolkit )
     {
@@ -192,13 +134,8 @@ public class MavenPomBuildResourcesPage extends FormPage
         Composite container = toolKit.createComposite( parent, SWT.None );
         container.setLayout( new GridLayout( 1, false ) );
 
-        excludeComponent = new IncludeExcludeComponent( container, SWT.NONE );
+        excludeComponent = new IncludeExcludeComponent( container, SWT.NONE, selectedResource, new EStructuralFeature[]{ PomPackage.Literals.RESOURCE__EXCLUDES }, domain );
         excludeComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
-
-        ExcludeComponentButtonListener buttonListener = new ExcludeComponentButtonListener();
-        excludeComponent.addAddButtonListener( buttonListener );
-        excludeComponent.addEditButtonListener( buttonListener );
-        excludeComponent.addRemoveButtonListener( buttonListener );
 
         return container;
     }
@@ -208,69 +145,12 @@ public class MavenPomBuildResourcesPage extends FormPage
         Composite container = toolKit.createComposite( parent, SWT.None );
         container.setLayout( new GridLayout( 1, false ) );
 
-        includeComponent = new IncludeExcludeComponent( container, SWT.NONE );
+        includeComponent = new IncludeExcludeComponent( container, SWT.NONE, selectedResource, new EStructuralFeature[]{ PomPackage.Literals.RESOURCE__INCLUDES }, domain );
         includeComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
 
-        IncludeComponentButtonListener buttonListener = new IncludeComponentButtonListener();
-        includeComponent.addAddButtonListener( buttonListener );
-        includeComponent.addEditButtonListener( buttonListener );
-        includeComponent.addRemoveButtonListener( buttonListener );
 
         return container;
     }
 
-    @SuppressWarnings( "unchecked" )
-    private class IncludeComponentButtonListener extends SelectionAdapter
-    {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
 
-        public void widgetSelected( SelectionEvent e )
-        {
-            if ( includeComponent.isModified() == true )
-            {
-                pageModified();
-            }
-        }
-    }
-
-    @SuppressWarnings( "unchecked" )
-    private class ExcludeComponentButtonListener extends SelectionAdapter
-    {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
-        public void widgetSelected( SelectionEvent e )
-        {
-            if ( excludeComponent.isModified() == true )
-            {
-                pageModified();
-            }
-        }
-    }
-
-    protected void pageModified()
-    {
-        isPageModified = true;
-        this.getEditor().editorDirtyStateChanged();
-    }
-
-    public boolean isDirty()
-    {
-        return isPageModified;
-    }
-
-    public boolean isPageModified()
-    {
-        return isPageModified;
-    }
-
-    public void setPageModified( boolean isPageModified )
-    {
-        this.isPageModified = isPageModified;
-    }
 }

@@ -9,7 +9,7 @@ package org.devzuz.q.maven.pomeditor.dialogs;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.maven.model.MailingList;
+import org.devzuz.q.maven.pom.MailingList;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.ui.MavenUiActivator;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;

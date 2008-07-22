@@ -3,9 +3,16 @@ package org.devzuz.q.maven.pomeditor.components;
 import java.util.Iterator;
 import java.util.List;
 
-import org.apache.maven.model.Dependency;
+import org.devzuz.q.maven.pom.Dependency;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomFactory;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.ui.dialogs.AddEditDependencyDialog;
+import org.eclipse.core.databinding.observable.value.WritableValue;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -33,21 +40,24 @@ public class DependencyTableComponent extends Composite
 
     private Button removeButton;
 
-    private List<Dependency> dependenciesList;
-
-    private Dependency selectedDependency;
-
     public int selectedIndex;
+    
+    private Model model;
+    
+    private EStructuralFeature[] path;
+    
+    private EditingDomain domain;
+    
+    private WritableValue selectedDependency;
 
-    private boolean isModified;
-
-    public DependencyTableComponent( Composite parent, int style, List<Dependency> dependenciesList )
+    public DependencyTableComponent( Composite parent, int style, Model model, EStructuralFeature[] path, EditingDomain domain, WritableValue selectedDependency )
     {
         super( parent, style );
 
-        assert dependenciesList != null;
-
-        this.dependenciesList = dependenciesList;
+        this.model = model;
+        this.path = path;
+        this.domain = domain;
+        this.selectedDependency = selectedDependency;
 
         setLayout( new GridLayout( 2, false ) );
 
@@ -90,6 +100,13 @@ public class DependencyTableComponent extends Composite
         TableColumn optionalColumn = new TableColumn( dependenciesTable, SWT.BEGINNING, 7 );
         optionalColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Optional );
         optionalColumn.setWidth( 50 );
+        
+        ModelUtil.bindTable( 
+        		model, 
+        		path, 
+        		new EStructuralFeature[]{ PomPackage.Literals.DEPENDENCY__GROUP_ID, PomPackage.Literals.DEPENDENCY__ARTIFACT_ID, PomPackage.Literals.DEPENDENCY__VERSION, PomPackage.Literals.DEPENDENCY__TYPE, PomPackage.Literals.DEPENDENCY__CLASSIFIER, PomPackage.Literals.DEPENDENCY__SYSTEM_PATH, PomPackage.Literals.DEPENDENCY__SCOPE, PomPackage.Literals.DEPENDENCY__OPTIONAL }, 
+        		dependenciesTable, 
+        		domain);
 
         Composite container2 = new Composite( this, SWT.NULL );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -114,26 +131,6 @@ public class DependencyTableComponent extends Composite
         removeButton.addSelectionListener( removeButtonListener );
         removeButton.setEnabled( false );
 
-        populateDependencyTable();
-
-    }
-
-    public void populateDependencyTable()
-    {
-        dependenciesTable.removeAll();
-
-        if ( dependenciesList != null )
-        {
-            for ( Dependency dependency : dependenciesList )
-            {
-                TableItem item = new TableItem( dependenciesTable, SWT.BEGINNING );
-                String optional = new Boolean( dependency.isOptional() ).toString();
-                item.setText( new String[] { dependency.getGroupId(), dependency.getArtifactId(),
-                    dependency.getVersion(), dependency.getType(), dependency.getClassifier(), dependency.getScope(),
-                    dependency.getSystemPath(), optional } );
-            }
-        }
-
     }
 
     private class DependenciesTableListener extends SelectionAdapter
@@ -151,7 +148,8 @@ public class DependencyTableComponent extends Composite
                 if ( dependenciesTable.getSelectionIndex() >= 0 )
                 {
                     selectedIndex = dependenciesTable.getSelectionIndex();
-                    selectedDependency = dependenciesList.get( selectedIndex );
+                    List<Dependency> dependenciesList = (List<Dependency>) ModelUtil.getValue( model, path, domain, false );
+                    selectedDependency.setValue( dependenciesList == null ? null : dependenciesList.get( selectedIndex ) );
                 }
             }
         }
@@ -168,7 +166,7 @@ public class DependencyTableComponent extends Composite
             {
                 if ( !artifactAlreadyExist( addDialog.getGroupId(), addDialog.getArtifactId() ) )
                 {
-                    Dependency dependency = new Dependency();
+                    Dependency dependency = PomFactory.eINSTANCE.createDependency();
 
                     dependency.setGroupId( addDialog.getGroupId() );
                     dependency.setArtifactId( addDialog.getArtifactId() );
@@ -179,11 +177,8 @@ public class DependencyTableComponent extends Composite
                     dependency.setSystemPath( nullIfBlank( addDialog.getSystemPath() ) );
                     dependency.setOptional( addDialog.isOptional() );
 
+                    List<Dependency> dependenciesList = (List<Dependency>) ModelUtil.getValue( model, path, domain, true );
                     dependenciesList.add( dependency );
-
-                    populateDependencyTable();
-
-                    setModified( true );
                 }
                 else
                 {
@@ -201,10 +196,18 @@ public class DependencyTableComponent extends Composite
         public void widgetSelected( SelectionEvent e )
         {
             AddEditDependencyDialog addDialog = AddEditDependencyDialog.getAddEditDependencyDialog();
-
-            if ( addDialog.openWithDependency( selectedDependency ) == Window.OK )
+            Dependency oldDependency = (Dependency) selectedDependency.getValue();
+            addDialog.setGroupId( oldDependency.getGroupId() );
+            addDialog.setArtifactId( oldDependency.getArtifactId() );
+            addDialog.setVersion( oldDependency.getVersion() );
+            addDialog.setScope( oldDependency.getScope() );
+            addDialog.setType( oldDependency.getType() );
+            addDialog.setClassifier( oldDependency.getClassifier() );
+            addDialog.setSystemPath( oldDependency.getSystemPath() );
+            addDialog.setOptional( oldDependency.isOptional() );
+            if ( addDialog.open() == Window.OK )
             {
-                Dependency dependency = new Dependency();
+                Dependency dependency = PomFactory.eINSTANCE.createDependency();
 
                 dependency.setGroupId( addDialog.getGroupId() );
                 dependency.setArtifactId( addDialog.getArtifactId() );
@@ -215,19 +218,16 @@ public class DependencyTableComponent extends Composite
                 dependency.setSystemPath( nullIfBlank( addDialog.getSystemPath() ) );
                 dependency.setOptional( addDialog.isOptional() );
 
+                List<Dependency> dependenciesList = (List<Dependency>) ModelUtil.getValue( model, path, domain, true );
                 if ( artifactAlreadyExist( addDialog.getGroupId(), addDialog.getArtifactId() ) )
                 {
                     // groupId and artifactId are unmodified
-                    if ( ( selectedDependency.getGroupId().equalsIgnoreCase( dependency.getGroupId() ) )
-                                    && ( selectedDependency.getArtifactId().equalsIgnoreCase( dependency.getArtifactId() ) ) )
+                    if ( ( oldDependency.getGroupId().equalsIgnoreCase( dependency.getGroupId() ) )
+                                    && ( oldDependency.getArtifactId().equalsIgnoreCase( dependency.getArtifactId() ) ) )
                     {
-                        dependenciesList.remove( selectedDependency );
+                        dependenciesList.remove( oldDependency );
 
                         dependenciesList.add( dependency );
-
-                        populateDependencyTable();
-
-                        setModified( true );
                     }
                     // this means user put in a duplicate artifact
                     else
@@ -243,13 +243,9 @@ public class DependencyTableComponent extends Composite
                 }
                 else
                 {
-                    dependenciesList.remove( selectedDependency );
+                    dependenciesList.remove( oldDependency );
 
                     dependenciesList.add( dependency );
-
-                    populateDependencyTable();
-
-                    setModified( true );
                 }
             }
 
@@ -260,16 +256,16 @@ public class DependencyTableComponent extends Composite
     {
         public void widgetSelected( SelectionEvent e )
         {
-            dependenciesList.remove( selectedDependency );
-
-            populateDependencyTable();
-
-            setModified( true );
+        	List<Dependency> dependenciesList = (List<Dependency>) ModelUtil.getValue( model, path, domain, true );
+            dependenciesList.remove( selectedDependency.getValue() );
+            selectedDependency.setValue( null );
+            
         }
     }
 
     private boolean artifactAlreadyExist( String groupId, String artifactId )
     {
+    	List<Dependency> dependenciesList = (List<Dependency>) ModelUtil.getValue( model, path, domain, true );
         for ( Iterator<Dependency> it = dependenciesList.iterator(); it.hasNext(); )
         {
             Dependency artifact = it.next();
@@ -287,10 +283,6 @@ public class DependencyTableComponent extends Composite
         return ( str == null || str.equals( "" ) ) ? null : str;
     }
 
-    public Dependency getSelectedDependency()
-    {
-        return selectedDependency;
-    }
 
     public void addDependencyTableListener( SelectionListener listener )
     {
@@ -345,16 +337,6 @@ public class DependencyTableComponent extends Composite
     public void removeRemoveButtonListener( SelectionListener listener )
     {
         removeButton.removeSelectionListener( listener );
-    }
-
-    public boolean isModified()
-    {
-        return isModified;
-    }
-
-    public void setModified( boolean isModified )
-    {
-        this.isModified = isModified;
     }
 
 }

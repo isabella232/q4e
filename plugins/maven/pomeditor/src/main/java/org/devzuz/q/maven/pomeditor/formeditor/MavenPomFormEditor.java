@@ -6,16 +6,16 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.pomeditor.formeditor;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.util.EventObject;
+import java.util.HashMap;
 
 import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.embedder.IMavenProject;
-import org.devzuz.q.maven.embedder.MavenUtils;
+import org.devzuz.q.maven.pom.PomPackage;
+import org.devzuz.q.maven.pom.provider.PomItemProviderAdapterFactory;
+import org.devzuz.q.maven.pom.util.PomResourceFactoryImpl;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBasicFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildFormPage;
@@ -31,7 +31,7 @@ import org.devzuz.q.maven.pomeditor.pages.MavenPomProfilesFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomPropertiesModuleFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomReportingFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomRepositoriesFormPage;
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -40,14 +40,28 @@ import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.databinding.EMFDataBindingContext;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
+import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
+import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.wst.sse.core.StructuredModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IModelManager;
+import org.eclipse.wst.sse.core.internal.provisional.IStructuredModel;
+import org.eclipse.wst.sse.ui.StructuredTextEditor;
+import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
 public class MavenPomFormEditor extends FormEditor
 {
@@ -119,6 +133,16 @@ public class MavenPomFormEditor extends FormEditor
     private MavenPomProfilesFormPage profilesPage;
 
     private IProject project;
+
+    private StructuredTextEditor sourceEditor;
+    
+    private IStructuredModel sourceModel;
+    
+    private org.devzuz.q.maven.pom.Model emfModel;
+    
+    private EditingDomain editingDomain;
+    
+    private DataBindingContext bindingContext = new EMFDataBindingContext();
 
     private final IResourceDeltaVisitor preDeleteDeltaVisitor = new IResourceDeltaVisitor()
     {
@@ -233,6 +257,7 @@ public class MavenPomFormEditor extends FormEditor
     public void dispose()
     {
         ResourcesPlugin.getWorkspace().removeResourceChangeListener( resourceChangeListener );
+        sourceModel.releaseFromEdit();
         super.dispose();
     }
 
@@ -244,68 +269,73 @@ public class MavenPomFormEditor extends FormEditor
             if ( initializeAddPagesOK() )
             {
                 basicFormPage =
-                    new MavenPomBasicFormPage( this, BASIC_INFO_FORM_PAGE, "Project Information", this.pomModel );
+                    new MavenPomBasicFormPage( this, BASIC_INFO_FORM_PAGE, "Project Information", this.emfModel, this.editingDomain, this.bindingContext );
                 addPage( basicFormPage );
 
                 dependenciesFormPage =
                     new MavenPomDependenciesFormPage( this, DEPENDENCIES_FORM_PAGE,
-                                                      "Dependencies/Dependency Management", this.pomModel );
+                                                      "Dependencies/Dependency Management", this.emfModel, this.editingDomain, this.bindingContext );
                 addPage( dependenciesFormPage );
 
                 mavenPomLicensesScmOrgFormPage =
                     new MavenPomLicensesScmOrgFormPage( this, LICENSES_SCM_ORG_FORM_PAGE,
-                                                        "Licenses/SCM/Organization/Issue Management", this.pomModel );
+                                                        "Licenses/SCM/Organization/Issue Management", this.emfModel, editingDomain, bindingContext );
                 addPage( mavenPomLicensesScmOrgFormPage );
 
                 developersContributorsFormPage =
                     new MavenPomDevelopersContributorsFormPage( this, DEVELOPERS_CONTRIBUTORS_FORM_PAGE,
-                                                                "Developers/Contributors", this.pomModel );
+                                                                "Developers/Contributors", this.emfModel, editingDomain, bindingContext );
                 addPage( developersContributorsFormPage );
 
                 modulePropertiesFormPage =
-                    new MavenPomPropertiesModuleFormPage( this, MODULES_FORM_PAGE, "Properties/Module", this.pomModel );
+                    new MavenPomPropertiesModuleFormPage( this, MODULES_FORM_PAGE, "Properties/Module", this.emfModel, editingDomain, bindingContext );
                 addPage( modulePropertiesFormPage );
 
-                buildFormPage = new MavenPomBuildFormPage( this, BUILD_FORM_PAGE, "Build Management", this.pomModel );
+                buildFormPage = new MavenPomBuildFormPage( this, BUILD_FORM_PAGE, "Build Management", this.emfModel, this.editingDomain, this.bindingContext );
                 addPage( buildFormPage );
 
                 buildResourcesPage =
-                    new MavenPomBuildResourcesPage( this, BUILD_RESOURCES_FORM_PAGE, "Build Resources", this.pomModel );
+                    new MavenPomBuildResourcesPage( this, BUILD_RESOURCES_FORM_PAGE, "Build Resources", this.emfModel, this.editingDomain, this.bindingContext );
                 addPage( buildResourcesPage );
 
                 buildTestResourcesPage =
                     new MavenPomBuildTestResourcesPage( this, BUILD_TEST_RESOURCES_FORM_PAGE, "Build Test Resources",
-                                                        this.pomModel );
+                                                        this.emfModel, this.editingDomain, this.bindingContext );
                 addPage( buildTestResourcesPage );
 
                 buildPluginFormPage =
                     new MavenPomBuildPluginFormPage( this, BUILD_PLUGINS_FORM_PAGE, "Build Plugin/Plugin Management",
-                                                     this.pomModel );
+                                                     this.emfModel, editingDomain );
                 addPage( buildPluginFormPage );
 
                 ciManagementMailingListsPage =
                     new MavenPomCiManagementMailingListFormPage( this, CIMANAGEMENT_MAILINGLISTS_FORM_PAGE,
-                                                                 "CiManagement/Mailing Lists", this.pomModel );
+                                                                 "CiManagement/Mailing Lists", this.emfModel, this.editingDomain, this.bindingContext );
                 addPage( ciManagementMailingListsPage );
 
                 repositoriesPage =
-                    new MavenPomRepositoriesFormPage( this, REPOSITORIES_FORM_PAGE, "Repositories", this.pomModel );
+                    new MavenPomRepositoriesFormPage( this, REPOSITORIES_FORM_PAGE, "Repositories", this.emfModel, editingDomain, bindingContext );
                 addPage( repositoriesPage );
 
                 distributionManagementPage =
                     new MavenPomDistributionManagementFormPage( this, DISTRIBUTION_MANAGEMENT_FORM_PAGE,
-                                                                "Distribution Management", this.pomModel );
+                                                                "Distribution Management", this.emfModel, editingDomain, bindingContext );
                 addPage( distributionManagementPage );
                 
                 reportingPage =
                     new MavenPomReportingFormPage( this, REPORTING_FORM_PAGE, 
-                                                   "Reporting", this.pomModel );                
+                                                   "Reporting", this.emfModel, editingDomain, bindingContext );                
                 addPage( reportingPage );
                 
                 profilesPage =
                     new MavenPomProfilesFormPage( this, PROFILES_FORM_PAGE,
                                                   "Profiles", this.pomModel );
                 addPage( profilesPage );
+                
+                sourceEditor = new StructuredTextEditor();
+                sourceEditor.setEditorPart( this );
+                int sourceIdx = addPage( sourceEditor, getEditorInput() );
+                setPageText( sourceIdx, "Source" );
             }
         }
         catch ( PartInitException pie )
@@ -316,21 +346,13 @@ public class MavenPomFormEditor extends FormEditor
 
     private boolean initializeAddPagesOK()
     {
-        if ( getPomFile() != null )
-        {
-            if ( checkIfPomEmpty())
-            {
-                this.pomModel = new Model();
                 
-                pomModel.setGroupId( project.getName() );
-                pomModel.setArtifactId( project.getName() );
-                pomModel.setVersion( "1.0-SNAPSHOT" ); 
-            }
-            else
-            {
                 try
                 {
-                    this.pomModel = new MavenXpp3Reader().read( new FileReader( getPomFile() ) );
+            this.pomModel = new Model();
+            this.sourceModel = buildDomModel();
+            this.editingDomain = buildEditingDomain();
+            this.emfModel = buildEmfModel();
                 }
                 catch ( FileNotFoundException e )
                 {
@@ -340,39 +362,16 @@ public class MavenPomFormEditor extends FormEditor
                 {
                     e.printStackTrace();
                 }
-                catch ( XmlPullParserException e )
-                {
-                    e.printStackTrace();
-                }
-            }
-        }
-        else
-        {
-            return false;
-        }
 
         return true;
 
-    }
-
-    private boolean checkIfPomEmpty()
-    {
-            File file =  getPomFile();
-            
-            if ( file.length() == 0 )
-            {    
-                
-                return true;
-            }                    
-        
-        return false;
     }
 
     @Override
     public void doSave( IProgressMonitor monitor )
     {
         monitor.beginTask( "Writing to POM file.", 3 );
-        savePomFile();
+         sourceEditor.doSave( monitor );
         monitor.worked( 1 );
         setPagesClean();
         monitor.worked( 1 );
@@ -393,62 +392,93 @@ public class MavenPomFormEditor extends FormEditor
         return false;
     }
 
-    protected void savePomFile()
-    {
-        try
-        {
-            File pomFile = getPomFile();
-
-            MavenUtils.rewritePom( pomFile, pomModel );
-
-            IPath location = Path.fromOSString( pomFile.getAbsolutePath() );
-            IFile file = ResourcesPlugin.getWorkspace().getRoot().getFileForLocation( location );
-
-            file.refreshLocal( IResource.DEPTH_ZERO, null );
-
-        }
-        catch ( CoreException e )
-        {
-            PomEditorActivator.getLogger().log( e );
-        }
-        catch ( IOException e )
-        {
-            PomEditorActivator.getLogger().log( e );
-        }
-        catch ( Exception e )
-        {
-            PomEditorActivator.getLogger().log( e );
-        }
-
-    }
-
     private void setPagesClean()
     {
         basicFormPage.setPageModified( false );
-        dependenciesFormPage.setPageModified( false );
         modulePropertiesFormPage.setPageModified( false );
-        mavenPomLicensesScmOrgFormPage.setPageModified( false );
-        developersContributorsFormPage.setPageModified( false );
         buildFormPage.setPageModified( false );
-        buildResourcesPage.setPageModified( false );
-        buildTestResourcesPage.setPageModified( false );
         buildPluginFormPage.setPageModified( false );
-        ciManagementMailingListsPage.setPageModified( false );
         repositoriesPage.setPageModified( false );
-        distributionManagementPage.setPageModified( false );
-        reportingPage.setPageModified( false );
-        profilesPage.setPageModified( false );
         // clean other pages
     }
-
-    private File getPomFile()
-    {
-        IEditorInput input = getEditorInput();
-        if ( input instanceof IFileEditorInput )
+    
+    private synchronized org.devzuz.q.maven.pom.Model buildEmfModel()
         {
-            return ( (IFileEditorInput) input ).getFile().getLocation().toFile();            
+    	URI resourceURI = EditUIUtil.getURI( getEditorInput() );
+        editingDomain.getResourceSet().getResourceFactoryRegistry().getExtensionToFactoryMap().put(
+                                                                                                    Resource.Factory.Registry.DEFAULT_EXTENSION,
+                                                                                                    new PomResourceFactoryImpl() );
+
+        editingDomain.getResourceSet().getPackageRegistry().put( PomPackage.eNS_URI, PomPackage.eINSTANCE );
+        editingDomain.getResourceSet().getPackageRegistry().put( null, PomPackage.eINSTANCE );
+        Resource resource = null;
+        try
+        {
+            // Load the resource through the editing domain.
+            //
+            resource = editingDomain.getResourceSet().getResource( resourceURI, true );
+        }
+        catch ( Exception e )
+        {
+            resource = editingDomain.getResourceSet().getResource( resourceURI, false );
+        }
+
+        if ( resource != null )
+        {
+            return (org.devzuz.q.maven.pom.Model) resource.getContents().get( 0 );
         }
 
         return null;
+    }
+
+    private EditingDomain buildEditingDomain() 
+    {
+     // Create an adapter factory that yields item providers.
+        //
+    	ComposedAdapterFactory adapterFactory = new ComposedAdapterFactory(ComposedAdapterFactory.Descriptor.Registry.INSTANCE);
+
+        adapterFactory.addAdapterFactory(new ResourceItemProviderAdapterFactory());
+        adapterFactory.addAdapterFactory(new PomItemProviderAdapterFactory());
+        adapterFactory.addAdapterFactory(new ReflectiveItemProviderAdapterFactory());
+
+        // Create the command stack that will notify this editor as commands are executed.
+        //
+        final BasicCommandStack commandStack = new BasicCommandStack();
+
+        commandStack.addCommandStackListener( new CommandStackListener() {
+            public void commandStackChanged(final EventObject event) {
+                getContainer().getDisplay().asyncExec(new Runnable() {
+                    public void run() {
+                        editorDirtyStateChanged();
+                    }
+                });
+            }
+        });
+
+        // Create the editing domain with a special command stack.
+        //
+       return new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
+    }
+
+    private synchronized IDOMModel buildDomModel( ) throws IOException
+    {
+        IEditorInput input = getEditorInput();
+        try
+        {
+            IModelManager modelManager = StructuredModelManager.getModelManager();
+            IDOMModel model = (IDOMModel) modelManager.getExistingModelForEdit( input );
+            if( null == model )
+            {
+        if ( input instanceof IFileEditorInput )
+        {
+                    model = (IDOMModel) modelManager.getModelForEdit( ( (IFileEditorInput) input ).getFile() );            
+                }
+            }
+            return model;
+        }
+        catch ( CoreException e )
+        {
+            throw new IOException( e );
+        }
     }
 }

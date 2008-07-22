@@ -8,15 +8,21 @@ package org.devzuz.q.maven.pomeditor.pages;
 
 import java.util.List;
 
-import org.apache.maven.model.Build;
-import org.apache.maven.model.Extension;
-import org.apache.maven.model.Model;
+import org.devzuz.q.maven.pom.Extension;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomFactory;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
 import org.devzuz.q.maven.pomeditor.components.BuildManagementDetailComponent;
 import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
 import org.devzuz.q.maven.pomeditor.components.SimpleTableComponent;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditExtensionDialog;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -51,24 +57,24 @@ public class MavenPomBuildFormPage extends FormPage
 	private Button addExtensionButton;
 
 	private Button removeExtensionButton;
-	
-	private Build build;
-
-	private List<Extension> extensionList;
-
-	private Extension selectedExtension;  
 
 	private Button editExtensionButton;
 
     private BuildManagementDetailComponent buildManagementDetailComponent;
 
-    private SimpleTableComponent filterTableComponent;
+    private SimpleTableComponent filterComponent;
+    
+    private EditingDomain domain;
+    
+    private DataBindingContext bindingContext;
 
 	public MavenPomBuildFormPage ( FormEditor editor, String id, 
-			String title, Model model )
+			String title, Model model, EditingDomain domain, DataBindingContext bindingContext )
 	{
 		super ( editor, id, title );
 		this.pomModel = model;
+		this.domain = domain;
+		this.bindingContext = bindingContext;
 	}
 	
 	public MavenPomBuildFormPage ( String id, String title )
@@ -93,13 +99,6 @@ public class MavenPomBuildFormPage extends FormPage
         Composite container = toolkit.createComposite( form.getBody() );
         container.setLayoutData( createSectionLayoutData() );
         createRightSideControl( container, toolkit );
-        
-        build  = pomModel.getBuild();
-        if( build != null )
-        {
-            extensionList = build.getExtensions();
-            syncExtensionListToTable();
-        }
     }
 
     private GridData createSectionLayoutData()
@@ -137,7 +136,14 @@ public class MavenPomBuildFormPage extends FormPage
         extensionsTable.setLinesVisible( true );
         extensionsTable.setHeaderVisible( true );
         ExtensionsTableListener tableListener = new ExtensionsTableListener();
-        extensionsTable.addSelectionListener( tableListener );        
+        extensionsTable.addSelectionListener( tableListener );   
+        
+        ModelUtil.bindTable(
+        		pomModel,
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__EXTENSIONS },
+        		new EStructuralFeature[]{ PomPackage.Literals.EXTENSION__GROUP_ID, PomPackage.Literals.EXTENSION__ARTIFACT_ID, PomPackage.Literals.EXTENSION__VERSION },
+        		extensionsTable,
+        		domain);
         
         TableColumn groupIdColumn = new TableColumn( extensionsTable, SWT.LEFT, 0 );
         groupIdColumn.setWidth( 150 );
@@ -174,50 +180,13 @@ public class MavenPomBuildFormPage extends FormPage
 		return container;
 	}
 
-	@SuppressWarnings( "unchecked" )
-	private void syncExtensionListToTable()
-    {
-        if ( extensionList != null )
-        {
-            extensionsTable.removeAll();
-            for ( Extension extension : extensionList )
-            {
-                TableItem item = new TableItem( extensionsTable, SWT.BEGINNING );
-                item.setText( new String[] { extension.getGroupId(), 
-                                             extension.getArtifactId(), 
-                                             extension.getVersion() } );
-
-            }
-        }		
-	}
-
 	private Control createDirectoryControls( Composite parent, FormToolkit toolKit )
-	{
-	    IComponentModificationListener listener = new IComponentModificationListener()
-        {
-            public void componentModified( AbstractComponent component ,  Control ctrl )
-            {
-                build.setDefaultGoal( buildManagementDetailComponent.getDefaultGoal() );
-                build.setFinalName( buildManagementDetailComponent.getFinalName() );
-                build.setDirectory( buildManagementDetailComponent.getDirectory() );
-                build.setOutputDirectory( buildManagementDetailComponent.getOutputDirectory() );
-                build.setTestOutputDirectory( buildManagementDetailComponent.getTestOutputDirectory() );
-                build.setSourceDirectory( buildManagementDetailComponent.getSourceDirectory() );
-                build.setTestOutputDirectory( buildManagementDetailComponent.getTestOutputDirectory() );
-                build.setScriptSourceDirectory( buildManagementDetailComponent.getScriptSourceDirectory() );
-                
-                pageModified();
-            }
-        };
-        
+	{   
 	    Composite container = toolKit.createComposite( parent );
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
         
         buildManagementDetailComponent = 
-            new BuildManagementDetailComponent( container, SWT.NULL );
-        buildManagementDetailComponent.updateComponent( pomModel.getBuild() );
-        
-        buildManagementDetailComponent.addComponentModifyListener( listener );
+            new BuildManagementDetailComponent( container, SWT.NULL, pomModel, domain, bindingContext );
         
         return container;
 	}	
@@ -238,34 +207,18 @@ public class MavenPomBuildFormPage extends FormPage
 	    Composite container = toolKit.createComposite( parent );
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
         
-        filterTableComponent = 
-            new SimpleTableComponent( container, SWT.NULL, 
-                                      pomModel.getBuild().getFilters(), "Filter"  );
+        filterComponent = new SimpleTableComponent( 
+        		container, 
+        		SWT.NULL, 
+                pomModel, 
+                new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__FILTERS },
+                "Filter",
+                domain
+                );
         
-        filterTableComponent.addComponentModifyListener( buttonListener );
+        filterComponent.addComponentModifyListener( buttonListener );
         
         return container;
-    }
-
-    /*
-	 *  The idea behind this function is that the build element should be null if it contains nothing.
-	 */
-	private boolean checkBuild()
-    {
-        boolean buildIsNull = ( build.getFinalName() == null && build.getDirectory() == null && 
-                                build.getOutputDirectory() == null && build.getTestOutputDirectory() == null && 
-                                build.getSourceDirectory() == null && build.getScriptSourceDirectory() == null && 
-                                build.getTestSourceDirectory() == null && build.getExtensions().size() <= 0 && 
-                                build.getResources().size() <= 0 && build.getTestResources().size() <= 0 &&
-                                build.getPlugins().size() <= 0 && build.getPluginManagement() == null &&
-                                build.getDefaultGoal() == null && build.getFilters().size() <= 0 );
-        if( buildIsNull )
-        {
-            pomModel.setBuild( null );
-            build = null;
-        }
-        
-        return buildIsNull;
     }
 	
 	private class ExtensionsTableListener extends SelectionAdapter
@@ -280,12 +233,6 @@ public class MavenPomBuildFormPage extends FormPage
                 addExtensionButton.setEnabled( true );
                 editExtensionButton.setEnabled( true );
                 removeExtensionButton.setEnabled( true );
-                
-                if ( extensionsTable.getSelectionIndex() >= 0 )
-                {
-                    int selectedIndex = extensionsTable.getSelectionIndex();
-                    selectedExtension = extensionList.get( selectedIndex );
-                }
             }
         }
     }
@@ -304,21 +251,18 @@ public class MavenPomBuildFormPage extends FormPage
 	    		                            addDialog.getArtifactId(), 
 	    		                            addDialog.getVersion() ) )
 	    		{	    			
-	    			Extension extension = new Extension();
+	    			Extension extension = PomFactory.eINSTANCE.createExtension();
 	    			extension.setGroupId( addDialog.getGroupId() );
 	    			extension.setArtifactId( addDialog.getArtifactId() );
 	    			extension.setVersion( addDialog.getVersion() );
 	    			
-	    			if( build == null )
-                    {
-                        build = new Build();
-                        extensionList = build.getExtensions();
-                        pomModel.setBuild( build );
-                    }
+	    			List<Extension> extensions = (List<Extension>) ModelUtil.createOrGetContainer( 
+	    					pomModel, 
+	    					new EReference[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__EXTENSIONS }, 
+	    					domain );
 	    			
-	    			extensionList.add( extension );
 	    			
-	    			syncExtensionListToTable();
+	    			extensions.add( extension );
 	    			
 	    			pageModified();
 	    		}	    		
@@ -334,27 +278,37 @@ public class MavenPomBuildFormPage extends FormPage
 	    	AddEditExtensionDialog addDialog = 
 	    		AddEditExtensionDialog.newAddEditExtensionDialog();
 	    	
-	    	if ( addDialog.openWithItem(selectedExtension.getGroupId(), 
-	    	                            selectedExtension.getArtifactId(), 
-	    	                            selectedExtension.getVersion() ) == Window.OK )
-	    	{	    		
-	    	    // TODO : addDialog should have a way to validate with already existing 
-	    	    //        artifacts in the table
-	    		if ( !artifactAlreadyExist( addDialog.getGroupId(), 
-	    		                            addDialog.getArtifactId(), 
-	    		                            addDialog.getVersion() ) )
-	    		{	    			
-	    		    selectedExtension.setGroupId( addDialog.getGroupId() );
-	    		    selectedExtension.setArtifactId( addDialog.getArtifactId() );
-	    		    selectedExtension.setVersion( addDialog.getVersion() );
-	    		    
-	    			syncExtensionListToTable();
-	    			
-	    			pageModified();
-	    			
-	    			editExtensionButton.setEnabled( false );
-	    			removeExtensionButton.setEnabled( false );
-	    		}	    		
+	    	int selectedIndex = extensionsTable.getSelectionIndex();
+	    	
+	    	if( selectedIndex > -1 )
+	    	{
+	    		List<Extension> extensions = (List<Extension>) ModelUtil.createOrGetContainer( 
+    					pomModel, 
+    					new EReference[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__EXTENSIONS }, 
+    					domain );
+	    		
+	    		Extension selectedExtension = extensions.get( selectedIndex );
+	    		
+		    	if ( addDialog.openWithItem(selectedExtension.getGroupId(), 
+		    	                            selectedExtension.getArtifactId(), 
+		    	                            selectedExtension.getVersion() ) == Window.OK )
+		    	{	    		
+		    	    // TODO : addDialog should have a way to validate with already existing 
+		    	    //        artifacts in the table
+		    		if ( !artifactAlreadyExist( addDialog.getGroupId(), 
+		    		                            addDialog.getArtifactId(), 
+		    		                            addDialog.getVersion() ) )
+		    		{	    			
+		    		    selectedExtension.setGroupId( addDialog.getGroupId() );
+		    		    selectedExtension.setArtifactId( addDialog.getArtifactId() );
+		    		    selectedExtension.setVersion( addDialog.getVersion() );
+		    			
+		    			pageModified();
+		    			
+		    			editExtensionButton.setEnabled( false );
+		    			removeExtensionButton.setEnabled( false );
+		    		}	    		
+		    	}
 	    	}
 	    }
 	}
@@ -363,16 +317,21 @@ public class MavenPomBuildFormPage extends FormPage
 	{
 		public void widgetSelected( SelectionEvent e )
 	    {
-	    	extensionList.remove( selectedExtension );
+			int selectedIndex = extensionsTable.getSelectionIndex();
 	    	
-	    	syncExtensionListToTable();
-	    	
-	    	checkBuild();
-	    	
-	    	pageModified();
-	    	
-	    	editExtensionButton.setEnabled( false );
-	    	removeExtensionButton.setEnabled( false );
+	    	if( selectedIndex > -1 )
+	    	{
+	    		List<Extension> extensions = (List<Extension>) ModelUtil.createOrGetContainer( 
+    					pomModel, 
+    					new EReference[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__EXTENSIONS }, 
+    					domain );
+		    	extensions.remove( selectedIndex );
+		    	
+		    	pageModified();
+		    	
+		    	editExtensionButton.setEnabled( false );
+		    	removeExtensionButton.setEnabled( false );
+	    	}
 	    }
 		
 	}
@@ -380,9 +339,17 @@ public class MavenPomBuildFormPage extends FormPage
 	private boolean artifactAlreadyExist(String groupId, String artifactId,
 			String version) 
 	{
-	    if ( extensionList != null )
+
+		
+		
+	    if ( pomModel.getBuild() != null && pomModel.getBuild().getExtensions() != null )
         {
-            for ( Extension extension : extensionList )
+	    	List<Extension> extensions = (List<Extension>) ModelUtil.createOrGetContainer( 
+					pomModel, 
+					new EReference[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__EXTENSIONS }, 
+					domain );
+
+            for ( Extension extension : extensions )
             {
                 if ( ( extension.getGroupId().equals( groupId ) ) &&
                      ( extension.getArtifactId().equals( artifactId ) ) &&

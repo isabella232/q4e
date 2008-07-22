@@ -1,11 +1,13 @@
 package org.devzuz.q.maven.pomeditor.pages;
 
-import org.apache.maven.model.Model;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.components.RepositoryTableComponent;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -30,12 +32,18 @@ public class MavenPomRepositoriesFormPage
     private RepositoryTableComponent repositoriesTableComponent;
     
     private RepositoryTableComponent pluginRepositoriesTableComponent;
+    
+    private EditingDomain domain;
+    
+    private DataBindingContext bindingContext;
         
     public MavenPomRepositoriesFormPage( FormEditor editor, String id,
-                                         String title, Model model )
+                                         String title, Model model, EditingDomain domain, DataBindingContext bindingContext )
     {
         super( editor, id, title );
         this.pomModel = model;
+        this.domain = domain;
+        this.bindingContext = bindingContext;
         
     }
     public MavenPomRepositoriesFormPage( String id, String title )
@@ -77,12 +85,10 @@ public class MavenPomRepositoriesFormPage
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
                 
         pluginRepositoriesTableComponent = new RepositoryTableComponent( container, SWT.None, 
-                                                                         pomModel.getPluginRepositories() );
+                                                                         pomModel, 
+                                                                         new EStructuralFeature[] { PomPackage.Literals.MODEL__PLUGIN_REPOSITORIES },
+                                                                         domain );
                         
-        ComponentListener buttonListener = new ComponentListener();
-        pluginRepositoriesTableComponent.addAddButtonListener( buttonListener );
-        pluginRepositoriesTableComponent.addEditButtonListener( buttonListener );
-        pluginRepositoriesTableComponent.addRemoveButtonListener( buttonListener );
         
         return container;
     }
@@ -95,38 +101,13 @@ public class MavenPomRepositoriesFormPage
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
                 
         repositoriesTableComponent = new RepositoryTableComponent( container, SWT.None, 
-                                                                   pomModel.getRepositories() );
-                        
-        ComponentListener buttonListener = new ComponentListener();
-        repositoriesTableComponent.addAddButtonListener( buttonListener );
-        repositoriesTableComponent.addEditButtonListener( buttonListener );
-        repositoriesTableComponent.addRemoveButtonListener( buttonListener );
-        
+													                pomModel, 
+													                new EStructuralFeature[] { PomPackage.Literals.MODEL__REPOSITORIES },
+													                domain );
+
         return container;
     }
     
-    private class ComponentListener extends SelectionAdapter
-    {
-        public void widgetDefaultSelected( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-
-        public void widgetSelected( SelectionEvent e )
-        {
-            if ( ( repositoriesTableComponent.isModified() == true ) ||
-                 ( pluginRepositoriesTableComponent.isModified() == true ) )
-            {
-                pageModified();
-            }
-        }
-    }
-    protected void pageModified()
-    {
-        isPageModified = true;
-        this.getEditor().editorDirtyStateChanged();
-        
-    }
     
     public boolean isDirty()
     {

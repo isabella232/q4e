@@ -3,12 +3,23 @@ package org.devzuz.q.maven.pomeditor.components;
 import java.util.List;
 
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditInclusionExclusionDialog;
+import org.eclipse.core.databinding.observable.Realm;
+import org.eclipse.core.databinding.observable.list.IObservableList;
+import org.eclipse.core.databinding.observable.value.IObservableValue;
+import org.eclipse.core.databinding.observable.value.IValueChangeListener;
+import org.eclipse.core.databinding.observable.value.ValueChangeEvent;
+import org.eclipse.emf.databinding.edit.EMFEditObservables;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
@@ -26,18 +37,23 @@ public class IncludeExcludeComponent extends Composite
 	private Button editButton;
 	
 	private Button removeButton;
-
-	private int selectedIndex;
 	
-	private String selectedElement;
-
-	private List<String> dataSource;
+	private int selectedIndex;
 
     private boolean isModified;
+    
+    private IObservableValue parentObservable;
+    
+    private EStructuralFeature[] feature;
+    
+    private EditingDomain domain;
 	
-	public IncludeExcludeComponent ( Composite parent, int style )
+	public IncludeExcludeComponent ( Composite parent, int style, IObservableValue parentObservable, EStructuralFeature[] feature, EditingDomain domain )
 	{
 		super ( parent, style );
+		this.parentObservable = parentObservable;
+		this.feature = feature;
+		this.domain = domain;
 		
 		setLayout( new GridLayout( 2, false ) );
 		
@@ -45,6 +61,19 @@ public class IncludeExcludeComponent extends Composite
         componentTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
         componentTable.setLinesVisible( true );
         componentTable.setHeaderVisible( true );
+        
+        TableViewer viewer = new TableViewer( componentTable );
+		ObservableListContentProvider contentProvider = new ObservableListContentProvider();
+		viewer.setContentProvider( contentProvider );
+		IObservableValue ctx = parentObservable;
+		for ( int i = 0; i < feature.length - 1; i++ )
+		{
+			ctx = EMFEditObservables.observeDetailValue( Realm.getDefault(), domain, ctx, feature[i] );
+		}
+		IObservableList list = EMFEditObservables.observeDetailList( Realm.getDefault(), domain, ctx, feature[feature.length - 1] );
+		viewer.setInput( list );
+		
+		
         ComponentTableListener tableListener = new ComponentTableListener();
         componentTable.addSelectionListener( tableListener );
         
@@ -70,22 +99,14 @@ public class IncludeExcludeComponent extends Composite
         removeButton.setText( Messages.MavenPomEditor_MavenPomEditor_RemoveButton );
         RemoveButtonListener removeButtonListener = new RemoveButtonListener();
         removeButton.addSelectionListener( removeButtonListener );
-        removeButton.setEnabled( false );		
-	}
-	
-	public void updateTable( List<String> dataSource )
-	{
-	    assert dataSource != null;
-
-	    this.dataSource = dataSource;
-	    
-        componentTable.removeAll();
+        removeButton.setEnabled( false );	
         
-        for ( String data : this.dataSource )
-        {
-            TableItem tableItem = new TableItem( componentTable, SWT.BEGINNING );
-				tableItem.setText( new String[] { data } );
-		}
+        parentObservable.addValueChangeListener( new IValueChangeListener() {
+        	public void handleValueChange(ValueChangeEvent event) {
+        		editButton.setEnabled( false );
+        		removeButton.setEnabled( false );
+        	}
+        });
 	}
 	
 	private class ComponentTableListener extends SelectionAdapter
@@ -103,7 +124,6 @@ public class IncludeExcludeComponent extends Composite
 				if ( componentTable.getSelectionIndex() >= 0 )
 				{
 					selectedIndex = componentTable.getSelectionIndex();
-					selectedElement = (String) dataSource.get( selectedIndex );
 				}
 			}
 		}
@@ -119,11 +139,11 @@ public class IncludeExcludeComponent extends Composite
 			if ( addDialog.openWithItem(null) == Window.OK )
 			{
 				String dataString = addDialog.getDataString();
+				EObject parent = (EObject) parentObservable.getValue();
+				List<String> dataSource = (List<String>)ModelUtil.getValue(parent, feature, domain, true );
 				dataSource.add( dataString );
 				
 				setModified( true );
-				
-				refreshComponentTable();
 			}
 		}
 		
@@ -136,6 +156,9 @@ public class IncludeExcludeComponent extends Composite
 			AddEditInclusionExclusionDialog editDialog = 
 			    AddEditInclusionExclusionDialog.getNewAddEditInclusionExclusionDialog();
 			
+			EObject parent = (EObject) parentObservable.getValue();
+			List<String> dataSource = (List<String>)ModelUtil.getValue(parent, feature, domain, true );
+			String selectedElement = dataSource.get( selectedIndex );
 			if ( editDialog.openWithItem( selectedElement ) == Window.OK )
 			{
 				dataSource.remove( selectedIndex );
@@ -143,8 +166,6 @@ public class IncludeExcludeComponent extends Composite
 				dataSource.add( selectedIndex, dataString );
 				
 				setModified( true );
-				
-				refreshComponentTable();
 			}
 		}
 	}
@@ -153,70 +174,18 @@ public class IncludeExcludeComponent extends Composite
 	{
 		public void widgetSelected( SelectionEvent e )
 		{
+			EObject parent = (EObject) parentObservable.getValue();
+			List<String> dataSource = (List<String>)ModelUtil.getValue(parent, feature, domain, true );
 			dataSource.remove( selectedIndex );
 			
 			setModified( true );
-			
-			refreshComponentTable();
 		}
-	}
-	
-	private void refreshComponentTable() 
-	{
-		componentTable.removeAll();
-		
-		for ( String data : dataSource )
-		{
-			TableItem tableItem = new TableItem( componentTable, SWT.BEGINNING );
-			tableItem.setText( new String[] { data } );
-		}
-		
 	}
 	
 	public void setAddButtonEnabled( boolean enabled )
 	{
 	    addButton.setEnabled( enabled );
 	}
-	
-	public void setEditButtonEnabled( boolean enabled )
-    {
-	    editButton.setEnabled( enabled );
-    }
-	
-	public void setRemoveButtonEnabled( boolean enabled )
-    {
-	    removeButton.setEnabled( enabled );
-    }
-	
-	public void addAddButtonListener( SelectionListener listener )
-    {
-        addButton.addSelectionListener( listener );
-    }
-    
-    public void addEditButtonListener( SelectionListener listener )
-    {
-        editButton.addSelectionListener( listener );
-    }
-    
-    public void addRemoveButtonListener( SelectionListener listener )
-    {
-        removeButton.addSelectionListener( listener );
-    }
-    
-    public void removeAddButtonListener( SelectionListener listener )
-    {
-        addButton.removeSelectionListener( listener );
-    }
-    
-    public void removeEditButtonListener( SelectionListener listener )
-    {
-        editButton.removeSelectionListener( listener );
-    }
-    
-    public void removeRemoveButtonListener( SelectionListener listener )
-    {
-        removeButton.removeSelectionListener( listener );
-    }
     
     public boolean isModified()
     {

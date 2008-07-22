@@ -8,20 +8,24 @@ package org.devzuz.q.maven.pomeditor.pages;
 
 import java.util.List;
 
-import org.apache.maven.model.CiManagement;
-import org.apache.maven.model.MailingList;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.Notifier;
+import org.devzuz.q.maven.pom.MailingList;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.Notifier;
+import org.devzuz.q.maven.pom.PomFactory;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditMailingListDialog;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditNotifierDialog;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -35,7 +39,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -46,17 +49,8 @@ import org.eclipse.ui.forms.widgets.Section;
 
 public class MavenPomCiManagementMailingListFormPage extends FormPage
 {
-    private static final int MAIL_COLUMN = 0;
-
-    private static final int ADDRESS_COLUMN = 1;
 
     private ScrolledForm form;
-
-    private CiManagement ciManagement;
-
-    private List<MailingList> mailingLists;
-
-    private boolean isPageModified;
 
     private Text systemText;
 
@@ -78,6 +72,12 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
 
     private Button removeMailingListButton;
 
+    private Model model;
+    
+    private EditingDomain domain;
+    
+    private DataBindingContext bindingContext;
+    
     private SelectionListener selectionListener;
 
     public MavenPomCiManagementMailingListFormPage( String id, String title )
@@ -86,20 +86,12 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
     }
 
     @SuppressWarnings( "unchecked" )
-    public MavenPomCiManagementMailingListFormPage( FormEditor editor, String id, String title, Model model )
+    public MavenPomCiManagementMailingListFormPage( FormEditor editor, String id, String title, Model model, EditingDomain domain, DataBindingContext bindingContext )
     {
         super( editor, id, title );
-        if ( model.getCiManagement() == null )
-        {
-            ciManagement = new CiManagement();
-            model.setCiManagement( ciManagement );
-        }
-        else
-        {
-            ciManagement = model.getCiManagement();
-        }
-
-        mailingLists = model.getMailingLists();
+        this.model = model;
+        this.domain = domain;
+        this.bindingContext = bindingContext;
     }
 
     @Override
@@ -135,39 +127,12 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         mailingListsSection.setText( Messages.MavenPomEditor_MailingList_Title );
         mailingListsSection.setLayoutData( createSectionLayoutData() );
         mailingListsSection.setClient( createMailingListControls( mailingListsSection, toolkit ) );
-        /*
-        ciManagementSection.addExpansionListener( expansionAdapter );
-        mailingListsSection.addExpansionListener( expansionAdapter );
-        */
-        initCiManagementControls();
-        initMailingListsSection();
     }
 
     private GridData createSectionLayoutData()
     {
         GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false );
         return layoutData;
-    }
-
-    @SuppressWarnings( "unchecked" )
-    private void initCiManagementControls()
-    {
-        List<Notifier> notifiers = ciManagement.getNotifiers();
-
-        for ( Notifier notifier : notifiers )
-        {
-            TableItem tableItem = new TableItem( notifiersTable, SWT.BEGINNING );
-            tableItem.setText( new String[] { notifier.getType(), notifier.getAddress() } );
-        }
-    }
-
-    private void initMailingListsSection()
-    {
-        for ( MailingList mailingList : mailingLists )
-        {
-            TableItem tableItem = new TableItem( mailingListTable, SWT.BEGINNING );
-            tableItem.setText( mailingList.getName() );
-        }
     }
 
     public Control createCiManagementControls( Composite form, FormToolkit toolKit )
@@ -183,13 +148,25 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
             toolKit.createLabel( parentContainer, Messages.MavenPomEditor_MavenPomEditor_System, SWT.NONE );
         groupIdLabel.setLayoutData( createLabelLayoutData() );
         systemText = toolKit.createText( parentContainer, "", SWT.BORDER | SWT.SINGLE );
-        createTextDisplay( systemText, createControlLayoutData(), ciManagement.getSystem() );
+        createTextDisplay( systemText, createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__SYSTEM }, 
+        		SWTObservables.observeText( systemText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
 
         Label urlLabel =
             toolKit.createLabel( parentContainer, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE );
         urlLabel.setLayoutData( createLabelLayoutData() );
         urlText = toolKit.createText( parentContainer, "", SWT.BORDER | SWT.SINGLE );
-        createTextDisplay( urlText, createControlLayoutData(), ciManagement.getUrl() );
+        createTextDisplay( urlText, createControlLayoutData() );
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__URL }, 
+        		SWTObservables.observeText( urlText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
 
         Section notifiersSection = toolKit.createSection( ciManagementContainer, Section.TWISTIE | Section.TITLE_BAR);
         notifiersSection.setLayoutData( createSectionLayoutData() );
@@ -204,13 +181,20 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         notifiersTable.setHeaderVisible( true );
         notifiersTable.addSelectionListener( getSelectionListener() );
 
-        TableColumn keyColumn = new TableColumn( notifiersTable, SWT.BEGINNING, MAIL_COLUMN );
+        TableColumn keyColumn = new TableColumn( notifiersTable, SWT.BEGINNING, 0 );
         keyColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Type );
         keyColumn.setWidth( 100 );
 
-        TableColumn valueColumn = new TableColumn( notifiersTable, SWT.BEGINNING, ADDRESS_COLUMN );
+        TableColumn valueColumn = new TableColumn( notifiersTable, SWT.BEGINNING, 1 );
         valueColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Address );
         valueColumn.setWidth( 180 );
+        
+        ModelUtil.bindTable(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__NOTIFIERS }, 
+        		new EStructuralFeature[]{ PomPackage.Literals.NOTIFIER__TYPE, PomPackage.Literals.NOTIFIER__ADDRESS },
+        		notifiersTable,
+        		domain );
 
         Composite buttonBox = toolKit.createComposite( notifiersGroup );
         buttonBox.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -263,6 +247,13 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         TableColumn nameColumn = new TableColumn( mailingListTable, SWT.BEGINNING );
         nameColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Name );
         nameColumn.setWidth( 200 );
+        
+        ModelUtil.bindTable(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MAILING_LISTS }, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MAILING_LIST__NAME },
+        		mailingListTable,
+        		domain );
 
         Composite buttonBox = toolKit.createComposite( mailingListsContainer );
         buttonBox.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -287,18 +278,11 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
         return mailingListsContainer;
     }
 
-    private void createTextDisplay( Text text, GridData controlData, String data )
+    private void createTextDisplay( Text text, GridData controlData )
     {
         if ( text != null )
         {
-            ModifyListener modifyingListener = new ModifyListener()
-            {
-                public void modifyText( ModifyEvent e )
-                {
-                    syncControlsToModel();
-                    pageModified();
-                }
-            };
+            
             
             FocusListener focusListener = new FocusListener()
             {
@@ -334,19 +318,8 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
             
             text.setLayoutData( controlData );
             text.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
-            text.setText( blankIfNull( data ) );
-            text.addModifyListener( modifyingListener );
             text.addFocusListener( focusListener );
         }
-    }
-
-    protected void syncControlsToModel()
-    {
-        if ( ciManagement != null )
-        {
-            ciManagement.setSystem( nullIfBlank( systemText.getText().trim()) );
-            ciManagement.setUrl( nullIfBlank( urlText.getText().trim() ) );
-        }        
     }
 
     private SelectionListener getSelectionListener()
@@ -370,24 +343,32 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                             AddEditNotifierDialog.newAddEditNotifierDialog( getSite().getShell() );
                         if ( dialog.open() == Window.OK )
                         {
-                            Notifier notifier = new Notifier();
+                            Notifier notifier = PomFactory.eINSTANCE.createNotifier();
                             notifier.setAddress( dialog.getAddress() );
-                            notifier.setConfiguration( dialog.getConfigurations() );
+                            //TODO: notifier.setConfiguration( dialog.getConfigurations() );
                             notifier.setSendOnError( dialog.isSendOnError() );
                             notifier.setSendOnFailure( dialog.isSendOnFailure() );
                             notifier.setSendOnSuccess( dialog.isSendOnSuccess() );
                             notifier.setSendOnWarning( dialog.isSendOnWarning() );
                             notifier.setType( dialog.getType() );
-                            ciManagement.addNotifier( notifier );
-                            TableItem tableItem = new TableItem( notifiersTable, SWT.BEGINNING );
-                            tableItem.setText( new String[] { dialog.getType(), dialog.getAddress() } );
-                            pageModified();
+                            
+                            List<Notifier> notifierList = (List<Notifier>)ModelUtil.getValue( 
+                            		model, 
+                            		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__NOTIFIERS }, 
+                            		domain, 
+                            		true );
+                            notifierList.add( notifier );
                         }
                     }
                     else if ( e.getSource() == editNotifierButton )
                     {
                         int selectedItem = notifiersTable.getSelectionIndex();
-                        Notifier notifier = (Notifier) ciManagement.getNotifiers().get( selectedItem );
+                        List<Notifier> notifierList = (List<Notifier>)ModelUtil.getValue( 
+                        		model, 
+                        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__NOTIFIERS }, 
+                        		domain, 
+                        		true );
+                        Notifier notifier = notifierList.get( selectedItem );
                         if ( notifier != null )
                         {
                             AddEditNotifierDialog dialog =
@@ -395,17 +376,12 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                             if ( dialog.open() == Window.OK )
                             {
                                 notifier.setAddress( dialog.getAddress() );
-                                notifier.setConfiguration( dialog.getConfigurations() );
+                                //TODO: notifier.setConfiguration( dialog.getConfigurations() );
                                 notifier.setSendOnError( dialog.isSendOnError() );
                                 notifier.setSendOnFailure( dialog.isSendOnFailure() );
                                 notifier.setSendOnSuccess( dialog.isSendOnSuccess() );
                                 notifier.setSendOnWarning( dialog.isSendOnWarning() );
-                                notifier.setType( dialog.getType() );
-
-                                TableItem tableItem = notifiersTable.getItem( selectedItem );
-                                tableItem.setText( new String[] { dialog.getType(), dialog.getAddress() } );
-                                
-                                pageModified();                                
+                                notifier.setType( dialog.getType() );                            
                             }
                             
                             disableEditDeleteNotifierButton();
@@ -414,11 +390,13 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                     else if ( e.getSource() == removeNotifierButton )
                     {
                         int selected = notifiersTable.getSelectionIndex();
-                        notifiersTable.remove( selected );
-                        ciManagement.getNotifiers().remove( selected );
-                        
-                        pageModified();
-                        
+                        List<Notifier> notifierList = (List<Notifier>)ModelUtil.getValue( 
+                        		model, 
+                        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__NOTIFIERS }, 
+                        		domain, 
+                        		true );
+                        notifierList.remove( selected );
+
                         disableEditDeleteNotifierButton();
                     }
                     else if ( e.getSource() == mailingListTable )
@@ -434,23 +412,32 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                             AddEditMailingListDialog.newAddEditMailingListDialog( getSite().getShell() );
                         if ( dialog.open() == Window.OK )
                         {
-                            MailingList mailingList = new MailingList();
+                            MailingList mailingList = PomFactory.eINSTANCE.createMailingList();
                             mailingList.setArchive( dialog.getArchive() );
                             mailingList.setName( dialog.getName() );
-                            mailingList.setOtherArchives( dialog.getOtherArchives() );
+                            
+                            
+                            mailingList.getOtherArchives().addAll( dialog.getOtherArchives() );
                             mailingList.setPost( dialog.getPost() );
                             mailingList.setSubscribe( dialog.getSubscribe() );
                             mailingList.setUnsubscribe( dialog.getUnsubscribe() );
+                            
+                            List<MailingList> mailingLists = (List<MailingList>)ModelUtil.getValue( 
+                            		model, 
+                            		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MAILING_LISTS }, 
+                            		domain, 
+                            		true );
                             mailingLists.add( mailingList );
-
-                            TableItem tableItem = new TableItem( mailingListTable, SWT.BEGINNING );
-                            tableItem.setText( dialog.getName() );
-                            pageModified();
                         }
                     }
                     else if ( e.getSource() == editMailingListButton )
                     {
                         int selectedItem = mailingListTable.getSelectionIndex();
+                        List<MailingList> mailingLists = (List<MailingList>)ModelUtil.getValue( 
+                        		model, 
+                        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MAILING_LISTS }, 
+                        		domain, 
+                        		true );
                         MailingList mailingList = (MailingList) mailingLists.get( selectedItem );
                         if ( mailingList != null )
                         {
@@ -460,14 +447,11 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                             {
                                 mailingList.setArchive( dialog.getArchive() );
                                 mailingList.setName( dialog.getName() );
-                                mailingList.setOtherArchives( dialog.getOtherArchives() );
+                                mailingList.getOtherArchives().clear();
+                                mailingList.getOtherArchives().addAll( dialog.getOtherArchives() );
                                 mailingList.setPost( dialog.getPost() );
                                 mailingList.setSubscribe( dialog.getSubscribe() );
                                 mailingList.setUnsubscribe( dialog.getUnsubscribe() );
-
-                                TableItem tableItem = mailingListTable.getItem( selectedItem );
-                                tableItem.setText( dialog.getName() );
-                                pageModified();
                             }
                             
                             disableEditDeleteMailingListButton();
@@ -477,10 +461,13 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
                     {
                         int selected = mailingListTable.getSelectionIndex();
                         mailingListTable.remove( selected );
+                        List<MailingList> mailingLists = (List<MailingList>)ModelUtil.getValue( 
+                        		model, 
+                        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MAILING_LISTS }, 
+                        		domain, 
+                        		true );
                         mailingLists.remove( selected );
-                        
-                        pageModified();
-                        
+
                         disableEditDeleteMailingListButton();
                     }
                 }
@@ -511,31 +498,5 @@ public class MavenPomCiManagementMailingListFormPage extends FormPage
     {
         editMailingListButton.setEnabled( false );
         removeMailingListButton.setEnabled( false );
-    }
-    
-    private String blankIfNull( String str )
-    {
-        return str == null ? "" : str;
-    }
-
-    private String nullIfBlank( String str )
-    {
-        return ( str == null || str.equals( "" ) ) ? null : str;
-    }
-    
-    protected void pageModified()
-    {
-        isPageModified = true;
-        this.getEditor().editorDirtyStateChanged();
-    }
-
-    public void setPageModified( boolean isPageModified )
-    {
-        this.isPageModified = isPageModified;
-    }
-
-    public boolean isDirty()
-    {
-        return isPageModified;
     }
 }

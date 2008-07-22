@@ -1,15 +1,17 @@
 package org.devzuz.q.maven.pomeditor.pages;
 
-import java.util.List;
-
-import org.apache.maven.model.Model;
-import org.apache.maven.model.ReportPlugin;
-import org.apache.maven.model.Reporting;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomFactory;
+import org.devzuz.q.maven.pom.PomPackage;
+import org.devzuz.q.maven.pom.ReportPlugin;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditReportPluginDialog;
-import org.devzuz.q.maven.pomeditor.dialogs.ConfigurationDialog;
 import org.devzuz.q.maven.pomeditor.dialogs.ReportSetDialog;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -57,31 +59,25 @@ public class MavenPomReportingFormPage
 
     private Button removePluginButton;
 
-    private Button pluginConfigurationButton;
-
     private Button reportSetButton;
     
     private ReportPlugin selectedReportPlugin;
 
     private Table reportPluginTable;
     
-    private List<ReportPlugin> reportPluginList;
-    
     private int selectedIndex;
 
+    private EditingDomain domain;
+    
+    private DataBindingContext context;
+    
     @SuppressWarnings("unchecked")
-    public MavenPomReportingFormPage( FormEditor editor, String id, String title, Model model )
+    public MavenPomReportingFormPage( FormEditor editor, String id, String title, Model model, EditingDomain domain, DataBindingContext context )
     {
         super( editor, id, title );
-        this.pomModel = model;         
-        
-        if ( pomModel.getReporting() == null )
-        {
-            Reporting reporting = new Reporting();
-            pomModel.setReporting( reporting );            
-        }
-        
-        reportPluginList = pomModel.getReporting().getPlugins();
+        this.pomModel = model;
+        this.domain = domain;
+        this.context = context;
     }
     
     public MavenPomReportingFormPage( String id, String title )
@@ -109,7 +105,6 @@ public class MavenPomReportingFormPage
         {
             public void widgetSelected( SelectionEvent arg0 )
             {
-                syncControlsToModel();
                 pageModified();
             }
         };
@@ -122,23 +117,28 @@ public class MavenPomReportingFormPage
         
         excludeDefaultsRadioButton = toolkit.createButton( container, "", SWT.CHECK );
         excludeDefaultsRadioButton.addSelectionListener( selectionListener );
+        ModelUtil.bind( 
+                       pomModel, 
+                       new EStructuralFeature[] { PomPackage.Literals.MODEL__REPORTING, PomPackage.Literals.REPORTING__EXCLUDE_DEFAULTS }, 
+                       SWTObservables.observeSelection( excludeDefaultsRadioButton ), 
+                       domain, 
+                       context );
         
         Label outputDirectoryLabel = toolkit.createLabel( container, Messages.MavenPomEditor_MavenPomEditor_OutputDirectory, SWT.None );
         outputDirectoryLabel.setLayoutData( createLabelLayoutData() );        
         
         outputDirectoryText = toolkit.createText( container, "", SWT.SINGLE | SWT.BORDER );
-        createTextDisplay( outputDirectoryText, createControlLayoutData(), null );        
+        createTextDisplay( outputDirectoryText, createControlLayoutData(), null );    
+        ModelUtil.bind( 
+                       pomModel, 
+                       new EStructuralFeature[] { PomPackage.Literals.MODEL__REPORTING, PomPackage.Literals.REPORTING__OUTPUT_DIRECTORY }, 
+                       SWTObservables.observeText( outputDirectoryText, SWT.FocusOut ), 
+                       domain, 
+                       context );
     
         createPluginGroupTable( container, toolkit );
         
         return container;
-    }
-    
-    protected void syncControlsToModel()
-    { 
-        pomModel.getReporting().setOutputDirectory( nullIfBlank( outputDirectoryText.getText().trim() ) );
-        pomModel.getReporting().setExcludeDefaults( excludeDefaultsRadioButton.getSelection() );
-        
     }
 
     private void createPluginGroupTable ( Composite container, FormToolkit toolkit )
@@ -198,14 +198,6 @@ public class MavenPomReportingFormPage
         removePluginButton.addSelectionListener( removeButtonListener );
         removePluginButton.setEnabled( false );
         
-        pluginConfigurationButton = new Button( pluginButtonContainer, SWT.PUSH | SWT.CENTER );
-        pluginConfigurationButton.setText( Messages.MavenPomEditor_MavenPomEditor_Configuration );
-        pluginConfigurationButton.setEnabled( false );
-        
-        PluginConfigurationButtonListener configListener = new PluginConfigurationButtonListener();
-        pluginConfigurationButton.addSelectionListener( configListener );
-        
-        
         reportSetButton = new Button( pluginButtonContainer, SWT.PUSH | SWT.CENTER );
         reportSetButton.setText( Messages.MavenPomEditor_MavenPomEditor_ReportSet );
         reportSetButton.setEnabled( false );
@@ -213,7 +205,12 @@ public class MavenPomReportingFormPage
         ReportSetButtonListener reportSetListener = new ReportSetButtonListener();
         reportSetButton.addSelectionListener( reportSetListener );
         
-        populateReportPluginTable();
+        ModelUtil.bindTable( 
+                             pomModel, 
+                             new EStructuralFeature[] { PomPackage.Literals.MODEL__REPORTING, PomPackage.Literals.REPORTING__PLUGINS }, 
+                             new EStructuralFeature[] { PomPackage.Literals.REPORT_PLUGIN__GROUP_ID, PomPackage.Literals.REPORT_PLUGIN__ARTIFACT_ID, PomPackage.Literals.REPORT_PLUGIN__VERSION, PomPackage.Literals.REPORT_PLUGIN__INHERITED }, 
+                             reportPluginTable, 
+                             domain );
     }
 
     private void createTextDisplay( Text text, GridData controlData, String data )
@@ -224,7 +221,6 @@ public class MavenPomReportingFormPage
             {
                 public void modifyText( ModifyEvent e )
                 {
-                    syncControlsToModel();
                     pageModified();
                 }
             };
@@ -252,13 +248,12 @@ public class MavenPomReportingFormPage
             {
                 editPluginButton.setEnabled( true );
                 removePluginButton.setEnabled( true );
-                pluginConfigurationButton.setEnabled( true );
                 reportSetButton.setEnabled( true );
                 
                 if ( reportPluginTable.getSelectionIndex() >= 0 )
                 {
                     selectedIndex = reportPluginTable.getSelectionIndex();
-                    selectedReportPlugin = reportPluginList.get( selectedIndex );
+                    selectedReportPlugin = pomModel.getReporting().getPlugins().get( selectedIndex );
                 }
             }
         }
@@ -277,7 +272,7 @@ public class MavenPomReportingFormPage
             
             if ( addDialog.open() == Window.OK )
             {    
-                ReportPlugin reportPlugin = new ReportPlugin();
+                ReportPlugin reportPlugin = PomFactory.eINSTANCE.createReportPlugin();
                 
                 reportPlugin.setGroupId( addDialog.getGroupId() );
                 reportPlugin.setArtifactId( addDialog.getArtifactId() );
@@ -291,21 +286,9 @@ public class MavenPomReportingFormPage
                     reportPlugin.setInherited( "false" );
                 }
                 
-                if ( reportPluginAlreadyExist( reportPlugin.getGroupId(), reportPlugin.getArtifactId() ) )
-                {
-                    MessageBox mesgBox = new MessageBox( form.getShell(), SWT.ICON_ERROR | SWT.OK  );
-                    mesgBox.setMessage( "Report Plugin already exists." );
-                    mesgBox.setText( "Saving Report Plugin Error" );
-                    mesgBox.open( );
-                }
-                else
-                {
-                    pomModel.getReporting().addPlugin( reportPlugin );
+                pomModel.getReporting().getPlugins().add( reportPlugin );
                 
-                    populateReportPluginTable();
-                
-                    pageModified();
-                }
+                pageModified();
                 
             }
         }
@@ -324,7 +307,7 @@ public class MavenPomReportingFormPage
             
             if ( editDialog.openWithReportPlugin( selectedReportPlugin ) == Window.OK )
             {
-                ReportPlugin newReportPlugin = new ReportPlugin();
+                ReportPlugin newReportPlugin = PomFactory.eINSTANCE.createReportPlugin();
                 
                 newReportPlugin.setGroupId( editDialog.getGroupId() );
                 newReportPlugin.setArtifactId( editDialog.getArtifactId() );
@@ -340,49 +323,18 @@ public class MavenPomReportingFormPage
                 
                 if ( reportPluginAlreadyExist( newReportPlugin.getGroupId(), newReportPlugin.getArtifactId() ) )
                 {
-                    if ( ( newReportPlugin.getGroupId().equals( selectedReportPlugin.getGroupId() ) ) &&
-                         ( newReportPlugin.getGroupId().equals( selectedReportPlugin.getArtifactId() ) ) )
-                    {
-                        // check other fields
-                        if ( ( !( blankIfNull( newReportPlugin.getVersion() )).equalsIgnoreCase( selectedReportPlugin.getVersion()  ) ) || 
-                             ( !( newReportPlugin.getInherited().equalsIgnoreCase( selectedReportPlugin.getInherited() ) ) ) )
-                        {
-                            reportPluginList.remove( selectedReportPlugin );
-                        
-                            reportPluginList.add( newReportPlugin );
-                        
-                            pageModified();
-                        
-                            populateReportPluginTable();
-                        }
-                        else
-                        {
-                            MessageBox mesgBox = new MessageBox( form.getShell(), SWT.ICON_ERROR | SWT.OK  );
-                            mesgBox.setMessage( "Report Plugin already exists." );
-                            mesgBox.setText( "Saving Report Plugin Error" );
-                            mesgBox.open( );
-                        }
-                    }
-                    else
-                    {
-                        reportPluginList.remove( selectedReportPlugin );
-                        
-                        reportPluginList.add( newReportPlugin );
-                    
-                        pageModified();
-                    
-                        populateReportPluginTable();
-                    }
+                    MessageBox mesgBox = new MessageBox( form.getShell(), SWT.ICON_ERROR | SWT.OK  );
+                    mesgBox.setMessage( "Report Plugin already exists." );
+                    mesgBox.setText( "Saving Report Plugin Error" );
+                    mesgBox.open( );
                 }
                 else
                 {
-                    reportPluginList.remove( selectedReportPlugin );
+                    pomModel.getReporting().getPlugins().remove( selectedReportPlugin );
                     
-                    reportPluginList.add( newReportPlugin );
+                    pomModel.getReporting().getPlugins().add( newReportPlugin );
                     
                     pageModified();
-                    
-                    populateReportPluginTable();
                 }
             }
         
@@ -398,11 +350,9 @@ public class MavenPomReportingFormPage
         
         public void widgetSelected( SelectionEvent e )
         {
-            reportPluginList.remove( selectedReportPlugin );
+            pomModel.getReporting().getPlugins().remove( selectedReportPlugin );
             
             pageModified();
-            
-            populateReportPluginTable();
         }
     }
     
@@ -420,36 +370,13 @@ public class MavenPomReportingFormPage
             
             if ( reportSetDialog.opentWithReportSetList( selectedReportPlugin.getReportSets() ) == Window.OK )
             {
+                System.out.println("moogle testing #1 kupo");
+                
                 if ( reportSetDialog.isPageModified() == true )
                 {
                     pageModified();
                 }                
             }
-        }
-    }
-    
-    private class PluginConfigurationButtonListener extends SelectionAdapter
-    {
-        public void defaultWidgetSelected ( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-        
-        public void widgetSelected( SelectionEvent e )
-        {
-            ConfigurationDialog configDialog = ConfigurationDialog.newConfigurationDialog();
-            
-            Xpp3Dom dom = ( Xpp3Dom )selectedReportPlugin.getConfiguration();            
-            
-            if ( configDialog.openWithConfiguration( dom ) == Window.OK )
-            {
-                Xpp3Dom newDom = configDialog.getDomContainer().getDom();
-                
-                selectedReportPlugin.setConfiguration( newDom );
-                
-                pageModified();
-            }
-            
         }
     }
     
@@ -462,32 +389,8 @@ public class MavenPomReportingFormPage
     
     public boolean reportPluginAlreadyExist( String groupId, String artifactId )
     {
-        for ( ReportPlugin reportPlugin : reportPluginList )
-        {
-            if ( ( reportPlugin.getGroupId().equals( groupId ) ) &&
-                 ( reportPlugin.getArtifactId().equals( artifactId ) ) )
-            {
-                return true;
-            }
-        }
-        
+        // TODO Auto-generated method stub
         return false;
-    }
-
-    public void populateReportPluginTable()
-    {
-        reportPluginTable.removeAll();
-        
-        if ( reportPluginList != null )
-        {
-            for ( ReportPlugin reportPlugin : reportPluginList )
-            {
-                TableItem item = new TableItem( reportPluginTable, SWT.BEGINNING );
-                item.setText( new String[] { reportPlugin.getGroupId(), reportPlugin.getArtifactId(), 
-                    reportPlugin.getVersion(), reportPlugin.getInherited() } );
-            }
-        }
-        
     }
 
     private GridData createControlLayoutData()

@@ -2,8 +2,9 @@ package org.devzuz.q.maven.pomeditor.dialogs;
 
 import java.util.List;
 
-import org.apache.maven.model.ReportSet;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.devzuz.q.maven.pom.PomFactory;
+import org.devzuz.q.maven.pom.PomPackage;
+import org.devzuz.q.maven.pom.ReportSet;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;
@@ -38,8 +39,6 @@ public class ReportSetDialog
     private Button editReportSetButton;
     
     private Button removeReportSetButton;
-
-    private Button reportSetConfigurationButton;
 
     private Table reportSetTable;
 
@@ -110,12 +109,6 @@ public class ReportSetDialog
         RemoveReportSetButtonListener removeButtonListener = new RemoveReportSetButtonListener();
         removeReportSetButton.addSelectionListener( removeButtonListener );
         removeReportSetButton.setEnabled( false );
-        
-        reportSetConfigurationButton = new Button( reportSetButtonContainer, SWT.PUSH | SWT.CENTER );
-        reportSetConfigurationButton.setText( Messages.MavenPomEditor_MavenPomEditor_Configuration );
-        ReportSetConfigurationButtonListener configListener = new ReportSetConfigurationButtonListener();
-        reportSetConfigurationButton.addSelectionListener( configListener );
-        reportSetConfigurationButton.setEnabled( false );
         
         populateReportSetTable();
         
@@ -193,7 +186,6 @@ public class ReportSetDialog
             {
                 editReportSetButton.setEnabled( true );
                 removeReportSetButton.setEnabled( true );
-                reportSetConfigurationButton.setEnabled( true );
                 
                 if ( reportSetTable.getSelectionIndex() >= 0 )
                 {
@@ -217,7 +209,7 @@ public class ReportSetDialog
             
             if ( addDialog.open() == Window.OK )
             {
-                ReportSet reportSet = new ReportSet();
+                ReportSet reportSet = PomFactory.eINSTANCE.createReportSet();
                 
                 reportSet.setId( addDialog.getId() );
                 
@@ -239,23 +231,14 @@ public class ReportSetDialog
                     
                     for ( String str: reportsList )
                     {
-                        reportSet.addReport( str.trim() );
+                        reportSet.getReports().add( str.trim() );
                     }
                 }
                 else
                 {
-                    reportSet.setReports( null );
+                    reportSet.eUnset( PomPackage.Literals.REPORT_SET__REPORTS );
                 }
                 
-                if ( reportSetAlreadyExist( reportSet.getId() ) )
-                {
-                    MessageBox mesgBox = new MessageBox( getShell(), SWT.ICON_ERROR | SWT.OK  );
-                    mesgBox.setMessage( "Report Set already exists." );
-                    mesgBox.setText( "Saving Report Set Error" );
-                    mesgBox.open( );
-                }
-                else
-                {
                     reportSetList.add( reportSet );
                 
                     setPageModified( true );
@@ -264,7 +247,6 @@ public class ReportSetDialog
                 }                
             }
         }
-    }
     
     private class EditReportSetButtonListener extends SelectionAdapter
     {
@@ -279,7 +261,7 @@ public class ReportSetDialog
             
             if ( editDialog.openWithReportSet( selectedReportSet ) == Window.OK )
             {
-                ReportSet newReportSet = new ReportSet();
+                ReportSet newReportSet = PomFactory.eINSTANCE.createReportSet();
                 
                 newReportSet.setId( editDialog.getId() );
                 if ( editDialog.isInherited() == true )
@@ -300,19 +282,13 @@ public class ReportSetDialog
                     
                     for ( String str: reportsList )
                     {
-                        newReportSet.addReport( str.trim() );
+                        newReportSet.getReports().add( str.trim() );
                     }
-                }
-                else
-                {
-                    newReportSet.setReports( null );
                 }
                 
                 if ( reportSetAlreadyExist( newReportSet.getId() ) )
                 {
-                    // check other fields
-                    if ( ( !( newReportSet.getInherited().equalsIgnoreCase( selectedReportSet.getInherited() ) ) ) || 
-                    	 ( !( newReportSet.getReports().equals( selectedReportSet.getReports() ) ) ) )                    
+                    if ( selectedReportSet.getId().equalsIgnoreCase( newReportSet.getId() ) )
                     {
                         reportSetList.remove( selectedReportSet );
                         
@@ -368,32 +344,6 @@ public class ReportSetDialog
         }
     }
     
-    private class ReportSetConfigurationButtonListener extends SelectionAdapter
-    {
-        public void defaultWidgetSelected ( SelectionEvent e )
-        {
-            widgetSelected( e );
-        }
-        
-        public void widgetSelected( SelectionEvent e )
-        {
-            ConfigurationDialog configDialog = ConfigurationDialog.newConfigurationDialog();
-            
-            Xpp3Dom dom = ( Xpp3Dom )selectedReportSet.getConfiguration();
-            
-            if ( configDialog.openWithConfiguration( dom ) == Window.OK )
-            {
-                System.out.println("moogle testing #4 kupo");
-                
-                Xpp3Dom newDom = configDialog.getDomContainer().getDom();
-                
-                selectedReportSet.setConfiguration( newDom );
-                
-                setPageModified( true );
-            }
-        }
-    }
-
     public boolean isPageModified()
     {
         return isPageModified;

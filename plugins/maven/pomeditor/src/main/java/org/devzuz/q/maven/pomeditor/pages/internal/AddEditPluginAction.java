@@ -2,8 +2,12 @@ package org.devzuz.q.maven.pomeditor.pages.internal;
 
 import java.util.List;
 
-import org.apache.maven.model.Plugin;
+import org.devzuz.q.maven.pom.Plugin;
+import org.devzuz.q.maven.pom.PomFactory;
+import org.devzuz.q.maven.pom.PomPackage;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.dialogs.AddBuildPluginDialog;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.window.Window;
 
 public class AddEditPluginAction
@@ -11,10 +15,9 @@ public class AddEditPluginAction
 {
     private Mode mode;
     
-    private List<Plugin> plugins;
-    
-    public AddEditPluginAction( ITreeObjectActionListener listener , Mode mode )
+    public AddEditPluginAction( ITreeObjectActionListener listener, Mode mode, EditingDomain domain )
     {
+    	super( domain );
         addTreeObjectActionListener( listener );
         this.mode = mode;
         if( mode == Mode.ADD )
@@ -27,14 +30,6 @@ public class AddEditPluginAction
         }
     }
     
-    public AddEditPluginAction( ITreeObjectActionListener listener, List<Plugin> plugins )
-    {
-        super("Add plugin");
-        mode = Mode.ADD;
-        this.plugins = plugins;
-        addTreeObjectActionListener( listener );
-    }
-    
     @SuppressWarnings ("unchecked")
     public void doAction( Object obj )
     {        
@@ -44,17 +39,13 @@ public class AddEditPluginAction
         {
             if ( addDialog.open() == Window.OK )
             {
-                Plugin plugin = new Plugin();
+                Plugin plugin = PomFactory.eINSTANCE.createPlugin();
 
                 synchDialogToPlugin( addDialog, plugin );
 
                 if ( obj instanceof List )
                 {
                     ( (List<Plugin>) obj ).add( plugin );
-                }
-                else
-                {
-                    plugins.add( plugin );
                 }
                 
                 super.doAction( obj );
@@ -75,28 +66,11 @@ public class AddEditPluginAction
 
     private void synchDialogToPlugin( AddBuildPluginDialog addDialog, Plugin plugin )
     {
-        plugin.setGroupId( addDialog.getGroupId() );
-        plugin.setArtifactId( addDialog.getArtifactId() );
-        plugin.setVersion( addDialog.getVersion() );
-        plugin.setExtensions( addDialog.isExtension() );
-
-        if ( addDialog.isInherited() == true )
-        {
-            plugin.setInherited( "true" );
-        }
-        else
-        {
-            plugin.setInherited( "false" );
-        }
+    	ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__GROUP_ID, addDialog.getGroupId(), editingDomain );
+        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__ARTIFACT_ID, addDialog.getArtifactId(), editingDomain );
+        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__VERSION, addDialog.getVersion(), editingDomain );
+        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__EXTENSIONS, addDialog.isExtension(), editingDomain );
+        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__INHERITED, addDialog.isInherited(), editingDomain );
     }
 
-    public List<Plugin> getPlugins()
-    {
-        return plugins;
-    }
-
-    public void setPlugins( List<Plugin> plugins )
-    {
-        this.plugins = plugins;
-    }
 }

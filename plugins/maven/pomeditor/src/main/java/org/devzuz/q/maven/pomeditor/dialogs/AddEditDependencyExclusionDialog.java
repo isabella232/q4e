@@ -6,7 +6,7 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.pomeditor.dialogs;
 
-import org.apache.maven.model.Exclusion;
+import org.devzuz.q.maven.pom.Exclusion;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;

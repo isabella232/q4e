@@ -1,6 +1,6 @@
 package org.devzuz.q.maven.pomeditor.dialogs;
 
-import org.apache.maven.model.ReportPlugin;
+import org.devzuz.q.maven.pom.ReportPlugin;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;
@@ -99,9 +99,7 @@ public class AddEditReportPluginDialog
         setGroupId( blankIfNull( reportPlugin.getGroupId() ) );
         setArtifactId( blankIfNull( reportPlugin.getArtifactId() ) );
         setVersion( blankIfNull( reportPlugin.getVersion() ) );
-        
-        if ( ( reportPlugin.getInherited() != null ) && 
-           ( reportPlugin.getInherited().equalsIgnoreCase( "true" ) ) )
+        if ( reportPlugin.getInherited().equalsIgnoreCase( "true" ) )
         {
             setInherited( true );
         }

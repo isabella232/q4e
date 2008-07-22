@@ -2,6 +2,7 @@ package org.devzuz.q.maven.pomeditor.pages.internal;
 
 import java.util.List;
 
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.ui.PlatformUI;
@@ -17,9 +18,9 @@ public class DeleteAllItemsAction
      *                    - used for display purposes for the MessageBox
      * @param objectList - list of objects from where the object will be removed
      */
-    public DeleteAllItemsAction( ITreeObjectActionListener listener , String commandString, String objectClass )
+    public DeleteAllItemsAction( ITreeObjectActionListener listener , String commandString, String objectClass, EditingDomain domain )
     {
-        super( commandString );
+        super( domain, commandString );
         addTreeObjectActionListener( listener );
         this.objectClass = objectClass;
     }

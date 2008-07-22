@@ -1,12 +1,15 @@
 package org.devzuz.q.maven.pomeditor.dialogs;
 
-import java.util.Properties;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.devzuz.q.maven.pom.PropertyElement;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
 import org.devzuz.q.maven.pomeditor.components.ContributorDeveloperDetailComponent;
 import org.devzuz.q.maven.pomeditor.components.PropertiesTableComponent;
 import org.devzuz.q.maven.ui.dialogs.AbstractResizableDialog;
+import org.eclipse.core.databinding.observable.list.WritableList;
 import org.eclipse.core.runtime.Preferences;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
@@ -44,7 +47,7 @@ public class AddEditContributorDeveloperDialog
 
     private String id = null;
     
-    private Properties properties;
+    private List<PropertyElement> properties;
     
     public static AddEditContributorDeveloperDialog newAddEditContributorDialog( String type )
     {
@@ -188,14 +191,16 @@ public class AddEditContributorDeveloperDialog
         contributorComponent.setTimezone( blankIfNull( timezone ) );
         
         if( properties == null )
-            properties = new Properties();
+            properties = new ArrayList<PropertyElement>();
         
-        propertiesTableComponent.updateTable( properties );
+        WritableList ol = new WritableList( properties, PropertyElement.class );
+        propertiesTableComponent.bind( ol );
+        
     }
 
     public int openWithItem(String id, String name, String email, String url, 
                             String organization, String organizationUrl,
-                            String roles, String timezone , Properties properties )
+                            String roles, String timezone , List<PropertyElement> properties )
     {
         if ( id != null )
         {
@@ -209,13 +214,15 @@ public class AddEditContributorDeveloperDialog
         this.organizationUrl = organizationUrl;
         this.roles = roles;
         this.timezone = timezone;
+        this.properties = new ArrayList<PropertyElement>();
         
         if( properties != null )
-            this.properties = ( Properties ) properties.clone();
-        else
-            this.properties = new Properties();
+        {
+            this.properties.addAll( properties );
+        }
         
-        if ( contributorComponent != null && propertiesTableComponent != null )
+        
+        if ( contributorComponent != null  && propertiesTableComponent != null )
         {
             syncData();
         }
@@ -306,12 +313,12 @@ public class AddEditContributorDeveloperDialog
         this.timezone = timezone;
     }
     
-    public Properties getProperties()
+    public List<PropertyElement> getProperties()
     {
         return properties;
     }
 
-    public void setProperties( Properties properties )
+    public void setProperties( List<PropertyElement> properties )
     {
         this.properties = properties;
     }

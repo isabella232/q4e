@@ -1,19 +1,24 @@
 package org.devzuz.q.maven.pomeditor.components;
 
-import org.apache.maven.model.Build;
+import org.devzuz.q.maven.pom.Build;
+import org.devzuz.q.maven.pom.Model;
+import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.PomEditorUtils;
+import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -36,7 +41,7 @@ public class BuildManagementDetailComponent
     private Text testSourceDirText;
 
     private Text defaultGoalText;
-
+    
     private Button directoryButton;
 
     private Button outputDirButton;
@@ -51,11 +56,18 @@ public class BuildManagementDetailComponent
 
     private SelectionListener buttonListener;
 
-    private Build build;
+    private Model model;   
 
-    public BuildManagementDetailComponent( Composite parent, int style )
+    private EditingDomain domain;
+    
+    private DataBindingContext bindingContext;
+    
+    public BuildManagementDetailComponent( Composite parent, int style, Model model, EditingDomain domain, DataBindingContext bindingContext )
     {
         super( parent, style );
+        this.model = model;
+        this.domain = domain;
+        this.bindingContext = bindingContext;
 
         setLayout( new GridLayout( 3, false ) );
 
@@ -66,6 +78,13 @@ public class BuildManagementDetailComponent
         defaultGoalText = new Text( this, SWT.BORDER | SWT.SINGLE );
         defaultGoalText.setLayoutData( createSpanTwoColumnData() );
 
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__DEFAULT_GOAL }, 
+        		SWTObservables.observeText( defaultGoalText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
+        
         Label finalNameLabel = new Label( this, SWT.NULL );
         finalNameLabel.setLayoutData( createLabelLayoutData() );
         finalNameLabel.setText( Messages.MavenPomEditor_MavenPomEditor_FinalName );
@@ -73,6 +92,13 @@ public class BuildManagementDetailComponent
         finalNameText = new Text( this, SWT.BORDER | SWT.SINGLE );
         finalNameText.setLayoutData( createSpanTwoColumnData() );
 
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__FINAL_NAME }, 
+        		SWTObservables.observeText( finalNameText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
+        
         Label directoryLabel = new Label( this, SWT.NULL );
         directoryLabel.setLayoutData( createLabelLayoutData() );
         directoryLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Directory );
@@ -84,6 +110,13 @@ public class BuildManagementDetailComponent
         directoryButton.setText( "..." );
         directoryButton.addSelectionListener( getButtonListener() );
 
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__DIRECTORY }, 
+        		SWTObservables.observeText( directoryText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
+        
         Label outputDirLabel = new Label( this, SWT.NULL );
         outputDirLabel.setLayoutData( createLabelLayoutData() );
         outputDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_OutputDirectory );
@@ -95,6 +128,13 @@ public class BuildManagementDetailComponent
         outputDirButton.setText( "..." );
         outputDirButton.addSelectionListener( getButtonListener() );
 
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__OUTPUT_DIRECTORY }, 
+        		SWTObservables.observeText( outputDirText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
+        
         Label testOutputDirLabel = new Label( this, SWT.NULL );
         testOutputDirLabel.setLayoutData( createLabelLayoutData() );
         testOutputDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_TestOutputDirectory );
@@ -106,6 +146,13 @@ public class BuildManagementDetailComponent
         testOutputDirButton.setText( "..." );
         testOutputDirButton.addSelectionListener( getButtonListener() );
 
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__TEST_OUTPUT_DIRECTORY }, 
+        		SWTObservables.observeText( testOutputDirText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
+        
         Label sourceDirLabel = new Label( this, SWT.NULL );
         sourceDirLabel.setLayoutData( createLabelLayoutData() );
         sourceDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_SourceDirectory );
@@ -117,6 +164,13 @@ public class BuildManagementDetailComponent
         sourceDirButton.setText( "..." );
         sourceDirButton.addSelectionListener( getButtonListener() );
 
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__SOURCE_DIRECTORY }, 
+        		SWTObservables.observeText( sourceDirText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
+        
         Label scriptSourceDirLabel = new Label( this, SWT.NULL );
         scriptSourceDirLabel.setLayoutData( createLabelLayoutData() );
         scriptSourceDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_ScriptSourceDirectory );
@@ -128,6 +182,13 @@ public class BuildManagementDetailComponent
         scriptSourceDirButton.setText( "..." );
         scriptSourceDirButton.addSelectionListener( getButtonListener() );
 
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__SCRIPT_SOURCE_DIRECTORY }, 
+        		SWTObservables.observeText( scriptSourceDirText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
+        
         Label testSourceDirLabel = new Label( this, SWT.NULL );
         testSourceDirLabel.setLayoutData( createLabelLayoutData() );
         testSourceDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_TestSourceDirectory );
@@ -138,6 +199,14 @@ public class BuildManagementDetailComponent
         testSourceDirButton = new Button( this, SWT.PUSH );
         testSourceDirButton.setText( "..." );
         testSourceDirButton.addSelectionListener( getButtonListener() );
+        
+        ModelUtil.bind(
+        		model, 
+        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__TEST_SOURCE_DIRECTORY }, 
+        		SWTObservables.observeText( testSourceDirText, SWT.FocusOut ), 
+        		domain, 
+        		bindingContext );
+        
     }
 
     private SelectionListener getButtonListener()
@@ -153,13 +222,14 @@ public class BuildManagementDetailComponent
 
                 public void widgetSelected( SelectionEvent e )
                 {
+                    Build build = (Build) ModelUtil.createOrGetContainer( model, new EReference[] { PomPackage.Literals.MODEL__BUILD }, domain );
                     if ( e.getSource() == directoryButton )
                     {
                         String directory = getDesiredDirectory( directoryText.getText() );
 
                         if ( directory != null )
                         {
-                            directoryText.setText( directory );
+                            build.setDirectory( directory );
                         }
                     }
                     else if ( e.getSource() == outputDirButton )
@@ -168,7 +238,7 @@ public class BuildManagementDetailComponent
 
                         if ( directory != null )
                         {
-                            outputDirText.setText( directory );
+                            build.setOutputDirectory( directory );
                         }
                     }
                     else if ( e.getSource() == testOutputDirButton )
@@ -177,7 +247,7 @@ public class BuildManagementDetailComponent
 
                         if ( directory != null )
                         {
-                            testOutputDirText.setText( directory );
+                            build.setTestOutputDirectory( directory );
                         }
                     }
                     else if ( e.getSource() == sourceDirButton )
@@ -186,7 +256,7 @@ public class BuildManagementDetailComponent
 
                         if ( directory != null )
                         {
-                            sourceDirText.setText( directory );
+                            build.setSourceDirectory( directory );
                         }
                     }
                     else if ( e.getSource() == scriptSourceDirButton )
@@ -195,7 +265,7 @@ public class BuildManagementDetailComponent
 
                         if ( directory != null )
                         {
-                            scriptSourceDirText.setText( directory );
+                            build.setScriptSourceDirectory( directory );
                         }
                     }
                     else if ( e.getSource() == testSourceDirButton )
@@ -204,7 +274,7 @@ public class BuildManagementDetailComponent
 
                         if ( directory != null )
                         {
-                            testSourceDirText.setText( directory );
+                            build.setTestSourceDirectory( directory );
                         }
                     }
                 }
@@ -248,55 +318,6 @@ public class BuildManagementDetailComponent
         GridData labelData = new GridData( SWT.BEGINNING, SWT.CENTER, false, false );
         labelData.widthHint = 132;
         return labelData;
-    }
-
-    public void updateComponent( Build buildData )
-    {
-        ModifyListener listener = new ModifyListener()
-        {
-            public void modifyText( ModifyEvent e )
-            {
-                notifyListeners( (Control) e.widget );
-            }
-        };
-        assert buildData != null;
-
-        this.build = buildData;
-
-        setDefaultGoal( build.getDefaultGoal() );
-        setFinalName( build.getFinalName() );
-        setDirectory( build.getDirectory() );
-        setOutputDirectory( build.getOutputDirectory() );
-        setTestOutputDirector( build.getTestOutputDirectory() );
-        setSourceDirectory( build.getSourceDirectory() );
-        setScriptSourceDirectory( build.getScriptSourceDirectory() );
-        setTestSourceDirectory( build.getTestSourceDirectory() );
-
-        addModifyListener( listener );
-    }
-
-    public void addModifyListener( ModifyListener listener )
-    {
-        defaultGoalText.addModifyListener( listener );
-        finalNameText.addModifyListener( listener );
-        directoryText.addModifyListener( listener );
-        outputDirText.addModifyListener( listener );
-        testOutputDirText.addModifyListener( listener );
-        sourceDirText.addModifyListener( listener );
-        scriptSourceDirText.addModifyListener( listener );
-        testSourceDirText.addModifyListener( listener );
-    }
-
-    public void removeModifyListener( ModifyListener listener )
-    {
-        defaultGoalText.removeModifyListener( listener );
-        finalNameText.removeModifyListener( listener );
-        directoryText.removeModifyListener( listener );
-        outputDirText.removeModifyListener( listener );
-        testOutputDirText.removeModifyListener( listener );
-        sourceDirText.removeModifyListener( listener );
-        scriptSourceDirText.removeModifyListener( listener );
-        testSourceDirText.removeModifyListener( listener );
     }
 
     public String getDefaultGoal()

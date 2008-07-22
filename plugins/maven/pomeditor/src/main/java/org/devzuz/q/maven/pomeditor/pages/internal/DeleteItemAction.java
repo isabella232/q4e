@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.PluginExecution;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.devzuz.q.maven.pomeditor.model.DomContainer;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -28,17 +28,17 @@ public class DeleteItemAction extends AbstractTreeObjectAction
      * @param object -
      *            the selected object from the tree viewer
      */
-    public DeleteItemAction( String commandString, String objectClass, ITreeContentProvider contentProvider )
+    public DeleteItemAction( String commandString, String objectClass, ITreeContentProvider contentProvider, EditingDomain domain )
     {
-        super( commandString );
+        super( domain, commandString );
         this.str = objectClass;
         this.contentProvider = contentProvider;
     }
 
     public DeleteItemAction( ITreeObjectActionListener listener, String commandString, String objectClass,
-                             ITreeContentProvider contentProvider )
+                             ITreeContentProvider contentProvider, EditingDomain domain )
     {
-        super( commandString );
+        super( domain, commandString );
         this.str = objectClass;
         this.contentProvider = contentProvider;
         addTreeObjectActionListener( listener );
@@ -66,11 +66,7 @@ public class DeleteItemAction extends AbstractTreeObjectAction
                     {
                         ((PluginExecution) obj).setConfiguration( null );
                     }
-                    else if ( obj instanceof DomContainer )
-                    {
-                    	( ( DomContainer ) obj ).setDom( new Xpp3Dom("configuration") );
-                    }
-                    
+                   
                     object = null;
                 }
                 else
