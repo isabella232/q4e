@@ -478,7 +478,12 @@ public class MavenPomFormEditor extends FormEditor
         }
         catch ( CoreException e )
         {
-            throw new IOException( e );
+            // IOException can't wrap another exception before Java 6
+            if (e.getCause() != null && e.getCause() instanceof IOException) {
+                throw (IOException) e.getCause();
+            } else {
+                throw new IOException( e.getMessage() );
+            }
         }
     }
 }
