@@ -64,6 +64,11 @@ class ValueUpdateAdapter
             try
             {
                 resource.setProcessEvents( false );
+                if ( newValue instanceof Text )
+                {
+                    changedFeature = newValue;
+                    newValue = ( (Text)newValue ).getData();
+                }
                 if ( changedFeature instanceof Text )
                 {
                     if ( null == newValue )

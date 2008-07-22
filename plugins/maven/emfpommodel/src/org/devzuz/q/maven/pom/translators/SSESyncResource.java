@@ -68,11 +68,16 @@ public class SSESyncResource
                 IDOMModel domModel = buildModel( file );
                 pomModel = PomFactory.eINSTANCE.createModel();
                 doc = domModel.getDocument();
+                DocumentAdapter da = new DocumentAdapter();
                 if ( doc.getDocumentElement() != null )
                 {
                     createAdapterForRootNode( domModel.getDocument().getDocumentElement() ).load();
                 }
-                ( (IDOMNode) doc ).addAdapter( new DocumentAdapter() );
+                else
+                {
+                    pomModel.eAdapters().add( da );
+                }
+                ( (IDOMNode) doc ).addAdapter( da );
                 this.getContents().add( pomModel );
                 this.setLoaded( true );
                 domModel.releaseFromEdit();
