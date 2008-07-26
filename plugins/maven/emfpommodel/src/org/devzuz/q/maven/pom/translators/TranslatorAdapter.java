@@ -363,7 +363,7 @@ public abstract class TranslatorAdapter
                 {
                     try
                     {
-                        c = doc.getChar( i - 1 );
+                        c = doc.getChar( i );
                     }
                     catch ( BadLocationException ble )
                     {
@@ -375,8 +375,8 @@ public abstract class TranslatorAdapter
                 break;
             }
 
-        }
-        doc.replaceText( this, i, nodeEndOff - i, null );
+        } 
+        doc.replaceText( this, i + 1, nodeEndOff - i, null );
     }
 
     private String getIndentForNode( Element node )
