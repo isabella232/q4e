@@ -376,7 +376,7 @@ public abstract class TranslatorAdapter
             }
 
         } 
-        doc.replaceText( this, i + 1, nodeEndOff - i, null );
+        doc.replaceText( this, i + 1, nodeEndOff - i - 1, null );
     }
 
     private String getIndentForNode( Element node )
