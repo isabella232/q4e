@@ -35,7 +35,42 @@
          id="org.devzuz.q.maven.pomeditor"
          download-size="0"
          install-size="0"
-         version="0.8.0.qualifier"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.devzuz.q.maven.pom.model"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.devzuz.q.maven.pom.model.edit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.databinding"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.v200806091234-q4e"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.emf.databinding.edit"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.v200806091234-q4e"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.core.databinding"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
          unpack="false"/>
 
 </feature>
