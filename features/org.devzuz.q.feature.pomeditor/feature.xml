@@ -29,6 +29,8 @@
       <import plugin="org.eclipse.ui.ide"/>
       <import plugin="org.devzuz.q.maven.ui"/>
       <import plugin="org.apache.maven.embedder"/>
+      <import feature="org.devzuz.q.feature" version="0.8.0" match="greaterOrEqual"/>
+      <import feature="org.eclipse.emf.edit.ui" version="2.3.1" match="compatible"/>
    </requires>
 
    <plugin
