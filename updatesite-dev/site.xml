@@ -54,6 +54,12 @@
    <feature url="features/org.apache.maven.feature_2.1.0.659801.jar" id="org.apache.maven.feature" version="2.1.0.659801">
       <category name="Eclipse33"/>
    </feature>
+   <feature url="features/org.eclipse.zest_1.0.0.v20080115-53-8xB4CE888N2337.jar" id="org.eclipse.zest" version="1.0.0.v20080115-53-8xB4CE888N2337">
+      <category name="Eclipse33"/>
+   </feature>
+   <feature url="features/org.eclipse.draw2d_3.4.0.v20080115-33-7w31191226.jar" id="org.eclipse.draw2d" version="3.4.0.v20080115-33-7w31191226">
+      <category name="Eclipse33"/>
+   </feature>
    <feature url="features/org.devzuz.q.feature_0.8.0.200806301603.jar" id="org.devzuz.q.feature" version="0.8.0.200806301603">
       <category name="Community"/>
    </feature>
