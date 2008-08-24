@@ -374,6 +374,7 @@ public class MavenNature implements IProjectNature
             IResource resource = project.findMember( folder );
             if (resource == null) {
                 // [Issue 512] Maven did not create the source folders it is declaring
+                // shouldn't happen as resources are already created in getClasspathFolders
                 resource = createSourceFolder( folder );
             }
             if (resource != null) {
@@ -396,7 +397,7 @@ public class MavenNature implements IProjectNature
         IPath path = new Path(folder);
         IContainer currentContainer = getProject();
         try {
-            for (int i = 1; i < path.segmentCount(); i++) {
+            for (int i = 1; i <= path.segmentCount(); i++) {
                 IFolder newFolder = getProject().getFolder( path.uptoSegment( i ) );
                 if (!newFolder.exists()) {
                     newFolder.create( true, true, null );
@@ -436,14 +437,17 @@ public class MavenNature implements IProjectNature
         }
         for ( String sourceRoot : sourceRoots )
         {
-            File sourceRootFile = new File( sourceRoot );
             // Issue 462: Generated folders might not exist during import, but we need them
-            if (!sourceRootFile.exists()) {
-            	sourceRootFile.mkdirs();
-            }
-            if ( sourceRootFile.exists() && sourceRootFile.isDirectory() )
+            String relativePath = getRelativePath( project.getLocation(), sourceRoot );
+
+            IResource resource = project.findMember( relativePath );
+            if ( resource == null )
             {
-                String relativePath = getRelativePath( project.getLocation(), sourceRoot );
+                resource = createSourceFolder( relativePath );
+            }
+            if ( ( resource != null ) && ( resource.getType() == IResource.FOLDER ) )
+            {
+                
                 // Maven returns generated folders last. Per Issue 142 they should be first, so the list is reversed.
                 classpathEntries.add( 0, relativePath );
             }
