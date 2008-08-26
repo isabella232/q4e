@@ -43,15 +43,16 @@ public class ProjectScanner
     /**
      * Creates a new project scanner.
      * 
-     * @param importParentProjects
-     *            <code>true</code> to import pom packaging projects, <code>false</code> to skip them.
+     * @param importParentProjects <code>true</code> to import pom packaging projects, <code>false</code> to skip
+     *            them.
      */
     public ProjectScanner( boolean importParentProjects )
     {
         this.importParentProjects = importParentProjects;
     }
 
-    public Collection<PomFileDescriptor> scanFolder( File file, IProgressMonitor monitor ) throws InterruptedException
+    public Collection<PomFileDescriptor> scanFolder( File file, IProgressMonitor monitor )
+        throws InterruptedException
     {
 
         if ( monitor.isCanceled() )
@@ -88,7 +89,8 @@ public class ProjectScanner
     }
 
     @SuppressWarnings( "unchecked" )
-    public PomFileDescriptor scanFolder( File file, SubMonitor monitor ) throws InterruptedException
+    public PomFileDescriptor scanFolder( File file, SubMonitor monitor )
+        throws InterruptedException
     {
         PomFileDescriptor root = new PomFileDescriptor();
 
@@ -132,20 +134,26 @@ public class ProjectScanner
      *         <code>mvn validate</code>).
      * @throws InterruptedException
      */
-    private List<PomFileDescriptor> getSortedProjects( File pom, IProgressMonitor monitor ) throws InterruptedException
+    private List<PomFileDescriptor> getSortedProjects( File pom, IProgressMonitor monitor )
+        throws InterruptedException
     {
-        List<IMavenProject> sortedProjects;
+        List<IMavenProject> sortedProjects = null;
         try
         {
             MavenExecutionParameter parameter = MavenExecutionParameter.newDefaultMavenExecutionParameter();
             parameter.setRecursive( true );
-            if (!pom.isAbsolute()) {
+            if ( !pom.isAbsolute() )
+            {
                 pom = pom.getAbsoluteFile();
             }
-            IMavenExecutionResult result =
-                MavenManager.getMaven().executeGoal( new Path( pom.getParent() ), "validate", parameter, monitor );
-            sortedProjects = result.getSortedProjects();
 
+            Path parentPath = new Path( pom.getParent() );
+            if ( parentPath.toFile().exists() )
+            {
+                IMavenExecutionResult result =
+                    MavenManager.getMaven().executeGoal( parentPath , "validate", parameter, monitor );
+                sortedProjects = result.getSortedProjects();
+            }
             if ( sortedProjects == null )
             {
                 /* the project doesn't build so we can't get the list of sorted projects */
