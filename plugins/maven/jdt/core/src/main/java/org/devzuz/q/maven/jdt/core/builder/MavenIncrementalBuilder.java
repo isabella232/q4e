@@ -25,7 +25,7 @@ import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
 import org.devzuz.q.maven.jdt.core.classpath.container.UpdateClasspathJob;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
-import org.devzuz.q.maven.jdt.core.properties.MavenPropertyManager;
+import org.devzuz.q.maven.project.properties.MavenProjectPropertiesManager;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -706,13 +706,13 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
         if ( RESOURCES_GOAL.equals( phase ) )
         {
             createSentinelFile( mavenProject, mavenProject.getBuildOutputDirectory() );
-            params.setFilteredGoals( MavenPropertyManager.getInstance().getResourceExcludedGoals(
+            params.setFilteredGoals( MavenProjectPropertiesManager.getInstance().getResourceExcludedGoals(
                                                                                                   mavenProject.getProject() ) );
         }
         else if ( TEST_RESOURCES_GOAL.equals( phase ) )
         {
             createSentinelFile( mavenProject, mavenProject.getBuildTestOutputDirectory() );
-            params.setFilteredGoals( MavenPropertyManager.getInstance().getTestResourceExcludedGoals(
+            params.setFilteredGoals( MavenProjectPropertiesManager.getInstance().getTestResourceExcludedGoals(
                                                                                                       mavenProject.getProject() ) );
         }
 

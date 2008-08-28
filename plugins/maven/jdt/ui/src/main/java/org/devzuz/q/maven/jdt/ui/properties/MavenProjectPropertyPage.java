@@ -20,7 +20,6 @@ import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
-import org.devzuz.q.maven.jdt.core.properties.MavenPropertyManager;
 import org.devzuz.q.maven.jdt.ui.Messages;
 import org.devzuz.q.maven.project.properties.MavenProjectPropertiesManager;
 import org.devzuz.q.maven.ui.customcomponents.MavenProfileUi;
@@ -38,7 +37,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.dialogs.PropertyPage;
 
 /**
- * This class provides a property page for displaying the Maven JDT preferences managed by the MavenPropertyManager.
+ * This class provides a property page for displaying the Maven JDT preferences managed by the MavenProjectPropertiesManager.
  * 
  * @author staticsnow@gmail.com
  */
@@ -62,12 +61,12 @@ public class MavenProjectPropertyPage
             rowLayout.verticalSpacing = 20;
             composite.setLayout( rowLayout );
             Set<String> excludedResourceGoals =
-                MavenPropertyManager.getInstance().getResourceExcludedGoals( getProject() );
+                MavenProjectPropertiesManager.getInstance().getResourceExcludedGoals( getProject() );
             buildGoalTableRow( composite, Messages.MavenProjectPropertyPage_ExecuteOnResource,
                                newExcludedResourceGoals, excludedResourceGoals, //$NON-NLS-1$
                                MavenIncrementalBuilder.RESOURCES_GOAL );
             Set<String> excludedTestResourceGoals =
-                MavenPropertyManager.getInstance().getTestResourceExcludedGoals( getProject() );
+                MavenProjectPropertiesManager.getInstance().getTestResourceExcludedGoals( getProject() );
             buildGoalTableRow( composite, Messages.MavenProjectPropertyPage_ExecuteOnTestResource,
                                newExcludedTestResourceGoals, //$NON-NLS-1$
                                excludedTestResourceGoals, MavenIncrementalBuilder.TEST_RESOURCES_GOAL );
@@ -95,8 +94,8 @@ public class MavenProjectPropertyPage
     {
         try
         {
-            MavenPropertyManager.getInstance().setResourceExcludedGoals( getProject(), newExcludedResourceGoals );
-            MavenPropertyManager.getInstance().setTestResourceExcludedGoals( getProject(), newExcludedTestResourceGoals );
+            MavenProjectPropertiesManager.getInstance().setResourceExcludedGoals( getProject(), newExcludedResourceGoals );
+            MavenProjectPropertiesManager.getInstance().setTestResourceExcludedGoals( getProject(), newExcludedTestResourceGoals );
             MavenProjectPropertiesManager.getInstance().setActiveProfiles(
                                                                            getProject(),
                                                                            new HashSet<String>( profileUi.getProfiles() ) );

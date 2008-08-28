@@ -5,7 +5,9 @@
  */
 package org.devzuz.q.maven.project.properties;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -20,20 +22,26 @@ import org.eclipse.core.runtime.QualifiedName;
  * Singleton class used to manage a maven project persistant properties.
  * 
  * @author amuino
- * 
  */
 public class MavenProjectPropertiesManager
 {
-    // TODO: Merge the MavenPropertyManager from maven.jdt.core
     private static enum Property
     {
-        ActiveProfiles, InactiveProfiles
+        ActiveProfiles, InactiveProfiles, TEST_RESOURCE_EXCLUDED, RESOURCE_EXCLUDED
     };
+
+    private static final String[] DEFAULT_RESOURCES_EXCLUDES = {};
+
+    // TODO: Maybe these should be extensible? other plug-ins might want to exclude other expensive tasks
+    private static final String[] DEFAULT_TEST_RESOURCES_EXCLUDES =
+        { "org.apache.maven.plugins:maven-resources-plugin:resources:default",
+            "org.apache.maven.plugins:maven-compiler-plugin:compile:default" };
 
     /**
      * Do not activate any profile by default
      */
     // amuino: XXX Should we (by default) enable a q4e profile?
+    // agramirez: execution works fine even withouth the default profiles, i think we can remove this
     private final static Set<String> DEFAULT_ACTIVE_PROFILES = Collections.emptySet();
 
     /**
@@ -61,19 +69,88 @@ public class MavenProjectPropertiesManager
         // No op
     }
 
+    /**
+     * Get the project active profiles
+     * 
+     * @param project
+     * @return
+     */
     public Set<String> getActiveProfiles( IProject project )
     {
         return getProperty( project, Property.ActiveProfiles );
     }
 
-    public void setActiveProfiles (IProject project, Set<String> activeProfiles )
+    /**
+     * Set the active profiles for a project
+     * 
+     * @param project
+     * @param activeProfiles
+     */
+    public void setActiveProfiles( IProject project, Set<String> activeProfiles )
     {
         setProperty( project, Property.ActiveProfiles, activeProfiles );
     }
+
+    /**
+     * Get the inactive profiles for a project
+     * 
+     * @param project
+     * @return
+     */
+    //agramirez: XXX Do we really need inactive profiles?
     public Set<String> getInactiveProfiles( IProject project )
     {
         return getProperty( project, Property.InactiveProfiles );
     }
+    
+    /**
+     * Get the set of goals that should be excluded from the process-test-resources incremental build execution.
+     * 
+     * @param project
+     * @return
+     * @throws CoreException
+     */
+    public Set<String> getTestResourceExcludedGoals( IProject project )
+    {
+        return getProperty( project, Property.TEST_RESOURCE_EXCLUDED );
+    }
+
+    /**
+     * Sets the goals that are excluded from a process-test-resources incremental build.
+     * 
+     * @param project
+     * @param excludedGoals
+     * @throws CoreException
+     */
+    public void setTestResourceExcludedGoals( IProject project, Set<String> excludedGoals )
+    {
+        setProperty( project, Property.TEST_RESOURCE_EXCLUDED, excludedGoals );
+    }
+
+    /**
+     * Get the set of goals that should be excluded from the process-resources incremental build execution.
+     * 
+     * @param project
+     * @param excludedGoals
+     * @throws CoreException
+     */
+
+    public Set<String> getResourceExcludedGoals( IProject project ) throws CoreException
+    {
+        return getProperty( project, Property.RESOURCE_EXCLUDED );
+    }
+
+    /**
+     * Sets the goals that are excluded from a process-resources incremental build.
+     * 
+     * @param project
+     * @param excludedGoals
+     * @throws CoreException
+     */
+    public void setResourceExcludedGoals( IProject project, Set<String> excludedGoals ) throws CoreException
+    {
+        setProperty( project, Property.RESOURCE_EXCLUDED, excludedGoals );
+    }    
 
     public void activateProfile( IProject project, String profileName )
     {
@@ -100,7 +177,8 @@ public class MavenProjectPropertiesManager
      * 
      * @param project
      */
-    private void initializePreferencesForProject( IProject project ) throws CoreException
+    private void initializePreferencesForProject( IProject project )
+        throws CoreException
     {
         String activeProfiles =
             project.getPersistentProperty( new QualifiedName( MavenCoreActivator.PLUGIN_ID,
@@ -117,19 +195,31 @@ public class MavenProjectPropertiesManager
         {
             setProperty( project, Property.InactiveProfiles, DEFAULT_INACTIVE_PROFILES );
         }
+
+        String resourceExcluded =
+            project.getPersistentProperty( new QualifiedName( MavenCoreActivator.PLUGIN_ID,
+                                                              Property.RESOURCE_EXCLUDED.name() ) );
+        if ( null == resourceExcluded )
+        {
+            setProperty( project, Property.RESOURCE_EXCLUDED, new HashSet<String>( Arrays.asList( DEFAULT_RESOURCES_EXCLUDES ) ) );
+        }
+
+        String testResourceExcluded =
+            project.getPersistentProperty( new QualifiedName( MavenCoreActivator.PLUGIN_ID, Property.TEST_RESOURCE_EXCLUDED.name() ) );
+        if ( null == testResourceExcluded )
+        {
+            setProperty( project, Property.TEST_RESOURCE_EXCLUDED,
+                         new HashSet<String>( Arrays.asList( DEFAULT_TEST_RESOURCES_EXCLUDES ) ) );
+        }
     }
 
     /**
      * Writes a set of values into a project persistent property.
      * 
-     * @param project
-     *            the project
-     * @param property
-     *            the property to write
-     * @param values
-     *            the values to store
-     * @throws CoreException
-     *             if the property values can't be persisted on the given project
+     * @param project the project
+     * @param property the property to write
+     * @param values the values to store
+     * @throws CoreException if the property values can't be persisted on the given project
      */
     private void setProperty( IProject project, Property property, Set<String> values )
     {
@@ -142,17 +232,15 @@ public class MavenProjectPropertiesManager
         {
             MavenCoreActivator.getLogger().log(
                                                 "Unable to write property " + property.name() + " with value " + values
-                                                                + " for project " + project, e );
+                                                    + " for project " + project, e );
         }
     }
 
     /**
      * Reads a set of values from a project persistent property.
      * 
-     * @param project
-     *            the project
-     * @param property
-     *            the property to read
+     * @param project the project
+     * @param property the property to read
      * @return the set of strings read from the property, or an empty set if the property can't be read.
      */
     private Set<String> getProperty( IProject project, Property property )
@@ -162,7 +250,6 @@ public class MavenProjectPropertiesManager
             // running a maven goal without a project
             if ( property.equals( Property.ActiveProfiles ) )
             {
-                // TODO: Should get the default set of profiles (when Issue 367 implemented)
                 return MavenManager.getMavenPreferenceManager().getDefaultProfiles();
             }
             else
@@ -191,7 +278,7 @@ public class MavenProjectPropertiesManager
         {
             MavenCoreActivator.getLogger().log(
                                                 "Unable to read property " + property.name() + " for project "
-                                                                + project, e );
+                                                    + project, e );
             return Collections.emptySet();
         }
 
@@ -200,8 +287,7 @@ public class MavenProjectPropertiesManager
     /**
      * Serializes the set of values as a String
      * 
-     * @param values
-     *            the values to serialize
+     * @param values the values to serialize
      * @return a delimited string of values
      */
     private String toString( Set<String> values )
@@ -230,8 +316,7 @@ public class MavenProjectPropertiesManager
     /**
      * Deserializes the set of values in the given String (created by {@link #toString(Set)}
      * 
-     * @param value
-     *            the serialized string
+     * @param value the serialized string
      * @return the set of values in the serialized parameter
      */
     private Set<String> fromString( String value )
