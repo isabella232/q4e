@@ -29,6 +29,8 @@ public class Messages
     public static String MavenProjectPropertyPage_ExecuteOnResource;
 
     public static String MavenProjectPropertyPage_ExecuteOnTestResource;
+    
+    public static String MavenProfilePreferencePage_Description;
 
     static
     {

@@ -8,6 +8,7 @@
 
 package org.devzuz.q.maven.jdt.ui.properties;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -21,6 +22,8 @@ import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
 import org.devzuz.q.maven.jdt.core.properties.MavenPropertyManager;
 import org.devzuz.q.maven.jdt.ui.Messages;
+import org.devzuz.q.maven.project.properties.MavenProjectPropertiesManager;
+import org.devzuz.q.maven.ui.customcomponents.MavenProfileUi;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
@@ -38,14 +41,16 @@ import org.eclipse.ui.dialogs.PropertyPage;
  * This class provides a property page for displaying the Maven JDT preferences managed by the MavenPropertyManager.
  * 
  * @author staticsnow@gmail.com
- * 
  */
-public class MavenProjectPropertyPage extends PropertyPage
+public class MavenProjectPropertyPage
+    extends PropertyPage
 {
 
     final Set<String> newExcludedResourceGoals = new HashSet<String>();
 
     final Set<String> newExcludedTestResourceGoals = new HashSet<String>();
+
+    private MavenProfileUi profileUi;
 
     @Override
     protected Control createContents( Composite parent )
@@ -67,6 +72,8 @@ public class MavenProjectPropertyPage extends PropertyPage
                                newExcludedTestResourceGoals, //$NON-NLS-1$
                                excludedTestResourceGoals, MavenIncrementalBuilder.TEST_RESOURCES_GOAL );
 
+            buildProfileRow( composite );
+
             return composite;
         }
         catch ( CoreException e )
@@ -77,12 +84,22 @@ public class MavenProjectPropertyPage extends PropertyPage
     }
 
     @Override
+    public boolean performOk()
+    {
+        performApply();
+        return super.performOk();
+    }
+    
+    @Override
     protected void performApply()
     {
         try
         {
             MavenPropertyManager.getInstance().setResourceExcludedGoals( getProject(), newExcludedResourceGoals );
             MavenPropertyManager.getInstance().setTestResourceExcludedGoals( getProject(), newExcludedTestResourceGoals );
+            MavenProjectPropertiesManager.getInstance().setActiveProfiles(
+                                                                           getProject(),
+                                                                           new HashSet<String>( profileUi.getProfiles() ) );
         }
         catch ( CoreException e )
         {
@@ -90,8 +107,30 @@ public class MavenProjectPropertyPage extends PropertyPage
         }
     }
 
+    private void buildProfileRow( Composite parent )
+    {
+        Composite composite = new Composite( parent, SWT.NONE );
+        GridLayout layout = new GridLayout( 2, false );
+        GridData layoutData = new GridData( GridData.FILL_BOTH );
+        layoutData.grabExcessHorizontalSpace = true;
+        layoutData.grabExcessVerticalSpace = true;
+        composite.setLayout( layout );
+        composite.setLayoutData( layoutData );
+
+        layoutData = new GridData( GridData.FILL, GridData.FILL, true, false, 2, 1 );
+        Label label = new Label( composite, SWT.READ_ONLY );
+        label.setText( Messages.MavenProfilePreferencePage_Description );
+        label.setLayoutData( layoutData );
+
+        List<String> activeProfiles =
+            new ArrayList<String>( MavenProjectPropertiesManager.getInstance().getActiveProfiles( getProject() ) );
+        profileUi = new MavenProfileUi( composite, activeProfiles, 2 );
+        profileUi.draw();
+    }
+
     private void buildGoalTableRow( Composite parent, String label, final Set<String> managedSet,
-                                    Set<String> existingExcludes, String phase ) throws CoreException
+                                    Set<String> existingExcludes, String phase )
+        throws CoreException
     {
         Composite row = new Composite( parent, SWT.NONE );
         GridLayout rowLayout = new GridLayout( 1, true );
@@ -114,7 +153,7 @@ public class MavenProjectPropertyPage extends PropertyPage
         {
             allResourceGoals.add( MojoBindingUtils.createMojoBindingKey( mojoBinding, true ) );
         }
-        
+
         for ( String goal : allResourceGoals )
         {
             resourceGoalsCheckTableViewer.add( goal );

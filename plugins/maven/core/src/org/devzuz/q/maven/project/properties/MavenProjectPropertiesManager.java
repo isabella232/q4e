@@ -66,6 +66,10 @@ public class MavenProjectPropertiesManager
         return getProperty( project, Property.ActiveProfiles );
     }
 
+    public void setActiveProfiles (IProject project, Set<String> activeProfiles )
+    {
+        setProperty( project, Property.ActiveProfiles, activeProfiles );
+    }
     public Set<String> getInactiveProfiles( IProject project )
     {
         return getProperty( project, Property.InactiveProfiles );
