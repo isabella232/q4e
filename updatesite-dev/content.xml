@@ -3,7 +3,7 @@
 <repository name='Q for Eclipse' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1219493244972'/>
+    <property name='p2.timestamp' value='1220096179364'/>
   </properties>
   <references size='14'>
     <repository url='http://download.eclipse.org/modeling/emft/updates/' type='0' options='0'/>
@@ -11,15 +11,15 @@
     <repository url='http://download.eclipse.org/modeling/emf/updates/' type='0' options='0'/>
     <repository url='http://download.eclipse.org/modeling/emft/updates/' type='1' options='0'/>
     <repository url='http://download.eclipse.org/tools/gef/update-site/releases/site.xml' type='1' options='0'/>
+    <repository url='http://q4e.googlecode.com/svn/trunk/updatesite' type='0' options='0'/>
     <repository url='http://download.eclipse.org/webtools/updates' type='0' options='0'/>
-    <repository url='http://q4e.googlecode.com/svn/trunk/updatesite' type='1' options='0'/>
     <repository url='http://download.eclipse.org/modeling/mdt/updates/' type='0' options='0'/>
     <repository url='http://download.eclipse.org/webtools/updates/' type='1' options='0'/>
+    <repository url='http://q4e.googlecode.com/svn/trunk/updatesite' type='1' options='0'/>
     <repository url='http://download.eclipse.org/modeling/emf/updates/' type='1' options='0'/>
     <repository url='http://download.eclipse.org/webtools/updates/' type='0' options='0'/>
     <repository url='http://download.eclipse.org/webtools/updates' type='1' options='0'/>
     <repository url='http://download.eclipse.org/modeling/mdt/updates/' type='1' options='0'/>
-    <repository url='http://q4e.googlecode.com/svn/trunk/updatesite' type='0' options='0'/>
   </references>
   <units size='225'>
     <unit id='org.eclipse.zest.layouts' version='1.0.0.v20080115' singleton='false'>
@@ -4063,9 +4063,11 @@
       <provides size='1'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='Enabling Features' version='0.0.0'/>
       </provides>
-      <requires size='2'>
+      <requires size='4'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.feature.feature.group' range='[2.1.0.659801,2.1.0.659801]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.feature.feature.group' range='[2.1.0.659801b,2.1.0.659801b]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.collections.feature.feature.group' range='[3.2.0.200801311913,3.2.0.200801311913]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.feature.feature.group' range='[2.1.0.627670,2.1.0.627670]'/>
       </requires>
       <touchpoint id='null' version='0.0.0'/>
     </unit>
@@ -6476,7 +6478,7 @@
       <provides size='1'>
         <provided namespace='org.eclipse.equinox.p2.iu' name='Eclipse33' version='0.0.0'/>
       </provides>
-      <requires size='18'>
+      <requires size='16'>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.xsd.feature.group' range='[2.3.2.v200802051830,2.3.2.v200802051830]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.zest.feature.group' range='[1.0.0.v20080115-53-8xB4CE888N2337,1.0.0.v20080115-53-8xB4CE888N2337]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.emf.ecore.edit.feature.group' range='[2.3.1.v200802051830,2.3.1.v200802051830]'/>
@@ -6484,10 +6486,8 @@
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.xsd.edit.feature.group' range='[2.3.0.v200802051830,2.3.0.v200802051830]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.wst.xml_ui.feature.feature.group' range='[2.0.2.v200802150100-7A1ECMCnbcl1bVs9uNm_Zkieb7Qe,2.0.2.v200802150100-7A1ECMCnbcl1bVs9uNm_Zkieb7Qe]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.wst.common_core.feature.feature.group' range='[2.0.2.v200802150100-7C78EKOE_EkMNlO6f7cjpz0,2.0.2.v200802150100-7C78EKOE_EkMNlO6f7cjpz0]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.feature.feature.group' range='[2.1.0.627670,2.1.0.627670]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.draw2d.feature.group' range='[3.4.0.v20080115-33-7w31191226,3.4.0.v20080115-33-7w31191226]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.emf.common.feature.group' range='[2.3.1.v200802051830,2.3.1.v200802051830]'/>
-        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.feature.feature.group' range='[2.1.0.659801,2.1.0.659801]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.emf.edit.ui.feature.group' range='[2.3.1.v200802051830,2.3.1.v200802051830]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.emf.edit.feature.group' range='[2.3.2.v200802051830,2.3.2.v200802051830]'/>
         <required namespace='org.eclipse.equinox.p2.iu' name='org.eclipse.emf.common.ui.feature.group' range='[2.3.1.v200802051830,2.3.1.v200802051830]'/>
