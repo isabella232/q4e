@@ -7,7 +7,7 @@
       <category name="Enabling Features"/>
    </feature>
    <feature url="features/org.apache.maven.feature_2.1.0.627670.jar" id="org.apache.maven.feature" version="2.1.0.627670">
-      <category name="Eclipse33"/>
+      <category name="Enabling Features"/>
    </feature>
    <feature url="features/org.eclipse.emf.common_2.3.1.v200802051830.jar" id="org.eclipse.emf.common" version="2.3.1.v200802051830">
       <category name="Eclipse33"/>
@@ -52,7 +52,7 @@
       <category name="Eclipse33"/>
    </feature>
    <feature url="features/org.apache.maven.feature_2.1.0.659801.jar" id="org.apache.maven.feature" version="2.1.0.659801">
-      <category name="Eclipse33"/>
+      <category name="Enabling Features"/>
    </feature>
    <feature url="features/org.eclipse.zest_1.0.0.v20080115-53-8xB4CE888N2337.jar" id="org.eclipse.zest" version="1.0.0.v20080115-53-8xB4CE888N2337">
       <category name="Eclipse33"/>
