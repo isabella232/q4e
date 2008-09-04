@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.PlatformUI;
 
-public class DependencyTableComponent extends Composite
+public class DependencyTableComponent extends AbstractComponent
 {
     private Table dependenciesTable;
 
@@ -50,7 +50,9 @@ public class DependencyTableComponent extends Composite
     
     private WritableValue selectedDependency;
 
-    public DependencyTableComponent( Composite parent, int style, Model model, EStructuralFeature[] path, EditingDomain domain, WritableValue selectedDependency )
+    public DependencyTableComponent( Composite parent, int style, 
+    		Model model, EStructuralFeature[] path, EditingDomain domain, 
+    		WritableValue selectedDependency )
     {
         super( parent, style );
 
@@ -277,12 +279,6 @@ public class DependencyTableComponent extends Composite
 
         return false;
     }
-
-    private String nullIfBlank( String str )
-    {
-        return ( str == null || str.equals( "" ) ) ? null : str;
-    }
-
 
     public void addDependencyTableListener( SelectionListener listener )
     {

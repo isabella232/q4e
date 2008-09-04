@@ -6,18 +6,11 @@ import org.devzuz.q.maven.pom.PomFactory;
 import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pom.PropertyElement;
 import org.devzuz.q.maven.pomeditor.Messages;
-import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.ui.dialogs.KeyValueEditorDialog;
-import org.eclipse.core.databinding.observable.Realm;
 import org.eclipse.core.databinding.observable.list.IObservableList;
 import org.eclipse.core.databinding.observable.map.IObservableMap;
-import org.eclipse.core.databinding.observable.value.IObservableValue;
-import org.eclipse.core.databinding.observable.value.WritableValue;
 import org.eclipse.emf.databinding.EMFObservables;
-import org.eclipse.emf.databinding.edit.EMFEditObservables;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
 import org.eclipse.jface.databinding.viewers.ObservableMapLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -54,7 +47,7 @@ public class PropertiesTableComponent
         super( parent, style );
         
         setLayout( new GridLayout( 2, false ) );
-        
+
         propertiesTable = new Table( this, SWT.BORDER | SWT.FULL_SELECTION | SWT.SINGLE );
         propertiesTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
         propertiesTable.setLinesVisible( true );
@@ -69,9 +62,7 @@ public class PropertiesTableComponent
 
         TableColumn valueColumn = new TableColumn( propertiesTable, SWT.BEGINNING, 1 );
         valueColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Value );
-        valueColumn.setWidth( 200 );
-        
-        
+        valueColumn.setWidth( 200 );        
 
         Composite container2 = new Composite( this, SWT.NULL );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -95,9 +86,10 @@ public class PropertiesTableComponent
         RemoveButtonListener removeButtonListener = new RemoveButtonListener();
         removeButton.addSelectionListener( removeButtonListener );
         removeButton.setEnabled( false );
+        
     }
-    
-    public void bind( IObservableList list )
+
+	public void bind( IObservableList list )
     {
     	this.list = list;
     	TableViewer viewer = new TableViewer( propertiesTable );
@@ -106,7 +98,7 @@ public class PropertiesTableComponent
 		viewer.setInput( list );
 		IObservableMap[] labels = EMFObservables.observeMaps(contentProvider.getKnownElements(), new EStructuralFeature[] { PomPackage.Literals.PROPERTY_ELEMENT__NAME, PomPackage.Literals.PROPERTY_ELEMENT__VALUE } );
 		viewer.setLabelProvider( new ObservableMapLabelProvider( labels ) );
-    }
+    }    
     
     private void refreshPropertiesTable()
     {

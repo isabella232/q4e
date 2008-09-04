@@ -27,7 +27,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 public class RepositoryTableComponent
-    extends Composite
+    extends AbstractComponent
 {
     private Table repositoriesTable;
     
@@ -38,8 +38,6 @@ public class RepositoryTableComponent
     private Button removeButton;
     
     private Repository selectedRepository;
-
-    private boolean isModified;
 
     private Model model;
     
@@ -66,19 +64,19 @@ public class RepositoryTableComponent
         repositoriesTable.addSelectionListener( tableListener );
         
         TableColumn idColumn = new TableColumn( repositoriesTable, SWT.BEGINNING, 0 );
-        idColumn.setWidth( 50 );
+        idColumn.setWidth( 125 );
         idColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Identity );
         
         TableColumn nameColumn = new TableColumn( repositoriesTable, SWT.BEGINNING, 1 );
-        nameColumn.setWidth( 75 );
+        nameColumn.setWidth( 150 );
         nameColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Name );        
         
         TableColumn urlColumn = new TableColumn( repositoriesTable, SWT.BEGINNING, 2 );
-        urlColumn.setWidth( 90 );
+        urlColumn.setWidth( 250 );
         urlColumn.setText( Messages.MavenPomEditor_MavenPomEditor_URL );
         
         TableColumn layoutColumn = new TableColumn( repositoriesTable, SWT.BEGINNING, 3 );
-        layoutColumn.setWidth( 75 );
+        layoutColumn.setWidth( 150 );
         layoutColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Layout );
         
         ModelUtil.bindTable(
@@ -178,7 +176,7 @@ public class RepositoryTableComponent
                 List<Repository> dataSource = (List<Repository>)ModelUtil.getValue( model, path, domain, true );
                 dataSource.add( repository );
                 
-                setModified( true );
+                notifyListeners( repositoriesTable );
                 
             }
         }
@@ -223,7 +221,7 @@ public class RepositoryTableComponent
                 dataSource.remove( selectedRepository );
                 dataSource.add( repository );
                 
-                setModified( true );
+                notifyListeners( repositoriesTable );
             }
             
             editButton.setEnabled( false );
@@ -244,16 +242,11 @@ public class RepositoryTableComponent
         	List<Repository> dataSource = (List<Repository>)ModelUtil.getValue( model, path, domain, true );
             dataSource.remove( selectedRepository );
             
-            setModified( true );
+            notifyListeners( repositoriesTable );
             
             editButton.setEnabled( false );
             removeButton.setEnabled( false );
         }
-    }
-    
-    private String nullIfBlank(String str) 
-    {
-        return ( str == null || str.equals( "" ) ) ? null : str;
     }
     
     public Repository getSelectedRepository()
@@ -304,16 +297,6 @@ public class RepositoryTableComponent
     public void removeRemoveButtonListener( SelectionListener listener )
     {
         removeButton.removeSelectionListener( listener );
-    }
-    
-    public boolean isModified()
-    {
-        return isModified;
-    }
-    
-    public void setModified( boolean isModified )
-    {
-        this.isModified = isModified;
     }
 
 }

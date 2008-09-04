@@ -37,7 +37,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.PlatformUI;
 
 public class DependencyExclusionTableComponent
-    extends Composite
+    extends AbstractComponent
 {
     private Table exclusionsTable;
 
@@ -55,7 +55,8 @@ public class DependencyExclusionTableComponent
     
     private EditingDomain domain;
 
-    public DependencyExclusionTableComponent( Composite parent, int style, IObservableValue parentValue, EStructuralFeature[] path, EditingDomain domain )
+    public DependencyExclusionTableComponent( Composite parent, int style, 
+    		IObservableValue parentValue, EStructuralFeature[] path, EditingDomain domain )
     {
         super( parent, style );
         
