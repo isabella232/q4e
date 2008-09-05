@@ -9,7 +9,9 @@ Require-Bundle: org.devzuz.q.maven.core;bundle-version="[0.8.0,0.9.0)";visibilit
  org.eclipse.ui;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.apache.commons.collections;bundle-version="[3.2.0,4.0.0)",
  org.eclipse.core.expressions,
- org.apache.lucene;bundle-version="2.3.1"
+ org.apache.lucene;bundle-version="2.3.1",
+ org.eclipse.ui.ide,
+ org.eclipse.core.filesystem
 Eclipse-LazyStart: true
 Bundle-Localization: plugin
 Bundle-ClassPath: .

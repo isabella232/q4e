@@ -8,7 +8,8 @@ package org.devzuz.q.maven.ui;
 
 import org.eclipse.osgi.util.NLS;
 
-public class Messages extends NLS
+public class Messages
+    extends NLS
 {
     private static final String BUNDLE_NAME = "org.devzuz.q.maven.ui.messages"; //$NON-NLS-1$
 
@@ -25,9 +26,9 @@ public class Messages extends NLS
     public static String MavenEventView_FilterDialog_fatal;
 
     public static String MavenEventView_MavenEventDetailDialog_ViewDetailMenuLabel;
-    
+
     public static String MavenEventView_MavenEventDetailDialog_ViewPreviousEvent;
-    
+
     public static String MavenEventView_MavenEventDetailDialog_ViewNextEvent;
 
     public static String MavenLaunchConfigurationCustomGoalTab_Browse;
@@ -53,7 +54,7 @@ public class Messages extends NLS
     public static String MavenPreference_ArchetypeConnectionTimeout;
 
     public static String MavenPreference_GlobalSettingsXml;
-    
+
     public static String MavenPreference_UserSettingsXml;
 
     public static String MavenPreference_EventsViewSize;
@@ -101,11 +102,11 @@ public class Messages extends NLS
     public static String MavenCustomComponent_ScopeLabel;
 
     public static String MavenCustomComponent_TypeLabel;
-    
+
     public static String MavenCustomComponent_ClassifierLabel;
-    
+
     public static String MavenCustomComponent_SystemPath;
-    
+
     public static String MavenCustomComponent_Optional;
 
     public static String MavenCustomComponent_SearchLabel;
@@ -117,13 +118,13 @@ public class Messages extends NLS
     public static String MavenAddEditDependencyDialog_versionLabel;
 
     public static String MavenAddEditDependencyDialog_scopeLabel;
-    
+
     public static String MavenAddEditDependencyDialog_typeLabel;
-    
+
     public static String MavenAddEditDependencyDialog_classifierLabel;
-    
+
     public static String MavenAddEditDependencyDialog_systemPathLabel;
-    
+
     public static String MavenAddEditDependencyDialog_optionalLabel;
 
     public static String MavenDependencyLookupDialog_Label;
@@ -135,13 +136,13 @@ public class Messages extends NLS
     public static String MavenArchetypePreferencePage_nameExample;
 
     public static String MavenArchetypePreferencePage_type;
-    
+
     public static String MavenArchetypePreferencePage_errorNoName;
 
     public static String MavenArchetypePreferencePage_archetypeVersionLabel;
-    
+
     public static String MavenArchetypePreferencePage_archetypeVersion_1_0_latest_label;
-    
+
     public static String MavenArchetypePreferencePage_archetypeVersion_2_0_latest_label;
 
     public static String MavenArchetypePreferenceEditor_LineSeparator;
@@ -169,9 +170,21 @@ public class Messages extends NLS
     public static String MavenProfileView_ProfileName;
 
     public static String MavenProfileView_ProfileLocation;
-    
+
     public static String MavenProfilePreferencePage_Description;
-    
+
+    public static String MavenPreferencePage_EditButtonCaption;
+
+    public static String MessageDialog_SystemError_Title;
+
+    public static String MessageDialog_Error_Title;
+
+    public static String MessageDialog_Error_Message;
+
+    public static String MessageDialog_Confirm_Title;
+
+    public static String MessageDialog_Confirm_Message;
+
     static
     {
         // initialize resource bundle
