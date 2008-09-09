@@ -36,7 +36,7 @@ public class SettingsXmlEditor
     public void doSave( IProgressMonitor progressMonitor )
     {
         super.doSave( progressMonitor );
-        if ( MessageDialog.openConfirm( new Shell(), Messages.MessageDialog_Confirm_Title,
+        if ( MessageDialog.openQuestion( new Shell(), Messages.MessageDialog_Confirm_Title,
                                         Messages.MessageDialog_Confirm_Message ) )
         {
             buildAllMavenProjectsinWorkspace();
@@ -49,7 +49,7 @@ public class SettingsXmlEditor
         super.doSaveAs();
         if ( getEditorInput().getName().equals( SETTINGSXML_FILENAME ) )
         {
-            if ( MessageDialog.openConfirm( new Shell(), Messages.MessageDialog_Confirm_Title,
+            if ( MessageDialog.openQuestion( new Shell(), Messages.MessageDialog_Confirm_Title,
                                             Messages.MessageDialog_Confirm_Message ) )
             {
                 buildAllMavenProjectsinWorkspace();

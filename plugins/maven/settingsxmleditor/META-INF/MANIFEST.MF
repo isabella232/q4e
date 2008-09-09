@@ -4,10 +4,11 @@ Bundle-Name: Maven Settings Xml Editor Plug-in
 Bundle-SymbolicName: org.devzuz.q.maven.settingsxmleditor; singleton:=true
 Bundle-Version: 1.0.0
 Bundle-Activator: org.devzuz.q.maven.settingsxmleditor.Activator
-Require-Bundle: org.devzuz.q.maven.core;bundle-version="[0.8.0,0.9.0)";visibility:=reexport, 
+Require-Bundle: org.devzuz.q.maven.core;bundle-version="[0.8.0,0.9.0)";visibility:=reexport,
  org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.jface.text,
  org.eclipse.ui.editors,
- org.eclipse.wst.sse.ui
+ org.eclipse.wst.sse.ui,
+ org.eclipse.wst.xml.core
 Bundle-Vendor: Devzuz
