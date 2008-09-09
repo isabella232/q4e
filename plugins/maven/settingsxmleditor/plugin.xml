@@ -27,7 +27,7 @@
             icon="icons/Maven_M(16)-TP.gif"            
             id="org.devzuz.q.maven.settingsxmleditor.editors.MavenSettingsXmlEditor">
 	         <contentTypeBinding
-	               contentTypeId="org.devzuz.q.maven.settingsxmlContentType">
+	               contentTypeId="org.devzuz.q.maven.settingsXmlFile">
 	         </contentTypeBinding>            
       </editor>
    </extension>
