@@ -48,7 +48,7 @@ public class BuildSettingsSecondThirdTab
         this.type = type;
         
         setLayout( new FillLayout( SWT.VERTICAL ) );
-        
+                
         Section resourceSection = 
             toolkit.createSection( this, 
                                      Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
@@ -64,9 +64,9 @@ public class BuildSettingsSecondThirdTab
         
         resourceSection.setDescription( "This element describes all of the classpath resources " +
         		"associated with a project or unit tests." ); 
-        resourceSection.setLayoutData( createSectionLayoutData() );
+        //resourceSection.setLayoutData( createSectionLayoutData() );
         resourceSection.setClient( createResourceSectionControls( resourceSection, toolkit ) );
-        
+                
         Composite container = toolkit.createComposite( this );
         container.setLayoutData( createSectionLayoutData() );
         createIncludeExcludeTables( container, toolkit );

@@ -37,6 +37,8 @@ public class PomBasicInformationSecondThirdTab extends AbstractComponent
 
 	private EditingDomain domain;
 
+    private String type;
+
 	public PomBasicInformationSecondThirdTab(Composite parent, int style, 
 			FormToolkit toolkit, String type,
 			Model model, EditingDomain domain ) 
@@ -45,6 +47,7 @@ public class PomBasicInformationSecondThirdTab extends AbstractComponent
 		
 		this.model = model;
 		this.domain = domain;
+		this.type = type;
 		
 		setLayout( new FillLayout( SWT.VERTICAL ) );
 		
@@ -61,13 +64,13 @@ public class PomBasicInformationSecondThirdTab extends AbstractComponent
 	        dependencyTableSection.setText( Messages.MavenPomEditor_MavenPomEditor_DependencyManagement );
 		}
 		
-        dependencyTableSection.setLayoutData( createSectionLayoutData() );
+        //dependencyTableSection.setLayoutData( createSectionLayoutData() );
         dependencyTableSection.setClient( createDependencyTableControls( dependencyTableSection , toolkit ) );
         
         Section dependencyExclusionTableSection = toolkit.createSection( this, Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         dependencyExclusionTableSection.setDescription( "Contains information required to exclude an artifact from the project." );
         
-        if ( type.equalsIgnoreCase("Dependency") )
+        if ( type.equalsIgnoreCase( Messages.MavenPomEditor_MavenPomEditor_Dependencies ) )
 		{        	
         	dependencyExclusionTableSection.setText( Messages.MavenPomEditor_MavenPomEditor_DependencyExclusions );
 		}
@@ -76,7 +79,7 @@ public class PomBasicInformationSecondThirdTab extends AbstractComponent
         	dependencyExclusionTableSection.setText( Messages.MavenPomEditor_MavenPomEditor_DependencyManagementExclusions );
         }
         
-        dependencyExclusionTableSection.setLayoutData( createSectionLayoutData() );
+        //dependencyExclusionTableSection.setLayoutData( createSectionLayoutData() );
         dependencyExclusionTableSection.setClient( createDependencyExclusionTableControls( dependencyExclusionTableSection, toolkit ) );
 	}
 	
@@ -182,9 +185,19 @@ public class PomBasicInformationSecondThirdTab extends AbstractComponent
 		Composite container = toolKit.createComposite( parent, SWT.BORDER );
         container.setLayout( new GridLayout( 1, false ) );
         
-        dependencyTableComponent = new DependencyTableComponent( container, SWT.None, 
-        			model, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEPENDENCIES }, 
-        			domain, selectedDependency );
+        if ( type.equalsIgnoreCase( Messages.MavenPomEditor_MavenPomEditor_Dependencies ) )
+        {
+            dependencyTableComponent = new DependencyTableComponent( container, SWT.None, 
+                  model, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEPENDENCIES }, 
+                  domain, selectedDependency );
+        }
+        else
+        {
+            dependencyTableComponent = new DependencyTableComponent( container, SWT.None, 
+                  model, new EStructuralFeature[]{ PomPackage.Literals.MODEL__DEPENDENCY_MANAGEMENT, PomPackage.Literals.DEPENDENCY_MANAGEMENT__DEPENDENCIES }, 
+                  domain, selectedDependency );
+        }
+        
         
         dependencyTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
         

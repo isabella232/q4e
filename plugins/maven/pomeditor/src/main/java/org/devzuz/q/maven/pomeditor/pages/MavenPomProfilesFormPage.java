@@ -1,7 +1,9 @@
 package org.devzuz.q.maven.pomeditor.pages;
 
-import org.apache.maven.model.Model;
+import org.devzuz.q.maven.pom.Model;
 import org.devzuz.q.maven.pomeditor.Messages;
+import org.eclipse.core.databinding.DataBindingContext;
+import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
@@ -25,10 +27,18 @@ public class MavenPomProfilesFormPage
 
     private ScrolledForm form;
 
-    public MavenPomProfilesFormPage( FormEditor editor, String id, String title, Model model )
+    private EditingDomain domain;
+
+    private DataBindingContext bindingContext;
+
+    public MavenPomProfilesFormPage( FormEditor editor, String id, String title, 
+           Model model, EditingDomain domain, DataBindingContext bindingContext )
     {
         super( editor, id, title );
+        
         this.pomModel = model;
+        this.domain = domain;
+        this.bindingContext = bindingContext;
     }
     
     public MavenPomProfilesFormPage( String id, String title )

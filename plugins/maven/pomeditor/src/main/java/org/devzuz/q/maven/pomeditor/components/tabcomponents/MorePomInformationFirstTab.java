@@ -5,6 +5,7 @@ import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
+import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
 import org.devzuz.q.maven.pomeditor.components.LicenseTableComponent;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.ecore.EStructuralFeature;
@@ -37,6 +38,8 @@ public class MorePomInformationFirstTab extends AbstractComponent
 
     private Text organizationUrlText;
 
+    private LicenseTableComponent licensesTableComponent;
+    
     public MorePomInformationFirstTab( Composite parent, int style, 
 	         FormToolkit toolkit, Model model, EditingDomain domain, 
 	         DataBindingContext bindingContext ) 
@@ -47,48 +50,59 @@ public class MorePomInformationFirstTab extends AbstractComponent
         this.domain = domain;
         this.bindingContext = bindingContext;
         
-        //setLayout( new GridLayout( 2, false ) );
+        //setLayout( new GridLayout( 2, true ) );
         setLayout( new FillLayout( SWT.HORIZONTAL) );
 		
 		Section licenseSection = 
 		    toolkit.createSection( this, 
-		                           Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
+		                           Section.TITLE_BAR | Section.DESCRIPTION );
 		
 		licenseSection.setText( Messages.MavenPomEditor_MavenPomEditor_Licenses );
 		licenseSection.setDescription( "This element describes all of the licenses for this project. " );
 		
-		licenseSection.setLayoutData( createSectionLayoutData() );
+		//licenseSection.setLayoutData( createSectionLayoutData() );
 		licenseSection.setClient( createLicenseControls( licenseSection, toolkit ) );
-		
+		                                       
 		Section organizationSection = 
-		    toolkit.createSection( this, Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
+		    toolkit.createSection( this, Section.TITLE_BAR |  Section.DESCRIPTION );
 		organizationSection.setText( Messages.MavenPomEditor_MavenPomEditor_Organization );
 		organizationSection.setDescription( "This element describes various attributes of the " +
 				"organization to which the project belongs." );
 		
-		organizationSection.setLayoutData( createSectionLayoutData() );
+		//organizationSection.setLayoutData( createSectionLayoutData() );		
 		organizationSection.setClient( createOrganizationControls( organizationSection, toolkit ) );
 		
 	}
     
     private Control createLicenseControls( Composite form , FormToolkit toolKit )
     {
-        Composite parent = toolKit.createComposite( form );
-        parent.setLayout( new GridLayout( 1, false ) );
+        IComponentModificationListener listener  = new IComponentModificationListener()
+        {
+            public void componentModified(AbstractComponent component, Control ctrl) 
+            {
+               notifyListeners( licensesTableComponent );            
+            }
+            
+        };
         
-        LicenseTableComponent licensesTableComponent = 
-            new LicenseTableComponent( parent, SWT.None, model, 
+        Composite container = toolKit.createComposite( form );
+        //parent.setLayout( new GridLayout( 1, false ) );
+        container.setLayout( new FillLayout( SWT.VERTICAL ) );
+        
+        licensesTableComponent = 
+            new LicenseTableComponent( container, SWT.None, model, 
                                       new EStructuralFeature[] { PomPackage.Literals.MODEL__LICENSES }, 
                                       domain);
         
-        licensesTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
+        //licensesTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true, 2, 1 ) );
         
-        return parent;
+        licensesTableComponent.addComponentModifyListener( listener );
+        
+        return container;
     }
 
     private Control createOrganizationControls( Composite form,  FormToolkit toolkit )
-    {
-        System.out.println("createOrganizationControls start");
+    {  
         FocusListener focusListener = new FocusListener()
         {
             public void focusGained( FocusEvent e )
@@ -115,13 +129,16 @@ public class MorePomInformationFirstTab extends AbstractComponent
             }
         };
         
-        Composite parent = toolkit.createComposite( form );
-        parent.setLayout( new GridLayout( 2, false ) );
+        Composite container = toolkit.createComposite( form );
+        container.setLayout( new GridLayout( 2, false ) );
         
-        Label nameLabel = toolkit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_Name, SWT.NONE );
+        //Label nameLabel = new Label( this, SWT.None );
+        //nameLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Name );
+        Label nameLabel = toolkit.createLabel( container, Messages.MavenPomEditor_MavenPomEditor_Name , SWT.None );
         nameLabel.setLayoutData( createLabelLayoutData() );
 
-        nameText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
+        //nameText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        nameText = toolkit.createText( container, "", SWT.BORDER | SWT.SINGLE );
         nameText.setLayoutData( createControlLayoutData() );
         
         ModelUtil.bind(
@@ -131,10 +148,13 @@ public class MorePomInformationFirstTab extends AbstractComponent
                 domain, 
                 bindingContext );
         
-        Label organizationUrlLabel = toolkit.createLabel( parent, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.NONE );
+        //Label organizationUrlLabel = new Label( this, SWT.NONE );
+        //organizationUrlLabel.setText( Messages.MavenPomEditor_MavenPomEditor_URL );
+        Label organizationUrlLabel = toolkit.createLabel( container, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.None );
         organizationUrlLabel.setLayoutData( createLabelLayoutData() );
 
-        organizationUrlText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
+        //organizationUrlText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        organizationUrlText = toolkit.createText( container, "", SWT.None );
         organizationUrlText.setLayoutData( createControlLayoutData() );
         
         ModelUtil.bind(
@@ -146,11 +166,9 @@ public class MorePomInformationFirstTab extends AbstractComponent
         
         organizationUrlText.addFocusListener( focusListener );
         
-        toolkit.paintBordersFor( parent );
+        toolkit.paintBordersFor( container );
         
-        System.out.println("createOrganizationControls end");
-        
-        return parent;
+        return container;
     }
 
     private GridData createLabelLayoutData()

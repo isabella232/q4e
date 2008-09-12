@@ -99,7 +99,7 @@ public class BasicProjectInformationComponent extends AbstractComponent
         ModelUtil.bind(
         		model, 
         		new EStructuralFeature[]{ PomPackage.Literals.MODEL__GROUP_ID }, 
-        		SWTObservables.observeText( groupIdText, SWT.FocusOut ), 
+        		SWTObservables.observeText( groupIdText, SWT.Modify ), 
         		domain, 
         		bindingContext );        
         

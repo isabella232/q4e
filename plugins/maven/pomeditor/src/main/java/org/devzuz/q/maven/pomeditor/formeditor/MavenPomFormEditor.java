@@ -21,6 +21,7 @@ import org.devzuz.q.maven.pomeditor.pages.MavenPomBasicInformationFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildSettingsFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomEnvironmentSettingsFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomMoreProjectInformationFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomProfilesFormPage;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -67,6 +68,9 @@ public class MavenPomFormEditor extends FormEditor
     private static final String POM_ENVIRONMENT_SETTINGS_FORM_PAGE = 
         "org.devzuz.q.maven.pomeditor.MavenPomEnvironmentSettingsFormPage";
 
+    private static final String POM_PROFILES_FORM_PAGE = 
+        "org.devzuz.q.maven.pomeditor.MavenPomProfilesFormPage";
+
     private Model pomModel;
     
     private MavenPomBasicInformationFormPage basicInformationPage;
@@ -76,6 +80,8 @@ public class MavenPomFormEditor extends FormEditor
     private MavenPomBuildSettingsFormPage buildSettingsFormPage;
     
     private MavenPomEnvironmentSettingsFormPage environmentSettingsFormPage;
+    
+    private MavenPomProfilesFormPage profilesFormPage;
 
     private IProject project;
 
@@ -177,7 +183,9 @@ public class MavenPomFormEditor extends FormEditor
                 }
             }
         }
-    };    
+    };
+
+    
 
     public MavenPomFormEditor()
     {
@@ -228,12 +236,15 @@ public class MavenPomFormEditor extends FormEditor
             	            "Build Settings", this.emfModel, this.editingDomain, this.bindingContext );
             	addPage( buildSettingsFormPage );
             	
-            	environmentSettingsFormPage =
-            	    new MavenPomEnvironmentSettingsFormPage( this, POM_ENVIRONMENT_SETTINGS_FORM_PAGE,
-            	            "Environment Settings", this.emfModel, this.editingDomain, this.bindingContext );
-            	addPage( environmentSettingsFormPage );
-            	
-            	// still have to add the Profiles main tab here
+//            	environmentSettingsFormPage =
+//            	    new MavenPomEnvironmentSettingsFormPage( this, POM_ENVIRONMENT_SETTINGS_FORM_PAGE,
+//            	            "Environment Settings", this.emfModel, this.editingDomain, this.bindingContext );
+//            	addPage( environmentSettingsFormPage );
+//            	
+//            	profilesFormPage =
+//            	    new MavenPomProfilesFormPage( this, POM_PROFILES_FORM_PAGE, 
+//            	            "Profiles", this.emfModel, this.editingDomain, this.bindingContext );
+//            	addPage( profilesFormPage );
             	
                 sourceEditor = new StructuredTextEditor();
                 sourceEditor.setEditorPart( this );
@@ -301,6 +312,7 @@ public class MavenPomFormEditor extends FormEditor
     	moreInformationFormPage.setPageModified( false );
     	buildSettingsFormPage.setPageModified( false );
     	environmentSettingsFormPage.setPageModified( false );
+    	profilesFormPage.setPageModified( false );
         // clean other pages
     }
     

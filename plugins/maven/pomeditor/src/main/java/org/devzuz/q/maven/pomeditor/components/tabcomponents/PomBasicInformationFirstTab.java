@@ -13,6 +13,7 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -40,12 +41,14 @@ public class PomBasicInformationFirstTab extends AbstractComponent
 		this.domain = domain;
 		this.bindingContext = bindingContext;
 		
-		//setLayout( new GridLayout( 2, false ) );
+		//setLayout( new GridLayout( 2, true ) );
 		setLayout( new FillLayout( SWT.HORIZONTAL) );
 		
 		basicPomInformationComponent = 
 			new BasicProjectInformationComponent( this, SWT.None, toolkit, model,
 	                domain, bindingContext );
+		
+		//basicPomInformationComponent.setLayoutData( createSectionLayoutData() );
 		
 		basicPomInformationComponent.addComponentModifyListener( new ComponentListener() );
 		
@@ -54,7 +57,7 @@ public class PomBasicInformationFirstTab extends AbstractComponent
                                    Section.DESCRIPTION );
         moduleControls.setDescription( "Aggregate the build of a set of projects by adding them as modules." );
         moduleControls.setText( Messages.MavenPomEditor_MavenPomEditor_Modules );
-        moduleControls.setLayoutData( createSectionLayoutData() );
+        //moduleControls.setLayoutData( createSectionLayoutData() );
         moduleControls.setClient( createModulesControls( moduleControls, toolkit ) );
         
 	}
@@ -64,12 +67,15 @@ public class PomBasicInformationFirstTab extends AbstractComponent
     {
         Composite container = toolKit.createComposite( form );
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
+        //container.setLayout( new GridLayout( 1, false ) );
         
         modulesTableComponent = new SimpleTableComponent( container, SWT.None, 
                                                           model,
                                                           new EStructuralFeature[]{ PomPackage.Literals.MODEL__MODULES },
                                                           "Module",
-                                                          domain );
+                                                          domain );    
+        
+        //modulesTableComponent.setLayoutData( createSectionLayoutData() ); 
         
         modulesTableComponent.addComponentModifyListener( new ComponentListener() );
                 
@@ -86,7 +92,7 @@ public class PomBasicInformationFirstTab extends AbstractComponent
 	
 	private GridData createSectionLayoutData()
     {
-        GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false );
+        GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, true );
         return layoutData;
     }
 }

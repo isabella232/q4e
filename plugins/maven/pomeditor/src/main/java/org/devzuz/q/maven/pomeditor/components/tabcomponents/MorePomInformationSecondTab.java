@@ -37,7 +37,7 @@ public class MorePomInformationSecondTab
             toolkit.createSection( this, Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         developersSection.setDescription( "Information about the committers on this project." );
         developersSection.setText( Messages.MavenPomEditor_MavenPomEditor_Developers );
-        developersSection.setLayoutData( createSectionLayoutData() );
+        //developersSection.setLayoutData( createSectionLayoutData() );
         developersSection.setClient( createDeveloperTableControls( developersSection, toolkit ) );
     }
     

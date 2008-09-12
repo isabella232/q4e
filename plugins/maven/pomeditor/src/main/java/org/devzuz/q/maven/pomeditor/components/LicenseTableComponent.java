@@ -11,7 +11,6 @@ import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditLicenseDialog;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -27,7 +26,7 @@ import org.eclipse.swt.widgets.TableItem;
 
 public class LicenseTableComponent extends AbstractComponent 
 {
-	private List<License> licensesList;
+	//private List<License> licensesList;
 	
 	private Table licensesTable;
 	
@@ -75,11 +74,11 @@ public class LicenseTableComponent extends AbstractComponent
         urlColumn.setText( Messages.MavenPomEditor_MavenPomEditor_URL );
         
         TableColumn distributionColumn = new TableColumn( licensesTable, SWT.BEGINNING, 2 );
-        distributionColumn.setWidth( 120 );
+        distributionColumn.setWidth( 75 );
         distributionColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Distribution );
         
         TableColumn commentsColumn = new TableColumn( licensesTable, SWT.BEGINNING, 3 );
-        commentsColumn.setWidth( 150 );
+        commentsColumn.setWidth( 90 );
         commentsColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Comment );
         
         ModelUtil.bindTable(
@@ -150,12 +149,10 @@ public class LicenseTableComponent extends AbstractComponent
                 license.setUrl( addDialog.getURL() );
                 license.setDistribution( addDialog.getDistribution() );
                 license.setComments( addDialog.getComment() );
-                if ( isValidLicense( license ) && !duplicateLicense( license ) )
-                {
-                	List<License> dataSource = (List<License>)ModelUtil.getValue( model, path, domain, true );
-                	dataSource.add( license );
-                }
                 
+                List<License> dataSource = (List<License>)ModelUtil.getValue( model, path, domain, true );
+                dataSource.add( license );
+                                
                 notifyListeners( licensesTable );
             }
         }
@@ -197,46 +194,4 @@ public class LicenseTableComponent extends AbstractComponent
             notifyListeners( licensesTable );
 		}
 	}
-	
-	private boolean isValidLicense( License license )
-    {
-        boolean flag = true;
-
-        if ( license == null || 
-             license.getName() == null ||
-             license.getName().trim().length() <= 0 )
-        {
-            flag = false;
-        }
-        
-        return flag;
-    }    
-    
-	private boolean duplicateLicense( License l )
-    {
-        boolean flag = false;
-        if ( licensesList.contains( l ) )
-        {
-            flag = true;
-        }
-        else
-        {
-            for ( License license : licensesList )
-            {
-                flag = license.getName().equalsIgnoreCase( l.getName() );
-                if ( flag )
-                {
-                    break;
-                }
-            }
-        }
-        if ( flag )
-        {
-            flag =
-                !MessageDialog.openConfirm( getShell(), "License Error",
-                                            Messages.MavenPomEditor_MavenPomEditor_DuplicateLicense );
-        }
-        return flag;
-    }
-
 }

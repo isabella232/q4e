@@ -1,23 +1,20 @@
 package org.devzuz.q.maven.pomeditor.pages;
 
 import org.devzuz.q.maven.pom.Model;
-import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
 import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
-import org.devzuz.q.maven.pomeditor.components.PropertiesTableComponent;
 import org.devzuz.q.maven.pomeditor.components.tabcomponents.PomBasicInformationFirstTab;
 import org.devzuz.q.maven.pomeditor.components.tabcomponents.PomBasicInformationFourthTab;
 import org.devzuz.q.maven.pomeditor.components.tabcomponents.PomBasicInformationSecondThirdTab;
 import org.eclipse.core.databinding.DataBindingContext;
-import org.eclipse.core.databinding.observable.list.IObservableList;
-import org.eclipse.emf.databinding.edit.EMFEditObservables;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.IManagedForm;
@@ -63,7 +60,7 @@ public class MavenPomBasicInformationFormPage extends FormPage
         Section pomRelationshipsSection =
             toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED );        
         pomRelationshipsSection.setText( Messages.MavenPomEditor_MavenPomEditor_BasicInformation );
-        pomRelationshipsSection.setLayoutData( createSectionLayoutData() );
+        //pomRelationshipsSection.setLayoutData( createSectionLayoutData() );
         pomRelationshipsSection.setClient( createPomRelationshipControls( pomRelationshipsSection, toolkit ) );
                 
     }	
@@ -89,7 +86,8 @@ public class MavenPomBasicInformationFormPage extends FormPage
         	new PomBasicInformationFirstTab( tabFolder, SWT.None, toolkit, 
         			pomModel, domain, bindingContext );
         PomBasicInformationSecondThirdTab dependencyComponent = 
-        	new PomBasicInformationSecondThirdTab ( tabFolder, SWT.None, toolkit, "Dependency",
+        	new PomBasicInformationSecondThirdTab ( tabFolder, SWT.None, toolkit, 
+        	        Messages.MavenPomEditor_MavenPomEditor_Dependencies,
         			pomModel, domain );
         PomBasicInformationSecondThirdTab dependencyManagementComponent = 
         	new PomBasicInformationSecondThirdTab ( tabFolder, SWT.None, toolkit, "Dependency Management",
@@ -126,11 +124,11 @@ public class MavenPomBasicInformationFormPage extends FormPage
 		item.setControl( component );
 	}
 	
-	private GridData createSectionLayoutData()
-    {
-        GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false );
-        return layoutData;
-    }
+//	private GridData createSectionLayoutData()
+//    {
+//        GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false );
+//        return layoutData;
+//    }
 	
 	public boolean isDirty()
     {

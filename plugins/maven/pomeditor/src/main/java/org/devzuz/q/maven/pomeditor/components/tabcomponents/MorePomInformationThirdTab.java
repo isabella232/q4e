@@ -37,7 +37,7 @@ public class MorePomInformationThirdTab
             toolkit.createSection( this, Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         contributorsSection.setDescription( "Information about people who have contributed to the project, but who do not have commit privileges" );
         contributorsSection.setText( Messages.MavenPomEditor_MavenPomEditor_Contributors );
-        contributorsSection.setLayoutData( createSectionLayoutData() );
+        //contributorsSection.setLayoutData( createSectionLayoutData() );
         contributorsSection.setClient( createContributorTableControls( contributorsSection, toolkit ) );
         
     }

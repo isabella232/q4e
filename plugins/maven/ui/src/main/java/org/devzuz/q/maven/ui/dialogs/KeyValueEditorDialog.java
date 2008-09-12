@@ -139,7 +139,14 @@ public class KeyValueEditorDialog
 
     private boolean didValidate()
     {
-        return ( ( keyText.getText().trim().length() > 0 ) && ( valueText.getText().trim().length() > 0 ) );
+    	if ( keyText.getText().trim().contains(" ") )
+    	{
+    		return false;
+    	}
+    	else
+    	{
+    		return ( ( keyText.getText().trim().length() > 0 ) && ( valueText.getText().trim().length() > 0 ) );
+    	}
     }
     
     private String blankIfNull( String str )

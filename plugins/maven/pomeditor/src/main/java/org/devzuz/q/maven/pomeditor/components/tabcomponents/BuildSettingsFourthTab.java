@@ -34,6 +34,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -60,7 +61,8 @@ public class BuildSettingsFourthTab
         this.model = model;
         this.domain = domain;
         
-        setLayout( new FillLayout( SWT.HORIZONTAL ) );
+        //setLayout( new FillLayout( SWT.HORIZONTAL ) );
+        setLayout( new GridLayout( 2, false ) );
         
         Section treeSection = toolkit.createSection( this, Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         treeSection.setDescription( "Section for management of default plugin information for use in a group of POMs." );

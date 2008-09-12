@@ -98,8 +98,6 @@ public class Messages
 
     public static String MavenPomEditor_MavenPomEditor_ClearButton;
     
-    public static String MavenPomEditor_MavenPomEditor_DuplicateLicense;
-    
     public static String MavenPomEditor_MavenPomEditor_Identity;
 	
 	public static String MavenPomEditor_MavenPomEditor_Email;
@@ -239,6 +237,26 @@ public class Messages
     public static String MavenPomEditor_MavenPomEditor_Environment;
     
     public static String MavenPomEditor_MavenPomEditor_SCM;
+    
+    public static String MavenPomEditor_MavenPomEditor_Activation;
+    
+    public static String MavenPomEditor_MavenPomEditor_ActiveByDefault;
+    
+    public static String MavenPomEditor_MavenPomEditor_JDK;
+    
+    public static String MavenPomEditor_MavenPomEditor_OS;
+    
+    public static String MavenPomEditor_MavenPomEditor_Family;
+    
+    public static String MavenPomEditor_MavenPomEditor_Property;
+    
+    public static String MavenPomEditor_MavenPomEditor_Arch;
+    
+    public static String MavenPomEditor_MavenPomEditor_File;
+    
+    public static String MavenPomEditor_MavenPomEditor_Missing;
+    
+    public static String MavenPomEditor_MavenPomEditor_Exists;
     
     static
     {

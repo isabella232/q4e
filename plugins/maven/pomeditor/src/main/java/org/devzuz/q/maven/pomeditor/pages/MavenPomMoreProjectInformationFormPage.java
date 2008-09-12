@@ -14,6 +14,7 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.IManagedForm;
@@ -55,11 +56,11 @@ public class MavenPomMoreProjectInformationFormPage extends FormPage
         form = managedForm.getForm();
         
         form.getBody().setLayout( new FillLayout( SWT.VERTICAL ) );
-        
+                
         Section informationSection =
             toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED );
         informationSection.setText( Messages.MavenPomEditor_MavenPomEditor_MoreProjInfo );
-        informationSection.setLayoutData( createSectionLayoutData() );
+        //informationSection.setLayoutData( createSectionLayoutData() );
         informationSection.setClient( createInformationControls( informationSection, toolkit ) );
     }
 	
@@ -73,8 +74,6 @@ public class MavenPomMoreProjectInformationFormPage extends FormPage
             }
             
         };
-        
-        System.out.println("createInformationControls start");
         
         Composite parent = toolkit.createComposite( form );
         parent.setLayout( new FillLayout( SWT.VERTICAL ) );        

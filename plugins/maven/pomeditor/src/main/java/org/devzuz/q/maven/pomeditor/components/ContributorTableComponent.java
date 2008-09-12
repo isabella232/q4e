@@ -73,7 +73,7 @@ public class ContributorTableComponent
         urlColumn.setText( Messages.MavenPomEditor_MavenPomEditor_URL );
         
         TableColumn orgColumn = new TableColumn( contributorsTable, SWT.BEGINNING, 3 );
-        orgColumn.setWidth( 100 );
+        orgColumn.setWidth( 90 );
         orgColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Organization );
         
         TableColumn orgUrlColumn = new TableColumn( contributorsTable, SWT.BEGINNING, 4 );
@@ -81,7 +81,7 @@ public class ContributorTableComponent
         orgUrlColumn.setText( Messages.MavenPomEditor_MavenPomEditor_OrganizationUrl );        
         
         TableColumn timezoneColumn = new TableColumn( contributorsTable, SWT.BEGINNING, 5 );
-        timezoneColumn.setWidth( 75 );
+        timezoneColumn.setWidth( 65 );
         timezoneColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Timezone );
         
         

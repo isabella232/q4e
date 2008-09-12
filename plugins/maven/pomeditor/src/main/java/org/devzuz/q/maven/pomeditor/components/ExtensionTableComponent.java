@@ -48,12 +48,10 @@ public class ExtensionTableComponent extends AbstractComponent
 
 	public int selectedIndex;
 
-	public ExtensionTableComponent(Composite parent, int style, 
+	public ExtensionTableComponent( Composite parent, int style, 
 			Model model, EStructuralFeature[] path, EditingDomain domain ) 
 	{
 		super( parent, style );
-		
-		System.out.println("ExtensionTableComponent start");
 		
 		this.model = model;
 		this.path = path;
@@ -80,16 +78,12 @@ public class ExtensionTableComponent extends AbstractComponent
         versionColumn.setWidth( 85 );
         versionColumn.setText( "Version");
         
-        System.out.println("ExtensionTableComponent before bindTable");
-        
         ModelUtil.bindTable( 
         		model, 
         		path, 
         		new EStructuralFeature[]{ PomPackage.Literals.EXTENSION__GROUP_ID, PomPackage.Literals.EXTENSION__ARTIFACT_ID, PomPackage.Literals.EXTENSION__VERSION }, 
         		extensionsTable, 
         		domain );
-        
-        System.out.println("ExtensionTableComponent after bindTable");
 
         Composite container2 = new Composite( this, SWT.NULL );
         container2.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -113,8 +107,6 @@ public class ExtensionTableComponent extends AbstractComponent
         RemoveButtonListener removeButtonListener = new RemoveButtonListener();
         removeButton.addSelectionListener( removeButtonListener );
         removeButton.setEnabled( false );
-        
-        System.out.println("ExtensionTableComponent end");
 
 	}
 	

@@ -50,7 +50,7 @@ public class DependencyTableComponent extends AbstractComponent
     
     private WritableValue selectedDependency;
 
-    public DependencyTableComponent( Composite parent, int style, 
+    public DependencyTableComponent( Composite parent, int style,
     		Model model, EStructuralFeature[] path, EditingDomain domain, 
     		WritableValue selectedDependency )
     {

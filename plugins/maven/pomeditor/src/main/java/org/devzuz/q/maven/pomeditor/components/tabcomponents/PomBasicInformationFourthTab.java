@@ -41,7 +41,7 @@ public class PomBasicInformationFourthTab
             toolkit.createSection( this, Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         propertiesSection.setDescription( "Set the properties of this POM." );
         propertiesSection.setText( Messages.MavenPomEditor_MavenPomEditor_Properties );
-        propertiesSection.setLayoutData( createSectionLayoutData() );
+        //propertiesSection.setLayoutData( createSectionLayoutData() );
         propertiesSection.setClient( createPropertiesControls( propertiesSection, toolkit ) );
 
         
@@ -60,7 +60,7 @@ public class PomBasicInformationFourthTab
         };
         
         Composite container = toolKit.createComposite( form );
-        container.setLayout( new FillLayout( SWT.VERTICAL ) );
+        container.setLayout( new FillLayout( SWT.VERTICAL ) );        
         
         propertiesTableComponent = new PropertiesTableComponent( container, SWT.None );
         IObservableList ol = EMFEditObservables.observeList( domain, model, PomPackage.Literals.MODEL__PROPERTIES );
@@ -71,10 +71,10 @@ public class PomBasicInformationFourthTab
         return container;
     }
     
-    private GridData createSectionLayoutData()
-    {
-        GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false );
-        return layoutData;
-    }
+//    private GridData createSectionLayoutData()
+//    {
+//        GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false );
+//        return layoutData;
+//    }
 
 }
