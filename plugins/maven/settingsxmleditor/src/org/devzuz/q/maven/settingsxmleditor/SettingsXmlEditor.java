@@ -17,10 +17,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 
 /**
- * 
- * 
  * @author Allan Ramirez
- *
  */
 public class SettingsXmlEditor
     extends StructuredTextEditor
@@ -37,9 +34,17 @@ public class SettingsXmlEditor
     {
         super.doSave( progressMonitor );
         if ( MessageDialog.openQuestion( new Shell(), Messages.MessageDialog_Confirm_Title,
-                                        Messages.MessageDialog_Confirm_Message ) )
+                                         Messages.MessageDialog_Confirm_Message ) )
         {
-            buildAllMavenProjectsinWorkspace();
+            try
+            {
+                MavenManager.getMaven().refresh();
+                buildAllMavenProjectsinWorkspace();
+            }
+            catch ( CoreException e )
+            {
+                Activator.getLogger().log( e );
+            }
         }
     }
 
@@ -50,9 +55,17 @@ public class SettingsXmlEditor
         if ( getEditorInput().getName().equals( SETTINGSXML_FILENAME ) )
         {
             if ( MessageDialog.openQuestion( new Shell(), Messages.MessageDialog_Confirm_Title,
-                                            Messages.MessageDialog_Confirm_Message ) )
+                                             Messages.MessageDialog_Confirm_Message ) )
             {
-                buildAllMavenProjectsinWorkspace();
+                try
+                {
+                    MavenManager.getMaven().refresh();
+                    buildAllMavenProjectsinWorkspace();
+                }
+                catch ( CoreException e )
+                {
+                    Activator.getLogger().log( e );
+                }
             }
         }
     }
