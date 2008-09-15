@@ -326,6 +326,7 @@ public class MavenIncrementalBuilder extends IncrementalProjectBuilder
                     onResourcesChange( status );
                 }
             }
+            
             if ( status.mavenProject != null )
             {
                 lastGoodProject = status.mavenProject;

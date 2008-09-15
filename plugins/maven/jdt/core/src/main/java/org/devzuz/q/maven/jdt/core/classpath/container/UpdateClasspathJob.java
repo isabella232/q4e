@@ -16,6 +16,8 @@ import org.devzuz.q.maven.embedder.MavenInterruptedException;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.embedder.MavenMonitorHolder;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
+import org.devzuz.q.maven.jdt.core.handlers.IBuildPluginHandler;
+import org.devzuz.q.maven.jdt.core.handlers.MavenCompilerPluginHandler;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.CoreException;
@@ -25,6 +27,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.IJobChangeListener;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jdt.core.JavaCore;
 
 /**
  * Updates the Maven classpath container
@@ -82,7 +85,10 @@ public class UpdateClasspathJob extends WorkspaceJob implements IMavenJob
                 return new Status( IStatus.OK, MavenJdtCoreActivator.PLUGIN_ID,
                                    "Project in error, not updating dependent projects" );
             }
-
+            
+            IBuildPluginHandler compilerPlugin = new MavenCompilerPluginHandler( JavaCore.create(project), thisMavenProject );
+            compilerPlugin.setBuildOptions();
+            
             Artifact thisArtifact = thisMavenProject.getRawMavenProject().getArtifact();
             IProject[] workspaceProjects = MavenManager.getMavenProjectManager().getWorkspaceProjects();
             

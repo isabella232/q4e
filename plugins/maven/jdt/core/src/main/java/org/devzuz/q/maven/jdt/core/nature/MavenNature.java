@@ -8,25 +8,17 @@
 package org.devzuz.q.maven.jdt.core.nature;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
-import java.util.jar.Attributes;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
 
 import org.apache.commons.collections.list.SetUniqueList;
-import org.apache.maven.model.Plugin;
 import org.apache.maven.model.Resource;
-import org.codehaus.plexus.util.xml.Xpp3Dom;
 import org.devzuz.q.maven.embedder.IMavenExecutionResult;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
@@ -38,6 +30,8 @@ import org.devzuz.q.maven.jdt.core.builder.MavenIncrementalBuilder;
 import org.devzuz.q.maven.jdt.core.classpath.container.IMavenClasspathAttributeProvider;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathAttributeProviderManager;
 import org.devzuz.q.maven.jdt.core.classpath.container.MavenClasspathContainer;
+import org.devzuz.q.maven.jdt.core.handlers.IBuildPluginHandler;
+import org.devzuz.q.maven.jdt.core.handlers.MavenCompilerPluginHandler;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.ICommand;
 import org.eclipse.core.resources.IContainer;
@@ -57,11 +51,6 @@ import org.eclipse.jdt.core.IClasspathEntry;
 import org.eclipse.jdt.core.IJavaProject;
 import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.JavaModelException;
-import org.eclipse.jdt.launching.IVMInstall;
-import org.eclipse.jdt.launching.IVMInstall2;
-import org.eclipse.jdt.launching.IVMInstallType;
-import org.eclipse.jdt.launching.JavaRuntime;
-import org.eclipse.jdt.launching.LibraryLocation;
 
 /**
  * An implementation of an Eclipse Project Nature that is used to set-up the Maven Builder for older Nature-based
@@ -76,13 +65,7 @@ public class MavenNature implements IProjectNature
     private static IPath[] SOURCE_INCLUDES = new IPath[] { new Path( "**/*.java" ) };
 
     private static IPath[] SOURCE_EXCLUDES = new IPath[0];
-
-    private static IPath[] RESOURCE_INCLUDES = new IPath[] { new Path( "**" ) };
-
-    private static IPath[] RESOURCE_EXCLUDES = SOURCE_INCLUDES;
-
-    private static final List<String> SOURCE_VERSIONS = Arrays.asList( "1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7" );
-
+    
     private static final String DEFAULT_OUTPUT_FOLDER = "target/classes";
 
     private IProject project;
@@ -95,7 +78,7 @@ public class MavenNature implements IProjectNature
 
         ICommand command = desc.newCommand();
         command.setBuilderName( MavenIncrementalBuilder.MAVEN_INCREMENTAL_BUILDER_ID );
-
+        
         if ( !buildSpecList.contains( command ) )
         {
             buildSpecList.add( command );
@@ -260,7 +243,8 @@ public class MavenNature implements IProjectNature
         classpathEntriesList.add( getMavenClasspathContainer( mavenProject ) );
 
         // (x) Add the JRE container to the classpath
-        classpathEntriesList.add( getJREClasspathContainer( javaProject, mavenProject ) );
+        IBuildPluginHandler compilerPlugin = new MavenCompilerPluginHandler( javaProject, mavenProject );
+        compilerPlugin.setBuildOptions();
 
         IFolder outputFolder = project.getFolder( getRelativePath( project.getLocation(), outputDirectory ) );
 
@@ -520,175 +504,4 @@ public class MavenNature implements IProjectNature
         return containerEntry;
     }
 
-    private IClasspathEntry getJREClasspathContainer( IJavaProject javaProject, IMavenProject mavenProject )
-    {
-        // Set the compiler version options given in mavenProject to javaProject
-        Map<String, String> compilerVersionOptions = getMavenProjectCompilerVersionOptions( mavenProject );
-        setJavaProjectCompilerVersionOptions( javaProject, compilerVersionOptions );
-        // Add to classpath the appropriate JRE Container
-        String compilerSourceVersion = compilerVersionOptions.get( JavaCore.COMPILER_SOURCE );
-        if ( ( compilerSourceVersion != null ) && ( compilerSourceVersion.length() > 0 ) )
-        {
-            return getJREContainerClasspathWithVersion( compilerSourceVersion );
-        }
-        else
-        {
-            return JavaRuntime.getDefaultJREContainerEntry();
-        }
-    }
-
-    private Map<String, String> getMavenProjectCompilerVersionOptions( IMavenProject mavenProject )
-    {
-        Map<String, String> compilerOptions = new HashMap<String, String>();
-
-        String projSourceVersion = getArtifactSettings( mavenProject, "maven-compiler-plugin", "source" );
-        if ( projSourceVersion != null )
-        {
-            if ( SOURCE_VERSIONS.contains( projSourceVersion ) )
-            {
-                compilerOptions.put( JavaCore.COMPILER_COMPLIANCE, projSourceVersion );
-                compilerOptions.put( JavaCore.COMPILER_SOURCE, projSourceVersion );
-            }
-        }
-        else
-        {
-            compilerOptions.put( JavaCore.COMPILER_COMPLIANCE,
-                                 (String) JavaCore.getDefaultOptions().get( JavaCore.COMPILER_COMPLIANCE ) );
-            compilerOptions.put( JavaCore.COMPILER_SOURCE,
-                                 (String) JavaCore.getDefaultOptions().get( JavaCore.COMPILER_SOURCE ) );
-        }
-
-        String projTargetVersion = getArtifactSettings( mavenProject, "maven-compiler-plugin", "target" );
-        if ( projTargetVersion != null )
-        {
-            if ( SOURCE_VERSIONS.contains( projTargetVersion ) )
-            {
-                compilerOptions.put( JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM, projTargetVersion );
-            }
-        }
-        else
-        {
-            compilerOptions.put( JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM,
-                                 (String) JavaCore.getDefaultOptions().get( JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM ) );
-        }
-
-        return compilerOptions;
-    }
-
-    private String getArtifactSettings( IMavenProject mavenProject, String artifactId, String settingsName )
-    {
-        for ( Plugin plugin : mavenProject.getBuildPlugins() )
-        {
-            if ( artifactId.equals( plugin.getArtifactId() ) )
-            {
-                Xpp3Dom config = (Xpp3Dom) plugin.getConfiguration();
-                if ( ( config != null ) && ( config.getChild( settingsName ) != null ) )
-                {
-                    return config.getChild( settingsName ).getValue();
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private void setJavaProjectCompilerVersionOptions( IJavaProject javaProject,
-                                                       Map<String, String> compilerVersionOptions )
-    {
-        setJavaProjectOption( javaProject, JavaCore.COMPILER_COMPLIANCE,
-                              compilerVersionOptions.get( JavaCore.COMPILER_COMPLIANCE ) );
-        setJavaProjectOption( javaProject, JavaCore.COMPILER_SOURCE,
-                              compilerVersionOptions.get( JavaCore.COMPILER_SOURCE ) );
-        setJavaProjectOption( javaProject, JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM,
-                              compilerVersionOptions.get( JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM ) );
-    }
-
-    private void setJavaProjectOption( IJavaProject javaProject, String key, String value )
-    {
-        if ( ( value != null ) && ( value.length() > 0 ) )
-        {
-            String oldOption = javaProject.getOption( key, false );
-            if ( ( oldOption == null ) || ( !oldOption.equals( value ) ) )
-            {
-                javaProject.setOption( key, value );
-            }
-        }
-    }
-
-    private IClasspathEntry getJREContainerClasspathWithVersion( String version )
-    {
-        int n = SOURCE_VERSIONS.indexOf( version );
-
-        if ( n >= 0 )
-        {
-            Map<String, IClasspathEntry> jreContainers = getJREContainersMap();
-            for ( int i = n; i < SOURCE_VERSIONS.size(); i++ )
-            {
-                IClasspathEntry classpathEntry = jreContainers.get( SOURCE_VERSIONS.get( i ) );
-                if ( classpathEntry != null )
-                {
-                    return classpathEntry;
-                }
-            }
-        }
-
-        return JavaRuntime.getDefaultJREContainerEntry();
-    }
-
-    private Map<String, IClasspathEntry> getJREContainersMap()
-    {
-        Map<String, IClasspathEntry> jreContainers = new HashMap<String, IClasspathEntry>();
-
-        jreContainers.put( getJREVersion( JavaRuntime.getDefaultVMInstall() ),
-                           JavaRuntime.getDefaultJREContainerEntry() );
-        for ( IVMInstallType installType : JavaRuntime.getVMInstallTypes() )
-        {
-            for ( IVMInstall install : installType.getVMInstalls() )
-            {
-                String version = getJREVersion( install );
-                if ( !jreContainers.containsKey( version ) )
-                {
-                    jreContainers.put( version, JavaCore.newContainerEntry( JavaRuntime.newJREContainerPath( install ) ) );
-                }
-            }
-        }
-
-        return jreContainers;
-    }
-
-    private String getJREVersion( IVMInstall install )
-    {
-        if ( install instanceof IVMInstall2 )
-        {
-            return ( (IVMInstall2) install ).getJavaVersion();
-        }
-        else
-        {
-            LibraryLocation[] libLocations = install.getLibraryLocations();
-            if ( libLocations != null )
-            {
-                for ( LibraryLocation libLocation : libLocations )
-                {
-                    IPath systemLibraryPath = libLocation.getSystemLibraryPath();
-                    if ( "rt.jar".equals( systemLibraryPath.lastSegment() ) )
-                    {
-                        try
-                        {
-                            JarFile jarFile = new JarFile( systemLibraryPath.toFile() );
-                            Manifest manifest = jarFile.getManifest();
-                            Attributes attributes = manifest.getMainAttributes();
-                            return attributes.getValue( Attributes.Name.SPECIFICATION_VERSION );
-                        }
-                        catch ( IOException e )
-                        {
-                            // TODO : Handle!
-                            MavenJdtCoreActivator.getLogger().log( e );
-                        }
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
 }
