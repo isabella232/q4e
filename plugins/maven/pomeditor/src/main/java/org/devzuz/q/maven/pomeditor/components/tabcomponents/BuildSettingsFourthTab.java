@@ -61,26 +61,26 @@ public class BuildSettingsFourthTab
         this.model = model;
         this.domain = domain;
         
-        //setLayout( new FillLayout( SWT.HORIZONTAL ) );
-        setLayout( new GridLayout( 2, false ) );
+        setLayout( new FillLayout( SWT.HORIZONTAL ) );
+        //setLayout( new GridLayout( 2, false ) );
         
         Section treeSection = toolkit.createSection( this, Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         treeSection.setDescription( "Section for management of default plugin information for use in a group of POMs." );
         treeSection.setText( Messages.MavenPomEditor_MavenPomEditor_Plugins );
-        treeSection.setLayoutData( createSectionLayoutData() );
+        //treeSection.setLayoutData( createSectionLayoutData() );
         treeSection.setClient( createTreeViewerControl( treeSection, toolkit ) );
         
         Section pluginManagementSection = toolkit.createSection( this, Section.TITLE_BAR | Section.DESCRIPTION  );
         pluginManagementSection.setDescription( "Section for management of default plugin information for use in a group of POMs." );
         pluginManagementSection.setText( Messages.MavenPomEditor_MavenPomEditor_PluginManagement );
-        pluginManagementSection.setLayoutData( createSectionLayoutData() );
+        //pluginManagementSection.setLayoutData( createSectionLayoutData() );
         pluginManagementSection.setClient( createPluginManagementTreeViewerControl( pluginManagementSection, toolkit ) );
         
     }
     
     private GridData createSectionLayoutData()
     {
-        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
+        GridData layoutData = new GridData( SWT.FILL , SWT.TOP , true , false );
         return layoutData;
     }
     
@@ -88,7 +88,7 @@ public class BuildSettingsFourthTab
     private Control createPluginManagementTreeViewerControl( Composite form, FormToolkit toolkit) 
     {
         Composite parent = toolkit.createComposite( form );
-        parent.setLayout( new FillLayout() );
+        parent.setLayout( new FillLayout() );        
         
         //pluginManagementContentProvider = new PluginTreeContentProvider( pomModel.getBuild().getPluginManagement() );
         pluginManagementTreeComponent = new ObjectTreeComponent( parent, SWT.None );
@@ -109,7 +109,7 @@ public class BuildSettingsFourthTab
     {
         Composite parent = toolkit.createComposite( form );
         parent.setLayout( new FillLayout() );
-        
+                
         //contentProvider = new PluginTreeContentProvider( pomModel.getBuild() );
         treeComponent = new ObjectTreeComponent( parent, SWT.None );
         

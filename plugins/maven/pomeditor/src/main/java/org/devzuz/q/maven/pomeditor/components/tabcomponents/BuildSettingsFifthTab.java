@@ -45,7 +45,7 @@ public class BuildSettingsFifthTab
             toolkit.createSection( this, Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         reportingSection.setText( Messages.MavenPomEditor_MavenPomEditor_Reporting );
         reportingSection.setDescription( "Section for management of reports and their configuration. " );
-        reportingSection.setLayoutData( createSectionLayoutData() );
+        //reportingSection.setLayoutData( createSectionLayoutData() );
         reportingSection.setClient( createReportingControls( reportingSection, toolkit ) );
         
     }

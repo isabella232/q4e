@@ -67,15 +67,15 @@ public class ExtensionTableComponent extends AbstractComponent
         extensionsTable.addSelectionListener( tableListener );        
         
         TableColumn groupIdColumn = new TableColumn( extensionsTable, SWT.LEFT, 0 );
-        groupIdColumn.setWidth( 150 );
+        groupIdColumn.setWidth( 125 );
         groupIdColumn.setText( "Group Id" );
         
         TableColumn artifactIdColumn = new TableColumn( extensionsTable, SWT.LEFT, 1 );
-        artifactIdColumn.setWidth( 150 );
+        artifactIdColumn.setWidth( 125 );
         artifactIdColumn.setText( "Artifact Id");
         
         TableColumn versionColumn = new TableColumn( extensionsTable, SWT.LEFT, 2 );
-        versionColumn.setWidth( 85 );
+        versionColumn.setWidth( 50 );
         versionColumn.setText( "Version");
         
         ModelUtil.bindTable( 

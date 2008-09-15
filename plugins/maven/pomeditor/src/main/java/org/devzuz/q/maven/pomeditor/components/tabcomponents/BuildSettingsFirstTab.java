@@ -15,6 +15,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -45,10 +46,11 @@ public class BuildSettingsFirstTab
         this.domain = domain;
         this.bindingContext = bindingContext;
         
-        setLayout( new GridLayout( 2, false ) );
+        //setLayout( new GridLayout( 2, false ) );
+        setLayout( new FillLayout( SWT.HORIZONTAL ) );
         
         Composite container = toolkit.createComposite( this );
-        container.setLayoutData( createSectionLayoutData() );
+        //container.setLayoutData( createSectionLayoutData() );
         createLeftSideControl( container, toolkit );
                 
         Section extensionSection = 
@@ -56,22 +58,25 @@ public class BuildSettingsFirstTab
                                    Section.DESCRIPTION );        
         extensionSection.setDescription( "Describes a build extension to utilise. " );
         extensionSection.setText( Messages.MavenPomEditor_MavenPomEditor_Extension );
-        extensionSection.setLayoutData( createSectionLayoutData() );
+        //extensionSection.setLayoutData( createSectionLayoutData() );
         extensionSection.setClient( createExtensionControls( extensionSection, toolkit ) );        
     }
     
     private Control createLeftSideControl( Composite container, FormToolkit toolkit )
     {
-        container.setLayout( new FillLayout( SWT.VERTICAL ) );
-
+        //container.setLayout( new FillLayout( SWT.VERTICAL ) );
+        container.setLayout( new GridLayout( 1, false ) );
+        
         Section directoryInfoControls = toolkit.createSection( container , Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         directoryInfoControls.setDescription( "This section contains informations required to build the project." );
         directoryInfoControls.setText( Messages.MavenPomEditor_MavenPomEditor_Build );
+        directoryInfoControls.setLayoutData( createSectionLayoutData() );
         directoryInfoControls.setClient( createDirectoryControls ( directoryInfoControls, toolkit ) );
         
         Section filterControls = toolkit.createSection( container , Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED | Section.DESCRIPTION );
         filterControls.setDescription( "The list of filter properties files that are used when filtering is enabled." );
         filterControls.setText( Messages.MavenPomEditor_MavenPomEditor_Filters );
+        filterControls.setLayoutData( createSectionLayoutData() );
         filterControls.setClient( createFilterControls( filterControls, toolkit ) );
         
         return container;
@@ -144,7 +149,7 @@ public class BuildSettingsFirstTab
     
     private GridData createSectionLayoutData()
     {
-        GridData layoutData = new GridData( SWT.FILL , SWT.FILL , true , true );
+        GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false );
         return layoutData;
     }
 

@@ -5,8 +5,6 @@ import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
-import org.devzuz.q.maven.pomeditor.components.CiManagementComponent;
-import org.devzuz.q.maven.pomeditor.components.DistributionManagementDetailComponent;
 import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
 import org.devzuz.q.maven.pomeditor.components.MailingListComponent;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -53,11 +51,7 @@ public class EnvironmentSettingsFirstTab
 
     private Text urlText;
 
-    private CiManagementComponent ciManagementComponent;
-
     private MailingListComponent mailingListComponent;
-
-    private DistributionManagementDetailComponent distributionManagementComponent;
 
     public EnvironmentSettingsFirstTab( Composite parent, int style, 
                                        FormToolkit toolkit, Model model, EditingDomain domain, 
@@ -73,17 +67,16 @@ public class EnvironmentSettingsFirstTab
         setLayout( new FillLayout( SWT.HORIZONTAL ) );
         
         Composite container = toolkit.createComposite( this );
-        container.setLayoutData( createSectionLayoutData() );
+        //container.setLayoutData( createSectionLayoutData() );
         createLeftSideControl( container, toolkit );
         
-        Section distributionManagementSection = 
+        Section mailingListSection = 
             toolkit.createSection( this, Section.TWISTIE | Section.TITLE_BAR | Section.EXPANDED | 
                                    Section.DESCRIPTION );
-        distributionManagementSection.setDescription( "This section describes all that pertains to distribution for a project. " +
-                 "It is primarily used for deployment of artifacts and the site produced by the build." );
-        distributionManagementSection.setText( Messages.MavenPomEditor_MavenPomEditor_DistributionManagement );
-        distributionManagementSection.setLayoutData( createSectionLayoutData() );
-        distributionManagementSection.setClient( createDistributionManagementControls( distributionManagementSection, toolkit ) );
+        mailingListSection.setDescription( Messages.MavenPomEditor_MailingList_Description );
+        mailingListSection.setText( Messages.MavenPomEditor_MailingList_Title );
+        //distributionManagementSection.setLayoutData( createSectionLayoutData() );
+        mailingListSection.setClient( createMailingListControls( mailingListSection, toolkit ) );
     }
     
     private Control createLeftSideControl( Composite container, FormToolkit toolkit )
@@ -203,24 +196,26 @@ public class EnvironmentSettingsFirstTab
         return parent;
     }
     
-    public Control createDistributionManagementControls( Composite form, FormToolkit toolKit )
+    public Control createMailingListControls( Composite form, FormToolkit toolKit )
     {
         IComponentModificationListener listener  = new IComponentModificationListener()
         {
             public void componentModified(AbstractComponent component, Control ctrl) 
             {
-               notifyListeners( ciManagementComponent );            
+               notifyListeners( mailingListComponent );            
             }
             
         };
         
         Composite container = toolKit.createComposite( form );
-        container.setLayout( new FillLayout( SWT.VERTICAL ) );
+        container.setLayout( new FillLayout( SWT.VERTICAL ) );        
         
-        distributionManagementComponent = 
-            new DistributionManagementDetailComponent( container, SWT.None, model, domain, bindingContext );
+        mailingListComponent =
+            new MailingListComponent( container, SWT.None, 
+              model, new EStructuralFeature[] { PomPackage.Literals.MODEL__MAILING_LISTS },
+              domain );
         
-        distributionManagementComponent.addComponentModifyListener( listener );
+        mailingListComponent.addComponentModifyListener( listener );
         
         return container;
         

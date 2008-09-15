@@ -67,8 +67,6 @@ public class CiManagementComponent extends AbstractComponent
 	{
 		super( parent, style );
 		
-		System.out.println("CiManagementComponent start");
-		
 		this.model = model;
 		this.path = path;
 		this.domain = domain;
@@ -86,8 +84,6 @@ public class CiManagementComponent extends AbstractComponent
 		systemText = toolkit.createText( ciManagementContainer, "", SWT.BORDER | SWT.SINGLE );
 		systemText.setLayoutData( createControlLayoutData() );
 		
-		System.out.println("CiManagementComponent before system text bind");
-		
 		ModelUtil.bind(
         		model, 
         		new EStructuralFeature[]{ PomPackage.Literals.MODEL__CI_MANAGEMENT, PomPackage.Literals.CI_MANAGEMENT__SYSTEM }, 
@@ -95,15 +91,11 @@ public class CiManagementComponent extends AbstractComponent
         		domain, 
         		bindingContext );
 		
-		System.out.println("CiManagementComponent after system text bind");
-		
 		Label urlLabel = toolkit.createLabel( ciManagementContainer, Messages.MavenPomEditor_MavenPomEditor_URL, SWT.None );		
 		urlLabel.setLayoutData( createLabelLayoutData() );
 		
 		urlText = toolkit.createText( ciManagementContainer, "", SWT.BORDER | SWT.SINGLE );
 		urlText.setLayoutData( createControlLayoutData() );
-		
-		System.out.println("CiManagementComponent before url text bind");
 		
 		ModelUtil.bind(
         		model, 
@@ -111,8 +103,6 @@ public class CiManagementComponent extends AbstractComponent
         		SWTObservables.observeText( urlText, SWT.FocusOut ), 
         		domain, 
         		bindingContext );
-		
-		System.out.println("CiManagementComponent before url text bind");
 		
 		Section notifiersSection = toolkit.createSection( this, Section.TITLE_BAR);
         notifiersSection.setLayoutData( createSectionLayoutData() );
@@ -154,8 +144,6 @@ public class CiManagementComponent extends AbstractComponent
         warningColumn.setText( Messages.MavenPomEditor_MavenPomEditor_SendOnWarning );
         warningColumn.setWidth( 100 );
         
-        System.out.println("CiManagementComponent before table bind");
-        
         ModelUtil.bindTable( 
         		model, 
         		path, 
@@ -167,8 +155,6 @@ public class CiManagementComponent extends AbstractComponent
         				PomPackage.Literals.NOTIFIER__SEND_ON_WARNING },
         		notifiersTable,
         		domain );
-        
-        System.out.println("CiManagementComponent after table bind");
 
         Composite buttonBox = toolkit.createComposite( notifiersGroup );
         buttonBox.setLayoutData( new GridData( GridData.CENTER, GridData.BEGINNING, false, true ) );
@@ -194,8 +180,6 @@ public class CiManagementComponent extends AbstractComponent
         notifiersSection.setClient( notifiersGroup );
         
         toolkit.paintBordersFor( ciManagementContainer );
-        
-        System.out.println("CiManagementComponent end");
 		
 	}
 	

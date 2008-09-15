@@ -5,6 +5,7 @@ import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.components.AbstractComponent;
 import org.devzuz.q.maven.pomeditor.components.IComponentModificationListener;
 import org.devzuz.q.maven.pomeditor.components.tabcomponents.EnvironmentSettingsFirstTab;
+import org.devzuz.q.maven.pomeditor.components.tabcomponents.EnvironmentSettingsFourthTab;
 import org.devzuz.q.maven.pomeditor.components.tabcomponents.EnvironmentSettingsSecondTab;
 import org.devzuz.q.maven.pomeditor.components.tabcomponents.EnvironmentSettingsThirdTab;
 import org.eclipse.core.databinding.DataBindingContext;
@@ -61,7 +62,7 @@ public class MavenPomEnvironmentSettingsFormPage
         Section environmentSettingSection =
             toolkit.createSection( form.getBody(), Section.TITLE_BAR | Section.EXPANDED );
         environmentSettingSection.setText( Messages.MavenPomEditor_MavenPomEditor_Environment );
-        environmentSettingSection.setLayoutData( createSectionLayoutData() );
+        //environmentSettingSection.setLayoutData( createSectionLayoutData() );
         environmentSettingSection.setClient( createEnvironmentControls( environmentSettingSection, toolkit ) );
         
     }
@@ -94,22 +95,29 @@ public class MavenPomEnvironmentSettingsFormPage
             new EnvironmentSettingsThirdTab( tabFolder, SWT.None, toolkit,
                                              model, domain );
         
+        EnvironmentSettingsFourthTab environmentSettingsFourthTab =
+            new EnvironmentSettingsFourthTab( tabFolder, SWT.None, toolkit,
+                                              model, domain, bindingContext );
+        
         createTabItem( tabFolder, Messages.MavenPomEditor_MavenPomEditor_IssueManagement + 
                        "/" + Messages.MavenPomEditor_MavenPomEditor_SCM + "/"  +
-                       Messages.MavenPomEditor_MavenPomEditor_DistributionManagement,
+                       Messages.MavenPomEditor_MailingList_Title,
                        environmentSettingsFirstTab );
         
-        createTabItem( tabFolder, Messages.MavenPomEditor_CiManagement_Title + "/" +
-                       Messages.MavenPomEditor_MailingList_Title, 
+        createTabItem( tabFolder, Messages.MavenPomEditor_CiManagement_Title, 
                        enviromentSettingsSecondTab );
         
         createTabItem( tabFolder, Messages.MavenPomEditor_MavenPomEditor_PluginRepository +
                        "/" + Messages.MavenPomEditor_MavenPomEditor_Repository,
                        environmentSettingsThirdTab );
         
+        createTabItem( tabFolder, Messages.MavenPomEditor_MavenPomEditor_DistributionManagement,
+                       environmentSettingsFourthTab );
+        
         environmentSettingsFirstTab.addComponentModifyListener( listener );
         enviromentSettingsSecondTab.addComponentModifyListener( listener );
         environmentSettingsThirdTab.addComponentModifyListener( listener );
+        environmentSettingsFourthTab.addComponentModifyListener( listener );
         
         tabFolder.setSimple( false );
         

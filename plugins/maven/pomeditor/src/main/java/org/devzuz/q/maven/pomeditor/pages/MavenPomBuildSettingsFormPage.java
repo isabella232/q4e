@@ -99,12 +99,12 @@ public class MavenPomBuildSettingsFormPage
                                    Messages.MavenPomEditor_MavenPomEditor_TestResource,
                                    model, domain );
         
-//        BuildSettingsFourthTab buildPluginsComponent =
-//            new BuildSettingsFourthTab( tabFolder, SWT.None, toolkit, model, domain );
-//        
-//        BuildSettingsFifthTab buildSettingsFifthTab =
-//            new BuildSettingsFifthTab( tabFolder, SWT.None, toolkit, model,
-//                domain, bindingContext );
+        BuildSettingsFourthTab buildPluginsComponent =
+            new BuildSettingsFourthTab( tabFolder, SWT.None, toolkit, model, domain );
+        
+        BuildSettingsFifthTab buildSettingsFifthTab =
+            new BuildSettingsFifthTab( tabFolder, SWT.None, toolkit, model,
+                domain, bindingContext );
         
         createTabItem( tabFolder, Messages.MavenPomEditor_MavenPomEditor_Build, 
                        buildSettingsComponent );
@@ -115,18 +115,18 @@ public class MavenPomBuildSettingsFormPage
         createTabItem( tabFolder, Messages.MavenPomEditor_MavenPomEditor_TestResource,
                        testResourceComponent );
         
-//        createTabItem( tabFolder, Messages.MavenPomEditor_MavenPomEditor_Plugins + "/" +
-//                       Messages.MavenPomEditor_MavenPomEditor_PluginManagement, 
-//                       buildPluginsComponent );
-//        
-//        createTabItem( tabFolder, Messages.MavenPomEditor_MavenPomEditor_Reporting,
-//                       buildSettingsFifthTab );
+        createTabItem( tabFolder, Messages.MavenPomEditor_MavenPomEditor_Plugins + "/" +
+                       Messages.MavenPomEditor_MavenPomEditor_PluginManagement, 
+                       buildPluginsComponent );
+        
+        createTabItem( tabFolder, Messages.MavenPomEditor_MavenPomEditor_Reporting,
+                       buildSettingsFifthTab );
         
         buildSettingsComponent.addComponentModifyListener( listener );
         resourceComponent.addComponentModifyListener( listener );
         testResourceComponent.addComponentModifyListener( listener );
-//        buildPluginsComponent.addComponentModifyListener( listener );
-//        buildSettingsFifthTab.addComponentModifyListener( listener );
+        buildPluginsComponent.addComponentModifyListener( listener );
+        buildSettingsFifthTab.addComponentModifyListener( listener );
         
         tabFolder.setSimple( false );
         
@@ -146,11 +146,11 @@ public class MavenPomBuildSettingsFormPage
         item.setControl( component );
     }
 
-    private GridData createSectionLayoutData()
-    {
-        GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false );
-        return layoutData;
-    }
+//    private GridData createSectionLayoutData()
+//    {
+//        GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false );
+//        return layoutData;
+//    }
     
     public boolean isDirty()
     {

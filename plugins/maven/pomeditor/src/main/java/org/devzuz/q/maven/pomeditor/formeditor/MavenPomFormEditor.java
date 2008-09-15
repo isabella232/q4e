@@ -236,10 +236,10 @@ public class MavenPomFormEditor extends FormEditor
             	            "Build Settings", this.emfModel, this.editingDomain, this.bindingContext );
             	addPage( buildSettingsFormPage );
             	
-//            	environmentSettingsFormPage =
-//            	    new MavenPomEnvironmentSettingsFormPage( this, POM_ENVIRONMENT_SETTINGS_FORM_PAGE,
-//            	            "Environment Settings", this.emfModel, this.editingDomain, this.bindingContext );
-//            	addPage( environmentSettingsFormPage );
+            	environmentSettingsFormPage =
+            	    new MavenPomEnvironmentSettingsFormPage( this, POM_ENVIRONMENT_SETTINGS_FORM_PAGE,
+            	            "Environment Settings", this.emfModel, this.editingDomain, this.bindingContext );
+            	addPage( environmentSettingsFormPage );
 //            	
 //            	profilesFormPage =
 //            	    new MavenPomProfilesFormPage( this, POM_PROFILES_FORM_PAGE, 

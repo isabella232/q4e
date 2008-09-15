@@ -47,7 +47,7 @@ public class BuildSettingsSecondThirdTab
         this.domain = domain;
         this.type = type;
         
-        setLayout( new FillLayout( SWT.VERTICAL ) );
+        setLayout( new GridLayout( 1, false ) ); 
                 
         Section resourceSection = 
             toolkit.createSection( this, 
@@ -64,7 +64,7 @@ public class BuildSettingsSecondThirdTab
         
         resourceSection.setDescription( "This element describes all of the classpath resources " +
         		"associated with a project or unit tests." ); 
-        //resourceSection.setLayoutData( createSectionLayoutData() );
+        resourceSection.setLayoutData( createSectionLayoutData() );
         resourceSection.setClient( createResourceSectionControls( resourceSection, toolkit ) );
                 
         Composite container = toolkit.createComposite( this );
@@ -77,6 +77,7 @@ public class BuildSettingsSecondThirdTab
     {
         Composite container = toolKit.createComposite( parent );
         container.setLayout( new GridLayout( 1, false ) );
+        //container.setLayout( new FillLayout( SWT.VERTICAL ) );
         
         if ( type.equalsIgnoreCase( Messages.MavenPomEditor_MavenPomEditor_Resource ) )
         {
@@ -113,15 +114,16 @@ public class BuildSettingsSecondThirdTab
     
     private Control createIncludeExcludeTables( Composite container, FormToolkit toolkit )
     {
-        GridLayout layout = new GridLayout( 1, false );
+        GridLayout layout = new GridLayout( 2, false );
         container.setLayout( layout );
-
+        //container.setLayout( new FillLayout( SWT.VERTICAL ) );
+        
         Section includeTable =
             toolkit.createSection( container, Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION | Section.EXPANDED );
         includeTable.setDescription( "A set of files patterns which specify the files to include as resources under that specified directory, using * as a wildcard." );
         includeTable.setText( Messages.MavenPomEditor_MavenPomEditor_Resource_Includes );
         includeTable.setClient( createIncludeTableControls( includeTable, toolkit ) );
-        includeTable.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
+        includeTable.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, false ) );
 
         Section excludeTable =
             toolkit.createSection( container, Section.TWISTIE | Section.TITLE_BAR | Section.DESCRIPTION | Section.EXPANDED );
@@ -129,7 +131,7 @@ public class BuildSettingsSecondThirdTab
                         + " The same structure as includes , but specifies which files to ignore. In conflicts between include  and exclude , exclude  wins." );
         excludeTable.setText( Messages.MavenPomEditor_MavenPomEditor_Resource_Excludes );
         excludeTable.setClient( createExcludeTableControls( excludeTable, toolkit ) );
-        excludeTable.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
+        excludeTable.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, false ) );
 
         return container;
 
@@ -139,11 +141,12 @@ public class BuildSettingsSecondThirdTab
     {
         Composite container = toolKit.createComposite( parent, SWT.None );
         container.setLayout( new GridLayout( 1, false ) );
+        //container.setLayout( new FillLayout( SWT.VERTICAL ) );
 
         excludeTableComponent = new IncludeExcludeTableComponent( container, SWT.NONE, 
             selectedResource, new EStructuralFeature[]{ PomPackage.Literals.RESOURCE__EXCLUDES }, 
             domain );
-        excludeTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
+        excludeTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, false ) );
 
         return container;
     }
@@ -152,11 +155,12 @@ public class BuildSettingsSecondThirdTab
     {
         Composite container = toolKit.createComposite( parent, SWT.None );
         container.setLayout( new GridLayout( 1, false ) );
+        //container.setLayout( new FillLayout( SWT.VERTICAL ) );
 
         includeTableComponent = new IncludeExcludeTableComponent( container, SWT.NONE, 
               selectedResource, new EStructuralFeature[]{ PomPackage.Literals.RESOURCE__INCLUDES }, 
               domain );
-        includeTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
+        includeTableComponent.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, false ) );
 
         return container;
     }
