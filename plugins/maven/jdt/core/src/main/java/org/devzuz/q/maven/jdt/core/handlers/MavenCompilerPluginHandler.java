@@ -82,18 +82,19 @@ public class MavenCompilerPluginHandler
 
     private void getMavenProjectCompilerVersionOptions()
     {
-        sourceVersion = MavenBuildPluginUtil.getArtifactSettings( mavenProject, MAVEN_COMPILER_PLUGIN, SOURCE );
+        sourceVersion = MavenBuildPluginUtil.getArtifactSettings( mavenProject.getRawMavenProject(), 
+                                                                  MAVEN_COMPILER_PLUGIN, SOURCE , true );
         if ( sourceVersion == null || !SOURCE_VERSIONS.contains( sourceVersion ) )
         {
             sourceVersion = (String) JavaCore.getDefaultOptions().get( JavaCore.COMPILER_SOURCE );
         }
 
-        targetVersion = MavenBuildPluginUtil.getArtifactSettings( mavenProject, MAVEN_COMPILER_PLUGIN, TARGET );
+        targetVersion = MavenBuildPluginUtil.getArtifactSettings( mavenProject.getRawMavenProject(), 
+                                                                  MAVEN_COMPILER_PLUGIN, TARGET, true );
         if ( targetVersion == null || !SOURCE_VERSIONS.contains( targetVersion ) )
         {
             targetVersion = (String) JavaCore.getDefaultOptions().get( JavaCore.COMPILER_CODEGEN_TARGET_PLATFORM );
         }
-
     }
 
     private void setJavaProjectCompilerVersionOptions()
