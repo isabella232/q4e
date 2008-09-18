@@ -14,10 +14,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.apache.xml.serialize.OutputFormat;
 import org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator;
 import org.devzuz.q.maven.dependency.analysis.Messages;
 import org.devzuz.q.maven.dependency.analysis.extension.IInstance;
@@ -35,7 +31,6 @@ import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
-import org.w3c.dom.DOMImplementation;
 
 public class ExcludeDependencyAction
     extends StructuredSelectionAction
@@ -125,14 +120,6 @@ public class ExcludeDependencyAction
         {
             handleError( e.getMessage(), e );
         }
-    }
-
-    
-    private void createExclusions2()
-    {
-        // Find the implementation
-        
-
     }
     private String key( Dependency dependency )
     {
