@@ -66,11 +66,18 @@ public class AddEditPluginAction
 
     private void synchDialogToPlugin( AddBuildPluginDialog addDialog, Plugin plugin )
     {
+        System.out.println("moogle trace synchDialogToPlugin addDialog group id = " + addDialog.getGroupId());
+        System.out.println("moogle trace synchDialogToPlugin addDialog artifact id = " + addDialog.getArtifactId());
+        
+        //ModelUtil.setValue( plugin, feature, value, domain )
+        
     	ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__GROUP_ID, addDialog.getGroupId(), editingDomain );
-        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__ARTIFACT_ID, addDialog.getArtifactId(), editingDomain );
-        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__VERSION, addDialog.getVersion(), editingDomain );
-        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__EXTENSIONS, addDialog.isExtension(), editingDomain );
-        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__INHERITED, addDialog.isInherited(), editingDomain );
+//        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__ARTIFACT_ID, addDialog.getArtifactId(), editingDomain );
+//        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__VERSION, addDialog.getVersion(), editingDomain );
+//        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__EXTENSIONS, addDialog.isExtension(), editingDomain );
+//        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__INHERITED, addDialog.isInherited(), editingDomain );
+        
+        System.out.println("moogle trace synchDialogToPlugin end");
     }
 
 }

@@ -17,20 +17,11 @@ import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pom.provider.PomItemProviderAdapterFactory;
 import org.devzuz.q.maven.pom.util.PomResourceFactoryImpl;
 import org.devzuz.q.maven.pomeditor.PomEditorActivator;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomBasicFormPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildFormPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildPluginFormPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildResourcesPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildTestResourcesPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomCiManagementMailingListFormPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomDependenciesFormPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomDevelopersContributorsFormPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomDistributionManagementFormPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomLicensesScmOrgFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomBasicInformationFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomBuildSettingsFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomEnvironmentSettingsFormPage;
+import org.devzuz.q.maven.pomeditor.pages.MavenPomMoreProjectInformationFormPage;
 import org.devzuz.q.maven.pomeditor.pages.MavenPomProfilesFormPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomPropertiesModuleFormPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomReportingFormPage;
-import org.devzuz.q.maven.pomeditor.pages.MavenPomRepositoriesFormPage;
 import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -64,73 +55,33 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
 import org.eclipse.wst.xml.core.internal.provisional.document.IDOMModel;
 
 public class MavenPomFormEditor extends FormEditor
-{
-    public static final String BASIC_INFO_FORM_PAGE = "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomBasicFormPage";
-
-    public static final String DEPENDENCIES_FORM_PAGE =
-        "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDependenciesFormPage";
-
-    public static final String LICENSES_SCM_ORG_FORM_PAGE =
-        "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomLicensesScmOrgFormPage";
-
-    public static final String MODULES_FORM_PAGE =
-        "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomPropertiesModuleFormPage";
-
-    public static final String DEVELOPERS_CONTRIBUTORS_FORM_PAGE =
-        "org.devzuz.q.maven.jdt.ui.pomeditor.MavenPomDevelopersContributorsFormPage";
-
-    public static final String BUILD_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildFormPage";
-
-    public static final String BUILD_RESOURCES_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildResourcesPage";
-
-    public static final String BUILD_TEST_RESOURCES_FORM_PAGE =
-        "org.devzuz.q.maven.pomeditor.MavenPomBuildTestResourcesPage";
-
-    public static final String BUILD_PLUGINS_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomBuildPluginFormPage";
-
-    public static final String CIMANAGEMENT_MAILINGLISTS_FORM_PAGE =
-        "org.devzuz.q.maven.pomeditor.MavenPomCiManagementMailingListsPage";
-
-    public static final String REPOSITORIES_FORM_PAGE = "org.devzuz.q.maven.pomeditor.MavenPomRepositoriesFormPage";
-
-    public static final String DISTRIBUTION_MANAGEMENT_FORM_PAGE =
-        "org.devzuz.q.maven.pomeditor.MavenPomDistributionManagementFormPage";
+{   
+    public static final String POM_BASIC_INFORMATION_FORM_PAGE =
+    	"org.devzuz.q.maven.pomeditor.MavenPomRelationshipsFormPage";
     
-    public static final String REPORTING_FORM_PAGE =
-        "org.devzuz.q.maven.pomeditor.MavenPomReportingFormPage";
+    public static final String POM_MORE_INFORMATION_FORM_PAGE =
+    	"org.devzuz.q.maven.pomeditor.MavenPomMoreProjectInformationFormPage";
     
-    public static final String PROFILES_FORM_PAGE =
+    public static final String POM_BUILD_SETTINGS_FORM_PAGE =
+        "org.devzuz.q.maven.pomeditor.MavenPomBuildSettingsFormPage";
+
+    private static final String POM_ENVIRONMENT_SETTINGS_FORM_PAGE = 
+        "org.devzuz.q.maven.pomeditor.MavenPomEnvironmentSettingsFormPage";
+
+    private static final String POM_PROFILES_FORM_PAGE = 
         "org.devzuz.q.maven.pomeditor.MavenPomProfilesFormPage";
 
     private Model pomModel;
-
-    private MavenPomBasicFormPage basicFormPage;
-
-    private MavenPomDependenciesFormPage dependenciesFormPage;
-
-    private MavenPomPropertiesModuleFormPage modulePropertiesFormPage;
-
-    private MavenPomLicensesScmOrgFormPage mavenPomLicensesScmOrgFormPage;
-
-    private MavenPomDevelopersContributorsFormPage developersContributorsFormPage;
-
-    private MavenPomBuildFormPage buildFormPage;
-
-    private MavenPomBuildResourcesPage buildResourcesPage;
-
-    private MavenPomBuildTestResourcesPage buildTestResourcesPage;
-
-    private MavenPomBuildPluginFormPage buildPluginFormPage;
-
-    private MavenPomCiManagementMailingListFormPage ciManagementMailingListsPage;
-
-    private MavenPomRepositoriesFormPage repositoriesPage;
-
-    private MavenPomDistributionManagementFormPage distributionManagementPage;
     
-    private MavenPomReportingFormPage reportingPage;
+    private MavenPomBasicInformationFormPage basicInformationPage;
+
+    private MavenPomMoreProjectInformationFormPage moreInformationFormPage;
     
-    private MavenPomProfilesFormPage profilesPage;
+    private MavenPomBuildSettingsFormPage buildSettingsFormPage;
+    
+    private MavenPomEnvironmentSettingsFormPage environmentSettingsFormPage;
+    
+    private MavenPomProfilesFormPage profilesFormPage;
 
     private IProject project;
 
@@ -234,6 +185,8 @@ public class MavenPomFormEditor extends FormEditor
         }
     };
 
+    
+
     public MavenPomFormEditor()
     {
     }
@@ -268,70 +221,31 @@ public class MavenPomFormEditor extends FormEditor
         {
             if ( initializeAddPagesOK() )
             {
-                basicFormPage =
-                    new MavenPomBasicFormPage( this, BASIC_INFO_FORM_PAGE, "Project Information", this.emfModel, this.editingDomain, this.bindingContext );
-                addPage( basicFormPage );
-
-                dependenciesFormPage =
-                    new MavenPomDependenciesFormPage( this, DEPENDENCIES_FORM_PAGE,
-                                                      "Dependencies/Dependency Management", this.emfModel, this.editingDomain, this.bindingContext );
-                addPage( dependenciesFormPage );
-
-                mavenPomLicensesScmOrgFormPage =
-                    new MavenPomLicensesScmOrgFormPage( this, LICENSES_SCM_ORG_FORM_PAGE,
-                                                        "Licenses/SCM/Organization/Issue Management", this.emfModel, editingDomain, bindingContext );
-                addPage( mavenPomLicensesScmOrgFormPage );
-
-                developersContributorsFormPage =
-                    new MavenPomDevelopersContributorsFormPage( this, DEVELOPERS_CONTRIBUTORS_FORM_PAGE,
-                                                                "Developers/Contributors", this.emfModel, editingDomain, bindingContext );
-                addPage( developersContributorsFormPage );
-
-                modulePropertiesFormPage =
-                    new MavenPomPropertiesModuleFormPage( this, MODULES_FORM_PAGE, "Properties/Module", this.emfModel, editingDomain, bindingContext );
-                addPage( modulePropertiesFormPage );
-
-                buildFormPage = new MavenPomBuildFormPage( this, BUILD_FORM_PAGE, "Build Management", this.emfModel, this.editingDomain, this.bindingContext );
-                addPage( buildFormPage );
-
-                buildResourcesPage =
-                    new MavenPomBuildResourcesPage( this, BUILD_RESOURCES_FORM_PAGE, "Build Resources", this.emfModel, this.editingDomain, this.bindingContext );
-                addPage( buildResourcesPage );
-
-                buildTestResourcesPage =
-                    new MavenPomBuildTestResourcesPage( this, BUILD_TEST_RESOURCES_FORM_PAGE, "Build Test Resources",
-                                                        this.emfModel, this.editingDomain, this.bindingContext );
-                addPage( buildTestResourcesPage );
-
-                buildPluginFormPage =
-                    new MavenPomBuildPluginFormPage( this, BUILD_PLUGINS_FORM_PAGE, "Build Plugin/Plugin Management",
-                                                     this.emfModel, editingDomain );
-                addPage( buildPluginFormPage );
-
-                ciManagementMailingListsPage =
-                    new MavenPomCiManagementMailingListFormPage( this, CIMANAGEMENT_MAILINGLISTS_FORM_PAGE,
-                                                                 "CiManagement/Mailing Lists", this.emfModel, this.editingDomain, this.bindingContext );
-                addPage( ciManagementMailingListsPage );
-
-                repositoriesPage =
-                    new MavenPomRepositoriesFormPage( this, REPOSITORIES_FORM_PAGE, "Repositories", this.emfModel, editingDomain, bindingContext );
-                addPage( repositoriesPage );
-
-                distributionManagementPage =
-                    new MavenPomDistributionManagementFormPage( this, DISTRIBUTION_MANAGEMENT_FORM_PAGE,
-                                                                "Distribution Management", this.emfModel, editingDomain, bindingContext );
-                addPage( distributionManagementPage );
-                
-                reportingPage =
-                    new MavenPomReportingFormPage( this, REPORTING_FORM_PAGE, 
-                                                   "Reporting", this.emfModel, editingDomain, bindingContext );                
-                addPage( reportingPage );
-                
-                profilesPage =
-                    new MavenPomProfilesFormPage( this, PROFILES_FORM_PAGE,
-                                                  "Profiles", this.pomModel );
-                addPage( profilesPage );
-                
+            	basicInformationPage =
+            		new MavenPomBasicInformationFormPage( this, POM_BASIC_INFORMATION_FORM_PAGE, 
+            				"Basic POM Information", this.emfModel, this.editingDomain, this.bindingContext );
+            	addPage( basicInformationPage );
+            	
+            	moreInformationFormPage =
+            		new MavenPomMoreProjectInformationFormPage( this, POM_MORE_INFORMATION_FORM_PAGE, 
+            				"More POM Information", this.emfModel, this.editingDomain, this.bindingContext );
+            	addPage( moreInformationFormPage );
+            	
+            	buildSettingsFormPage =
+            	    new MavenPomBuildSettingsFormPage( this, POM_BUILD_SETTINGS_FORM_PAGE,
+            	            "Build Settings", this.emfModel, this.editingDomain, this.bindingContext );
+            	addPage( buildSettingsFormPage );
+            	
+            	environmentSettingsFormPage =
+            	    new MavenPomEnvironmentSettingsFormPage( this, POM_ENVIRONMENT_SETTINGS_FORM_PAGE,
+            	            "Environment Settings", this.emfModel, this.editingDomain, this.bindingContext );
+            	addPage( environmentSettingsFormPage );
+//            	
+//            	profilesFormPage =
+//            	    new MavenPomProfilesFormPage( this, POM_PROFILES_FORM_PAGE, 
+//            	            "Profiles", this.emfModel, this.editingDomain, this.bindingContext );
+//            	addPage( profilesFormPage );
+            	
                 sourceEditor = new StructuredTextEditor();
                 sourceEditor.setEditorPart( this );
                 int sourceIdx = addPage( sourceEditor, getEditorInput() );
@@ -394,11 +308,11 @@ public class MavenPomFormEditor extends FormEditor
 
     private void setPagesClean()
     {
-        basicFormPage.setPageModified( false );
-        modulePropertiesFormPage.setPageModified( false );
-        buildFormPage.setPageModified( false );
-        buildPluginFormPage.setPageModified( false );
-        repositoriesPage.setPageModified( false );
+    	basicInformationPage.setPageModified( false );
+    	moreInformationFormPage.setPageModified( false );
+    	buildSettingsFormPage.setPageModified( false );
+    	environmentSettingsFormPage.setPageModified( false );
+    	//profilesFormPage.setPageModified( false );
         // clean other pages
     }
     
@@ -459,7 +373,7 @@ public class MavenPomFormEditor extends FormEditor
         //
        return new AdapterFactoryEditingDomain(adapterFactory, commandStack, new HashMap<Resource, Boolean>());
     }
-
+    
     private synchronized IDOMModel buildDomModel( ) throws IOException
     {
         IEditorInput input = getEditorInput();

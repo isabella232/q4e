@@ -22,6 +22,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class BuildManagementDetailComponent
     extends AbstractComponent
@@ -62,150 +63,138 @@ public class BuildManagementDetailComponent
     
     private DataBindingContext bindingContext;
     
-    public BuildManagementDetailComponent( Composite parent, int style, Model model, EditingDomain domain, DataBindingContext bindingContext )
+    public BuildManagementDetailComponent( Composite parent, int style, FormToolkit toolkit,
+                                           Model model, EditingDomain domain, 
+                                           DataBindingContext bindingContext )
     {
         super( parent, style );
         this.model = model;
         this.domain = domain;
         this.bindingContext = bindingContext;
-
+        
         setLayout( new GridLayout( 3, false ) );
-
-        Label defaultGoalLabel = new Label( this, SWT.NULL );
+        
+        Label defaultGoalLabel = toolkit.createLabel( this, Messages.MavenPomEditor_MavenPomEditor_DefaultGoal, SWT.NULL );
         defaultGoalLabel.setLayoutData( createLabelLayoutData() );
-        defaultGoalLabel.setText( Messages.MavenPomEditor_MavenPomEditor_DefaultGoal );
 
-        defaultGoalText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        defaultGoalText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         defaultGoalText.setLayoutData( createSpanTwoColumnData() );
 
         ModelUtil.bind(
-        		model, 
-        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__DEFAULT_GOAL }, 
-        		SWTObservables.observeText( defaultGoalText, SWT.FocusOut ), 
-        		domain, 
-        		bindingContext );
+                model, 
+                new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__DEFAULT_GOAL }, 
+                SWTObservables.observeText( defaultGoalText, SWT.FocusOut ), 
+                domain, 
+                bindingContext );
         
-        Label finalNameLabel = new Label( this, SWT.NULL );
-        finalNameLabel.setLayoutData( createLabelLayoutData() );
-        finalNameLabel.setText( Messages.MavenPomEditor_MavenPomEditor_FinalName );
+        Label finalNameLabel = toolkit.createLabel( this, Messages.MavenPomEditor_MavenPomEditor_FinalName, SWT.NULL );
+        finalNameLabel.setLayoutData( createLabelLayoutData() );        
 
-        finalNameText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        finalNameText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         finalNameText.setLayoutData( createSpanTwoColumnData() );
 
         ModelUtil.bind(
-        		model, 
-        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__FINAL_NAME }, 
-        		SWTObservables.observeText( finalNameText, SWT.FocusOut ), 
-        		domain, 
-        		bindingContext );
+                model, 
+                new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__FINAL_NAME }, 
+                SWTObservables.observeText( finalNameText, SWT.FocusOut ), 
+                domain, 
+                bindingContext );
         
-        Label directoryLabel = new Label( this, SWT.NULL );
+        Label directoryLabel = toolkit.createLabel( this, Messages.MavenPomEditor_MavenPomEditor_Directory, SWT.NULL );
         directoryLabel.setLayoutData( createLabelLayoutData() );
-        directoryLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Directory );
 
-        directoryText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        directoryText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         directoryText.setLayoutData( createControlLayoutData() );
 
-        directoryButton = new Button( this, SWT.PUSH );
-        directoryButton.setText( "..." );
+        directoryButton = toolkit.createButton( this, "...", SWT.PUSH );
         directoryButton.addSelectionListener( getButtonListener() );
 
         ModelUtil.bind(
-        		model, 
-        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__DIRECTORY }, 
-        		SWTObservables.observeText( directoryText, SWT.FocusOut ), 
-        		domain, 
-        		bindingContext );
+                model, 
+                new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__DIRECTORY }, 
+                SWTObservables.observeText( directoryText, SWT.FocusOut ), 
+                domain, 
+                bindingContext );
         
-        Label outputDirLabel = new Label( this, SWT.NULL );
+        Label outputDirLabel = toolkit.createLabel( this, Messages.MavenPomEditor_MavenPomEditor_OutputDirectory, SWT.NULL );
         outputDirLabel.setLayoutData( createLabelLayoutData() );
-        outputDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_OutputDirectory );
 
-        outputDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        outputDirText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         outputDirText.setLayoutData( createControlLayoutData() );
 
-        outputDirButton = new Button( this, SWT.PUSH );
-        outputDirButton.setText( "..." );
+        outputDirButton = toolkit.createButton( this, "...", SWT.PUSH );
         outputDirButton.addSelectionListener( getButtonListener() );
 
         ModelUtil.bind(
-        		model, 
-        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__OUTPUT_DIRECTORY }, 
-        		SWTObservables.observeText( outputDirText, SWT.FocusOut ), 
-        		domain, 
-        		bindingContext );
+                model, 
+                new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__OUTPUT_DIRECTORY }, 
+                SWTObservables.observeText( outputDirText, SWT.FocusOut ), 
+                domain, 
+                bindingContext );
         
-        Label testOutputDirLabel = new Label( this, SWT.NULL );
+        Label testOutputDirLabel = toolkit.createLabel( this, Messages.MavenPomEditor_MavenPomEditor_TestOutputDirectory, SWT.NULL );
         testOutputDirLabel.setLayoutData( createLabelLayoutData() );
-        testOutputDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_TestOutputDirectory );
 
-        testOutputDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        testOutputDirText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         testOutputDirText.setLayoutData( createControlLayoutData() );
 
-        testOutputDirButton = new Button( this, SWT.PUSH );
-        testOutputDirButton.setText( "..." );
+        testOutputDirButton = toolkit.createButton( this, "...", SWT.PUSH );
         testOutputDirButton.addSelectionListener( getButtonListener() );
 
         ModelUtil.bind(
-        		model, 
-        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__TEST_OUTPUT_DIRECTORY }, 
-        		SWTObservables.observeText( testOutputDirText, SWT.FocusOut ), 
-        		domain, 
-        		bindingContext );
+                model, 
+                new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__TEST_OUTPUT_DIRECTORY }, 
+                SWTObservables.observeText( testOutputDirText, SWT.FocusOut ), 
+                domain, 
+                bindingContext );
         
-        Label sourceDirLabel = new Label( this, SWT.NULL );
+        Label sourceDirLabel = toolkit.createLabel( this, Messages.MavenPomEditor_MavenPomEditor_SourceDirectory, SWT.NULL );
         sourceDirLabel.setLayoutData( createLabelLayoutData() );
-        sourceDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_SourceDirectory );
 
-        sourceDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        sourceDirText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         sourceDirText.setLayoutData( createControlLayoutData() );
 
-        sourceDirButton = new Button( this, SWT.PUSH );
-        sourceDirButton.setText( "..." );
+        sourceDirButton =toolkit.createButton( this, "...", SWT.PUSH );
         sourceDirButton.addSelectionListener( getButtonListener() );
 
         ModelUtil.bind(
-        		model, 
-        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__SOURCE_DIRECTORY }, 
-        		SWTObservables.observeText( sourceDirText, SWT.FocusOut ), 
-        		domain, 
-        		bindingContext );
+                model, 
+                new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__SOURCE_DIRECTORY }, 
+                SWTObservables.observeText( sourceDirText, SWT.FocusOut ), 
+                domain, 
+                bindingContext );
         
-        Label scriptSourceDirLabel = new Label( this, SWT.NULL );
+        Label scriptSourceDirLabel = toolkit.createLabel( this, Messages.MavenPomEditor_MavenPomEditor_ScriptSourceDirectory, SWT.NULL );
         scriptSourceDirLabel.setLayoutData( createLabelLayoutData() );
-        scriptSourceDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_ScriptSourceDirectory );
 
-        scriptSourceDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        scriptSourceDirText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         scriptSourceDirText.setLayoutData( createControlLayoutData() );
 
-        scriptSourceDirButton = new Button( this, SWT.PUSH );
-        scriptSourceDirButton.setText( "..." );
+        scriptSourceDirButton = toolkit.createButton( this, "...", SWT.PUSH );
         scriptSourceDirButton.addSelectionListener( getButtonListener() );
 
         ModelUtil.bind(
-        		model, 
-        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__SCRIPT_SOURCE_DIRECTORY }, 
-        		SWTObservables.observeText( scriptSourceDirText, SWT.FocusOut ), 
-        		domain, 
-        		bindingContext );
+                model, 
+                new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__SCRIPT_SOURCE_DIRECTORY }, 
+                SWTObservables.observeText( scriptSourceDirText, SWT.FocusOut ), 
+                domain, 
+                bindingContext );
         
-        Label testSourceDirLabel = new Label( this, SWT.NULL );
+        Label testSourceDirLabel = toolkit.createLabel( this, Messages.MavenPomEditor_MavenPomEditor_TestSourceDirectory, SWT.NULL );
         testSourceDirLabel.setLayoutData( createLabelLayoutData() );
-        testSourceDirLabel.setText( Messages.MavenPomEditor_MavenPomEditor_TestSourceDirectory );
 
-        testSourceDirText = new Text( this, SWT.BORDER | SWT.SINGLE );
+        testSourceDirText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         testSourceDirText.setLayoutData( createControlLayoutData() );
 
-        testSourceDirButton = new Button( this, SWT.PUSH );
-        testSourceDirButton.setText( "..." );
+        testSourceDirButton = toolkit.createButton( this, "...", SWT.PUSH );
         testSourceDirButton.addSelectionListener( getButtonListener() );
         
         ModelUtil.bind(
-        		model, 
-        		new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__TEST_SOURCE_DIRECTORY }, 
-        		SWTObservables.observeText( testSourceDirText, SWT.FocusOut ), 
-        		domain, 
-        		bindingContext );
+                model, 
+                new EStructuralFeature[]{ PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__TEST_SOURCE_DIRECTORY }, 
+                SWTObservables.observeText( testSourceDirText, SWT.FocusOut ), 
+                domain, 
+                bindingContext );
         
     }
 
@@ -297,6 +286,12 @@ public class BuildManagementDetailComponent
         }
 
         return directoryDialog.open();
+    }
+    
+    private GridData createSectionLayoutData()
+    {
+        GridData layoutData = new GridData( SWT.FILL, SWT.TOP, true, false );
+        return layoutData;
     }
 
     private GridData createControlLayoutData()

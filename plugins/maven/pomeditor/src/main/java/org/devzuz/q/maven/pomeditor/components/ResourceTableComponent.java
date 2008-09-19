@@ -22,9 +22,10 @@ import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-public class ResourceComponent extends Composite
+public class ResourceTableComponent extends AbstractComponent
 {
     private Table resourcesTable;
 
@@ -46,12 +47,9 @@ public class ResourceComponent extends Composite
     
     private WritableValue selectedResource;
 
-    public ResourceComponent( Composite parent, int style )
-    {
-        this( parent, style, null, null, null, null );
-    }
-
-    public ResourceComponent( Composite parent, int style, Model model, EStructuralFeature[] path, EditingDomain domain, WritableValue selectedResource )
+    public ResourceTableComponent( Composite parent, int style, Model model, 
+                              EStructuralFeature[] path, EditingDomain domain, 
+                              WritableValue selectedResource )
     {
         super( parent, style );
         
@@ -66,13 +64,28 @@ public class ResourceComponent extends Composite
         resourcesTable.setLayoutData( new GridData( GridData.FILL, GridData.FILL, true, true ) );
         resourcesTable.setLinesVisible( true );
         resourcesTable.setHeaderVisible( true );
+        
         ResourcesTableListener tableListener = new ResourcesTableListener();
         resourcesTable.addSelectionListener( tableListener );
+        
+        TableColumn targetPathColumn = new TableColumn( resourcesTable, SWT.BEGINNING, 0 );
+        targetPathColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Resource_TargetPath );
+        targetPathColumn.setWidth( 200 );
+        
+        TableColumn filteringColumn =  new TableColumn( resourcesTable, SWT.BEGINNING, 1 );
+        filteringColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Resource_Filtering );
+        filteringColumn.setWidth( 100 );
+        
+        TableColumn directoryColumn = new TableColumn( resourcesTable, SWT.BEGINNING, 2 );
+        directoryColumn.setText( Messages.MavenPomEditor_MavenPomEditor_Directory );
+        directoryColumn.setWidth( 200 );        
         
         ModelUtil.bindTable( 
         		model, 
         		path, 
-        		new EStructuralFeature[]{ PomPackage.Literals.RESOURCE__TARGET_PATH, PomPackage.Literals.RESOURCE__FILTERING, PomPackage.Literals.RESOURCE__DIRECTORY }, 
+        		new EStructuralFeature[]{ PomPackage.Literals.RESOURCE__TARGET_PATH, 
+        		    PomPackage.Literals.RESOURCE__FILTERING, 
+        		    PomPackage.Literals.RESOURCE__DIRECTORY }, 
         		resourcesTable, 
         		domain);
 
@@ -116,12 +129,12 @@ public class ResourceComponent extends Composite
                     selectedIndex = resourcesTable.getSelectionIndex();
                     List<Resource> resourcesList = (List<Resource>) ModelUtil.getValue( model, path, domain, true );
                     Resource selectedResource = resourcesList.get( selectedIndex );
-                    ResourceComponent.this.selectedResource.setValue( selectedResource );
+                    ResourceTableComponent.this.selectedResource.setValue( selectedResource );
                 }
             }
             else
             {
-            	ResourceComponent.this.selectedResource.setValue( null );
+            	ResourceTableComponent.this.selectedResource.setValue( null );
             }
         }
     }
@@ -175,7 +188,7 @@ public class ResourceComponent extends Composite
         {
         	List<Resource> resourcesList = (List<Resource>) ModelUtil.getValue( model, path, domain, true );
             resourcesList.remove( selectedIndex );
-            ResourceComponent.this.selectedResource.setValue( null );
+            ResourceTableComponent.this.selectedResource.setValue( null );
             setModified( true );
         }
     }

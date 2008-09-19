@@ -115,13 +115,13 @@ public class AddEditNotifierDialog
         super( shell );
         if ( notifier != null )
         {
-            setType( notifier.getType() );
+            setType(  notifier.getType() );
             setAddress( notifier.getAddress() );
             setSendOnError( notifier.isSendOnError() );
             setSendOnFailure( notifier.isSendOnFailure() );
             setSendOnSuccess( notifier.isSendOnSuccess() );
             setSendOnWarning( notifier.isSendOnWarning() );
-            //TODO: setConfigurations( notifier.getConfiguration() );
+            //TODO: setConfigurations( notifier.getConfiguration() );            
         }
         else
         {
@@ -204,9 +204,13 @@ public class AddEditNotifierDialog
         addButton = new Button( buttonBox, SWT.PUSH );
         addButton.setText( Messages.MavenPomEditor_MavenPomEditor_AddButton );
         addButton.addSelectionListener( getSelectionListener() );
+        //TODO:  Disable the New button for now until Notifier has the getConfiguration() method
+        addButton.setEnabled( false );
+        
         editButton = new Button( buttonBox, SWT.PUSH );
         editButton.setText( Messages.MavenPomEditor_MavenPomEditor_EditButton );
         editButton.addSelectionListener( getSelectionListener() );
+        
         removeButton = new Button( buttonBox, SWT.PUSH );
         removeButton.setText( Messages.MavenPomEditor_MavenPomEditor_RemoveButton );
         removeButton.addSelectionListener( getSelectionListener() );
@@ -239,8 +243,8 @@ public class AddEditNotifierDialog
 
     private void initControlValues()
     {
-        typeText.setText( getType() );
-        addressText.setText( getAddress() );
+        typeText.setText( blankIfNull( getType() ) );
+        addressText.setText( blankIfNull( getAddress() ) );
         initComboBox( sendOnErrorCombo, isSendOnError() );
         initComboBox( sendOnFailureCombo, isSendOnFailure() );
         initComboBox( sendOnSuccessCombo, isSendOnSuccess() );
@@ -253,13 +257,16 @@ public class AddEditNotifierDialog
         configurationTable.removeAll();
 
         // get the keys first
-        Object[] keySet = configurations.keySet().toArray();
-
-        for ( int index = 0; index < configurations.size(); index++ )
+        if ( configurations != null )
         {
-            TableItem item = new TableItem( configurationTable, SWT.BEGINNING );
-            item.setText( new String[] { keySet[index].toString(),
-                configurations.getProperty( keySet[index].toString() ) } );
+            Object[] keySet = configurations.keySet().toArray();
+
+            for ( int index = 0; index < configurations.size(); index++ )
+            {
+                TableItem item = new TableItem( configurationTable, SWT.BEGINNING );
+                item.setText( new String[] { keySet[index].toString(),
+                    configurations.getProperty( keySet[index].toString() ) } );
+            }
         }
     }
 
@@ -326,7 +333,7 @@ public class AddEditNotifierDialog
                     {
                         KeyValueEditorDialog keyValueDialog = KeyValueEditorDialog.getKeyValueEditorDialog();
 
-                        if ( keyValueDialog.openWithEntry( "", "" ) == Window.OK )
+                        if ( keyValueDialog.open() == Window.OK )
                         {
                             if ( !keyAlreadyExist( keyValueDialog.getKey() ) )
                             {
@@ -385,7 +392,12 @@ public class AddEditNotifierDialog
 
     public boolean keyAlreadyExist( String key )
     {
-        return configurations.containsKey( key );
+        if ( configurations != null )
+        {
+            return configurations.containsKey( key );
+        }
+        
+        return false;
     }
 
     @Override
@@ -404,6 +416,16 @@ public class AddEditNotifierDialog
         setSendOnSuccess( Boolean.parseBoolean( sendOnSuccessCombo.getText() ) );
         setSendOnWarning( Boolean.parseBoolean( sendOnWarningCombo.getText() ) );
         super.okPressed();
+    }
+    
+    protected static String blankIfNull( String str )
+    {
+        return str != null ? str : "";
+    }
+
+    protected static String nullIfBlank( String str )
+    {
+        return ( str == null || str.equals( "" ) ) ? null : str;
     }
 
     @Override

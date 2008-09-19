@@ -105,9 +105,12 @@ public class AddBuildPluginDialog extends AbstractResizableDialog
 
     private boolean didValidate()
     {
-        if ( pluginComponent.getGroupId().length() > 0 && pluginComponent.getArtifactId().length() > 0 )
+        if ( pluginComponent.getGroupId() != null && pluginComponent.getArtifactId() != null )
         {
-            return true;
+            if ( pluginComponent.getGroupId().length() > 0 && pluginComponent.getArtifactId().length() > 0 )
+            {
+                return true;
+            }
         }
 
         return false;

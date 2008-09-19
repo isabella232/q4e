@@ -159,11 +159,22 @@ public class ModelUtil
             @Override
             protected IStatus doSet( IObservableValue observableValue, Object value )
             {
+                System.out.println("mogol testing ModelUtil #1 value = " + value.toString() );
                 getValue( root, path, domain, true );
                 if ( "".equals( value ) )
                 {
+                    System.out.println("mogol testing ModelUtil #2 value = " + value.toString() );                    
                     value = null;
                 }
+                if ( value == null )
+                {
+                    System.out.println("mogol testing ModelUtil #4 Value is null!");
+                }
+                else
+                {
+                    System.out.println("mogol testing ModelUtil #5 Value is not null!");
+                }
+                System.out.println("mogol testing ModelUtil #3 value = " + value.toString() );
                 return super.doSet( observableValue, value );
             }
         }, null );
