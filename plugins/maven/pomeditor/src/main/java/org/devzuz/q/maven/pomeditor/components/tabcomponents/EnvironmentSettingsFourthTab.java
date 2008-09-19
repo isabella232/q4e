@@ -52,7 +52,7 @@ public class EnvironmentSettingsFourthTab
     }
     
     private Control createDistributionManagementControls(Composite parent,
-                                                         FormToolkit toolKit)
+                                                         FormToolkit toolkit)
     {
         IComponentModificationListener listener  = new IComponentModificationListener()
         {
@@ -63,11 +63,12 @@ public class EnvironmentSettingsFourthTab
             
         };
         
-        Composite container = toolKit.createComposite( parent, SWT.None );
+        Composite container = toolkit.createComposite( parent, SWT.None );
         container.setLayout( new FillLayout( SWT.VERTICAL ) );
         
         distributionManagementComponent = 
-            new DistributionManagementDetailComponent(container, SWT.None, model, domain, bindingContext);
+            new DistributionManagementDetailComponent(container, SWT.None,
+                                                       model, domain, bindingContext);
         
         distributionManagementComponent.addComponentModifyListener( listener );
         

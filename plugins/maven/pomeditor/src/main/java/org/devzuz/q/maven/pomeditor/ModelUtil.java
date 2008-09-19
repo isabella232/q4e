@@ -22,6 +22,7 @@ import org.eclipse.emf.databinding.edit.EMFEditObservables;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.edit.command.AddCommand;
 import org.eclipse.emf.edit.command.SetCommand;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.viewers.ObservableListContentProvider;
@@ -159,22 +160,11 @@ public class ModelUtil
             @Override
             protected IStatus doSet( IObservableValue observableValue, Object value )
             {
-                System.out.println("mogol testing ModelUtil #1 value = " + value.toString() );
                 getValue( root, path, domain, true );
                 if ( "".equals( value ) )
-                {
-                    System.out.println("mogol testing ModelUtil #2 value = " + value.toString() );                    
+                {                   
                     value = null;
-                }
-                if ( value == null )
-                {
-                    System.out.println("mogol testing ModelUtil #4 Value is null!");
-                }
-                else
-                {
-                    System.out.println("mogol testing ModelUtil #5 Value is not null!");
-                }
-                System.out.println("mogol testing ModelUtil #3 value = " + value.toString() );
+                }                
                 return super.doSet( observableValue, value );
             }
         }, null );
@@ -183,6 +173,6 @@ public class ModelUtil
     public static void setValue( final EObject obj, EStructuralFeature feature, Object value, EditingDomain domain )
     {
         Command cmd = SetCommand.create( domain, obj, feature, value );
-        domain.getCommandStack().execute( cmd );
+        domain.getCommandStack().execute( cmd );        
     }
 }

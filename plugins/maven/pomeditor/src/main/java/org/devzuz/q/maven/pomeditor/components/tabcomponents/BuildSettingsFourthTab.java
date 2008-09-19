@@ -93,9 +93,11 @@ public class BuildSettingsFourthTab
         //pluginManagementContentProvider = new PluginTreeContentProvider( pomModel.getBuild().getPluginManagement() );
         pluginManagementTreeComponent = new ObjectTreeComponent( parent, SWT.None );
         
-        pluginManagementTreeComponent.setContentProvider( new PluginTreeContentProvider( new EReference[] { PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__PLUGIN_MANAGEMENT, PomPackage.Literals.PLUGIN_MANAGEMENT__PLUGINS }, domain, "Plugin Management" ) );
+        ITreeContentProvider contentProvider = new PluginTreeContentProvider( new EReference[] { PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__PLUGIN_MANAGEMENT, PomPackage.Literals.PLUGIN_MANAGEMENT__PLUGINS }, domain, "Plugin Management" );
+        
+        pluginManagementTreeComponent.setContentProvider( contentProvider );
         pluginManagementTreeComponent.setLabelProvider( new PluginTreeLabelProvider() );
-        //pluginManagementTreeComponent.setObjectActionMap( new PluginActionMap( this, pluginManagementContentProvider ) );
+        pluginManagementTreeComponent.setObjectActionMap( new PluginActionMap( this, contentProvider ) );
         pluginManagementTreeComponent.setInput( model );
         pluginManagementTreeComponent.expandAll();
         

@@ -143,9 +143,6 @@ public class MailingListComponent extends AbstractComponent
                 
                 List<MailingList> dataSource = (List<MailingList>)ModelUtil.getValue( model, path, domain, true );
                 dataSource.add( mailingList );
-
-                TableItem tableItem = new TableItem( mailingListTable, SWT.BEGINNING );
-                tableItem.setText( dialog.getName() );
                 
                 notifyListeners( mailingListTable );
             }

@@ -312,7 +312,7 @@ public class MavenPomFormEditor extends FormEditor
     	moreInformationFormPage.setPageModified( false );
     	buildSettingsFormPage.setPageModified( false );
     	environmentSettingsFormPage.setPageModified( false );
-    	profilesFormPage.setPageModified( false );
+    	//profilesFormPage.setPageModified( false );
         // clean other pages
     }
     

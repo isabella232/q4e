@@ -178,12 +178,18 @@ public class AddEditMailingListDialog
         RowLayout layout = new RowLayout( SWT.VERTICAL );
         layout.fill = true;
         buttonBox.setLayout( layout );
+        
         addButton = new Button( buttonBox, SWT.PUSH );
         addButton.setText( Messages.MavenPomEditor_MavenPomEditor_AddButton );
         addButton.addSelectionListener( getSelectionListener() );
+        //TODO:  Disable addButton until we have the setOtherArchives() method for MailingList
+        addButton.setEnabled( false );
+       
+        
         editButton = new Button( buttonBox, SWT.PUSH );
         editButton.setText( Messages.MavenPomEditor_MavenPomEditor_EditButton );
         editButton.addSelectionListener( getSelectionListener() );
+        
         removeButton = new Button( buttonBox, SWT.PUSH );
         removeButton.setText( Messages.MavenPomEditor_MavenPomEditor_RemoveButton );
         removeButton.addSelectionListener( getSelectionListener() );
@@ -209,11 +215,11 @@ public class AddEditMailingListDialog
 
     private void initControlValues()
     {
-        nameText.setText( getName() );
-        subscribeText.setText( getSubscribe() );
-        unsubscibeText.setText( getUnsubscribe() );
-        postText.setText( getPost() );
-        archiveText.setText( getArchive() );
+        nameText.setText( blankIfNull( getName() ) );
+        subscribeText.setText( blankIfNull( getSubscribe() ) );
+        unsubscibeText.setText( blankIfNull( getUnsubscribe() ) );
+        postText.setText( blankIfNull( getPost() ) );
+        archiveText.setText( blankIfNull( getArchive() ) );
         initializeOtherArchivesTable();
     }
 
@@ -224,7 +230,7 @@ public class AddEditMailingListDialog
         for ( String archiveName : getOtherArchives() )
         {
             TableItem item = new TableItem( otherArchivesTable, SWT.BEGINNING );
-            item.setText( archiveName );
+            item.setText( blankIfNull( archiveName ) );
         }
     }
 
@@ -339,6 +345,16 @@ public class AddEditMailingListDialog
         setPost( postText.getText().trim() );
         setArchive( archiveText.getText().trim() );
         super.okPressed();
+    }
+    
+    protected static String blankIfNull( String str )
+    {
+        return str != null ? str : "";
+    }
+
+    protected static String nullIfBlank( String str )
+    {
+        return ( str == null || str.equals( "" ) ) ? null : str;
     }
 
     @Override

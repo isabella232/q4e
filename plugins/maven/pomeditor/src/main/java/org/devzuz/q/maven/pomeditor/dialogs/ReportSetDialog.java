@@ -32,7 +32,8 @@ public class ReportSetDialog
     public static ReportSetDialog newReportSetDialog()
     {
         return new ReportSetDialog( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell() );
-    }
+    }   
+    
 
     private Button addReportSetButton;
     
@@ -139,6 +140,20 @@ public class ReportSetDialog
         this.reportSetList = reportSetList;
         
         return open();
+    }
+    
+    protected void createButtonsForButtonBar(Composite parent)
+    {
+        Button okButton = createButton(parent, SWT.OK, "OK", true);
+        
+        okButton.addSelectionListener( new SelectionAdapter() 
+        {
+            public void widgetSelected(SelectionEvent e) 
+            {
+                setReturnCode( OK );
+                close();
+            }
+        });
     }
     
     private String convertReportListToString( List<String> reportsList )
