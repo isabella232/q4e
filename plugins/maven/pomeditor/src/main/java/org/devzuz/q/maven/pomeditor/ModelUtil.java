@@ -145,44 +145,34 @@ public class ModelUtil
     }
 
     public static void bind( final EObject root, final EStructuralFeature[] path, IObservableValue uiValue,
-                             final EditingDomain domain, DataBindingContext dbc )
+            final EditingDomain domain, DataBindingContext dbc )
     {
-        IObservableValue ctx = new WritableValue();
-        ctx.setValue( root );
-        for ( EStructuralFeature feature : path )
-        {
-            ctx = EMFEditObservables.observeDetailValue( Realm.getDefault(), domain, ctx, feature );
-        }
-        ctx.getValue();
-        dbc.bindValue( uiValue, ctx, new UpdateValueStrategy()
-        {
-            @Override
-            protected IStatus doSet( IObservableValue observableValue, Object value )
-            {
-                System.out.println("mogol testing ModelUtil #1 value = " + value.toString() );
-                getValue( root, path, domain, true );
-                if ( "".equals( value ) )
-                {
-                    System.out.println("mogol testing ModelUtil #2 value = " + value.toString() );                    
-                    value = null;
-                }
-                if ( value == null )
-                {
-                    System.out.println("mogol testing ModelUtil #4 Value is null!");
-                }
-                else
-                {
-                    System.out.println("mogol testing ModelUtil #5 Value is not null!");
-                }
-                System.out.println("mogol testing ModelUtil #3 value = " + value.toString() );
-                return super.doSet( observableValue, value );
-            }
-        }, null );
+    	IObservableValue ctx = new WritableValue();
+    	ctx.setValue( root );
+    	for ( EStructuralFeature feature : path )
+    	{
+    		ctx = EMFEditObservables.observeDetailValue( Realm.getDefault(), domain, ctx, feature );
+    	}
+    	
+    	ctx.getValue();
+    	dbc.bindValue( uiValue, ctx, new UpdateValueStrategy()
+    	{
+    		@Override
+    		protected IStatus doSet( IObservableValue observableValue, Object value )
+    		{
+    			getValue( root, path, domain, true );
+    			if ( "".equals( value ) )
+    			{
+    				value = null;
+    			}
+    			return super.doSet( observableValue, value );
+    		}
+    	}, null );
     }
-
+    
     public static void setValue( final EObject obj, EStructuralFeature feature, Object value, EditingDomain domain )
     {
-        Command cmd = SetCommand.create( domain, obj, feature, value );
-        domain.getCommandStack().execute( cmd );
+    	Command cmd = SetCommand.create( domain, obj, feature, value );
+    	domain.getCommandStack().execute( cmd );
     }
 }
