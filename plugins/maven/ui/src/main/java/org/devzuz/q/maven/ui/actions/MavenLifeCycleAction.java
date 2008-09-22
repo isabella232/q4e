@@ -54,7 +54,8 @@ public class MavenLifeCycleAction
 
         try
         {
-            MavenManager.getMaven().scheduleGoals( MavenManager.getMaven().getMavenProject( project, true ), goals,
+            
+            MavenManager.getMaven().scheduleGoals( MavenManager.getMavenProjectManager().getMavenProject( project, true ), goals,
                                                    MavenExecutionParameter.newDefaultMavenExecutionParameter() );
 
         }

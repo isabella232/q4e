@@ -687,7 +687,7 @@ public class MavenProfileView
         {
             if ( currentProject != null )
             {
-                IMavenProject mavenProject = MavenManager.getMaven().getMavenProject( currentProject, false );
+                IMavenProject mavenProject = MavenManager.getMavenProjectManager().getMavenProject( currentProject, false );
                 pomLocation = mavenProject.getPomFile().getPath();
                 pomModel = mavenProject.getModel();
                 pomFileLmod = new File( pomLocation ).lastModified();
@@ -713,7 +713,7 @@ public class MavenProfileView
             if ( currentProject != null )
             {
                 IMavenProject currentSelectedMavenProject =
-                    MavenManager.getMaven().getMavenProject( currentProject, false );
+                    MavenManager.getMavenProjectManager().getMavenProject( currentProject, false );
                 pomLocation = currentSelectedMavenProject.getPomFile().getPath();
                 pomFileLmod = new File( pomLocation ).lastModified();
 
@@ -1138,7 +1138,6 @@ public class MavenProfileView
          * @param input the input model, which is a list of profiles.
          * @return Object[]
          */
-        @SuppressWarnings( "unchecked" )
         public Object[] getElements( Object input )
         {
             return ( profiles ).toArray();
