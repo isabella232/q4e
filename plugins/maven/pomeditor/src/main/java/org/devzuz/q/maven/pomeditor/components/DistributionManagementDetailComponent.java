@@ -8,12 +8,16 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -96,6 +100,9 @@ public class DistributionManagementDetailComponent
         
         downloadURLText = new Text( container, SWT.BORDER | SWT.SINGLE );        
         downloadURLText.setLayoutData( createControlLayoutData() );
+        
+        downloadURLText.addFocusListener( new TextFieldFocusListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__DOWNLOAD_URL }, 
@@ -166,6 +173,9 @@ public class DistributionManagementDetailComponent
         
         repositoryUrlText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
         repositoryUrlText.setLayoutData( createControlLayoutData() );
+        
+        repositoryUrlText.addFocusListener( new TextFieldFocusListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__URL }, 
@@ -179,12 +189,14 @@ public class DistributionManagementDetailComponent
         
         repositoryLayoutText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
         repositoryLayoutText.setLayoutData( createControlLayoutData() );    
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__LAYOUT }, 
                 SWTObservables.observeText( repositoryLayoutText, SWT.FocusOut ), 
                 domain, 
                 bindingContext );
+        
         Group siteGroup = new Group( container, SWT.None );
         siteGroup.setText( Messages.MavenPomEditor_MavenPomEditor_Site );
         siteGroup.setLayout( new GridLayout( 2, false ) );
@@ -196,6 +208,7 @@ public class DistributionManagementDetailComponent
         
         siteIdText = new Text( siteGroup, SWT.BORDER | SWT.SINGLE );
         siteIdText.setLayoutData( createControlLayoutData() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SITE, PomPackage.Literals.SITE__ID }, 
@@ -209,6 +222,7 @@ public class DistributionManagementDetailComponent
         
         siteNameText = new Text( siteGroup, SWT.BORDER | SWT.SINGLE );
         siteNameText.setLayoutData( createControlLayoutData() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SITE, PomPackage.Literals.SITE__NAME }, 
@@ -222,6 +236,9 @@ public class DistributionManagementDetailComponent
         
         siteUrlText = new Text( siteGroup, SWT.BORDER | SWT.SINGLE );
         siteUrlText.setLayoutData( createControlLayoutData() );
+        
+        siteUrlText.addFocusListener( new TextFieldFocusListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SITE, PomPackage.Literals.SITE__URL }, 
@@ -237,9 +254,7 @@ public class DistributionManagementDetailComponent
     private Control createRightSideControl( Composite form )
     {
         Composite container = new Composite( form, SWT.None );
-        container.setLayout( new GridLayout( 2, false ) );
-        
-        
+        container.setLayout( new GridLayout( 2, false ) );        
         
         Group snapshotsGroup = new Group( container, SWT.None );
         snapshotsGroup.setText( Messages.MavenPomEditor_MavenPomEditor_SnapshotRepository );
@@ -252,6 +267,7 @@ public class DistributionManagementDetailComponent
         
         snapshotsUniqueVersionRadioButton = new Button( snapshotsGroup, SWT.CHECK );
         snapshotsUniqueVersionRadioButton.setLayoutData( createControlLayoutData() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SNAPSHOT_REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__UNIQUE_VERSION }, 
@@ -265,6 +281,7 @@ public class DistributionManagementDetailComponent
         
         snapshotsIdText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
         snapshotsIdText.setLayoutData( createControlLayoutData() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SNAPSHOT_REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__ID }, 
@@ -278,6 +295,7 @@ public class DistributionManagementDetailComponent
         
         snapshotsNameText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
         snapshotsNameText.setLayoutData( createControlLayoutData() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SNAPSHOT_REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__NAME }, 
@@ -291,6 +309,9 @@ public class DistributionManagementDetailComponent
         
         snapshotsUrlText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
         snapshotsUrlText.setLayoutData( createControlLayoutData() );
+        
+        snapshotsUrlText.addFocusListener( new TextFieldFocusListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SNAPSHOT_REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__URL }, 
@@ -304,12 +325,14 @@ public class DistributionManagementDetailComponent
         
         snapshotsLayoutText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
         snapshotsLayoutText.setLayoutData( createControlLayoutData() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SNAPSHOT_REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__LAYOUT }, 
                 SWTObservables.observeText( snapshotsLayoutText, SWT.FocusOut ), 
                 domain, 
                 bindingContext );
+        
         Group relocationGroup = new Group( container, SWT.None );
         relocationGroup.setText( Messages.MavenPomEditor_MavenPomEditor_Relocation );
         relocationGroup.setLayout( new GridLayout( 2, false ) );
@@ -321,6 +344,7 @@ public class DistributionManagementDetailComponent
         
         groupIdText = new Text( relocationGroup, SWT.BORDER | SWT.SINGLE );
         groupIdText.setLayoutData( createControlLayoutData() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__RELOCATION, PomPackage.Literals.RELOCATION__GROUP_ID }, 
@@ -334,6 +358,7 @@ public class DistributionManagementDetailComponent
         
         artifactIdText = new Text( relocationGroup, SWT.BORDER | SWT.SINGLE );
         artifactIdText.setLayoutData( createControlLayoutData() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__RELOCATION, PomPackage.Literals.RELOCATION__ARTIFACT_ID }, 
@@ -347,6 +372,7 @@ public class DistributionManagementDetailComponent
         
         versionText = new Text( relocationGroup, SWT.BORDER | SWT.SINGLE );
         versionText.setLayoutData( createControlLayoutData() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__RELOCATION, PomPackage.Literals.RELOCATION__VERSION }, 
@@ -372,31 +398,44 @@ public class DistributionManagementDetailComponent
         return container;
         
     }
-        
-        
-        
-        
-        
     
-
-    public boolean validateURL( String siteUrl )
+    private class TextFieldFocusListener implements FocusListener
     {
-        if ( siteUrl.length() > 0 )
-        {
-            if ( !( siteUrl.toLowerCase().startsWith( "http://" ) ) &&
-                 !( siteUrl.toLowerCase().startsWith( "https://" ) ) &&
-                 !( siteUrl.toLowerCase().startsWith( "ftp://" ) ) &&
-                 !( siteUrl.toLowerCase().startsWith( "file://" ) ) &&
-                 !( siteUrl.toLowerCase().startsWith( "scp://" ) ) &&
-                 !( siteUrl.toLowerCase().startsWith( "sftp://" ) ) &&
-                 !( siteUrl.toLowerCase().startsWith( "dav:http://" ) ) )
-            {
-                return false;
-            }
-        }
-        
-        return true;
-        
+
+		@Override
+		public void focusGained( FocusEvent event ) 
+		{
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void focusLost( final FocusEvent event ) 
+		{
+			if ( ( ( Text )event.widget ).getText().trim().length() > 0 )
+			{
+			    if ( !( ( ( Text )event.widget ).getText().toLowerCase().startsWith( "http://" ) ) &&
+			         !( ( ( Text )event.widget ).getText().toLowerCase().startsWith( "https://" ) )	&&
+			         !( ( ( Text )event.widget ).getText().toLowerCase().startsWith( "ftp://" ) ) &&
+			         !( ( ( Text )event.widget ).getText().toLowerCase().startsWith( "file://" ) ) &&
+			         !( ( ( Text )event.widget ).getText().toLowerCase().startsWith( "scp://" ) ) &&
+			         !( ( ( Text )event.widget ).getText().toLowerCase().startsWith( "sftp://" ) ) &&
+			         !( ( ( Text )event.widget ).getText().toLowerCase().startsWith( "dav:http://" ) ) )
+			    {
+				    MessageDialog.openWarning( getShell(), "Invalid URL",
+                        "URL should start with either of the following: " +
+                        "http://, https://, ftp://, file://, scp://, sftp:// or dav:http://");
+				    Display.getCurrent().asyncExec( new Runnable()
+                    {
+                        public void run()
+                        {
+                    	    (( Text )event.widget ).setFocus();
+                        }                                
+                    });
+			    }
+			}			
+		}
+    	
     }
 
     private GridData createSectionLayoutData()

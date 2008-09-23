@@ -8,11 +8,15 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -149,6 +153,35 @@ public class BasicProjectInformationComponent extends AbstractComponent
 	
 	private Control createProjectInformationControls( Composite form,  FormToolkit toolkit ) 
 	{
+		FocusListener focusListener = new FocusListener()
+        {
+            public void focusGained( FocusEvent e )
+            {
+                
+            }
+
+            public void focusLost( FocusEvent e )
+            {
+            	if ( urlText.getText().trim().length() > 0 )
+            	{
+                    if ( !( urlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
+                         !( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
+                    {
+                        MessageDialog.openWarning( getShell(), "Invalid URL",
+                                               "URL should start with " +
+                                               "http:// or https://");
+                        Display.getCurrent().asyncExec( new Runnable()
+                        {
+                            public void run()
+                            {
+                        	    urlText.setFocus();
+                            }                                
+                        });                            
+                    }
+            	}
+            }
+        };
+        
 		Composite parent = toolkit.createComposite( form );
 		parent.setLayout( new GridLayout( 2, false ) );
 		
@@ -183,6 +216,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
 		
 		urlText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
 		urlText.setLayoutData( createControlLayoutData() );
+		
+		urlText.addFocusListener( focusListener );
 		
 		ModelUtil.bind(
         		model, 

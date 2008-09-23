@@ -219,11 +219,12 @@ public class ContributorTableComponent
                     String roles = editDialog.getRoles();
                         
                     String[] roleArray = roles.split( "," );
-                    List<String> newRoleList = (List<String>) ModelUtil.getValue( selectedContributor, new EStructuralFeature[]{ PomPackage.Literals.CONTRIBUTOR__ROLES } , domain, true );
-                    for ( String role : newRoleList )
+                    List<String> newRoleList = (List<String>) ModelUtil.getValue( newContributor, new EStructuralFeature[]{ PomPackage.Literals.CONTRIBUTOR__ROLES } , domain, true );
+                    for ( String role : roleArray )
                     {
                         newRoleList.add( role.trim() );
                     }
+                    
                 }
                 else
                 {
@@ -239,7 +240,8 @@ public class ContributorTableComponent
                     if ( ( !( blankIfNull( selectedContributor.getUrl() ).equals( blankIfNull(newContributor.getUrl() ) ) ) ) ||
                          ( !( blankIfNull( selectedContributor.getOrganization() ).equals( blankIfNull( newContributor.getOrganization() ) ) ) ) ||
                          ( !( blankIfNull( selectedContributor.getOrganizationUrl() ).equals( blankIfNull( newContributor.getOrganizationUrl() ) ) ) ) ||
-                         ( ! (blankIfNull( oldRoles).equals( blankIfNull( editDialog.getRoles() ) ) ) ) ||
+                         ( !( blankIfNull( oldRoles).equals( blankIfNull( editDialog.getRoles() ) ) ) ) ||
+                         ( !( selectedContributor.getProperties() .equals( editDialog.getProperties()  ) ) ) ||
                          ( !( blankIfNull( selectedContributor.getTimezone() ).equals( blankIfNull( newContributor.getTimezone() ) ) ) ) 
                        )
                     {

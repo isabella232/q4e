@@ -112,20 +112,23 @@ public class MorePomInformationFirstTab extends AbstractComponent
 
             public void focusLost( FocusEvent e )
             {
-                if ( !( organizationUrlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
-                     !( organizationUrlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
-                {
-                    MessageDialog.openWarning( getShell(), "Invalid URL",
+            	if ( organizationUrlText.getText().trim().length() > 0 )
+            	{
+                    if ( !( organizationUrlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
+                         !( organizationUrlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
+                    {
+                        MessageDialog.openWarning( getShell(), "Invalid URL",
                                                "URL should start with " +
                                                "http:// or https://");
-                    Display.getCurrent().asyncExec( new Runnable()
-                    {
-                        public void run()
+                        Display.getCurrent().asyncExec( new Runnable()
                         {
-                            organizationUrlText.setFocus();
-                        }                                
-                    });                            
-                }
+                            public void run()
+                            {
+                                organizationUrlText.setFocus();
+                            }                                
+                        });                            
+                    }
+            	}
             }
         };
         

@@ -2,7 +2,6 @@ package org.devzuz.q.maven.pomeditor.components;
 
 import java.util.List;
 
-import org.devzuz.q.maven.pom.CiManagement;
 import org.devzuz.q.maven.pom.Model;
 import org.devzuz.q.maven.pom.Notifier;
 import org.devzuz.q.maven.pom.PomFactory;
@@ -14,19 +13,20 @@ import org.eclipse.core.databinding.DataBindingContext;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.SWTObservables;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
@@ -72,6 +72,35 @@ public class CiManagementComponent extends AbstractComponent
 		this.domain = domain;
 		this.bindingContext = bindingContext;
 		
+		FocusListener focusListener = new FocusListener()
+        {
+            public void focusGained( FocusEvent e )
+            {
+                
+            }
+
+            public void focusLost( FocusEvent e )
+            {
+            	if ( urlText.getText().trim().length() > 0 )
+            	{
+                    if ( !( urlText.getText().trim().toLowerCase().startsWith( "http://" ) ) &&
+                         !( urlText.getText().trim().toLowerCase().startsWith( "https://" ) ) )
+                    {
+                        MessageDialog.openWarning( getShell(), "Invalid URL",
+                                               "URL should start with " +
+                                               "http:// or https://");
+                        Display.getCurrent().asyncExec( new Runnable()
+                        {
+                            public void run()
+                            {
+                        	    urlText.setFocus();
+                            }                                
+                        });                            
+                    }
+            	}
+            }
+        };
+		
 		setLayout( new GridLayout( 1, false ) );
 		
 		Composite ciManagementContainer = new Composite( this, style );
@@ -96,6 +125,8 @@ public class CiManagementComponent extends AbstractComponent
 		
 		urlText = toolkit.createText( ciManagementContainer, "", SWT.BORDER | SWT.SINGLE );
 		urlText.setLayoutData( createControlLayoutData() );
+		
+		urlText.addFocusListener( focusListener );
 		
 		ModelUtil.bind(
         		model, 
