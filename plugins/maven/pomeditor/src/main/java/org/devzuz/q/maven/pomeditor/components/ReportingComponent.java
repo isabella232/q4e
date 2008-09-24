@@ -7,7 +7,6 @@ import org.devzuz.q.maven.pom.Model;
 import org.devzuz.q.maven.pom.PomFactory;
 import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pom.ReportPlugin;
-import org.devzuz.q.maven.pom.Reporting;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.dialogs.AddEditReportPluginDialog;
@@ -19,6 +18,8 @@ import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -26,6 +27,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.MessageBox;
@@ -98,6 +100,16 @@ public class ReportingComponent extends AbstractComponent
         
         outputDirectoryText = new Text( this, SWT.SINGLE | SWT.BORDER );
         outputDirectoryText.setLayoutData( createControlLayoutData() );
+        
+        ModifyListener listener = new ModifyListener()
+        {
+            public void modifyText( ModifyEvent e )
+            {
+                notifyListeners( ( Control ) e.widget );
+            }
+        };
+        
+        outputDirectoryText.addModifyListener( listener );
         
         ModelUtil.bind(
         		model, 

@@ -15,6 +15,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -110,6 +112,9 @@ public class EnvironmentSettingsFirstTab
         
         issueManagementSystemText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
         issueManagementSystemText.setLayoutData( createControlLayoutData() );
+        
+        issueManagementSystemText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__ISSUE_MANAGEMENT, PomPackage.Literals.ISSUE_MANAGEMENT__SYSTEM }, 
@@ -122,7 +127,10 @@ public class EnvironmentSettingsFirstTab
         
         issueManagementUrlText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
         issueManagementUrlText.setLayoutData( createControlLayoutData() );
+        
+        issueManagementUrlText.addModifyListener( new TextModifyListener() );
         issueManagementUrlText.addFocusListener( new TextFocusListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__ISSUE_MANAGEMENT, PomPackage.Literals.ISSUE_MANAGEMENT__URL }, 
@@ -146,6 +154,9 @@ public class EnvironmentSettingsFirstTab
 
         connectionText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
         connectionText.setLayoutData( createControlLayoutData() );
+        
+        connectionText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__SCM, PomPackage.Literals.SCM__CONNECTION }, 
@@ -159,6 +170,9 @@ public class EnvironmentSettingsFirstTab
 
         developerConnectionText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
         developerConnectionText.setLayoutData( createControlLayoutData() );
+        
+        developerConnectionText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__SCM, PomPackage.Literals.SCM__DEVELOPER_CONNECTION }, 
@@ -171,6 +185,9 @@ public class EnvironmentSettingsFirstTab
 
         tagText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
         tagText.setLayoutData( createControlLayoutData() );
+        
+        tagText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__SCM, PomPackage.Literals.SCM__TAG }, 
@@ -183,6 +200,8 @@ public class EnvironmentSettingsFirstTab
 
         urlText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
         urlText.setLayoutData( createControlLayoutData() );
+        
+        urlText.addModifyListener( new TextModifyListener() );
         urlText.addFocusListener( new TextFocusListener() );
         ModelUtil.bind(
                 model, 
@@ -274,7 +293,16 @@ public class EnvironmentSettingsFirstTab
             }
         }
         
-    };
+    }
+    
+    private class TextModifyListener implements ModifyListener
+	{
+		@Override
+		public void modifyText( ModifyEvent e ) 
+		{
+			notifyListeners( ( Control ) e.widget );			
+		}		
+	}
     
     private GridData createSectionLayoutData()
     {

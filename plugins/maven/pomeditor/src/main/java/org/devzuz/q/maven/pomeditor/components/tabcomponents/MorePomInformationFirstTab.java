@@ -15,6 +15,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -144,6 +146,8 @@ public class MorePomInformationFirstTab extends AbstractComponent
         nameText = toolkit.createText( container, "", SWT.BORDER | SWT.SINGLE );
         nameText.setLayoutData( createControlLayoutData() );
         
+        nameText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__ORGANIZATION, PomPackage.Literals.ORGANIZATION__NAME }, 
@@ -167,12 +171,22 @@ public class MorePomInformationFirstTab extends AbstractComponent
                 domain, 
                 bindingContext );
         
+        organizationUrlText.addModifyListener( new TextModifyListener() );
         organizationUrlText.addFocusListener( focusListener );
         
         toolkit.paintBordersFor( container );
         
         return container;
     }
+    
+    private class TextModifyListener implements ModifyListener
+	{
+		@Override
+		public void modifyText( ModifyEvent e ) 
+		{
+			notifyListeners( ( Control ) e.widget );			
+		}		
+	}
 
     private GridData createLabelLayoutData()
     {

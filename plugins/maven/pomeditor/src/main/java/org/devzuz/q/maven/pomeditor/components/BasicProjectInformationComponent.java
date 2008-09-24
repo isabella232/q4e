@@ -12,6 +12,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -100,6 +102,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
         groupIdText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
         groupIdText.setLayoutData( createControlLayoutData() );
         
+        groupIdText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
         		model, 
         		new EStructuralFeature[]{ PomPackage.Literals.MODEL__GROUP_ID }, 
@@ -112,6 +116,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
         
         artifactIdText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
         artifactIdText.setLayoutData( createControlLayoutData() );
+        
+        artifactIdText.addModifyListener( new TextModifyListener() );
         
         ModelUtil.bind(
         		model, 
@@ -126,6 +132,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
         versionText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
         versionText.setLayoutData( createControlLayoutData() );
         
+        versionText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
         		model, 
         		new EStructuralFeature[]{ PomPackage.Literals.MODEL__VERSION }, 
@@ -138,6 +146,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
         
         packagingText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
         packagingText.setLayoutData( createControlLayoutData() );
+        
+        packagingText.addModifyListener( new TextModifyListener() );
         
         ModelUtil.bind(
         		model, 
@@ -191,6 +201,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
 		nameText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
 		nameText.setLayoutData( createControlLayoutData() );		
 		
+		nameText.addModifyListener( new TextModifyListener() );
+		
 		ModelUtil.bind(
         		model, 
         		new EStructuralFeature[]{ PomPackage.Literals.MODEL__NAME }, 
@@ -203,6 +215,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
 		
 		descriptionText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
 		descriptionText.setLayoutData( createControlLayoutData() );
+		
+		descriptionText.addModifyListener( new TextModifyListener() );
 		
 		ModelUtil.bind(
         		model, 
@@ -217,6 +231,7 @@ public class BasicProjectInformationComponent extends AbstractComponent
 		urlText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
 		urlText.setLayoutData( createControlLayoutData() );
 		
+		urlText.addModifyListener( new TextModifyListener() );
 		urlText.addFocusListener( focusListener );
 		
 		ModelUtil.bind(
@@ -232,6 +247,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
 		inceptionYearText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
 		inceptionYearText.setLayoutData( createControlLayoutData() );
 		
+		inceptionYearText.addModifyListener( new TextModifyListener() );
+		
 		ModelUtil.bind(
         		model, 
         		new EStructuralFeature[]{ PomPackage.Literals.MODEL__INCEPTION_YEAR }, 
@@ -245,6 +262,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
 		modelVersionText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
 		modelVersionText.setLayoutData( createControlLayoutData() );
 		
+		modelVersionText.addModifyListener( new TextModifyListener() );
+		
 		ModelUtil.bind(
         		model, 
         		new EStructuralFeature[]{ PomPackage.Literals.MODEL__MODEL_VERSION }, 
@@ -257,6 +276,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
 		
 		mavenVersionText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
 		mavenVersionText.setLayoutData( createControlLayoutData() );
+		
+		mavenVersionText.addModifyListener( new TextModifyListener() );
 		
 		ModelUtil.bind(
         		model, 
@@ -281,6 +302,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
 	    parentGroupIdText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
 	    parentGroupIdText.setLayoutData( createControlLayoutData() );
 	    
+	    parentGroupIdText.addModifyListener( new TextModifyListener() );
+	    
 	    ModelUtil.bind(
         		model, 
         		new EStructuralFeature[]{ PomPackage.Literals.PARENT__GROUP_ID }, 
@@ -293,6 +316,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
 	    
 	    parentArtifactIdText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
 	    parentArtifactIdText.setLayoutData( createControlLayoutData() );
+	    
+	    parentArtifactIdText.addModifyListener( new TextModifyListener() );
 	    
 	    ModelUtil.bind(
         		model, 
@@ -307,6 +332,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
 	    parentVersionText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
 	    parentVersionText.setLayoutData( createControlLayoutData() );
 	    
+	    parentVersionText.addModifyListener( new TextModifyListener() );
+	    
 	    ModelUtil.bind(
         		model, 
         		new EStructuralFeature[]{ PomPackage.Literals.PARENT__VERSION }, 
@@ -320,6 +347,8 @@ public class BasicProjectInformationComponent extends AbstractComponent
 	    relativePathText = toolkit.createText( parent, "", SWT.BORDER | SWT.SINGLE );
 	    relativePathText.setLayoutData( createControlLayoutData() );
 	    
+	    relativePathText.addModifyListener( new TextModifyListener() );
+	    
 	    ModelUtil.bind(
         		model, 
         		new EStructuralFeature[]{ PomPackage.Literals.PARENT__RELATIVE_PATH }, 
@@ -331,6 +360,15 @@ public class BasicProjectInformationComponent extends AbstractComponent
 		
 		return parent;
 	}	
+	
+	private class TextModifyListener implements ModifyListener
+	{
+		@Override
+		public void modifyText( ModifyEvent e ) 
+		{
+			notifyListeners( ( Control ) e.widget );			
+		}		
+	}
 	
 	private GridData createSectionLayoutData()
     {

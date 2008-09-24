@@ -12,6 +12,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -101,6 +103,8 @@ public class DistributionManagementDetailComponent
         downloadURLText = new Text( container, SWT.BORDER | SWT.SINGLE );        
         downloadURLText.setLayoutData( createControlLayoutData() );
         
+        downloadURLText.addModifyListener( new TextModifyListener() );
+        
         downloadURLText.addFocusListener( new TextFieldFocusListener() );
         
         ModelUtil.bind(
@@ -116,6 +120,9 @@ public class DistributionManagementDetailComponent
         
         statusText = new Text( container, SWT.BORDER | SWT.SINGLE );
         statusText.setLayoutData( createControlLayoutData() );     
+        
+        statusText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__STATUS }, 
@@ -147,6 +154,9 @@ public class DistributionManagementDetailComponent
         
         repositoryIdText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
         repositoryIdText.setLayoutData( createControlLayoutData() );
+        
+        repositoryIdText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__ID }, 
@@ -160,6 +170,9 @@ public class DistributionManagementDetailComponent
         
         repositoryNameText = new Text( repositoryGroup, SWT.SINGLE | SWT.BORDER );
         repositoryNameText.setLayoutData( createControlLayoutData() );
+        
+        repositoryNameText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__NAME }, 
@@ -174,6 +187,7 @@ public class DistributionManagementDetailComponent
         repositoryUrlText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
         repositoryUrlText.setLayoutData( createControlLayoutData() );
         
+        repositoryUrlText.addModifyListener( new TextModifyListener() );
         repositoryUrlText.addFocusListener( new TextFieldFocusListener() );
         
         ModelUtil.bind(
@@ -189,6 +203,8 @@ public class DistributionManagementDetailComponent
         
         repositoryLayoutText = new Text( repositoryGroup, SWT.BORDER | SWT.SINGLE );
         repositoryLayoutText.setLayoutData( createControlLayoutData() );    
+        
+        repositoryLayoutText.addModifyListener( new TextModifyListener() );
         
         ModelUtil.bind(
                 model, 
@@ -209,6 +225,8 @@ public class DistributionManagementDetailComponent
         siteIdText = new Text( siteGroup, SWT.BORDER | SWT.SINGLE );
         siteIdText.setLayoutData( createControlLayoutData() );
         
+        siteIdText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SITE, PomPackage.Literals.SITE__ID }, 
@@ -222,6 +240,8 @@ public class DistributionManagementDetailComponent
         
         siteNameText = new Text( siteGroup, SWT.BORDER | SWT.SINGLE );
         siteNameText.setLayoutData( createControlLayoutData() );
+        
+        siteNameText.addModifyListener( new TextModifyListener() );
         
         ModelUtil.bind(
                 model, 
@@ -237,6 +257,7 @@ public class DistributionManagementDetailComponent
         siteUrlText = new Text( siteGroup, SWT.BORDER | SWT.SINGLE );
         siteUrlText.setLayoutData( createControlLayoutData() );
         
+        siteUrlText.addModifyListener( new TextModifyListener() );        
         siteUrlText.addFocusListener( new TextFieldFocusListener() );
         
         ModelUtil.bind(
@@ -282,6 +303,8 @@ public class DistributionManagementDetailComponent
         snapshotsIdText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
         snapshotsIdText.setLayoutData( createControlLayoutData() );
         
+        snapshotsIdText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__SNAPSHOT_REPOSITORY, PomPackage.Literals.DEPLOYMENT_REPOSITORY__ID }, 
@@ -295,6 +318,8 @@ public class DistributionManagementDetailComponent
         
         snapshotsNameText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
         snapshotsNameText.setLayoutData( createControlLayoutData() );
+        
+        snapshotsNameText.addModifyListener( new TextModifyListener() );
         
         ModelUtil.bind(
                 model, 
@@ -310,6 +335,7 @@ public class DistributionManagementDetailComponent
         snapshotsUrlText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
         snapshotsUrlText.setLayoutData( createControlLayoutData() );
         
+        snapshotsUrlText.addModifyListener( new TextModifyListener() );
         snapshotsUrlText.addFocusListener( new TextFieldFocusListener() );
         
         ModelUtil.bind(
@@ -325,6 +351,8 @@ public class DistributionManagementDetailComponent
         
         snapshotsLayoutText = new Text( snapshotsGroup, SWT.BORDER | SWT.SINGLE );
         snapshotsLayoutText.setLayoutData( createControlLayoutData() );
+        
+        snapshotsLayoutText.addModifyListener( new TextModifyListener() );
         
         ModelUtil.bind(
                 model, 
@@ -345,6 +373,8 @@ public class DistributionManagementDetailComponent
         groupIdText = new Text( relocationGroup, SWT.BORDER | SWT.SINGLE );
         groupIdText.setLayoutData( createControlLayoutData() );
         
+        groupIdText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__RELOCATION, PomPackage.Literals.RELOCATION__GROUP_ID }, 
@@ -359,6 +389,8 @@ public class DistributionManagementDetailComponent
         artifactIdText = new Text( relocationGroup, SWT.BORDER | SWT.SINGLE );
         artifactIdText.setLayoutData( createControlLayoutData() );
         
+        artifactIdText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__RELOCATION, PomPackage.Literals.RELOCATION__ARTIFACT_ID }, 
@@ -372,6 +404,8 @@ public class DistributionManagementDetailComponent
         
         versionText = new Text( relocationGroup, SWT.BORDER | SWT.SINGLE );
         versionText.setLayoutData( createControlLayoutData() );
+        
+        versionText.addModifyListener( new TextModifyListener() );
         
         ModelUtil.bind(
                 model, 
@@ -388,6 +422,9 @@ public class DistributionManagementDetailComponent
         GridData grid = new GridData( GridData.FILL_HORIZONTAL );
         grid.heightHint = 40;
         messageText.setLayoutData( grid );
+        
+        messageText.addModifyListener( new TextModifyListener() );
+        
         ModelUtil.bind(
                 model, 
                 new EStructuralFeature[]{ PomPackage.Literals.MODEL__DISTRIBUTION_MANAGEMENT, PomPackage.Literals.DISTRIBUTION_MANAGEMENT__RELOCATION, PomPackage.Literals.RELOCATION__MESSAGE }, 
@@ -437,6 +474,15 @@ public class DistributionManagementDetailComponent
 		}
     	
     }
+    
+    private class TextModifyListener implements ModifyListener
+	{
+		@Override
+		public void modifyText( ModifyEvent e ) 
+		{
+			notifyListeners( ( Control ) e.widget );			
+		}		
+	}
 
     private GridData createSectionLayoutData()
     {

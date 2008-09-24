@@ -13,12 +13,15 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.databinding.swt.SWTObservables;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -79,6 +82,8 @@ public class BuildManagementDetailComponent
 
         defaultGoalText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         defaultGoalText.setLayoutData( createSpanTwoColumnData() );
+        
+        defaultGoalText.addModifyListener( new TextModifyListener() );
 
         ModelUtil.bind(
                 model, 
@@ -92,6 +97,8 @@ public class BuildManagementDetailComponent
 
         finalNameText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         finalNameText.setLayoutData( createSpanTwoColumnData() );
+        
+        finalNameText.addModifyListener( new TextModifyListener() );
 
         ModelUtil.bind(
                 model, 
@@ -105,6 +112,8 @@ public class BuildManagementDetailComponent
 
         directoryText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         directoryText.setLayoutData( createControlLayoutData() );
+        
+        directoryText.addModifyListener( new TextModifyListener() );
 
         directoryButton = toolkit.createButton( this, "...", SWT.PUSH );
         directoryButton.addSelectionListener( getButtonListener() );
@@ -121,6 +130,8 @@ public class BuildManagementDetailComponent
 
         outputDirText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         outputDirText.setLayoutData( createControlLayoutData() );
+        
+        outputDirText.addModifyListener( new TextModifyListener() );
 
         outputDirButton = toolkit.createButton( this, "...", SWT.PUSH );
         outputDirButton.addSelectionListener( getButtonListener() );
@@ -137,6 +148,8 @@ public class BuildManagementDetailComponent
 
         testOutputDirText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         testOutputDirText.setLayoutData( createControlLayoutData() );
+        
+        testOutputDirText.addModifyListener( new TextModifyListener() );
 
         testOutputDirButton = toolkit.createButton( this, "...", SWT.PUSH );
         testOutputDirButton.addSelectionListener( getButtonListener() );
@@ -154,6 +167,8 @@ public class BuildManagementDetailComponent
         sourceDirText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         sourceDirText.setLayoutData( createControlLayoutData() );
 
+        sourceDirText.addModifyListener( new TextModifyListener() );
+        
         sourceDirButton =toolkit.createButton( this, "...", SWT.PUSH );
         sourceDirButton.addSelectionListener( getButtonListener() );
 
@@ -170,6 +185,8 @@ public class BuildManagementDetailComponent
         scriptSourceDirText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         scriptSourceDirText.setLayoutData( createControlLayoutData() );
 
+        scriptSourceDirText.addModifyListener( new TextModifyListener() );
+        
         scriptSourceDirButton = toolkit.createButton( this, "...", SWT.PUSH );
         scriptSourceDirButton.addSelectionListener( getButtonListener() );
 
@@ -185,6 +202,8 @@ public class BuildManagementDetailComponent
 
         testSourceDirText = toolkit.createText( this, "", SWT.BORDER | SWT.SINGLE );
         testSourceDirText.setLayoutData( createControlLayoutData() );
+        
+        testSourceDirText.addModifyListener( new TextModifyListener() );
 
         testSourceDirButton = toolkit.createButton( this, "...", SWT.PUSH );
         testSourceDirButton.addSelectionListener( getButtonListener() );
@@ -287,6 +306,15 @@ public class BuildManagementDetailComponent
 
         return directoryDialog.open();
     }
+    
+    private class TextModifyListener implements ModifyListener
+	{
+		@Override
+		public void modifyText( ModifyEvent e ) 
+		{
+			notifyListeners( ( Control ) e.widget );			
+		}		
+	}
     
     private GridData createSectionLayoutData()
     {

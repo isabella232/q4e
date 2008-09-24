@@ -18,6 +18,7 @@ import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -26,6 +27,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
@@ -100,6 +102,14 @@ public class CiManagementComponent extends AbstractComponent
             	}
             }
         };
+        
+        ModifyListener listener = new ModifyListener()
+        {
+            public void modifyText( ModifyEvent e )
+            {
+                notifyListeners( ( Control ) e.widget );
+            }
+        };
 		
 		setLayout( new GridLayout( 1, false ) );
 		
@@ -112,6 +122,8 @@ public class CiManagementComponent extends AbstractComponent
 		
 		systemText = toolkit.createText( ciManagementContainer, "", SWT.BORDER | SWT.SINGLE );
 		systemText.setLayoutData( createControlLayoutData() );
+		
+		systemText.addModifyListener( listener );
 		
 		ModelUtil.bind(
         		model, 
@@ -126,6 +138,7 @@ public class CiManagementComponent extends AbstractComponent
 		urlText = toolkit.createText( ciManagementContainer, "", SWT.BORDER | SWT.SINGLE );
 		urlText.setLayoutData( createControlLayoutData() );
 		
+		urlText.addModifyListener( listener );
 		urlText.addFocusListener( focusListener );
 		
 		ModelUtil.bind(
