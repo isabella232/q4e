@@ -22,6 +22,8 @@ import org.devzuz.q.maven.embedder.MavenExecutionStatus;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.devzuz.q.maven.jdt.core.MavenClasspathHelper;
 import org.devzuz.q.maven.jdt.core.MavenJdtCoreActivator;
+import org.devzuz.q.maven.jdt.core.handlers.IBuildPluginHandler;
+import org.devzuz.q.maven.jdt.core.handlers.MavenCompilerPluginHandler;
 import org.devzuz.q.maven.jdt.core.internal.TraceOption;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
@@ -128,6 +130,10 @@ public class MavenClasspathContainer implements IClasspathContainer
             MavenJdtCoreActivator.trace( TraceOption.CLASSPATH_UPDATE, "Refreshing classpath for maven project ",
                                          mavenProject.getArtifactId(), " - Processing ", artifacts.size(), " artifacts" );
             this.project = mavenProject.getProject();
+            
+            IBuildPluginHandler compilerPlugin = new MavenCompilerPluginHandler( JavaCore.create(project), mavenProject );
+            compilerPlugin.setBuildOptions();
+            
             List<IClasspathEntry> newClasspathEntries = resolveArtifacts( mavenProject, artifacts, downloadSources );
             /* compare before setting to new value to avoid clean and rebuild */
             IClasspathEntry[] newEntries =

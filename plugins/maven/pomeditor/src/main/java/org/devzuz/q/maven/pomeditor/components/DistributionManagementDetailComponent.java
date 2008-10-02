@@ -447,14 +447,12 @@ public class DistributionManagementDetailComponent
     private class TextFieldFocusListener implements FocusListener
     {
 
-		@Override
 		public void focusGained( FocusEvent event ) 
 		{
 			// TODO Auto-generated method stub
 			
 		}
 
-		@Override
 		public void focusLost( final FocusEvent event ) 
 		{
 			if ( ( ( Text )event.widget ).getText().trim().length() > 0 )
@@ -485,7 +483,6 @@ public class DistributionManagementDetailComponent
     
     private class TextModifyListener implements ModifyListener
 	{
-		@Override
 		public void modifyText( ModifyEvent e ) 
 		{
 			notifyListeners( ( Control ) e.widget );			

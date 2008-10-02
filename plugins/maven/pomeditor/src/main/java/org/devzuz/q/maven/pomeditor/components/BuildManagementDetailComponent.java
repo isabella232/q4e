@@ -317,7 +317,6 @@ public class BuildManagementDetailComponent
     
     private class TextModifyListener implements ModifyListener
 	{
-		@Override
 		public void modifyText( ModifyEvent e ) 
 		{
 			notifyListeners( ( Control ) e.widget );			

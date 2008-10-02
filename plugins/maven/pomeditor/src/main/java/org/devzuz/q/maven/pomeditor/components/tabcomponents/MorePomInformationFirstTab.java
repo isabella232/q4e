@@ -189,7 +189,6 @@ public class MorePomInformationFirstTab extends AbstractComponent
     
     private class TextModifyListener implements ModifyListener
 	{
-		@Override
 		public void modifyText( ModifyEvent e ) 
 		{
 			notifyListeners( ( Control ) e.widget );			
