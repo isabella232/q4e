@@ -33,7 +33,12 @@ public class PluginTreeContentProvider
 
     private String rootName;
 
-    public PluginTreeContentProvider( EReference[] path, EditingDomain domain, String rootName )
+    public String getRootName() 
+    {
+		return rootName;
+	}
+
+	public PluginTreeContentProvider( EReference[] path, EditingDomain domain, String rootName )
     {
         this.path = path;
         this.rootName = rootName;

@@ -10,11 +10,12 @@ package org.devzuz.q.maven.pomeditor.pages.internal;
 
 import java.util.List;
 
+import org.devzuz.q.maven.pom.Model;
 import org.devzuz.q.maven.pom.Plugin;
 import org.devzuz.q.maven.pom.PomFactory;
-import org.devzuz.q.maven.pom.PomPackage;
 import org.devzuz.q.maven.pomeditor.ModelUtil;
 import org.devzuz.q.maven.pomeditor.dialogs.AddBuildPluginDialog;
+import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
 import org.eclipse.jface.window.Window;
 
@@ -23,11 +24,24 @@ public class AddEditPluginAction
 {
     private Mode mode;
     
-    public AddEditPluginAction( ITreeObjectActionListener listener, Mode mode, EditingDomain domain )
+    private EditingDomain domain;
+
+	private Model model;
+
+	private EReference[] path;
+    
+    //public AddEditPluginAction( ITreeObjectActionListener listener, Mode mode, EditingDomain domain )
+    public AddEditPluginAction( ITreeObjectActionListener listener, Mode mode, EditingDomain domain,
+    		Model model, EReference[] path )
     {
     	super( domain );
         addTreeObjectActionListener( listener );
+        
         this.mode = mode;
+        this.domain = domain;
+        this.model = model;
+        this.path = path;
+        
         if( mode == Mode.ADD )
         {
             setName( ("Add plugin") );
@@ -55,6 +69,16 @@ public class AddEditPluginAction
                 {
                     ( (List<Plugin>) obj ).add( plugin );
                 }
+                else
+                {
+                	Object o = ModelUtil.getValue( model, path, domain, false );
+                	
+                	if ( o instanceof List )
+                	{
+                		((List<Plugin>)o).add( plugin );
+                	}
+                	
+                }
                 
                 super.doAction( obj );
             }
@@ -63,9 +87,19 @@ public class AddEditPluginAction
         {
             if ( addDialog.openWithPlugin( ( Plugin ) obj ) == Window.OK )
             {
-                Plugin plugin = ( Plugin ) obj;
+                //Plugin plugin = ( Plugin ) obj;
+            	Plugin plugin = PomFactory.eINSTANCE.createPlugin();
 
                 synchDialogToPlugin( addDialog, plugin );
+                
+                Object o = ModelUtil.getValue( model, path, domain, false );
+            	
+            	if ( o instanceof List )
+            	{
+            		( ( List<Plugin> )o ).remove( (Plugin) obj );
+            		
+            		( (List<Plugin> )o ).add( plugin );
+            	}
                 
                 super.doAction( obj );
             }
@@ -73,19 +107,21 @@ public class AddEditPluginAction
     }
 
     private void synchDialogToPlugin( AddBuildPluginDialog addDialog, Plugin plugin )
-    {
-        System.out.println("moogle trace synchDialogToPlugin addDialog group id = " + addDialog.getGroupId());
-        System.out.println("moogle trace synchDialogToPlugin addDialog artifact id = " + addDialog.getArtifactId());
-        
-        //ModelUtil.setValue( plugin, feature, value, domain )
-        
-    	ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__GROUP_ID, addDialog.getGroupId(), editingDomain );
-//        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__ARTIFACT_ID, addDialog.getArtifactId(), editingDomain );
-//        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__VERSION, addDialog.getVersion(), editingDomain );
-//        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__EXTENSIONS, addDialog.isExtension(), editingDomain );
-//        ModelUtil.setValue( plugin, PomPackage.Literals.PLUGIN__INHERITED, addDialog.isInherited(), editingDomain );
-        
-        System.out.println("moogle trace synchDialogToPlugin end");
+    {    	
+    	plugin.setGroupId( addDialog.getGroupId() );
+    	plugin.setArtifactId( addDialog.getArtifactId() );
+    	plugin.setVersion( addDialog.getVersion() );
+    	if ( addDialog.isInherited() )
+    	{
+    		plugin.setInherited( "true" );
+    	}
+    	else
+    	{
+    		plugin.setInherited( "false" );
+    	}
+    	
+    	plugin.setExtensions( addDialog.isExtension() );
     }
+
 
 }

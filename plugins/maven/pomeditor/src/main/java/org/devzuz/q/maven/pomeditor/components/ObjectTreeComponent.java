@@ -10,6 +10,8 @@ package org.devzuz.q.maven.pomeditor.components;
 
 import java.util.List;
 
+import org.devzuz.q.maven.pomeditor.model.PluginTreeContentProvider;
+import org.devzuz.q.maven.pomeditor.model.PluginTreeLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.ISelection;
@@ -111,12 +113,13 @@ public class ObjectTreeComponent extends Composite
     {
         public void selectionChanged( SelectionChangedEvent event )
         {
-            IStructuredSelection selection = (IStructuredSelection) event.getSelection();
+            IStructuredSelection selection = (IStructuredSelection) event.getSelection();           
             treeViewer.getControl().setMenu( getMenu( selection.getFirstElement() ) );
         }
 
         private Menu getMenu( final Object firstElement )
         {
+        	System.out.println("moogle trace = " + firstElement.getClass().toString() );
             List< ITreeObjectAction > actions = objectActionMap.getObjectActions( firstElement );            
             if ( actions != null )
             {

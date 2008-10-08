@@ -6,6 +6,11 @@
  **************************************************************************************************/
 package org.devzuz.q.maven.pomeditor.model;
 
+import org.devzuz.q.maven.pom.Dependency;
+import org.devzuz.q.maven.pom.Exclusion;
+import org.devzuz.q.maven.pom.Goal;
+import org.devzuz.q.maven.pom.Plugin;
+import org.devzuz.q.maven.pom.PluginExecution;
 import org.devzuz.q.maven.pom.provider.PomItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -31,7 +36,75 @@ public class PluginTreeLabelProvider
         }
         else
         {
-            return delegateProvider.getText( element );
+        	if ( element instanceof org.devzuz.q.maven.pom.impl.PluginImpl )
+        	{
+        		Plugin plugin = (Plugin) element;
+        	    StringBuffer pluginString = new StringBuffer();
+        	    pluginString.append( "Plugin { " );
+        	    pluginString.append( plugin.getGroupId() );
+        	    pluginString.append( "," );
+        	    pluginString.append( plugin.getArtifactId() );
+        	    pluginString.append( "," );
+        	    pluginString.append( plugin.getVersion() );
+        	    pluginString.append( " }" );
+        	    
+        	    return pluginString.toString();
+        	}
+        	
+        	if ( element instanceof org.devzuz.q.maven.pom.impl.PluginExecutionImpl )
+        	{
+        		PluginExecution execution = (PluginExecution) element;
+        	    StringBuffer executionString = new StringBuffer();
+        	    executionString.append( "Execution { " );
+        	    executionString.append( execution.getId() );
+        	    executionString.append( "," );
+        	    executionString.append( execution.getPhase() );
+        	    executionString.append( " }" );
+        	                
+        	    return executionString.toString();
+        	}
+        	
+        	if ( element instanceof org.devzuz.q.maven.pom.impl.DependencyImpl )
+        	{
+        		Dependency dependency = (Dependency) element;
+        	    StringBuffer dependencyString = new StringBuffer();
+        	    dependencyString.append( "Dependency { " );
+        	    dependencyString.append( dependency.getGroupId() );
+        	    dependencyString.append( "," );
+        	    dependencyString.append( dependency.getArtifactId() );
+        	    dependencyString.append( "," );
+        	    dependencyString.append( dependency.getVersion() );
+        	    dependencyString.append( " }" );
+        	                
+        	    return dependencyString.toString();
+        	}
+        	
+        	if ( element instanceof org.devzuz.q.maven.pom.impl.ExclusionImpl )
+        	{
+        		Exclusion exclusion = (Exclusion) element;
+        	    StringBuffer exclusionString = new StringBuffer();
+        	    exclusionString.append( "Exclusion { " );
+        	    exclusionString.append( exclusion.getGroupId() );
+        	    exclusionString.append( "," );
+        	    exclusionString.append( exclusion.getArtifactId() );
+        	    exclusionString.append( " }" );
+        	                
+        	    return exclusionString.toString();
+        	}
+        	
+        	if ( element instanceof org.devzuz.q.maven.pom.impl.GoalImpl )
+        	{
+        		Goal goal = ( Goal ) element;
+        		StringBuffer goalString = new StringBuffer();
+        		goalString.append( "Goal { " );
+        		goalString.append( goal.getGoal() );
+        		goalString.append( " }" );
+        		
+        		return goalString.toString();
+        	}
+        	
+        	return delegateProvider.getText( element );
+        	
         }
     }
 

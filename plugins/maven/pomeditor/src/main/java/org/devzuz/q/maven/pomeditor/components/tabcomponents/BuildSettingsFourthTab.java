@@ -15,6 +15,7 @@ import java.util.Map;
 
 import org.devzuz.q.maven.pom.Dependency;
 import org.devzuz.q.maven.pom.Exclusion;
+import org.devzuz.q.maven.pom.Goal;
 import org.devzuz.q.maven.pom.Model;
 import org.devzuz.q.maven.pom.Plugin;
 import org.devzuz.q.maven.pom.PluginExecution;
@@ -38,11 +39,11 @@ import org.devzuz.q.maven.pomeditor.pages.internal.ITreeObjectActionListener;
 import org.devzuz.q.maven.pomeditor.pages.internal.Mode;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.AttributeValueWrapperItemProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -101,11 +102,19 @@ public class BuildSettingsFourthTab
         //pluginManagementContentProvider = new PluginTreeContentProvider( pomModel.getBuild().getPluginManagement() );
         pluginManagementTreeComponent = new ObjectTreeComponent( parent, SWT.None );
         
-        ITreeContentProvider contentProvider = new PluginTreeContentProvider( new EReference[] { PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__PLUGIN_MANAGEMENT, PomPackage.Literals.PLUGIN_MANAGEMENT__PLUGINS }, domain, "Plugin Management" );
+        ITreeContentProvider contentProvider = new PluginTreeContentProvider( 
+        		new EReference[] { PomPackage.Literals.MODEL__BUILD, 
+        				PomPackage.Literals.BUILD__PLUGIN_MANAGEMENT, 
+        				PomPackage.Literals.PLUGIN_MANAGEMENT__PLUGINS }, 
+        	    domain, "Plugin Management" );
         
         pluginManagementTreeComponent.setContentProvider( contentProvider );
         pluginManagementTreeComponent.setLabelProvider( new PluginTreeLabelProvider() );
-        pluginManagementTreeComponent.setObjectActionMap( new PluginActionMap( this, contentProvider ) );
+        pluginManagementTreeComponent.setObjectActionMap( new PluginActionMap( this, 
+        		contentProvider,  
+        		new EReference[] { PomPackage.Literals.MODEL__BUILD, 
+        		PomPackage.Literals.BUILD__PLUGIN_MANAGEMENT, 
+        		PomPackage.Literals.PLUGIN_MANAGEMENT__PLUGINS } ) );
         pluginManagementTreeComponent.setInput( model );
         pluginManagementTreeComponent.expandAll();
         
@@ -123,10 +132,16 @@ public class BuildSettingsFourthTab
         //contentProvider = new PluginTreeContentProvider( pomModel.getBuild() );
         treeComponent = new ObjectTreeComponent( parent, SWT.None );
         
-        ITreeContentProvider contentProvider = new PluginTreeContentProvider( new EReference[] { PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__PLUGINS }, domain, "Plugins" );
+        ITreeContentProvider contentProvider = new PluginTreeContentProvider( 
+        		new EReference[] { PomPackage.Literals.MODEL__BUILD, 
+        				PomPackage.Literals.BUILD__PLUGINS }, 
+        		domain, "Plugins" );
         treeComponent.setContentProvider( contentProvider );
         treeComponent.setLabelProvider( new PluginTreeLabelProvider() );
-        treeComponent.setObjectActionMap( new PluginActionMap( this, contentProvider ) );
+        treeComponent.setObjectActionMap( new PluginActionMap( this, 
+        		contentProvider, 
+        		new EReference[] { PomPackage.Literals.MODEL__BUILD, 
+        		PomPackage.Literals.BUILD__PLUGINS } ) );
         treeComponent.setInput( model );
         treeComponent.expandAll();
         
@@ -141,12 +156,17 @@ public class BuildSettingsFourthTab
         private Map<String , List<ITreeObjectAction> > objectActionMap;
         private ITreeObjectActionListener listener;
         private ITreeContentProvider contentProvider;
+        private EReference[] path;
         
+        //public PluginActionMap( ITreeObjectActionListener actionListener,
+        //                        ITreeContentProvider contentProvider )
         public PluginActionMap( ITreeObjectActionListener actionListener,
-                                ITreeContentProvider contentProvider )
+                                ITreeContentProvider contentProvider,
+                                EReference[] path )
         {
             this.listener = actionListener;
             this.contentProvider = contentProvider;
+            this.path = path;
             constructObjectActionMap();
         }
         
@@ -155,7 +175,9 @@ public class BuildSettingsFourthTab
             objectActionMap = new HashMap<String, List<ITreeObjectAction>>();
             
             List<ITreeObjectAction> pluginsActionMap = new ArrayList<ITreeObjectAction>();
-            pluginsActionMap.add( new AddEditPluginAction( listener , Mode.ADD, domain ) );
+            pluginsActionMap.add( new AddEditPluginAction( listener , 
+            		Mode.ADD, domain, model, 
+            		path ) );
             pluginsActionMap.add( new DeleteAllItemsAction( listener , "Delete all plugins" , "plugins", domain ) );
             
             objectActionMap.put( "Plugins", pluginsActionMap );
@@ -185,7 +207,8 @@ public class BuildSettingsFourthTab
             objectActionMap.put( "Goals", goalsActionMap );
             
             List<ITreeObjectAction> pluginActionMap = new ArrayList<ITreeObjectAction>();
-            pluginActionMap.add( new AddEditPluginAction( listener , Mode.EDIT, domain ) );
+            //pluginActionMap.add( new AddEditPluginAction( listener , Mode.EDIT, domain, model, new EReference[] { PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__PLUGINS } ) );
+            pluginActionMap.add( new AddEditPluginAction( listener , Mode.EDIT, domain, model, path ) );
             pluginActionMap.add( new AddEditExecutionAction( listener, Mode.ADD, domain ) );
             pluginActionMap.add( new AddEditDependencyAction( listener , Mode.ADD, domain ) );
             pluginActionMap.add( new DeleteItemAction( listener , "Delete this plugin", "plugin", contentProvider, domain ) );
@@ -224,7 +247,7 @@ public class BuildSettingsFourthTab
         }
 
         public List<ITreeObjectAction> getObjectActions( Object element )
-        {
+        {        	
             if ( element instanceof List )
             {
                 List list = (List) element;
@@ -258,12 +281,12 @@ public class BuildSettingsFourthTab
                 }
             }
             else if ( element instanceof TreeRoot )
-            {                
-                return objectActionMap.get( "Plugins" );                
+            {
+            	return objectActionMap.get( "Plugins" );
             }
             else if ( element instanceof Plugin )
-            {                
-                return objectActionMap.get( "Plugin" );                
+            {
+            	return objectActionMap.get( "Plugin" );
             }
             else if ( element instanceof Dependency )
             {                
