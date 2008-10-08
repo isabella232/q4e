@@ -16,7 +16,7 @@ import org.osgi.framework.BundleContext;
  * 
  * @author Allan Ramirez
  */
-public class Activator
+public class SettingsXmlEditorActivator
     extends AbstractUIPlugin
 {
 
@@ -24,14 +24,14 @@ public class Activator
     public static final String PLUGIN_ID = "org.devzuz.q.maven.settingsxmleditor";
 
     // The shared instance
-    private static Activator plugin;
+    private static SettingsXmlEditorActivator plugin;
 
     private Logger logger;
 
     /**
      * The constructor
      */
-    public Activator()
+    public SettingsXmlEditorActivator()
     {
     }
 
@@ -65,7 +65,7 @@ public class Activator
      * 
      * @return the shared instance
      */
-    public static Activator getDefault()
+    public static SettingsXmlEditorActivator getDefault()
     {
         return plugin;
     }

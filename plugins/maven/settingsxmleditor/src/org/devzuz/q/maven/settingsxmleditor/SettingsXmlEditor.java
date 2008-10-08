@@ -8,6 +8,15 @@
 
 package org.devzuz.q.maven.settingsxmleditor;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringReader;
+
+import org.apache.maven.settings.Settings;
+import org.apache.maven.settings.io.xpp3.SettingsXpp3Reader;
+import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.devzuz.q.maven.embedder.MavenManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceRuleFactory;
@@ -21,7 +30,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.core.runtime.jobs.MultiRule;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.text.IDocument;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.ide.FileStoreEditorInput;
+import org.eclipse.ui.texteditor.IDocumentProvider;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 
 /**
@@ -32,6 +44,8 @@ public class SettingsXmlEditor
 {
     private static String SETTINGSXML_FILENAME = "settings.xml";
 
+    private boolean hasEssentialChanges;
+
     public SettingsXmlEditor()
     {
         super();
@@ -40,8 +54,11 @@ public class SettingsXmlEditor
     @Override
     public void doSave( IProgressMonitor progressMonitor )
     {
+        checkForEssentialChanges();
+        
         super.doSave( progressMonitor );
-        if ( MessageDialog.openQuestion( new Shell(), Messages.MessageDialog_Confirm_Title,
+
+        if ( hasEssentialChanges && MessageDialog.openQuestion( new Shell(), Messages.MessageDialog_Confirm_Title,
                                          Messages.MessageDialog_Confirm_Message ) )
         {
             try
@@ -51,7 +68,7 @@ public class SettingsXmlEditor
             }
             catch ( CoreException e )
             {
-                Activator.getLogger().log( e );
+                SettingsXmlEditorActivator.getLogger().log( e );
             }
         }
     }
@@ -59,8 +76,10 @@ public class SettingsXmlEditor
     @Override
     public void doSaveAs()
     {
+        checkForEssentialChanges();
+        
         super.doSaveAs();
-        if ( getEditorInput().getName().equals( SETTINGSXML_FILENAME ) )
+        if ( hasEssentialChanges && getEditorInput().getName().equals( SETTINGSXML_FILENAME ) )
         {
             if ( MessageDialog.openQuestion( new Shell(), Messages.MessageDialog_Confirm_Title,
                                              Messages.MessageDialog_Confirm_Message ) )
@@ -72,7 +91,7 @@ public class SettingsXmlEditor
                 }
                 catch ( CoreException e )
                 {
-                    Activator.getLogger().log( e );
+                    SettingsXmlEditorActivator.getLogger().log( e );
                 }
             }
         }
@@ -112,5 +131,36 @@ public class SettingsXmlEditor
             combinedRule = MultiRule.combine( rule, combinedRule );
         }
         return combinedRule;
+    }
+
+    private void checkForEssentialChanges()
+    {
+        try
+        {
+            IDocumentProvider dp = getDocumentProvider();
+            IDocument doc = dp.getDocument( getEditorInput() );
+            String bufferedCopy = doc.get();
+            File file = new File( ( (FileStoreEditorInput) getEditorInput() ).getURI() );
+
+            SettingsXpp3Reader settingsReader = new SettingsXpp3Reader();
+
+            Settings copy = settingsReader.read( new StringReader( bufferedCopy ) );
+            Settings orig = settingsReader.read( new FileReader( file ) );
+
+            SettingsXmlDiff diff = new SettingsXmlDiff( orig, copy );
+            hasEssentialChanges = diff.hasEssentialDiffs();
+        }
+        catch ( FileNotFoundException e )
+        {
+            SettingsXmlEditorActivator.getLogger().log( e );
+        }
+        catch ( IOException e )
+        {
+            SettingsXmlEditorActivator.getLogger().log( e );
+        }
+        catch ( XmlPullParserException e )
+        {
+            MessageDialog.openWarning( getEditorSite().getShell(), "Warning", "settings.xml is invalid. Please correct this in order to avoid further problems. \n\n" + e.getMessage());
+        }
     }
 }
