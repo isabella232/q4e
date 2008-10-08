@@ -8,7 +8,6 @@
 
 package org.devzuz.q.maven.pomeditor.pages.internal;
 
-import org.devzuz.q.maven.pom.Goal;
 import org.devzuz.q.maven.pom.PluginExecution;
 import org.devzuz.q.maven.pom.PomFactory;
 import org.devzuz.q.maven.pomeditor.dialogs.SimpleAddEditStringDialog;

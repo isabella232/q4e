@@ -15,7 +15,6 @@ import java.util.Map;
 
 import org.devzuz.q.maven.pom.Dependency;
 import org.devzuz.q.maven.pom.Exclusion;
-import org.devzuz.q.maven.pom.Goal;
 import org.devzuz.q.maven.pom.Model;
 import org.devzuz.q.maven.pom.Plugin;
 import org.devzuz.q.maven.pom.PluginExecution;

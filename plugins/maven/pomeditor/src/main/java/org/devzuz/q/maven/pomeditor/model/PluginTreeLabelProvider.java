@@ -8,7 +8,6 @@ package org.devzuz.q.maven.pomeditor.model;
 
 import org.devzuz.q.maven.pom.Dependency;
 import org.devzuz.q.maven.pom.Exclusion;
-import org.devzuz.q.maven.pom.Goal;
 import org.devzuz.q.maven.pom.Plugin;
 import org.devzuz.q.maven.pom.PluginExecution;
 import org.devzuz.q.maven.pom.provider.PomItemProviderAdapterFactory;
@@ -92,16 +91,16 @@ public class PluginTreeLabelProvider
         	    return exclusionString.toString();
         	}
         	
-        	if ( element instanceof org.devzuz.q.maven.pom.impl.GoalImpl )
-        	{
-        		Goal goal = ( Goal ) element;
-        		StringBuffer goalString = new StringBuffer();
-        		goalString.append( "Goal { " );
-        		goalString.append( goal.getGoal() );
-        		goalString.append( " }" );
-        		
-        		return goalString.toString();
-        	}
+//        	if ( element instanceof org.devzuz.q.maven.pom.impl.GoalImpl )
+//        	{
+//        		Goal goal = ( Goal ) element;
+//        		StringBuffer goalString = new StringBuffer();
+//        		goalString.append( "Goal { " );
+//        		goalString.append( goal.getGoal() );
+//        		goalString.append( " }" );
+//        		
+//        		return goalString.toString();
+//        	}
         	
         	return delegateProvider.getText( element );
         	
