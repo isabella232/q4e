@@ -233,8 +233,8 @@
         <version>3.2.0.v200803061811</version>
       </dependency>
       <dependency>
-        <groupId>org.aspectj</groupId>
-        <artifactId>runtime</artifactId>
+        <groupId>org.eclipse.orbit</groupId>
+        <artifactId>org.aspectj.runtime</artifactId>
         <version>1.5.4.200705211336</version>
       </dependency>
       <dependency>
