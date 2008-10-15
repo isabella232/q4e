@@ -36,7 +36,7 @@
   </prerequisites>
 
   <properties>
-    <maven.embedder.version>2.1.0-655675</maven.embedder.version>
+    <maven.embedder.version>2.1.0-659802</maven.embedder.version>
     <felix.bundle.plugin.version>1.4.1</felix.bundle.plugin.version>
     <pde.plugin.version>1.0-SNAPSHOT</pde.plugin.version>
     <libdir>${basedir}/lib</libdir>
@@ -58,6 +58,16 @@
   </distributionManagement>
 
   <repositories>
+    <repository>
+      <id>iam.eclipse.org</id>
+      <url>http://dev.eclipse.org/svnroot/technology/org.eclipse.iam/repository/releases</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
     <repository>
       <id>code.google.com</id>
       <url>http://q4e.googlecode.com/svn/repository/releases</url>
@@ -208,18 +218,18 @@
         <version>${maven.embedder.version}</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>cli</artifactId>
+        <groupId>org.eclipse.orbit</groupId>
+        <artifactId>org.apache.commons.cli</artifactId>
         <version>1.0.0.v20080604-1500</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>lang</artifactId>
+        <groupId>org.eclipse.orbit</groupId>
+        <artifactId>org.apache.commons.lang</artifactId>
         <version>2.1.0.v200803061811</version>
       </dependency>
       <dependency>
-        <groupId>org.apache.commons</groupId>
-        <artifactId>collections</artifactId>
+        <groupId>org.eclipse.orbit</groupId>
+        <artifactId>org.apache.commons.collections</artifactId>
         <version>3.2.0.v200803061811</version>
       </dependency>
       <dependency>
@@ -228,14 +238,14 @@
         <version>1.5.4.200705211336</version>
       </dependency>
       <dependency>
+        <groupId>org.eclipse.orbit</groupId>
+        <artifactId>com.jcraft.jsch</artifactId>
+        <version>0.1.31</version>
+      </dependency>
+      <dependency>
         <groupId>org.w3c</groupId>
         <artifactId>tidy</artifactId>
         <version>0.0.0.4aug2000r7-dev-200711190855</version>
-      </dependency>
-      <dependency>
-        <groupId>com.jcraft</groupId>
-        <artifactId>jsch</artifactId>
-        <version>0.1.31</version>
       </dependency>
       <dependency>
         <groupId>org</groupId>
