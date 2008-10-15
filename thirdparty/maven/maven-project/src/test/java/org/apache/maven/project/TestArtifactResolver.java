@@ -32,6 +32,7 @@ import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.artifact.resolver.DefaultArtifactResolver;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
+import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.artifact.versioning.VersionRange;
 import org.apache.maven.model.Dependency;
@@ -82,7 +83,7 @@ public class TestArtifactResolver
         }
 
         public ResolutionGroup retrieve( Artifact artifact, ArtifactRepository localRepository,
-                                         List remoteRepositories )
+                                         List<ArtifactRepository> remoteRepositories )
             throws ArtifactMetadataRetrievalException
         {
             Model model = null;
@@ -141,8 +142,18 @@ public class TestArtifactResolver
             return new ResolutionGroup( artifact, artifacts, artifactRepositories );
         }
 
-        public List retrieveAvailableVersions( Artifact artifact, ArtifactRepository localRepository,
-                                               List remoteRepositories )
+        public List<ArtifactVersion> retrieveAvailableVersions( Artifact artifact, ArtifactRepository localRepository,
+                                                                List<ArtifactRepository> remoteRepositories )
+            throws ArtifactMetadataRetrievalException
+        {
+            throw new UnsupportedOperationException( "Cannot get available versions in this test case" );
+        }
+
+        public List<ArtifactVersion> retrieveAvailableVersionsFromDeploymentRepository(
+                                                                                        Artifact artifact,
+                                                                                        ArtifactRepository localRepository,
+                                                                                        ArtifactRepository remoteRepository )
+            throws ArtifactMetadataRetrievalException
         {
             throw new UnsupportedOperationException( "Cannot get available versions in this test case" );
         }
@@ -178,6 +189,14 @@ public class TestArtifactResolver
 
             return projectArtifacts;
         }
+
+        public Artifact retrieveRelocatedArtifact( Artifact artifact,
+                                                   ArtifactRepository localRepository,
+                                                   List<ArtifactRepository> remoteRepositories )
+            throws ArtifactMetadataRetrievalException
+        {
+            return artifact;
+        }
     }
 
     public Source source()
@@ -188,12 +207,14 @@ public class TestArtifactResolver
     /**
      * @noinspection RefusedBequest
      */
+    @Override
     public void resolve( Artifact artifact, List remoteRepositories, ArtifactRepository localRepository )
         throws ArtifactResolutionException
     {
         artifact.setFile( new File( "dummy" ) );
     }
 
+    @Override
     public ArtifactResolutionResult resolveTransitively( Set artifacts, Artifact originatingArtifact,
                                                          ArtifactRepository localRepository, List remoteRepositories,
                                                          ArtifactMetadataSource source, ArtifactFilter filter )
@@ -203,6 +224,7 @@ public class TestArtifactResolver
                                           new Source( artifactFactory, repositoryFactory, container ), filter );
     }
 
+    @Override
     public ArtifactResolutionResult resolveTransitively( Set artifacts, Artifact originatingArtifact,
                                                          List remoteRepositories, ArtifactRepository localRepository,
                                                          ArtifactMetadataSource source )
@@ -215,7 +237,7 @@ public class TestArtifactResolver
     public void contextualize( Context context )
         throws ContextException
     {
-        this.container = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
+        container = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
     }
 
 }
