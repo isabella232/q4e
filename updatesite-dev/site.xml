@@ -129,9 +129,6 @@
    <feature url="features/org.apache.commons.collections.feature_3.2.0.v200803061811.jar" id="org.apache.commons.collections.feature" version="3.2.0.v200803061811">
       <category name="Enabling Features"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature_0.8.0.200810161219.jar" id="org.devzuz.q.feature" version="0.8.0.200810161219">
-      <category name="Community"/>
-   </feature>
    <category-def name="Community" label="Community"/>
    <category-def name="Enabling Features" label="Enabling Features"/>
    <category-def name="Optional" label="Optional">
