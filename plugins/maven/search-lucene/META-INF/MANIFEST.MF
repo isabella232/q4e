@@ -9,6 +9,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.devzuz.q.maven.search,
  org.devzuz.q.maven.core,
- org.apache.lucene;bundle-version="2.3.1"
+ org.apache.lucene;bundle-version="[2.3.1,2.4.0)"
 Eclipse-LazyStart: true
 Bundle-ClassPath: .
