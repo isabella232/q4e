@@ -2,7 +2,7 @@
 <feature
       id="org.devzuz.q.feature.pomxmleditor"
       label="Pom XML Editor Feature"
-      version="0.8.0.qualifier"
+      version="0.9.0.qualifier"
       provider-name="DevZuz, Inc">
 
    <description url="http://www.example.com/description">
@@ -40,7 +40,7 @@
          id="org.devzuz.q.pomxmleditor"
          download-size="0"
          install-size="0"
-         version="0.8.0.qualifier"
+         version="0.9.0.qualifier"
          unpack="false"/>
 
 </feature>
