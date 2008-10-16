@@ -22,7 +22,7 @@
    </url>
 
    <requires>
-      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.ide" version="3.3.0" match="compatible"/>
       <import feature="org.devzuz.q.feature" version="0.9.0" match="compatible"/>
       <import feature="org.eclipse.emf.edit.ui" version="2.3.1" match="compatible"/>
    </requires>
@@ -31,21 +31,21 @@
          id="org.devzuz.q.maven.pomeditor"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.9.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.pom.model"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.9.0.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.pom.model.edit"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="0.9.0.qualifier"
          unpack="false"/>
 
    <plugin
@@ -66,7 +66,7 @@
          id="org.eclipse.core.databinding"
          download-size="0"
          install-size="0"
-         version="0.0.0"
+         version="1.1.0.I20080527-2000"
          unpack="false"/>
 
 </feature>
