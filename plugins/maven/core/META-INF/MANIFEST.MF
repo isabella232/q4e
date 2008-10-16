@@ -7,12 +7,12 @@ Bundle-Activator: org.devzuz.q.maven.embedder.MavenCoreActivator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.eclipse.core.resources;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
- org.apache.maven.embedder;bundle-version="2.1.0.659801";visibility:=reexport,
+ org.apache.maven.embedder;bundle-version="2.1.0.659802";visibility:=reexport,
  org.eclipse.core.commands;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.apache.maven.shared.dependency.tree;bundle-version="[1.1.0,1.2.0)";visibility:=reexport,
  org.apache.commons.lang;bundle-version="[2.1.0,3.0.0)";visibility:=reexport,
- org.eclipse.core.expressions,
- org.dom4j;bundle-version="1.6.1"
+ org.eclipse.core.expressions;bundle-version="[3.3.0,4.0.0)",
+ org.dom4j;bundle-version="[1.6.1,1.7.0)"
 Eclipse-LazyStart: true
 Export-Package: org.devzuz.q.maven.embedder;uses:="junit.framework",
  org.devzuz.q.maven.embedder.exception,

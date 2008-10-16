@@ -81,7 +81,7 @@
          id="org.apache.maven.shared.dependency.tree"
          download-size="41"
          install-size="41"
-         version="1.1.0.v200803012119"
+         version="1.1.0.v200810141150"
          unpack="false"/>
 
    <plugin
@@ -123,7 +123,7 @@
          id="org.apache.lucene"
          download-size="0"
          install-size="0"
-         version="2.3.1.v200807161426"
+         version="2.3.2.v200810141136"
          unpack="false"/>
 
 </feature>

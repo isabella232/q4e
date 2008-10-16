@@ -2,7 +2,7 @@
 <feature
       id="org.apache.maven.feature"
       label="%featureName"
-      version="2.1.0.659801b"
+      version="2.1.0.659802"
       provider-name="%providerName">
 
    <description>
@@ -21,21 +21,21 @@
          id="org.apache.maven.embedder"
          download-size="2121"
          install-size="2121"
-         version="2.1.0.659801b"
+         version="2.1.0.659802"
          unpack="false"/>
 
    <plugin
          id="org.apache.commons.cli"
-         download-size="31"
-         install-size="31"
-         version="1.0.0.v200709131616"
+         download-size="36"
+         install-size="36"
+         version="1.0.0.v20080604-1500"
          unpack="false"/>
 
    <plugin
          id="org.apache.commons.lang"
-         download-size="206"
-         install-size="206"
-         version="2.1.0.v200709131643"
+         download-size="216"
+         install-size="216"
+         version="2.1.0.v200803061811"
          unpack="false"/>
 
    <plugin
