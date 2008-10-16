@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.devzuz.q.maven.embedder.exception.MarkerInfo;
+import org.devzuz.q.maven.embedder.exception.MavenExceptionHandler;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Status;
 
 public class MavenExecutionStatus extends Status
@@ -30,7 +32,9 @@ public class MavenExecutionStatus extends Status
         }
 
         List<MarkerInfo> markerInfos = new ArrayList<MarkerInfo>(exceptions.size());
-        MavenCoreActivator.getDefault().getMavenExceptionHandler().handle( executionResult.getMavenProject().getProject(), exceptions, markerInfos );
+        IProject project = executionResult.getMavenProject().getProject();
+        MavenExceptionHandler exceptionHandler = MavenCoreActivator.getDefault().getMavenExceptionHandler();
+        exceptionHandler.handle( project, exceptions, markerInfos );
 
         if ( markerInfos.size() == 1 )
         {
