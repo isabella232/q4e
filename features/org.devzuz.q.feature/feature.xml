@@ -116,14 +116,14 @@
          id="org.dom4j"
          download-size="0"
          install-size="0"
-         version="1.6.1.v200807161426"
+         version="1.6.1.v200810161614"
          unpack="false"/>
 
    <plugin
          id="org.apache.lucene"
          download-size="0"
          install-size="0"
-         version="2.3.2.v200810141136"
+         version="2.3.2.v200810161704"
          unpack="false"/>
 
 </feature>
