@@ -101,22 +101,34 @@ public class MavenMetadataSource
             return artifact;
         }
 
-        ProjectRelocation res = retrieveRelocatedProject( artifact, localRepository, remoteRepositories );
-        MavenProject project = res.project;
-
+        ProjectRelocation rel = retrieveRelocatedProject( artifact, localRepository, remoteRepositories );
+        
+        if ( rel == null )
+        {
+            return artifact;
+        }
+        
+        MavenProject project = rel.project;
         if ( project == null || getRelocationKey( artifact ).equals( getRelocationKey( project.getArtifact() ) ) )
         {
             return artifact;
         }
 
+        
+        // NOTE: Using artifact information here, since some POMs are deployed 
+        // to central with one version in the filename, but another in the <version> string!
+        // Case in point: org.apache.ws.commons:XmlSchema:1.1:pom.
+        //
+        // Since relocation triggers a reconfiguration of the artifact's information
+        // in retrieveRelocatedProject(..), this is safe to do.
         Artifact result = null;
         if ( artifact.getClassifier() != null )
         {
-            result = artifactFactory.createArtifactWithClassifier( project.getGroupId(), project.getArtifactId(), project.getVersion(), artifact.getType(), artifact.getClassifier() );
+            result = artifactFactory.createArtifactWithClassifier( artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), artifact.getType(), artifact.getClassifier() );
         }
         else
         {
-            result = artifactFactory.createArtifact( project.getGroupId(), project.getArtifactId(), project.getVersion(), artifact.getScope(), artifact.getType() );
+            result = artifactFactory.createArtifact( artifact.getGroupId(), artifact.getArtifactId(), artifact.getVersion(), artifact.getScope(), artifact.getType() );
         }
 
         result.setScope( artifact.getScope() );
@@ -175,14 +187,7 @@ public class MavenMetadataSource
                 }
                 catch ( InvalidProjectModelException e )
                 {
-                    if ( strictlyEnforceThePresenceOfAValidMavenPOM )
-                    {
-                        throw new ArtifactMetadataRetrievalException( "Invalid POM file for artifact: '" +
-                            artifact.getDependencyConflictId() + "' Reason: " + e.getMessage(), e, artifact );
-                    }
-
-                    getLogger().warn( "POM for \'" + pomArtifact +
-                        "\' is invalid. It will be ignored for artifact resolution. Reason: " + e.getMessage() );
+                    handleInvalidOrMissingMavenPOM( artifact, e );
 
                     if ( getLogger().isDebugEnabled() )
                     {
@@ -209,11 +214,9 @@ public class MavenMetadataSource
                 }
                 catch ( ProjectBuildingException e )
                 {
-                    if ( strictlyEnforceThePresenceOfAValidMavenPOM )
-                    {
-                        throw new ArtifactMetadataRetrievalException( "Unable to read the metadata file for artifact '" +
-                            artifact.getDependencyConflictId() + "': " + e.getMessage(), e, artifact );
-                    }
+                    handleInvalidOrMissingMavenPOM( artifact, e );
+                    
+                    project = null;
                 }
 
                 if ( project != null )
@@ -357,6 +360,25 @@ public class MavenMetadataSource
         return result;
     }
 
+    private void handleInvalidOrMissingMavenPOM( Artifact artifact, ProjectBuildingException e )
+        throws ArtifactMetadataRetrievalException
+    {
+        if ( strictlyEnforceThePresenceOfAValidMavenPOM )
+        {
+            throw new ArtifactMetadataRetrievalException( "Invalid POM file for artifact: '" +
+                artifact.getDependencyConflictId() + "': " + e.getMessage(), e, artifact );
+        }
+        else
+        {
+            getLogger().warn(
+                              "\n\tDEPRECATION: The POM for the artifact '"
+                                  + artifact.getDependencyConflictId()
+                                  + "' was invalid or not found on any repositories.\n"
+                                  + "\tThis may not be supported by future versions of Maven and should be corrected as soon as possible.\n"
+                                  + "\tError given: " + e.getMessage() + "\n" );
+        }
+    }
+
     private void loadProjectBuilder()
         throws ComponentLookupException
     {
@@ -427,15 +449,15 @@ public class MavenMetadataSource
      * @todo desperately needs refactoring. It's just here because it's implementation is maven-project specific
      * @return {@link Set} &lt; {@link Artifact} >
      */
-    public static Set createArtifacts( ArtifactFactory artifactFactory, List dependencies, String inheritedScope,
+    public static Set<Artifact> createArtifacts( ArtifactFactory artifactFactory, List<Dependency> dependencies, String inheritedScope,
                                        ArtifactFilter dependencyFilter, MavenProject project )
         throws InvalidDependencyVersionException
     {
-        Set projectArtifacts = new LinkedHashSet( dependencies.size() );
+        Set<Artifact> projectArtifacts = new LinkedHashSet<Artifact>( dependencies.size() );
 
-        for ( Iterator i = dependencies.iterator(); i.hasNext(); )
+        for ( Iterator<Dependency> i = dependencies.iterator(); i.hasNext(); )
         {
-            Dependency d = (Dependency) i.next();
+            Dependency d = i.next();
 
             String scope = d.getScope();
 
@@ -470,10 +492,10 @@ public class MavenMetadataSource
             {
                 if ( ( d.getExclusions() != null ) && !d.getExclusions().isEmpty() )
                 {
-                    List exclusions = new ArrayList();
-                    for ( Iterator j = d.getExclusions().iterator(); j.hasNext(); )
+                    List<String> exclusions = new ArrayList<String>();
+                    for ( Iterator<Exclusion> j = d.getExclusions().iterator(); j.hasNext(); )
                     {
-                        Exclusion e = (Exclusion) j.next();
+                        Exclusion e = j.next();
                         exclusions.add( e.getGroupId() + ":" + e.getArtifactId() );
                     }
 
