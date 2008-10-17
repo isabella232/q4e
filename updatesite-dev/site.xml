@@ -75,6 +75,9 @@
    <feature url="features/org.devzuz.q.feature.pomeditor_0.9.0.200810161544.jar" id="org.devzuz.q.feature.pomeditor" version="0.9.0.200810161544">
       <category name="Optional"/>
    </feature>
+   <feature url="features/org.apache.maven.feature_2.1.0.659801b.jar" id="org.apache.maven.feature" version="2.1.0.659801b">
+      <category name="Enabling Features"/>
+   </feature>
    <category-def name="Community" label="Community"/>
    <category-def name="Enabling Features" label="Enabling Features"/>
    <category-def name="Optional" label="Optional">
