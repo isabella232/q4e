@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Dom4j Plug-in
 Bundle-SymbolicName: org.dom4j
-Bundle-Version: 1.6.1.v200807161426
+Bundle-Version: 1.6.1.v200810161614
 Bundle-ClassPath: dom4j-1.6.1.jar
 Bundle-Vendor: q4e
 Export-Package: org.dom4j,
@@ -19,4 +19,4 @@ Export-Package: org.dom4j,
  org.dom4j.util,
  org.dom4j.xpath,
  org.dom4j.xpp
-Require-Bundle: org.apache.xerces
+Require-Bundle: org.apache.xerces;bundle-version="[2.8.0,3.0.0)";visibility:=reexport
