@@ -2,7 +2,7 @@
 <feature
       id="org.apache.maven.feature"
       label="%featureName"
-      version="2.1.0.659802"
+      version="3.0.0.705434"
       provider-name="%providerName">
 
    <description>
@@ -21,7 +21,7 @@
          id="org.apache.maven.embedder"
          download-size="2121"
          install-size="2121"
-         version="2.1.0.659802"
+         version="3.0.0.705434"
          unpack="false"/>
 
    <plugin
@@ -43,13 +43,6 @@
          download-size="95"
          install-size="95"
          version="1.5.4.200705211336"
-         unpack="false"/>
-
-   <plugin
-         id="org.w3c.tidy"
-         download-size="123"
-         install-size="123"
-         version="0.0.0.4aug2000r7-dev-200711190855"
          unpack="false"/>
 
    <plugin
