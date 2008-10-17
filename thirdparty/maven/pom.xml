@@ -15,15 +15,16 @@
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.apache.maven</groupId>
     <artifactId>maven-parent</artifactId>
-    <version>9-SNAPSHOT</version>
+    <version>10-SNAPSHOT</version>
     <relativePath>../pom/maven/pom.xml</relativePath>
-  </parent>
+  </parent>    
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.maven</groupId>
   <artifactId>maven</artifactId>
-  <version>2.1-SNAPSHOT</version>
+  <version>3.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>Apache Maven</name>
   <description>Maven is a project development management and
@@ -125,6 +126,18 @@
     <pluginManagement>
       <plugins>
         <plugin>
+          <groupId>org.codehaus.plexus</groupId>
+          <artifactId>plexus-component-metadata</artifactId>
+          <version>1.0-beta-1</version>
+          <executions>
+            <execution>
+              <goals>
+                <goal>generate-metadata</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>      
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>
           <version>2.1</version>
@@ -155,7 +168,7 @@
         <plugin>
           <groupId>org.codehaus.modello</groupId>
           <artifactId>modello-maven-plugin</artifactId>
-          <version>1.0-alpha-18</version>
+          <version>1.0-alpha-13</version>
           <executions>
             <execution>
               <id>site-docs</id>
@@ -229,26 +242,26 @@
     <module>maven-lifecycle</module>
     <module>maven-model</module>
     <module>maven-plugin-api</module>
-    <module>maven-profile</module>
     <module>maven-project</module>
     <module>maven-reporting-api</module>
     <module>maven-embedder</module>
-    <module>maven-workspace</module>
+    <module>maven-shared-model</module>
     <module>maven-toolchain</module>
+    <module>maven-compat</module>
   </modules>
   <properties>
-    <artifactVersion>3.0-alpha-1</artifactVersion>
+    <artifactVersion>3.0-alpha-2-SNAPSHOT</artifactVersion>
     <aspectjVersion>1.5.3</aspectjVersion>
     <classWorldsVersion>1.2-alpha-13</classWorldsVersion>
     <commonsCliVersion>1.0</commonsCliVersion>
     <doxiaVersion>1.0-alpha-9</doxiaVersion>
     <easyMockVersion>1.2_Java1.3</easyMockVersion>
     <junitVersion>3.8.1</junitVersion>
-    <plexusVersion>1.0-alpha-48</plexusVersion>
+    <plexusVersion>1.0-beta-1</plexusVersion>
     <plexusInteractivityVersion>1.0-alpha-6</plexusInteractivityVersion>
     <plexusInterpolationVersion>1.1</plexusInterpolationVersion>
     <plexusUtilsVersion>1.5.5</plexusUtilsVersion>
-    <wagonVersion>1.0-beta-3</wagonVersion>
+    <wagonVersion>1.0-beta-4</wagonVersion>
     <mavenSharedModel>1.0-SNAPSHOT</mavenSharedModel>
     <woodstoxVersion>3.2.6</woodstoxVersion>
   </properties>
@@ -266,11 +279,7 @@
     <!--end-->
     <dependencies>
       <!--  Maven Modules -->
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>maven-workspace</artifactId>
-        <version>${project.version}</version>
-      </dependency>
+      <!--start-->
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-lifecycle</artifactId>
@@ -316,6 +325,12 @@
         <artifactId>maven-core</artifactId>
         <version>${project.version}</version>
       </dependency>
+      <dependency>
+        <groupId>org.apache.maven</groupId>
+        <artifactId>maven-compat</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+      <!--end-->
       <!--  Plexus -->
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
@@ -327,6 +342,11 @@
         <artifactId>plexus-container-default</artifactId>
         <version>${plexusVersion}</version>
       </dependency>
+      <dependency>
+        <groupId>org.codehaus.plexus</groupId>
+        <artifactId>plexus-component-annotations</artifactId>
+        <version>${plexusVersion}</version>
+      </dependency>          
       <dependency>
         <groupId>org.codehaus.plexus</groupId>
         <artifactId>plexus-classworlds</artifactId>
@@ -491,7 +511,6 @@
     <profile>
       <id>run-its</id>
       <modules>
-        <module>maven-embedder-integration-tests</module>
         <module>maven-core-it-runner</module>
       </modules>
     </profile>

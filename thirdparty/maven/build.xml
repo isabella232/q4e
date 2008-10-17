@@ -81,8 +81,15 @@ TODO:
     <!-- Pull the dependencies for Modello -->
     <artifact:dependencies pathId="modello.pathid" filesetId="modello.fileset" verbose="${verbose}">
        <localRepository path="${maven.repo.local}"/>
-       <dependency groupId="org.codehaus.modello" artifactId="modello-maven-plugin" version="1.0-alpha-17"/>                                                                                                                                      
+       <dependency groupId="org.codehaus.modello" artifactId="modello-maven-plugin" version="1.0-alpha-20"/>
+    </artifact:dependencies>
+    
+    <!-- Pull the dependencies for the MetadataGenerator CLI -->
+    <artifact:dependencies pathId="pmdg.pathid" filesetId="pmdg.fileset" verbose="${verbose}">
+       <localRepository path="${maven.repo.local}"/>
+       <dependency groupId="org.codehaus.plexus" artifactId="plexus-component-metadata" version="1.0-beta-1"/>
     </artifact:dependencies>          
+    
   </target>
 
   <target name="generate-sources" depends="pull" description="generates Java sources from Modello mdo model files">
@@ -119,7 +126,7 @@ TODO:
     <modello file="maven-model/src/main/mdo/maven.mdo" version="4.0.0"/>
     <modello file="maven-lifecycle/src/main/mdo/maven-lifecycle.mdo"/>
     <modello file="maven-plugin-api/src/main/mdo/lifecycle.mdo"/>
-    <modello file="maven-profile/src/main/mdo/profiles.mdo"/>
+    <modello file="maven-project/src/main/mdo/profiles.mdo"/>
     <modello file="maven-core/src/main/mdo/settings.mdo"/>
     <modello file="maven-toolchain/src/main/mdo/toolchains.xml"/>
   </target>
@@ -155,6 +162,7 @@ TODO:
   <target name="maven-compile" depends="compile-boot" description="compiles Maven using the bootstrap Maven, skipping automated tests">
     <java fork="true" classname="org.apache.maven.cli.MavenCli" failonerror="true">
       <classpath refid="maven.classpath"/>
+      <arg value="-e"/>      
       <arg value="-B"/>
       <arg value="clean"/>
       <arg value="install"/>

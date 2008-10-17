@@ -19,6 +19,16 @@ package org.apache.maven.embedder;
  * under the License.
  */
 
+import java.io.File;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
+import java.net.URL;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+
 import org.apache.maven.Maven;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
@@ -35,12 +45,11 @@ import org.apache.maven.errors.CoreErrorReporter;
 import org.apache.maven.errors.CoreReporterManager;
 import org.apache.maven.execution.DefaultMavenExecutionRequest;
 import org.apache.maven.execution.DefaultMavenExecutionResult;
+import org.apache.maven.execution.DuplicateProjectException;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
 import org.apache.maven.execution.MavenSession;
 import org.apache.maven.execution.ReactorManager;
-import org.apache.maven.extension.BuildExtensionScanner;
-import org.apache.maven.extension.ExtensionScanningException;
 import org.apache.maven.lifecycle.LifecycleException;
 import org.apache.maven.lifecycle.LifecycleUtils;
 import org.apache.maven.lifecycle.plan.BuildPlan;
@@ -57,10 +66,8 @@ import org.apache.maven.plugin.MavenPluginDiscoverer;
 import org.apache.maven.plugin.PluginManager;
 import org.apache.maven.plugin.PluginManagerException;
 import org.apache.maven.plugin.PluginNotFoundException;
-import org.apache.maven.plugin.descriptor.PluginDescriptorBuilder;
 import org.apache.maven.plugin.version.PluginVersionNotFoundException;
 import org.apache.maven.plugin.version.PluginVersionResolutionException;
-import org.apache.maven.project.DuplicateProjectException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.MavenProjectBuildingResult;
@@ -74,7 +81,6 @@ import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
 import org.apache.maven.settings.validation.DefaultSettingsValidator;
 import org.apache.maven.settings.validation.SettingsValidationResult;
 import org.apache.maven.settings.validation.SettingsValidator;
-import org.apache.maven.workspace.MavenWorkspaceStore;
 import org.codehaus.plexus.ContainerConfiguration;
 import org.codehaus.plexus.DefaultContainerConfiguration;
 import org.codehaus.plexus.DefaultPlexusContainer;
@@ -95,16 +101,6 @@ import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.WriterFactory;
 import org.codehaus.plexus.util.dag.CycleDetectedException;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
-
-import java.io.File;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.Writer;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
 
 /**
  * Class intended to be used by clients who wish to embed Maven into their applications
@@ -141,23 +137,13 @@ public class MavenEmbedder
 
     private MavenProjectBuilder mavenProjectBuilder;
 
-    private BuildExtensionScanner extensionScanner;
-
     private MavenXpp3Reader modelReader;
 
     private MavenXpp3Writer modelWriter;
 
-    private SettingsXpp3Writer settingsWriter;
-
-    private PluginDescriptorBuilder pluginDescriptorBuilder;
-
-    private ArtifactRepositoryFactory artifactRepositoryFactory;
-
     private ArtifactFactory artifactFactory;
 
     private ArtifactResolver artifactResolver;
-
-    private ArtifactRepositoryLayout defaultArtifactRepositoryLayout;
 
     private ArtifactHandlerManager artifactHandlerManager;
 
@@ -166,9 +152,6 @@ public class MavenEmbedder
     private MavenExecutionRequestPopulator populator;
 
     private BuildPlanner buildPlanner;
-
-    // TODO: Remove this once we have better control over cache-cleaning.
-    private MavenWorkspaceStore workspaceStore;
 
     // ----------------------------------------------------------------------
     // Configuration
@@ -201,11 +184,6 @@ public class MavenEmbedder
     public MavenExecutionRequest getDefaultRequest()
     {
         return request;
-    }
-
-    protected MavenWorkspaceStore getWorkspaceStore()
-    {
-        return workspaceStore;
     }
 
     // ----------------------------------------------------------------------
@@ -359,7 +337,7 @@ public class MavenEmbedder
     // ----------------------------------------------------------------------
 
     public MavenProject readProject( File mavenProject )
-    throws ProjectBuildingException, ExtensionScanningException, MavenExecutionException
+    throws ProjectBuildingException, MavenExecutionException
     {
         CoreErrorReporter errorReporter = request.getErrorReporter();
         errorReporter.clearErrors();
@@ -370,12 +348,8 @@ public class MavenEmbedder
     }
 
     private MavenProject readProject( File mavenProject, MavenExecutionRequest request )
-        throws ProjectBuildingException, ExtensionScanningException, MissingModuleException
+        throws ProjectBuildingException, MissingModuleException
     {
-        getLogger().debug( "Scanning for extensions: " + mavenProject );
-
-        extensionScanner.scanForBuildExtensions( mavenProject, request, true );
-
         getLogger().debug( "Building MavenProject instance: " + mavenProject );
 
         return mavenProjectBuilder.build( mavenProject, request.getProjectBuildingConfiguration() );
@@ -415,22 +389,12 @@ public class MavenEmbedder
 
             readProject( request.getPom(), request );
 
-//            Map handlers = findArtifactTypeHandlers( project );
-
-            //TODO: ok this is crappy, now there are active collections so when new artifact handlers
-            // enter the system they should be available.
-
-//            artifactHandlerManager.addHandlers( handlers );
         }
         catch ( MavenEmbedderException e )
         {
             return result.addException( e );
         }
         catch ( ProjectBuildingException e )
-        {
-            return result.addException( e );
-        }
-        catch ( ExtensionScanningException e )
         {
             return result.addException( e );
         }
@@ -682,35 +646,21 @@ public class MavenEmbedder
 
             modelWriter = new MavenXpp3Writer();
 
-            settingsWriter = new SettingsXpp3Writer();
-
             maven = (Maven) container.lookup( Maven.ROLE );
 
-            pluginDescriptorBuilder = new PluginDescriptorBuilder();
-
             mavenProjectBuilder = (MavenProjectBuilder) container.lookup( MavenProjectBuilder.ROLE );
-
-            extensionScanner = (BuildExtensionScanner) container.lookup( BuildExtensionScanner.ROLE );
 
             // ----------------------------------------------------------------------
             // Artifact related components
             // ----------------------------------------------------------------------
 
-            artifactRepositoryFactory = (ArtifactRepositoryFactory) container.lookup( ArtifactRepositoryFactory.ROLE );
-
             artifactFactory = (ArtifactFactory) container.lookup( ArtifactFactory.ROLE );
 
             artifactResolver = (ArtifactResolver) container.lookup( ArtifactResolver.ROLE, "default" );
 
-            defaultArtifactRepositoryLayout =
-                (ArtifactRepositoryLayout) container.lookup( ArtifactRepositoryLayout.ROLE, "default" );
-
-            populator = (MavenExecutionRequestPopulator) container.lookup(
-                MavenExecutionRequestPopulator.ROLE );
+            populator = (MavenExecutionRequestPopulator) container.lookup( MavenExecutionRequestPopulator.ROLE );
 
             buildPlanner = (BuildPlanner) container.lookup( BuildPlanner.class );
-
-            workspaceStore = (MavenWorkspaceStore) container.lookup( MavenWorkspaceStore.class );
 
             artifactHandlerManager = (ArtifactHandlerManager) container.lookup( ArtifactHandlerManager.ROLE );
 

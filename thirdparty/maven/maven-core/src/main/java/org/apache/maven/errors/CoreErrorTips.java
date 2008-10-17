@@ -23,7 +23,6 @@ import org.apache.maven.plugin.version.PluginVersionResolutionException;
 import org.apache.maven.project.DuplicateArtifactAttachmentException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.artifact.InvalidDependencyVersionException;
-import org.apache.maven.project.interpolation.ModelInterpolationException;
 import org.apache.maven.realm.RealmManagementException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.configuration.PlexusConfiguration;
@@ -181,13 +180,6 @@ public final class CoreErrorTips
         return null;
     }
 
-    public static List getTipsForModelInterpolationError( Model model,
-                                                          File pomFile,
-                                                          ModelInterpolationException cause )
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     public static List getIncompatibleProjectMavenVersionPrereqTips( MavenProject project,
                                                                      ArtifactVersion mavenVersion )

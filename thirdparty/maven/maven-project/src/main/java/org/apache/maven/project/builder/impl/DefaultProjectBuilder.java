@@ -19,11 +19,14 @@ package org.apache.maven.project.builder.impl;
  * under the License.
  */
 
+import org.apache.maven.MavenTools;
 import org.apache.maven.artifact.Artifact;
+import org.apache.maven.artifact.InvalidRepositoryException;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.model.Model;
 import org.apache.maven.model.Parent;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.ProjectBuilderConfiguration;
 import org.apache.maven.project.builder.ArtifactModelContainerFactory;
 import org.apache.maven.project.builder.IdModelContainerFactory;
 import org.apache.maven.project.builder.PomArtifactResolver;
@@ -33,13 +36,13 @@ import org.apache.maven.project.builder.ProjectBuilder;
 import org.apache.maven.project.validation.ModelValidationResult;
 import org.apache.maven.project.validation.ModelValidator;
 import org.apache.maven.shared.model.DomainModel;
+import org.apache.maven.shared.model.ImportModel;
 import org.apache.maven.shared.model.InterpolatorProperty;
 import org.apache.maven.shared.model.ModelTransformerContext;
 import org.codehaus.plexus.logging.LogEnabled;
 import org.codehaus.plexus.logging.Logger;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -64,6 +67,8 @@ public final class DefaultProjectBuilder
 
     private ModelValidator validator;
 
+    private MavenTools mavenTools;
+
     /**
      * Default constructor
      */
@@ -86,11 +91,13 @@ public final class DefaultProjectBuilder
     }
 
     /**
-     * @see ProjectBuilder#buildFromLocalPath(java.io.InputStream, java.util.List, java.util.Collection, org.apache.maven.project.builder.PomArtifactResolver, java.io.File)
+     * @see ProjectBuilder#buildFromLocalPath(java.io.InputStream, java.util.List, java.util.Collection, java.util.Collection, org.apache.maven.project.builder.PomArtifactResolver, java.io.File, org.apache.maven.project.ProjectBuilderConfiguration)
      */
     public MavenProject buildFromLocalPath( InputStream pom, List<Model> inheritedModels,
+                                            Collection<ImportModel> importModels,
                                             Collection<InterpolatorProperty> interpolatorProperties,
-                                            PomArtifactResolver resolver, File projectDirectory )
+                                            PomArtifactResolver resolver, File projectDirectory,
+                                            ProjectBuilderConfiguration projectBuilderConfiguration )
         throws IOException
     {
         if ( pom == null )
@@ -129,19 +136,32 @@ public final class DefaultProjectBuilder
         }
 
         PomClassicDomainModel domainModel = new PomClassicDomainModel( pom );
+        domainModel.setProjectDirectory( projectDirectory );
+
         List<DomainModel> domainModels = new ArrayList<DomainModel>();
         domainModels.add( domainModel );
 
+        File parentFile = null;
         if ( domainModel.getModel().getParent() != null )
         {
+            List<DomainModel> mavenParents;
             if ( isParentLocal( domainModel.getModel().getParent(), projectDirectory ) )
             {
-                domainModels.addAll( getDomainModelParentsFromLocalPath( domainModel, resolver, projectDirectory ) );
+                mavenParents = getDomainModelParentsFromLocalPath( domainModel, resolver, projectDirectory );
             }
             else
             {
-                domainModels.addAll( getDomainModelParentsFromRepository( domainModel, resolver ) );
+                mavenParents = getDomainModelParentsFromRepository( domainModel, resolver );
             }
+
+            if ( mavenParents.size() > 0 )
+            {
+                PomClassicDomainModel dm = (PomClassicDomainModel) mavenParents.get( 0 );
+                parentFile = dm.getFile();
+                domainModel.setParentFile( parentFile );
+            }
+
+            domainModels.addAll( mavenParents );
         }
 
         for ( Model model : inheritedModels )
@@ -149,16 +169,36 @@ public final class DefaultProjectBuilder
             domainModels.add( new PomClassicDomainModel( model ) );
         }
 
-        PomClassicTransformer transformer = new PomClassicTransformer();
+        PomClassicTransformer transformer = new PomClassicTransformer( null );
         ModelTransformerContext ctx = new ModelTransformerContext(
             Arrays.asList( new ArtifactModelContainerFactory(), new IdModelContainerFactory() ) );
 
-        PomClassicDomainModel transformedDomainModel =
-            ( (PomClassicDomainModel) ctx.transform( domainModels, transformer, transformer, null, properties ) );
-        Model model = transformedDomainModel.getModel();
-        return new MavenProject( model );
+        PomClassicDomainModel transformedDomainModel = ( (PomClassicDomainModel) ctx.transform( domainModels,
+                                                                                                transformer,
+                                                                                                transformer,
+                                                                                                importModels,
+                                                                                                properties ) );
+        try
+        {
+            MavenProject mavenProject = new MavenProject( transformedDomainModel.getModel(), artifactFactory,
+                                                          mavenTools, null,
+                                                          projectBuilderConfiguration );
+            mavenProject.setParentFile( parentFile );
+            return mavenProject;
+        }
+        catch ( InvalidRepositoryException e )
+        {
+            throw new IOException( e.getMessage() );
+        }
     }
 
+    /**
+     * Returns true if the relative path of the specified parent references a pom, otherwise returns false.
+     *
+     * @param parent           the parent model info
+     * @param projectDirectory the project directory of the child pom
+     * @return true if the relative path of the specified parent references a pom, otherwise returns fals
+     */
     private boolean isParentLocal( Parent parent, File projectDirectory )
     {
         try
@@ -199,17 +239,13 @@ public final class DefaultProjectBuilder
             artifactFactory.createParentArtifact( parent.getGroupId(), parent.getArtifactId(), parent.getVersion() );
         artifactResolver.resolve( artifactParent );
 
-        PomClassicDomainModel parentDomainModel =
-            new PomClassicDomainModel( new FileInputStream( artifactParent.getFile() ) );
+        PomClassicDomainModel parentDomainModel = new PomClassicDomainModel( artifactParent.getFile() );
+
         if ( !parentDomainModel.matchesParent( domainModel.getModel().getParent() ) )
         {
-            logger.warn( "Parent pom ids do not match: File = " + artifactParent.getFile().getAbsolutePath() );
+            logger.debug( "Parent pom ids do not match: Parent File = " + artifactParent.getFile().getAbsolutePath() +
+                ": Child ID = " + domainModel.getModel().getId() );
             return domainModels;
-        }
-        else
-        {
-            //  logger.info("Adding pom to hierarchy: Group Id = " + parent.getGroupId() + ", Artifact Id ="
-            //      + parent.getArtifactId()  + ", Version = " + parent.getVersion() + ", File" + artifactParent.getFile());
         }
 
         domainModels.add( parentDomainModel );
@@ -217,7 +253,15 @@ public final class DefaultProjectBuilder
         return domainModels;
     }
 
-
+    /**
+     * Returns list of domain model parents of the specified domain model. The parent domain models are part
+     *
+     * @param domainModel
+     * @param artifactResolver
+     * @param projectDirectory
+     * @return
+     * @throws IOException
+     */
     private List<DomainModel> getDomainModelParentsFromLocalPath( PomClassicDomainModel domainModel,
                                                                   PomArtifactResolver artifactResolver,
                                                                   File projectDirectory )
@@ -248,13 +292,26 @@ public final class DefaultProjectBuilder
 
         if ( !parentFile.exists() )
         {
-            throw new IOException( "File does not exist: File =" + parentFile.getAbsolutePath() );
+            throw new IOException( "File does not exist: File = " + parentFile.getAbsolutePath() );
         }
 
-        PomClassicDomainModel parentDomainModel = new PomClassicDomainModel( new FileInputStream( parentFile ) );
+        PomClassicDomainModel parentDomainModel = new PomClassicDomainModel( parentFile );
+        parentDomainModel.setProjectDirectory( parentFile.getParentFile() );
+
         if ( !parentDomainModel.matchesParent( domainModel.getModel().getParent() ) )
         {
-            logger.warn( "Parent pom ids do not match: File = " + parentFile.getAbsolutePath() );
+            logger.debug( "Parent pom ids do not match: Parent File = " + parentFile.getAbsolutePath() + ", Parent ID = "
+                    + parentDomainModel.getId() + ", Child ID = " + domainModel.getId() + ", Expected Parent ID = "
+                    + domainModel.getModel().getParent().getId() );
+            List<DomainModel> parentDomainModels = getDomainModelParentsFromRepository( domainModel, artifactResolver );
+            if(parentDomainModels.size() == 0)
+            {
+                throw new IOException("Unable to find parent pom on local path or repo: "
+                        + domainModel.getModel().getParent().getId());
+            }
+            //logger.info("Attempting to lookup from the repository: Found parents: " + parentDomainModels.size());
+            domainModels.addAll( parentDomainModels );
+            return domainModels;
         }
 
         domainModels.add( parentDomainModel );
@@ -290,6 +347,4 @@ public final class DefaultProjectBuilder
             throw new IOException( "Failed to validate: " + validationResult.toString() );
         }
     }
-
-
 }
