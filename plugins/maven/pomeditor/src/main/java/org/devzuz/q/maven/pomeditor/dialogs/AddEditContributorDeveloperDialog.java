@@ -23,6 +23,8 @@ import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -79,13 +81,30 @@ public class AddEditContributorDeveloperDialog
     {
         container.setLayout( new FillLayout( SWT.VERTICAL )  );
         
-        ModifyListener contributorListener = new ModifyListener()
+        ModifyListener contributorModifyListener = new ModifyListener()
         {
             public void modifyText( ModifyEvent e )
             {
                 validate();
             }
-        };  
+        }; 
+        
+        SelectionListener contributorSelectListener = new SelectionListener()
+        {
+
+			public void widgetDefaultSelected( SelectionEvent e ) 
+			{
+				widgetSelected( e );
+				
+			}
+
+			public void widgetSelected( SelectionEvent e ) 
+			{
+				validate();
+				
+			}
+        	
+        };
     
         contributorComponent = new ContributorDeveloperDetailComponent( container, SWT.None, type );
         
@@ -94,7 +113,8 @@ public class AddEditContributorDeveloperDialog
         group.setLayout( new FillLayout() );
         propertiesTableComponent = new PropertiesTableComponent( group, SWT.None );
         syncData();
-        contributorComponent.addModifyListener( contributorListener );
+        contributorComponent.addModifyListener( contributorModifyListener );
+        contributorComponent.addSelectionListener( contributorSelectListener );
         
         return container;
     }
@@ -197,6 +217,7 @@ public class AddEditContributorDeveloperDialog
         contributorComponent.setOrganizationUrl( blankIfNull( organizationUrl ) );
         contributorComponent.setRoles( blankIfNull( roles ) );
         contributorComponent.setTimezone( blankIfNull( timezone ) );
+        
         
         if( properties == null )
             properties = new ArrayList<PropertyElement>();

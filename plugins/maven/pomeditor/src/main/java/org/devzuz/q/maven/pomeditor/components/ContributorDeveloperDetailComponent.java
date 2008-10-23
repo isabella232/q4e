@@ -11,8 +11,10 @@ package org.devzuz.q.maven.pomeditor.components;
 import org.devzuz.q.maven.pomeditor.Messages;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
@@ -20,6 +22,98 @@ import org.eclipse.swt.widgets.Text;
 public class ContributorDeveloperDetailComponent
     extends Composite
 {    
+	static private String[] timezoneList = { 
+		"(GMT-12:00) International Date Line West",
+		"(GMT-11:00) Midway Island, Samoa",
+		"(GMT-10:00) Hawaii",
+		"(GMT-09:00) Alaska",
+		"(GMT-08:00) Pacific Time(US & Canada)",
+		"(GMT-08:00) Tijuana, Baja California",
+		"(GMT-07:00) Arizona",
+		"(GMT-07:00) Chihuahua, La Paz, Mazatlan - New",
+		"(GMT-07:00) Chihuahua, La Paz, Mazatlan - Old",
+		"(GMT-07:00) Mountain Time(US & Canada)",
+		"(GMT-06:00) Central America",
+		"(GMT-06:00) Guadalajara, Mexico City, Monterrey - New",
+		"(GMT-06:00) Guadalajara, Mexico City, Monterrey - Old",
+		"(GMT-06:00) Saskatchewan",
+		"(GMT-05:00) Bogota, Lima, Quito, Rio Branco",
+		"(GMT-05:00) Eastern Time(US & Canada)",
+		"(GMT-05:00) Indiana (East)",
+		"(GMT-04:30) Caracas",
+		"(GMT-04:00) Atlantic Time(Canada)",
+		"(GMT-04:00) La Paz",
+		"(GMT-04:00) Manaus",
+		"(GMT-04:00) Santiago",
+		"(GMT-03:30) Newfoundland",
+		"(GMT-03:00) Brasilia",
+		"(GMT-03:00) Buenos Aires",
+		"(GMT-03:00) Georgetown",
+		"(GMT-03:00) Greenland",
+		"(GMT-03:00) Montevideo",
+		"(GMT-02:00) Mid-Atlantic",
+		"(GMT-01:00) Azores",
+		"(GMT-01:00) Cape Verde Island",
+		"(GMT) Casablanca",
+		"(GMT) Greenwich Mean Time: Dublin, Edinburgh, Lisbon, London",
+		"(GMT) Monrovia, Reykjavik",
+		"(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna",
+		"(GMT+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague",
+		"(GMT+01:00) Brussels, Copenhagen, Madrid, Paris",
+		"(GMT+01:00) Sarajevo, Skopje, Warsaw, Zagreb",
+		"(GMT+01:00) West Central Africa",
+		"(GMT+02:00) Amman",
+		"(GMT+02:00) Athens, Bucharest, Istanbul",
+		"(GMT+02:00) Beirut",
+		"(GMT+02:00) Cairo",
+		"(GMT+02:00) Harare, Pretoria",
+		"(GMT+02:00) Helsinki, Kyiv, Riga, Sofia, Tallinn, Vilnius",
+		"(GMT+02:00) Jerusalem",
+		"(GMT+02:00) Minsk",
+		"(GMT+02:00) Windhoek",
+		"(GMT+03:00) Baghdad",
+		"(GMT+03:00) Kuwait, Riyadh",
+		"(GMT+03:00) Moscow, St. Petersburg, Volgograd",
+		"(GMT+03:00) Nairobi",
+		"(GMT+03:00) Tibilisi",
+		"(GMT+03:30) Tehran",
+		"(GMT+04:00) Abu Dhabi, Muscat",
+		"(GMT+04:00) Baku",
+		"(GMT+04:00) Caucasus Standard Time",
+		"(GMT+04:00) Yerevan",
+		"(GMT+04:30) Kabul",
+		"(GMT+05:00) Ekaterinburg",
+		"(GMT+05:00) Islamabad, Karachi",
+		"(GMT+05:00) Tashkent",
+		"(GMT+05:30) Chennai, Kolkata, Mumbai, New Delhi",
+		"(GMT+05:30) Sri Jawardenepura",
+		"(GMT+05:45) Kathmandu",
+		"(GMT+06:00) Almaty, Novosibirsk,",
+		"(GMT+06:00) Astana, Dhaka",
+		"(GMT+06:30) Yangon(Rangoon)",
+		"(GMT+07:00) Bangkok, Hanoi, Jakarta",
+		"(GMT+07:00) Krasnoyarsk",
+		"(GMT+08:00) Beijing, Chongqing, Hong Kong, Urumqi",
+		"(GMT+08:00) Irkutsk, Ulaan Bataar",
+		"(GMT+08:00) Kuala Lumpur, Singapore",
+		"(GMT+08:00) Perth",
+		"(GMT+08:00) Taipei",
+		"(GMT+09:00) Osaka, Sapporo, Tokyo",
+		"(GMT+09:00) Seoul",
+		"(GMT+09:00) Yakutsk",
+		"(GMT+09:30) Adelaide",
+		"(GMT+09:30) Darwin",
+		"(GMT+10:00) Brisbane",
+		"(GMT+10:00) Canberra, Melbourne, Sydney",
+		"(GMT+10:00) Guam, Port Moresby",
+		"(GMT+10:00) Hobart",
+		"(GMT+10:00) Vladivostok",
+		"(GMT+11:00) Magadan, Solomon Is., New Caledonia",
+		"(GMT+12:00) Auckland, Wellington",
+		"(GMT+12:00) Fiji, Kamchatka, Marshall Is.",
+		"(GMT+13:00) Nuku'alofa"
+		};
+	
     private Text nameText;
     
     private Text emailText;
@@ -31,12 +125,14 @@ public class ContributorDeveloperDetailComponent
     private Text organizationUrlText;
     
     private Text rolesText;
-    
-    private Text timezoneText;
 
     private Text identityText;
 
     private String type;
+
+	private Combo timezoneCombo;
+
+	protected int selectedIndex;
 
     public ContributorDeveloperDetailComponent(Composite parent, int style, String type )
     {   
@@ -102,8 +198,14 @@ public class ContributorDeveloperDetailComponent
         timezoneLabel.setLayoutData( createLabelLayoutData() );
         timezoneLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Timezone );
         
-        timezoneText = new Text( this, SWT.BORDER | SWT.SINGLE );
-        timezoneText.setLayoutData( createControlLayoutData() );
+        timezoneCombo = new Combo( this, SWT.DROP_DOWN | SWT.READ_ONLY );
+        timezoneCombo.setLayoutData( createControlLayoutData() );
+        
+        for ( int index = 0; index < timezoneList.length; index++ )
+        {
+        	timezoneCombo.add( timezoneList[index] );
+        }
+        
     }
 
     private GridData createControlLayoutData()
@@ -132,9 +234,13 @@ public class ContributorDeveloperDetailComponent
         urlText.addModifyListener( listener );
         organizationText.addModifyListener( listener );
         organizationUrlText.addModifyListener( listener );
-        rolesText.addModifyListener( listener );
-        timezoneText.addModifyListener( listener );
-    } 
+        rolesText.addModifyListener( listener );     
+    }
+    
+    public void addSelectionListener( SelectionListener listener )
+    {
+    	timezoneCombo.addSelectionListener( listener );
+    }
 
     public String getId()
     {
@@ -208,11 +314,11 @@ public class ContributorDeveloperDetailComponent
 
     public String getTimezone()
     {
-        return timezoneText.getText().trim();
+    	return timezoneCombo.getText().trim();
     }
 
     public void setTimezone( String timezone )
     {
-        timezoneText.setText( timezone );
+    	timezoneCombo.setText( timezone );
     }
 }
