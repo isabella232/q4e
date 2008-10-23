@@ -69,14 +69,14 @@ public class AddEditDependencyExclusionAction
         {
             Exclusion exclusion = ( Exclusion ) obj;
             
-//            if ( addDialog.openWithExclusion( exclusion ) == Window.OK )
-//            {
-//                exclusion.setGroupId( addDialog.getGroupId() );
-//                exclusion.setArtifactId( addDialog.getArtifactId() );
-//                
-//                super.doAction( obj );
-//                
-//            }
+            if ( addDialog.openWithExclusion( exclusion ) == Window.OK )
+            {
+                exclusion.setGroupId( addDialog.getGroupId() );
+                exclusion.setArtifactId( addDialog.getArtifactId() );
+                
+                super.doAction( obj );
+                
+            }
         }
     }
 }

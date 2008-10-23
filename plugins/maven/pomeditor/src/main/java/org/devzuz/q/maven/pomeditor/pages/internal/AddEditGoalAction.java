@@ -12,6 +12,7 @@ import org.devzuz.q.maven.pom.PluginExecution;
 import org.devzuz.q.maven.pom.PomFactory;
 import org.devzuz.q.maven.pomeditor.dialogs.SimpleAddEditStringDialog;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.AttributeValueWrapperItemProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.window.Window;
 
@@ -55,17 +56,22 @@ public class AddEditGoalAction
         }
         else
         {
-            String str = ( String ) obj;
-            if( addDialog.openWithItem( str ) == Window.OK )
+        	String test = (( AttributeValueWrapperItemProvider ) obj).getText( obj );
+        	
+        	PluginExecution pe = ((PluginExecution)(( AttributeValueWrapperItemProvider ) obj).getParent( obj ));
+        	
+            if( addDialog.openWithItem( test ) == Window.OK )
             {
                 String newGoal = addDialog.getTextString();
-                //TODO
+                
+                pe.getGoals().remove( (( AttributeValueWrapperItemProvider ) obj).getText( obj ) );
+                
+                pe.getGoals().add( newGoal );                
                 
                 super.doAction( obj );
                 
             }
-        }
-        
+        }       
         
     }
 

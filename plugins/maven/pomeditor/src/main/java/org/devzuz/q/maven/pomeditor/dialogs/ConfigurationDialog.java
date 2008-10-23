@@ -136,7 +136,7 @@ public class ConfigurationDialog
             
         }
 
-        public List<ITreeObjectAction> getObjectActions( Object element )
+        public List<ITreeObjectAction> getObjectActions( Object element, String name )
         {
             if ( element instanceof Xpp3Dom )
             {

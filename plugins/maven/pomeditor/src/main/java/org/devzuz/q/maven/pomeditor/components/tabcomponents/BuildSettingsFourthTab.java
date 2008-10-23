@@ -205,8 +205,7 @@ public class BuildSettingsFourthTab
                                
             objectActionMap.put( "Goals", goalsActionMap );
             
-            List<ITreeObjectAction> pluginActionMap = new ArrayList<ITreeObjectAction>();
-            //pluginActionMap.add( new AddEditPluginAction( listener , Mode.EDIT, domain, model, new EReference[] { PomPackage.Literals.MODEL__BUILD, PomPackage.Literals.BUILD__PLUGINS } ) );
+            List<ITreeObjectAction> pluginActionMap = new ArrayList<ITreeObjectAction>();            
             pluginActionMap.add( new AddEditPluginAction( listener , Mode.EDIT, domain, model, path ) );
             pluginActionMap.add( new AddEditExecutionAction( listener, Mode.ADD, domain ) );
             pluginActionMap.add( new AddEditDependencyAction( listener , Mode.ADD, domain ) );
@@ -236,6 +235,7 @@ public class BuildSettingsFourthTab
             
             List<ITreeObjectAction> goalActionMap = new ArrayList<ITreeObjectAction>();
             goalActionMap.add( new AddEditGoalAction( listener , Mode.EDIT , contentProvider, domain ) );
+            goalActionMap.add( new DeleteItemAction( listener, "Delete this goal", "goal", contentProvider, domain ) );
             
             objectActionMap.put( "Goal", goalActionMap );
             
@@ -245,7 +245,7 @@ public class BuildSettingsFourthTab
             objectActionMap.put( "default", defaultActionMap );
         }
 
-        public List<ITreeObjectAction> getObjectActions( Object element )
+        public List<ITreeObjectAction> getObjectActions( Object element, String name )
         {        	
             if ( element instanceof List )
             {
@@ -299,7 +299,7 @@ public class BuildSettingsFourthTab
             {
                 return objectActionMap.get( "Exclusion" );                
             }
-            else if( element instanceof String )
+            else if( name.startsWith( "Goal {" ) )
             {
                 return objectActionMap.get( "Goal" );
             }

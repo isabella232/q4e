@@ -91,18 +91,13 @@ public class PluginTreeLabelProvider
         	    return exclusionString.toString();
         	}
         	
-//        	if ( element instanceof org.devzuz.q.maven.pom.impl.GoalImpl )
-//        	{
-//        		Goal goal = ( Goal ) element;
-//        		StringBuffer goalString = new StringBuffer();
-//        		goalString.append( "Goal { " );
-//        		goalString.append( goal.getGoal() );
-//        		goalString.append( " }" );
-//        		
-//        		return goalString.toString();
-//        	}
+        	StringBuffer goalString = new StringBuffer();
         	
-        	return delegateProvider.getText( element );
+        	goalString.append( "Goal { " );
+        	goalString.append( delegateProvider.getText( element ) );
+        	goalString.append( " }" );
+        	
+        	return goalString.toString();
         	
         }
     }

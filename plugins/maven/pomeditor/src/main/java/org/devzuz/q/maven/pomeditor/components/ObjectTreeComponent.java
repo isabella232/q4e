@@ -113,14 +113,15 @@ public class ObjectTreeComponent extends Composite
     {
         public void selectionChanged( SelectionChangedEvent event )
         {
-            IStructuredSelection selection = (IStructuredSelection) event.getSelection();           
+            IStructuredSelection selection = (IStructuredSelection) event.getSelection();            
             treeViewer.getControl().setMenu( getMenu( selection.getFirstElement() ) );
         }
 
         private Menu getMenu( final Object firstElement )
         {
-        	System.out.println("moogle trace = " + firstElement.getClass().toString() );
-            List< ITreeObjectAction > actions = objectActionMap.getObjectActions( firstElement );            
+        	String elementName = ((PluginTreeLabelProvider)treeViewer.getLabelProvider()).getText( firstElement);
+        	        	
+            List< ITreeObjectAction > actions = objectActionMap.getObjectActions( firstElement, elementName );            
             if ( actions != null )
             {
                 Menu rootMenu = new Menu( ObjectTreeComponent.this.getParent() );

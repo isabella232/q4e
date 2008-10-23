@@ -8,12 +8,14 @@
 
 package org.devzuz.q.maven.pomeditor.pages.internal;
 
-import java.util.List;
-
-import org.apache.maven.model.Plugin;
-import org.apache.maven.model.PluginExecution;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
+import org.devzuz.q.maven.pom.Build;
+import org.devzuz.q.maven.pom.Dependency;
+import org.devzuz.q.maven.pom.Plugin;
+import org.devzuz.q.maven.pom.PluginExecution;
+import org.devzuz.q.maven.pom.PluginManagement;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.provider.AttributeValueWrapperItemProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -68,11 +70,11 @@ public class DeleteItemAction extends AbstractTreeObjectAction
                     Object obj = contentProvider.getParent( object );
                     if( obj instanceof Plugin )
                     {
-                        ((Plugin) obj).setConfiguration( null );
+                        //((Plugin) obj).setConfiguration( null );
                     }
                     else if( obj instanceof PluginExecution )
                     {
-                        ((PluginExecution) obj).setConfiguration( null );
+                        //((PluginExecution) obj).setConfiguration( null );
                     }
                    
                     object = null;
@@ -90,13 +92,45 @@ public class DeleteItemAction extends AbstractTreeObjectAction
                 }
             }
             else
-            {
-                Object obj = contentProvider.getParent( object );
-                if ( obj instanceof List )
+            {         
+            	if ( object instanceof AttributeValueWrapperItemProvider )
                 {
-                    List<Object> parent = (List<Object>) obj;
-                    parent.remove( object );
+                	PluginExecution pe = ((PluginExecution)(( AttributeValueWrapperItemProvider ) object).getParent( object ));
+                	
+                	pe.getGoals().remove( (( AttributeValueWrapperItemProvider ) object).getText( object ) );
                 }
+            	else
+            	{
+            		Object parentObject = contentProvider.getParent( object );            		
+            		
+            		if ( parentObject instanceof Build )
+            		{
+            			( ( Build )parentObject ).getPlugins().remove( object );
+            		}
+
+            		if ( parentObject instanceof PluginManagement )
+            		{
+            			( (  PluginManagement ) parentObject ).getPlugins().remove( object );
+            		}
+
+            		if ( parentObject instanceof Plugin )
+            		{
+            			if ( object instanceof PluginExecution )
+            			{
+            				( ( Plugin ) parentObject ).getExecutions().remove( object );
+            			}
+            			
+            			if ( object instanceof Dependency )
+            			{
+            				( ( Plugin ) parentObject ).getDependencies().remove( object );
+            			}
+            		}
+
+            		if ( parentObject instanceof Dependency )
+            		{
+            			( ( Dependency ) parentObject ).getExclusions().remove( object );
+            		}
+            	}
             }
             
             super.doAction( object );

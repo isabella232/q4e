@@ -16,5 +16,5 @@ public interface IObjectActionMap
      * @param object the object to get actions for
      * @return The list of ITreeObjectAction for this object's class 
      */
-    public List< ITreeObjectAction > getObjectActions( Object object );
+    public List< ITreeObjectAction > getObjectActions( Object object, String name );
 }
