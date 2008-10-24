@@ -198,7 +198,7 @@ public class ContributorDeveloperDetailComponent
         timezoneLabel.setLayoutData( createLabelLayoutData() );
         timezoneLabel.setText( Messages.MavenPomEditor_MavenPomEditor_Timezone );
         
-        timezoneCombo = new Combo( this, SWT.DROP_DOWN | SWT.READ_ONLY );
+        timezoneCombo = new Combo( this, SWT.DROP_DOWN );
         timezoneCombo.setLayoutData( createControlLayoutData() );
         
         for ( int index = 0; index < timezoneList.length; index++ )
@@ -234,7 +234,8 @@ public class ContributorDeveloperDetailComponent
         urlText.addModifyListener( listener );
         organizationText.addModifyListener( listener );
         organizationUrlText.addModifyListener( listener );
-        rolesText.addModifyListener( listener );     
+        rolesText.addModifyListener( listener );
+        timezoneCombo.addModifyListener( listener );
     }
     
     public void addSelectionListener( SelectionListener listener )
