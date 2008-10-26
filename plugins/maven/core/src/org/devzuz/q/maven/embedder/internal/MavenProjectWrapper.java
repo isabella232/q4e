@@ -465,12 +465,13 @@ public class MavenProjectWrapper extends MavenProject implements Cloneable
         return delegate.getFilters();
     }
 
-    @Override
-    public Xpp3Dom getGoalConfiguration( String pluginGroupId, String pluginArtifactId, String executionId,
-                                         String goalId )
-    {
-        return delegate.getGoalConfiguration( pluginGroupId, pluginArtifactId, executionId, goalId );
-    }
+// Missing from the new embedder
+//    @Override
+//    public Xpp3Dom getGoalConfiguration( String pluginGroupId, String pluginArtifactId, String executionId,
+//                                         String goalId )
+//    {
+//        return delegate.getGoalConfiguration( pluginGroupId, pluginArtifactId, executionId, goalId );
+//    }
 
     @Override
     public String getGroupId()
@@ -982,12 +983,25 @@ public class MavenProjectWrapper extends MavenProject implements Cloneable
         delegate.setPluginArtifactRepositories( pluginArtifactRepositories );
     }
 
+// Removed from latest embedder
+//    @Override
+//    public void setPluginArtifacts( Set pluginArtifacts )
+//    {
+//        delegate.setPluginArtifacts( pluginArtifacts );
+//    }
+    
     @Override
-    public void setPluginArtifacts( Set pluginArtifacts )
+    public File getParentFile()
     {
-        delegate.setPluginArtifacts( pluginArtifacts );
+        return delegate.getParentFile();
     }
-
+    
+    @Override
+    public void setParentFile( File parentFile )
+    {
+        delegate.setParentFile( parentFile );
+    }
+    
     @Override
     public void setReleaseArtifactRepository( ArtifactRepository releaseArtifactRepository )
     {
@@ -1047,11 +1061,11 @@ public class MavenProjectWrapper extends MavenProject implements Cloneable
     {
         delegate.writeModel( writer );
     }
-
-    @Override
-    public void writeOriginalModel( Writer writer ) throws IOException
-    {
-        delegate.writeOriginalModel( writer );
-    }
+// Missing from the new embedder
+//    @Override
+//    public void writeOriginalModel( Writer writer ) throws IOException
+//    {
+//        delegate.writeOriginalModel( writer );
+//    }
 
 }
