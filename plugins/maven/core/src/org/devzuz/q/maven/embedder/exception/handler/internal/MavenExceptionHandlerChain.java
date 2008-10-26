@@ -19,8 +19,6 @@ import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.apache.maven.artifact.versioning.OverConstrainedVersionException;
-import org.apache.maven.extension.ExtensionManagerException;
-import org.apache.maven.extension.ExtensionScanningException;
 import org.apache.maven.lifecycle.LifecycleExecutionException;
 import org.apache.maven.lifecycle.LifecycleSpecificationException;
 import org.apache.maven.plugin.AbstractMojoExecutionException;
@@ -59,12 +57,14 @@ public class MavenExceptionHandlerChain
         handlers.put( ProjectBuildingException.class, new ProjectBuildingExceptionHandler() );
         handlers.put( XmlPullParserException.class, new XmlPullParserExceptionHandler() );
         handlers.put( OverConstrainedVersionException.class, new OverConstrainedVersionExceptionHandler() );
-        handlers.put( ExtensionManagerException.class, new ExtensionManagerExceptionHandler() );
+        // ExtensionManagerException gone in Maven 3.0 ??
+        //handlers.put( ExtensionManagerException.class, new ExtensionManagerExceptionHandler() );
 
         ChainExceptionHandler chainExceptionHandler = new ChainExceptionHandler();
         handlers.put( LifecycleExecutionException.class, chainExceptionHandler );
         handlers.put( ArtifactMetadataRetrievalException.class, chainExceptionHandler );
-        handlers.put( ExtensionScanningException.class, chainExceptionHandler );
+        // ExtensionScanningException gone in Maven 3.0 ??
+        //handlers.put( ExtensionScanningException.class, chainExceptionHandler );
         handlers.put( PluginManagerException.class, chainExceptionHandler );
         handlers.put( LifecycleSpecificationException.class, chainExceptionHandler );
 
