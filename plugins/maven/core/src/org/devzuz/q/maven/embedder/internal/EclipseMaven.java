@@ -38,9 +38,11 @@ import org.apache.maven.lifecycle.NoSuchPhaseException;
 import org.apache.maven.lifecycle.model.MojoBinding;
 import org.apache.maven.lifecycle.plan.BuildPlan;
 import org.apache.maven.model.Dependency;
+import org.apache.maven.project.DefaultProjectBuilderConfiguration;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
+import org.apache.maven.project.builder.impl.DefaultProjectBuilder;
 import org.apache.maven.reactor.MavenExecutionException;
 import org.codehaus.plexus.PlexusContainer;
 import org.codehaus.plexus.component.repository.ComponentDescriptor;
@@ -426,7 +428,7 @@ public class EclipseMaven implements IMaven
     {
         try
         {
-            MavenProject superProject = getMavenProjectBuilder().buildStandaloneSuperProject();
+            MavenProject superProject = getMavenProjectBuilder().buildStandaloneSuperProject(new DefaultProjectBuilderConfiguration());
             return new EclipseMavenProject( superProject, null );
         }
         catch ( ProjectBuildingException e )
