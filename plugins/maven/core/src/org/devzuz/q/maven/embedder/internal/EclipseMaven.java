@@ -34,7 +34,6 @@ import org.apache.maven.embedder.MavenEmbedder;
 import org.apache.maven.embedder.MavenEmbedderException;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenExecutionResult;
-import org.apache.maven.extension.ExtensionScanningException;
 import org.apache.maven.lifecycle.NoSuchPhaseException;
 import org.apache.maven.lifecycle.model.MojoBinding;
 import org.apache.maven.lifecycle.plan.BuildPlan;
@@ -481,11 +480,6 @@ public class EclipseMaven implements IMaven
                 try
                 {
                     mavenRawProject = getMavenEmbedder().readProject( mavenProject.getPomFile() );
-                }
-                catch ( ExtensionScanningException e )
-                {
-                    throw new QCoreException( new Status( IStatus.ERROR, MavenCoreActivator.PLUGIN_ID,
-                                                          "Unable to read pom file.", e ) );
                 }
                 catch ( MavenExecutionException e )
                 {
