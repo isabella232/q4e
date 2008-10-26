@@ -14,6 +14,8 @@ import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.profiles.ProfileManager;
 import org.apache.maven.project.DefaultMavenProjectBuilder;
 import org.apache.maven.project.MavenProject;
+import org.apache.maven.project.MavenProjectBuildingResult;
+import org.apache.maven.project.ProjectBuilderConfiguration;
 import org.apache.maven.project.ProjectBuildingException;
 import org.devzuz.q.maven.embedder.IMavenProject;
 import org.devzuz.q.maven.embedder.MavenCoreActivator;
@@ -39,6 +41,22 @@ public class EclipseMavenProjectBuilder extends DefaultMavenProjectBuilder
         return new MavenProjectWrapper( super.build( projectDescriptor, localRepository, profileManager ) );
     }
 
+    @Override
+    public MavenProject build( File projectDescriptor, ProjectBuilderConfiguration config )
+        throws ProjectBuildingException
+    {
+        return new MavenProjectWrapper( super.build( projectDescriptor, config ));
+    }
+    
+    @Override
+    public MavenProjectBuildingResult buildProjectWithDependencies( File projectDescriptor,
+                                                                    ProjectBuilderConfiguration config )
+        throws ProjectBuildingException
+    {
+        MavenProjectBuildingResult result = super.buildProjectWithDependencies( projectDescriptor, config );
+        return new MavenProjectBuildingResult(new MavenProjectWrapper(result.getProject()), result.getArtifactResolutionResult());
+    }
+    
     @Override
     public MavenProject buildFromRepository( Artifact artifact, List remoteArtifactRepositories,
                                              ArtifactRepository localRepository, boolean allowStub )
@@ -95,25 +113,35 @@ public class EclipseMavenProjectBuilder extends DefaultMavenProjectBuilder
         return null;
     }
 
+// Removed from latest embedder
+//    @Override
+//    public MavenProject buildStandaloneSuperProject() throws ProjectBuildingException
+//    {
+//        return buildStandaloneSuperProject(new DefaultProjectBuilderConfiguration());
+//    }
+    
     @Override
-    public MavenProject buildStandaloneSuperProject() throws ProjectBuildingException
+    public MavenProject buildStandaloneSuperProject( ProjectBuilderConfiguration config )
+        throws ProjectBuildingException
     {
-        return new MavenProjectWrapper( super.buildStandaloneSuperProject() );
+        return new MavenProjectWrapper( super.buildStandaloneSuperProject( config ));
     }
 
-    @Override
-    public MavenProject buildStandaloneSuperProject( ProfileManager profileManager ) throws ProjectBuildingException
-    {
-        // TODO Auto-generated method stub
-        return new MavenProjectWrapper( super.buildStandaloneSuperProject( profileManager ) );
-    }
+// Removed from latest embedder
+//    @Override
+//    public MavenProject buildStandaloneSuperProject( ProfileManager profileManager ) throws ProjectBuildingException
+//    {
+//        // TODO Auto-generated method stub
+//        return new MavenProjectWrapper( super.buildStandaloneSuperProject( profileManager ) );
+//    }
 
-    @Override
-    public MavenProject buildWithDependencies( File projectDescriptor, ArtifactRepository localRepository,
-                                               ProfileManager profileManager ) throws ProjectBuildingException
-    {
-        // TODO Auto-generated method stub
-        return new MavenProjectWrapper(
-                                        super.buildWithDependencies( projectDescriptor, localRepository, profileManager ) );
-    }
+// Removed from latest embedder    
+//    @Override
+//    public MavenProject buildWithDependencies( File projectDescriptor, ArtifactRepository localRepository,
+//                                               ProfileManager profileManager ) throws ProjectBuildingException
+//    {
+//        // TODO Auto-generated method stub
+//        return new MavenProjectWrapper(
+//                                        super.buildWithDependencies( projectDescriptor, localRepository, profileManager ) );
+//    }
 }
