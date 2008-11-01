@@ -1,0 +1,10 @@
+The codebase for q4e is now hosted at the eclipse foundation under the Eclipse IAM project.
+
+Project site:
+http://eclipse.org/iam
+
+Public SVN:
+http://dev.eclipse.org/svnroot/technology/org.eclipse.iam
+
+Committer SVN:
+https://dev.eclipse.org/svnroot/technology/org.eclipse.iam
