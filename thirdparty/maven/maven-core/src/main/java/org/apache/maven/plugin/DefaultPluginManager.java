@@ -20,8 +20,6 @@ package org.apache.maven.plugin;
  */
 
 import org.apache.maven.ArtifactFilterManager;
-import org.apache.maven.path.PathTranslator;
-import org.apache.maven.shared.model.InterpolatorProperty;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.factory.ArtifactFactory;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
@@ -43,7 +41,6 @@ import org.apache.maven.execution.RuntimeInformation;
 import org.apache.maven.lifecycle.statemgmt.StateManagementUtils;
 import org.apache.maven.model.Plugin;
 import org.apache.maven.model.ReportPlugin;
-import org.apache.maven.model.Model;
 import org.apache.maven.monitor.event.EventDispatcher;
 import org.apache.maven.monitor.event.MavenEvents;
 import org.apache.maven.monitor.logging.DefaultLog;
@@ -59,11 +56,9 @@ import org.apache.maven.project.DuplicateArtifactAttachmentException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
-import org.apache.maven.project.ModelUtils;
-import org.apache.maven.project.builder.PomClassicTransformer;
-import org.apache.maven.project.builder.PomInterpolatorTag;
 import org.apache.maven.project.artifact.InvalidDependencyVersionException;
 import org.apache.maven.project.artifact.MavenMetadataSource;
+import org.apache.maven.project.path.PathTranslator;
 import org.apache.maven.realm.MavenRealmManager;
 import org.apache.maven.realm.RealmManagementException;
 import org.apache.maven.reporting.MavenReport;
@@ -87,11 +82,7 @@ import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.util.StringUtils;
 import org.codehaus.plexus.util.xml.Xpp3Dom;
-import org.codehaus.plexus.util.xml.Xpp3DomBuilder;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -278,17 +269,15 @@ public class DefaultPluginManager
         {
             projectPlugin = plugin;
         }
-        else if ( projectPlugin.getVersion() == null ||
-                  Artifact.RELEASE_VERSION.equals(projectPlugin.getVersion()) ||
+        else if ( projectPlugin.getVersion() == null || 
+                  Artifact.RELEASE_VERSION.equals(projectPlugin.getVersion()) || 
                   Artifact.LATEST_VERSION.equals(projectPlugin.getVersion()))
         {
             projectPlugin.setVersion( plugin.getVersion() );
         }
 
-        Set<Artifact> artifactSet = getPluginArtifacts( pluginArtifact, projectPlugin, project, session.getLocalRepository() );
-
-        List<Artifact> artifacts = ( artifactSet == null || artifactSet.isEmpty() )
-                        ? new ArrayList<Artifact>() : new ArrayList<Artifact>( artifactSet );
+        List artifacts = getPluginArtifacts( pluginArtifact, projectPlugin, project,
+                                            session.getLocalRepository() );
 
         getLogger().debug( "Got plugin artifacts:\n\n" + artifacts );
 
@@ -358,7 +347,7 @@ public class DefaultPluginManager
         }
         else
         {
-            List<Artifact> managedPluginArtifacts = realmManager.getPluginArtifacts( projectPlugin );
+            List managedPluginArtifacts = realmManager.getPluginArtifacts( projectPlugin );
 
             if ( ( managedPluginArtifacts == null ) || ( managedPluginArtifacts.isEmpty() && !artifacts.isEmpty() ) )
             {
@@ -367,14 +356,14 @@ public class DefaultPluginManager
         }
     }
 
-    private Set<Artifact> getPluginArtifacts( Artifact pluginArtifact,
+    private List getPluginArtifacts( Artifact pluginArtifact,
                                     Plugin plugin,
                                     MavenProject project,
                                     ArtifactRepository localRepository )
         throws InvalidPluginException, ArtifactNotFoundException, ArtifactResolutionException
     {
 
-        Set<Artifact> projectPluginDependencies;
+        Set projectPluginDependencies;
 
         try
         {
@@ -428,7 +417,7 @@ public class DefaultPluginManager
 
 //        checkPlexusUtils( resolutionGroup, artifactFactory );
 
-        Set<Artifact> dependencies = new LinkedHashSet<Artifact>();
+        Set dependencies = new LinkedHashSet();
 
         // resolve the plugin dependencies specified in <plugin><dependencies> first:
         dependencies.addAll( projectPluginDependencies );
@@ -456,18 +445,16 @@ public class DefaultPluginManager
                                                                                 artifactMetadataSource,
                                                                                 filter );
 
-        Set<Artifact> resolved = new HashSet<Artifact>();
+        List resolved = new ArrayList( result.getArtifacts() );
 
-        for ( Iterator<Artifact> it = result.getArtifacts().iterator(); it.hasNext(); )
+        for ( Iterator it = resolved.iterator(); it.hasNext(); )
         {
-            Artifact artifact = it.next();
+            Artifact artifact = (Artifact) it.next();
 
             if ( !artifact.equals( pluginArtifact ) )
             {
                 artifact = project.replaceWithActiveArtifact( artifact );
             }
-
-            resolved.add( artifact );
         }
 
         getLogger().debug(
@@ -515,10 +502,6 @@ public class DefaultPluginManager
             getLogger().warn( "Mojo: " + mojoDescriptor.getGoal() + " is deprecated.\n" + mojoDescriptor.getDeprecated() );
         }
 
-        Model model = project.getModel();
-        pathTranslator.alignToBaseDirectory( model, project.getBasedir() );
-        project.setBuild( model.getBuild() );
-
         if ( mojoDescriptor.isDependencyResolutionRequired() != null )
         {
             Collection projects;
@@ -556,35 +539,8 @@ public class DefaultPluginManager
         Xpp3Dom dom = mojoExecution.getConfiguration();
         if ( dom != null )
         {
-            try
-            {  
-                List<InterpolatorProperty> interpolatorProperties = new ArrayList<InterpolatorProperty>();
-                interpolatorProperties.addAll( InterpolatorProperty.toInterpolatorProperties( session.getProjectBuilderConfiguration().getExecutionProperties(),
-                        PomInterpolatorTag.SYSTEM_PROPERTIES.name()));
-                interpolatorProperties.addAll( InterpolatorProperty.toInterpolatorProperties( session.getProjectBuilderConfiguration().getUserProperties(),
-                        PomInterpolatorTag.USER_PROPERTIES.name()));
-                String interpolatedDom  =
-                        PomClassicTransformer.interpolateXmlString( String.valueOf( dom ), interpolatorProperties );
-                dom = Xpp3DomBuilder.build( new StringReader( interpolatedDom ) );
-            }
-            catch ( XmlPullParserException e )
-            {
-                throw new PluginManagerException(
-                                                  mojoDescriptor,
-                                                  project,
-                                                  "Failed to calculate concrete state for configuration of: "
-                                                                  + mojoDescriptor.getHumanReadableKey(),
-                                                  e );
-            }
-            catch ( IOException e )
-            {
-                throw new PluginManagerException(
-                                                  mojoDescriptor,
-                                                  project,
-                                                  "Failed to calculate concrete state for configuration of: "
-                                                                  + mojoDescriptor.getHumanReadableKey(),
-                                                  e );
-            }
+            // make a defensive copy, to keep things from getting polluted.
+            dom = new Xpp3Dom( dom );
         }
 
         // Event monitoring.
@@ -1467,7 +1423,7 @@ public class DefaultPluginManager
     // Artifact resolution
     // ----------------------------------------------------------------------
 
-    protected void resolveTransitiveDependencies( MavenSession context,
+    private void resolveTransitiveDependencies( MavenSession context,
                                                 ArtifactResolver artifactResolver,
                                                 String scope,
                                                 ArtifactFactory artifactFactory,

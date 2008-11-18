@@ -70,7 +70,6 @@ public class ProjectInheritanceTest
         MavenProject project0 = getProjectWithDependencies( pom0 );
         MavenProject project1 = getProjectWithDependencies( pom1 );
 
-        assertNotNull("Parent is null", project1.getParent());
         assertEquals( pom0Basedir, project1.getParent().getBasedir().getCanonicalFile() );
         Map map = project1.getArtifactMap();
 

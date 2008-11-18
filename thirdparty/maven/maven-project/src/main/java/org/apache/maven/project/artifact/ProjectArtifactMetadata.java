@@ -45,7 +45,8 @@ public class ProjectArtifactMetadata
         this( artifact, null );
     }
 
-    public ProjectArtifactMetadata( Artifact artifact, File file )
+    public ProjectArtifactMetadata( Artifact artifact,
+                                    File file )
     {
         super( artifact );
         this.file = file;
@@ -66,7 +67,8 @@ public class ProjectArtifactMetadata
         return getArtifactId() + "-" + artifact.getVersion() + ".pom";
     }
 
-    public void storeInLocalRepository( ArtifactRepository localRepository, ArtifactRepository remoteRepository )
+    public void storeInLocalRepository( ArtifactRepository localRepository,
+                                        ArtifactRepository remoteRepository )
         throws RepositoryMetadataStoreException
     {
         File destination = new File( localRepository.getBasedir(),
@@ -88,7 +90,7 @@ public class ProjectArtifactMetadata
             throw new RepositoryMetadataStoreException( "Error copying POM to the local repository.", e );
         }
     }
-
+    
     public String toString()
     {
         return "project information for " + artifact.getArtifactId() + " " + artifact.getVersion();

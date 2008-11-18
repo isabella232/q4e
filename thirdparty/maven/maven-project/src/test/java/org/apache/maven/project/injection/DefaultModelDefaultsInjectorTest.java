@@ -24,7 +24,6 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DependencyManagement;
 import org.apache.maven.model.Exclusion;
 import org.apache.maven.model.Model;
-import org.apache.maven.project.artifact.TestModelDefaultsInjector;
 
 import java.util.List;
 
@@ -36,7 +35,7 @@ public class DefaultModelDefaultsInjectorTest
 {
     public void testShouldConstructWithNoParams()
     {
-        new TestModelDefaultsInjector();
+        new DefaultModelDefaultsInjector();
     }
 
     public void testShouldMergeManagedDependencyOfTypeEJBToDependencyList()
@@ -67,7 +66,7 @@ public class DefaultModelDefaultsInjectorTest
         
         model.addDependency( dep );
         
-        new TestModelDefaultsInjector().injectDefaults( model );
+        new DefaultModelDefaultsInjector().injectDefaults( model );
         
         List resultingDeps = model.getDependencies();
         
@@ -100,7 +99,7 @@ public class DefaultModelDefaultsInjectorTest
 
         model.setDependencyManagement( depMgmt );
 
-        new TestModelDefaultsInjector().injectDefaults( model );
+        new DefaultModelDefaultsInjector().injectDefaults( model );
 
         List deps = model.getDependencies();
         assertEquals( 1, deps.size() );
@@ -137,7 +136,7 @@ public class DefaultModelDefaultsInjectorTest
 
         model.setDependencyManagement( depMgmt );
 
-        new TestModelDefaultsInjector().injectDefaults( model );
+        new DefaultModelDefaultsInjector().injectDefaults( model );
 
         List deps = model.getDependencies();
         assertEquals( 1, deps.size() );
@@ -175,7 +174,7 @@ public class DefaultModelDefaultsInjectorTest
 
         model.setDependencyManagement( depMgmt );
 
-        new TestModelDefaultsInjector().injectDefaults( model );
+        new DefaultModelDefaultsInjector().injectDefaults( model );
 
         List deps = model.getDependencies();
         assertEquals( 1, deps.size() );
@@ -205,7 +204,7 @@ public class DefaultModelDefaultsInjectorTest
 
         model.setDependencyManagement( depMgmt );
 
-        new TestModelDefaultsInjector().injectDefaults( model );
+        new DefaultModelDefaultsInjector().injectDefaults( model );
 
         List deps = model.getDependencies();
         assertEquals( 1, deps.size() );
@@ -235,7 +234,7 @@ public class DefaultModelDefaultsInjectorTest
 
         model.setDependencyManagement( depMgmt );
 
-        new TestModelDefaultsInjector().injectDefaults( model );
+        new DefaultModelDefaultsInjector().injectDefaults( model );
 
         List deps = model.getDependencies();
         assertEquals( 1, deps.size() );
@@ -262,7 +261,7 @@ public class DefaultModelDefaultsInjectorTest
 
         model.setDependencyManagement( depMgmt );
 
-        new TestModelDefaultsInjector().injectDefaults( model );
+        new DefaultModelDefaultsInjector().injectDefaults( model );
 
         List deps = model.getDependencies();
         assertEquals( 1, deps.size() );
@@ -290,7 +289,7 @@ public class DefaultModelDefaultsInjectorTest
 
         model.setDependencyManagement( depMgmt );
 
-        new TestModelDefaultsInjector().injectDefaults( model );
+        new DefaultModelDefaultsInjector().injectDefaults( model );
 
         List deps = model.getDependencies();
         assertEquals( 1, deps.size() );
@@ -323,7 +322,7 @@ public class DefaultModelDefaultsInjectorTest
 
         model.setDependencyManagement( depMgmt );
 
-        new TestModelDefaultsInjector().injectDefaults( model );
+        new DefaultModelDefaultsInjector().injectDefaults( model );
 
         List deps = model.getDependencies();
         assertEquals( 1, deps.size() );
@@ -354,7 +353,7 @@ public class DefaultModelDefaultsInjectorTest
 
 //        try
 //        {
-        new TestModelDefaultsInjector().injectDefaults( model );
+        new DefaultModelDefaultsInjector().injectDefaults( model );
         Dependency dependency = (Dependency) model.getDependencies().get( 0 );
         assertNull( "check version is null", dependency.getVersion() );
 //            fail("Should fail to validate dependency without a version.");

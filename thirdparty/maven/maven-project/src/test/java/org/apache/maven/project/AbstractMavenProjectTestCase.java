@@ -112,12 +112,9 @@ public abstract class AbstractMavenProjectTestCase
     protected MavenProject getProjectWithDependencies( File pom )
         throws Exception
     {
-        ProjectBuilderConfiguration pbc = new DefaultProjectBuilderConfiguration();
-        pbc.setLocalRepository( getLocalRepository() );
-        
         try
         {
-            return projectBuilder.buildProjectWithDependencies( pom, pbc).getProject();
+            return projectBuilder.buildWithDependencies( pom, getLocalRepository(), null );
         }
         catch ( Exception e )
         {
@@ -139,11 +136,7 @@ public abstract class AbstractMavenProjectTestCase
         Properties props = System.getProperties();
         ProfileActivationContext ctx = new DefaultProfileActivationContext( props, false );
 
-        ProjectBuilderConfiguration pbc = new DefaultProjectBuilderConfiguration();
-        pbc.setLocalRepository( getLocalRepository() );
-        pbc.setGlobalProfileManager( new DefaultProfileManager( getContainer(), ctx ) );
-
-        return projectBuilder.build( pom, pbc );
+        return projectBuilder.build( pom, getLocalRepository(), new DefaultProfileManager( getContainer(), ctx ) );
     }
 
 }

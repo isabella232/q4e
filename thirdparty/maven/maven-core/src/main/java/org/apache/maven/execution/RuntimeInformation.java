@@ -1,7 +1,5 @@
 package org.apache.maven.execution;
 
-import org.apache.maven.artifact.versioning.ArtifactVersion;
-
 /*
  * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
@@ -21,6 +19,8 @@ import org.apache.maven.artifact.versioning.ArtifactVersion;
  * under the License.
  */
 
+import org.apache.maven.artifact.versioning.ArtifactVersion;
+
 /**
  * Describes runtime information about the application.
  *
@@ -29,10 +29,5 @@ import org.apache.maven.artifact.versioning.ArtifactVersion;
  */
 public interface RuntimeInformation
 {
-    ApplicationInformation getApplicationInformation();
-    
-    /** @deprecated Use getApplicationInformation() */
-    //!!BC Used by the Eclipse Plugin
     ArtifactVersion getApplicationVersion();
-     
 }

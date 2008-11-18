@@ -31,7 +31,8 @@ public class MavenProjectBuildingResult
 
     private ArtifactResolutionResult artifactResolutionResult;
 
-    public MavenProjectBuildingResult( MavenProject project, ArtifactResolutionResult artifactResolutionResult )
+    public MavenProjectBuildingResult( MavenProject project,
+                                       ArtifactResolutionResult artifactResolutionResult )
     {
         this.project = project;
 

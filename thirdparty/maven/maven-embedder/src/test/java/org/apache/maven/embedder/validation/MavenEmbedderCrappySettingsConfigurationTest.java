@@ -31,7 +31,6 @@ import org.codehaus.plexus.PlexusTestCase;
 
 import java.io.File;
 import java.util.Arrays;
-import java.util.Iterator;
 
 public class MavenEmbedderCrappySettingsConfigurationTest
     extends PlexusTestCase
@@ -41,7 +40,7 @@ public class MavenEmbedderCrappySettingsConfigurationTest
     {
         // START SNIPPET: simple-embedder-example
 
-        File projectDirectory = getTestFile( "src/examples/simple-project" );
+        File projectDirectory = new File( getBasedir(), "src/examples/simple-project" );
 
         File user = new File( projectDirectory, "invalid-settings.xml" );
 
@@ -59,17 +58,9 @@ public class MavenEmbedderCrappySettingsConfigurationTest
 
         MavenExecutionRequest request = new DefaultMavenExecutionRequest()
             .setBaseDirectory( projectDirectory )
-            .setGoals( Arrays.asList( new String[]{"validate"} ) );
+            .setGoals( Arrays.asList( new String[]{"clean", "install"} ) );
 
         MavenExecutionResult result = embedder.execute( request );
-        
-        for ( Iterator i = result.getExceptions().iterator(); i.hasNext(); )
-        {
-            Exception e = (Exception) i.next();
-            e.printStackTrace();
-        }
-        
-        assertFalse( result.hasExceptions() );
 
         assertNotNull( result.getProject() );
 

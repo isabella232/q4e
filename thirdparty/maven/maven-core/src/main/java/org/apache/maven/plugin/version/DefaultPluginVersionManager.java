@@ -256,7 +256,7 @@ public class DefaultPluginVersionManager
                                                                         e.getMessage() );
                     }
 
-                    if ( ( mavenRange != null ) && !mavenRange.containsVersion( runtimeInformation.getApplicationInformation().getVersion() ) )
+                    if ( ( mavenRange != null ) && !mavenRange.containsVersion( runtimeInformation.getApplicationVersion() ) )
                     {
                         getLogger().info( "Ignoring available plugin version: " + artifactVersion +
                             " for: " + groupId + ":" + artifactId + " as it requires Maven version matching: " + mavenVersion );
@@ -302,11 +302,11 @@ public class DefaultPluginVersionManager
 
             version = artifactVersion;
         }
-        if( version == null )
+
+        if ( version != null )
         {
-            version = artifactVersion;
+            getLogger().info( "Using version: " + version + " of plugin: " + groupId + ":" + artifactId );
         }
-        getLogger().info( "Using version: " + version + " of plugin: " + groupId + ":" + artifactId );
 
         return version;
     }

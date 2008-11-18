@@ -74,7 +74,6 @@ public class MavenEmbedderTest
         Configuration configuration = new DefaultConfiguration()
             .setClassLoader( classLoader )
             .setMavenEmbedderLogger( new MavenEmbedderConsoleLogger() );
-        configuration.setUserSettingsFile( MavenEmbedder.DEFAULT_USER_SETTINGS_FILE );
 
         maven = new MavenEmbedder( configuration );
     }
@@ -334,9 +333,9 @@ public class MavenEmbedderTest
 
         MavenProject project = maven.readProject( pomFile );
 
-        assertEquals( "http://host/viewer?path=/trunk/parent/child1", project.getScm().getUrl() );
-        assertEquals( "scm:svn:http://host/trunk/parent/child1", project.getScm().getConnection() );
-        assertEquals( "scm:svn:https://host/trunk/parent/child1", project.getScm().getDeveloperConnection() );
+        assertEquals( "http://host/viewer?path=/trunk/parent/modules/child1", project.getScm().getUrl() );
+        assertEquals( "scm:svn:http://host/trunk/parent/modules/child1", project.getScm().getConnection() );
+        assertEquals( "scm:svn:https://host/trunk/parent/modules/child1", project.getScm().getDeveloperConnection() );
     }
 
     public void testProjectReading_SkipMissingModuleSilently()

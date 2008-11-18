@@ -62,8 +62,7 @@ public class OperatingSystemProfileActivator
 
     private boolean ensureAtLeastOneNonNull( ActivationOS os )
     {
-        return ( os.getArch() != null ) || ( os.getFamily() != null ) || ( os.getName() != null ) ||
-            ( os.getVersion() != null );
+        return ( os.getArch() != null ) || ( os.getFamily() != null ) || ( os.getName() != null ) || ( os.getVersion() != null );
     }
 
     private boolean determineVersionMatch( String version )

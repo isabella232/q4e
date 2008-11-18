@@ -19,89 +19,66 @@ package org.apache.maven.execution;
  * under the License.
  */
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
-
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.Initializable;
 import org.codehaus.plexus.personality.plexus.lifecycle.phase.InitializationException;
 import org.codehaus.plexus.util.IOUtil;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
+
 /**
  * Describes runtime information about the application.
  *
- * @author Jason van Zyl
  * @author <a href="mailto:brett@apache.org">Brett Porter</a>
  * @version $Id$
  */
 public class DefaultRuntimeInformation
     implements RuntimeInformation, Initializable
-{    
-    private ApplicationInformation applicationInformation;
+{
+    private static final String MAVEN_GROUPID = "org.apache.maven";
     
-    public ApplicationInformation getApplicationInformation()
-    {
-        return applicationInformation;
-    }
+    private static final String MAVEN_PROPERTIES = "META-INF/maven/" + MAVEN_GROUPID + "/maven-core/pom.properties";
 
-    /** @deprecated Use getApplicationInformation() */
+    private ArtifactVersion applicationVersion;
+
     public ArtifactVersion getApplicationVersion()
     {
-        return applicationInformation.getVersion();
-    }    
-    
+        return applicationVersion;
+    }
+
     public void initialize()
         throws InitializationException
     {
-        applicationInformation = getVersion( getClass().getClassLoader(), "org.apache.maven", "maven-core" );
-    }
-    
-    public static ApplicationInformation getVersion( ClassLoader loader, String groupId, String artifactId )
-    {
-        String MAVEN_PROPERTIES = "META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties";
-
-        String version = "unknown";
-        String builtOn = "unknown";
-
         InputStream resourceAsStream = null;
         try
         {
             Properties properties = new Properties();
-            resourceAsStream = loader.getResourceAsStream( MAVEN_PROPERTIES );
+            resourceAsStream = getClass().getClassLoader().getResourceAsStream( MAVEN_PROPERTIES );
             
             if ( resourceAsStream == null )
             {
-                return new ApplicationInformation( new DefaultArtifactVersion( "3.0" ), builtOn );
+                throw new IllegalStateException( "Unable to find Maven properties in classpath: " + MAVEN_PROPERTIES );
             }
-            
             properties.load( resourceAsStream );
 
             String property = properties.getProperty( "version" );
-            
-            if ( property != null )
+            if ( property == null )
             {
-                version = property;
+                throw new InitializationException( "maven-core properties did not include the version" );
             }
-            
-            property = properties.getProperty( "builtOn" );
-            
-            if ( property != null )
-            {
-                builtOn = property;
-            }
-            
-            return new ApplicationInformation( new DefaultArtifactVersion( version ), builtOn );
-            
+
+            applicationVersion = new DefaultArtifactVersion( property );
         }
         catch ( IOException e )
         {
-            return new ApplicationInformation( new DefaultArtifactVersion( version ), builtOn );
+            throw new InitializationException( "Unable to read properties file from maven-core", e );
         }
         finally
         {
             IOUtil.close( resourceAsStream );
-        }        
+        }
     }
 }

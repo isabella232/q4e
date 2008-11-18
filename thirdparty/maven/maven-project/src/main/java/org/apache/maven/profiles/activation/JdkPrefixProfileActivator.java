@@ -43,8 +43,7 @@ public class JdkPrefixProfileActivator
         String javaVersion = props.getProperty( JDK_VERSION );
         if ( javaVersion == null )
         {
-            getLogger().warn(
-                "Cannot locate java version property: " + JDK_VERSION + ". NOT enabling profile: " + profile.getId() );
+            getLogger().warn( "Cannot locate java version property: " + JDK_VERSION + ". NOT enabling profile: " + profile.getId() );
             return false;
         }
 
@@ -101,8 +100,7 @@ public class JdkPrefixProfileActivator
         }
     }
 
-    /**
-     * This method transforms a string like "1.5.0_06" into
+    /** This method transforms a string like "1.5.0_06" into
      * new int[]{1, 5, 0, 6}.
      */
     private static int[] asIntArray( String pVersion )
@@ -131,8 +129,7 @@ public class JdkPrefixProfileActivator
         return result;
     }
 
-    /**
-     * This method compares to integer arrays, as created
+    /** This method compares to integer arrays, as created
      * by {@link #asIntArray(String)}.
      */
     private static int compareTo( int[] pVersion1, int[] pVersion2 )

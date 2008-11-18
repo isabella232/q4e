@@ -32,9 +32,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * @author Jason van Zyl
- */
+/** @author Jason van Zyl */
 public class DefaultMavenTools
     implements MavenTools
 {
@@ -96,8 +94,7 @@ public class DefaultMavenTools
 
             if ( url == null || url.trim().length() < 1 )
             {
-                throw new MissingRepositoryElementException( "Repository URL must not be empty (ID is: " + id + ").",
-                                                             id );
+                throw new MissingRepositoryElementException( "Repository URL must not be empty (ID is: " + id + ").", id );
             }
 
             ArtifactRepositoryPolicy snapshots = buildArtifactRepositoryPolicy( repo.getSnapshots() );

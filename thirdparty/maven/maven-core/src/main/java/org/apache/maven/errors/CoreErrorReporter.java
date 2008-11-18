@@ -13,6 +13,7 @@ import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
+import org.apache.maven.extension.ExtensionManagerException;
 import org.apache.maven.lifecycle.LifecycleException;
 import org.apache.maven.lifecycle.LifecycleLoaderException;
 import org.apache.maven.lifecycle.LifecycleSpecificationException;
@@ -35,7 +36,9 @@ import org.apache.maven.project.DuplicateArtifactAttachmentException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.project.artifact.InvalidDependencyVersionException;
-import org.apache.maven.path.PathTranslator;
+import org.apache.maven.project.error.ProjectErrorReporter;
+import org.apache.maven.project.interpolation.ModelInterpolationException;
+import org.apache.maven.project.path.PathTranslator;
 import org.apache.maven.reactor.MavenExecutionException;
 import org.apache.maven.reactor.MissingModuleException;
 import org.apache.maven.realm.RealmManagementException;
@@ -66,9 +69,13 @@ public interface CoreErrorReporter
 
     void reportErrorFormulatingBuildPlan( List tasks, MavenProject project, MavenSession session, LifecycleException cause );
 
+    void reportErrorInterpolatingModel( Model model, Map inheritedValues, File pomFile, MavenExecutionRequest request, ModelInterpolationException cause );
+
     void reportErrorLoadingPlugin( MojoBinding binding, MavenProject project, PluginLoaderException cause );
 
     void reportErrorManagingRealmForExtension( Artifact extensionArtifact, Artifact projectArtifact, List remoteRepos, MavenExecutionRequest request, RealmManagementException cause );
+
+    void reportErrorResolvingExtensionDependencies( Artifact extensionArtifact, Artifact projectArtifact, List remoteRepos, MavenExecutionRequest request, ArtifactResolutionResult resolutionResult, ExtensionManagerException err );
 
     void reportErrorResolvingExtensionDirectDependencies( Artifact extensionArtifact, Artifact projectArtifact, List remoteRepos, MavenExecutionRequest request, ArtifactMetadataRetrievalException cause );
 

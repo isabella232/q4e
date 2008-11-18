@@ -1,6 +1,6 @@
 package org.apache.maven.errors;
 
-import org.apache.maven.errors.ProjectReporterManager;
+import org.apache.maven.project.error.ProjectReporterManager;
 
 public final class CoreReporterManager
 {

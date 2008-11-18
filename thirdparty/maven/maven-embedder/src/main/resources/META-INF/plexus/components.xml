@@ -24,6 +24,9 @@ under the License.
       <implementation>org.apache.maven.embedder.execution.DefaultMavenExecutionRequestPopulator</implementation>
       <requirements>
         <requirement>
+          <role>org.apache.maven.workspace.MavenWorkspaceStore</role>
+        </requirement>
+        <requirement>
           <role>org.apache.maven.artifact.manager.WagonManager</role>
           <role-hint>default</role-hint>
         </requirement>
@@ -38,39 +41,6 @@ under the License.
           <role-hint>default</role-hint>
         </requirement>
       </requirements>
-    </component>
-
-    <component>
-      <role>org.apache.maven.wagon.Wagon</role>
-      <role-hint>http</role-hint>
-      <implementation>org.apache.maven.wagon.providers.http.LightweightHttpWagon</implementation>
-      <instantiation-strategy>per-lookup</instantiation-strategy>
-      <description>LightweightHttpWagon</description>
-      <isolated-realm>false</isolated-realm>
-      <configuration>
-        <httpHeaders>
-          <property>
-            <name>User-Agent</name>
-            <value>Apache-Maven/${project.version} maven-artifact/${artifactVersion}</value>
-          </property>
-        </httpHeaders>
-      </configuration>
-    </component>
-    <component>
-      <role>org.apache.maven.wagon.Wagon</role>
-      <role-hint>https</role-hint>
-      <implementation>org.apache.maven.wagon.providers.http.LightweightHttpsWagon</implementation>
-      <instantiation-strategy>per-lookup</instantiation-strategy>
-      <description>LIghtweightHttpsWagon</description>
-      <isolated-realm>false</isolated-realm>
-      <configuration>
-        <httpHeaders>
-          <property>
-            <name>User-Agent</name>
-            <value>Apache-Maven/${project.version} maven-artifact/${artifactVersion}</value>
-          </property>
-        </httpHeaders>
-      </configuration>
     </component>
   </components>
 </component-set>

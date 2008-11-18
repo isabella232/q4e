@@ -24,13 +24,12 @@ import org.apache.maven.settings.io.xpp3.SettingsXpp3Reader;
 import org.apache.maven.settings.io.xpp3.SettingsXpp3Writer;
 import org.apache.maven.settings.validation.SettingsValidationResult;
 import org.apache.maven.settings.validation.SettingsValidator;
-import org.codehaus.plexus.interpolation.EnvarBasedValueSource;
-import org.codehaus.plexus.interpolation.InterpolationException;
-import org.codehaus.plexus.interpolation.PropertiesBasedValueSource;
-import org.codehaus.plexus.interpolation.RegexBasedInterpolator;
 import org.codehaus.plexus.logging.AbstractLogEnabled;
 import org.codehaus.plexus.util.IOUtil;
 import org.codehaus.plexus.util.ReaderFactory;
+import org.codehaus.plexus.util.interpolation.EnvarBasedValueSource;
+import org.codehaus.plexus.util.interpolation.PropertiesBasedValueSource;
+import org.codehaus.plexus.util.interpolation.RegexBasedInterpolator;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 import java.io.File;
@@ -120,19 +119,9 @@ public class DefaultMavenSettingsBuilder
 
         interpolator.addValueSource( new EnvarBasedValueSource() );
 
-        try
-        {
-            serializedSettings = interpolator.interpolate(
-                serializedSettings,
-                "settings" );
-        }
-        catch ( InterpolationException e )
-        {
-            IOException error = new IOException( "Failed to interpolate settings." );
-            error.initCause( e );
-
-            throw error;
-        }
+        serializedSettings = interpolator.interpolate(
+            serializedSettings,
+            "settings" );
 
         Settings result = new SettingsXpp3Reader().read( new StringReader( serializedSettings ) );
 
