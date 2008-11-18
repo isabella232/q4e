@@ -111,7 +111,6 @@
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-embedder</artifactId>
-      <version>2.1-SNAPSHOT</version>
       <exclusions>
         <!-- for now we wont include webdav until is cleared in the maven mailing list -->
         <exclusion>
@@ -151,30 +150,30 @@
     </dependency>
     <!-- Eclipse bundles dependencies -->
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>cli</artifactId>
+      <groupId>org.eclipse.orbit</groupId>
+      <artifactId>org.apache.commons.cli</artifactId>
       <exclusions>
         <exclusion>
-          <groupId>commons-logging</groupId>
-          <artifactId>commons-logging</artifactId>
+          <groupId>org.eclipse.orbit</groupId>
+          <artifactId>org.apache.commons.logging</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
     <dependency>
-      <groupId>org.apache.commons</groupId>
-      <artifactId>lang</artifactId>
+      <groupId>org.eclipse.orbit</groupId>
+      <artifactId>org.apache.commons.lang</artifactId>
     </dependency>
     <dependency>
-      <groupId>org.aspectj</groupId>
-      <artifactId>runtime</artifactId>
+      <groupId>org.eclipse.orbit</groupId>
+      <artifactId>org.aspectj.runtime</artifactId>
     </dependency>
     <dependency>
       <groupId>org.w3c</groupId>
       <artifactId>tidy</artifactId>
     </dependency>
     <dependency>
-      <groupId>com.jcraft</groupId>
-      <artifactId>jsch</artifactId>
+      <groupId>org.eclipse.orbit</groupId>
+      <artifactId>com.jcraft.jsch</artifactId>
     </dependency>
     <!-- this is a wagon-webdav dependency
     <dependency>
@@ -183,16 +182,5 @@
     </dependency>
     -->
   </dependencies>
-
-  <repositories>
-    <repository>
-      <id>apache.snapshots</id>
-      <name>Apache Snapshot Repository</name>
-      <url>http://people.apache.org/repo/m2-snapshot-repository</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-    </repository>
-  </repositories>
 
 </project>
