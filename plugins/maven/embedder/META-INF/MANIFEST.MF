@@ -601,8 +601,8 @@ Ignore-Package: org.objectweb.asm.commons,javax.swing.text,javax.manag
  tweb.asm,com.sun.jdmk.comm,javax.swing.event,javax.naming,javax.xml.p
  arsers,javax.mail.internet,junit.framework,javax.mail,javax.swing,jav
  ax.jms
-Bundle-Name: Q for Eclipse Maven Embedder
-Bundle-Description: Maven Embedder for the Q project
+Bundle-Name: Eclipse IAM Maven Embedder
+Bundle-Description: Maven Embedder for Eclipse IAM
 Bundle-ClassPath: .,lib/maven-core-2.1-SNAPSHOT.jar,lib/maven-lifecycl
  e-2.1-SNAPSHOT.jar,lib/log4j-1.2.12.jar,lib/maven-workspace-2.1-SNAPS
  HOT.jar,lib/wagon-ssh-common-1.0-beta-2.jar,lib/maven-embedder-2.1-SN

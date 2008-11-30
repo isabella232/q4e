@@ -23,8 +23,8 @@
   <artifactId>embedder</artifactId>
   <version>${maven.embedder.version}</version>
   <packaging>bundle</packaging>
-  <name>Q for Eclipse Maven Embedder</name>
-  <description>Maven Embedder for the Q project</description>
+  <name>Eclipse IAM Maven Embedder</name>
+  <description>Maven Embedder for the Eclipse IAM project</description>
 
   <licenses>
     <license>
