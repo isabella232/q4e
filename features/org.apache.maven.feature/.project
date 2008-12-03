@@ -1,6 +1,6 @@
 <projectDescription>
-  <name>org.devzuz.q.feature.maven</name>
-  <comment>Q is the Apache Maven integration for Eclipse</comment>
+  <name>org.apache.maven.feature</name>
+  <comment>Apache Maven Embedder Feature</comment>
   <projects/>
   <buildSpec>
     <buildCommand>
