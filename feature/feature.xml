@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.apache.maven.feature"
+      label="%featureName"
+      version="3.0.0.705434"
+      provider-name="%providerName">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <plugin
+         id="org.apache.maven.embedder"
+         download-size="2121"
+         install-size="2121"
+         version="3.0.0.705434"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.cli"
+         download-size="36"
+         install-size="36"
+         version="1.0.0.v20080604-1500"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.lang"
+         download-size="216"
+         install-size="216"
+         version="2.1.0.v200803061811"
+         unpack="false"/>
+
+   <plugin
+         id="org.aspectj.runtime"
+         download-size="95"
+         install-size="95"
+         version="1.5.4.200705211336"
+         unpack="false"/>
+
+   <plugin
+         id="com.jcraft.jsch"
+         download-size="167"
+         install-size="167"
+         version="0.1.31"
+         unpack="false"/>
+
+</feature>
