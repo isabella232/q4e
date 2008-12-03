@@ -2,11 +2,10 @@ Manifest-Version: 1.0
 Built-By: amuino
 Created-By: Apache Maven Bundle Plugin
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
-Import-Package: com.jcraft.jsch,org.apache.commons.cli;version="[1.0.0
- ,2.0.0)",org.aspectj.internal.lang.annotation,org.aspectj.lang,org.as
- pectj.lang.annotation,org.aspectj.lang.reflect,org.aspectj.runtime.in
- ternal,org.aspectj.runtime.reflect,org.w3c.dom,org.w3c.tidy,org.xml.s
- ax,org.xml.sax.helpers
+Import-Package: com.jcraft.jsch,
+ org.w3c.dom,
+ org.xml.sax,
+ org.xml.sax.helpers
 Embed-Transitive: true
 Eclipse-BuddyPolicy: registered
 Bnd-LastModified: 1211636462251
@@ -595,7 +594,7 @@ Export-Package: org.apache.maven.project.inheritance;uses:="org.apache
  lexus.classworlds.realm,org.apache.maven.project.build.model,org.apac
  he.maven.artifact.resolver,org.apache.maven.project,org.apache.maven.
  reactor,org.codehaus.plexus.context,org.apache.maven.errors"
-Bundle-Version: 2.1.0.659801b
+Bundle-Version: 2.1.0.659801c
 Ignore-Package: org.objectweb.asm.commons,javax.swing.text,javax.manag
  ement,javax.swing.tree,javax.swing.table,javax.swing.border,org.objec
  tweb.asm,com.sun.jdmk.comm,javax.swing.event,javax.naming,javax.xml.p
@@ -603,21 +602,37 @@ Ignore-Package: org.objectweb.asm.commons,javax.swing.text,javax.manag
  ax.jms
 Bundle-Name: Eclipse IAM Maven Embedder
 Bundle-Description: Maven Embedder for Eclipse IAM
-Bundle-ClassPath: .,lib/maven-core-2.1-SNAPSHOT.jar,lib/maven-lifecycl
- e-2.1-SNAPSHOT.jar,lib/log4j-1.2.12.jar,lib/maven-workspace-2.1-SNAPS
- HOT.jar,lib/wagon-ssh-common-1.0-beta-2.jar,lib/maven-embedder-2.1-SN
- APSHOT.jar,lib/xbean-reflect-3.4-SNAPSHOT.jar,lib/maven-artifact-3.0-
- SNAPSHOT.jar,lib/doxia-sink-api-1.0-alpha-9.jar,lib/wagon-http-shared
- -1.0-beta-2.jar,lib/wagon-ssh-1.0-beta-2.jar,lib/maven-profile-2.1-SN
- APSHOT.jar,lib/plexus-interactivity-api-1.0-alpha-6.jar,lib/maven-rep
- orting-api-2.1-SNAPSHOT.jar,lib/wagon-provider-api-1.0-beta-2.jar,lib
- /wagon-http-lightweight-1.0-beta-2.jar,lib/maven-toolchain-2.1-SNAPSH
- OT.jar,lib/maven-model-2.1-SNAPSHOT.jar,lib/wagon-file-1.0-beta-2.jar
- ,lib/wagon-ssh-external-1.0-beta-2.jar,lib/plexus-classworlds-1.2-alp
- ha-12.jar,lib/plexus-utils-1.5.1.jar,lib/maven-plugin-api-2.1-SNAPSHO
- T.jar,lib/plexus-interpolation-1.0-SNAPSHOT.jar,lib/commons-logging-a
- pi-1.1.jar,lib/plexus-container-default-1.0-alpha-46-SNAPSHOT.jar,lib
- /maven-project-2.1-SNAPSHOT.jar
+Bundle-ClassPath: .,
+ lib/maven-core-2.1-SNAPSHOT.jar,
+ lib/maven-lifecycle-2.1-SNAPSHOT.jar,
+ lib/log4j-1.2.12.jar,
+ lib/maven-workspace-2.1-SNAPSHOT.jar,
+ lib/wagon-ssh-common-1.0-beta-2.jar,
+ lib/maven-embedder-2.1-SNAPSHOT.jar,
+ lib/xbean-reflect-3.4-SNAPSHOT.jar,
+ lib/maven-artifact-3.0-SNAPSHOT.jar,
+ lib/doxia-sink-api-1.0-alpha-9.jar,
+ lib/wagon-http-shared-1.0-beta-2.jar,
+ lib/wagon-ssh-1.0-beta-2.jar,
+ lib/maven-profile-2.1-SNAPSHOT.jar,
+ lib/plexus-interactivity-api-1.0-alpha-6.jar,
+ lib/maven-reporting-api-2.1-SNAPSHOT.jar,
+ lib/wagon-provider-api-1.0-beta-2.jar,
+ lib/wagon-http-lightweight-1.0-beta-2.jar,
+ lib/maven-toolchain-2.1-SNAPSHOT.jar,
+ lib/maven-model-2.1-SNAPSHOT.jar,
+ lib/wagon-file-1.0-beta-2.jar,
+ lib/wagon-ssh-external-1.0-beta-2.jar,
+ lib/plexus-classworlds-1.2-alpha-12.jar,
+ lib/plexus-utils-1.5.1.jar,
+ lib/maven-plugin-api-2.1-SNAPSHOT.jar,
+ lib/plexus-interpolation-1.0-SNAPSHOT.jar,
+ lib/commons-logging-api-1.1.jar,
+ lib/plexus-container-default-1.0-alpha-46-SNAPSHOT.jar,
+ lib/maven-project-2.1-SNAPSHOT.jar,
+ lib/cli-1.0.0.v200709131616.jar,
+ lib/tidy-0.0.0.4aug2000r7-dev-200711190855.jar,
+ lib/runtime-1.5.4.200705211336.jar
 Build-Jdk: 1.5.0_13
 Bundle-DocURL: http://www.apache.org/
 Private-Package: lib,licenses,org.apache.commons.logging,org.apache.co
