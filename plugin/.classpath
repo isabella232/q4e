@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry exported="true" kind="lib" path="lib/jsch-0.1.31.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/runtime-1.5.4.200705211336.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/tidy-0.0.0.4aug2000r7-dev-200711190855.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/cli-1.0.0.v200709131616.jar"/>

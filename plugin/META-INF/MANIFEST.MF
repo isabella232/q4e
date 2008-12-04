@@ -2,8 +2,7 @@ Manifest-Version: 1.0
 Built-By: amuino
 Created-By: Apache Maven Bundle Plugin
 Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
-Import-Package: com.jcraft.jsch,
- org.w3c.dom,
+Import-Package: org.w3c.dom,
  org.xml.sax,
  org.xml.sax.helpers
 Embed-Transitive: true
@@ -632,7 +631,8 @@ Bundle-ClassPath: .,
  lib/maven-project-2.1-SNAPSHOT.jar,
  lib/cli-1.0.0.v200709131616.jar,
  lib/tidy-0.0.0.4aug2000r7-dev-200711190855.jar,
- lib/runtime-1.5.4.200705211336.jar
+ lib/runtime-1.5.4.200705211336.jar,
+ lib/jsch-0.1.31.jar
 Build-Jdk: 1.5.0_13
 Bundle-DocURL: http://www.apache.org/
 Private-Package: lib,licenses,org.apache.commons.logging,org.apache.co
