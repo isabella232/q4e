@@ -628,11 +628,7 @@ Bundle-ClassPath: .,
  lib/plexus-interpolation-1.0-SNAPSHOT.jar,
  lib/commons-logging-api-1.1.jar,
  lib/plexus-container-default-1.0-alpha-46-SNAPSHOT.jar,
- lib/maven-project-2.1-SNAPSHOT.jar,
- lib/cli-1.0.0.v200709131616.jar,
- lib/tidy-0.0.0.4aug2000r7-dev-200711190855.jar,
- lib/runtime-1.5.4.200705211336.jar,
- lib/jsch-0.1.31.jar
+ lib/maven-project-2.1-SNAPSHOT.jar
 Build-Jdk: 1.5.0_13
 Bundle-DocURL: http://www.apache.org/
 Private-Package: lib,licenses,org.apache.commons.logging,org.apache.co
@@ -653,4 +649,11 @@ Bundle-SymbolicName: org.apache.maven.embedder
 Tool: Bnd-0.0.255
 Embed-Dependency: *;scope=compile|runtime;inline=false;artifactId=!cli
  |lang|runtime|tidy|jsch|commons-logging|jdom
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.aspectj.runtime;bundle-version="1.5.3",
+ org.apache.commons.cli;bundle-version="1.0.0",
+ org.apache.commons.lang;bundle-version="2.1.0",
+ org.w3c.tidy;bundle-version="0.0.0",
+ com.jcraft.jsch;bundle-version="0.1.31"
 
