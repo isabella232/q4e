@@ -3,7 +3,7 @@
 <repository name='Q4E to IAM Update Site' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1228849582317'/>
+    <property name='p2.timestamp' value='1228947440250'/>
   </properties>
   <references size='4'>
     <repository url='http://dev.eclipse.org/releases/ganymede' type='0' options='1'/>

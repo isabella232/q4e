@@ -1,13 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-  <name>org.apache.maven.feature</name>
-  <comment>Apache Maven Embedder Feature</comment>
-  <projects/>
-  <buildSpec>
-    <buildCommand>
-      <name>org.eclipse.pde.FeatureBuilder</name>
-    </buildCommand>
-  </buildSpec>
-  <natures>
-    <nature>org.eclipse.pde.FeatureNature</nature>
-  </natures>
+	<name>org.apache.maven.feature-2.1.0.659801c</name>
+	<comment>Apache Maven Embedder Feature</comment>
+	<projects>
+	</projects>
+	<buildSpec>
+		<buildCommand>
+			<name>org.eclipse.pde.FeatureBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+	</buildSpec>
+	<natures>
+		<nature>org.eclipse.pde.FeatureNature</nature>
+	</natures>
 </projectDescription>
