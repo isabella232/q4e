@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Backport Java Util Concurrent Plug-in
+Bundle-SymbolicName: edu.emory.mathcs.backport.util.concurrent
+Bundle-Version: 3.0.0
+Bundle-Vendor: Q4E Project
+Export-Package: edu.emory.mathcs.backport.java.util,
+ edu.emory.mathcs.backport.java.util.concurrent,
+ edu.emory.mathcs.backport.java.util.concurrent.atomic,
+ edu.emory.mathcs.backport.java.util.concurrent.helpers,
+ edu.emory.mathcs.backport.java.util.concurrent.locks
+Bundle-RequiredExecutionEnvironment: J2SE-1.4
