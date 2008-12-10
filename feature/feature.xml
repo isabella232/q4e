@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.apache.maven.feature"
+      label="%featureName"
+      version="2.1.0.659801c"
+      provider-name="%providerName">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <plugin
+         id="org.apache.maven.embedder"
+         download-size="2121"
+         install-size="2121"
+         version="2.1.0.659801c"
+         unpack="false"/>
+
+   <plugin
+         id="org.w3c.tidy"
+         download-size="0"
+         install-size="0"
+         version="0.0.0.4aug2000r7-dev-200711190855"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.cli"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.v20080604-1500"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.collections"
+         download-size="0"
+         install-size="0"
+         version="3.2.0.v200803061811"
+         unpack="false"/>
+
+   <plugin
+         id="com.jcraft.jsch"
+         download-size="0"
+         install-size="0"
+         version="0.1.37.v200803061811"
+         unpack="false"/>
+
+</feature>

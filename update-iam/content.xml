@@ -1,0 +1,637 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?metadataRepository class='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'?>
+<repository name='Q4E to IAM Update Site' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
+  <properties size='2'>
+    <property name='p2.compressed' value='false'/>
+    <property name='p2.timestamp' value='1228947440250'/>
+  </properties>
+  <references size='4'>
+    <repository url='http://dev.eclipse.org/releases/ganymede' type='0' options='1'/>
+    <repository url='http://dev.eclipse.org/releases/ganymede' type='1' options='1'/>
+    <repository url='http://download.eclipse.org/tools/ajdt/34/update' type='0' options='1'/>
+    <repository url='http://download.eclipse.org/tools/ajdt/34/update' type='1' options='1'/>
+  </references>
+  <units size='12'>
+    <unit id='org.apache.commons.cli' version='1.0.0.v20080604-1500' singleton='false'>
+      <update id='org.apache.commons.cli' range='[0.0.0,1.0.0.v20080604-1500)' severity='0'/>
+      <properties size='4'>
+        <property name='df_LT.providerName' value='Eclipse.org'/>
+        <property name='df_LT.pluginName' value='Apache Jakarta Commons CLI'/>
+        <property name='org.eclipse.equinox.p2.name' value='%pluginName'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
+      </properties>
+      <provides size='5'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.cli' version='1.0.0.v20080604-1500'/>
+        <provided namespace='osgi.bundle' name='org.apache.commons.cli' version='1.0.0.v20080604-1500'/>
+        <provided namespace='java.package' name='org.apache.commons.cli' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <requires size='2'>
+        <required namespace='osgi.bundle' name='org.apache.commons.lang' range='[2.0.0,3.0.0)'/>
+        <required namespace='osgi.bundle' name='org.apache.commons.logging' range='[1.0.0,2.0.0)'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.commons.cli' version='1.0.0.v20080604-1500'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Version: 1.0.0.v20080604-1500&#xA;Export-Package: org.apache.commons.cli;version=&quot;1.0.0&quot;&#xA;Require-Bundle: org.apache.commons.lang;bundle-version=&quot;[2.0.0,3.0.0)&quot;,org.apache.commons.logging;bundle-version=&quot;[1.0.0,2.0.0)&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.apache.commons.cli&#xA;Bundle-Name: %pluginName&#xA;Bundle-Vendor: %providerName
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.commons.collections' version='3.2.0.v200803061811' singleton='false'>
+      <update id='org.apache.commons.collections' range='[0.0.0,3.2.0.v200803061811)' severity='0'/>
+      <properties size='4'>
+        <property name='df_LT.providerName' value='Eclipse.org'/>
+        <property name='df_LT.pluginName' value='Apache Commons Collections'/>
+        <property name='org.eclipse.equinox.p2.name' value='%pluginName'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
+      </properties>
+      <provides size='16'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.collections' version='3.2.0.v200803061811'/>
+        <provided namespace='osgi.bundle' name='org.apache.commons.collections' version='3.2.0.v200803061811'/>
+        <provided namespace='java.package' name='org.apache.commons.collections' version='3.2.0'/>
+        <provided namespace='java.package' name='org.apache.commons.collections.bag' version='3.2.0'/>
+        <provided namespace='java.package' name='org.apache.commons.collections.bidimap' version='3.2.0'/>
+        <provided namespace='java.package' name='org.apache.commons.collections.buffer' version='3.2.0'/>
+        <provided namespace='java.package' name='org.apache.commons.collections.collection' version='3.2.0'/>
+        <provided namespace='java.package' name='org.apache.commons.collections.comparators' version='3.2.0'/>
+        <provided namespace='java.package' name='org.apache.commons.collections.functors' version='3.2.0'/>
+        <provided namespace='java.package' name='org.apache.commons.collections.iterators' version='3.2.0'/>
+        <provided namespace='java.package' name='org.apache.commons.collections.keyvalue' version='3.2.0'/>
+        <provided namespace='java.package' name='org.apache.commons.collections.list' version='3.2.0'/>
+        <provided namespace='java.package' name='org.apache.commons.collections.map' version='3.2.0'/>
+        <provided namespace='java.package' name='org.apache.commons.collections.set' version='3.2.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.commons.collections' version='3.2.0.v200803061811'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: %pluginName&#xA;Bundle-Version: 3.2.0.v200803061811&#xA;Export-Package: org.apache.commons.collections;version=&quot;3.2.0&quot;,org.apache.commons.collections.bag;version=&quot;3.2.0&quot;,org.apache.commons.collections.bidimap;version=&quot;3.2.0&quot;,org.apache.commons.collections.buffer;version=&quot;3.2.0&quot;,org.apache.commons.collections.collection;version=&quot;3.2.0&quot;,org.apache.commons.collections.comparators;version=&quot;3.2.0&quot;,org.apache.commons.collections.functors;version=&quot;3.2.0&quot;,org.apache.commons.collections.iterators;version=&quot;3.2.0&quot;,org.apache.commons.collections.keyvalue;version=&quot;3.2.0&quot;,org.apache.commons.collections.list;version=&quot;3.2.0&quot;,org.apache.commons.collections.map;version=&quot;3.2.0&quot;,org.apache.commons.collections.set;version=&quot;3.2.0&quot;&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.3&#xA;Bundle-SymbolicName: org.apache.commons.collections&#xA;Bundle-Localization: plugin&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: %providerName
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='tooling.source.default' version='1.0.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='source' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='2'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='tooling.source.default' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.flavor' name='tooling' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='source' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='install'>
+            addSourceBundle(bundle:${artifact})
+          </instruction>
+          <instruction key='uninstall'>
+            removeSourceBundle(bundle:${artifact})
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.embedder' version='2.1.0.659801c' singleton='false'>
+      <update id='org.apache.maven.embedder' range='[0.0.0,2.1.0.659801c)' severity='0'/>
+      <properties size='4'>
+        <property name='org.eclipse.equinox.p2.name' value='Eclipse IAM Maven Embedder'/>
+        <property name='org.eclipse.equinox.p2.description' value='Maven Embedder for Eclipse IAM'/>
+        <property name='org.eclipse.equinox.p2.provider' value='The Apache Software Foundation'/>
+        <property name='org.eclipse.equinox.p2.doc.url' value='http://www.apache.org/'/>
+      </properties>
+      <provides size='149'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.embedder' version='2.1.0.659801c'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.embedder' version='2.1.0.659801c'/>
+        <provided namespace='java.package' name='org.apache.maven.project.inheritance' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin.version' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.injection' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.handler' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.versioning' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin.logging' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle.mapping' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.workspace' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.logging.console' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.resolver.filter' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.interpolation.util' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.factory' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.logging' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.execution' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.composition' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.settings.io.xpp3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.configuration.io' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin.lifecycle' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.settings' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.resolver.conflict' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.repository.io' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator.converters.special' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator.converters.lookup' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.interpolation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator.converters.basic' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.reporting' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.context' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.repository.metadata.io.xpp3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.reflection' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.observers' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.builder' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.ssh.jsch' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.reloading' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.toolchain' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.profiles.injection' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.ssh' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator.expression' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.embedder.cache' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.repository' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.embedder.execution' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin.loader' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.validation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.cli.shell' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.classworlds.strategy' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.manager' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.cli' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.cli' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.personality.plexus.lifecycle.phase' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.classworlds' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.ssh.knownhost' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.io' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.shared.http' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.repository' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.http' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.repository' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.repository.exception' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.dag' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.realm' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.resource' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.configuration' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.composition.setter' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.profiles.activation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.ssh.jsch.interactive' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.toolchain.model' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.factory' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.monitor.logging' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.toolchain.model.io.xpp3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.classworlds.realm' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.build.model' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.installer' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.events' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.error' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.factory.java' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.interpolation.os' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle.plan' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.aspect' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.monitor.event' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.classworlds.launcher' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.model' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.discovery' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.embedder' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.profiles.io.xpp3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.deployer' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.interpolation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.handler.manager' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator.converters' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.profiles' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle.model' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.doxia.sink' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.aspect.compat' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.interpolation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.lifecycle' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.settings.validation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.embedder.event' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator.converters.composite' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.resolver' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.reactor' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.aspect' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.toolchain.java' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.transform' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.errors' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.path' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.profiles.build' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.collections' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.messages' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.ssh.interactive' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.repository.layout' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.xml' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.introspection' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.repository.metadata' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin.descriptor' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.embedder.user' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.artifact' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.authentication' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.metadata' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin.lifecycle.io.xpp3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.resolver.metadata' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.proxy' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.xml.pull' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.ssh.external' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle.model.io.xpp3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle.statemgmt' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.components.interactivity' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.manager' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.configuration.xml' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.model.io.xpp3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.configuration.source' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.interpolation.reflection' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.compat' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle.binding' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.container.initialization' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.workspace' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.authorization' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.lifecycle.phase' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.file' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.extension' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='8'>
+        <required namespace='osgi.bundle' name='org.aspectj.runtime' range='1.5.3'/>
+        <required namespace='osgi.bundle' name='org.apache.commons.cli' range='1.0.0'/>
+        <required namespace='osgi.bundle' name='org.apache.commons.lang' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.w3c.tidy' range='0.0.0'/>
+        <required namespace='osgi.bundle' name='com.jcraft.jsch' range='0.1.31'/>
+        <required namespace='java.package' name='org.w3c.dom' range='0.0.0'/>
+        <required namespace='java.package' name='org.xml.sax' range='0.0.0'/>
+        <required namespace='java.package' name='org.xml.sax.helpers' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.embedder' version='2.1.0.659801c'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Created-By: Apache Maven Bundle Plugin&#xA;Manifest-Version: 1.0&#xA;Bundle-ActivationPolicy: lazy&#xA;Embed-Directory: lib&#xA;Built-By: amuino&#xA;Bundle-DocURL: http://www.apache.org/&#xA;Bundle-Description: Maven Embedder for Eclipse IAM&#xA;Bnd-LastModified: 1211636462251&#xA;Export-Package: org.apache.maven.project.inheritance;uses:=&quot;org.apache.maven.project,org.codehaus.plexus.util,org.apache.maven.model&quot;,org.apache.maven.plugin.version;uses:=&quot;org.apache.maven.artifact.repository,org.apache.maven.artifact.versioning,org.codehaus.plexus.util,org.apache.maven.artifact,org.apache.maven.model,org.apache.maven.artifact.factory,org.apache.maven.plugin,org.codehaus.plexus.logging,org.apache.maven.execution,org.apache.maven.artifact.metadata,org.aspectj.runtime.internal,org.apache.maven.project,org.apache.maven.errors&quot;,org.apache.maven.project.injection;uses:=&quot;org.apache.maven.project,org.apache.maven.model&quot;,org.apache.maven.artifact.handler,org.apache.maven.artifact.versioning;uses:=&quot;org.apache.maven.artifact.resolver,org.apache.maven.artifact&quot;,org.apache.maven.plugin.logging,org.apache.maven.lifecycle.mapping,org.apache.maven.workspace;uses:=&quot;org.codehaus.plexus.logging&quot;,org.codehaus.plexus.logging.console;uses:=&quot;org.codehaus.plexus.logging,org.codehaus.plexus.personality.plexus.lifecycle.phase&quot;,org.apache.maven.artifact.resolver.filter;uses:=&quot;org.apache.maven.artifact&quot;,org.codehaus.plexus.interpolation.util,org.codehaus.plexus.component.factory;uses:=&quot;org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.context,org.codehaus.plexus.component.repository,org.codehaus.plexus.component.factory.java,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.codehaus.plexus&quot;,org.codehaus.plexus.logging;uses:=&quot;org.codehaus.plexus.personality.plexus.lifecycle.phase&quot;,org.apache.maven.execution;uses:=&quot;org.apache.maven.artifact.versioning,org.apache.maven.monitor.event,org.codehaus.plexus.util,org.apache.maven.artifact,org.apache.maven.plugin.descriptor,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.maven.settings,org.apache.maven.profiles,org.apache.maven.artifact.repository,org.apache.maven.realm,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.util.dag,org.apache.maven.profiles.activation,org.codehaus.plexus,org.apache.maven.compat,org.apache.maven.artifact.resolver,org.apache.maven.project,org.apache.maven.reporting,org.apache.maven.wagon.events,org.apache.maven.errors,org.apache.maven.lifecycle.plan&quot;,org.codehaus.plexus.component.composition;uses:=&quot;org.codehaus.plexus.component,org.codehaus.plexus.component.configurator,org.codehaus.plexus.util,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.util.dag,org.codehaus.plexus.component.repository,org.codehaus.plexus,org.codehaus.plexus.logging,org.codehaus.plexus.classworlds.realm,org.aspectj.runtime.internal,org.codehaus.plexus.aspect,org.codehaus.plexus.component.collections&quot;,org.apache.maven.settings.io.xpp3;uses:=&quot;org.apache.maven.settings,org.codehaus.plexus.util,org.codehaus.plexus.util.xml,org.codehaus.plexus.util.xml.pull&quot;,org.codehaus.plexus.configuration.io;uses:=&quot;org.codehaus.plexus.configuration,org.codehaus.plexus.configuration.xml,org.codehaus.plexus.util.xml,org.codehaus.plexus.util.xml.pull&quot;,org.apache.maven.plugin.lifecycle,org.apache.maven.settings;uses:=&quot;org.codehaus.plexus.util,org.codehaus.plexus.util.xml,org.codehaus.plexus.util.interpolation,org.apache.maven.model,org.apache.maven.settings.validation,org.apache.maven.compat,org.codehaus.plexus.logging,org.apache.maven.execution,org.apache.maven.settings.io.xpp3,org.codehaus.plexus.util.xml.pull&quot;,org.apache.maven.artifact.resolver.conflict;uses:=&quot;org.apache.maven.artifact.resolver,org.apache.maven.artifact.versioning,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.context,org.apache.maven.artifact,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.maven.artifact.resolver.metadata,org.codehaus.plexus&quot;,org.codehaus.plexus.component.repository.io;uses:=&quot;org.codehaus.plexus.component.repository,org.codehaus.plexus.configuration,org.codehaus.plexus.configuration.io&quot;,org.codehaus.plexus.component.configurator.converters.special;uses:=&quot;org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.component.configurator.expression,org.codehaus.plexus.component.configurator,org.codehaus.plexus.configuration,org.codehaus.plexus.component.configurator.converters.lookup,org.codehaus.plexus.component.configurator.converters&quot;,org.codehaus.plexus.component.configurator.converters.lookup;uses:=&quot;org.codehaus.plexus.component.configurator.converters.composite,org.codehaus.plexus.component.configurator,org.codehaus.plexus.component.configurator.converters.basic,org.codehaus.plexus.component.collections,org.codehaus.plexus.component.configurator.converters&quot;,org.codehaus.plexus.interpolation;uses:=&quot;org.codehaus.plexus.interpolation.os,org.codehaus.plexus.interpolation.reflection,org.codehaus.plexus.interpolation.util&quot;,org.codehaus.plexus.component.configurator.converters.basic;uses:=&quot;org.codehaus.plexus.component.configurator.expression,org.codehaus.plexus.component.configurator,org.codehaus.plexus.configuration,org.codehaus.plexus.component.configurator.converters.lookup,org.codehaus.plexus.component.configurator.converters&quot;,org.apache.maven.reporting;uses:=&quot;org.apache.maven.doxia.sink&quot;,org.codehaus.plexus.context,org.apache.maven.artifact.repository.metadata.io.xpp3;uses:=&quot;org.codehaus.plexus.util,org.codehaus.plexus.util.xml,org.codehaus.plexus.util.xml.pull,org.apache.maven.artifact.repository.metadata&quot;,org.codehaus.plexus.util.reflection,org.apache.maven.wagon.observers;uses:=&quot;org.apache.maven.wagon.resource,org.apache.maven.wagon.events,org.apache.maven.wagon,org.apache.maven.wagon.repository&quot;,org.codehaus.plexus.component.builder;uses:=&quot;org.codehaus.plexus.component.configurator.expression,org.codehaus.plexus.component.configurator,org.codehaus.plexus.util,org.codehaus.plexus.component.repository,org.codehaus.plexus.component.factory,org.codehaus.plexus.logging,org.codehaus.plexus.component.manager,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.codehaus.plexus.component.configurator.converters,org.codehaus.plexus.component,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.configuration,org.codehaus.plexus.component.configurator.converters.special,org.codehaus.plexus.component.configurator.converters.lookup,org.codehaus.plexus,org.codehaus.plexus.lifecycle,org.codehaus.plexus.configuration.source,org.codehaus.plexus.component.configurator.converters.composite,org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.component.factory.java,org.codehaus.plexus.component.collections&quot;,org.apache.maven.wagon.providers.ssh.jsch;uses:=&quot;org.apache.maven.wagon.providers.ssh.interactive,com.jcraft.jsch,org.apache.maven.wagon.providers.ssh,org.apache.maven.wagon.resource,org.codehaus.plexus.util,org.apache.maven.wagon.providers.ssh.jsch.interactive,org.apache.maven.wagon,org.apache.maven.wagon.authentication,org.apache.maven.wagon.authorization,org.apache.maven.wagon.providers.ssh.knownhost,org.apache.maven.wagon.proxy,org.apache.maven.wagon.repository&quot;,org.codehaus.plexus.component.reloading;uses:=&quot;org.codehaus.plexus&quot;,org.apache.maven.toolchain;uses:=&quot;org.apache.maven.artifact.versioning,org.codehaus.plexus.component.repository.exception,org.apache.maven.toolchain.model,org.codehaus.plexus,org.apache.maven.plugin.descriptor,org.apache.maven.toolchain.model.io.xpp3,org.codehaus.plexus.logging,org.apache.maven.execution,org.apache.maven.project,org.codehaus.plexus.context,org.codehaus.plexus.personality.plexus.lifecycle.phase&quot;,org.apache.maven.profiles.injection;uses:=&quot;org.apache.maven.project,org.codehaus.plexus.util,org.codehaus.plexus.util.xml,org.apache.maven.model&quot;,org.apache.maven.wagon.providers.ssh;uses:=&quot;org.apache.maven.wagon.authentication,org.apache.maven.wagon.providers.ssh.interactive,org.codehaus.plexus.util,org.apache.maven.wagon.authorization,org.apache.maven.wagon.resource,org.apache.maven.wagon.providers.ssh.knownhost,org.apache.maven.wagon,org.apache.maven.wagon.repository&quot;,org.codehaus.plexus.component.configurator.expression,org.apache.maven.embedder.cache;uses:=&quot;org.apache.maven.execution,org.aspectj.lang,org.apache.maven.embedder&quot;,org.codehaus.plexus.component.configurator;uses:=&quot;org.codehaus.plexus.component,org.codehaus.plexus.component.configurator.expression,org.codehaus.plexus.configuration,org.codehaus.plexus.component.configurator.converters.special,org.codehaus.plexus.component.configurator.converters.lookup,org.codehaus.plexus.component.configurator.converters.composite,org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.component.configurator.converters&quot;,org.codehaus.plexus.util;uses:=&quot;org.codehaus.plexus.util.reflection,org.codehaus.plexus.util.xml,org.codehaus.plexus.util.io&quot;,org.codehaus.plexus.component.repository;uses:=&quot;org.codehaus.plexus.logging,org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.component.composition,org.codehaus.plexus.component.repository.io,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.configuration&quot;,org.apache.maven.embedder.execution;uses:=&quot;org.apache.maven.artifact.repository.layout,org.codehaus.plexus.util,org.apache.maven.monitor.event,org.codehaus.plexus.util.xml,org.apache.maven.workspace,org.apache.maven.model,org.apache.maven.embedder,org.apache.maven.plugin,org.codehaus.plexus.logging,org.apache.maven.execution,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.maven.wagon.repository,org.apache.maven.settings,org.apache.maven.profiles,org.apache.maven.artifact.repository,org.apache.maven.artifact.manager,org.codehaus.plexus.component.repository.exception,org.apache.maven.realm,org.apache.maven.profiles.activation,org.codehaus.plexus,org.apache.maven.wagon.events,org.codehaus.plexus.context,org.apache.maven.errors&quot;,org.apache.maven.artifact;uses:=&quot;org.apache.maven.artifact.repository,org.apache.maven.artifact.metadata,org.apache.maven.artifact.handler,org.apache.maven.artifact.versioning,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.util,org.apache.maven.artifact.resolver.filter&quot;,org.apache.maven.plugin.loader;uses:=&quot;org.apache.maven.settings,org.apache.maven.lifecycle.model,org.apache.maven.plugin.version,org.apache.maven.artifact.repository,org.apache.maven.artifact.versioning,org.apache.maven.model,org.apache.maven.plugin.descriptor,org.apache.maven.plugin,org.codehaus.plexus.logging,org.apache.maven.execution,org.apache.maven.artifact.resolver,org.aspectj.runtime.internal,org.apache.maven.project,org.apache.maven.errors&quot;,org.apache.maven.plugin;uses:=&quot;org.apache.maven.plugin.version,org.codehaus.plexus.component.configurator.expression,org.apache.maven.artifact.versioning,org.codehaus.plexus.component.configurator,org.apache.maven.monitor.event,org.codehaus.plexus.util,org.codehaus.plexus.component.repository,org.apache.maven.plugin.logging,org.apache.maven.artifact,org.codehaus.plexus.util.xml,org.apache.maven.model,org.codehaus.plexus.logging.console,org.codehaus.plexus.util.introspection,org.apache.maven.artifact.repository.metadata,org.apache.maven.plugin.descriptor,org.apache.maven.artifact.resolver.filter,org.codehaus.plexus.component.discovery,org.apache.maven.project.artifact,org.codehaus.plexus.logging,org.apache.maven.execution,org.aspectj.runtime.internal,org.apache.maven.artifact.metadata,org.apache.maven,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.maven.settings,org.apache.maven.lifecycle.model,org.apache.maven.artifact.repository,org.codehaus.plexus.component.repository.exception,org.apache.maven.realm,org.codehaus.plexus.configuration,org.codehaus.plexus.configuration.xml,org.apache.maven.artifact.factory,org.codehaus.plexus,org.apache.maven.monitor.logging,org.apache.maven.compat,org.codehaus.plexus.classworlds.realm,org.apache.maven.artifact.resolver,org.apache.maven.project,org.apache.maven.reporting,org.codehaus.plexus.context,org.apache.maven.errors,org.apache.maven.project.path&quot;,org.apache.maven.project.validation;uses:=&quot;org.codehaus.plexus.util,org.apache.maven.artifact,org.apache.maven.model&quot;,org.codehaus.plexus.util.cli.shell;uses:=&quot;org.codehaus.plexus.util&quot;,org.codehaus.plexus.classworlds.strategy;uses:=&quot;org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.classworlds&quot;,org.codehaus.plexus.component.manager;uses:=&quot;org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.util,org.codehaus.plexus.component.repository,org.codehaus.plexus,org.codehaus.plexus.lifecycle,org.codehaus.plexus.component.factory,org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.logging,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.codehaus.plexus.component.builder&quot;,org.codehaus.plexus.util.cli;uses:=&quot;org.codehaus.plexus.util.cli.shell,org.codehaus.plexus.util&quot;,org.apache.maven.cli;uses:=&quot;org.apache.maven.lifecycle,org.codehaus.plexus.util,org.apache.maven.wagon.resource,org.apache.maven.wagon,org.apache.maven.embedder,org.codehaus.plexus.logging,org.apache.maven.execution,org.apache.maven.project,org.apache.maven.reactor,org.apache.maven.wagon.events,org.codehaus.plexus.util.cli,org.apache.maven.errors,org.apache.maven,org.codehaus.plexus.classworlds,org.apache.maven.wagon.repository,org.apache.commons.cli&quot;,org.codehaus.plexus.personality.plexus.lifecycle.phase;uses:=&quot;org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.util,org.codehaus.plexus.component.configurator,org.codehaus.plexus.configuration,org.codehaus.plexus.component.repository,org.codehaus.plexus,org.codehaus.plexus.configuration.source,org.codehaus.plexus.logging,org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.context,org.codehaus.plexus.component.manager,org.codehaus.plexus.lifecycle.phase&quot;,org.codehaus.plexus.classworlds;uses:=&quot;org.codehaus.plexus.classworlds.realm&quot;,org.apache.maven.wagon.providers.ssh.knownhost;uses:=&quot;org.apache.maven.wagon.authentication,org.codehaus.plexus.util&quot;,org.codehaus.plexus.util.io,org.apache.maven.wagon.shared.http;uses:=&quot;org.w3c.tidy,org.codehaus.plexus.util,org.w3c.dom,org.apache.maven.wagon&quot;,org.apache.maven.wagon.repository;uses:=&quot;org.apache.maven.wagon&quot;,org.apache.maven.wagon.providers.http;uses:=&quot;org.apache.maven.wagon.authentication,org.apache.maven.wagon.resource,org.apache.maven.wagon.authorization,org.apache.maven.wagon,org.apache.maven.wagon.proxy,org.apache.maven.wagon.shared.http,org.apache.maven.wagon.repository&quot;,org.apache.maven.artifact.repository;uses:=&quot;org.apache.maven.artifact.metadata,org.apache.maven.artifact.repository.layout,org.apache.maven.artifact,org.apache.maven.wagon.repository&quot;,org.apache.maven.lifecycle;uses:=&quot;org.apache.maven.monitor.event,org.codehaus.plexus.util.xml,org.apache.maven.plugin.descriptor,org.apache.maven.plugin.loader,org.apache.maven.project.artifact,org.apache.maven.plugin,org.apache.maven.execution,org.codehaus.plexus.logging,org.aspectj.runtime.internal,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.maven,org.codehaus.plexus.util.xml.pull,org.apache.maven.lifecycle.model.io.xpp3,org.apache.maven.lifecycle.model,org.apache.maven.realm,org.codehaus.plexus,org.apache.maven.compat,org.codehaus.plexus.classworlds.realm,org.apache.maven.artifact.resolver,org.apache.maven.lifecycle.binding,org.apache.maven.project,org.codehaus.plexus.context,org.apache.maven.errors,org.apache.maven.lifecycle.plan&quot;,org.codehaus.plexus.component.repository.exception;uses:=&quot;org.codehaus.plexus.classworlds.realm&quot;,org.codehaus.plexus.util.dag,org.apache.maven.realm;uses:=&quot;org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.configuration,org.codehaus.plexus.component.repository,org.apache.maven.artifact,org.apache.maven.model,org.codehaus.plexus,org.apache.maven.artifact.resolver.filter,org.codehaus.plexus.component.discovery,org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.logging,org.codehaus.plexus.context,org.codehaus.plexus.classworlds&quot;,org.apache.maven.wagon.resource,org.codehaus.plexus.configuration;uses:=&quot;org.codehaus.plexus.component.repository,org.codehaus.plexus.configuration.xml,org.codehaus.plexus.util.xml,org.codehaus.plexus.util.xml.pull&quot;,org.codehaus.plexus.component.composition.setter;uses:=&quot;org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.component.composition,org.codehaus.plexus.component.repository,org.codehaus.plexus&quot;,org.apache.maven.profiles.activation;uses:=&quot;org.apache.maven.profiles,org.apache.maven.project.aspect,org.codehaus.plexus.component.configurator.expression,org.codehaus.plexus.util,org.apache.maven.realm,org.codehaus.plexus.component.configurator,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.configuration,org.codehaus.plexus.configuration.xml,org.codehaus.plexus.util.xml,org.codehaus.plexus.util.interpolation,org.apache.maven.model,org.codehaus.plexus.logging.console,org.codehaus.plexus,org.codehaus.plexus.logging,org.codehaus.plexus.classworlds.realm,org.aspectj.runtime.internal,org.codehaus.plexus.context,org.codehaus.plexus.personality.plexus.lifecycle.phase&quot;,org.apache.maven.wagon.providers.ssh.jsch.interactive;uses:=&quot;org.apache.maven.wagon.authentication,org.codehaus.plexus.components.interactivity,com.jcraft.jsch&quot;,org.apache.maven.toolchain.model,org.codehaus.plexus;uses:=&quot;org.codehaus.plexus.util,org.codehaus.plexus.component.repository,org.codehaus.plexus.util.xml,org.codehaus.plexus.component.discovery,org.codehaus.plexus.component.factory,org.codehaus.plexus.logging,org.aspectj.runtime.internal,org.codehaus.plexus.component.manager,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.codehaus.plexus.classworlds,org.codehaus.plexus.component.repository.io,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.configuration,org.aspectj.internal.lang.annotation,org.codehaus.plexus.lifecycle,org.codehaus.plexus.configuration.source,org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.container.initialization,org.codehaus.plexus.aspect,org.codehaus.plexus.context,org.codehaus.plexus.lifecycle.phase&quot;,org.apache.maven.artifact.factory;uses:=&quot;org.apache.maven.artifact.handler,org.apache.maven.artifact.versioning,org.apache.maven.artifact,org.apache.maven.artifact.handler.manager&quot;,org.apache.maven.wagon;uses:=&quot;org.apache.maven.wagon.authentication,org.apache.maven.wagon.resource,org.codehaus.plexus.util,org.apache.maven.wagon.events,org.apache.maven.wagon.authorization,org.apache.maven.wagon.proxy,org.apache.maven.wagon.repository&quot;,org.apache.maven.monitor.logging;uses:=&quot;org.codehaus.plexus.logging,org.apache.maven.plugin.logging&quot;,org.apache.maven.toolchain.model.io.xpp3;uses:=&quot;org.codehaus.plexus.util.xml,org.apache.maven.toolchain.model,org.codehaus.plexus.util.xml.pull&quot;,org.codehaus.plexus.classworlds.realm;uses:=&quot;org.codehaus.plexus.classworlds.strategy,org.codehaus.plexus.classworlds&quot;,org.apache.maven.project.build.model;uses:=&quot;org.apache.maven.project.aspect,org.apache.maven.profiles,org.apache.maven.artifact.repository,org.codehaus.plexus.util,org.apache.maven.artifact,org.codehaus.plexus.util.xml,org.apache.maven.profiles.activation,org.apache.maven.model,org.apache.maven.artifact.factory,org.codehaus.plexus.logging.console,org.apache.maven.model.io.xpp3,org.codehaus.plexus.logging,org.aspectj.runtime.internal,org.apache.maven.artifact.resolver,org.apache.maven.project,org.apache.maven.project.workspace,org.apache.maven,org.codehaus.plexus.util.xml.pull,org.apache.maven.profiles.build&quot;,org.apache.maven.artifact.installer;uses:=&quot;org.codehaus.plexus.logging,org.apache.maven.artifact.repository,org.apache.maven.artifact.metadata,org.apache.maven.artifact.handler,org.apache.maven.artifact.transform,org.codehaus.plexus.util,org.apache.maven.artifact,org.apache.maven.artifact.repository.metadata&quot;,org.apache.maven.wagon.events;uses:=&quot;org.apache.maven.wagon.resource,org.apache.maven.wagon,org.apache.maven.wagon.repository&quot;,org.apache.maven.project.error;uses:=&quot;org.apache.maven.artifact.repository,org.codehaus.plexus.component.repository.exception,org.apache.maven.artifact,org.apache.maven.profiles.activation,org.apache.maven.model,org.apache.maven.project.artifact,org.apache.maven.project.build.model,org.apache.maven.artifact.resolver,org.apache.maven.project.validation,org.apache.maven.project,org.apache.maven.project.interpolation,org.codehaus.plexus.util.xml.pull&quot;,org.codehaus.plexus.component.factory.java;uses:=&quot;org.codehaus.plexus.component.factory,org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.component.repository,org.codehaus.plexus&quot;,org.codehaus.plexus.interpolation.os,org.apache.maven.lifecycle.plan;uses:=&quot;org.apache.maven.lifecycle.model,org.apache.maven.lifecycle.statemgmt,org.apache.maven.lifecycle,org.apache.maven.plugin.descriptor,org.apache.maven.plugin.loader,org.apache.maven.execution,org.codehaus.plexus.logging,org.apache.maven.lifecycle.binding,org.aspectj.runtime.internal,org.apache.maven.project,org.apache.maven.errors&quot;,org.apache.maven.project.aspect;uses:=&quot;org.codehaus.plexus.component.repository.exception,org.apache.maven.artifact,org.aspectj.lang,org.apache.maven.profiles.activation,org.apache.maven.model,org.apache.maven.project.artifact,org.apache.maven.project.build.model,org.apache.maven.artifact.resolver,org.aspectj.runtime.internal,org.apache.maven.project,org.apache.maven.project.error,org.apache.maven.project.interpolation,org.codehaus.plexus.util.xml.pull&quot;,org.apache.maven.monitor.event;uses:=&quot;org.codehaus.plexus.logging,org.apache.maven.workspace&quot;,org.codehaus.plexus.classworlds.launcher;uses:=&quot;org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.classworlds&quot;,org.apache.maven.model,org.codehaus.plexus.component.discovery;uses:=&quot;org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.component.repository.io,org.codehaus.plexus.util,org.codehaus.plexus.component.repository,org.codehaus.plexus.context,org.codehaus.plexus.configuration,org.codehaus.plexus.util.xml&quot;,org.apache.maven.embedder;uses:=&quot;org.apache.maven.plugin.version,org.apache.maven.artifact.handler,org.apache.maven.monitor.event,org.apache.maven.model,org.apache.maven.workspace,org.codehaus.plexus.component.discovery,org.codehaus.plexus.logging,org.apache.maven.execution,org.apache.maven.settings.io.xpp3,org.apache.maven,org.apache.maven.artifact.handler.manager,org.apache.maven.settings,org.aspectj.lang,org.apache.maven.settings.validation,org.apache.maven.embedder.event,org.apache.maven.artifact.resolver,org.apache.maven.reactor,org.apache.maven.errors,org.apache.maven.embedder.cache,org.apache.maven.artifact.repository.layout,org.codehaus.plexus.util,org.apache.maven.embedder.execution,org.aspectj.runtime.reflect,org.apache.maven.artifact,org.codehaus.plexus.util.xml,org.apache.maven.plugin.descriptor,org.apache.maven.plugin,org.aspectj.runtime.internal,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.codehaus.plexus.classworlds,org.codehaus.plexus.util.xml.pull,org.apache.maven.artifact.repository,org.apache.maven.lifecycle,org.apache.maven.realm,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.util.dag,org.codehaus.plexus.configuration,org.codehaus.plexus,org.apache.maven.artifact.factory,org.apache.maven.model.io.xpp3,org.codehaus.plexus.classworlds.realm,org.apache.maven.compat,org.aspectj.lang.reflect,org.apache.maven.project,org.apache.maven.extension,org.apache.maven.lifecycle.plan&quot;,org.apache.maven.profiles.io.xpp3;uses:=&quot;org.apache.maven.profiles,org.codehaus.plexus.util,org.codehaus.plexus.util.xml,org.codehaus.plexus.util.xml.pull&quot;,org.apache.maven.artifact.deployer;uses:=&quot;org.apache.maven.artifact.repository,org.apache.maven.artifact.manager,org.apache.maven.artifact.handler,org.apache.maven.artifact.repository.layout,org.apache.maven.artifact.versioning,org.codehaus.plexus.util,org.apache.maven.artifact,org.apache.maven.wagon,org.apache.maven.artifact.repository.metadata,org.codehaus.plexus.logging,org.apache.maven.artifact.metadata,org.apache.maven.artifact.transform&quot;,org.apache.maven.project.interpolation;uses:=&quot;org.codehaus.plexus.logging,org.codehaus.plexus.util,org.codehaus.plexus.interpolation,org.apache.maven.model,org.apache.maven.project.path,org.apache.maven.model.io.xpp3,org.codehaus.plexus.util.xml.pull&quot;,org.apache.maven;uses:=&quot;org.apache.maven.project.aspect,org.apache.maven.artifact.versioning,org.codehaus.plexus.util,org.apache.maven.monitor.event,org.apache.maven.artifact,org.apache.maven.model,org.apache.maven.artifact.resolver.filter,org.apache.maven.plugin,org.codehaus.plexus.logging,org.apache.maven.execution,org.aspectj.runtime.internal,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.maven.lifecycle.model,org.apache.maven.artifact.repository,org.apache.maven.lifecycle,org.codehaus.plexus.util.dag,org.aspectj.lang,org.codehaus.plexus,org.apache.maven.compat,org.apache.maven.project,org.apache.maven.reactor,org.apache.maven.wagon.events,org.codehaus.plexus.context,org.apache.maven.errors,org.apache.maven.extension&quot;,org.apache.maven.artifact.handler.manager;uses:=&quot;org.apache.maven.artifact.handler&quot;,org.codehaus.plexus.component.configurator.converters;uses:=&quot;org.codehaus.plexus.component.configurator.expression,org.codehaus.plexus.util,org.codehaus.plexus.component.configurator,org.codehaus.plexus.configuration,org.codehaus.plexus.component.configurator.converters.lookup&quot;,org.apache.maven.profiles;uses:=&quot;org.apache.maven.project.aspect,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.util,org.apache.maven.realm,org.apache.maven.profiles.activation,org.codehaus.plexus.util.xml,org.codehaus.plexus.util.interpolation,org.apache.maven.model,org.codehaus.plexus,org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.logging,org.aspectj.runtime.internal,org.apache.maven.profiles.io.xpp3,org.apache.maven.project,org.codehaus.plexus.context,org.codehaus.plexus.util.xml.pull&quot;,org.apache.maven.lifecycle.model,org.apache.maven.doxia.sink,org.apache.maven.project.aspect.compat;uses:=&quot;org.aspectj.lang&quot;,org.codehaus.plexus.util.interpolation;uses:=&quot;org.codehaus.plexus.util,org.codehaus.plexus.util.cli,org.codehaus.plexus.util.introspection&quot;,org.codehaus.plexus.lifecycle;uses:=&quot;org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.component.manager,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.codehaus.plexus.lifecycle.phase,org.codehaus.plexus&quot;,org.apache.maven.settings.validation;uses:=&quot;org.apache.maven.settings&quot;,org.apache.maven.embedder.event;uses:=&quot;org.aspectj.runtime.internal,org.apache.maven.monitor.event,org.aspectj.lang,org.apache.maven.embedder&quot;,org.codehaus.plexus.component.configurator.converters.composite;uses:=&quot;org.codehaus.plexus.component.configurator.expression,org.codehaus.plexus.component.configurator,org.codehaus.plexus.util,org.codehaus.plexus.configuration,org.codehaus.plexus.component.configurator.converters.lookup,org.codehaus.plexus.component.configurator.converters&quot;,org.apache.maven.artifact.resolver;uses:=&quot;org.apache.maven.artifact.repository,org.apache.maven.artifact.resolver.conflict,org.apache.maven.artifact.manager,org.apache.maven.artifact.versioning,org.codehaus.plexus.util,org.apache.maven.artifact,org.apache.maven.artifact.factory,org.apache.maven.wagon,org.apache.maven.artifact.resolver.filter,org.apache.maven.artifact.repository.metadata,org.codehaus.plexus.logging,org.apache.maven.artifact.metadata,org.apache.maven.artifact.transform&quot;,org.apache.maven.reactor;uses:=&quot;org.apache.maven.project,org.apache.maven.errors,org.apache.maven.extension&quot;,org.codehaus.plexus.aspect;uses:=&quot;org.aspectj.lang,org.aspectj.internal.lang.annotation,org.codehaus.plexus,org.codehaus.plexus.component.discovery,org.codehaus.plexus.classworlds.realm,org.aspectj.runtime.internal,org.aspectj.lang.annotation,org.codehaus.plexus.classworlds,org.codehaus.plexus.component.collections&quot;,org.apache.maven.toolchain.java;uses:=&quot;org.apache.maven.toolchain,org.codehaus.plexus.logging,org.codehaus.plexus.util,org.codehaus.plexus.util.xml,org.apache.maven.toolchain.model&quot;,org.apache.maven.artifact.transform;uses:=&quot;org.apache.maven.artifact.resolver.conflict,org.apache.maven.artifact.manager,org.apache.maven.artifact.repository,org.codehaus.plexus.util,org.apache.maven.artifact,org.apache.maven.artifact.repository.metadata,org.codehaus.plexus.logging,org.apache.maven.artifact.installer,org.apache.maven.artifact.metadata,org.apache.maven.artifact.resolver,org.apache.maven.artifact.deployer,org.apache.maven.artifact.resolver.metadata&quot;,org.apache.maven.errors;uses:=&quot;org.apache.maven.plugin.version,org.codehaus.plexus.component.configurator.expression,org.apache.maven.artifact.versioning,org.apache.maven.artifact,org.apache.maven.model,org.codehaus.plexus.logging.console,org.apache.maven.plugin.descriptor,org.apache.maven.plugin.loader,org.apache.maven.project.artifact,org.apache.maven.plugin,org.apache.maven.execution,org.codehaus.plexus.logging,org.aspectj.runtime.internal,org.apache.maven.artifact.metadata,org.apache.maven.project.interpolation,org.apache.maven,org.apache.maven.lifecycle.model,org.apache.maven.lifecycle,org.codehaus.plexus.util.dag,org.apache.maven.realm,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.configuration,org.aspectj.lang,org.apache.maven.artifact.resolver,org.apache.maven.project,org.apache.maven.reactor,org.apache.maven.project.error,org.apache.maven.project.path,org.apache.maven.extension,org.apache.maven.lifecycle.plan&quot;,org.apache.maven.project.path;uses:=&quot;org.apache.maven.model&quot;,org.apache.maven.profiles.build;uses:=&quot;org.apache.maven.project.aspect,org.apache.maven.profiles,org.apache.maven.artifact.repository,org.apache.maven.profiles.injection,org.apache.maven.artifact,org.apache.maven.profiles.activation,org.apache.maven.model,org.codehaus.plexus,org.codehaus.plexus.logging,org.aspectj.runtime.internal,org.apache.maven.project,org.codehaus.plexus.context,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.maven,org.codehaus.plexus.util.xml.pull&quot;,org.codehaus.plexus.component.collections;uses:=&quot;org.codehaus.plexus.logging,org.codehaus.plexus.classworlds.realm,org.aspectj.runtime.internal,org.codehaus.plexus.aspect,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.component.repository,org.codehaus.plexus.classworlds,org.codehaus.plexus&quot;,org.apache.maven.messages,org.apache.maven.wagon.providers.ssh.interactive;uses:=&quot;org.codehaus.plexus.components.interactivity&quot;,org.apache.maven.artifact.repository.layout;uses:=&quot;org.apache.maven.artifact.repository,org.apache.maven.artifact.metadata,org.apache.maven.artifact.handler,org.apache.maven.artifact&quot;,org.codehaus.plexus.util.xml;uses:=&quot;org.codehaus.plexus.util,org.codehaus.plexus.util.xml.pull&quot;,org.codehaus.plexus.util.introspection;uses:=&quot;org.codehaus.plexus.util&quot;,org.apache.maven.artifact.repository.metadata;uses:=&quot;org.apache.maven.artifact.repository,org.apache.maven.artifact.manager,org.codehaus.plexus.util,org.apache.maven.artifact,org.codehaus.plexus.util.xml,org.apache.maven.wagon,org.codehaus.plexus.logging,org.apache.maven.artifact.metadata,org.apache.maven.artifact.repository.metadata.io.xpp3,org.codehaus.plexus.util.xml.pull&quot;,org.apache.maven.plugin.descriptor;uses:=&quot;org.codehaus.plexus.util,org.codehaus.plexus.configuration,org.codehaus.plexus.component.repository,org.codehaus.plexus.configuration.xml,org.apache.maven.artifact,org.codehaus.plexus.util.xml,org.apache.maven.plugin,org.codehaus.plexus.classworlds.realm,org.apache.maven.plugin.lifecycle.io.xpp3,org.apache.maven.plugin.lifecycle,org.codehaus.plexus.util.xml.pull&quot;,org.apache.maven.embedder.user;uses:=&quot;org.apache.maven.settings,org.apache.maven.execution&quot;,org.apache.maven.project.artifact;uses:=&quot;org.apache.maven.artifact.repository,org.apache.maven.artifact.handler,org.apache.maven.artifact.versioning,org.codehaus.plexus.util,org.codehaus.plexus.component.repository.exception,org.apache.maven.artifact,org.apache.maven.model,org.codehaus.plexus,org.apache.maven.artifact.factory,org.apache.maven.artifact.repository.metadata,org.apache.maven.artifact.resolver.filter,org.codehaus.plexus.logging,org.apache.maven.project.validation,org.apache.maven.artifact.metadata,org.apache.maven.project,org.codehaus.plexus.context,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.maven.artifact.resolver.metadata&quot;,org.apache.maven.wagon.authentication;uses:=&quot;org.apache.maven.wagon&quot;,org.apache.maven.artifact.metadata;uses:=&quot;org.apache.maven.artifact.repository,org.apache.maven.artifact,org.apache.maven.artifact.repository.metadata&quot;,org.apache.maven.plugin.lifecycle.io.xpp3;uses:=&quot;org.codehaus.plexus.util,org.codehaus.plexus.util.xml,org.apache.maven.plugin.lifecycle,org.codehaus.plexus.util.xml.pull&quot;,org.apache.maven.artifact.resolver.metadata;uses:=&quot;org.apache.maven.artifact.resolver.conflict,org.apache.maven.artifact.repository,org.codehaus.plexus.component.repository.exception,org.apache.maven.artifact,org.codehaus.plexus,org.apache.maven.artifact.factory,org.codehaus.plexus.logging,org.apache.maven.artifact.resolver,org.apache.maven.artifact.transform&quot;,org.apache.maven.wagon.proxy,org.codehaus.plexus.util.xml.pull;uses:=&quot;org.codehaus.plexus.util,org.codehaus.plexus.util.xml&quot;,org.apache.maven.wagon.providers.ssh.external;uses:=&quot;org.apache.maven.wagon.authentication,org.apache.maven.wagon.providers.ssh,org.codehaus.plexus.util,org.apache.maven.wagon.authorization,org.apache.maven.wagon.resource,org.codehaus.plexus.util.cli,org.apache.maven.wagon,org.apache.maven.wagon.repository&quot;,org.apache.maven.lifecycle.model.io.xpp3;uses:=&quot;org.apache.maven.lifecycle.model,org.codehaus.plexus.util,org.codehaus.plexus.util.xml,org.codehaus.plexus.util.xml.pull&quot;,org.apache.maven.lifecycle.statemgmt;uses:=&quot;org.apache.maven.lifecycle.model,org.apache.maven.plugin,org.apache.maven.execution,org.apache.maven.lifecycle,org.apache.maven.lifecycle.binding,org.apache.maven.project,org.apache.maven.plugin.logging,org.codehaus.plexus.util.xml,org.apache.maven.plugin.descriptor,org.apache.maven.plugin.loader&quot;,org.codehaus.plexus.components.interactivity;uses:=&quot;org.codehaus.plexus.logging,org.codehaus.plexus.util,org.codehaus.plexus.personality.plexus.lifecycle.phase&quot;,org.apache.maven.artifact.manager;uses:=&quot;org.apache.maven.artifact.repository.layout,org.codehaus.plexus.util,org.codehaus.plexus.component.configurator,org.apache.maven.artifact,org.codehaus.plexus.util.xml,org.apache.maven.artifact.repository.metadata,org.apache.maven.wagon.authentication,org.codehaus.plexus.logging,org.apache.maven.artifact.metadata,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.maven.wagon.proxy,org.apache.maven.wagon.repository,org.apache.maven.artifact.repository,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.configuration,org.codehaus.plexus.configuration.xml,org.codehaus.plexus,org.apache.maven.wagon,org.codehaus.plexus.classworlds.realm,org.apache.maven.wagon.authorization,org.apache.maven.wagon.events,org.codehaus.plexus.context,org.apache.maven.wagon.observers&quot;,org.codehaus.plexus.component;uses:=&quot;org.codehaus.plexus.component.configurator,org.codehaus.plexus.component.repository&quot;,org.codehaus.plexus.configuration.xml;uses:=&quot;org.codehaus.plexus.configuration,org.codehaus.plexus.configuration.io,org.codehaus.plexus.util.xml&quot;,org.apache.maven.model.io.xpp3;uses:=&quot;org.codehaus.plexus.util,org.codehaus.plexus.util.xml,org.apache.maven.model,org.codehaus.plexus.util.xml.pull&quot;,org.codehaus.plexus.configuration.source;uses:=&quot;org.codehaus.plexus.component.repository,org.codehaus.plexus.configuration&quot;,org.codehaus.plexus.interpolation.reflection;uses:=&quot;org.codehaus.plexus.interpolation.util&quot;,org.apache.maven.compat;uses:=&quot;org.apache.maven.plugin.version,org.apache.maven.artifact.versioning,org.apache.maven.artifact,org.codehaus.plexus.util.xml,org.apache.maven.model,org.apache.maven.plugin.descriptor,org.apache.maven.plugin,org.apache.maven.execution,org.codehaus.plexus.logging,org.aspectj.runtime.internal,org.apache.maven,org.codehaus.plexus.util.xml.pull,org.apache.maven.settings,org.apache.maven.lifecycle.model,org.apache.maven.artifact.repository,org.apache.maven.lifecycle,org.codehaus.plexus.component.repository.exception,org.aspectj.lang,org.apache.maven.artifact.factory,org.codehaus.plexus,org.codehaus.plexus.classworlds.realm,org.apache.maven.lifecycle.binding,org.apache.maven.artifact.resolver,org.apache.maven.project,org.apache.maven.errors,org.apache.maven.extension&quot;,org.apache.maven.lifecycle.binding;uses:=&quot;org.apache.maven.lifecycle.model,org.apache.maven.lifecycle,org.apache.maven.realm,org.apache.maven.lifecycle.mapping,org.codehaus.plexus.util.xml,org.apache.maven.model,org.codehaus.plexus,org.apache.maven.plugin.descriptor,org.apache.maven.plugin.loader,org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.logging,org.apache.maven.execution,org.apache.maven.compat,org.aspectj.runtime.internal,org.apache.maven.project,org.apache.maven.reporting,org.codehaus.plexus.context,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.maven.plugin.lifecycle,org.codehaus.plexus.util.xml.pull&quot;,org.codehaus.plexus.container.initialization;uses:=&quot;org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.configuration,org.codehaus.plexus.component.repository,org.codehaus.plexus.logging.console,org.codehaus.plexus,org.codehaus.plexus.lifecycle,org.codehaus.plexus.configuration.source,org.codehaus.plexus.component.discovery,org.codehaus.plexus.component.factory,org.codehaus.plexus.logging,org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.context,org.codehaus.plexus.component.manager,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.codehaus.plexus.classworlds&quot;,org.apache.maven.project;uses:=&quot;org.apache.maven.project.inheritance,org.apache.maven.project.aspect,org.apache.maven.project.injection,org.apache.maven.artifact.handler,org.apache.maven.artifact.versioning,org.codehaus.plexus.util,org.apache.maven.artifact,org.codehaus.plexus.util.xml,org.apache.maven.model,org.apache.maven.artifact.resolver.filter,org.apache.maven.project.artifact,org.codehaus.plexus.logging,org.apache.maven.artifact.metadata,org.aspectj.runtime.internal,org.apache.maven.project.validation,org.apache.maven.project.interpolation,org.apache.maven,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.maven.artifact.handler.manager,org.codehaus.plexus.util.xml.pull,org.apache.maven.profiles,org.apache.maven.artifact.repository,org.codehaus.plexus.util.dag,org.apache.maven.profiles.activation,org.codehaus.plexus,org.apache.maven.artifact.factory,org.apache.maven.model.io.xpp3,org.apache.maven.project.build.model,org.apache.maven.artifact.resolver,org.apache.maven.project.workspace,org.apache.maven.project.path,org.apache.maven.profiles.build&quot;,org.apache.maven.project.workspace;uses:=&quot;org.apache.maven.project.build.model,org.codehaus.plexus.logging,org.apache.maven.project,org.apache.maven.model,org.apache.maven.workspace&quot;,org.apache.maven.wagon.authorization;uses:=&quot;org.apache.maven.wagon&quot;,org.codehaus.plexus.lifecycle.phase;uses:=&quot;org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.component.manager,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.codehaus.plexus&quot;,org.apache.maven.wagon.providers.file;uses:=&quot;org.apache.maven.wagon.resource,org.apache.maven.wagon.authorization,org.codehaus.plexus.util,org.apache.maven.wagon,org.apache.maven.wagon.repository&quot;,org.apache.maven.extension;uses:=&quot;org.apache.maven.plugin.version,org.apache.maven.artifact.versioning,org.apache.maven.monitor.event,org.apache.maven.artifact,org.apache.maven.model,org.codehaus.plexus.logging.console,org.apache.maven.artifact.resolver.filter,org.apache.maven.plugin.descriptor,org.apache.maven.plugin,org.codehaus.plexus.logging,org.apache.maven.execution,org.aspectj.runtime.internal,org.apache.maven.artifact.metadata,org.apache.maven.project.interpolation,org.codehaus.plexus.personality.plexus.lifecycle.phase,org.apache.maven,org.apache.maven.profiles,org.apache.maven.artifact.manager,org.apache.maven.artifact.repository,org.apache.maven.realm,org.apache.maven.profiles.activation,org.apache.maven.artifact.factory,org.codehaus.plexus,org.apache.maven.compat,org.codehaus.plexus.classworlds.realm,org.apache.maven.project.build.model,org.apache.maven.artifact.resolver,org.apache.maven.project,org.apache.maven.reactor,org.codehaus.plexus.context,org.apache.maven.errors&quot;&#xA;Tool: Bnd-0.0.255&#xA;Ignore-Package: org.objectweb.asm.commons,javax.swing.text,javax.management,javax.swing.tree,javax.swing.table,javax.swing.border,org.objectweb.asm,com.sun.jdmk.comm,javax.swing.event,javax.naming,javax.xml.parsers,javax.mail.internet,junit.framework,javax.mail,javax.swing,javax.jms&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.5&#xA;Bundle-Name: Eclipse IAM Maven Embedder&#xA;Bundle-Vendor: The Apache Software Foundation&#xA;Bundle-ClassPath: .,lib/maven-core-2.1-SNAPSHOT.jar,lib/maven-lifecycle-2.1-SNAPSHOT.jar,lib/log4j-1.2.12.jar,lib/maven-workspace-2.1-SNAPSHOT.jar,lib/wagon-ssh-common-1.0-beta-2.jar,lib/maven-embedder-2.1-SNAPSHOT.jar,lib/xbean-reflect-3.4-SNAPSHOT.jar,lib/maven-artifact-3.0-SNAPSHOT.jar,lib/doxia-sink-api-1.0-alpha-9.jar,lib/wagon-http-shared-1.0-beta-2.jar,lib/wagon-ssh-1.0-beta-2.jar,lib/maven-profile-2.1-SNAPSHOT.jar,lib/plexus-interactivity-api-1.0-alpha-6.jar,lib/maven-reporting-api-2.1-SNAPSHOT.jar,lib/wagon-provider-api-1.0-beta-2.jar,lib/wagon-http-lightweight-1.0-beta-2.jar,lib/maven-toolchain-2.1-SNAPSHOT.jar,lib/maven-model-2.1-SNAPSHOT.jar,lib/wagon-file-1.0-beta-2.jar,lib/wagon-ssh-external-1.0-beta-2.jar,lib/plexus-classworlds-1.2-alpha-12.jar,lib/plexus-utils-1.5.1.jar,lib/maven-plugin-api-2.1-SNAPSHOT.jar,lib/plexus-interpolation-1.0-SNAPSHOT.jar,lib/commons-logging-api-1.1.jar,lib/plexus-container-default-1.0-alpha-46-SNAPSHOT.jar,lib/maven-project-2.1-SNAPSHOT.jar&#xA;Bundle-SymbolicName: org.apache.maven.embedder&#xA;Import-Package: org.w3c.dom,org.xml.sax,org.xml.sax.helpers&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt&#xA;Build-Jdk: 1.5.0_13&#xA;Embed-Transitive: true&#xA;Bundle-Version: 2.1.0.659801c&#xA;Private-Package: lib,licenses,org.apache.commons.logging,org.apache.commons.logging.impl,org.apache.log4j,org.apache.log4j.chainsaw,org.apache.log4j.config,org.apache.log4j.helpers,org.apache.log4j.jdbc,org.apache.log4j.jmx,org.apache.log4j.lf5,org.apache.log4j.lf5.config,org.apache.log4j.lf5.util,org.apache.log4j.lf5.viewer,org.apache.log4j.lf5.viewer.categoryexplorer,org.apache.log4j.lf5.viewer.configure,org.apache.log4j.lf5.viewer.images,org.apache.log4j.net,org.apache.log4j.nt,org.apache.log4j.or,org.apache.log4j.or.jms,org.apache.log4j.or.sax,org.apache.log4j.spi,org.apache.log4j.varia,org.apache.log4j.xml,org.apache.xbean.propertyeditor,org.apache.xbean.recipe,org.codehaus.classworlds,org.codehaus.doxia.sink&#xA;Embed-Dependency: *;scope=compile|runtime;inline=false;artifactId=!cli|lang|runtime|tidy|jsch|commons-logging|jdom&#xA;Eclipse-BuddyPolicy: registered&#xA;Require-Bundle: org.aspectj.runtime;bundle-version=&quot;1.5.3&quot;,org.apache.commons.cli;bundle-version=&quot;1.0.0&quot;,org.apache.commons.lang;bundle-version=&quot;2.1.0&quot;,org.w3c.tidy;bundle-version=&quot;0.0.0&quot;,com.jcraft.jsch;bundle-version=&quot;0.1.31&quot;
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='tooling.osgi.bundle.default' version='1.0.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' range='0.0.0' multiple='true' greedy='false'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='2'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='tooling.osgi.bundle.default' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.flavor' name='tooling' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' range='0.0.0' multiple='true' greedy='false'/>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='4'>
+          <instruction key='install'>
+            installBundle(bundle:${artifact})
+          </instruction>
+          <instruction key='uninstall'>
+            uninstallBundle(bundle:${artifact})
+          </instruction>
+          <instruction key='unconfigure'>
+
+          </instruction>
+          <instruction key='configure'>
+            setStartLevel(startLevel:4);
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='tooling.org.eclipse.update.feature.default' version='1.0.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='2'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='tooling.org.eclipse.update.feature.default' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.flavor' name='tooling' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </requires>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <touchpoint id='null' version='0.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='install'>
+            installFeature(feature:${artifact},featureId:default,featureVersion:default)
+          </instruction>
+          <instruction key='uninstall'>
+            uninstallFeature(feature:${artifact},featureId:default,featureVersion:default)
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='com.jcraft.jsch' version='0.1.37.v200803061811' singleton='false'>
+      <update id='com.jcraft.jsch' range='[0.0.0,0.1.37.v200803061811)' severity='0'/>
+      <properties size='4'>
+        <property name='df_LT.bundleName' value='JSch'/>
+        <property name='df_LT.venderName' value='JCraft, Inc.'/>
+        <property name='org.eclipse.equinox.p2.name' value='%bundleName'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%venderName'/>
+      </properties>
+      <provides size='8'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='com.jcraft.jsch' version='0.1.37.v200803061811'/>
+        <provided namespace='osgi.bundle' name='com.jcraft.jsch' version='0.1.37.v200803061811'/>
+        <provided namespace='java.package' name='com.jcraft.jsch' version='0.0.0'/>
+        <provided namespace='java.package' name='com.jcraft.jsch.jce' version='0.0.0'/>
+        <provided namespace='java.package' name='com.jcraft.jsch.jcraft' version='0.0.0'/>
+        <provided namespace='java.package' name='com.jcraft.jsch.jgss' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='com.jcraft.jsch' version='0.1.37.v200803061811'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 0.1.37.v200803061811&#xA;Export-Package: com.jcraft.jsch,com.jcraft.jsch.jce;x-internal:=true,com.jcraft.jsch.jcraft;x-internal:=true,com.jcraft.jsch.jgss;x-internal:=true&#xA;Bundle-SymbolicName: com.jcraft.jsch&#xA;Bundle-Localization: plugin&#xA;Bundle-ClassPath: .&#xA;Bundle-Name: %bundleName&#xA;Bundle-Vendor: %venderName
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.feature.feature.jar' version='2.1.0.659801c'>
+      <update id='org.apache.maven.feature.feature.jar' range='[0.0.0,2.1.0.659801c)' severity='0'/>
+      <properties size='8'>
+        <property name='org.eclipse.equinox.p2.name' value='%featureName'/>
+        <property name='org.eclipse.equinox.p2.description' value='%description'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
+        <property name='df_LT.featureName' value='Apache Maven'/>
+        <property name='df_LT.copyright' value='Copyright The Apache Software Foundation http://www.apache.org/'/>
+        <property name='df_LT.providerName' value='The Apache Software Foundation'/>
+        <property name='df_LT.description' value='Eclipse Feature for Apache Maven'/>
+        <property name='df_LT.license' value='The Apache Software License, Version 2.0'/>
+      </properties>
+      <provides size='4'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.feature.feature.jar' version='2.1.0.659801c'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
+        <provided namespace='org.eclipse.update.feature' name='org.apache.maven.feature' version='2.1.0.659801c'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size='1'>
+        <artifact classifier='org.eclipse.update.feature' id='org.apache.maven.feature' version='2.1.0.659801c'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size='1'>
+        <license>
+          %license
+        </license>
+      </licenses>
+      <copyright>
+        %copyright
+      </copyright>
+    </unit>
+    <unit id='config.a.jre' version='1.6.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='a.jre' range='1.6.0'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='config.a.jre' version='1.6.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='a.jre' range='1.6.0'/>
+      </requires>
+      <touchpoint id='org.eclipse.equinox.p2.native' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='install'>
+
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.feature.feature.group' version='2.1.0.659801c' singleton='false'>
+      <update id='org.apache.maven.feature.feature.group' range='[0.0.0,2.1.0.659801c)' severity='0'/>
+      <properties size='9'>
+        <property name='org.eclipse.equinox.p2.name' value='%featureName'/>
+        <property name='org.eclipse.equinox.p2.description' value='%description'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
+        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
+        <property name='df_LT.featureName' value='Apache Maven'/>
+        <property name='df_LT.copyright' value='Copyright The Apache Software Foundation http://www.apache.org/'/>
+        <property name='df_LT.providerName' value='The Apache Software Foundation'/>
+        <property name='df_LT.description' value='Eclipse Feature for Apache Maven'/>
+        <property name='df_LT.license' value='The Apache Software License, Version 2.0'/>
+      </properties>
+      <provides size='2'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.feature.feature.group' version='2.1.0.659801c'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <requires size='6'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.embedder' range='[2.1.0.659801c,2.1.0.659801c]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.w3c.tidy' range='[0.0.0.4aug2000r7-dev-200711190855,0.0.0.4aug2000r7-dev-200711190855]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.cli' range='[1.0.0.v20080604-1500,1.0.0.v20080604-1500]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.collections' range='[3.2.0.v200803061811,3.2.0.v200803061811]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='com.jcraft.jsch' range='[0.1.37.v200803061811,0.1.37.v200803061811]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.feature.feature.jar' range='[2.1.0.659801c,2.1.0.659801c]'>
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <licenses size='1'>
+        <license>
+          %license
+        </license>
+      </licenses>
+      <copyright>
+        %copyright
+      </copyright>
+    </unit>
+    <unit id='org.w3c.tidy' version='0.0.0.4aug2000r7-dev-200711190855' singleton='false'>
+      <update id='org.w3c.tidy' range='[0.0.0,0.0.0.4aug2000r7-dev-200711190855)' severity='0'/>
+      <properties size='4'>
+        <property name='org.eclipse.equinox.p2.name' value='JTidy'/>
+        <property name='org.eclipse.equinox.p2.description' value='JTidy is a Java port of HTML Tidy, a HTML syntax checker and pretty printer. Like its non-Java cousin, JTidy can be used as a tool for cleaning up malformed and faulty HTML. In addition, JTidy provides a DOM parser for real-world HTML.'/>
+        <property name='org.eclipse.equinox.p2.provider' value='JTidy'/>
+        <property name='org.eclipse.equinox.p2.doc.url' value='http://jtidy.sf.net'/>
+      </properties>
+      <provides size='4'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.w3c.tidy' version='0.0.0.4aug2000r7-dev-200711190855'/>
+        <provided namespace='osgi.bundle' name='org.w3c.tidy' version='0.0.0.4aug2000r7-dev-200711190855'/>
+        <provided namespace='java.package' name='org.w3c.tidy' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='2'>
+        <required namespace='java.package' name='org.w3c.dom' range='0.0.0'/>
+        <required namespace='java.package' name='org.w3c.tidy' range='0.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.w3c.tidy' version='0.0.0.4aug2000r7-dev-200711190855'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Description: JTidy is a Java port of HTML Tidy, a HTML syntax checker and pretty printer. Like its non-Java cousin, JTidy can be used as a tool for cleaning up malformed and faulty HTML. In addition, JTidy provides a DOM parser for real-world HTML.&#xA;Bundle-Name: JTidy&#xA;Tool: Bnd-0.0.212&#xA;Bundle-Vendor: JTidy&#xA;Created-By: 1.5.0_10 (Sun Microsystems Inc.)&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 0.0.0.4aug2000r7-dev-200711190855&#xA;Bnd-LastModified: 1195463418437&#xA;Bundle-DocURL: http://jtidy.sf.net&#xA;Bundle-License: http://svn.sourceforge.net/viewvc/*checkout*/jtidy/trunk/jtidy/LICENSE.txt?revision=95&#xA;Include-Resource: LICENSE.txt&#xA;Export-Package: org.w3c.tidy;uses:=org.w3c.dom&#xA;Bundle-SymbolicName: org.w3c.tidy&#xA;Import-Package: org.w3c.dom,org.w3c.tidy
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='a.jre' version='1.6.0' singleton='false'>
+      <provides size='117'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='a.jre' version='1.6.0'/>
+        <provided namespace='java.package' name='javax.accessibility' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.activity' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.crypto' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.crypto.interfaces' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.crypto.spec' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.event' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.metadata' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.plugins.bmp' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.plugins.jpeg' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.stream' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.loading' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.modelmbean' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.monitor' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.openmbean' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.relation' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.remote' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.remote.rmi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.timer' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming.directory' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming.event' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming.ldap' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.net' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.net.ssl' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.print' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.print.attribute' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.print.attribute.standard' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.print.event' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.rmi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.rmi.CORBA' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.rmi.ssl' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.callback' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.kerberos' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.login' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.x500' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.cert' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.sasl' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sound.midi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sound.midi.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sound.sampled' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sound.sampled.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sql' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sql.rowset' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sql.rowset.serial' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sql.rowset.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.border' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.colorchooser' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.event' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.filechooser' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf.basic' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf.metal' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf.multi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf.synth' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.table' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.text' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.text.html' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.text.html.parser' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.text.rtf' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.tree' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.undo' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.transaction' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.transaction.xa' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.datatype' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.namespace' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.parsers' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.transform' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.transform.dom' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.transform.sax' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.transform.stream' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.validation' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.xpath' version='0.0.0'/>
+        <provided namespace='java.package' name='org.ietf.jgss' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA_2_3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA_2_3.portable' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA.DynAnyPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA.ORBPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA.portable' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA.TypeCodePackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CosNaming' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CosNaming.NamingContextExtPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CosNaming.NamingContextPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.Dynamic' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.DynamicAny' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.DynamicAny.DynAnyFactoryPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.DynamicAny.DynAnyPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.IOP' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.IOP.CodecFactoryPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.IOP.CodecPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.Messaging' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableInterceptor' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableInterceptor.ORBInitInfoPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.CurrentPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.POAManagerPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.POAPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.portable' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.ServantLocatorPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.SendingContext' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.stub.java.rmi' version='0.0.0'/>
+        <provided namespace='java.package' name='org.w3c.dom' version='0.0.0'/>
+        <provided namespace='java.package' name='org.w3c.dom.bootstrap' version='0.0.0'/>
+        <provided namespace='java.package' name='org.w3c.dom.events' version='0.0.0'/>
+        <provided namespace='java.package' name='org.w3c.dom.ls' version='0.0.0'/>
+        <provided namespace='java.package' name='org.xml.sax' version='0.0.0'/>
+        <provided namespace='java.package' name='org.xml.sax.ext' version='0.0.0'/>
+        <provided namespace='java.package' name='org.xml.sax.helpers' version='0.0.0'/>
+      </provides>
+      <touchpoint id='org.eclipse.equinox.p2.native' version='1.0.0'/>
+    </unit>
+  </units>
+</repository>

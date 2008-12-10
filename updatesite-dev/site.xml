@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <description url="http://q4e.googlecode.com/svn/trunk/updatesite-dev">
-      Maven embedder for Eclipse IAM: http://www.eclipse.org/iam
-   </description>
-   <feature url="features/org.apache.maven.feature_2.1.0.659801d.jar" id="org.apache.maven.feature" version="2.1.0.659801d"/>
-</site>

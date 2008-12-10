@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/org.apache.maven.feature_2.1.0.659801c.jar" id="org.apache.maven.feature" version="2.1.0.659801c">
+      <category name="IAMDEPS"/>
+   </feature>
+   <category-def name="IAMDEPS" label="IAM Deps">
+      <description>
+         Dependencies that IAM needs, but are not (yet) housed at eclipse.org
+      </description>
+   </category-def>
+</site>
