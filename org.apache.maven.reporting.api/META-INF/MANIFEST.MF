@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Maven Reporting Api Plug-in
+Bundle-SymbolicName: org.apache.maven.reporting.api
+Bundle-Version: 2.1.0.R659801
+Bundle-ClassPath: .
+Bundle-Vendor: Q4E Project
+Export-Package: org.apache.maven.reporting
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

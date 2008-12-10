@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Maven Toolchain Plug-in
+Bundle-SymbolicName: org.apache.maven.toolchain
+Bundle-Version: 2.1.0.R659801
+Bundle-Vendor: Q4E Project
+Export-Package: org.apache.maven.toolchain,
+ org.apache.maven.toolchain.java,
+ org.apache.maven.toolchain.model,
+ org.apache.maven.toolchain.model.io.xpp3
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

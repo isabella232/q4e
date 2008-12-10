@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Maven Core Plug-in
+Bundle-SymbolicName: org.apache.maven.core
+Bundle-Version: 2.1.0.R659801
+Bundle-ClassPath: .
+Bundle-Vendor: Q4E Project
+Export-Package: org.apache.maven,
+ org.apache.maven.compat,
+ org.apache.maven.errors,
+ org.apache.maven.execution,
+ org.apache.maven.extension,
+ org.apache.maven.lifecycle,
+ org.apache.maven.lifecycle.binding,
+ org.apache.maven.lifecycle.mapping,
+ org.apache.maven.lifecycle.plan,
+ org.apache.maven.lifecycle.statemgmt,
+ org.apache.maven.monitor.event,
+ org.apache.maven.monitor.logging,
+ org.apache.maven.plugin,
+ org.apache.maven.plugin.loader,
+ org.apache.maven.plugin.version,
+ org.apache.maven.reactor,
+ org.apache.maven.settings,
+ org.apache.maven.settings.io.xpp3,
+ org.apache.maven.settings.validation

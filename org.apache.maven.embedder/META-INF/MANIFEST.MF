@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Maven Embedder Plug-in
+Bundle-SymbolicName: org.apache.maven.embedder
+Bundle-Version: 2.1.0.R659801
+Bundle-ClassPath: .
+Bundle-Vendor: Q4E Project
+Export-Package: org.apache.maven.cli,
+ org.apache.maven.embedder,
+ org.apache.maven.embedder.cache,
+ org.apache.maven.embedder.event,
+ org.apache.maven.embedder.execution,
+ org.apache.maven.embedder.user
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

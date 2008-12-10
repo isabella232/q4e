@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Maven Artifact Plug-in
+Bundle-SymbolicName: org.apache.maven.artifact
+Bundle-Version: 3.0.0.R659801
+Bundle-Vendor: Q4E Project
+Export-Package: org.apache.maven.artifact,
+ org.apache.maven.artifact.deployer,
+ org.apache.maven.artifact.factory,
+ org.apache.maven.artifact.handler,
+ org.apache.maven.artifact.handler.manager,
+ org.apache.maven.artifact.installer,
+ org.apache.maven.artifact.manager,
+ org.apache.maven.artifact.metadata,
+ org.apache.maven.artifact.repository,
+ org.apache.maven.artifact.repository.layout,
+ org.apache.maven.artifact.repository.metadata,
+ org.apache.maven.artifact.repository.metadata.io.xpp3,
+ org.apache.maven.artifact.resolver,
+ org.apache.maven.artifact.resolver.conflict,
+ org.apache.maven.artifact.resolver.filter,
+ org.apache.maven.artifact.resolver.metadata,
+ org.apache.maven.artifact.transform,
+ org.apache.maven.artifact.versioning
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

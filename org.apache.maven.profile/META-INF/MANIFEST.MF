@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Maven Profile Plug-in
+Bundle-SymbolicName: org.apache.maven.profile
+Bundle-Version: 2.1.0.R659801
+Bundle-Vendor: Q4E Project
+Export-Package: org.apache.maven.profiles,
+ org.apache.maven.profiles.io.xpp3
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

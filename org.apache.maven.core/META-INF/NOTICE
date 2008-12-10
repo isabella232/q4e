@@ -1,0 +1,39 @@
+// ------------------------------------------------------------------
+// NOTICE file corresponding to the section 4d of The Apache License,
+// Version 2.0, in this case for Maven Core
+// ------------------------------------------------------------------
+
+Maven Core
+Copyright 2001-2008 The Apache Software Foundation
+
+This product includes/uses software(s) developed by 'an unknown organization'
+  - AspectJ runtime (http://www.aspectj.org)
+  - CLI
+  - Unnamed - log4j:log4j:jar:1.2.12
+
+This product includes/uses software(s) developed by 'Apache Software Foundation' (http://www.apache.org/)
+  - Maven Wagon API (http://maven.apache.org/wagon/wagon-provider-api)
+
+This product includes/uses software(s) developed by 'Codehaus' (http://www.codehaus.org/)
+  - Plexus Classworlds
+  - Default Plexus Container
+  - Plexus Default Interactivity Handler
+  - Plexus Interpolation API
+  - Plexus Common Utilities (http://plexus.codehaus.org/plexus-utils)
+
+This product includes/uses software(s) developed by 'The Apache Software Foundation' (http://jakarta.apache.org)
+  - Logging (http://jakarta.apache.org/commons/logging/)
+
+This product includes/uses software(s) developed by 'The Apache Software Foundation' (http://www.apache.org/)
+  - Maven Lifecycle Model (http://maven.apache.org/maven-lifecycle)
+  - Maven Model (http://maven.apache.org/maven-model)
+  - Maven Plugin API (http://maven.apache.org/maven-plugin-api)
+  - Maven Profile Model (http://maven.apache.org/maven-profile)
+  - Maven Project Builder (http://maven.apache.org/maven-project)
+  - Maven Reporting API (http://maven.apache.org/maven-reporting-api)
+  - Maven Workspace (http://maven.apache.org/maven-workspace)
+  - Maven Artifact (http://maven.apache.org/maven-artifact)
+  - Doxia :: Sink API (http://maven.apache.org/doxia/doxia/doxia-sink-api)
+  - Apache XBean :: Reflect (http://geronimo.apache.org/xbean/xbean-reflect)
+
+

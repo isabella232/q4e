@@ -1,0 +1,54 @@
+// ------------------------------------------------------------------
+// NOTICE file corresponding to the section 4d of The Apache License,
+// Version 2.0, in this case for Maven Embedder
+// ------------------------------------------------------------------
+
+Maven Embedder
+Copyright 2001-2008 The Apache Software Foundation
+
+This product includes/uses software(s) developed by 'an unknown organization'
+  - AspectJ runtime (http://www.aspectj.org)
+  - CLI
+  - Unnamed - log4j:log4j:jar:1.2.12
+
+This product includes/uses software(s) developed by 'Apache Software Foundation' (http://www.apache.org/)
+  - Maven Wagon File Provider (http://maven.apache.org/wagon/wagon-providers/wagon-file)
+  - Maven Wagon Lightweight HTTP Provider (http://maven.apache.org/wagon/wagon-providers/wagon-http-lightweight)
+  - Maven Wagon HTTP Shared Library (http://maven.apache.org/wagon/wagon-providers/wagon-http-shared)
+  - Maven Wagon API (http://maven.apache.org/wagon/wagon-provider-api)
+  - Maven Wagon SSH Provider (http://maven.apache.org/wagon/wagon-providers/wagon-ssh)
+  - Maven Wagon SSH Common Library (http://maven.apache.org/wagon/wagon-providers/wagon-ssh-common)
+  - Maven Wagon SSH External Provider (http://maven.apache.org/wagon/wagon-providers/wagon-ssh-external)
+  - XML Commons External Components XML APIs (http://xml.apache.org/commons/#external)
+
+This product includes/uses software(s) developed by 'Codehaus' (http://www.codehaus.org/)
+  - Plexus Classworlds
+  - Default Plexus Container
+  - Plexus Default Interactivity Handler
+  - Plexus Interpolation API
+  - Plexus Common Utilities (http://plexus.codehaus.org/plexus-utils)
+
+This product includes/uses software(s) developed by 'jcraft' (http://www.jcraft.com/jsch)
+  - JSch (http://www.jcraft.com/jsch/)
+
+This product includes/uses software(s) developed by 'JTidy' (http://jtidy.sf.net)
+  - JTidy (http://jtidy.sourceforge.net)
+
+This product includes/uses software(s) developed by 'The Apache Software Foundation' (http://jakarta.apache.org)
+  - Logging (http://jakarta.apache.org/commons/logging/)
+
+This product includes/uses software(s) developed by 'The Apache Software Foundation' (http://www.apache.org/)
+  - Maven Core (http://maven.apache.org/maven-core)
+  - Maven Lifecycle Model (http://maven.apache.org/maven-lifecycle)
+  - Maven Model (http://maven.apache.org/maven-model)
+  - Maven Plugin API (http://maven.apache.org/maven-plugin-api)
+  - Maven Profile Model (http://maven.apache.org/maven-profile)
+  - Maven Project Builder (http://maven.apache.org/maven-project)
+  - Maven Reporting API (http://maven.apache.org/maven-reporting-api)
+  - Maven Toolchains (http://maven.apache.org)
+  - Maven Workspace (http://maven.apache.org/maven-workspace)
+  - Maven Artifact (http://maven.apache.org/maven-artifact)
+  - Doxia :: Sink API (http://maven.apache.org/doxia/doxia/doxia-sink-api)
+  - Apache XBean :: Reflect (http://geronimo.apache.org/xbean/xbean-reflect)
+
+
