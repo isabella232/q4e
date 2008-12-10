@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: JCraft Java SSH / SCH Plug-in
+Bundle-SymbolicName: com.jcraft.jsch
+Bundle-Version: 0.1.31
+Bundle-ClassPath: .
+Bundle-Vendor: Q4E Project
+Export-Package: com.jcraft.jsch,
+ com.jcraft.jsch.jce,
+ com.jcraft.jsch.jcraft
+Bundle-RequiredExecutionEnvironment: J2SE-1.4
