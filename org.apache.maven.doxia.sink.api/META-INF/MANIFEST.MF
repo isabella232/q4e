@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Maven Doxia Sink Api Plug-in
+Bundle-SymbolicName: org.apache.maven.doxia.sink.api
+Bundle-Version: 1.0.0.a9
+Bundle-Vendor: Q4E Project
+Export-Package: org.apache.maven.doxia.sink,
+ org.codehaus.doxia.sink
+Bundle-RequiredExecutionEnvironment: J2SE-1.4
