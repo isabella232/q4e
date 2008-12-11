@@ -1,0 +1,16 @@
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'dependency'.
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Plexus Classworlds
+[INFO]    task-segment: [dependency:tree]
+[INFO] ------------------------------------------------------------------------
+[INFO] [dependency:tree]
+[INFO] org.codehaus.plexus:plexus-classworlds:jar:1.2-alpha-12
+[INFO] \- junit:junit:jar:3.8.1:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 6 seconds
+[INFO] Finished at: Thu Dec 11 11:16:02 MST 2008
+[INFO] Final Memory: 10M/21M
+[INFO] ------------------------------------------------------------------------

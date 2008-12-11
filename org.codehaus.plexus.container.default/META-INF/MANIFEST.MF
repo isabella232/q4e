@@ -39,3 +39,7 @@ Export-Package: org.codehaus.plexus,
  org.codehaus.plexus.logging.console,
  org.codehaus.plexus.personality.plexus.lifecycle.phase
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.codehaus.plexus.utils;bundle-version="1.5.1";visibility:=reexport,
+ org.codehaus.plexus.classworlds;bundle-version="1.2.0";visibility:=reexport,
+ org.aspectj.runtime;bundle-version="[1.5.3,2.0.0)";visibility:=reexport,
+ org.apache.xbean.reflect;bundle-version="3.4.0";visibility:=reexport

@@ -6,3 +6,4 @@ Bundle-Version: 1.0.0.a6
 Bundle-Vendor: Q4E Project
 Export-Package: org.codehaus.plexus.components.interactivity
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.codehaus.plexus.container.default;bundle-version="1.0.0";visibility:=reexport
