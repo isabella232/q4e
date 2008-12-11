@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Maven Wagon SSH Common Plug-in
+Bundle-SymbolicName: org.apache.maven.wagon.providers.ssh.common
+Bundle-Version: 1.0.0.b2
+Bundle-Vendor: Q4E Project
+Export-Package: org.apache.maven.wagon.providers.ssh,
+ org.apache.maven.wagon.providers.ssh.interactive,
+ org.apache.maven.wagon.providers.ssh.knownhost

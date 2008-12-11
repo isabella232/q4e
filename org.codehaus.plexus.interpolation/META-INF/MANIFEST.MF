@@ -1,0 +1,11 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Plexus Interpolation Plug-in
+Bundle-SymbolicName: org.codehaus.plexus.interpolation
+Bundle-Version: 1.0.0
+Bundle-Vendor: Q4E Project
+Export-Package: org.codehaus.plexus.interpolation,
+ org.codehaus.plexus.interpolation.os,
+ org.codehaus.plexus.interpolation.reflection,
+ org.codehaus.plexus.interpolation.util
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

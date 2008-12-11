@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Retrotranslator Plug-in
+Bundle-SymbolicName: net.sf.retrotranslator
+Bundle-Version: 1.2.1
+Bundle-ClassPath: .
+Bundle-Vendor: Q4E Project
+Export-Package: net.sf.retrotranslator.runtime.asm,
+ net.sf.retrotranslator.runtime.asm.signature,
+ net.sf.retrotranslator.runtime.format,
+ net.sf.retrotranslator.runtime.impl,
+ net.sf.retrotranslator.runtime.java.io,
+ net.sf.retrotranslator.runtime.java.lang,
+ net.sf.retrotranslator.runtime.java.lang.annotation,
+ net.sf.retrotranslator.runtime.java.lang.instrument,
+ net.sf.retrotranslator.runtime.java.lang.reflect,
+ net.sf.retrotranslator.runtime.java.math,
+ net.sf.retrotranslator.runtime.java.net,
+ net.sf.retrotranslator.runtime.java.nio,
+ net.sf.retrotranslator.runtime.java.rmi.server,
+ net.sf.retrotranslator.runtime.java.text,
+ net.sf.retrotranslator.runtime.java.util,
+ net.sf.retrotranslator.runtime.java.util.concurrent.locks,
+ net.sf.retrotranslator.runtime.java.util.regex
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

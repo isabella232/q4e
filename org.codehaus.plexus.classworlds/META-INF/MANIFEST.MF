@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Plexus Classworlds Plug-in
+Bundle-SymbolicName: org.codehaus.plexus.classworlds
+Bundle-Version: 1.2.0.a12
+Bundle-Vendor: Q4E Project
+Export-Package: org.codehaus.classworlds,
+ org.codehaus.plexus.classworlds,
+ org.codehaus.plexus.classworlds.launcher,
+ org.codehaus.plexus.classworlds.realm,
+ org.codehaus.plexus.classworlds.strategy
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

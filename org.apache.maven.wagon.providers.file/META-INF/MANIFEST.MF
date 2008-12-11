@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Maven Wagon File Provider Plug-in
+Bundle-SymbolicName: org.apache.maven.wagon.providers.file
+Bundle-Version: 1.0.0.b2
+Bundle-ClassPath: .
+Bundle-Vendor: Q4E Project
+Export-Package: org.apache.maven.wagon.providers.file
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

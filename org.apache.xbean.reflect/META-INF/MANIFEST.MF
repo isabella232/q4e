@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache XBean Reflect Plug-in
+Bundle-SymbolicName: org.apache.xbean.reflect
+Bundle-Version: 3.4.0
+Bundle-Vendor: Q4E Project
+Export-Package: org.apache.xbean.propertyeditor,
+ org.apache.xbean.recipe
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

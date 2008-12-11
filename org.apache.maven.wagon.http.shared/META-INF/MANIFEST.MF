@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Maven Wagon HTTP Shared Plug-in
+Bundle-SymbolicName: org.apache.maven.wagon.http.shared
+Bundle-Version: 1.0.0.b2
+Bundle-Vendor: Q4E Project
+Export-Package: org.apache.maven.wagon.shared.http
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

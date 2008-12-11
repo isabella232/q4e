@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: W3C Tidy Plug-in
+Bundle-SymbolicName: org.w3c.tidy
+Bundle-Version: 0.0.4.aug2000r7-dev
+Bundle-ClassPath: .
+Bundle-Vendor: Q4E Project
+Export-Package: org.w3c.tidy
+Bundle-RequiredExecutionEnvironment: J2SE-1.4
