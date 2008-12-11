@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>org.apache.maven.feature-2.1.0.659801c</name>
+	<name>org.apache.maven.embedder.feature</name>
 	<comment>Apache Maven Embedder Feature</comment>
 	<projects>
 	</projects>

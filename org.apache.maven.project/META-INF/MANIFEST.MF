@@ -24,3 +24,8 @@ Export-Package: org.apache.maven,
  org.apache.maven.project.workspace,
  org.apache.maven.realm
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.apache.maven.workspace;bundle-version="2.1.0";visibility:=reexport,
+ org.apache.maven.profile;bundle-version="2.1.0";visibility:=reexport,
+ org.apache.maven.model;bundle-version="2.1.0";visibility:=reexport,
+ org.codehaus.plexus.interpolation;bundle-version="1.0.0";visibility:=reexport,
+ org.codehaus.plexus.container.default;bundle-version="1.0.0";visibility:=reexport

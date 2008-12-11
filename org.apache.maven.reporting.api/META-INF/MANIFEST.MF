@@ -7,3 +7,4 @@ Bundle-ClassPath: .
 Bundle-Vendor: Q4E Project
 Export-Package: org.apache.maven.reporting
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.apache.maven.doxia.sink.api;bundle-version="1.0.0"

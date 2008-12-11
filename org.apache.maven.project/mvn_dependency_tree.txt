@@ -1,0 +1,28 @@
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'dependency'.
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Project Builder
+[INFO]    task-segment: [dependency:tree]
+[INFO] ------------------------------------------------------------------------
+[INFO] [dependency:tree]
+[INFO] org.apache.maven:maven-project:jar:2.1.0-R659801
+[INFO] +- org.apache.maven:maven-workspace:jar:2.1.0-R659801:compile
+[INFO] +- org.apache.maven:maven-profile:jar:2.1.0-R659801:compile
+[INFO] +- org.apache.maven:maven-model:jar:2.1.0-R659801:compile
+[INFO] +- org.codehaus.plexus:plexus-utils:jar:1.5.1:compile
+[INFO] +- org.codehaus.plexus:plexus-interpolation:jar:1.0:compile
+[INFO] +- org.apache.maven.artifact:maven-artifact:jar:3.0-R659801:compile
+[INFO] |  \- org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2:compile
+[INFO] +- org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-46:compile
+[INFO] |  +- org.codehaus.plexus:plexus-classworlds:jar:1.2-alpha-12:compile (version managed from 1.2-alpha-13)
+[INFO] |  \- org.apache.xbean:xbean-reflect:jar:3.4:compile
+[INFO] |     +- log4j:log4j:jar:1.2.12:compile
+[INFO] |     \- commons-logging:commons-logging-api:jar:1.1:compile
+[INFO] +- aspectj:aspectjrt:jar:1.5.3:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 6 seconds
+[INFO] Finished at: Thu Dec 11 14:31:00 MST 2008
+[INFO] Final Memory: 10M/19M
+[INFO] ------------------------------------------------------------------------

@@ -6,3 +6,4 @@ Bundle-Version: 2.1.0.R659801
 Bundle-Vendor: Q4E Project
 Export-Package: org.apache.maven.workspace
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.codehaus.plexus.container.default;bundle-version="1.0.0"

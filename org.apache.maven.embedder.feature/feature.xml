@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
-      id="org.apache.maven.feature"
+      id="org.apache.maven.embedder.feature"
       label="%featureName"
-      version="2.1.0.659801c"
+      version="2.1.0.R659801"
       provider-name="%providerName">
 
    <description>
@@ -21,14 +21,14 @@
          id="org.apache.maven.embedder"
          download-size="2121"
          install-size="2121"
-         version="2.1.0.659801c"
+         version="2.1.0.R659801"
          unpack="false"/>
 
    <plugin
          id="org.w3c.tidy"
          download-size="0"
          install-size="0"
-         version="0.0.0.4aug2000r7-dev-200711190855"
+         version="0.0.4.aug2000r7-dev"
          unpack="false"/>
 
    <plugin
@@ -39,17 +39,205 @@
          unpack="false"/>
 
    <plugin
-         id="org.apache.commons.collections"
-         download-size="0"
-         install-size="0"
-         version="3.2.0.v200803061811"
-         unpack="false"/>
-
-   <plugin
          id="com.jcraft.jsch"
          download-size="0"
          install-size="0"
          version="0.1.37.v200803061811"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.lang"
+         download-size="0"
+         install-size="0"
+         version="2.3.0.v200803061910"
+         unpack="false"/>
+
+   <plugin
+         id="org.aspectj.runtime"
+         download-size="0"
+         install-size="0"
+         version="1.6.3.20081028135200"/>
+
+   <plugin
+         id="org.apache.log4j"
+         download-size="0"
+         install-size="0"
+         version="1.2.13.v200806030600"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.commons.logging"
+         download-size="0"
+         install-size="0"
+         version="1.1.1.v20080605-1935"
+         unpack="false"/>
+
+   <plugin
+         id="org.codehaus.plexus.classworlds"
+         download-size="0"
+         install-size="0"
+         version="1.2.0.a12"
+         unpack="false"/>
+
+   <plugin
+         id="org.codehaus.plexus.container.default"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.a46"
+         unpack="false"/>
+
+   <plugin
+         id="org.codehaus.plexus.interactivity.api"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.a6"
+         unpack="false"/>
+
+   <plugin
+         id="org.codehaus.plexus.interpolation"
+         download-size="0"
+         install-size="0"
+         version="1.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.codehaus.plexus.utils"
+         download-size="0"
+         install-size="0"
+         version="1.5.1"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.artifact"
+         download-size="0"
+         install-size="0"
+         version="3.0.0.R659801"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.core"
+         download-size="0"
+         install-size="0"
+         version="2.1.0.R659801"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.doxia.sink.api"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.a9"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.lifecycle"
+         download-size="0"
+         install-size="0"
+         version="2.1.0.R659801"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.model"
+         download-size="0"
+         install-size="0"
+         version="2.1.0.R659801"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.plugin.api"
+         download-size="0"
+         install-size="0"
+         version="2.1.0.R659801"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.profile"
+         download-size="0"
+         install-size="0"
+         version="2.1.0.R659801"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.project"
+         download-size="0"
+         install-size="0"
+         version="2.1.0.R659801"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.reporting.api"
+         download-size="0"
+         install-size="0"
+         version="2.1.0.R659801"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.toolchain"
+         download-size="0"
+         install-size="0"
+         version="2.1.0.R659801"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.wagon.http.shared"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.b2"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.wagon.provider.api"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.b2"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.wagon.providers.file"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.b2"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.wagon.providers.http.lightweight"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.b2"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.wagon.providers.ssh.common"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.b2"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.wagon.providers.ssh.external"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.b2"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.wagon.providers.ssh.jsch"
+         download-size="0"
+         install-size="0"
+         version="1.0.0.b2"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.maven.workspace"
+         download-size="0"
+         install-size="0"
+         version="2.1.0.R659801"
+         unpack="false"/>
+
+   <plugin
+         id="org.apache.xbean.reflect"
+         download-size="0"
+         install-size="0"
+         version="3.4.0"
          unpack="false"/>
 
 </feature>

@@ -8,3 +8,4 @@ Export-Package: org.apache.maven.lifecycle,
  org.apache.maven.lifecycle.model,
  org.apache.maven.lifecycle.model.io.xpp3
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.codehaus.plexus.utils;bundle-version="1.5.1"

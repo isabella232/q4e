@@ -25,3 +25,11 @@ Export-Package: org.apache.maven,
  org.apache.maven.settings.io.xpp3,
  org.apache.maven.settings.validation
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.apache.maven.workspace;bundle-version="2.1.0";visibility:=reexport,
+ org.apache.maven.lifecycle;bundle-version="2.1.0";visibility:=reexport,
+ org.apache.maven.reporting.api;bundle-version="2.1.0";visibility:=reexport,
+ org.apache.maven.model;bundle-version="2.1.0";visibility:=reexport,
+ org.apache.maven.profile;bundle-version="2.1.0";visibility:=reexport,
+ org.apache.maven.plugin.api;bundle-version="2.1.0";visibility:=reexport,
+ org.apache.maven.project;bundle-version="2.1.0";visibility:=reexport,
+ org.codehaus.plexus.interactivity.api;bundle-version="1.0.0";visibility:=reexport

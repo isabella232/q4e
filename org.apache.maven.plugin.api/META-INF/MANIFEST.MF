@@ -10,3 +10,5 @@ Export-Package: org.apache.maven.plugin,
  org.apache.maven.plugin.lifecycle.io.xpp3,
  org.apache.maven.plugin.logging
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.apache.maven.artifact;bundle-version="3.0.0";visibility:=reexport,
+ org.codehaus.plexus.container.default;bundle-version="1.0.0";visibility:=reexport

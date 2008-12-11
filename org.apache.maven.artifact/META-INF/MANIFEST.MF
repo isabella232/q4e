@@ -23,3 +23,6 @@ Export-Package: org.apache.maven.artifact,
  org.apache.maven.artifact.transform,
  org.apache.maven.artifact.versioning
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.codehaus.plexus.utils;bundle-version="1.5.1",
+ org.codehaus.plexus.container.default;bundle-version="1.0.0",
+ org.apache.maven.wagon.provider.api;bundle-version="1.0.0"

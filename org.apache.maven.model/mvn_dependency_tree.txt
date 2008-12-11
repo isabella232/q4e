@@ -1,0 +1,16 @@
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'dependency'.
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Model
+[INFO]    task-segment: [dependency:tree]
+[INFO] ------------------------------------------------------------------------
+[INFO] [dependency:tree]
+[INFO] org.apache.maven:maven-model:jar:2.1.0-R659801
+[INFO] +- org.codehaus.plexus:plexus-utils:jar:1.5.1:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 6 seconds
+[INFO] Finished at: Thu Dec 11 14:34:08 MST 2008
+[INFO] Final Memory: 9M/19M
+[INFO] ------------------------------------------------------------------------

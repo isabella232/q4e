@@ -9,3 +9,9 @@ Export-Package: org.apache.maven.toolchain,
  org.apache.maven.toolchain.model,
  org.apache.maven.toolchain.model.io.xpp3
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.apache.maven.artifact;bundle-version="3.0.0";visibility:=reexport,
+ org.apache.maven.core;bundle-version="2.1.0";visibility:=reexport,
+ org.apache.maven.wagon.providers.http.lightweight;bundle-version="1.0.0",
+ org.apache.maven.wagon.providers.ssh.external;bundle-version="1.0.0",
+ org.apache.maven.wagon.providers.ssh.jsch;bundle-version="1.0.0",
+ org.apache.maven.wagon.providers.file;bundle-version="1.0.0"

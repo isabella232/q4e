@@ -7,3 +7,5 @@ Bundle-Vendor: Q4E Project
 Export-Package: org.apache.maven.profiles,
  org.apache.maven.profiles.io.xpp3
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.apache.maven.model;bundle-version="2.1.0";visibility:=reexport,
+ org.codehaus.plexus.container.default;bundle-version="1.0.0";visibility:=reexport
