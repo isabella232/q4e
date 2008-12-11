@@ -1,8 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="q4e-target-platform" default="all" basedir=".">
-  <property name="ide" value="${basedir}/eclipse" />
-  <property name="workspace" value="${basedir}/workspace" />
-  <property name="tarball" value="eclipse-SDK-3.4.1.tar.gz" />
+  <!-- Load property values from the -optional- local.properties file -->
+  <property file="local.properties" />
+  <!-- These are default values, use local.properties to customize -->
+  <property name="base" value="${basedir}" />
+  <property name="ide" value="${base}/eclipse" />
+  <property name="workspace" value="${base}/workspace" />
+  <property name="tarball" value="${base}/eclipse-SDK-3.4.1.tar.gz" />
+
+  <condition property="isMacOsX">
+    <and>
+      <os family="mac"/>
+      <os family="unix"/>
+	</and>
+  </condition>
+
+  <target name="fix-osx-platform" if="isMacOsX">
+  	<delete file="${ide}/eclipse"></delete>
+  	<chmod perm="u+x">
+      <fileset dir="${ide}/Eclipse.app/Contents/MacOS">
+        <include name="eclipse" />
+      </fileset>
+    </chmod>
+  	<exec executable="ln" dir="${ide}">
+  		<arg value="-s"/>
+  		<arg value="${ide}/Eclipse.app/Contents/MacOS/eclipse"/>
+  	</exec>
+  </target>
 
   <target name="clean">
     <delete dir="${ide}" />
@@ -22,8 +46,9 @@
 ----------------------------------------------------------
     </fail>
     <untar src="${tarball}" 
-           dest="${basedir}"
+           dest="${base}"
            compression="gzip" />
+	<antcall target="fix-osx-platform" />
     <chmod perm="u+x">
       <fileset dir="${ide}">
         <include name="eclipse" />
@@ -124,7 +149,7 @@
   <target name="download">
     <!-- AJDT -->
     <install-ajdt-iu label="AJDT"
-      iu="org.eclipse.ajdt.feature.group" version="1.6.1.20081104192500" />
+      iu="org.aspectj.runtime" version="1.6.3.20081028135200" />
 
     <!-- Orbit Downloads -->
     <download-orbit-plugin 
