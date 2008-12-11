@@ -117,7 +117,7 @@
     <sequential>
       <echo>Downloading Orbit Plugin: @{name}</echo>
       <get src="http://download.eclipse.org/tools/orbit/downloads/drops/@{drop}/bundles/@{name}"
-           dest="${ide}/dropins/@{name}" />
+           dest="${ide}/plugins/@{name}" />
     </sequential>
   </macrodef>
 
