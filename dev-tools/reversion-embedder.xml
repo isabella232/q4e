@@ -1,0 +1,139 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.apache.maven</groupId>
+  <artifactId>maven-embedder-fix</artifactId>
+  <version>2.1.0-R659801</version>
+  <packaging>pom</packaging>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pom-plugin</artifactId>
+        <version>1.0-SNAPSHOT</version>
+        <executions>
+          <execution>
+            <configuration>
+              <newVersion>${pom.version}</newVersion>
+              <target>${basedir}</target>
+            </configuration>
+            <id>reversion</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>alter-version</goal>
+            </goals>
+          </execution>
+          <execution>
+            <configuration>
+              <projectFile>${basedir}/pom.xml</projectFile>
+              <newParentGroupId>org.apache.maven</newParentGroupId>
+              <newParentArtifactId>maven-parent</newParentArtifactId>
+              <newParentVersion>8</newParentVersion>
+              <suppressRelativePath>true</suppressRelativePath>
+            </configuration>
+            <id>fixparent</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>alter-parent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <configuration>
+              <projectFile>${basedir}/pom.xml</projectFile>
+              <xpath>//project/properties/plexusVersion</xpath>
+              <newValue>1.0-alpha-46</newValue>
+            </configuration>
+            <id>fix-plexus-version</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>alter-by-xpath</goal>
+            </goals>
+          </execution>
+          <execution>
+            <configuration>
+              <projectFile>${basedir}/pom.xml</projectFile>
+              <xpath>//project/dependencyManagement/dependencies/dependency[artifactId[text() = 'maven-artifact']]/version</xpath>
+              <newValue>3.0</newValue>
+            </configuration>
+            <id>fix-maven-artifact-version</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>alter-by-xpath</goal>
+            </goals>
+          </execution>
+          <execution>
+            <configuration>
+              <projectFile>${basedir}/pom.xml</projectFile>
+              <xpath>//project/dependencyManagement/dependencies/dependency[artifactId[text() = 'plexus-interpolation']]/version</xpath>
+              <newValue>1.0</newValue>
+            </configuration>
+            <id>fix-plexus-interpolation-version</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>alter-by-xpath</goal>
+            </goals>
+          </execution>
+          <execution>
+            <!-- Creates empty depMan/dep element -->
+            <configuration>
+              <projectFile>${basedir}/pom.xml</projectFile>
+              <xpath>//project/dependencyManagement/dependencies</xpath>
+              <newElement>dependency</newElement>
+              <skipXPath>//project/dependencyManagement/dependencies/dependency[artifactId[. = 'xbean-reflect']]</skipXPath>
+            </configuration>
+            <id>add-xbean-reflect-dep</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>add-by-xpath</goal>
+            </goals>
+          </execution>
+          <execution>
+            <!-- populates the empty depMan/dep element w/groupId -->
+            <configuration>
+              <projectFile>${basedir}/pom.xml</projectFile>
+              <xpath>//project/dependencyManagement/dependencies/dependency[not(node())]</xpath>
+              <newElement>groupId</newElement>
+              <newValue>org.apache.xbean</newValue>
+              <skipXPath>//project/dependencyManagement/dependencies/dependency[artifactId[. = 'xbean-reflect']]</skipXPath>
+            </configuration>
+            <id>add-xbean-reflect-groupId</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>add-by-xpath</goal>
+            </goals>
+          </execution>
+          <execution>
+            <!-- populates the depMan/dep element w/version -->
+            <configuration>
+              <projectFile>${basedir}/pom.xml</projectFile>
+              <xpath>//project/dependencyManagement/dependencies/dependency[groupId[.='org.apache.xbean']]</xpath>
+              <newElement>version</newElement>
+              <newValue>3.4</newValue>
+              <skipXPath>//project/dependencyManagement/dependencies/dependency[artifactId[. = 'xbean-reflect']]</skipXPath>
+            </configuration>
+            <id>add-xbean-reflect-version</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>add-by-xpath</goal>
+            </goals>
+          </execution>
+          <execution>
+            <!-- LAST ADD / populates the empty depMan/dep element w/artifactId -->
+            <configuration>
+              <projectFile>${basedir}/pom.xml</projectFile>
+              <xpath>//project/dependencyManagement/dependencies/dependency[groupId[.='org.apache.xbean']]</xpath>
+              <newElement>artifactId</newElement>
+              <newValue>xbean-reflect</newValue>
+              <skipXPath>//project/dependencyManagement/dependencies/dependency[artifactId[. = 'xbean-reflect']]</skipXPath>
+            </configuration>
+            <id>add-xbean-reflect-artifactId</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>add-by-xpath</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+</project>
