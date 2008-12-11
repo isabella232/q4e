@@ -1,0 +1,16 @@
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'dependency'.
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Wagon API
+[INFO]    task-segment: [dependency:tree]
+[INFO] ------------------------------------------------------------------------
+[INFO] [dependency:tree]
+[INFO] org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2
+[INFO] +- org.codehaus.plexus:plexus-utils:jar:1.0.4:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 6 seconds
+[INFO] Finished at: Thu Dec 11 11:02:55 MST 2008
+[INFO] Final Memory: 8M/19M
+[INFO] ------------------------------------------------------------------------

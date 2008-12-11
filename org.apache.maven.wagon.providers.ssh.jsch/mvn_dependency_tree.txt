@@ -1,0 +1,23 @@
+[INFO] Scanning for projects...
+[INFO] Searching repository for plugin with prefix: 'dependency'.
+[INFO] ------------------------------------------------------------------------
+[INFO] Building Maven Wagon SSH Provider
+[INFO]    task-segment: [dependency:tree]
+[INFO] ------------------------------------------------------------------------
+[INFO] [dependency:tree]
+[INFO] org.apache.maven.wagon:wagon-ssh:jar:1.0-beta-2
+[INFO] +- com.jcraft:jsch:jar:0.1.27:compile
+[INFO] +- org.codehaus.plexus:plexus-interactivity-api:jar:1.0-alpha-4:compile
+[INFO] |  +- org.codehaus.plexus:plexus-container-default:jar:1.0-alpha-8:compile (version managed from 1.0-alpha-7)
+[INFO] |  +- classworlds:classworlds:jar:1.1-alpha-2:compile
+[INFO] |  \- plexus:plexus-utils:jar:1.0.2:compile
+[INFO] +- org.codehaus.plexus:plexus-utils:jar:1.0.4:compile
+[INFO] +- org.apache.maven.wagon:wagon-ssh-common:jar:1.0-beta-2:compile
+[INFO] +- org.apache.maven.wagon:wagon-provider-api:jar:1.0-beta-2:compile
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 6 seconds
+[INFO] Finished at: Thu Dec 11 11:05:00 MST 2008
+[INFO] Final Memory: 9M/18M
+[INFO] ------------------------------------------------------------------------
