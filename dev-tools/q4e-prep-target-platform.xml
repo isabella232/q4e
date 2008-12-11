@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="q4e-target-platform" default="all" basedir=".">
+  <property name="ide" value="${basedir}/eclipse" />
+  <property name="workspace" value="${basedir}/workspace" />
+  <property name="tarball" value="eclipse-SDK-3.4.1.tar.gz" />
+
+  <target name="clean">
+    <delete dir="${ide}" />
+    <delete dir="${workspace}" />
+  </target>
+
+  <target name="unpack">
+    <available file="${tarball}" type="file" property="tarball.present" />
+    <fail unless="tarball.present">.
+----------------------------------------------------------
+  Unable to find ${tarball}
+
+  Download the Eclipse SDK for your system from
+  http://download.eclipse.org/eclipse/downloads/drops/R-3.4.1-200809111700/index.php
+
+  Then rename (or link) it to ${tarball}
+----------------------------------------------------------
+    </fail>
+    <untar src="${tarball}" 
+           dest="${basedir}"
+           compression="gzip" />
+    <chmod perm="u+x">
+      <fileset dir="${ide}">
+        <include name="eclipse" />
+        <include name="eclipse.exe" />
+      </fileset>
+    </chmod>
+  </target>
+
+  <target name="reset">
+    <antcall target="clean" />
+    <antcall target="unpack" />
+  </target>
+
+  <target name="all">
+    <antcall target="init" />
+    <antcall target="download" />
+  </target>
+
+  <target name="init">
+    <mkdir dir="${workspace}" />
+    <available file="${ide}" type="dir" property="ide.present" />
+    <fail unless="ide.present">.
+----------------------------------------------------------
+      The ${ide} directory is not present.
+      Run the 'unpack' target to create it.
+----------------------------------------------------------
+    </fail>
+  </target>
+
+  <macrodef name="install-ajdt-iu">
+    <attribute name="label" />
+    <attribute name="iu" />
+    <attribute name="version" />
+    <sequential>
+      <echo />
+      <echo>Installing AJDT Plugin: @{label}</echo>
+      <exec executable="${ide}/eclipse">
+        <arg value="-clean" />
+        <arg value="-nosplash" />
+        <arg value="-consoleLog" />
+        <arg value="-data" />
+        <arg value="${workspace}" />
+        <arg value="-application" />
+        <arg value="org.eclipse.equinox.p2.director.app.application" />
+        <arg value="-metadataRepository" />
+        <arg value="http://download.eclipse.org/tools/ajdt/34/update/" />
+        <arg value="-artifactRepository" />
+        <arg value="http://download.eclipse.org/tools/ajdt/34/update/" />
+        <arg value="-installIU" />
+        <arg value="@{iu}" />
+        <arg value="-version" />
+        <arg value="@{version}" />
+        <arg value="-profileProperties" />
+        <arg value="org.eclipse.update.install.features=true" />
+      </exec>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="install-ganymede-iu">
+    <attribute name="label" />
+    <attribute name="iu" />
+    <attribute name="version" />
+    <sequential>
+      <echo />
+      <echo>Installing Ganymede Plugin: @{label}</echo>
+      <exec executable="${ide}/eclipse">
+        <arg value="-clean" />
+        <arg value="-nosplash" />
+        <arg value="-consoleLog" />
+        <arg value="-data" />
+        <arg value="${workspace}" />
+        <arg value="-application" />
+        <arg value="org.eclipse.equinox.p2.director.app.application" />
+        <arg value="-metadataRepository" />
+        <arg value="http://download.eclipse.org/releases/ganymede/" />
+        <arg value="-artifactRepository" />
+        <arg value="http://download.eclipse.org/releases/ganymede/" />
+        <arg value="-installIU" />
+        <arg value="@{iu}" />
+        <arg value="-version" />
+        <arg value="@{version}" />
+        <arg value="-profileProperties" />
+        <arg value="org.eclipse.update.install.features=true" />
+      </exec>
+    </sequential>
+  </macrodef>
+
+  <macrodef name="download-orbit-plugin">
+    <attribute name="drop" default="R20080807152315" />
+    <attribute name="name" />
+    <sequential>
+      <echo>Downloading Orbit Plugin: @{name}</echo>
+      <get src="http://download.eclipse.org/tools/orbit/downloads/drops/@{drop}/bundles/@{name}"
+           dest="${ide}/dropins/@{name}" />
+    </sequential>
+  </macrodef>
+
+  <target name="download">
+    <!-- AJDT -->
+    <install-ajdt-iu label="AJDT"
+      iu="org.eclipse.ajdt.feature.group" version="1.6.1.20081104192500" />
+
+    <!-- Orbit Downloads -->
+    <download-orbit-plugin 
+      name="org.apache.commons.cli_1.0.0.v20080604-1500.jar" />
+    <download-orbit-plugin
+      name="org.apache.commons.cli.source_1.0.0.v20080604-1500.jar" />
+
+    <download-orbit-plugin 
+      name="org.apache.commons.lang_2.1.0.v200803061811.jar" />
+    <download-orbit-plugin
+      name="org.apache.commons.lang.source_2.1.0.v200803061811.jar" />
+
+    <download-orbit-plugin
+      name="org.apache.commons.logging_1.1.1.v20080605-1935.jar" />
+    <download-orbit-plugin
+      name="org.apache.commons.logging.source_1.1.1.v20080605-1935.jar" />
+
+    <download-orbit-plugin
+      name="com.jcraft.jsch_0.1.31.jar" />
+    <download-orbit-plugin
+      name="org.apache.log4j_1.2.13.v200806030600.jar" />
+
+  </target>
+</project>
