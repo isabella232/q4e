@@ -1,0 +1,258 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository class='org.eclipse.equinox.internal.p2.artifact.repository.simple.SimpleArtifactRepository' version='1.0.0'?>
+<repository name='file:/home/joakim/code/q4e/branches/maven-embedder-2.1.x-no-lib/update-iam/ - artifacts' type='org.eclipse.equinox.p2.artifact.repository.simpleRepository' version='1.0.0'>
+  <properties size='2'>
+    <property name='p2.compressed' value='false'/>
+    <property name='p2.timestamp' value='1229033748645'/>
+  </properties>
+  <mappings size='3'>
+    <rule filter='(&amp; (classifier=osgi.bundle))' output='${repoUrl}/plugins/${id}_${version}.jar'/>
+    <rule filter='(&amp; (classifier=binary))' output='${repoUrl}/binary/${id}_${version}'/>
+    <rule filter='(&amp; (classifier=org.eclipse.update.feature))' output='${repoUrl}/features/${id}_${version}.jar'/>
+  </mappings>
+  <artifacts size='35'>
+    <artifact classifier='osgi.bundle' id='org.codehaus.plexus.interpolation' version='1.0.0'>
+      <properties size='3'>
+        <property name='artifact.size' value='35362'/>
+        <property name='download.size' value='35362'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.aspectj.runtime' version='1.6.3.20081028135200'>
+      <properties size='3'>
+        <property name='artifact.size' value='97350'/>
+        <property name='download.size' value='97350'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='org.apache.maven.embedder.feature' version='2.1.0.R659801'>
+      <properties size='2'>
+        <property name='artifact.size' value='5492'/>
+        <property name='download.size' value='5492'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.toolchain' version='2.1.0.R659801'>
+      <properties size='3'>
+        <property name='artifact.size' value='32093'/>
+        <property name='download.size' value='32093'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.log4j' version='1.2.13.v200806030600'>
+      <properties size='3'>
+        <property name='artifact.size' value='387861'/>
+        <property name='download.size' value='387861'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.commons.logging' version='1.1.1.v20080605-1935'>
+      <properties size='3'>
+        <property name='artifact.size' value='66460'/>
+        <property name='download.size' value='66460'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.codehaus.plexus.container.default' version='1.0.0.a46'>
+      <properties size='3'>
+        <property name='artifact.size' value='268311'/>
+        <property name='download.size' value='268311'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.codehaus.plexus.classworlds' version='1.2.0.a12'>
+      <properties size='3'>
+        <property name='artifact.size' value='43297'/>
+        <property name='download.size' value='43297'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.commons.lang' version='2.3.0.v200803061910'>
+      <properties size='3'>
+        <property name='artifact.size' value='258243'/>
+        <property name='download.size' value='258243'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.w3c.tidy' version='0.0.4.aug2000r7-dev'>
+      <properties size='3'>
+        <property name='artifact.size' value='125032'/>
+        <property name='download.size' value='125032'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.project' version='2.1.0.R659801'>
+      <properties size='3'>
+        <property name='artifact.size' value='231262'/>
+        <property name='download.size' value='231262'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.providers.ssh.jsch' version='1.0.0.b2'>
+      <properties size='3'>
+        <property name='artifact.size' value='23734'/>
+        <property name='download.size' value='23734'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.http.shared' version='1.0.0.b2'>
+      <properties size='3'>
+        <property name='artifact.size' value='9680'/>
+        <property name='download.size' value='9680'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.provider.api' version='1.0.0.b2'>
+      <properties size='3'>
+        <property name='artifact.size' value='46493'/>
+        <property name='download.size' value='46493'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.core' version='2.1.0.R659801'>
+      <properties size='3'>
+        <property name='artifact.size' value='342490'/>
+        <property name='download.size' value='342490'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.workspace' version='2.1.0.R659801'>
+      <properties size='3'>
+        <property name='artifact.size' value='8828'/>
+        <property name='download.size' value='8828'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.doxia.sink.api' version='1.0.0.a9'>
+      <properties size='3'>
+        <property name='artifact.size' value='9849'/>
+        <property name='download.size' value='9849'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.profile' version='2.1.0.R659801'>
+      <properties size='3'>
+        <property name='artifact.size' value='36949'/>
+        <property name='download.size' value='36949'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.codehaus.plexus.interactivity.api' version='1.0.0.a6'>
+      <properties size='3'>
+        <property name='artifact.size' value='12424'/>
+        <property name='download.size' value='12424'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.providers.ssh.external' version='1.0.0.b2'>
+      <properties size='3'>
+        <property name='artifact.size' value='12665'/>
+        <property name='download.size' value='12665'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.reporting.api' version='2.1.0.R659801'>
+      <properties size='3'>
+        <property name='artifact.size' value='10379'/>
+        <property name='download.size' value='10379'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.providers.http.lightweight' version='1.0.0.b2'>
+      <properties size='3'>
+        <property name='artifact.size' value='12452'/>
+        <property name='download.size' value='12452'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.commons.cli' version='1.0.0.v20080604-1500'>
+      <properties size='3'>
+        <property name='artifact.size' value='36855'/>
+        <property name='download.size' value='36855'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.lifecycle' version='2.1.0.R659801'>
+      <properties size='3'>
+        <property name='artifact.size' value='45611'/>
+        <property name='download.size' value='45611'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.doxia.sink.api' version='1.0.0.a9'>
+      <properties size='3'>
+        <property name='artifact.size' value='9885'/>
+        <property name='download.size' value='9885'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='com.jcraft.jsch' version='0.1.37.v200803061811'>
+      <properties size='3'>
+        <property name='artifact.size' value='214540'/>
+        <property name='download.size' value='214540'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.codehaus.plexus.utils' version='1.5.1'>
+      <properties size='3'>
+        <property name='artifact.size' value='211306'/>
+        <property name='download.size' value='211306'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.providers.ssh.common' version='1.0.0.b2'>
+      <properties size='3'>
+        <property name='artifact.size' value='25364'/>
+        <property name='download.size' value='25364'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.model' version='2.1.0.R659801'>
+      <properties size='3'>
+        <property name='artifact.size' value='95588'/>
+        <property name='download.size' value='95588'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.embedder' version='2.1.0.R659801'>
+      <properties size='3'>
+        <property name='artifact.size' value='68604'/>
+        <property name='download.size' value='68604'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.providers.file' version='1.0.0.b2'>
+      <properties size='3'>
+        <property name='artifact.size' value='10040'/>
+        <property name='download.size' value='10040'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.artifact' version='3.0.0.R659801'>
+      <properties size='3'>
+        <property name='artifact.size' value='220261'/>
+        <property name='download.size' value='220261'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.maven.plugin.api' version='2.1.0.R659801'>
+      <properties size='3'>
+        <property name='artifact.size' value='45291'/>
+        <property name='download.size' value='45291'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='osgi.bundle' id='org.apache.xbean.reflect' version='3.4.0'>
+      <properties size='3'>
+        <property name='artifact.size' value='131513'/>
+        <property name='download.size' value='131513'/>
+        <property name='download.contentType' value='application/zip'/>
+      </properties>
+    </artifact>
+    <artifact classifier='org.eclipse.update.feature' id='org.apache.maven.embedder.feature' version='2.1.0.R659801'>
+      <properties size='2'>
+        <property name='artifact.size' value='5769'/>
+        <property name='download.size' value='5769'/>
+      </properties>
+    </artifact>
+  </artifacts>
+</repository>

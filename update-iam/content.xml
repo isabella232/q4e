@@ -3,7 +3,7 @@
 <repository name='Q4E to IAM Update Site' type='org.eclipse.equinox.internal.p2.metadata.repository.LocalMetadataRepository' version='1.0.0'>
   <properties size='2'>
     <property name='p2.compressed' value='false'/>
-    <property name='p2.timestamp' value='1228947440250'/>
+    <property name='p2.timestamp' value='1229033748648'/>
   </properties>
   <references size='4'>
     <repository url='http://dev.eclipse.org/releases/ganymede' type='0' options='1'/>
@@ -11,4 +11,1373 @@
     <repository url='http://download.eclipse.org/tools/ajdt/34/update' type='0' options='1'/>
     <repository url='http://download.eclipse.org/tools/ajdt/34/update' type='1' options='1'/>
   </references>
+  <units size='39'>
+    <unit id='tooling.source.default' version='1.0.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='source' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='2'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='tooling.source.default' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.flavor' name='tooling' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='source' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='install'>
+            addSourceBundle(bundle:${artifact})
+          </instruction>
+          <instruction key='uninstall'>
+            removeSourceBundle(bundle:${artifact})
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.embedder' version='2.1.0.R659801' singleton='false'>
+      <update id='org.apache.maven.embedder' range='[0.0.0,2.1.0.R659801)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Embedder Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='9'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.embedder' version='2.1.0.R659801'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.embedder' version='2.1.0.R659801'/>
+        <provided namespace='java.package' name='org.apache.maven.cli' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.embedder' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.embedder.cache' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.embedder.event' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.embedder.execution' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.embedder.user' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='osgi.bundle' name='org.apache.maven.toolchain' range='2.1.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.embedder' version='2.1.0.R659801'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Require-Bundle: org.apache.maven.toolchain;bundle-version=&quot;2.1.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 2.1.0.R659801&#xA;Export-Package: org.apache.maven.cli,org.apache.maven.embedder,org.apache.maven.embedder.cache,org.apache.maven.embedder.event,org.apache.maven.embedder.execution,org.apache.maven.embedder.user&#xA;Bundle-SymbolicName: org.apache.maven.embedder&#xA;Bundle-ClassPath: .&#xA;Bundle-Name: Apache Maven Embedder Plug-in&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.embedder.feature.feature.group' version='2.1.0.R659801' singleton='false'>
+      <update id='org.apache.maven.embedder.feature.feature.group' range='[0.0.0,2.1.0.R659801)' severity='0'/>
+      <properties size='9'>
+        <property name='org.eclipse.equinox.p2.name' value='%featureName'/>
+        <property name='org.eclipse.equinox.p2.description' value='%description'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
+        <property name='org.eclipse.equinox.p2.type.group' value='true'/>
+        <property name='df_LT.featureName' value='Apache Maven'/>
+        <property name='df_LT.copyright' value='Copyright The Apache Software Foundation http://www.apache.org/'/>
+        <property name='df_LT.providerName' value='The Apache Software Foundation'/>
+        <property name='df_LT.description' value='Eclipse Feature for Apache Maven'/>
+        <property name='df_LT.license' value='The Apache Software License, Version 2.0'/>
+      </properties>
+      <provides size='2'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.embedder.feature.feature.group' version='2.1.0.R659801'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <requires size='9'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.embedder' range='[2.1.0.R659801,2.1.0.R659801]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.w3c.tidy' range='[0.0.4.aug2000r7-dev,0.0.4.aug2000r7-dev]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.cli' range='[1.0.0.v20080604-1500,1.0.0.v20080604-1500]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='com.jcraft.jsch' range='[0.1.37.v200803061811,0.1.37.v200803061811]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.lang' range='[2.3.0.v200803061910,2.3.0.v200803061910]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.aspectj.runtime' range='[1.6.3.20081028135200,1.6.3.20081028135200]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.log4j' range='[1.2.13.v200806030600,1.2.13.v200806030600]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.logging' range='[1.1.1.v20080605-1935,1.1.1.v20080605-1935]'/>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.embedder.feature.feature.jar' range='[2.1.0.R659801,2.1.0.R659801]'>
+          <filter>
+            (org.eclipse.update.install.features=true)
+          </filter>
+        </required>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <licenses size='1'>
+        <license>
+          %license
+        </license>
+      </licenses>
+      <copyright>
+        %copyright
+      </copyright>
+    </unit>
+    <unit id='org.w3c.tidy' version='0.0.4.aug2000r7-dev' singleton='false'>
+      <update id='org.w3c.tidy' range='[0.0.0,0.0.4.aug2000r7-dev)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='W3C Tidy Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='4'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.w3c.tidy' version='0.0.4.aug2000r7-dev'/>
+        <provided namespace='osgi.bundle' name='org.w3c.tidy' version='0.0.4.aug2000r7-dev'/>
+        <provided namespace='java.package' name='org.w3c.tidy' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.w3c.tidy' version='0.0.4.aug2000r7-dev'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: W3C Tidy Plug-in&#xA;Bundle-Version: 0.0.4.aug2000r7-dev&#xA;Export-Package: org.w3c.tidy&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-ClassPath: .&#xA;Bundle-SymbolicName: org.w3c.tidy&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.embedder.feature.feature.jar' version='2.1.0.R659801'>
+      <update id='org.apache.maven.embedder.feature.feature.jar' range='[0.0.0,2.1.0.R659801)' severity='0'/>
+      <properties size='8'>
+        <property name='org.eclipse.equinox.p2.name' value='%featureName'/>
+        <property name='org.eclipse.equinox.p2.description' value='%description'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
+        <property name='df_LT.featureName' value='Apache Maven'/>
+        <property name='df_LT.copyright' value='Copyright The Apache Software Foundation http://www.apache.org/'/>
+        <property name='df_LT.providerName' value='The Apache Software Foundation'/>
+        <property name='df_LT.description' value='Eclipse Feature for Apache Maven'/>
+        <property name='df_LT.license' value='The Apache Software License, Version 2.0'/>
+      </properties>
+      <provides size='4'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.embedder.feature.feature.jar' version='2.1.0.R659801'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' version='1.0.0'/>
+        <provided namespace='org.eclipse.update.feature' name='org.apache.maven.embedder.feature' version='2.1.0.R659801'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <artifacts size='1'>
+        <artifact classifier='org.eclipse.update.feature' id='org.apache.maven.embedder.feature' version='2.1.0.R659801'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+      <licenses size='1'>
+        <license>
+          %license
+        </license>
+      </licenses>
+      <copyright>
+        %copyright
+      </copyright>
+    </unit>
+    <unit id='tooling.osgi.bundle.default' version='1.0.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' range='0.0.0' multiple='true' greedy='false'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='2'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='tooling.osgi.bundle.default' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.flavor' name='tooling' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' range='0.0.0' multiple='true' greedy='false'/>
+      </requires>
+      <touchpoint id='null' version='0.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='4'>
+          <instruction key='install'>
+            installBundle(bundle:${artifact})
+          </instruction>
+          <instruction key='uninstall'>
+            uninstallBundle(bundle:${artifact})
+          </instruction>
+          <instruction key='unconfigure'>
+
+          </instruction>
+          <instruction key='configure'>
+            setStartLevel(startLevel:4);
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='tooling.org.eclipse.update.feature.default' version='1.0.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='2'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='tooling.org.eclipse.update.feature.default' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.flavor' name='tooling' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.eclipse.type' name='feature' range='0.0.0' optional='true' multiple='true' greedy='false'/>
+      </requires>
+      <filter>
+        (org.eclipse.update.install.features=true)
+      </filter>
+      <touchpoint id='null' version='0.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='install'>
+            installFeature(feature:${artifact},featureId:default,featureVersion:default)
+          </instruction>
+          <instruction key='uninstall'>
+            uninstallFeature(feature:${artifact},featureId:default,featureVersion:default)
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='config.a.jre' version='1.6.0' singleton='false'>
+      <hostRequirements size='1'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='a.jre' range='1.6.0'/>
+      </hostRequirements>
+      <properties size='1'>
+        <property name='org.eclipse.equinox.p2.type.fragment' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='config.a.jre' version='1.6.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='a.jre' range='1.6.0'/>
+      </requires>
+      <touchpoint id='org.eclipse.equinox.p2.native' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='install'>
+
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='a.jre' version='1.6.0' singleton='false'>
+      <provides size='117'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='a.jre' version='1.6.0'/>
+        <provided namespace='java.package' name='javax.accessibility' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.activity' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.crypto' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.crypto.interfaces' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.crypto.spec' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.event' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.metadata' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.plugins.bmp' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.plugins.jpeg' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.imageio.stream' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.loading' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.modelmbean' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.monitor' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.openmbean' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.relation' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.remote' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.remote.rmi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.management.timer' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming.directory' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming.event' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming.ldap' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.naming.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.net' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.net.ssl' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.print' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.print.attribute' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.print.attribute.standard' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.print.event' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.rmi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.rmi.CORBA' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.rmi.ssl' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.callback' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.kerberos' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.login' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.auth.x500' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.cert' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.security.sasl' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sound.midi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sound.midi.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sound.sampled' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sound.sampled.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sql' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sql.rowset' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sql.rowset.serial' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.sql.rowset.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.border' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.colorchooser' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.event' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.filechooser' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf.basic' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf.metal' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf.multi' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.plaf.synth' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.table' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.text' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.text.html' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.text.html.parser' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.text.rtf' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.tree' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.swing.undo' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.transaction' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.transaction.xa' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.datatype' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.namespace' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.parsers' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.transform' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.transform.dom' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.transform.sax' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.transform.stream' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.validation' version='0.0.0'/>
+        <provided namespace='java.package' name='javax.xml.xpath' version='0.0.0'/>
+        <provided namespace='java.package' name='org.ietf.jgss' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA_2_3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA_2_3.portable' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA.DynAnyPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA.ORBPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA.portable' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CORBA.TypeCodePackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CosNaming' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CosNaming.NamingContextExtPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.CosNaming.NamingContextPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.Dynamic' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.DynamicAny' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.DynamicAny.DynAnyFactoryPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.DynamicAny.DynAnyPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.IOP' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.IOP.CodecFactoryPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.IOP.CodecPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.Messaging' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableInterceptor' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableInterceptor.ORBInitInfoPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.CurrentPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.POAManagerPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.POAPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.portable' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.PortableServer.ServantLocatorPackage' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.SendingContext' version='0.0.0'/>
+        <provided namespace='java.package' name='org.omg.stub.java.rmi' version='0.0.0'/>
+        <provided namespace='java.package' name='org.w3c.dom' version='0.0.0'/>
+        <provided namespace='java.package' name='org.w3c.dom.bootstrap' version='0.0.0'/>
+        <provided namespace='java.package' name='org.w3c.dom.events' version='0.0.0'/>
+        <provided namespace='java.package' name='org.w3c.dom.ls' version='0.0.0'/>
+        <provided namespace='java.package' name='org.xml.sax' version='0.0.0'/>
+        <provided namespace='java.package' name='org.xml.sax.ext' version='0.0.0'/>
+        <provided namespace='java.package' name='org.xml.sax.helpers' version='0.0.0'/>
+      </provides>
+      <touchpoint id='org.eclipse.equinox.p2.native' version='1.0.0'/>
+    </unit>
+    <unit id='org.apache.commons.cli' version='1.0.0.v20080604-1500' singleton='false'>
+      <update id='org.apache.commons.cli' range='[0.0.0,1.0.0.v20080604-1500)' severity='0'/>
+      <properties size='4'>
+        <property name='df_LT.providerName' value='Eclipse.org'/>
+        <property name='df_LT.pluginName' value='Apache Jakarta Commons CLI'/>
+        <property name='org.eclipse.equinox.p2.name' value='%pluginName'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
+      </properties>
+      <provides size='5'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.cli' version='1.0.0.v20080604-1500'/>
+        <provided namespace='osgi.bundle' name='org.apache.commons.cli' version='1.0.0.v20080604-1500'/>
+        <provided namespace='java.package' name='org.apache.commons.cli' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <requires size='2'>
+        <required namespace='osgi.bundle' name='org.apache.commons.lang' range='[2.0.0,3.0.0)'/>
+        <required namespace='osgi.bundle' name='org.apache.commons.logging' range='[1.0.0,2.0.0)'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.commons.cli' version='1.0.0.v20080604-1500'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Version: 1.0.0.v20080604-1500&#xA;Export-Package: org.apache.commons.cli;version=&quot;1.0.0&quot;&#xA;Require-Bundle: org.apache.commons.lang;bundle-version=&quot;[2.0.0,3.0.0)&quot;,org.apache.commons.logging;bundle-version=&quot;[1.0.0,2.0.0)&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.apache.commons.cli&#xA;Bundle-Name: %pluginName&#xA;Bundle-Vendor: %providerName
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.aspectj.runtime' version='1.6.3.20081028135200'>
+      <update id='org.aspectj.runtime' range='[0.0.0,1.6.3.20081028135200)' severity='0'/>
+      <properties size='4'>
+        <property name='df_LT.providerName' value='Eclipse.org'/>
+        <property name='df_LT.pluginName' value='AspectJ Runtime'/>
+        <property name='org.eclipse.equinox.p2.name' value='%pluginName'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
+      </properties>
+      <provides size='14'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.aspectj.runtime' version='1.6.3.20081028135200'/>
+        <provided namespace='osgi.bundle' name='org.aspectj.runtime' version='1.6.3.20081028135200'/>
+        <provided namespace='java.package' name='org.aspectj.internal.lang.annotation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.aspectj.internal.lang.reflect' version='0.0.0'/>
+        <provided namespace='java.package' name='org.aspectj.lang' version='0.0.0'/>
+        <provided namespace='java.package' name='org.aspectj.lang.annotation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.aspectj.lang.internal.lang' version='0.0.0'/>
+        <provided namespace='java.package' name='org.aspectj.lang.reflect' version='0.0.0'/>
+        <provided namespace='java.package' name='org.aspectj.runtime' version='0.0.0'/>
+        <provided namespace='java.package' name='org.aspectj.runtime.internal' version='0.0.0'/>
+        <provided namespace='java.package' name='org.aspectj.runtime.internal.cflowstack' version='0.0.0'/>
+        <provided namespace='java.package' name='org.aspectj.runtime.reflect' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.aspectj.runtime' version='1.6.3.20081028135200'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='2'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: %pluginName&#xA;Bundle-Version: 1.6.3.20081028135200&#xA;Export-Package: org.aspectj.internal.lang.annotation,org.aspectj.internal.lang.reflect,org.aspectj.lang,org.aspectj.lang.annotation,org.aspectj.lang.internal.lang,org.aspectj.lang.reflect,org.aspectj.runtime,org.aspectj.runtime.internal,org.aspectj.runtime.internal.cflowstack,org.aspectj.runtime.reflect&#xA;Bundle-ClassPath: aspectjrt.jar&#xA;Bundle-SymbolicName: org.aspectj.runtime;singleton:=true&#xA;Bundle-Localization: plugin&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: %providerName
+          </instruction>
+          <instruction key='zipped'>
+            true
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.commons.lang' version='2.3.0.v200803061910' singleton='false'>
+      <update id='org.apache.commons.lang' range='[0.0.0,2.3.0.v200803061910)' severity='0'/>
+      <properties size='4'>
+        <property name='df_LT.providerName' value='Eclipse.org'/>
+        <property name='df_LT.pluginName' value='Apache Jakarta Commons Lang'/>
+        <property name='org.eclipse.equinox.p2.name' value='%pluginName'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%providerName'/>
+      </properties>
+      <provides size='13'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.lang' version='2.3.0.v200803061910'/>
+        <provided namespace='osgi.bundle' name='org.apache.commons.lang' version='2.3.0.v200803061910'/>
+        <provided namespace='java.package' name='org.apache.commons.lang' version='2.3.0'/>
+        <provided namespace='java.package' name='org.apache.commons.lang.builder' version='2.3.0'/>
+        <provided namespace='java.package' name='org.apache.commons.lang.enum' version='2.3.0'/>
+        <provided namespace='java.package' name='org.apache.commons.lang.enums' version='2.3.0'/>
+        <provided namespace='java.package' name='org.apache.commons.lang.exception' version='2.3.0'/>
+        <provided namespace='java.package' name='org.apache.commons.lang.math' version='2.3.0'/>
+        <provided namespace='java.package' name='org.apache.commons.lang.mutable' version='2.3.0'/>
+        <provided namespace='java.package' name='org.apache.commons.lang.text' version='2.3.0'/>
+        <provided namespace='java.package' name='org.apache.commons.lang.time' version='2.3.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.commons.lang' version='2.3.0.v200803061910'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: %pluginName&#xA;Bundle-Version: 2.3.0.v200803061910&#xA;Export-Package: org.apache.commons.lang;version=&quot;2.3.0&quot;,org.apache.commons.lang.builder;version=&quot;2.3.0&quot;,org.apache.commons.lang.enum;version=&quot;2.3.0&quot;,org.apache.commons.lang.enums;version=&quot;2.3.0&quot;,org.apache.commons.lang.exception;version=&quot;2.3.0&quot;,org.apache.commons.lang.math;version=&quot;2.3.0&quot;,org.apache.commons.lang.mutable;version=&quot;2.3.0&quot;,org.apache.commons.lang.text;version=&quot;2.3.0&quot;,org.apache.commons.lang.time;version=&quot;2.3.0&quot;&#xA;Bundle-RequiredExecutionEnvironment: JRE-1.1&#xA;Bundle-SymbolicName: org.apache.commons.lang&#xA;Bundle-Localization: plugin&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: %providerName
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.commons.logging' version='1.1.1.v20080605-1935' singleton='false'>
+      <update id='org.apache.commons.logging' range='[0.0.0,1.1.1.v20080605-1935)' severity='0'/>
+      <properties size='4'>
+        <property name='df_LT.bundleName' value='Apache Commons Logging Plug-in'/>
+        <property name='df_LT.bundleProvider' value='Eclipse.org'/>
+        <property name='org.eclipse.equinox.p2.name' value='%bundleName'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%bundleProvider'/>
+      </properties>
+      <provides size='6'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.commons.logging' version='1.1.1.v20080605-1935'/>
+        <provided namespace='osgi.bundle' name='org.apache.commons.logging' version='1.1.1.v20080605-1935'/>
+        <provided namespace='java.package' name='org.apache.commons.logging' version='1.1.1'/>
+        <provided namespace='java.package' name='org.apache.commons.logging.impl' version='1.1.1'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.commons.logging' version='1.1.1.v20080605-1935'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: %bundleName&#xA;Bundle-Version: 1.1.1.v20080605-1935&#xA;Export-Package: org.apache.commons.logging;version=&quot;1.1.1&quot;,org.apache.commons.logging.impl;version=&quot;1.1.1&quot;&#xA;Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0,J2SE-1.3&#xA;Bundle-SymbolicName: org.apache.commons.logging&#xA;Bundle-Localization: plugin&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: %bundleProvider
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.log4j' version='1.2.13.v200806030600' singleton='false'>
+      <update id='org.apache.log4j' range='[0.0.0,1.2.13.v200806030600)' severity='0'/>
+      <properties size='4'>
+        <property name='df_LT.PLUGIN_NAME' value='Apache Jakarta log4j Plug-in'/>
+        <property name='df_LT.PLUGIN_PROVIDER' value='Eclipse.org'/>
+        <property name='org.eclipse.equinox.p2.name' value='%PLUGIN_NAME'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%PLUGIN_PROVIDER'/>
+      </properties>
+      <provides size='25'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.log4j' version='1.2.13.v200806030600'/>
+        <provided namespace='osgi.bundle' name='org.apache.log4j' version='1.2.13.v200806030600'/>
+        <provided namespace='java.package' name='org.apache.log4j' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.chainsaw' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.config' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.helpers' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.jdbc' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.jmx' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.lf5' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.lf5.config' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.lf5.util' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.lf5.viewer' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.lf5.viewer.categoryexplorer' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.lf5.viewer.configure' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.lf5.viewer.images' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.net' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.nt' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.or' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.or.jms' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.or.sax' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.spi' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.varia' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.log4j.xml' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.log4j' version='1.2.13.v200806030600'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-Vendor: %PLUGIN_PROVIDER&#xA;Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-ClassPath: .&#xA;Bundle-Name: %PLUGIN_NAME&#xA;Bundle-Localization: plugin&#xA;Eclipse-BuddyPolicy: registered&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.apache.log4j&#xA;Bundle-Version: 1.2.13.v200806030600&#xA;Export-Package: org.apache.log4j,org.apache.log4j.chainsaw,org.apache.log4j.config,org.apache.log4j.helpers,org.apache.log4j.jdbc,org.apache.log4j.jmx,org.apache.log4j.lf5,org.apache.log4j.lf5.config,org.apache.log4j.lf5.util,org.apache.log4j.lf5.viewer,org.apache.log4j.lf5.viewer.categoryexplorer,org.apache.log4j.lf5.viewer.configure,org.apache.log4j.lf5.viewer.images,org.apache.log4j.net,org.apache.log4j.nt,org.apache.log4j.or,org.apache.log4j.or.jms,org.apache.log4j.or.sax,org.apache.log4j.spi,org.apache.log4j.varia,org.apache.log4j.xml
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='com.jcraft.jsch' version='0.1.37.v200803061811' singleton='false'>
+      <update id='com.jcraft.jsch' range='[0.0.0,0.1.37.v200803061811)' severity='0'/>
+      <properties size='4'>
+        <property name='df_LT.bundleName' value='JSch'/>
+        <property name='df_LT.venderName' value='JCraft, Inc.'/>
+        <property name='org.eclipse.equinox.p2.name' value='%bundleName'/>
+        <property name='org.eclipse.equinox.p2.provider' value='%venderName'/>
+      </properties>
+      <provides size='8'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='com.jcraft.jsch' version='0.1.37.v200803061811'/>
+        <provided namespace='osgi.bundle' name='com.jcraft.jsch' version='0.1.37.v200803061811'/>
+        <provided namespace='java.package' name='com.jcraft.jsch' version='0.0.0'/>
+        <provided namespace='java.package' name='com.jcraft.jsch.jce' version='0.0.0'/>
+        <provided namespace='java.package' name='com.jcraft.jsch.jcraft' version='0.0.0'/>
+        <provided namespace='java.package' name='com.jcraft.jsch.jgss' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.localization' name='df_LT' version='1.0.0'/>
+      </provides>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='com.jcraft.jsch' version='0.1.37.v200803061811'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 0.1.37.v200803061811&#xA;Export-Package: com.jcraft.jsch,com.jcraft.jsch.jce;x-internal:=true,com.jcraft.jsch.jcraft;x-internal:=true,com.jcraft.jsch.jgss;x-internal:=true&#xA;Bundle-SymbolicName: com.jcraft.jsch&#xA;Bundle-Localization: plugin&#xA;Bundle-ClassPath: .&#xA;Bundle-Name: %bundleName&#xA;Bundle-Vendor: %venderName
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.lifecycle' version='2.1.0.R659801' singleton='false'>
+      <update id='org.apache.maven.lifecycle' range='[0.0.0,2.1.0.R659801)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Lifecycle Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='6'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.lifecycle' version='2.1.0.R659801'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.lifecycle' version='2.1.0.R659801'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle.model' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle.model.io.xpp3' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.utils' range='1.5.1'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.lifecycle' version='2.1.0.R659801'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache Maven Lifecycle Plug-in&#xA;Bundle-Version: 2.1.0.R659801&#xA;Require-Bundle: org.codehaus.plexus.utils;bundle-version=&quot;1.5.1&quot;&#xA;Export-Package: org.apache.maven.lifecycle,org.apache.maven.lifecycle.model,org.apache.maven.lifecycle.model.io.xpp3&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.lifecycle&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.codehaus.plexus.utils' version='1.5.1' singleton='false'>
+      <update id='org.codehaus.plexus.utils' range='[0.0.0,1.5.1)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Plexus Utils Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='13'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.codehaus.plexus.utils' version='1.5.1'/>
+        <provided namespace='osgi.bundle' name='org.codehaus.plexus.utils' version='1.5.1'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.cli' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.cli.shell' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.dag' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.interpolation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.introspection' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.io' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.reflection' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.xml' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.util.xml.pull' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.codehaus.plexus.utils' version='1.5.1'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Version: 1.5.1&#xA;Export-Package: org.codehaus.plexus.util,org.codehaus.plexus.util.cli,org.codehaus.plexus.util.cli.shell,org.codehaus.plexus.util.dag,org.codehaus.plexus.util.interpolation,org.codehaus.plexus.util.introspection,org.codehaus.plexus.util.io,org.codehaus.plexus.util.reflection,org.codehaus.plexus.util.xml,org.codehaus.plexus.util.xml.pull&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.codehaus.plexus.utils&#xA;Bundle-Name: Plexus Utils Plug-in&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.codehaus.plexus.container.default' version='1.0.0.a46' singleton='false'>
+      <update id='org.codehaus.plexus.container.default' range='[0.0.0,1.0.0.a46)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Plexus Container Default Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='36'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.codehaus.plexus.container.default' version='1.0.0.a46'/>
+        <provided namespace='osgi.bundle' name='org.codehaus.plexus.container.default' version='1.0.0.a46'/>
+        <provided namespace='java.package' name='org.codehaus.plexus' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.aspect' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.builder' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.collections' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.composition' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.composition.setter' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator.converters' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator.converters.basic' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator.converters.composite' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator.converters.lookup' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator.converters.special' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.configurator.expression' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.discovery' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.factory' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.factory.java' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.manager' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.reloading' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.repository' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.repository.exception' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.component.repository.io' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.configuration' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.configuration.io' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.configuration.source' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.configuration.xml' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.container.initialization' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.context' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.lifecycle' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.lifecycle.phase' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.logging' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.logging.console' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.personality.plexus.lifecycle.phase' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='4'>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.utils' range='1.5.1'/>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.classworlds' range='1.2.0'/>
+        <required namespace='osgi.bundle' name='org.aspectj.runtime' range='[1.5.3,2.0.0)'/>
+        <required namespace='osgi.bundle' name='org.apache.xbean.reflect' range='3.4.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.codehaus.plexus.container.default' version='1.0.0.a46'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Require-Bundle: org.codehaus.plexus.utils;bundle-version=&quot;1.5.1&quot;;visibility:=reexport,org.codehaus.plexus.classworlds;bundle-version=&quot;1.2.0&quot;;visibility:=reexport,org.aspectj.runtime;bundle-version=&quot;[1.5.3,2.0.0)&quot;;visibility:=reexport,org.apache.xbean.reflect;bundle-version=&quot;3.4.0&quot;;visibility:=reexport&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 1.0.0.a46&#xA;Export-Package: org.codehaus.plexus,org.codehaus.plexus.aspect,org.codehaus.plexus.component,org.codehaus.plexus.component.builder,org.codehaus.plexus.component.collections,org.codehaus.plexus.component.composition,org.codehaus.plexus.component.composition.setter,org.codehaus.plexus.component.configurator,org.codehaus.plexus.component.configurator.converters,org.codehaus.plexus.component.configurator.converters.basic,org.codehaus.plexus.component.configurator.converters.composite,org.codehaus.plexus.component.configurator.converters.lookup,org.codehaus.plexus.component.configurator.converters.special,org.codehaus.plexus.component.configurator.expression,org.codehaus.plexus.component.discovery,org.codehaus.plexus.component.factory,org.codehaus.plexus.component.factory.java,org.codehaus.plexus.component.manager,org.codehaus.plexus.component.reloading,org.codehaus.plexus.component.repository,org.codehaus.plexus.component.repository.exception,org.codehaus.plexus.component.repository.io,org.codehaus.plexus.configuration,org.codehaus.plexus.configuration.io,org.codehaus.plexus.configuration.source,org.codehaus.plexus.configuration.xml,org.codehaus.plexus.container.initialization,org.codehaus.plexus.context,org.codehaus.plexus.lifecycle,org.codehaus.plexus.lifecycle.phase,org.codehaus.plexus.logging,org.codehaus.plexus.logging.console,org.codehaus.plexus.personality.plexus.lifecycle.phase&#xA;Bundle-SymbolicName: org.codehaus.plexus.container.default&#xA;Bundle-ClassPath: .&#xA;Bundle-Name: Plexus Container Default Plug-in&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.profile' version='2.1.0.R659801' singleton='false'>
+      <update id='org.apache.maven.profile' range='[0.0.0,2.1.0.R659801)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Profile Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='5'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.profile' version='2.1.0.R659801'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.profile' version='2.1.0.R659801'/>
+        <provided namespace='java.package' name='org.apache.maven.profiles' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.profiles.io.xpp3' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='2'>
+        <required namespace='osgi.bundle' name='org.apache.maven.model' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.container.default' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.profile' version='2.1.0.R659801'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache Maven Profile Plug-in&#xA;Bundle-Version: 2.1.0.R659801&#xA;Require-Bundle: org.apache.maven.model;bundle-version=&quot;2.1.0&quot;;visibility:=reexport,org.codehaus.plexus.container.default;bundle-version=&quot;1.0.0&quot;;visibility:=reexport&#xA;Export-Package: org.apache.maven.profiles,org.apache.maven.profiles.io.xpp3&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.profile&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.workspace' version='2.1.0.R659801' singleton='false'>
+      <update id='org.apache.maven.workspace' range='[0.0.0,2.1.0.R659801)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Workspace Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='4'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.workspace' version='2.1.0.R659801'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.workspace' version='2.1.0.R659801'/>
+        <provided namespace='java.package' name='org.apache.maven.workspace' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.container.default' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.workspace' version='2.1.0.R659801'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache Maven Workspace Plug-in&#xA;Bundle-Version: 2.1.0.R659801&#xA;Require-Bundle: org.codehaus.plexus.container.default;bundle-version=&quot;1.0.0&quot;&#xA;Export-Package: org.apache.maven.workspace&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.workspace&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.reporting.api' version='2.1.0.R659801' singleton='false'>
+      <update id='org.apache.maven.reporting.api' range='[0.0.0,2.1.0.R659801)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Reporting Api Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='4'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.reporting.api' version='2.1.0.R659801'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.reporting.api' version='2.1.0.R659801'/>
+        <provided namespace='java.package' name='org.apache.maven.reporting' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='osgi.bundle' name='org.apache.maven.doxia.sink.api' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.reporting.api' version='2.1.0.R659801'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Require-Bundle: org.apache.maven.doxia.sink.api;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 2.1.0.R659801&#xA;Export-Package: org.apache.maven.reporting&#xA;Bundle-SymbolicName: org.apache.maven.reporting.api&#xA;Bundle-ClassPath: .&#xA;Bundle-Name: Apache Maven Reporting Api Plug-in&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.wagon.provider.api' version='1.0.0.b2' singleton='false'>
+      <update id='org.apache.maven.wagon.provider.api' range='[0.0.0,1.0.0.b2)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Wagon Provider Api Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='11'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.wagon.provider.api' version='1.0.0.b2'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.wagon.provider.api' version='1.0.0.b2'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.authentication' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.authorization' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.events' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.observers' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.proxy' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.repository' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.resource' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.utils' range='1.5.1'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.provider.api' version='1.0.0.b2'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache Maven Wagon Provider Api Plug-in&#xA;Bundle-Version: 1.0.0.b2&#xA;Require-Bundle: org.codehaus.plexus.utils;bundle-version=&quot;1.5.1&quot;;visibility:=reexport&#xA;Export-Package: org.apache.maven.wagon,org.apache.maven.wagon.authentication,org.apache.maven.wagon.authorization,org.apache.maven.wagon.events,org.apache.maven.wagon.observers,org.apache.maven.wagon.proxy,org.apache.maven.wagon.repository,org.apache.maven.wagon.resource&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.wagon.provider.api&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.xbean.reflect' version='3.4.0' singleton='false'>
+      <update id='org.apache.xbean.reflect' range='[0.0.0,3.4.0)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache XBean Reflect Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='5'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.xbean.reflect' version='3.4.0'/>
+        <provided namespace='osgi.bundle' name='org.apache.xbean.reflect' version='3.4.0'/>
+        <provided namespace='java.package' name='org.apache.xbean.propertyeditor' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.xbean.recipe' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='2'>
+        <required namespace='osgi.bundle' name='org.apache.commons.logging' range='1.1.1'/>
+        <required namespace='osgi.bundle' name='org.apache.log4j' range='1.2.13'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.xbean.reflect' version='3.4.0'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache XBean Reflect Plug-in&#xA;Bundle-Version: 3.4.0&#xA;Require-Bundle: org.apache.commons.logging;bundle-version=&quot;1.1.1&quot;,org.apache.log4j;bundle-version=&quot;1.2.13&quot;&#xA;Export-Package: org.apache.xbean.propertyeditor,org.apache.xbean.recipe&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.xbean.reflect&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.model' version='2.1.0.R659801' singleton='false'>
+      <update id='org.apache.maven.model' range='[0.0.0,2.1.0.R659801)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Model Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='5'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.model' version='2.1.0.R659801'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.model' version='2.1.0.R659801'/>
+        <provided namespace='java.package' name='org.apache.maven.model' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.model.io.xpp3' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.utils' range='1.5.1'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.model' version='2.1.0.R659801'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache Maven Model Plug-in&#xA;Bundle-Version: 2.1.0.R659801&#xA;Require-Bundle: org.codehaus.plexus.utils;bundle-version=&quot;1.5.1&quot;&#xA;Export-Package: org.apache.maven.model,org.apache.maven.model.io.xpp3&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.model&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.core' version='2.1.0.R659801' singleton='false'>
+      <update id='org.apache.maven.core' range='[0.0.0,2.1.0.R659801)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Core Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='22'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.core' version='2.1.0.R659801'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.core' version='2.1.0.R659801'/>
+        <provided namespace='java.package' name='org.apache.maven' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.compat' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.errors' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.execution' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.extension' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle.binding' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle.mapping' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle.plan' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.lifecycle.statemgmt' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.monitor.event' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.monitor.logging' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin.loader' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin.version' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.reactor' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.settings' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.settings.io.xpp3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.settings.validation' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='8'>
+        <required namespace='osgi.bundle' name='org.apache.maven.workspace' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.lifecycle' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.reporting.api' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.model' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.profile' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.plugin.api' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.project' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.interactivity.api' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.core' version='2.1.0.R659801'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Require-Bundle: org.apache.maven.workspace;bundle-version=&quot;2.1.0&quot;;visibility:=reexport,org.apache.maven.lifecycle;bundle-version=&quot;2.1.0&quot;;visibility:=reexport,org.apache.maven.reporting.api;bundle-version=&quot;2.1.0&quot;;visibility:=reexport,org.apache.maven.model;bundle-version=&quot;2.1.0&quot;;visibility:=reexport,org.apache.maven.profile;bundle-version=&quot;2.1.0&quot;;visibility:=reexport,org.apache.maven.plugin.api;bundle-version=&quot;2.1.0&quot;;visibility:=reexport,org.apache.maven.project;bundle-version=&quot;2.1.0&quot;;visibility:=reexport,org.codehaus.plexus.interactivity.api;bundle-version=&quot;1.0.0&quot;;visibility:=reexport&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 2.1.0.R659801&#xA;Export-Package: org.apache.maven,org.apache.maven.compat,org.apache.maven.errors,org.apache.maven.execution,org.apache.maven.extension,org.apache.maven.lifecycle,org.apache.maven.lifecycle.binding,org.apache.maven.lifecycle.mapping,org.apache.maven.lifecycle.plan,org.apache.maven.lifecycle.statemgmt,org.apache.maven.monitor.event,org.apache.maven.monitor.logging,org.apache.maven.plugin,org.apache.maven.plugin.loader,org.apache.maven.plugin.version,org.apache.maven.reactor,org.apache.maven.settings,org.apache.maven.settings.io.xpp3,org.apache.maven.settings.validation&#xA;Bundle-SymbolicName: org.apache.maven.core&#xA;Bundle-ClassPath: .&#xA;Bundle-Name: Apache Maven Core Plug-in&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.doxia.sink.api' version='1.0.0.a9' singleton='false'>
+      <update id='org.apache.maven.doxia.sink.api' range='[0.0.0,1.0.0.a9)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Doxia Sink Api Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='5'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.doxia.sink.api' version='1.0.0.a9'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.doxia.sink.api' version='1.0.0.a9'/>
+        <provided namespace='java.package' name='org.apache.maven.doxia.sink' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.doxia.sink' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.doxia.sink.api' version='1.0.0.a9'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Version: 1.0.0.a9&#xA;Export-Package: org.apache.maven.doxia.sink,org.codehaus.doxia.sink&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.apache.maven.doxia.sink.api&#xA;Bundle-Name: Apache Maven Doxia Sink Api Plug-in&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.project' version='2.1.0.R659801' singleton='false'>
+      <update id='org.apache.maven.project' range='[0.0.0,2.1.0.R659801)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Project Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='21'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.project' version='2.1.0.R659801'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.project' version='2.1.0.R659801'/>
+        <provided namespace='java.package' name='org.apache.maven' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.profiles' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.profiles.activation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.profiles.build' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.profiles.injection' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.artifact' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.aspect' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.aspect.compat' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.build.model' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.error' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.inheritance' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.injection' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.interpolation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.path' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.validation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.project.workspace' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.realm' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='5'>
+        <required namespace='osgi.bundle' name='org.apache.maven.workspace' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.profile' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.model' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.interpolation' range='1.0.0'/>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.container.default' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.project' version='2.1.0.R659801'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Require-Bundle: org.apache.maven.workspace;bundle-version=&quot;2.1.0&quot;;visibility:=reexport,org.apache.maven.profile;bundle-version=&quot;2.1.0&quot;;visibility:=reexport,org.apache.maven.model;bundle-version=&quot;2.1.0&quot;;visibility:=reexport,org.codehaus.plexus.interpolation;bundle-version=&quot;1.0.0&quot;;visibility:=reexport,org.codehaus.plexus.container.default;bundle-version=&quot;1.0.0&quot;;visibility:=reexport&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 2.1.0.R659801&#xA;Export-Package: org.apache.maven,org.apache.maven.profiles,org.apache.maven.profiles.activation,org.apache.maven.profiles.build,org.apache.maven.profiles.injection,org.apache.maven.project,org.apache.maven.project.artifact,org.apache.maven.project.aspect,org.apache.maven.project.aspect.compat,org.apache.maven.project.build.model,org.apache.maven.project.error,org.apache.maven.project.inheritance,org.apache.maven.project.injection,org.apache.maven.project.interpolation,org.apache.maven.project.path,org.apache.maven.project.validation,org.apache.maven.project.workspace,org.apache.maven.realm&#xA;Bundle-SymbolicName: org.apache.maven.project&#xA;Bundle-ClassPath: .&#xA;Bundle-Name: Apache Maven Project Plug-in&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.wagon.providers.ssh.common' version='1.0.0.b2' singleton='false'>
+      <update id='org.apache.maven.wagon.providers.ssh.common' range='[0.0.0,1.0.0.b2)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Wagon SSH Common Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='6'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.wagon.providers.ssh.common' version='1.0.0.b2'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.wagon.providers.ssh.common' version='1.0.0.b2'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.ssh' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.ssh.interactive' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.ssh.knownhost' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='2'>
+        <required namespace='osgi.bundle' name='org.apache.maven.wagon.provider.api' range='1.0.0'/>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.interactivity.api' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.providers.ssh.common' version='1.0.0.b2'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache Maven Wagon SSH Common Plug-in&#xA;Bundle-Version: 1.0.0.b2&#xA;Require-Bundle: org.apache.maven.wagon.provider.api;bundle-version=&quot;1.0.0&quot;;visibility:=reexport,org.codehaus.plexus.interactivity.api;bundle-version=&quot;1.0.0&quot;;visibility:=reexport&#xA;Export-Package: org.apache.maven.wagon.providers.ssh,org.apache.maven.wagon.providers.ssh.interactive,org.apache.maven.wagon.providers.ssh.knownhost&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.wagon.providers.ssh.common&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.wagon.providers.ssh.external' version='1.0.0.b2' singleton='false'>
+      <update id='org.apache.maven.wagon.providers.ssh.external' range='[0.0.0,1.0.0.b2)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Wagon SSH / External Provider Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='4'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.wagon.providers.ssh.external' version='1.0.0.b2'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.wagon.providers.ssh.external' version='1.0.0.b2'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.ssh.external' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='osgi.bundle' name='org.apache.maven.wagon.providers.ssh.common' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.providers.ssh.external' version='1.0.0.b2'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache Maven Wagon SSH / External Provider Plug-in&#xA;Bundle-Version: 1.0.0.b2&#xA;Require-Bundle: org.apache.maven.wagon.providers.ssh.common;bundle-version=&quot;1.0.0&quot;&#xA;Export-Package: org.apache.maven.wagon.providers.ssh.external&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.wagon.providers.ssh.external&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.toolchain' version='2.1.0.R659801' singleton='false'>
+      <update id='org.apache.maven.toolchain' range='[0.0.0,2.1.0.R659801)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Toolchain Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='7'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.toolchain' version='2.1.0.R659801'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.toolchain' version='2.1.0.R659801'/>
+        <provided namespace='java.package' name='org.apache.maven.toolchain' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.toolchain.java' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.toolchain.model' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.toolchain.model.io.xpp3' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='6'>
+        <required namespace='osgi.bundle' name='org.apache.maven.artifact' range='3.0.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.core' range='2.1.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.wagon.providers.http.lightweight' range='1.0.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.wagon.providers.ssh.external' range='1.0.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.wagon.providers.ssh.jsch' range='1.0.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.wagon.providers.file' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.toolchain' version='2.1.0.R659801'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache Maven Toolchain Plug-in&#xA;Bundle-Version: 2.1.0.R659801&#xA;Require-Bundle: org.apache.maven.artifact;bundle-version=&quot;3.0.0&quot;;visibility:=reexport,org.apache.maven.core;bundle-version=&quot;2.1.0&quot;;visibility:=reexport,org.apache.maven.wagon.providers.http.lightweight;bundle-version=&quot;1.0.0&quot;,org.apache.maven.wagon.providers.ssh.external;bundle-version=&quot;1.0.0&quot;,org.apache.maven.wagon.providers.ssh.jsch;bundle-version=&quot;1.0.0&quot;,org.apache.maven.wagon.providers.file;bundle-version=&quot;1.0.0&quot;&#xA;Export-Package: org.apache.maven.toolchain,org.apache.maven.toolchain.java,org.apache.maven.toolchain.model,org.apache.maven.toolchain.model.io.xpp3&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.toolchain&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.artifact' version='3.0.0.R659801' singleton='false'>
+      <update id='org.apache.maven.artifact' range='[0.0.0,3.0.0.R659801)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Artifact Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='21'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.artifact' version='3.0.0.R659801'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.artifact' version='3.0.0.R659801'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.deployer' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.factory' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.handler' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.handler.manager' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.installer' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.manager' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.metadata' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.repository' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.repository.layout' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.repository.metadata' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.repository.metadata.io.xpp3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.resolver' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.resolver.conflict' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.resolver.filter' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.resolver.metadata' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.transform' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.artifact.versioning' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='3'>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.utils' range='1.5.1'/>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.container.default' range='1.0.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.wagon.provider.api' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.artifact' version='3.0.0.R659801'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache Maven Artifact Plug-in&#xA;Bundle-Version: 3.0.0.R659801&#xA;Require-Bundle: org.codehaus.plexus.utils;bundle-version=&quot;1.5.1&quot;,org.codehaus.plexus.container.default;bundle-version=&quot;1.0.0&quot;,org.apache.maven.wagon.provider.api;bundle-version=&quot;1.0.0&quot;&#xA;Export-Package: org.apache.maven.artifact,org.apache.maven.artifact.deployer,org.apache.maven.artifact.factory,org.apache.maven.artifact.handler,org.apache.maven.artifact.handler.manager,org.apache.maven.artifact.installer,org.apache.maven.artifact.manager,org.apache.maven.artifact.metadata,org.apache.maven.artifact.repository,org.apache.maven.artifact.repository.layout,org.apache.maven.artifact.repository.metadata,org.apache.maven.artifact.repository.metadata.io.xpp3,org.apache.maven.artifact.resolver,org.apache.maven.artifact.resolver.conflict,org.apache.maven.artifact.resolver.filter,org.apache.maven.artifact.resolver.metadata,org.apache.maven.artifact.transform,org.apache.maven.artifact.versioning&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.artifact&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.codehaus.plexus.interpolation' version='1.0.0' singleton='false'>
+      <update id='org.codehaus.plexus.interpolation' range='[0.0.0,1.0.0)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Plexus Interpolation Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='7'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.codehaus.plexus.interpolation' version='1.0.0'/>
+        <provided namespace='osgi.bundle' name='org.codehaus.plexus.interpolation' version='1.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.interpolation' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.interpolation.os' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.interpolation.reflection' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.interpolation.util' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.codehaus.plexus.interpolation' version='1.0.0'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Version: 1.0.0&#xA;Export-Package: org.codehaus.plexus.interpolation,org.codehaus.plexus.interpolation.os,org.codehaus.plexus.interpolation.reflection,org.codehaus.plexus.interpolation.util&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.codehaus.plexus.interpolation&#xA;Bundle-Name: Plexus Interpolation Plug-in&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.codehaus.plexus.classworlds' version='1.2.0.a12' singleton='false'>
+      <update id='org.codehaus.plexus.classworlds' range='[0.0.0,1.2.0.a12)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Plexus Classworlds Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='8'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.codehaus.plexus.classworlds' version='1.2.0.a12'/>
+        <provided namespace='osgi.bundle' name='org.codehaus.plexus.classworlds' version='1.2.0.a12'/>
+        <provided namespace='java.package' name='org.codehaus.classworlds' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.classworlds' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.classworlds.launcher' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.classworlds.realm' version='0.0.0'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.classworlds.strategy' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.codehaus.plexus.classworlds' version='1.2.0.a12'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Version: 1.2.0.a12&#xA;Export-Package: org.codehaus.classworlds,org.codehaus.plexus.classworlds,org.codehaus.plexus.classworlds.launcher,org.codehaus.plexus.classworlds.realm,org.codehaus.plexus.classworlds.strategy&#xA;Manifest-Version: 1.0&#xA;Bundle-SymbolicName: org.codehaus.plexus.classworlds&#xA;Bundle-Name: Plexus Classworlds Plug-in&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.wagon.providers.http.lightweight' version='1.0.0.b2' singleton='false'>
+      <update id='org.apache.maven.wagon.providers.http.lightweight' range='[0.0.0,1.0.0.b2)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Wagon HTTP Lightweight Provider Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='4'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.wagon.providers.http.lightweight' version='1.0.0.b2'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.wagon.providers.http.lightweight' version='1.0.0.b2'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.http' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='2'>
+        <required namespace='osgi.bundle' name='org.apache.maven.wagon.http.shared' range='1.0.0'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.wagon.provider.api' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.providers.http.lightweight' version='1.0.0.b2'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache Maven Wagon HTTP Lightweight Provider Plug-in&#xA;Bundle-Version: 1.0.0.b2&#xA;Require-Bundle: org.apache.maven.wagon.http.shared;bundle-version=&quot;1.0.0&quot;,org.apache.maven.wagon.provider.api;bundle-version=&quot;1.0.0&quot;;visibility:=reexport&#xA;Export-Package: org.apache.maven.wagon.providers.http&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.wagon.providers.http.lightweight&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.plugin.api' version='2.1.0.R659801' singleton='false'>
+      <update id='org.apache.maven.plugin.api' range='[0.0.0,2.1.0.R659801)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Maven Plugin Api Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='8'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.plugin.api' version='2.1.0.R659801'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.plugin.api' version='2.1.0.R659801'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin.descriptor' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin.lifecycle' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin.lifecycle.io.xpp3' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.plugin.logging' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='2'>
+        <required namespace='osgi.bundle' name='org.apache.maven.artifact' range='3.0.0'/>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.container.default' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.plugin.api' version='2.1.0.R659801'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Maven Plugin Api Plug-in&#xA;Bundle-Version: 2.1.0.R659801&#xA;Require-Bundle: org.apache.maven.artifact;bundle-version=&quot;3.0.0&quot;;visibility:=reexport,org.codehaus.plexus.container.default;bundle-version=&quot;1.0.0&quot;;visibility:=reexport&#xA;Export-Package: org.apache.maven.plugin,org.apache.maven.plugin.descriptor,org.apache.maven.plugin.lifecycle,org.apache.maven.plugin.lifecycle.io.xpp3,org.apache.maven.plugin.logging&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.plugin.api&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.wagon.providers.ssh.jsch' version='1.0.0.b2' singleton='false'>
+      <update id='org.apache.maven.wagon.providers.ssh.jsch' range='[0.0.0,1.0.0.b2)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Wagon SSH / JSCH Provider Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='5'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.wagon.providers.ssh.jsch' version='1.0.0.b2'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.wagon.providers.ssh.jsch' version='1.0.0.b2'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.ssh.jsch' version='0.0.0'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.ssh.jsch.interactive' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='2'>
+        <required namespace='osgi.bundle' name='com.jcraft.jsch' range='0.1.31'/>
+        <required namespace='osgi.bundle' name='org.apache.maven.wagon.providers.ssh.common' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.providers.ssh.jsch' version='1.0.0.b2'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache Maven Wagon SSH / JSCH Provider Plug-in&#xA;Bundle-Version: 1.0.0.b2&#xA;Require-Bundle: com.jcraft.jsch;bundle-version=&quot;0.1.31&quot;,org.apache.maven.wagon.providers.ssh.common;bundle-version=&quot;1.0.0&quot;&#xA;Export-Package: org.apache.maven.wagon.providers.ssh.jsch,org.apache.maven.wagon.providers.ssh.jsch.interactive&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.wagon.providers.ssh.jsch&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.wagon.http.shared' version='1.0.0.b2' singleton='false'>
+      <update id='org.apache.maven.wagon.http.shared' range='[0.0.0,1.0.0.b2)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Wagon HTTP Shared Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='4'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.wagon.http.shared' version='1.0.0.b2'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.wagon.http.shared' version='1.0.0.b2'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.shared.http' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='2'>
+        <required namespace='osgi.bundle' name='org.apache.maven.wagon.provider.api' range='1.0.0'/>
+        <required namespace='osgi.bundle' name='org.w3c.tidy' range='0.0.4'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.http.shared' version='1.0.0.b2'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Apache Maven Wagon HTTP Shared Plug-in&#xA;Bundle-Version: 1.0.0.b2&#xA;Require-Bundle: org.apache.maven.wagon.provider.api;bundle-version=&quot;1.0.0&quot;,org.w3c.tidy;bundle-version=&quot;0.0.4&quot;&#xA;Export-Package: org.apache.maven.wagon.shared.http&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.apache.maven.wagon.http.shared&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.codehaus.plexus.interactivity.api' version='1.0.0.a6' singleton='false'>
+      <update id='org.codehaus.plexus.interactivity.api' range='[0.0.0,1.0.0.a6)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Plexus Interactivity Api Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='4'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.codehaus.plexus.interactivity.api' version='1.0.0.a6'/>
+        <provided namespace='osgi.bundle' name='org.codehaus.plexus.interactivity.api' version='1.0.0.a6'/>
+        <provided namespace='java.package' name='org.codehaus.plexus.components.interactivity' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='osgi.bundle' name='org.codehaus.plexus.container.default' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.codehaus.plexus.interactivity.api' version='1.0.0.a6'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-Name: Plexus Interactivity Api Plug-in&#xA;Bundle-Version: 1.0.0.a6&#xA;Require-Bundle: org.codehaus.plexus.container.default;bundle-version=&quot;1.0.0&quot;;visibility:=reexport&#xA;Export-Package: org.codehaus.plexus.components.interactivity&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Bundle-SymbolicName: org.codehaus.plexus.interactivity.api&#xA;Manifest-Version: 1.0&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+    <unit id='org.apache.maven.wagon.providers.file' version='1.0.0.b2' singleton='false'>
+      <update id='org.apache.maven.wagon.providers.file' range='[0.0.0,1.0.0.b2)' severity='0'/>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Wagon File Provider Plug-in'/>
+        <property name='org.eclipse.equinox.p2.provider' value='Q4E Project'/>
+      </properties>
+      <provides size='4'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.wagon.providers.file' version='1.0.0.b2'/>
+        <provided namespace='osgi.bundle' name='org.apache.maven.wagon.providers.file' version='1.0.0.b2'/>
+        <provided namespace='java.package' name='org.apache.maven.wagon.providers.file' version='0.0.0'/>
+        <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='osgi.bundle' name='org.apache.maven.wagon.provider.api' range='1.0.0'/>
+      </requires>
+      <artifacts size='1'>
+        <artifact classifier='osgi.bundle' id='org.apache.maven.wagon.providers.file' version='1.0.0.b2'/>
+      </artifacts>
+      <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+      <touchpointData size='1'>
+        <instructions size='1'>
+          <instruction key='manifest'>
+            Bundle-ManifestVersion: 2&#xA;Bundle-RequiredExecutionEnvironment: J2SE-1.4&#xA;Require-Bundle: org.apache.maven.wagon.provider.api;bundle-version=&quot;1.0.0&quot;&#xA;Manifest-Version: 1.0&#xA;Bundle-Version: 1.0.0.b2&#xA;Export-Package: org.apache.maven.wagon.providers.file&#xA;Bundle-SymbolicName: org.apache.maven.wagon.providers.file&#xA;Bundle-ClassPath: .&#xA;Bundle-Name: Apache Maven Wagon File Provider Plug-in&#xA;Bundle-Vendor: Q4E Project
+          </instruction>
+        </instructions>
+      </touchpointData>
+    </unit>
+  </units>
 </repository>
