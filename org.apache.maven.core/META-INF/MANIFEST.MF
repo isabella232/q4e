@@ -24,3 +24,4 @@ Export-Package: org.apache.maven,
  org.apache.maven.settings,
  org.apache.maven.settings.io.xpp3,
  org.apache.maven.settings.validation
+Bundle-RequiredExecutionEnvironment: J2SE-1.4

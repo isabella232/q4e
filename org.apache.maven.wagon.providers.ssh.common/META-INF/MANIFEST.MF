@@ -9,3 +9,4 @@ Export-Package: org.apache.maven.wagon.providers.ssh,
  org.apache.maven.wagon.providers.ssh.knownhost
 Require-Bundle: org.apache.maven.wagon.provider.api;bundle-version="1.0.0";visibility:=reexport,
  org.codehaus.plexus.interactivity.api;bundle-version="1.0.0";visibility:=reexport
+Bundle-RequiredExecutionEnvironment: J2SE-1.4
