@@ -7,3 +7,5 @@ Bundle-Vendor: Q4E Project
 Export-Package: org.apache.maven.wagon.providers.ssh,
  org.apache.maven.wagon.providers.ssh.interactive,
  org.apache.maven.wagon.providers.ssh.knownhost
+Require-Bundle: org.apache.maven.wagon.provider.api;bundle-version="1.0.0";visibility:=reexport,
+ org.codehaus.plexus.interactivity.api;bundle-version="1.0.0";visibility:=reexport

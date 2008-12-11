@@ -13,3 +13,4 @@ Export-Package: org.apache.maven.wagon,
  org.apache.maven.wagon.repository,
  org.apache.maven.wagon.resource
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.codehaus.plexus.utils;bundle-version="1.5.1";visibility:=reexport

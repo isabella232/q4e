@@ -7,3 +7,5 @@ Bundle-Vendor: Q4E Project
 Export-Package: org.apache.maven.wagon.providers.ssh.jsch,
  org.apache.maven.wagon.providers.ssh.jsch.interactive
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: com.jcraft.jsch;bundle-version="0.1.31",
+ org.apache.maven.wagon.providers.ssh.common;bundle-version="1.0.0"

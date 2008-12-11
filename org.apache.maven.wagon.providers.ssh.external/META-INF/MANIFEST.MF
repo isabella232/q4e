@@ -6,3 +6,4 @@ Bundle-Version: 1.0.0.b2
 Bundle-Vendor: Q4E Project
 Export-Package: org.apache.maven.wagon.providers.ssh.external
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
+Require-Bundle: org.apache.maven.wagon.providers.ssh.common;bundle-version="1.0.0"
