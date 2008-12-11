@@ -11,7 +11,21 @@
     <repository url='http://download.eclipse.org/tools/ajdt/34/update' type='0' options='1'/>
     <repository url='http://download.eclipse.org/tools/ajdt/34/update' type='1' options='1'/>
   </references>
-  <units size='39'>
+  <units size='40'>
+    <unit id='org.apache.maven' version='0.0.0'>
+      <properties size='2'>
+        <property name='org.eclipse.equinox.p2.name' value='Apache Maven Development Tools'/>
+        <property name='org.eclipse.equinox.p2.type.category' value='true'/>
+      </properties>
+      <provides size='1'>
+        <provided namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven' version='0.0.0'/>
+      </provides>
+      <requires size='1'>
+        <required namespace='org.eclipse.equinox.p2.iu' name='org.apache.maven.embedder.feature.feature.group'
+          range='[2.1.0,2.2.0)' />
+      </requires>
+      <touchpoint id='null' version='0.0.0' />
+    </unit>
     <unit id='tooling.source.default' version='1.0.0' singleton='false'>
       <hostRequirements size='1'>
         <required namespace='org.eclipse.equinox.p2.eclipse.type' name='source' range='0.0.0' optional='true' multiple='true' greedy='false'/>
