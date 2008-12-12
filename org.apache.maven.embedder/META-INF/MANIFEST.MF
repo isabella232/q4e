@@ -12,4 +12,4 @@ Export-Package: org.apache.maven.cli,
  org.apache.maven.embedder.execution,
  org.apache.maven.embedder.user
 Bundle-RequiredExecutionEnvironment: J2SE-1.4
-Require-Bundle: org.apache.maven.toolchain;bundle-version="2.1.0"
+Require-Bundle: org.apache.maven.toolchain;bundle-version="2.1.0";visibility:=reexport

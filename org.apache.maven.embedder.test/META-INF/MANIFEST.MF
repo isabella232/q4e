@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Apache Maven Embedder Test Plug-in
+Bundle-SymbolicName: org.apache.maven.embedder.test
+Bundle-Version: 2.1.0.R659801
+Bundle-Vendor: Q4E Project
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Require-Bundle: org.junit,
+ org.apache.maven.embedder;bundle-version="2.1.0"
