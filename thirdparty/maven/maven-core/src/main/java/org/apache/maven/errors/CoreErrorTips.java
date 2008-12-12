@@ -23,7 +23,6 @@ import org.apache.maven.plugin.version.PluginVersionResolutionException;
 import org.apache.maven.project.DuplicateArtifactAttachmentException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.artifact.InvalidDependencyVersionException;
-import org.apache.maven.project.interpolation.ModelInterpolationException;
 import org.apache.maven.realm.RealmManagementException;
 import org.codehaus.plexus.component.repository.exception.ComponentLookupException;
 import org.codehaus.plexus.configuration.PlexusConfiguration;
@@ -41,6 +40,7 @@ public final class CoreErrorTips
 {
 
     private static final List NO_GOALS_TIPS = Arrays.asList( new String[] {
+        "Introduction to the Build Lifecycle", "\t(http://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html)",
         "Maven in 5 Minutes guide (http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html)",
         "Maven User's documentation (http://maven.apache.org/users/)",
         "Maven Plugins page (http://maven.apache.org/plugins/)",
@@ -180,13 +180,6 @@ public final class CoreErrorTips
         return null;
     }
 
-    public static List getTipsForModelInterpolationError( Model model,
-                                                          File pomFile,
-                                                          ModelInterpolationException cause )
-    {
-        // TODO Auto-generated method stub
-        return null;
-    }
 
     public static List getIncompatibleProjectMavenVersionPrereqTips( MavenProject project,
                                                                      ArtifactVersion mavenVersion )

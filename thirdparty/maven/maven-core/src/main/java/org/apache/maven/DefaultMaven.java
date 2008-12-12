@@ -21,21 +21,14 @@ package org.apache.maven;
 
 
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-import org.apache.maven.execution.DefaultMavenExecutionResult;
-import org.apache.maven.execution.MavenExecutionRequest;
-import org.apache.maven.execution.MavenExecutionResult;
-import org.apache.maven.execution.MavenSession;
-import org.apache.maven.execution.ReactorManager;
-import org.apache.maven.execution.RuntimeInformation;
-import org.apache.maven.extension.BuildExtensionScanner;
-import org.apache.maven.extension.ExtensionScanningException;
+import org.apache.maven.execution.*;
 import org.apache.maven.lifecycle.LifecycleExecutionException;
 import org.apache.maven.lifecycle.LifecycleExecutor;
 import org.apache.maven.lifecycle.TaskValidationResult;
 import org.apache.maven.monitor.event.DeprecationEventDispatcher;
 import org.apache.maven.monitor.event.EventDispatcher;
 import org.apache.maven.monitor.event.MavenEvents;
-import org.apache.maven.project.DuplicateProjectException;
+import org.apache.maven.execution.DuplicateProjectException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
 import org.apache.maven.project.ProjectBuildingException;
@@ -82,8 +75,6 @@ public class DefaultMaven
 
     protected RuntimeInformation runtimeInformation;
 
-    private BuildExtensionScanner buildExtensionScanner;
-
     private Logger logger;
 
     // ----------------------------------------------------------------------
@@ -94,8 +85,7 @@ public class DefaultMaven
     // artifact resolution
     // lifecycle execution
 
-    public ReactorManager createReactorManager( MavenExecutionRequest request,
-                                                MavenExecutionResult result )
+    public ReactorManager createReactorManager( MavenExecutionRequest request, MavenExecutionResult result )
     {
         List projects;
         try
@@ -124,16 +114,13 @@ public class DefaultMaven
 
         try
         {
-            reactorManager = new ReactorManager(
-                projects,
-                request.getReactorFailureBehavior() );
+            reactorManager = new ReactorManager( projects, request.getReactorFailureBehavior() );
 
             result.setReactorManager( reactorManager );
         }
         catch ( CycleDetectedException e )
         {
-            String message = "The projects in the reactor contain a cyclic reference: "
-                             + e.getMessage();
+            String message = "The projects in the reactor contain a cyclic reference: " + e.getMessage();
 
             ProjectCycleException error = new ProjectCycleException( projects, message, e );
 
@@ -157,9 +144,7 @@ public class DefaultMaven
 
         MavenExecutionResult result = new DefaultMavenExecutionResult();
 
-        ReactorManager reactorManager = createReactorManager(
-            request,
-            result );
+        ReactorManager reactorManager = createReactorManager( request, result );
 
         if ( result.hasExceptions() )
         {
@@ -251,7 +236,7 @@ public class DefaultMaven
         return result;
     }
 
-    private List getProjects( MavenExecutionRequest request )
+    protected List getProjects( MavenExecutionRequest request )
         throws MavenExecutionException
     {
         List projects;
@@ -266,17 +251,6 @@ public class DefaultMaven
             throw new MavenExecutionException(
                 "Error selecting project files for the reactor: " + e.getMessage(),
                 e );
-        }
-
-        // TODO: We should probably do this discovery just-in-time, if we can move to building project
-        // instances just-in-time.
-        try
-        {
-            buildExtensionScanner.scanForBuildExtensions( files, request, false );
-        }
-        catch ( ExtensionScanningException e )
-        {
-            throw new MavenExecutionException( "Error scanning for extensions: " + e.getMessage(), e );
         }
 
         projects = collectProjects( files, request, !request.useReactor() );
@@ -325,7 +299,7 @@ public class DefaultMaven
                 {
                     DefaultArtifactVersion version = new DefaultArtifactVersion( project.getPrerequisites().getMaven() );
 
-                    if ( runtimeInformation.getApplicationVersion().compareTo( version ) < 0 )
+                    if ( runtimeInformation.getApplicationInformation().getVersion().compareTo( version ) < 0 )
                     {
                         throw new MavenExecutionException(
                             "Unable to build project '" + file +

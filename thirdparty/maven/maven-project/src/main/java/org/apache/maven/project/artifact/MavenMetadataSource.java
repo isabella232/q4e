@@ -33,6 +33,7 @@ import org.apache.maven.artifact.repository.metadata.RepositoryMetadataResolutio
 import org.apache.maven.artifact.resolver.filter.AndArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
 import org.apache.maven.artifact.resolver.filter.ExcludesArtifactFilter;
+import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.artifact.versioning.VersionRange;
@@ -40,6 +41,7 @@ import org.apache.maven.model.Dependency;
 import org.apache.maven.model.DistributionManagement;
 import org.apache.maven.model.Exclusion;
 import org.apache.maven.model.Relocation;
+import org.apache.maven.project.DefaultProjectBuilderConfiguration;
 import org.apache.maven.project.InvalidProjectModelException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.MavenProjectBuilder;
@@ -55,12 +57,7 @@ import org.codehaus.plexus.personality.plexus.lifecycle.phase.Contextualizable;
 import org.codehaus.plexus.util.StringUtils;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Jason van Zyl
@@ -78,26 +75,83 @@ public class MavenMetadataSource
     private ArtifactFactory artifactFactory;
 
     private RepositoryMetadataManager repositoryMetadataManager;
-
+    
     // lazily instantiated and cached.
     private MavenProject superProject;
 
     private PlexusContainer container;
 
-    /** Unfortunately we have projects that are still sending us JARs without the accompanying POMs. */
+    /**
+     * Unfortunately we have projects that are still sending us JARs without the accompanying POMs.
+     */
     private boolean strictlyEnforceThePresenceOfAValidMavenPOM = false;
 
     /**
-     * Retrieve the metadata for the project from the repository.
-     * Uses the ProjectBuilder, to enable post-processing and inheritance calculation before retrieving the
-     * associated artifacts.
+     * Resolve all relocations in the POM for this artifact, and return the new artifact coordinate.
      */
-    public ResolutionGroup retrieve( Artifact artifact, ArtifactRepository localRepository, List remoteRepositories )
+    public Artifact retrieveRelocatedArtifact( Artifact artifact, ArtifactRepository localRepository,
+                                               List<ArtifactRepository> remoteRepositories )
+        throws ArtifactMetadataRetrievalException
+    {
+        if ( artifact instanceof ActiveProjectArtifact )
+        {
+            return artifact;
+        }
+
+        ProjectRelocation rel = retrieveRelocatedProject( artifact, localRepository, remoteRepositories );
+
+        if ( rel == null )
+        {
+            return artifact;
+        }
+
+        MavenProject project = rel.project;
+        if ( project == null || getRelocationKey( artifact ).equals( getRelocationKey( project.getArtifact() ) ) )
+        {
+            return artifact;
+        }
+
+        // NOTE: Using artifact information here, since some POMs are deployed
+        // to central with one version in the filename, but another in the <version> string!
+        // Case in point: org.apache.ws.commons:XmlSchema:1.1:pom.
+        //
+        // Since relocation triggers a reconfiguration of the artifact's information
+        // in retrieveRelocatedProject(..), this is safe to do.
+        Artifact result = null;
+        if ( artifact.getClassifier() != null )
+        {
+            result = artifactFactory.createArtifactWithClassifier( artifact.getGroupId(), artifact.getArtifactId(),
+                                                                   artifact.getVersion(), artifact.getType(),
+                                                                   artifact.getClassifier() );
+        }
+        else
+        {
+            result = artifactFactory.createArtifact( artifact.getGroupId(), artifact.getArtifactId(),
+                                                     artifact.getVersion(), artifact.getScope(), artifact.getType() );
+        }
+
+        result.setScope( artifact.getScope() );
+        result.setArtifactHandler( artifact.getArtifactHandler() );
+        result.setDependencyFilter( artifact.getDependencyFilter() );
+        result.setDependencyTrail( artifact.getDependencyTrail() );
+        result.setOptional( artifact.isOptional() );
+        result.setRelease( artifact.isRelease() );
+
+        return result;
+    }
+
+    private String getRelocationKey( Artifact artifact )
+    {
+        return artifact.getGroupId() + ":" + artifact.getArtifactId() + ":" + artifact.getVersion();
+    }
+    
+    private ProjectRelocation retrieveRelocatedProject( Artifact artifact, ArtifactRepository localRepository,
+                                                        List<ArtifactRepository> remoteRepositories )
         throws ArtifactMetadataRetrievalException
     {
         if ( remoteRepositories == null )
         {
-            remoteRepositories = Collections.EMPTY_LIST;
+            remoteRepositories = Collections.emptyList();
         }
 
         try
@@ -106,11 +160,11 @@ public class MavenMetadataSource
         }
         catch ( ComponentLookupException e )
         {
-            throw new ArtifactMetadataRetrievalException( "Cannot lookup MavenProjectBuilder component instance: " + e.getMessage(), e );
+            throw new ArtifactMetadataRetrievalException(
+                "Cannot lookup MavenProjectBuilder component instance: " + e.getMessage(), e );
         }
 
         MavenProject project = null;
-
         Artifact pomArtifact;
 
         boolean done = false;
@@ -132,14 +186,7 @@ public class MavenMetadataSource
                 }
                 catch ( InvalidProjectModelException e )
                 {
-                    if ( strictlyEnforceThePresenceOfAValidMavenPOM )
-                    {
-                        throw new ArtifactMetadataRetrievalException( "Invalid POM file for artifact: '" +
-                            artifact.getDependencyConflictId() + "' Reason: " + e.getMessage(), e, artifact );
-                    }
-
-                    getLogger().warn( "POM for \'" + pomArtifact +
-                        "\' is invalid. It will be ignored for artifact resolution. Reason: " + e.getMessage() );
+                    handleInvalidOrMissingMavenPOM( artifact, e );
 
                     if ( getLogger().isDebugEnabled() )
                     {
@@ -166,12 +213,11 @@ public class MavenMetadataSource
                 }
                 catch ( ProjectBuildingException e )
                 {
-                    if ( strictlyEnforceThePresenceOfAValidMavenPOM )
-                    {
-                        throw new ArtifactMetadataRetrievalException( "Unable to read the metadata file for artifact '" +
-                            artifact.getDependencyConflictId() + "': " + e.getMessage(), e, artifact );
-                    }
+                    handleInvalidOrMissingMavenPOM( artifact, e );
+
+                    project = null;
                 }
+
 
                 if ( project != null )
                 {
@@ -191,14 +237,17 @@ public class MavenMetadataSource
                         if ( relocation.getGroupId() != null )
                         {
                             artifact.setGroupId( relocation.getGroupId() );
+                            project.setGroupId( relocation.getGroupId() );
                         }
                         if ( relocation.getArtifactId() != null )
                         {
                             artifact.setArtifactId( relocation.getArtifactId() );
+                            project.setArtifactId( relocation.getArtifactId() );
                         }
                         if ( relocation.getVersion() != null )
                         {
                             artifact.setVersionRange( VersionRange.createFromVersion( relocation.getVersion() ) );
+                            project.setVersion( relocation.getVersion() );
                         }
 
                         if ( ( artifact.getDependencyFilter() != null ) &&
@@ -212,8 +261,8 @@ public class MavenMetadataSource
                         List available = artifact.getAvailableVersions();
                         if ( available != null && !available.isEmpty() )
                         {
-                            artifact.setAvailableVersions( retrieveAvailableVersions( artifact, localRepository,
-                                                                                           remoteRepositories ) );
+                            artifact.setAvailableVersions(
+                                retrieveAvailableVersions( artifact, localRepository, remoteRepositories ) );
 
                         }
 
@@ -225,7 +274,8 @@ public class MavenMetadataSource
                             message += "  " + relocation.getMessage() + "\n";
                         }
 
-                        if ( ( artifact.getDependencyTrail() != null ) && ( artifact.getDependencyTrail().size() == 1 ) )
+                        if ( ( artifact.getDependencyTrail() != null ) &&
+                            ( artifact.getDependencyTrail().size() == 1 ) )
                         {
                             getLogger().warn( "While downloading " + artifact.getGroupId() + ":" +
                                 artifact.getArtifactId() + ":" + artifact.getVersion() + message + "\n" );
@@ -248,6 +298,25 @@ public class MavenMetadataSource
             }
         }
         while ( !done );
+
+        ProjectRelocation res = new ProjectRelocation();
+        res.project = project;
+        res.pomArtifact = pomArtifact;
+
+        return res;
+    }
+
+    /**
+     * Retrieve the metadata for the project from the repository.
+     * Uses the ProjectBuilder, to enable post-processing and inheritance calculation before retrieving the
+     * associated artifacts.
+     */
+    public ResolutionGroup retrieve( Artifact artifact, ArtifactRepository localRepository, List remoteRepositories )
+        throws ArtifactMetadataRetrievalException
+    {
+        ProjectRelocation res = retrieveRelocatedProject( artifact, localRepository, remoteRepositories );
+        MavenProject project = res.project;
+        Artifact pomArtifact = res.pomArtifact;
 
         // last ditch effort to try to get this set...
         if ( artifact.getDownloadUrl() == null )
@@ -274,8 +343,8 @@ public class MavenMetadataSource
                 // or used the inherited scope (should that be passed to the buildFromRepository method above?)
                 try
                 {
-                    artifacts = project.createArtifacts( artifactFactory, artifact.getScope(),
-                                                         artifact.getDependencyFilter() );
+                    artifacts =
+                        project.createArtifacts( artifactFactory, artifact.getScope(), artifact.getDependencyFilter() );
                 }
                 catch ( InvalidDependencyVersionException e )
                 {
@@ -290,6 +359,24 @@ public class MavenMetadataSource
         }
 
         return result;
+    }
+
+    private void handleInvalidOrMissingMavenPOM( Artifact artifact, ProjectBuildingException e )
+        throws ArtifactMetadataRetrievalException
+    {
+        if ( strictlyEnforceThePresenceOfAValidMavenPOM )
+        {
+            throw new ArtifactMetadataRetrievalException(
+                "Invalid POM file for artifact: '" + artifact.getDependencyConflictId() + "': " + e.getMessage(), e,
+                artifact );
+        }
+        else
+        {
+            getLogger().warn( "\n\tDEPRECATION: The POM for the artifact '" + artifact.getDependencyConflictId() +
+                "' was invalid or not found on any repositories.\n" +
+                "\tThis may not be supported by future versions of Maven and should be corrected as soon as possible.\n" +
+                "\tError given: " + e.getMessage() + "\n" );
+        }
     }
 
     private void loadProjectBuilder()
@@ -308,7 +395,7 @@ public class MavenMetadataSource
         {
             try
             {
-                superProject = mavenProjectBuilder.buildStandaloneSuperProject();
+                superProject = mavenProjectBuilder.buildStandaloneSuperProject( new DefaultProjectBuilderConfiguration() );
             }
             catch ( ProjectBuildingException e )
             {
@@ -359,18 +446,19 @@ public class MavenMetadataSource
     }
 
     /**
-     * @todo desperately needs refactoring. It's just here because it's implementation is maven-project specific
      * @return {@link Set} &lt; {@link Artifact} >
+     * @todo desperately needs refactoring. It's just here because it's implementation is maven-project specific
      */
-    public static Set createArtifacts( ArtifactFactory artifactFactory, List dependencies, String inheritedScope,
-                                       ArtifactFilter dependencyFilter, MavenProject project )
+    public static Set<Artifact> createArtifacts( ArtifactFactory artifactFactory, List<Dependency> dependencies,
+                                                 String inheritedScope, ArtifactFilter dependencyFilter,
+                                                 MavenProject project )
         throws InvalidDependencyVersionException
     {
-        Set projectArtifacts = new LinkedHashSet( dependencies.size() );
+        Set<Artifact> projectArtifacts = new LinkedHashSet<Artifact>( dependencies.size() );
 
-        for ( Iterator i = dependencies.iterator(); i.hasNext(); )
+        for ( Iterator<Dependency> i = dependencies.iterator(); i.hasNext(); )
         {
-            Dependency d = (Dependency) i.next();
+            Dependency d = i.next();
 
             String scope = d.getScope();
 
@@ -405,10 +493,10 @@ public class MavenMetadataSource
             {
                 if ( ( d.getExclusions() != null ) && !d.getExclusions().isEmpty() )
                 {
-                    List exclusions = new ArrayList();
-                    for ( Iterator j = d.getExclusions().iterator(); j.hasNext(); )
+                    List<String> exclusions = new ArrayList<String>();
+                    for ( Iterator<Exclusion> j = d.getExclusions().iterator(); j.hasNext(); )
                     {
-                        Exclusion e = (Exclusion) j.next();
+                        Exclusion e = j.next();
                         exclusions.add( e.getGroupId() + ":" + e.getArtifactId() );
                     }
 
@@ -441,8 +529,8 @@ public class MavenMetadataSource
         return projectArtifacts;
     }
 
-    public List retrieveAvailableVersions( Artifact artifact, ArtifactRepository localRepository,
-                                           List remoteRepositories )
+    public List<ArtifactVersion> retrieveAvailableVersions( Artifact artifact, ArtifactRepository localRepository,
+                                                            List<ArtifactRepository> remoteRepositories )
         throws ArtifactMetadataRetrievalException
     {
         RepositoryMetadata metadata = new ArtifactRepositoryMetadata( artifact );
@@ -455,21 +543,42 @@ public class MavenMetadataSource
             throw new ArtifactMetadataRetrievalException( e.getMessage(), e );
         }
 
-        List versions;
-        Metadata repoMetadata = metadata.getMetadata();
+        return retrieveAvailableVersionsFromMetadata( metadata.getMetadata() );
+    }
+
+    public List<ArtifactVersion> retrieveAvailableVersionsFromDeploymentRepository( Artifact artifact,
+                                                                                    ArtifactRepository localRepository,
+                                                                                    ArtifactRepository deploymentRepository )
+        throws ArtifactMetadataRetrievalException
+    {
+        RepositoryMetadata metadata = new ArtifactRepositoryMetadata( artifact );
+        try
+        {
+            repositoryMetadataManager.resolveAlways( metadata, localRepository, deploymentRepository );
+        }
+        catch ( RepositoryMetadataResolutionException e )
+        {
+            throw new ArtifactMetadataRetrievalException( e.getMessage(), e );
+        }
+
+        return retrieveAvailableVersionsFromMetadata( metadata.getMetadata() );
+    }
+
+    private List<ArtifactVersion> retrieveAvailableVersionsFromMetadata( Metadata repoMetadata )
+    {
+        List<ArtifactVersion> versions;
         if ( ( repoMetadata != null ) && ( repoMetadata.getVersioning() != null ) )
         {
-            List metadataVersions = repoMetadata.getVersioning().getVersions();
-            versions = new ArrayList( metadataVersions.size() );
-            for ( Iterator i = metadataVersions.iterator(); i.hasNext(); )
+            List<String> metadataVersions = repoMetadata.getVersioning().getVersions();
+            versions = new ArrayList<ArtifactVersion>( metadataVersions.size() );
+            for ( String version : metadataVersions )
             {
-                String version = (String) i.next();
                 versions.add( new DefaultArtifactVersion( version ) );
             }
         }
         else
         {
-            versions = Collections.EMPTY_LIST;
+            versions = Collections.<ArtifactVersion>emptyList();
         }
 
         return versions;
@@ -480,4 +589,12 @@ public class MavenMetadataSource
     {
         container = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
     }
+
+    private static final class ProjectRelocation
+    {
+        private MavenProject project;
+
+        private Artifact pomArtifact;
+    }
+
 }

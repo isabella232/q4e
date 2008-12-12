@@ -24,7 +24,7 @@ under the License.
   <parent>
     <artifactId>maven</artifactId>
     <groupId>org.apache.maven</groupId>
-    <version>2.1-659802</version>
+    <version>3.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>maven-project</artifactId>
@@ -32,14 +32,6 @@ under the License.
   <description>This library is used to not only read Maven project object model files, but to assemble inheritence
     and to retrieve remote models as required.</description>
   <dependencies>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-workspace</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-profile</artifactId>
-    </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-model</artifactId>
@@ -68,23 +60,26 @@ under the License.
       <groupId>org.apache.maven.wagon</groupId>
       <artifactId>wagon-file</artifactId>
       <scope>test</scope>
-    </dependency>    
+    </dependency>  
+    <dependency>
+      <groupId>org.codehaus.woodstox</groupId>
+      <artifactId>wstx-asl</artifactId>
+    </dependency> 
+    <dependency>
+      <groupId>org.apache.maven.shared</groupId>
+      <artifactId>maven-shared-model</artifactId>
+    </dependency> 
   </dependencies>
   <build>
     <plugins>
       <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>aspectj-maven-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>compile-aspects</id>
-            <phase>compile</phase>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
+        <groupId>org.codehaus.modello</groupId>
+        <artifactId>modello-maven-plugin</artifactId>
+        <configuration>
+          <version>1.0.0</version>
+          <model>src/main/mdo/profiles.mdo</model>
+        </configuration>
       </plugin>
     </plugins>
-  </build>
+  </build>  
 </project>

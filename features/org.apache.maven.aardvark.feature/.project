@@ -1,0 +1,13 @@
+<projectDescription>
+  <name>org.devzuz.q.feature.maven.aardvark</name>
+  <comment>Q is the Apache Maven integration for Eclipse</comment>
+  <projects/>
+  <buildSpec>
+    <buildCommand>
+      <name>org.eclipse.pde.FeatureBuilder</name>
+    </buildCommand>
+  </buildSpec>
+  <natures>
+    <nature>org.eclipse.pde.FeatureNature</nature>
+  </natures>
+</projectDescription>

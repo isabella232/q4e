@@ -22,7 +22,6 @@ package org.apache.maven.execution;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.errors.CoreErrorReporter;
 import org.apache.maven.monitor.event.EventMonitor;
-import org.apache.maven.monitor.event.MavenWorkspaceMonitor;
 import org.apache.maven.profiles.ProfileManager;
 import org.apache.maven.profiles.activation.ProfileActivationContext;
 import org.apache.maven.project.DefaultProjectBuilderConfiguration;
@@ -101,8 +100,6 @@ public class DefaultMavenExecutionRequest
     private boolean showErrors = false;
 
     private List eventMonitors;
-
-    private MavenWorkspaceMonitor workspaceMonitor;
 
     private List activeProfiles;
 
@@ -712,17 +709,6 @@ public class DefaultMavenExecutionRequest
         return this;
     }
 
-    public MavenWorkspaceMonitor getWorkspaceMonitor()
-    {
-        return workspaceMonitor;
-    }
-
-    public MavenExecutionRequest setWorkspaceMonitor( MavenWorkspaceMonitor workspaceMonitor )
-    {
-        this.workspaceMonitor = workspaceMonitor;
-        return this;
-    }
-
     public Properties getUserProperties()
     {
         return userProperties;
@@ -743,6 +729,7 @@ public class DefaultMavenExecutionRequest
             projectBuildingConfiguration.setExecutionProperties( getProperties() );
             projectBuildingConfiguration.setGlobalProfileManager( getProfileManager() );
             projectBuildingConfiguration.setUserProperties( getUserProperties() );
+            projectBuildingConfiguration.setBuildStartTime( getStartTime() );
         }
 
         return projectBuildingConfiguration;

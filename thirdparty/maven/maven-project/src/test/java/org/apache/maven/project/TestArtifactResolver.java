@@ -27,15 +27,16 @@ import org.apache.maven.artifact.metadata.ArtifactMetadataSource;
 import org.apache.maven.artifact.metadata.ResolutionGroup;
 import org.apache.maven.artifact.repository.ArtifactRepository;
 import org.apache.maven.artifact.repository.ArtifactRepositoryFactory;
+import org.apache.maven.artifact.repository.ArtifactRepositoryPolicy;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
 import org.apache.maven.artifact.resolver.DefaultArtifactResolver;
 import org.apache.maven.artifact.resolver.filter.ArtifactFilter;
+import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.artifact.versioning.VersionRange;
-import org.apache.maven.model.Dependency;
-import org.apache.maven.model.Model;
+import org.apache.maven.model.*;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 import org.codehaus.plexus.PlexusConstants;
 import org.codehaus.plexus.PlexusContainer;
@@ -49,10 +50,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class TestArtifactResolver
     extends DefaultArtifactResolver
@@ -82,7 +80,7 @@ public class TestArtifactResolver
         }
 
         public ResolutionGroup retrieve( Artifact artifact, ArtifactRepository localRepository,
-                                         List remoteRepositories )
+                                         List<ArtifactRepository> remoteRepositories )
             throws ArtifactMetadataRetrievalException
         {
             Model model = null;
@@ -141,8 +139,18 @@ public class TestArtifactResolver
             return new ResolutionGroup( artifact, artifacts, artifactRepositories );
         }
 
-        public List retrieveAvailableVersions( Artifact artifact, ArtifactRepository localRepository,
-                                               List remoteRepositories )
+        public List<ArtifactVersion> retrieveAvailableVersions( Artifact artifact, ArtifactRepository localRepository,
+                                                                List<ArtifactRepository> remoteRepositories )
+            throws ArtifactMetadataRetrievalException
+        {
+            throw new UnsupportedOperationException( "Cannot get available versions in this test case" );
+        }
+
+        public List<ArtifactVersion> retrieveAvailableVersionsFromDeploymentRepository(
+                                                                                        Artifact artifact,
+                                                                                        ArtifactRepository localRepository,
+                                                                                        ArtifactRepository remoteRepository )
+            throws ArtifactMetadataRetrievalException
         {
             throw new UnsupportedOperationException( "Cannot get available versions in this test case" );
         }
@@ -178,6 +186,14 @@ public class TestArtifactResolver
 
             return projectArtifacts;
         }
+
+        public Artifact retrieveRelocatedArtifact( Artifact artifact,
+                                                   ArtifactRepository localRepository,
+                                                   List<ArtifactRepository> remoteRepositories )
+            throws ArtifactMetadataRetrievalException
+        {
+            return artifact;
+        }
     }
 
     public Source source()
@@ -188,12 +204,14 @@ public class TestArtifactResolver
     /**
      * @noinspection RefusedBequest
      */
+    @Override
     public void resolve( Artifact artifact, List remoteRepositories, ArtifactRepository localRepository )
         throws ArtifactResolutionException
     {
         artifact.setFile( new File( "dummy" ) );
     }
 
+    @Override
     public ArtifactResolutionResult resolveTransitively( Set artifacts, Artifact originatingArtifact,
                                                          ArtifactRepository localRepository, List remoteRepositories,
                                                          ArtifactMetadataSource source, ArtifactFilter filter )
@@ -203,6 +221,7 @@ public class TestArtifactResolver
                                           new Source( artifactFactory, repositoryFactory, container ), filter );
     }
 
+    @Override
     public ArtifactResolutionResult resolveTransitively( Set artifacts, Artifact originatingArtifact,
                                                          List remoteRepositories, ArtifactRepository localRepository,
                                                          ArtifactMetadataSource source )
@@ -215,7 +234,111 @@ public class TestArtifactResolver
     public void contextualize( Context context )
         throws ContextException
     {
-        this.container = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
+        container = (PlexusContainer) context.get( PlexusConstants.PLEXUS_KEY );
     }
+
+    public static final class ProjectUtils
+    {
+        private ProjectUtils()
+        {
+        }
+
+        public static List buildArtifactRepositories( List repositories,
+                                                      ArtifactRepositoryFactory artifactRepositoryFactory,
+                                                      PlexusContainer container )
+            throws InvalidRepositoryException
+        {
+
+            List repos = new ArrayList();
+
+            for ( Iterator i = repositories.iterator(); i.hasNext(); )
+            {
+                Repository mavenRepo = (Repository) i.next();
+
+                ArtifactRepository artifactRepo =
+                    buildArtifactRepository( mavenRepo, artifactRepositoryFactory, container );
+
+                if ( !repos.contains( artifactRepo ) )
+                {
+                    repos.add( artifactRepo );
+                }
+            }
+            return repos;
+        }
+
+        public static ArtifactRepository buildDeploymentArtifactRepository( DeploymentRepository repo,
+                                                                            ArtifactRepositoryFactory artifactRepositoryFactory,
+                                                                            PlexusContainer container )
+            throws InvalidRepositoryException
+        {
+            if ( repo != null )
+            {
+                String id = repo.getId();
+                String url = repo.getUrl();
+
+                return artifactRepositoryFactory.createDeploymentArtifactRepository( id, url, repo.getLayout(),
+                                                                                     repo.isUniqueVersion() );
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public static ArtifactRepository buildArtifactRepository( Repository repo,
+                                                                  ArtifactRepositoryFactory artifactRepositoryFactory,
+                                                                  PlexusContainer container )
+            throws InvalidRepositoryException
+        {
+            if ( repo != null )
+            {
+                String id = repo.getId();
+                String url = repo.getUrl();
+
+                if ( id == null || id.trim().length() < 1 )
+                {
+                    throw new MissingRepositoryElementException( "Repository ID must not be empty (URL is: " + url + ")." );
+                }
+
+                if ( url == null || url.trim().length() < 1 )
+                {
+                    throw new MissingRepositoryElementException( "Repository URL must not be empty (ID is: " + id + ").", id );
+                }
+
+                ArtifactRepositoryPolicy snapshots = buildArtifactRepositoryPolicy( repo.getSnapshots() );
+                ArtifactRepositoryPolicy releases = buildArtifactRepositoryPolicy( repo.getReleases() );
+
+                return artifactRepositoryFactory.createArtifactRepository( id, url, repo.getLayout(), snapshots, releases );
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        private static ArtifactRepositoryPolicy buildArtifactRepositoryPolicy( RepositoryPolicy policy )
+        {
+            boolean enabled = true;
+            String updatePolicy = null;
+            String checksumPolicy = null;
+
+            if ( policy != null )
+            {
+                enabled = policy.isEnabled();
+                if ( policy.getUpdatePolicy() != null )
+                {
+                    updatePolicy = policy.getUpdatePolicy();
+                }
+                if ( policy.getChecksumPolicy() != null )
+                {
+                    checksumPolicy = policy.getChecksumPolicy();
+                }
+            }
+
+            return new ArtifactRepositoryPolicy( enabled, updatePolicy, checksumPolicy );
+        }
+
+    }
+
 
 }

@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: WTP integration Core Plug-in
+Bundle-SymbolicName: org.devzuz.q.maven.wtp.core;singleton:=true
+Bundle-Version: 0.9.0.qualifier
+Bundle-Activator: org.devzuz.q.maven.wtp.core.MavenWtpActivator
+Bundle-Vendor: Devzuz
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.wst.common.project.facet.core,
+ org.eclipse.wst.web,
+ org.eclipse.wst.common.frameworks,
+ org.eclipse.jst.j2ee.web,
+ org.eclipse.jst.j2ee,
+ org.eclipse.jst.j2ee.core,
+ org.devzuz.q.maven.core,
+ org.devzuz.q.maven.jdt.ui
+Eclipse-LazyStart: true
+Import-Package: org.eclipse.jem.util.emf.workbench

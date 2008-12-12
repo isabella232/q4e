@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<extension
+		point="org.devzuz.q.maven.search.searchProvider">
+		<searchProvider 
+			class="org.devzuz.q.maven.search.lucene.LuceneArtifactSearchProvider"
+			label="Lucene Index Search"/>
+	</extension>
+
+ <extension
+       point="org.eclipse.ui.preferencePages">
+    <page
+          category="org.devzuz.q.maven.search.ui.preferences.ArtifactSearchPreferencePage"
+          class="org.devzuz.q.maven.search.lucene.preferences.LuceneArtifactSearchPreferencePage"
+          id="org.devzuz.q.maven.search.lucene.preferences.LuceneArtifactSearchPreferencePage"
+          name="Lucene Artifact Search Preferences">
+    </page>
+ </extension>
+ <extension
+       point="org.eclipse.core.runtime.preferences">
+    <initializer
+          class="org.devzuz.q.maven.search.lucene.preferences.PreferenceInitializer">
+    </initializer>
+ </extension>
+ <extension
+       point="org.eclipse.core.runtime.preferences">
+ </extension>
+</plugin>

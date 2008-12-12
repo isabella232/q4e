@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Dependency Analysis Plug-in
+Bundle-SymbolicName: org.devzuz.q.maven.dependency.analysis;singleton:=true
+Bundle-Version: 0.9.0.qualifier
+Bundle-Activator: org.devzuz.q.maven.dependency.analysis.DependencyAnalysisActivator
+Require-Bundle: org.devzuz.q.maven.ui;bundle-version="[0.9.0,1.0.0)"
+Eclipse-LazyStart: true
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Vendor: DevZuz
+Bundle-ClassPath: .
+Export-Package: org.devzuz.q.maven.dependency.analysis.extension
+Import-Package: org.eclipse.jdt.ui

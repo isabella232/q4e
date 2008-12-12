@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.devzuz.q.maven.jdt.core.classpathAttributeProvider">
+      <classpathAttributeProvider
+            class="org.devzuz.q.maven.wtp.core.postprocessor.WtpEnablerPostprocessor">
+      </classpathAttributeProvider>
+   </extension>
+   <extension
+         point="org.devzuz.q.maven.core.project.configurationParticipants">
+      <participant
+            class="org.devzuz.q.maven.wtp.core.postprocessor.WtpEnablerPostprocessor">
+            <enablement>
+            <and>
+            <test
+                  property="org.devzuz.q.packaging" value="war" forcePluginActivation="true">
+            </test>
+            </and>
+            </enablement>
+      </participant>
+   </extension>
+
+</plugin>

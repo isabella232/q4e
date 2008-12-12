@@ -2,20 +2,18 @@ package org.apache.maven.errors;
 
 import org.apache.maven.NoGoalsSpecifiedException;
 import org.apache.maven.ProjectCycleException;
+import org.apache.maven.path.PathTranslator;
 import org.apache.maven.artifact.Artifact;
 import org.apache.maven.artifact.ArtifactUtils;
 import org.apache.maven.artifact.metadata.ArtifactMetadataRetrievalException;
 import org.apache.maven.artifact.resolver.AbstractArtifactResolutionException;
 import org.apache.maven.artifact.resolver.ArtifactNotFoundException;
 import org.apache.maven.artifact.resolver.ArtifactResolutionException;
-import org.apache.maven.artifact.resolver.ArtifactResolutionResult;
-import org.apache.maven.artifact.resolver.CyclicDependencyException;
 import org.apache.maven.artifact.resolver.MultipleArtifactsNotFoundException;
 import org.apache.maven.artifact.versioning.ArtifactVersion;
 import org.apache.maven.artifact.versioning.InvalidVersionSpecificationException;
 import org.apache.maven.execution.MavenExecutionRequest;
 import org.apache.maven.execution.MavenSession;
-import org.apache.maven.extension.ExtensionManagerException;
 import org.apache.maven.lifecycle.LifecycleException;
 import org.apache.maven.lifecycle.LifecycleLoaderException;
 import org.apache.maven.lifecycle.LifecycleSpecificationException;
@@ -41,11 +39,6 @@ import org.apache.maven.project.DuplicateArtifactAttachmentException;
 import org.apache.maven.project.MavenProject;
 import org.apache.maven.project.ProjectBuildingException;
 import org.apache.maven.project.artifact.InvalidDependencyVersionException;
-import org.apache.maven.project.error.DefaultProjectErrorReporter;
-import org.apache.maven.project.error.ProjectErrorReporter;
-import org.apache.maven.project.error.ProjectReporterManager;
-import org.apache.maven.project.interpolation.ModelInterpolationException;
-import org.apache.maven.project.path.PathTranslator;
 import org.apache.maven.reactor.MavenExecutionException;
 import org.apache.maven.reactor.MissingModuleException;
 import org.apache.maven.realm.RealmManagementException;
@@ -60,7 +53,6 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,25 +78,39 @@ public class DefaultCoreErrorReporter
         StringWriter writer = new StringWriter();
 
         writer.write( NEWLINE );
-        writer.write( "You have not specified any goals or lifecycle phases for Maven to execute." );
+        writer.write( NEWLINE );
+        writer.write( "You must specify at least one goal or lifecycle phase to perform build steps." );
+        writer.write( NEWLINE );
+        writer.write( "The following list illustrates some commonly used build commands:" );
         writer.write( NEWLINE );
         writer.write( NEWLINE );
-        writer.write( "Either specify a goal or lifecycle phase on the command line" );
+        writer.write( "  mvn clean" );
         writer.write( NEWLINE );
-        writer.write( "(you may want to try \'package\' to get started), or configure the " );
+        writer.write( "    Deletes any build output (e.g. class files or JARs)." );
         writer.write( NEWLINE );
-        writer.write( "<defaultGoal/> element in the build section of your project POM." );
+        writer.write( "  mvn test" );
+        writer.write( NEWLINE );
+        writer.write( "    Runs the unit tests for the project." );
+        writer.write( NEWLINE );
+        writer.write( "  mvn install" );
+        writer.write( NEWLINE );
+        writer.write( "    Copies the project artifacts into your local repository." );
+        writer.write( NEWLINE );
+        writer.write( "  mvn deploy" );
+        writer.write( NEWLINE );
+        writer.write( "    Copies the project artifacts into the remote repository." );
+        writer.write( NEWLINE );
+        writer.write( "  mvn site" );
+        writer.write( NEWLINE );
+        writer.write( "    Creates project documentation (e.g. reports or Javadoc)." );
         writer.write( NEWLINE );
         writer.write( NEWLINE );
-        writer.write( NEWLINE );
-        writer.write( "NOTE: You can also chain multiple goals/phases together, as in the following example:" );
-        writer.write( NEWLINE );
-        writer.write( "mvn clean package" );
-        writer.write( NEWLINE );
-        writer.write( NEWLINE );
-        writer.write( NEWLINE );
-
         addTips( CoreErrorTips.getNoGoalsTips(), writer );
+        writer.write( NEWLINE );
+        writer.write( NEWLINE );
+        writer.write( "Use \"mvn -?\" to show general usage information about Maven's command line." );
+        writer.write( NEWLINE );
+        writer.write( NEWLINE );
 
         registerBuildError( error, writer.toString() );
     }
@@ -116,7 +122,8 @@ public class DefaultCoreErrorReporter
         {
             writer.write( NEWLINE );
             writer.write( NEWLINE );
-            writer.write( "Some tips:" );
+            writer.write( "Please see:" );
+            writer.write( NEWLINE );
             for ( Iterator it = tips.iterator(); it.hasNext(); )
             {
                 String tip = (String) it.next();
@@ -125,6 +132,9 @@ public class DefaultCoreErrorReporter
                 writer.write( "\t- " );
                 writer.write( tip );
             }
+            writer.write( NEWLINE );
+            writer.write( NEWLINE );
+            writer.write( "for more information." );
         }
     }
 
@@ -826,26 +836,6 @@ public class DefaultCoreErrorReporter
         registerBuildError( exception, formattedMessage, reportedException );
     }
 
-    public void reportErrorInterpolatingModel( Model model,
-                                               Map inheritedValues,
-                                               File pomFile,
-                                               MavenExecutionRequest request,
-                                               ModelInterpolationException cause )
-    {
-        StringWriter writer = new StringWriter();
-
-        writer.write( NEWLINE );
-        writer.write( "You have an invalid expression in your POM (interpolation failed):" );
-        writer.write( NEWLINE );
-        writer.write( cause.getMessage() );
-
-        writeProjectCoordinate( model, pomFile, writer );
-        addTips( CoreErrorTips.getTipsForModelInterpolationError( model, pomFile, cause ),
-                 writer );
-
-        registerBuildError( cause, writer.toString(), cause.getCause() );
-    }
-
     public void reportErrorResolvingExtensionDirectDependencies( Artifact extensionArtifact,
                                                                  Artifact projectArtifact,
                                                                  List remoteRepos,
@@ -881,140 +871,6 @@ public class DefaultCoreErrorReporter
                  writer );
 
         registerBuildError( cause, writer.toString(), cause.getCause() );
-    }
-
-    public void reportErrorResolvingExtensionDependencies( Artifact extensionArtifact,
-                                                           Artifact projectArtifact,
-                                                           List remoteRepos,
-                                                           MavenExecutionRequest request,
-                                                           ArtifactResolutionResult resolutionResult,
-                                                           ExtensionManagerException err )
-    {
-        StringWriter writer = new StringWriter();
-
-        writer.write( NEWLINE );
-        writer.write( "Maven encountered an error while trying to resolve the artifacts for a build extension used in your project." );
-        writer.write( NEWLINE );
-        writer.write( NEWLINE );
-        writer.write( "Project:" );
-        writeArtifactInfo( projectArtifact, writer, false );
-        writer.write( NEWLINE );
-        writer.write( NEWLINE );
-        writer.write( "Extension:" );
-        writeArtifactInfo( extensionArtifact, writer, false );
-        writer.write( NEWLINE );
-        writer.write( NEWLINE );
-
-        List missingArtifacts = resolutionResult.getMissingArtifacts();
-        if ( ( missingArtifacts != null ) && !missingArtifacts.isEmpty() )
-        {
-            writer.write( "The following artifacts were not found." );
-            writer.write( NEWLINE );
-            writer.write( "(Format is: groupId:artifactId:version:type[:classifier])" );
-            writer.write( NEWLINE );
-
-            for ( Iterator it = missingArtifacts.iterator(); it.hasNext(); )
-            {
-                Artifact artifact = (Artifact) it.next();
-                writer.write( NEWLINE );
-                writeCompactArtifactCoordinate( "- ", artifact, writer );
-            }
-            writer.write( NEWLINE );
-            writer.write( NEWLINE );
-        }
-
-        List circularDependencyExceptions = resolutionResult.getCircularDependencyExceptions();
-        if ( ( circularDependencyExceptions != null ) && !circularDependencyExceptions.isEmpty() )
-        {
-            writer.write( "The following dependency cycles were found." );
-            writer.write( NEWLINE );
-            writer.write( "(Format is: groupId:artifactId:version:type[:classifier]), followed by the dependency trail that included the offending artifact.)" );
-            writer.write( NEWLINE );
-
-            int i = 1;
-            for ( Iterator it = circularDependencyExceptions.iterator(); it.hasNext(); )
-            {
-                CyclicDependencyException cde = (CyclicDependencyException) it.next();
-                Artifact artifact = cde.getArtifact();
-                writer.write( NEWLINE );
-                writeCompactArtifactCoordinate( i + ". ", artifact, writer );
-
-                List trail = artifact.getDependencyTrail();
-                for ( Iterator trailIt = trail.iterator(); trailIt.hasNext(); )
-                {
-                    String id = (String) trailIt.next();
-                    writer.write( NEWLINE );
-                    writer.write( "  - " );
-                    writer.write( id );
-                }
-
-                writer.write( NEWLINE );
-                i++;
-            }
-
-            writer.write( NEWLINE );
-        }
-
-        Map mapOfLists = new LinkedHashMap();
-
-        List metadataExceptions = resolutionResult.getMetadataResolutionExceptions();
-        if ( ( metadataExceptions != null ) && !metadataExceptions.isEmpty() )
-        {
-            mapOfLists.put( "The following metadata-resolution errors were found.", metadataExceptions );
-        }
-
-        List errorArtifactExceptions = resolutionResult.getErrorArtifactExceptions();
-        if ( ( errorArtifactExceptions != null ) && !errorArtifactExceptions.isEmpty() )
-        {
-            mapOfLists.put( "The following artifact-resolution errors were found.", errorArtifactExceptions );
-        }
-
-        List versionRangeViolations = resolutionResult.getVersionRangeViolations();
-        if ( ( versionRangeViolations != null ) && !versionRangeViolations.isEmpty() )
-        {
-            mapOfLists.put( "The following artifact version-range violations were found.", versionRangeViolations );
-        }
-
-        for ( Iterator entryIt = mapOfLists.entrySet().iterator(); entryIt.hasNext(); )
-        {
-            Map.Entry entry = (Map.Entry) entryIt.next();
-            String key = (String) entry.getKey();
-            List exceptions = (List) entry.getValue();
-
-            writer.write( key );
-            writer.write( NEWLINE );
-
-            int i = 1;
-            for ( Iterator it = exceptions.iterator(); it.hasNext(); )
-            {
-                Exception e = (Exception) it.next();
-                writer.write( NEWLINE );
-                writer.write( i );
-                writer.write( ". " );
-                writer.write( e.getMessage() );
-
-                Throwable t = getRootCause( e );
-                if ( ( t != null ) && ( t != e ) )
-                {
-                    writer.write( NEWLINE );
-                    writer.write( NEWLINE );
-                    writer.write( "Root error: " );
-                    writer.write( NEWLINE );
-                    writer.write( NEWLINE );
-                    writer.write( t.getMessage() );
-                }
-
-                writer.write( NEWLINE );
-                i++;
-            }
-
-            writer.write( NEWLINE );
-        }
-
-        addTips( CoreErrorTips.getErrorResolvingExtensionArtifactsTips( extensionArtifact, projectArtifact, resolutionResult ),
-                 writer );
-
-        registerBuildError( err, writer.toString() );
     }
 
     private void writeCompactArtifactCoordinate( String linePrefix,

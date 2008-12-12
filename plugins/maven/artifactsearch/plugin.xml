@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point 
+   		id="org.devzuz.q.maven.search.searchProvider" 
+   		name="Artifact Search Provider" 
+   		schema="schema/org.devzuz.q.maven.search.searchProvider.exsd"/>
+
+	<extension
+	      point="org.devzuz.q.maven.search.searchProvider">
+	      <searchProvider 
+	      	class="org.devzuz.q.maven.search.builtin.BuiltinArtifactSearchProvider"
+	      	label="Built-In Repository Search">
+	      </searchProvider>
+	</extension>
+
+ <extension
+       point="org.eclipse.core.runtime.preferences">
+    <initializer
+          class="org.devzuz.q.maven.search.preferences.PreferenceInitializer">
+    </initializer>
+ </extension>
+ <extension
+       point="org.eclipse.core.runtime.preferences">
+ </extension>
+</plugin>

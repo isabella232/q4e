@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ***************************************************************************
+	* Copyright (c) 2007-2008 DevZuz, Inc. (AKA Simula Labs, Inc.)
+	* All rights reserved. This program and the accompanying materials
+	* are made available under the terms of the Eclipse Public License v1.0
+	* which accompanies this distribution, and is available at
+	* http://www.eclipse.org/legal/epl-v10.html
+	***************************************************************************-->
+
+<?eclipse version="3.2"?>
+<plugin>
+	<extension point="org.eclipse.ui.popupMenus">
+		<objectContribution adaptable="true"
+			id="org.devzuz.q.dependency.analysis.artifacts.menu"
+			objectClass="org.devzuz.q.maven.dependency.analysis.model.Artifact">
+			<action
+				class="org.devzuz.q.maven.dependency.analysis.actions.ExcludeAllAction"
+				enablesFor="1"
+				id="org.devzuz.q.maven.dependency.analysis.actions.ExcludeAllAction"
+				label="Exclude All"
+				menubarPath="exclude-all">
+			</action>
+			<action
+				class="org.devzuz.q.maven.dependency.analysis.actions.ForceVersionAction"
+				enablesFor="1"
+				id="org.devzuz.q.maven.dependency.analysis.actions.ForceVersionAction"
+				label="Force Version"
+				menubarPath="force-version">
+			</action>
+		</objectContribution>
+		<objectContribution adaptable="true"
+			id="org.devzuz.q.dependency.analysis.versions.menu"
+			objectClass="org.devzuz.q.maven.dependency.analysis.model.Version">
+			<action
+				class="org.devzuz.q.maven.dependency.analysis.actions.ExcludeDependencyAction"
+				enablesFor="1"
+				id="org.devzuz.q.maven.dependency.analysis.actions.ExcludeDependencyAction"
+				label="Exclude Dependency"
+				menubarPath="exclude-dependency">
+			</action>
+		</objectContribution>		
+		<objectContribution adaptable="true"
+			id="org.devzuz.q.maven.ui.project.menu"
+			objectClass="org.eclipse.core.resources.IProject">
+			<filter name="projectNature"
+				value="org.devzuz.q.maven.jdt.core.mavenNature">
+			</filter>
+			<action
+				class="org.devzuz.q.maven.dependency.analysis.actions.AnalyseDependencyAction"
+				enablesFor="1" icon="src/main/resources/icons/dependency-view.gif"
+				id="org.devzuz.q.maven.dependency.analysis.actions.AnalyseDependencyAction"
+				label="Analyse dependencies"
+				menubarPath="org.devzuz.q.maven.ui.project.submenu/contents">
+				<enablement>
+					<objectState name="projectNature"
+						value="org.devzuz.q.maven.jdt.core.mavenNature" />
+				</enablement>
+			</action>
+		</objectContribution>
+
+	</extension>
+	<extension point="org.eclipse.ui.views">
+		<category id="org.devzuz.q.maven.ui" name="Apache Maven">
+		</category>
+		<view allowMultiple="false" category="org.devzuz.q.maven.ui"
+			class="org.devzuz.q.maven.dependency.analysis.views.AnalyserGui"
+			icon="src/main/resources/icons/dependency-view.gif"
+			id="org.devzuz.q.maven.dependency.analysis.views.AnalyseDependencyView"
+			name="Analyse Dependencies">
+		</view>
+	</extension>
+</plugin>

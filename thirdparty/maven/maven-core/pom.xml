@@ -24,7 +24,7 @@ under the License.
   <parent>
     <artifactId>maven</artifactId>
     <groupId>org.apache.maven</groupId>
-    <version>2.1-659802</version>
+    <version>3.0-SNAPSHOT</version>
   </parent>
   
   <modelVersion>4.0.0</modelVersion>
@@ -33,19 +33,11 @@ under the License.
   <dependencies>
     <dependency>
       <groupId>org.apache.maven</groupId>
-      <artifactId>maven-workspace</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
       <artifactId>maven-lifecycle</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
       <artifactId>maven-reporting-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.maven</groupId>
-      <artifactId>maven-profile</artifactId>
     </dependency>
     <dependency>
       <groupId>org.apache.maven</groupId>
@@ -78,6 +70,10 @@ under the License.
     
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
+      <artifactId>plexus-interpolation</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
     </dependency>
     <dependency>
@@ -100,12 +96,6 @@ under the License.
       <version>1.0-alpha-1</version>
       <scope>test</scope>
     </dependency>
-    
-    <!-- Needed for backward compat aspect. -->
-    <dependency>
-      <groupId>aspectj</groupId>
-      <artifactId>aspectjrt</artifactId>
-    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -124,19 +114,6 @@ under the License.
             <exclude>**/testutils/**</exclude>
           </excludes>
         </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>aspectj-maven-plugin</artifactId>
-        
-        <executions>
-          <execution>
-            <id>weave-compat</id>
-            <goals>
-              <goal>compile</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Wizard Plug-in tests
+Bundle-SymbolicName: org.devzuz.q.maven.wizard.test;singleton:=true
+Bundle-Version: 0.9.0.qualifier
+Bundle-Activator: org.devzuz.q.maven.wizard.test.MavenWizardTestActivator
+Bundle-Vendor: DevZuz
+Require-Bundle: org.eclipse.core.runtime;bundle-version="[3.3.0,4.0.0)",
+ org.devzuz.q.maven.wizard,
+ org.junit4;visibility:=reexport,
+ org.devzuz.q.maven.ui
+Eclipse-LazyStart: true

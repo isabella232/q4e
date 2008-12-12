@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+	<extension point="org.eclipse.core.runtime.contentTypes">
+		<content-type 
+			id="org.devzuz.q.maven.settingsXmlFile" 
+			name="%contentTypeName"
+			base-type="org.eclipse.core.runtime.xml"
+			priority="normal"
+			default-charset="UTF-8"
+			file-names="settings.xml">
+			<describer class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber">
+				<parameter 
+					name="element" 
+					value="settings" />
+			</describer>
+		</content-type>
+	</extension>
+
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            name="Settings XML Editor"
+            filenames="settings.xml"
+            class="org.devzuz.q.maven.settingsxmleditor.SettingsXmlEditor"
+            icon="icons/Maven_M(16)-TP.gif"            
+            id="org.devzuz.q.maven.settingsxmleditor.editors.MavenSettingsXmlEditor">
+	         <contentTypeBinding
+	               contentTypeId="org.devzuz.q.maven.settingsXmlFile">
+	         </contentTypeBinding>            
+      </editor>
+   </extension>
+
+	<extension point="org.eclipse.wst.xml.core.catalogContributions">
+		<catalogContribution>	
+			<system
+				systemId="http://maven.apache.org/settings-1.0.0.xsd"
+				uri="platform:/plugin/org.devzuz.q.maven.settingsxmleditor/xsd/settings-1.0.0.xsd" />
+		</catalogContribution>
+	</extension>
+
+</plugin>

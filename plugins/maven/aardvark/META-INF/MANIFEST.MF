@@ -1,0 +1,47 @@
+Manifest-Version: 1.0
+Export-Package: org.apache.maven.aardvark.converter.ant;uses:="org.apa
+ che.maven.model.io.xpp3,org.apache.maven.model,org.apache.maven.aardv
+ ark.ant,org.apache.maven.aardvark.converter,org.apache.maven.model.co
+ nverter,org.apache.maven.aardvark.ant.plugin,org.codehaus.plexus.util
+ ",org.apache.maven.aardvark.converter.maven1;uses:="org.apache.maven.
+ aardvark.converter,org.apache.maven.model.converter",org.apache.maven
+ .aardvark.ant;uses:="org.apache.maven.shared.jar.identification,org.d
+ om4j,org.apache.maven.shared.jar,org.dom4j.io,org.codehaus.plexus.log
+ ging,org.codehaus.plexus.util",org.apache.maven.aardvark.converter;us
+ es:="org.apache.maven.model.converter",org.apache.maven.aardvark.ant.
+ plugin;uses:="org.apache.maven.model,org.apache.maven.aardvark.ant,or
+ g.codehaus.plexus.util.xml,org.apache.maven.model.converter"
+Embed-Directory: lib
+Private-Package: lib,org.apache.maven.model.converter,org.apache.maven
+ .model.converter.plugins,org.apache.maven.model.converter.relocators,
+ org.apache.maven.shared.jar,org.apache.maven.shared.jar.classes,org.a
+ pache.maven.shared.jar.identification,org.apache.maven.shared.jar.ide
+ ntification.exposers,org.apache.maven.shared.jar.identification.hash,
+ org.apache.maven.shared.jar.identification.repository
+Ignore-Package: org.codehaus.plexus.util.xml.pull,org.codehaus.plexus.
+ digest,org.apache.bcel.classfile,org.apache.maven.model.v3_0_0.io.xpp
+ 3,org.dom4j,org.codehaus.plexus.util.xml,org.dom4j.io,org.apache.mave
+ n.model.v3_0_0,org.codehaus.plexus.logging,org.codehaus.plexus.util
+Bundle-ClassPath: .,lib/maven-model-converter-2.2.jar,lib/maven-shared
+ -jar-1.0.jar,lib/aardvark-ant-1.0-6818.jar,lib/aardvark-core-1.0-
+ 6818.jar
+Built-By: csanchez
+Tool: Bnd-0.0.227
+Bundle-Name: Maven Aardvark
+Created-By: Apache Maven Bundle Plugin
+Bundle-Vendor: The Apache Software Foundation
+Build-Jdk: 1.6.0_03
+Bundle-Version: 1.0.0.SNAPSHOT
+Bnd-LastModified: 1201028391750
+Embed-Transitive: false
+Bundle-ManifestVersion: 2
+Bundle-Description: Maven Aardvark for the Q project
+Bundle-License: http://www.apache.org/licenses/LICENSE-2.0.txt
+Embed-Dependency: *;scope=compile|runtime;inline=false
+Bundle-DocURL: http://www.apache.org/
+Import-Package: org.apache.commons.collections,org.apache.commons.coll
+ ections.bag,org.apache.commons.collections.list,org.apache.maven.arti
+ fact,org.apache.maven.model,org.apache.maven.model.io.xpp3
+Embed-StripGroup: true
+Bundle-SymbolicName: org.devzuz.q.maven.aardvark
+

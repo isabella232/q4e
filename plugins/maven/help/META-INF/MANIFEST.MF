@@ -1,0 +1,6 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Q4E Help Plug-in
+Bundle-SymbolicName: org.devzuz.q.maven.help;singleton:=true
+Bundle-Version: 0.9.0.qualifier
+Bundle-Vendor: Devzuz

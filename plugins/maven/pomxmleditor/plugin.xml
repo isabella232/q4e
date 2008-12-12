@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+	<extension point="org.eclipse.core.runtime.contentTypes">
+		<content-type id="org.devzuz.q.pomxmleditor.pomFile" name="%contentTypeName"
+			base-type="org.eclipse.core.runtime.xml" 
+			priority="normal"
+			default-charset="UTF-8">
+			<describer
+				class="org.eclipse.core.runtime.content.XMLRootElementContentDescriber">
+				<parameter name="element" value="project" />
+			</describer>
+		</content-type>
+	</extension>
+
+	<extension point="org.eclipse.wst.sse.ui.editorConfiguration">
+		<sourceViewerConfiguration
+			class="org.devzuz.q.pomxmleditor.PomStructuredTextViewerConfiguration"
+			target="org.devzuz.q.pomxmleditor.pomFile" />
+	</extension>
+
+
+	<extension point="org.eclipse.wst.xml.core.catalogContributions">
+		<catalogContribution>
+			<public
+				publicId="http://maven.apache.org/POM/4.0.0"
+				uri="platform:/plugin/org.devzuz.q.pomxmleditor/xsd/maven-v4_0_0.xsd"
+				webURL="http://maven.apache.org/maven-v4_0_0.xsd" />
+			<system
+				systemId="http://maven.apache.org/maven-v4_0_0.xsd"
+				uri="platform:/plugin/org.devzuz.q.pomxmleditor/xsd/maven-v4_0_0.xsd" />
+		</catalogContribution>
+	</extension>
+
+</plugin>

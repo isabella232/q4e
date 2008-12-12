@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="org.apache.maven.aardvark.feature"
+      label="%featureName"
+      version="1.0.0.200711210751"
+      provider-name="%providerName">
+
+   <description>
+      %description
+   </description>
+
+   <copyright>
+      %copyright
+   </copyright>
+
+   <license url="%licenseURL">
+      %license
+   </license>
+
+   <url>
+      <update label="%updateSiteName" url="http://q4e.googlecode.com/svn/trunk/updatesite"/>
+   </url>
+
+   <requires>
+      <import feature="org.apache.maven.feature" version="2.1.0.594741" match="perfect"/>
+   </requires>
+
+   <plugin
+         id="org.devzuz.q.maven.aardvark"
+         download-size="0"
+         install-size="0"
+         version="0.9.0.qualifier"
+         unpack="false"/>
+
+</feature>

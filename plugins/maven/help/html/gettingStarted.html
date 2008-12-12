@@ -1,0 +1,155 @@
+<html>
+<head>
+<link rel="stylesheet" href="stylesheet.css" />
+</head>
+
+<body>
+<p>The <b>Q for Eclipse</b> is a plugin that better integrates the
+development and building processes by allowing users to run Maven
+commands inside of the Eclipse IDE.</p>
+
+<h2>Installing and Uninstalling the Eclipse Integration Plugin</h2>
+<h3>Pre-requisites</h3>
+<ul type="disc">
+	<li>Eclipse 3.3 or greater, which you can find at <a
+		href="http://download.eclipse.org/eclipse/downloads/">http://download.eclipse.org/eclipse/downloads</a></li>
+	<li>Java 5, which you can find at <a href="http://java.sun.com/">http://java.sun.com</a>
+	<br />
+	<i>Java 5 must be the JDK version, not JRE. If you experience build
+	errors, even if the JDK is first in your path, start Eclipse with "<code>-vm
+	c:\%JAVA_HOME%\bin\javaw.exe</code>" , where <code>JAVA_HOME</code> is set to
+	your JDK installation directory. This option can be put in the
+	eclipse.ini file and then you can start Eclipse from your menu or
+	shortcut.</i></li>
+</ul>
+
+<h3><a name="installation">Installing Q for Eclipse</a></h3>
+<ol>
+	<li>On the menu bar, click <b>Help > Software Updates > Find
+	and Install</b>. An installation wizard opens.</li>
+	<li>In the <b>Feature Updates</b> window:
+	<ul>
+		<li>Select <b>Search for new features to install</b> if this is
+		the first time you have installed the plugin.</li>
+		<li>Select <b>Search for updates</b> if you already have a
+		version of the plugin installed and are just performing an upgrade.</li>
+	</ul>
+	</li>
+	<li>On the <b>Update sites to visit</b> page, click the <b>New
+	Remote Site</b> button (located on the right side). A small pop-up appears,
+	allowing you to set up a bookmark for the site from which you will
+	download the Q for Eclipse Integration Plugin.</li>
+	<li>Enter a name or alias for the site from which you want to
+	download the plugin (for example, “<code>Q for Eclipse</code>”). Then,
+	enter the URL, <a
+		href="http://q4e.googlecode.com/svn/trunk/updatesite/">http://q4e.googlecode.com/svn/trunk/updatesite/</a>,
+	for the download site. <i>If you are behind a firewall that
+	requires a proxy you must setup a proxy in Eclipse to reach the remote
+	site. To setup a proxy go to <b>Window > Preferences</b> and in the new
+	window select <b>Network Connections</b> located under <b>General</b>
+	in the left hand expandable menu to establish a <b>Manual Proxy
+	Configuration</b>.</i></li>
+	<li>Click <b>OK</b> to add the new site to the list of sites in
+	the window of the wizard.</li>
+	<li>Click the box to select the site you just added, then click <b>Finish</b>.
+	Eclipse then searches the site for available features you can install
+	and and displays them in hierarchical tree structure on a <b>Search
+	Results</b> page.</li>
+	<li>On the <b>Search Results</b> page, click to select the box to
+	the left of the feature(s) you want to install (including the <code>Q
+	for Eclipse</code> plugin). Then, below the list of features, click to select
+	<b>Show the latest version of a feature only</b>.</li>
+	<li>Click <b>Next</b> to display the </b>Feature License</b> screen of the
+	wizard. The <b>Feature License</b> screen shows a list of the features
+	you selected that have license agreements you must accept before
+	installing them. Below the list window, click the first option to
+	indicate you accept the license agreement(s), then click <b>Next</b> to
+	move to the <b>Installation</b> screen of the wizard.</li>
+	<li>The <b>Installation</b> screen lists all of the
+	features/plugins you have chosen to install, along with the
+	corresponding directories into which they will install:
+	<ul>
+		<li>If you want to accept the default destination directories
+		shown for the features you selected,
+		<ol>
+			<li>Click <b>Finish</b> to download the features/plugins.</li>
+			<li>After downloading, a <b>Feature Verification</b> screen will
+			appear.</li>
+		</ol>
+		</li>
+		<li>If you want to change the default destination directories
+		shown for the features you selected,
+		<ol>
+			<li>Click to highlight the feature whose destination you want to
+			change.</li>
+			<li>Click the <b>Change Location</b> button, specify the new
+			destination, then click <b>OK</b>.</li>
+			<li>After downloading, a <b>Feature Verification</b> screen will
+			appear.</li>
+		</ol>
+		</li>
+	</ul>
+	</li>
+	<li>On the <b>Feature Verification</b> screen, verify that you
+	want to install the features you selected. To install all of the
+	features, click <b>Install All</b>.</li>
+	<li>When installation is complete, a window appears asking you
+	whether you would like to restart Eclipse. Click <b>Yes</b> to restart
+	so the new features will take effect.</li>
+</ol>
+
+<h3><a name="verification">Verifying Installation</a></h3>
+<ol>
+	<li>After Eclipse has been restarted, click on <b>Help > About
+	Eclipse SDK</b>.</li>
+	<li>On the pop-up, click <b>Plug-in Details</b>. A list of all
+	plugins installed on Eclipse will appear.</li>
+	<li>Scroll down and look for the Maestro Eclipse Integration
+	Plugin you just installed by looking for the Provider name of DevZuz.</li>
+</ol>
+
+<h3><a name="uninstallation">Uninstalling the Eclipse
+Integration Plugin</a></h3>
+<h4>Uninstalling the Plugin</h4>
+<p>The uninstall process completely removes the Eclipse Integration
+Plugin from your computer.</p>
+<ol>
+	<li>From inside Eclipse, select <b>Help > Software Updates >
+	Manage Configuration</b>.</li>
+	<li>A list of plugins is listed in the left pane of the <b>Product
+	Configuration</b> window. Select <b>Q for Eclipse</b> and right-click.</li>
+	<li>Click on <b>Uninstall</b>, and the system automatically
+	uninstalls the version you selected.</li>
+	<li>Repeat this operation for each plugin you want to remove. Most
+	likely you will want to remove the enabling features that were
+	installed as part of the Q for Eclipse Integration Plugin as well:
+	Apache Commons Collections, Prefuse, and Apache Maven.<br />
+	<i>Uninstalling the plugin will require you to restart Eclipse.
+	Restart Eclipse for the changes to take effect.</i></li>
+</ol>
+
+<h4>Returning to a Previous Installation</h4>
+<p>Under Eclipse's <b>Manage Configuration</b> page, there are
+several very useful options, such as <b>View Installation History</b>
+and <b>Revert to Previous</b>. <b>View Installation History</b> shows a
+log of all previous installations, and <b>Revert to Previous</b> lets
+you choose to return to a specific, previous installation (for example,
+the installation just prior to an upgrade). To return to a previous
+installation:</p>
+<ol>
+	<li>From inside Eclipse, select <b>Help > Software Updates >
+	Manage Configuration</b>. The <b>Product Configuration</b> screen appears,
+	showing a list of components on the left side and a list of links on
+	the right side.</li>
+	<li>On the right side of the <b>Product Configuration</b> screen,
+	click on the link for <b>Revert to Previous</b> to see a list of the
+	previous installations organized by date and time.</li>
+	<li>Click to select the installation to which you want to return.</li>
+	<li>Select <b>Revert to Previous</b>. The system automatically
+	returns to the installation and configuration that corresponds to your
+	selection.<br />
+	<i>This option is very useful if you have a problem with the
+	upgrade procedure and want to return to the version you had before.</i></li>
+</ol>
+</body>
+</html>
