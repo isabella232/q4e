@@ -62,6 +62,7 @@ public class FetchLuceneIndexJob extends Job
             long localLastUpdated = this.cacheFile.lastModified();
             if (localLastUpdated >= lastModified) {
             	// local more recent than index
+            	monitor.done();
             	return new Status( IStatus.OK, LuceneSearchPlugin.PLUGIN_ID,
                         Messages.getString( "FetchLuceneIndexJob.jobCompleted" ) ); //$NON-NLS-1$
             }
@@ -119,7 +120,7 @@ public class FetchLuceneIndexJob extends Job
 			Properties p = new Properties();
 			p.load(connection.getInputStream());
 			// Pattern is: nexus.index.time=20081205194313.557 -0600 
-			String timestamp = p.getProperty("nexus.index.central");
+			String timestamp = p.getProperty("nexus.index.time");
 			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss.SSS Z");
 			return sdf.parse(timestamp).getTime();
     	} catch (Exception e) {
