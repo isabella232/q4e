@@ -59,8 +59,14 @@ public class FetchLuceneIndexJob extends Job
         try
         {
             long lastModified = getLastModified();
+            long localLastUpdated = this.cacheFile.lastModified();
+            if (localLastUpdated >= lastModified) {
+            	// local more recent than index
+            	return new Status( IStatus.OK, LuceneSearchPlugin.PLUGIN_ID,
+                        Messages.getString( "FetchLuceneIndexJob.jobCompleted" ) ); //$NON-NLS-1$
+            }
             URLConnection connection = getUrlConnection(this.remoteUrl);
-            connection.setIfModifiedSince( lastModified );
+            connection.setIfModifiedSince( localLastUpdated );
             connection.connect();
             int contentLength = connection.getContentLength();
             if ( contentLength > -1 )
@@ -118,8 +124,8 @@ public class FetchLuceneIndexJob extends Job
 			return sdf.parse(timestamp).getTime();
     	} catch (Exception e) {
     		LuceneSearchPlugin.getLogger().log("Unable to download index properties: ", e);
-    		// Worst case, use the previous behavior of sending the last modified time of the cache file
-    		return this.cacheFile.lastModified();
+    		// Worst case, need to update
+    		return 0L;
     	}
 	}
     
