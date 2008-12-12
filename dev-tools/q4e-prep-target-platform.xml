@@ -12,20 +12,20 @@
     <and>
       <os family="mac"/>
       <os family="unix"/>
-	</and>
+    </and>
   </condition>
 
   <target name="fix-osx-platform" if="isMacOsX">
-  	<delete file="${ide}/eclipse"></delete>
-  	<chmod perm="u+x">
+    <delete file="${ide}/eclipse"></delete>
+    <chmod perm="u+x">
       <fileset dir="${ide}/Eclipse.app/Contents/MacOS">
         <include name="eclipse" />
       </fileset>
     </chmod>
-  	<exec executable="ln" dir="${ide}">
-  		<arg value="-s"/>
-  		<arg value="${ide}/Eclipse.app/Contents/MacOS/eclipse"/>
-  	</exec>
+    <exec executable="ln" dir="${ide}">
+      <arg value="-s"/>
+      <arg value="${ide}/Eclipse.app/Contents/MacOS/eclipse"/>
+    </exec>
   </target>
 
   <target name="clean">
@@ -48,7 +48,7 @@
     <untar src="${tarball}" 
            dest="${base}"
            compression="gzip" />
-	<antcall target="fix-osx-platform" />
+  <antcall target="fix-osx-platform" />
     <chmod perm="u+x">
       <fileset dir="${ide}">
         <include name="eclipse" />
