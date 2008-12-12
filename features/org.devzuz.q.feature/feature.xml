@@ -2,7 +2,7 @@
 <feature
       id="org.devzuz.q.feature"
       label="%featureName"
-      version="0.9.0.qualifier"
+      version="0.9.1.qualifier"
       provider-name="%providerName">
 
    <description>
@@ -102,7 +102,7 @@
          id="org.devzuz.q.maven.search.lucene"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.9.1.qualifier"
          unpack="false"/>
 
    <plugin
