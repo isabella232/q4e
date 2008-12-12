@@ -7,8 +7,10 @@
 package org.devzuz.q.maven.search.lucene;
 
 import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,6 +18,8 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Properties;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -54,38 +58,21 @@ public class FetchLuceneIndexJob extends Job
     {
         try
         {
-            long lastModified = this.cacheFile.lastModified();
-            URL remote = new URL( this.remoteUrl );
-            URLConnection connection = remote.openConnection();
-            connection.setAllowUserInteraction( true );
-            connection.setDoInput( true );
+            long lastModified = getLastModified();
+            URLConnection connection = getUrlConnection(this.remoteUrl);
             connection.setIfModifiedSince( lastModified );
-            connection.setReadTimeout( NETWORK_TIMEOUT );
-            connection.setConnectTimeout( NETWORK_TIMEOUT );
             connection.connect();
             int contentLength = connection.getContentLength();
             if ( contentLength > -1 )
             {
                 monitor.beginTask(
                                    Messages.getString( "FetchLuceneIndexJob.fetchingIndex" ) + this.remoteUrl, contentLength ); //$NON-NLS-1$
-                File tempFile = File.createTempFile( "q4e", ".tmp" ); //$NON-NLS-1$ //$NON-NLS-2$
-                InputStream connectionStream = connection.getInputStream();
-                writeToFile( monitor, tempFile, connectionStream );
-                connectionStream.close();
+                File tempFile = downloadToTempFile(connection, monitor);
                 // Delete current file
                 if (this.cacheFile.exists()) {
                     this.cacheFile.delete();
                 }
-                if (!tempFile.renameTo( this.cacheFile )) {
-                    // Issue 461: On some cases, a rename is not possible (different filesystems, etc...)
-                    this.cacheFile.createNewFile();
-                    InputStream tempFileStream = new FileInputStream(this.cacheFile);
-                    try {
-                        writeToFile( new NullProgressMonitor(), this.cacheFile, tempFileStream );
-                    } finally {
-                        tempFileStream.close();
-                    }
-                }
+                moveFile(tempFile, this.cacheFile);
                 tempFile.delete();
             }
 
@@ -109,7 +96,69 @@ public class FetchLuceneIndexJob extends Job
         }
     }
 
-    private void writeToFile( IProgressMonitor monitor, File outputFile, InputStream stream )
+
+    /**
+     * Quick hack for http://code.google.com/p/q4e/issues/detail?id=465
+     * @return
+     * @throws IOException 
+     * @throws MalformedURLException 
+     * @throws InterruptedException 
+     */
+    protected long getLastModified() {
+    	try {
+			int dotPosition = this.remoteUrl.lastIndexOf('.');
+			String basename = this.remoteUrl.substring(0, dotPosition);
+			String propertiesUrl = basename + ".properties";
+			URLConnection connection = getUrlConnection(propertiesUrl);
+			Properties p = new Properties();
+			p.load(connection.getInputStream());
+			// Pattern is: nexus.index.time=20081205194313.557 -0600 
+			String timestamp = p.getProperty("nexus.index.central");
+			SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss.SSS Z");
+			return sdf.parse(timestamp).getTime();
+    	} catch (Exception e) {
+    		LuceneSearchPlugin.getLogger().log("Unable to download index properties: ", e);
+    		// Worst case, use the previous behavior of sending the last modified time of the cache file
+    		return this.cacheFile.lastModified();
+    	}
+	}
+    
+	private File downloadToTempFile(URLConnection connection,
+			IProgressMonitor monitor) throws IOException, InterruptedException {
+		File tempFile = File.createTempFile( "q4e", ".tmp" ); //$NON-NLS-1$ //$NON-NLS-2$
+		InputStream connectionStream = connection.getInputStream();
+		writeToFile( monitor, tempFile, connectionStream );
+		connectionStream.close();
+		return tempFile;
+	}
+
+	private void moveFile(File tempFile, File destination) throws IOException,
+			FileNotFoundException, InterruptedException {
+		if (!tempFile.renameTo( this.cacheFile )) {
+		    // Issue 461: On some cases, a rename is not possible (different filesystems, etc...)
+		    this.cacheFile.createNewFile();
+		    InputStream tempFileStream = new FileInputStream(this.cacheFile);
+		    try {
+		        writeToFile( new NullProgressMonitor(), destination, tempFileStream );
+		    } finally {
+		        tempFileStream.close();
+		    }
+		}
+	}
+
+	private URLConnection getUrlConnection(String url) throws MalformedURLException,
+			IOException {
+		URL remote = new URL( url );
+		URLConnection connection = remote.openConnection();
+		connection.setAllowUserInteraction( true );
+		connection.setDoInput( true );
+		connection.setReadTimeout( NETWORK_TIMEOUT );
+		connection.setConnectTimeout( NETWORK_TIMEOUT );
+		return connection;
+	}
+
+
+	private void writeToFile( IProgressMonitor monitor, File outputFile, InputStream stream )
         throws IOException, InterruptedException
     {
         OutputStream out = new BufferedOutputStream( new FileOutputStream( outputFile ) );
