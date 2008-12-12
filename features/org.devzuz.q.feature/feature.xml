@@ -2,7 +2,7 @@
 <feature
       id="org.devzuz.q.feature"
       label="%featureName"
-      version="0.9.1.qualifier"
+      version="0.8.1.qualifier"
       provider-name="%providerName">
 
    <description>
@@ -39,49 +39,49 @@
          id="org.devzuz.q.maven.jdt.ui"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.8.0.200808231203"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.jdt.core"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.8.0.200808231203"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.ui"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.8.0.200808231203"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.wizard"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.8.0.200808231203"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.core"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.8.0.200808231203"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.dependency.analysis"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.8.0.200808231203"
          unpack="false"/>
 
    <plugin
          id="org.apache.maven.shared.dependency.tree"
          download-size="41"
          install-size="41"
-         version="1.1.0.v200810141150"
+         version="1.1.0.v200803012119"
          unpack="false"/>
 
    <plugin
@@ -95,35 +95,35 @@
          id="org.devzuz.q.maven.search"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.8.0.200808231203"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.search.lucene"
          download-size="0"
          install-size="0"
-         version="0.9.1.qualifier"
+         version="0.8.1.qualifier"
          unpack="false"/>
 
    <plugin
          id="org.devzuz.q.maven.search.ui"
          download-size="0"
          install-size="0"
-         version="0.9.0.qualifier"
+         version="0.8.0.200808231203"
          unpack="false"/>
 
    <plugin
          id="org.dom4j"
          download-size="0"
          install-size="0"
-         version="1.6.1.v200810161614"
+         version="1.6.1.v200807161426"
          unpack="false"/>
 
    <plugin
          id="org.apache.lucene"
          download-size="0"
          install-size="0"
-         version="2.3.2.v200810161704"
+         version="2.3.1.v200807161426"
          unpack="false"/>
 
 </feature>
