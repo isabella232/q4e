@@ -2,13 +2,13 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: Lucene Search Plug-in
 Bundle-SymbolicName: org.devzuz.q.maven.search.lucene;singleton:=true
-Bundle-Version: 0.9.1.qualifier
+Bundle-Version: 0.8.1.qualifier
 Bundle-Activator: org.devzuz.q.maven.search.lucene.LuceneSearchPlugin
 Bundle-Vendor: DevZuz
 Require-Bundle: org.eclipse.ui;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
  org.eclipse.core.runtime;bundle-version="[3.3.0,4.0.0)";visibility:=reexport,
- org.devzuz.q.maven.search;bundle-version="[0.9.0,1.0.0)";visibility:=reexport,
- org.devzuz.q.maven.core;bundle-version="[0.9.0,1.0.0)";visibility:=reexport,
+ org.devzuz.q.maven.search;bundle-version="[0.8.0,0.9.0)";visibility:=reexport,
+ org.devzuz.q.maven.core;bundle-version="[0.8.0,0.9.0)";visibility:=reexport,
  org.apache.lucene;bundle-version="[2.3.1,2.4.0)";visibility:=reexport
 Eclipse-LazyStart: true
 Bundle-ClassPath: .
