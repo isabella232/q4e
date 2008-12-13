@@ -1,9 +1,0 @@
-# Global trace switch for this plug-in
-org.devzuz.q.maven.wtp.core/debug=false
-# Trace for events related to assigning classpath attributes
-# to classpath container and individual entries.
-org.devzuz.q.maven.wtp.core/debug/classpathAttributeProvider=false
-# Trace for events related to postprocessing projects
-org.devzuz.q.maven.wtp.core/debug/postprocessor=false
-# This switch enables/disables time information in every trace 
-org.devzuz.q.maven.wtp.core/debug/timing=false
