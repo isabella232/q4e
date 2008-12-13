@@ -79,7 +79,7 @@ public class IndexManager
             @Override
             public void done( IJobChangeEvent event )
             {
-                if ( event.getResult().getCode() == IStatus.OK )
+                if ( event.getResult().getSeverity() == IStatus.OK )
                 {
                     IndexManager.this.ready = true;
                 }
