@@ -7,7 +7,6 @@
 package org.devzuz.q.maven.search.lucene;
 
 import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
