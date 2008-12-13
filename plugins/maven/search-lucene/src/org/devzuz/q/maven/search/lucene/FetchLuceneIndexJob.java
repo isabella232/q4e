@@ -75,15 +75,17 @@ public class FetchLuceneIndexJob extends Job
                 monitor.beginTask(
                                    Messages.getString( "FetchLuceneIndexJob.fetchingIndex" ) + this.remoteUrl, contentLength ); //$NON-NLS-1$
                 File tempFile = downloadToTempFile(connection, monitor);
-                // Delete current file
-                if (this.cacheFile.exists()) {
-                    this.cacheFile.delete();
+                if (tempFile.canRead() && tempFile.length() > 0) {
+                	// Only if the download is successful
+	                if (this.cacheFile.exists()) {
+	                	// Delete current file
+	                    this.cacheFile.delete();
+	                }
+	                moveFile(tempFile, this.cacheFile);
+	                tempFile.delete();
+	                extractIndex();
                 }
-                moveFile(tempFile, this.cacheFile);
-                tempFile.delete();
             }
-
-            extractIndex();
             monitor.done();
             return new Status( IStatus.OK, LuceneSearchPlugin.PLUGIN_ID,
                                Messages.getString( "FetchLuceneIndexJob.jobCompleted" ) ); //$NON-NLS-1$
