@@ -75,7 +75,7 @@
    <feature url="features/org.apache.maven.feature_2.1.0.659801b.jar" id="org.apache.maven.feature" version="2.1.0.659801b">
       <category name="Enabling Features"/>
    </feature>
-   <feature url="features/org.devzuz.q.feature_0.8.1.200812131449.jar" id="org.devzuz.q.feature" version="0.8.1.200812131449">
+   <feature url="features/org.devzuz.q.feature_0.8.1.200812131608.jar" id="org.devzuz.q.feature" version="0.8.1.200812131608">
       <category name="Community"/>
    </feature>
    <category-def name="Community" label="Community"/>
