@@ -15,6 +15,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -161,6 +162,12 @@ public class FetchLuceneIndexJob extends Job
 		connection.setDoInput( true );
 		connection.setReadTimeout( NETWORK_TIMEOUT );
 		connection.setConnectTimeout( NETWORK_TIMEOUT );
+		if (connection instanceof HttpURLConnection) {
+			// add user-agent if requesting through http
+			HttpURLConnection httpConnection = (HttpURLConnection) connection;
+			httpConnection.setInstanceFollowRedirects(true); // this is the default
+			httpConnection.setRequestProperty("User-Agent", "q4e/0.8.1/" + this.getClass().getName());
+		}
 		return connection;
 	}
 
