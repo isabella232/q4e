@@ -21,8 +21,7 @@
          id="org.apache.maven.embedder"
          download-size="2121"
          install-size="2121"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="org.apache.commons.cli"
