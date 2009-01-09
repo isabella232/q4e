@@ -601,7 +601,7 @@ Export-Package: org.apache.maven.project.inheritance;uses:="org.apache
  lexus.classworlds.realm,org.apache.maven.project.build.model,org.apac
  he.maven.artifact.resolver,org.apache.maven.project,org.apache.maven.
  reactor,org.codehaus.plexus.context,org.apache.maven.errors"
-Bundle-Version: 2.1.0.659801d
+Bundle-Version: 2.1.0.659801e
 Ignore-Package: org.objectweb.asm.commons,javax.swing.text,javax.manag
  ement,javax.swing.tree,javax.swing.table,javax.swing.border,org.objec
  tweb.asm,com.sun.jdmk.comm,javax.swing.event,javax.naming,javax.xml.p

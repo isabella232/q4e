@@ -2,7 +2,7 @@
 <feature
       id="org.apache.maven.feature"
       label="%featureName"
-      version="2.1.0.659801d"
+      version="2.1.0.659801e"
       provider-name="%providerName">
 
    <description>
