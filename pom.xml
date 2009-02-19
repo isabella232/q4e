@@ -36,7 +36,7 @@
   </prerequisites>
 
   <properties>
-    <maven.embedder.version>2.1.0-659802</maven.embedder.version>
+    <maven.embedder.version>3.0-alpha-2</maven.embedder.version>
     <felix.bundle.plugin.version>1.4.1</felix.bundle.plugin.version>
     <pde.plugin.version>1.0-SNAPSHOT</pde.plugin.version>
     <libdir>${basedir}/lib</libdir>
@@ -210,11 +210,6 @@
       <dependency>
         <groupId>org.apache.maven</groupId>
         <artifactId>maven-embedder</artifactId>
-        <version>2.1-659802</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.maven</groupId>
-        <artifactId>embedder</artifactId>
         <version>${maven.embedder.version}</version>
       </dependency>
       <dependency>
@@ -240,17 +235,7 @@
       <dependency>
         <groupId>org.eclipse.orbit</groupId>
         <artifactId>com.jcraft.jsch</artifactId>
-        <version>0.1.31</version>
-      </dependency>
-      <dependency>
-        <groupId>org.w3c</groupId>
-        <artifactId>tidy</artifactId>
-        <version>0.0.0.4aug2000r7-dev-200711190855</version>
-      </dependency>
-      <dependency>
-        <groupId>org</groupId>
-        <artifactId>jdom</artifactId>
-        <version>1.0.0.v200801070541</version>
+        <version>0.1.38</version>
       </dependency>
       <dependency>
         <groupId>org.apache.maven.shared.dependency</groupId>
