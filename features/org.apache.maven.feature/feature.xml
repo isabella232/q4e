@@ -2,7 +2,7 @@
 <feature
       id="org.apache.maven.feature"
       label="%featureName"
-      version="2.1.0.659801e"
+      version="3.0.0.alpha-2-qualifier"
       provider-name="%providerName">
 
    <description>
@@ -19,35 +19,14 @@
 
    <plugin
          id="org.apache.maven.embedder"
-         download-size="2121"
-         install-size="2121"
+         download-size="6348"
+         install-size="6348"
          version="0.0.0"/>
 
    <plugin
          id="org.apache.commons.cli"
          download-size="36"
          install-size="36"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.apache.commons.lang"
-         download-size="216"
-         install-size="216"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="org.aspectj.runtime"
-         download-size="95"
-         install-size="95"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="com.jcraft.jsch"
-         download-size="167"
-         install-size="167"
          version="0.0.0"
          unpack="false"/>
 
