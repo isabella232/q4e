@@ -219,6 +219,27 @@
    <feature url="features/org.eclipse.iam.feature.editor_0.9.0.200904281629.jar" id="org.eclipse.iam.feature.editor" version="0.9.0.200904281629">
       <category name="Tooling"/>
    </feature>
+   <feature url="features/org.eclipse.iam.feature_0.9.0.200905011357.jar" id="org.eclipse.iam.feature" version="0.9.0.200905011357">
+      <category name="Core"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.help_0.9.0.200905011357.jar" id="org.eclipse.iam.feature.help" version="0.9.0.200905011357">
+      <category name="Core"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.buckminster_0.9.0.200905011357.jar" id="org.eclipse.iam.feature.buckminster" version="0.9.0.200905011357">
+      <category name="Extras"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.teamsupport_0.9.0.200905011357.jar" id="org.eclipse.iam.feature.teamsupport" version="0.9.0.200905011357">
+      <category name="Extras"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.wtp_0.9.0.200905011357.jar" id="org.eclipse.iam.feature.wtp" version="0.9.0.200905011357">
+      <category name="Extras"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.dependencyviewer_0.9.0.200905011357.jar" id="org.eclipse.iam.feature.dependencyviewer" version="0.9.0.200905011357">
+      <category name="Tooling"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.editor_0.9.0.200905011357.jar" id="org.eclipse.iam.feature.editor" version="0.9.0.200905011357">
+      <category name="Tooling"/>
+   </feature>
    <category-def name="Core" label="Core features">
       <description>
          Features which provide the base functionality for Eclipse IAM, including JDT support.
