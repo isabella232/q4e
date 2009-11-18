@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description url="http://q4e.googlecode.com/svn/trunk/updatesite-dev">
+   <description name="Eclipse IAM development builds" url="http://q4e.googlecode.com/svn/trunk/updatesite-dev">
       Eclipse IAM developer builds: http://www.eclipse.org/iam
    </description>
    <feature url="features/org.apache.maven.feature_2.1.0.659801e.jar" id="org.apache.maven.feature" version="2.1.0.659801e">
@@ -12,9 +12,6 @@
    <feature url="features/org.eclipse.iam.feature.help_0.10.1.200911171311.jar" id="org.eclipse.iam.feature.help" version="0.10.1.200911171311">
       <category name="Core"/>
    </feature>
-   <feature url="features/org.eclipse.iam.feature.buckminster_0.10.1.200911171311.jar" id="org.eclipse.iam.feature.buckminster" version="0.10.1.200911171311">
-      <category name="Extras"/>
-   </feature>
    <feature url="features/org.eclipse.iam.feature.teamsupport_0.10.1.200911171311.jar" id="org.eclipse.iam.feature.teamsupport" version="0.10.1.200911171311">
       <category name="Extras"/>
    </feature>
@@ -25,6 +22,24 @@
       <category name="Tooling"/>
    </feature>
    <feature url="features/org.eclipse.iam.feature.editor_0.10.1.200911171311.jar" id="org.eclipse.iam.feature.editor" version="0.10.1.200911171311">
+      <category name="Tooling"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature_0.10.1.200911181059.jar" id="org.eclipse.iam.feature" version="0.10.1.200911181059">
+      <category name="Core"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.help_0.10.1.200911181059.jar" id="org.eclipse.iam.feature.help" version="0.10.1.200911181059">
+      <category name="Core"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.teamsupport_0.10.1.200911181059.jar" id="org.eclipse.iam.feature.teamsupport" version="0.10.1.200911181059">
+      <category name="Extras"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.wtp_0.10.1.200911181059.jar" id="org.eclipse.iam.feature.wtp" version="0.10.1.200911181059">
+      <category name="Extras"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.dependencyviewer_0.10.1.200911181059.jar" id="org.eclipse.iam.feature.dependencyviewer" version="0.10.1.200911181059">
+      <category name="Tooling"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.editor_0.10.1.200911181059.jar" id="org.eclipse.iam.feature.editor" version="0.10.1.200911181059">
       <category name="Tooling"/>
    </feature>
    <category-def name="Core" label="Core features">
