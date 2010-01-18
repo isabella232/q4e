@@ -114,13 +114,13 @@
    <feature url="features/org.eclipse.iam.feature.editor_0.11.0.200912111326.jar" id="org.eclipse.iam.feature.editor" version="0.11.0.200912111326">
       <category name="Tooling"/>
    </feature>
-   <feature url="features/org.eclipse.iam.feature_0.11.0.201001122007.jar" id="org.eclipse.iam.feature" version="0.11.0.201001122007">
+   <feature url="features/org.eclipse.iam.feature_0.11.0.201001181553.jar" id="org.eclipse.iam.feature" version="0.11.0.201001181553">
       <category name="Core"/>
    </feature>
-   <feature url="features/org.eclipse.iam.feature.help_0.11.0.201001122007.jar" id="org.eclipse.iam.feature.help" version="0.11.0.201001122007">
+   <feature url="features/org.eclipse.iam.feature.help_0.11.0.201001181553.jar" id="org.eclipse.iam.feature.help" version="0.11.0.201001181553">
       <category name="Core"/>
    </feature>
-   <feature url="features/org.eclipse.iam.feature.teamsupport_0.11.0.201001122007.jar" id="org.eclipse.iam.feature.teamsupport" version="0.11.0.201001122007">
+   <feature url="features/org.eclipse.iam.feature.teamsupport_0.11.0.201001181553.jar" id="org.eclipse.iam.feature.teamsupport" version="0.11.0.201001181553">
       <category name="Extras"/>
    </feature>
    <feature url="features/org.eclipse.iam.feature.wtp_0.11.0.201001122007.jar" id="org.eclipse.iam.feature.wtp" version="0.11.0.201001122007">
@@ -130,6 +130,15 @@
       <category name="Tooling"/>
    </feature>
    <feature url="features/org.eclipse.iam.feature.editor_0.11.0.201001122007.jar" id="org.eclipse.iam.feature.editor" version="0.11.0.201001122007">
+      <category name="Tooling"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.wtp_0.11.0.201001181553.jar" id="org.eclipse.iam.feature.wtp" version="0.11.0.201001181553">
+      <category name="Extras"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.dependencyviewer_0.11.0.201001181553.jar" id="org.eclipse.iam.feature.dependencyviewer" version="0.11.0.201001181553">
+      <category name="Tooling"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.editor_0.11.0.201001181553.jar" id="org.eclipse.iam.feature.editor" version="0.11.0.201001181553">
       <category name="Tooling"/>
    </feature>
    <category-def name="Core" label="Core features">
