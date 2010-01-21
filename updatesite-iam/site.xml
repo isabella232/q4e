@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description url="http://q4e.googlecode.com/svn/trunk/updatesite-dev">
+   <description name="Eclipse IAM" url="http://q4e.googlecode.com/svn/trunk/updatesite-iam">
       Eclipse IAM developer builds: http://www.eclipse.org/iam
    </description>
    <feature url="features/org.apache.maven.feature_2.1.0.659801e.jar" id="org.apache.maven.feature" version="2.1.0.659801e">
