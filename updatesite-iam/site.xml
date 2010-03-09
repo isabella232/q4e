@@ -48,6 +48,27 @@
    <feature url="features/org.eclipse.iam.feature.editor_0.9.0.200905051543.jar" id="org.eclipse.iam.feature.editor" version="0.9.0.200905051543">
       <category name="Tooling"/>
    </feature>
+   <feature url="features/org.eclipse.iam.feature_0.10.0.20090627114955616-7L9C4FA42kP8riBRsvtsYU_U.jar" id="org.eclipse.iam.feature" version="0.11.0.201001181900">
+      <category name="Core"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.help_0.10.0.20090627114955616-179-311A1738225A66727.jar" id="org.eclipse.iam.feature.help" version="0.10.0.20090627114955616">
+      <category name="Core"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.buckminster_0.10.0.20090627114955616-17J-7733L3F7H55BLDDF5F.jar" id="org.eclipse.iam.feature.buckminster" version="0.9.0.200905051543">
+      <category name="Extras"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.teamsupport_0.10.0.20090627114955616-179-311A1738225A66727.jar" id="org.eclipse.iam.feature.teamsupport" version="0.10.0.20090627114955616">
+      <category name="Extras"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.wtp_0.10.0.20090627114955616-179-311A1738225A66727.jar" id="org.eclipse.iam.feature.wtp" version="0.10.0.20090627114955616">
+      <category name="Extras"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.dependencyviewer_0.10.0.20090627114955616-67G-9sD7GYDOGO5EaND727.jar" id="org.eclipse.iam.feature.dependencyviewer" version="0.10.0.20090627114955616">
+      <category name="Tooling"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature.editor_0.10.0.20090627114955616-17c-7F77g7VFZBBNgRRVBV.jar" id="org.eclipse.iam.feature.editor" version="0.10.0.20090627114955616">
+      <category name="Tooling"/>
+   </feature>
    <feature url="features/org.eclipse.iam.feature_0.11.0.201001181900.jar" id="org.eclipse.iam.feature" version="0.11.0.201001181900">
       <category name="Core"/>
    </feature>
