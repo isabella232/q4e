@@ -126,6 +126,9 @@
    <feature url="features/org.eclipse.iam.feature_0.12.0.201007291544.jar" id="org.eclipse.iam.feature" version="0.12.0.201007291544">
       <category name="Core"/>
    </feature>
+   <feature url="features/org.eclipse.iam.feature_0.12.0.201008101314.jar" id="org.eclipse.iam.feature" version="0.12.0.201008101314">
+      <category name="Core"/>
+   </feature>
    <category-def name="Core" label="Core features">
       <description>
          Features which provide the base functionality for Eclipse IAM, including JDT support.
