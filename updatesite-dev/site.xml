@@ -24,6 +24,9 @@
    <feature url="features/org.eclipse.iam.feature.editor_0.12.0.201008101745.jar" id="org.eclipse.iam.feature.editor" version="0.12.0.201008101745">
       <category name="Tooling"/>
    </feature>
+   <feature url="features/org.eclipse.iam.feature_0.12.0.201008102020.jar" id="org.eclipse.iam.feature" version="0.12.0.201008102020">
+      <category name="Core"/>
+   </feature>
    <category-def name="Core" label="Core features">
       <description>
          Features which provide the base functionality for Eclipse IAM, including JDT support.
