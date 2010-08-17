@@ -51,6 +51,12 @@
    <feature url="features/org.eclipse.iam.feature.wtp_0.12.0.201008170002.jar" id="org.eclipse.iam.feature.wtp" version="0.12.0.201008170002">
       <category name="Extras"/>
    </feature>
+   <feature url="features/org.eclipse.iam.feature.wtp_0.12.0.201008171637.jar" id="org.eclipse.iam.feature.wtp" version="0.12.0.201008171637">
+      <category name="Extras"/>
+   </feature>
+   <feature url="features/org.eclipse.iam.feature_0.12.0.201008171637.jar" id="org.eclipse.iam.feature" version="0.12.0.201008171637">
+      <category name="Core"/>
+   </feature>
    <category-def name="Core" label="Core features">
       <description>
          Features which provide the base functionality for Eclipse IAM, including JDT support.
